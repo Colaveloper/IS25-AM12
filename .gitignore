@@ -38,5 +38,4 @@ build/
 .DS_Store
 
 ## probs don't want this ##
-pom.xml
 /.idea
