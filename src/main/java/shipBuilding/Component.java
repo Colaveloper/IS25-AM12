@@ -1,0 +1,32 @@
+package shipBuilding;
+
+import java.util.Collections;
+import java.util.List;
+
+public class Component {
+    private final List<Connector> connectors;
+    private int orientation;
+
+    public Component(List<Connector> connectors) {
+        this.connectors = connectors;
+        this.orientation = 0;
+    }
+
+    public List<Connector> getConnectors() {
+        return connectors;
+    }
+
+    public int getOrientation() {
+        return orientation;
+    }
+
+    public void rotateLeft() {
+        Collections.rotate(connectors, +1);
+        orientation = (orientation+1) % 4;
+    }
+
+    public void rotateRight() {
+        Collections.rotate(connectors, -1);
+        orientation = (orientation-1) % 4;
+    }
+}
