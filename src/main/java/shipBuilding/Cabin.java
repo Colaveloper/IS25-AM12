@@ -25,6 +25,7 @@ public class Cabin extends Component{
         return numResidents;
     }
 
+    // FIXME: CAN RETURN NULL
     public CrewType getCrewType() {
         return crewType;
     }

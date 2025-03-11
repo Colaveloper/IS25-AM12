@@ -9,37 +9,44 @@ import java.util.Map;
 public class CargoHold extends Component{
     private final int size;
     private int numGoods;
-    private final Map<GoodsType, Integer> loot;
+    private final Map<GoodsType, Integer> goods;
+    private final Boolean isSpecial;
 
-    public CargoHold(List<Connector> connectors, int size) {
+    public CargoHold(List<Connector> connectors, int size, Boolean isSpecial) {
         super(connectors);
         this.size = size;
         this.numGoods = 0;
-        this.loot = new HashMap<>();
+        this.goods = new HashMap<>();
+        this.isSpecial = isSpecial;
     }
 
-    public Map<GoodsType, Integer> getLoot() {
-        return loot;
+    public Boolean getSpecial() { return isSpecial; }
+
+    public Map<GoodsType, Integer> getGoods() {
+        return goods;
     }
 
-    public void addLoot(GoodsType goodsType, int amount) throws IllegalArgumentException {
+    public void addGoods(GoodsType goodsType, int amount) throws IllegalArgumentException {
+        if (goodsType == GoodsType.RED && !isSpecial) {
+            throw new IllegalArgumentException("Cannot add special goods in non-special CargoHold");
+        }
         int updatedNumGoods = this.numGoods + amount;
         if (updatedNumGoods < this.size) {
             throw new IllegalArgumentException("Cannot add the goods because total capacity would be exceeded");
         }
-        if (loot.containsKey(goodsType)) {
-            loot.put(goodsType, loot.get(goodsType) + amount);
+        if (goods.containsKey(goodsType)) {
+            goods.put(goodsType, goods.get(goodsType) + amount);
         } else {
-            loot.put(goodsType, amount);
+            goods.put(goodsType, amount);
         }
         this.numGoods = updatedNumGoods;
     }
 
-    public void removeLoot(GoodsType goodsType, int amount) throws IllegalArgumentException {
-        if (!loot.containsKey(goodsType) || loot.get(goodsType) < amount) {
+    public void removeGoods(GoodsType goodsType, int amount) throws IllegalArgumentException {
+        if (!goods.containsKey(goodsType) || goods.get(goodsType) < amount) {
             throw new IllegalArgumentException("Cannot remove the goods there are not enough");
         }
-        loot.put(goodsType, loot.get(goodsType) - amount);
+        goods.put(goodsType, goods.get(goodsType) - amount);
         this.numGoods -= amount;
     }
 

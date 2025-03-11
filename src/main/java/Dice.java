@@ -2,7 +2,7 @@ import java.util.Random;
 
 // DESCRIPTION:
 // returns a number between 2 and 12, sum of two random numbers between 1 and 6
-
+//
 // USAGE EXAMPLE:
 //Dice dice = Dice.create();
 //for (int i = 0; i < 5; i++) {

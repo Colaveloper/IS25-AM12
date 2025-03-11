@@ -3,22 +3,31 @@ package shipBuilding;
 import java.util.List;
 
 public class Shield extends Component implements Activatable{
+    private boolean active;
+
     public Shield(List<Connector> connectors) {
         super(connectors);
+        this.active = false;
     }
 
-    public int[] getDirections() {
-        return new int[]{getOrientation(), (getOrientation()+1)%4};
+    public int[] getProtectedDirections() {
+        if(this.active) {
+            return new int[]{getOrientation(), (getOrientation()+1)%4};
+        } else {
+            return new int[]{};
+        }
     }
 
     @Override
     public void activate(ActivatableVisitor visitor) {
+        this.active = true;
         visitor.activate(this);
     }
 
     @Override
     public void deactivate(ActivatableVisitor visitor) {
         visitor.deactivate(this);
+        this.active = false;
     }
 
     @Override
