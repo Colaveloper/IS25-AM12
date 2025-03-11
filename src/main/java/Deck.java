@@ -1,3 +1,5 @@
+import adventureCards.AdventureCard;
+
 import java.util.List;
 
 public abstract class Deck{

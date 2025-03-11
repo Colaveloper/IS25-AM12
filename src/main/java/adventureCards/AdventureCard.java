@@ -1,3 +1,5 @@
+package adventureCards;
+
 public abstract class AdventureCard {
     abstract void choosePlanet();
     abstract void grabGoods();
