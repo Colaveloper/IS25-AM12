@@ -22,4 +22,15 @@ public class LifeSupport extends Component{
     public CrewType getAlienType() {
         return crewType;
     }
+
+    @Override
+    public void addToVisitor(ComponentVisitor visitor) {
+        visitor.add(this);
+    }
+
+    @Override
+    public void removeFromVisitor(ComponentVisitor visitor) {
+        visitor.remove(this);
+    }
+
 }

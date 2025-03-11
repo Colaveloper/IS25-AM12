@@ -29,4 +29,12 @@ public class Component {
         Collections.rotate(connectors, -1);
         orientation = (orientation-1) % 4;
     }
+
+    public void addToVisitor(ComponentVisitor visitor) {
+        visitor.add(this);
+    }
+
+    public void removeFromVisitor(ComponentVisitor visitor) {
+        visitor.remove(this);
+    }
 }

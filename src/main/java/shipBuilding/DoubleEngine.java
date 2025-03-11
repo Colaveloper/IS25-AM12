@@ -30,4 +30,14 @@ public class DoubleEngine extends Engine implements Activatable{
         visitor.deactivate(this);
         this.active = false;
     }
+
+    @Override
+    public void addToVisitor(ComponentVisitor visitor) {
+        visitor.add(this);
+    }
+
+    @Override
+    public void removeFromVisitor(ComponentVisitor visitor) {
+        visitor.remove(this);
+    }
 }

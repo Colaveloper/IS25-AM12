@@ -42,4 +42,14 @@ public class CargoHold extends Component{
         loot.put(goodsType, loot.get(goodsType) - amount);
         this.numGoods -= amount;
     }
+
+    @Override
+    public void addToVisitor(ComponentVisitor visitor) {
+        visitor.add(this);
+    }
+
+    @Override
+    public void removeFromVisitor(ComponentVisitor visitor) {
+        visitor.remove(this);
+    }
 }

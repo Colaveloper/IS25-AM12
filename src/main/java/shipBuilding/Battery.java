@@ -22,4 +22,14 @@ public class Battery extends Component{
         }
         this.numBatteries -= numBatteries;
     }
+
+    @Override
+    public void addToVisitor(ComponentVisitor visitor) {
+        visitor.add(this);
+    }
+
+    @Override
+    public void removeFromVisitor(ComponentVisitor visitor) {
+        visitor.remove(this);
+    }
 }

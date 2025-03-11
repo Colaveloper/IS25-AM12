@@ -20,4 +20,14 @@ public class Shield extends Component implements Activatable{
     public void deactivate(ActivatableVisitor visitor) {
         visitor.deactivate(this);
     }
+
+    @Override
+    public void addToVisitor(ComponentVisitor visitor) {
+        visitor.add(this);
+    }
+
+    @Override
+    public void removeFromVisitor(ComponentVisitor visitor) {
+        visitor.remove(this);
+    }
 }
