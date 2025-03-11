@@ -8,6 +8,7 @@ public class Cannon extends Component {
         super(connectors);
     }
 
+    // TODO: consider renaming in getFirePowerHalves()
     public int getFirePower() {
         return (getOrientation() == 0) ? 2 : 1;
     }

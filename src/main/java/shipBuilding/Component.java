@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Component {
     private final List<Connector> connectors;
+    // TODO: consider whether to make it an enum for clarity
     private int orientation;
 
     public Component(List<Connector> connectors) {
@@ -25,6 +26,7 @@ public class Component {
         orientation = (orientation+1) % 4;
     }
 
+    // TODO: consider whether to remove this method
     public void rotateRight() {
         Collections.rotate(connectors, -1);
         orientation = (orientation-1) % 4;
