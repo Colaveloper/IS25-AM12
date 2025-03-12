@@ -1,3 +1,5 @@
-public class TestShipBoard extends ShipBoard{
+import shipBuilding.ShipBoard;
+
+public class TestShipBoard extends ShipBoard {
     //TODO: implement class
 }

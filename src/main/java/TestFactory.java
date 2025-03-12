@@ -1,3 +1,5 @@
+import shipBuilding.ShipBoard;
+
 public class TestFactory implements GameFactory{
     @Override
     public TestDeck createDeck() {
