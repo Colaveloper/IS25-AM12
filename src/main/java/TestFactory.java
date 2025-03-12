@@ -13,6 +13,8 @@ public class TestFactory implements GameFactory{
 
     @Override
     public ShipBoard createShipBoard() {
-        return new TestShipBoard();
+        return null;
+        // return new TestShipBoard();
+        // TODO : implement method
     }
 }
