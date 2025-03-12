@@ -1,0 +1,27 @@
+package it.polimi.ingsw.galaxytruckers.shipBuilding;
+
+import java.util.List;
+
+public class Engine extends Component {
+    public Engine(List<Connector> connectors) {
+        super(connectors);
+    }
+
+    public boolean isValid() {
+        return getOrientation() == 0;
+    }
+
+    public int getEnginePower() {
+        return 1;
+    }
+
+    @Override
+    public void addToVisitor(ComponentVisitor visitor) {
+        visitor.add(this);
+    }
+
+    @Override
+    public void removeFromVisitor(ComponentVisitor visitor) {
+        visitor.remove(this);
+    }
+}
