@@ -21,7 +21,7 @@ public class TestDeck extends Deck{
     }
 
     @Override
-    public void drawCard() {
+    public AdventureCard drawCard() {
         //TODO: implement method
     }
 }

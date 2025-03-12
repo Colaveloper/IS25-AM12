@@ -10,7 +10,7 @@ public abstract class Deck{
 
     abstract public AdventureCard getCurrentCard();
 
-    abstract public void drawCard();
+    abstract public AdventureCard drawCard();
 
     abstract public List<AdventureCard> peekForecastDeck(int id);
 }
