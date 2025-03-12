@@ -14,4 +14,8 @@ public class ComponentBank {
     public Component getRanComponent() {
         return coveredComponents.poll();
     }
+
+    public void addUncovered(Component component) {
+        uncoveredComponents.put(component.hashCode(), component);
+    }
 }
