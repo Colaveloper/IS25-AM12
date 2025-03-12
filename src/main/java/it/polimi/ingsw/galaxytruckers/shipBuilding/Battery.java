@@ -7,6 +7,9 @@ public class Battery extends Component{
 
     public Battery(List<Connector> connectors, int numBatteries) {
         super(connectors);
+        if (numBatteries != 2 && numBatteries != 3) {
+            throw new IllegalArgumentException("Number of batteries must be 2 or 3");
+        }
         this.numBatteries = numBatteries;
     }
 

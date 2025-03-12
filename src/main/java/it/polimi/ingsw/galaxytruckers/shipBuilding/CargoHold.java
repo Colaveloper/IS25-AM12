@@ -20,7 +20,7 @@ public class CargoHold extends Component{
         this.isSpecial = isSpecial;
     }
 
-    public Boolean getSpecial() { return isSpecial; }
+    public Boolean getIsSpecial() { return isSpecial; }
 
     public Map<GoodsType, Integer> getGoods() {
         return goods;
@@ -31,7 +31,7 @@ public class CargoHold extends Component{
             throw new IllegalArgumentException("Cannot add special goods in non-special CargoHold");
         }
         int updatedNumGoods = this.numGoods + amount;
-        if (updatedNumGoods < this.size) {
+        if (updatedNumGoods > this.size) {
             throw new IllegalArgumentException("Cannot add the goods because total capacity would be exceeded");
         }
         if (goods.containsKey(goodsType)) {

@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ComponentTest {
 
-    private Component myComponent;
-    private List<Connector> myConnectors;
+    protected Component myComponent;
+    protected List<Connector> myConnectors;
 
     @BeforeEach
     void setUp() {
