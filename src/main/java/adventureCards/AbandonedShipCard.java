@@ -1,9 +1,15 @@
 package adventureCards;
 
+import adventureCards.utils.Choice;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class AbandonedShipCard extends AdventureCard{
-    @Override
-    public void activate() {
-        //TODO: implement this method
-        //use loseResident to grabCredits
+    private List<Choice> choicesList;
+
+
+    public List<Choice> getChoicesList(){
+        return choicesList;
     }
 }
