@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BatteryTest extends ComponentTest {
 
-    Battery myBattery;
+    private Battery myBattery;
 
     @BeforeEach
     void setUp() {
@@ -33,4 +33,6 @@ class BatteryTest extends ComponentTest {
         myBattery.useBatteries(1);
         assertEquals(0, myBattery.getNumBatteries());
     }
+
+
 }

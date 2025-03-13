@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
+import it.polimi.ingsw.galaxytruckers.ShipBoardStub;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,7 @@ class ComponentTest {
 
     protected Component myComponent;
     protected List<Connector> myConnectors;
+    protected ShipBoardStub myShipBoard;
 
     @BeforeEach
     void setUp() {
@@ -23,6 +25,7 @@ class ComponentTest {
                 Connector.DOUBLE
         ));
         myComponent = new Component(myConnectors);
+        myShipBoard = new ShipBoardStub();
     }
 
     @Test

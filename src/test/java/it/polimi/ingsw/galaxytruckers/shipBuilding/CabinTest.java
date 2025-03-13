@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 class CabinTest extends ComponentTest {
 
-    Cabin myCabin;
+    private Cabin myCabin;
 
     @BeforeEach
     void setUp() {

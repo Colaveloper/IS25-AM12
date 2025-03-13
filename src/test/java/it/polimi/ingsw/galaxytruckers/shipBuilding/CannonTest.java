@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CannonTest extends ComponentTest {
 
-    Cannon myCannon;
+    private Cannon myCannon;
 
     @BeforeEach
     void setUp() {

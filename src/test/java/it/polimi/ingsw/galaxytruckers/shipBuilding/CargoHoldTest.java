@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CargoHoldTest extends ComponentTest {
-    CargoHold myNormalCargoHold;
-    CargoHold mySpecialCargoHold;
+    private CargoHold myNormalCargoHold;
+    private CargoHold mySpecialCargoHold;
 
     @BeforeEach
     void setUp() {
