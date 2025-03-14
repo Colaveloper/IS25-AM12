@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers;
+import shipBuilding.ShipBoard;
 
 public interface GameFactory {
     Deck createDeck();

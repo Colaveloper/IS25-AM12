@@ -1,8 +1,8 @@
-package it.polimi.ingsw.galaxytruckers;
+import shipBuilding.ShipBoard;
 
 public class TestFactory implements GameFactory{
     @Override
-    public TestDeck createDeck() {
+    public Deck createDeck() {
         return new TestDeck();
     }
 
@@ -13,6 +13,8 @@ public class TestFactory implements GameFactory{
 
     @Override
     public ShipBoard createShipBoard() {
-        return new TestShipBoard();
+        return null;
+        // TODO : implement method
+        // return new ShipBoard();
     }
 }
