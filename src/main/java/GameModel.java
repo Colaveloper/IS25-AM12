@@ -15,4 +15,11 @@ public class GameModel {
         activeCard = deck.drawCard();
         return activeCard;
     }
+
+    public int throwDice(Boolean activatable) {
+        i = rand;
+        if(activatable) {
+            shipboard.setDice(i);
+        }
+    }
 }
