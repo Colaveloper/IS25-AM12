@@ -1,5 +1,6 @@
 package shipBuilding;
 
+import enumTypes.Color;
 import enumTypes.GoodsType;
 
 import java.awt.*;
@@ -9,11 +10,13 @@ import java.util.List;
 public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     private final Map<Point, Component> componentMap;
+    private final Map<Point, Component> stashedComponentMap;
     private Component lastComponent;  // can be null
     private Point lastPosition;  // can be null
     private final ComponentBank componentBank;
-    private final List<Component> stashedComponents;
-    // private final Color color;
+    private final List<Point> shipArea;
+    private final List<Point> stashArea;
+    private final Color color;
 
     private int firePower;
     private int enginePower;
@@ -33,12 +36,14 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     private Map<Point, LifeSupport> lifeSupports;
     private Map<Point, Activatable> activatables;
 
-    public ShipBoard(int level, ComponentBank componentBank) { // (, Color color)
+    public ShipBoard(ComponentBank componentBank, Level level, Color color) { // (, Color color)
         this.componentMap = new HashMap<>();
+        this.stashedComponentMap = new HashMap<>();
         this.componentBank = componentBank;
         this.lastComponent = null;
         this.lastPosition = null;
-        this.stashedComponents = new ArrayList<>();
+        this.shipArea = level.getShipArea();
+        this.stashArea = level.getStashArea();
 
         this.firePower = 0;
         this.enginePower = 0;
@@ -49,10 +54,8 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
             this.shieldDirections[i] = 0;
         }
         this.aliens = new HashSet<>();
+        this.color = color;
 
-        // this.color = color;
-
-        //TODO: design a way to define which positions are available based on the level
     }
 
     //ComponentBank interaction methods
@@ -75,37 +78,43 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     //Ship building methods
 
-    public void placeComponent(Point newPosition) throws IllegalStateException {
-        if (lastPosition == null) {
+    public void placeComponent(Point newPosition) throws IllegalStateException, IllegalArgumentException {
+        if (lastComponent == null) {
             throw new IllegalStateException("There is no component to place");
         } else if (componentMap.containsKey(newPosition)) {
-            throw new IllegalStateException("The position is unavailable");
+            throw new IllegalStateException("The position is already taken");
+        } else if (!shipArea.contains(newPosition)) {
+            throw new IllegalArgumentException("The position is outside the ship");
         }
         lastPosition = newPosition;
     }
 
     public void rotateComponent() throws IllegalStateException {
-        if (lastPosition == null) {
+        if (lastComponent == null) {
             throw new IllegalStateException("There is no component to rotate");
         }
         lastComponent.rotateLeft();
     }
 
     public void stashComponent() throws IllegalStateException {
-        if (lastPosition == null) {
+        if (lastComponent == null) {
             throw new IllegalStateException("There is no component to stash");
         }
-        if (stashedComponents.size() >= 2) {
-            throw new IllegalStateException("You can only have 2 stashed components");
+        if (stashedComponentMap.size() >= 2) {
+            throw new IllegalStateException("You can only have up to 2 stashed components");
         }
-        stashedComponents.add(lastComponent);
+        for (Point stashPosition : stashArea) {
+            if (!stashedComponentMap.containsKey(stashPosition)) {
+                stashedComponentMap.put(stashPosition, lastComponent);
+            }
+        }
         lastComponent = null;
         lastPosition = null;
     }
 
     public void getStashedComponent(int index) throws IndexOutOfBoundsException {
         weldLastComponent();
-        lastComponent = stashedComponents.get(index);
+        lastComponent = stashedComponentMap.remove(index);
     }
 
     public void weldLastComponent() throws IllegalStateException {
@@ -180,16 +189,21 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     //Cabin (and LifeSupport) methods
 
-    public Set<CrewType> getCrewTypeOptions(Point position) throws IllegalStateException {
+    public Set<CrewType> getCrewTypeOptions(Point position) throws IllegalStateException, IllegalArgumentException {
         Set<CrewType> res = new HashSet<>();
         if (!cabins.containsKey(position)) {
             throw new IllegalStateException("There is no cabin for this position");
         }
-        List<Point> neighbours = getNeighbours(position);
-        for (int i = 0; i < neighbours.size(); i++) {
-            Point neighbour = neighbours.get(i);
-            if (lifeSupports.containsKey(neighbour) && componentMap.get(position).getConnectors().get(i) != Connector.NONE) {
-                res.add(lifeSupports.get(neighbour).getAlienType());
+        res.add(CrewType.HUMAN);
+
+        // aliens are not allowed on the starting cabin
+        if(!position.equals(new Point(7, 7))) {
+            List<Point> neighbours = getNeighbours(position);
+            for (int i = 0; i < neighbours.size(); i++) {
+                Point neighbour = neighbours.get(i);
+                if (lifeSupports.containsKey(neighbour) && componentMap.get(position).getConnectors().get(i) != Connector.NONE) {
+                    res.add(lifeSupports.get(neighbour).getAlienType());
+                }
             }
         }
         return res;
@@ -198,6 +212,9 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     public void initializeCabin(Point position, CrewType crewType) throws IllegalStateException {
         if (!cabins.containsKey(position)) {
             throw new IllegalStateException("There is no cabin for this position");
+        }
+        if (!getCrewTypeOptions(position).contains(crewType)) {
+            throw new IllegalStateException("This alien cannot to survive here");
         }
         cabins.get(position).initialize(crewType);
         crewSize += cabins.get(position).getNumResidents();
