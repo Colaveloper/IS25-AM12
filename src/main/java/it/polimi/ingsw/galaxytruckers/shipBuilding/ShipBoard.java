@@ -1,7 +1,7 @@
-package shipBuilding;
+package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
-import enumTypes.Color;
-import enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 
 import java.awt.*;
 import java.util.*;
@@ -16,7 +16,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     private final ComponentBank componentBank;
     private final List<Point> shipArea;
     private final List<Point> stashArea;
-    private final Color color;
+    private final Colors color;
 
     private int firePower;
     private int enginePower;
@@ -36,7 +36,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     private Map<Point, LifeSupport> lifeSupports;
     private Map<Point, Activatable> activatables;
 
-    public ShipBoard(ComponentBank componentBank, Level level, Color color) { // (, Color color)
+    public ShipBoard(ComponentBank componentBank, Level level, Colors color) { // (, Color color)
         this.componentMap = new HashMap<>();
         this.stashedComponentMap = new HashMap<>();
         this.componentBank = componentBank;
@@ -334,10 +334,10 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         }
     }
 
-    @Override
-    public void add(Component component) {
-        // Should probably remove this method since it isn't really needed
-    }
+//    @Override
+//    public void add(Component component) {
+//        return;
+//    }
 
     @Override
     public void add(Cannon cannon) {
@@ -389,10 +389,10 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         this.activatables.put(this.lastPosition, doubleEngine);
     }
 
-    @Override
-    public void remove(Component component) {
-        // Should probably remove this method since it isn't really needed
-    }
+//    @Override
+//    public void remove(Component component) {
+//        // Should probably remove this method since it isn't really needed
+//    }
 
     @Override
     public void remove(Cannon cannon) {

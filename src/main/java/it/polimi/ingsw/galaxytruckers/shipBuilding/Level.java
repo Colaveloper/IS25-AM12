@@ -1,4 +1,4 @@
-package shipBuilding;
+package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import java.awt.Point;
 import java.util.Arrays;
