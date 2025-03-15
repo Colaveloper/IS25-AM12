@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.*;
 import java.util.List;
 
@@ -302,8 +302,30 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     }
 
     public List<Set<Point>> getConnectedSets() {
-        //TODO: add Orientation Class to get neighbours
-        return null;
+        Set<Point> toVisit = new HashSet<>(componentMap.keySet());
+        List<Set<Point>> res = new ArrayList<>();
+        for (Point point : componentMap.keySet()) {
+            if (toVisit.contains(point)) {
+                res.add(new HashSet<>());
+                List<Point> connectedPoints = new ArrayList<>();
+                connectedPoints.add(point);
+                toVisit.remove(point);
+                while (!connectedPoints.isEmpty()) {
+                    Point currentPoint = connectedPoints.removeLast();
+                    res.getLast().add(currentPoint);
+                    List<Point> neighbours = getNeighbours(currentPoint);
+                    for (int i = 0; i < neighbours.size(); i++) {
+                        if (componentMap.containsKey(neighbours.get(i)) &&
+                                componentMap.get(currentPoint).getConnectors().get(i) != Connector.NONE &&
+                                toVisit.contains(neighbours.get(i))) {
+                            connectedPoints.add(neighbours.get(i));
+                            toVisit.remove(neighbours.get(i));
+                        }
+                    }
+                }
+            }
+        }
+        return res;
     }
 
     //Utilities methods
@@ -354,10 +376,10 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         }
     }
 
-//    @Override
-//    public void add(Component component) {
-//        return;
-//    }
+    @Override
+    public void add(Component component) {
+        return;
+    }
 
     @Override
     public void add(Cannon cannon) {
@@ -409,10 +431,10 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         this.activatables.put(this.lastPosition, doubleEngine);
     }
 
-//    @Override
-//    public void remove(Component component) {
-//        // Should probably remove this method since it isn't really needed
-//    }
+    @Override
+    public void remove(Component component) {
+        // Should probably remove this method since it isn't really needed
+    }
 
     @Override
     public void remove(Cannon cannon) {
