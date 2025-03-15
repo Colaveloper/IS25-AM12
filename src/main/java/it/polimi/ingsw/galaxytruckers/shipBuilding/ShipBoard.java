@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 
 import java.awt.*;
 import java.util.*;
@@ -22,6 +23,8 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     private int enginePower;
     private int numBatteries;
     private int crewSize;
+    private int credits;
+    private int losses;
     private final int[] shieldDirections;
     private final Set<CrewType> aliens;
     // We might need this attribute to handle meteors and cannon hits better
@@ -49,6 +52,8 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         this.enginePower = 0;
         this.numBatteries = 0;
         this.crewSize = 0;
+        this.credits = 0;
+        this.losses = 0;
         this.shieldDirections = new int[4];
         for (int i = 0; i < 4; i++) {
             this.shieldDirections[i] = 0;
@@ -56,6 +61,10 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         this.aliens = new HashSet<>();
         this.color = color;
 
+    }
+
+    public void gainCredits (int credits) {
+        this.credits += credits;
     }
 
     //ComponentBank interaction methods
@@ -133,6 +142,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         lastPosition = position;
         componentMap.remove(lastPosition).removeFromVisitor(this);
         lastPosition = null;
+        losses += 1;
     }
 
     //Observers
@@ -152,6 +162,16 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     public int getCrewSize() {
         return crewSize;
     }
+
+    public int getCredits() { return credits; }
+
+    public int getLosses() { return 0; }
+
+    // TODO: implement as a the weighted sum of goods
+    public int getGoodsValue() { return 0; }
+
+    // TODO: implement as the sum across all components of not NONE exposed connectors
+    public int getExposedConnectorsNumber() { return 0; }
 
     public boolean[] getShieldDirections() {
         boolean[] res = new boolean[this.shieldDirections.length];
