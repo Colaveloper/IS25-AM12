@@ -4,6 +4,6 @@ package it.polimi.ingsw.galaxytruckers;
 // to access and modify the state of the game
 
 public class GameModel {
-    Hourglass hourglass = new Hourglass();
+    BuildingTime buildingTime;
     Dice dice = Dice.create();
 }

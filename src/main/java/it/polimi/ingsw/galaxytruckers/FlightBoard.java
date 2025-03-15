@@ -8,10 +8,10 @@ import java.util.stream.Collectors;
 
 public abstract class FlightBoard {
     private final int loopLength;
-    private Deque<Integer> startingPositionsLeft;
+    private final Deque<Integer> startingPositionsLeft;
     private Integer buildingRoundsLeft; // can be null
     private final Set<ShipBoard> allShips; // contains playing+dead ships
-    private Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
+    private final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
     private Map<ShipBoard, Integer> finalScores; // can be populated early by giving up
 
     public FlightBoard(Level level, Set<ShipBoard> allShips) {
