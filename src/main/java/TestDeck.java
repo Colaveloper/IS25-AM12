@@ -17,11 +17,12 @@ public class TestDeck extends Deck{
     @Override
     public List<AdventureCard> peekForecastDeck(int id) {
         //TODO: implement method
-        return List.of();
+        return null;
     }
 
     @Override
     public AdventureCard drawCard() {
         //TODO: implement method
+        return null;
     }
 }
