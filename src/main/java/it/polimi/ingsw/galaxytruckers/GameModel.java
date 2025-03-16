@@ -31,13 +31,19 @@ public class GameModel {
         System.out.println("current player has lost " + numResidents + " residents");
     }
     public void grabCredits(int credits){
-        //TODO: update current player shipbpard to reflect gain in credits
+        //TODO: update current player shipboard to reflect gain in credits
         System.out.println("current player has received " + credits + " credits");
     }
     public void loseFlightDays(int flightDaysLost){
-        //TODO: make currecnt player lose flight days
+        //TODO: make current player lose flight days
         //or potentially all players depending on card
         System.out.println("current player has lost " + flightDaysLost + " days");
+    }
+
+    public int getExposedConnectors() {
+        //TODO: use shipboard method to get exposed connectors
+        System.out.println("current player has 3 exposed connectors");
+        return 3;
     }
 
 //    public int throwDice(Boolean activatable) {
