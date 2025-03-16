@@ -11,6 +11,7 @@ public enum CardState {
     LOSE_RESIDENT,      //player chooses what residents to lose
     CHOOSE_PLANET,      //player chooses planet
     ASK_NEXT_PLAYER,    //player chooses if he wants to pass
+    SABOTAGE,           //player input for dice
     START_CARD,         //doesn't require input but single-action would end before doing automatic parts(stardust, epidemic)
     END_CARD            //flag to end card
 }

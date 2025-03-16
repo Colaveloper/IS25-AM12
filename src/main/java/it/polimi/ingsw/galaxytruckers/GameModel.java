@@ -52,7 +52,7 @@ public class GameModel {
     }
 
     public void passCardToNextPlayer(){
-        activeCard.resetSteps();
+        activeCard.resetSteps();    //reset only if there is another player
         //TODO: pass the card to next player
         System.out.println("Card has been passed to the next player.");
     }
@@ -60,6 +60,10 @@ public class GameModel {
     public int getShipPower() {
         //TODO: get actual shipboard model to do this
         return 2;
+    }
+
+    public void epidemic() {
+        //all players lose 1 crew member in paired cabins
     }
 
     public void loseResidents(int numResidents){
