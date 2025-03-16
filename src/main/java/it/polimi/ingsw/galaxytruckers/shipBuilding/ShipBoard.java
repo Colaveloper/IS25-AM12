@@ -25,6 +25,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     private int crewSize;
     private int credits;
     private int losses;
+    private int exposedConnectorsNumber;
     private final int[] shieldDirections;
     private final Set<CrewType> aliens;
     private Map<GoodsType, Integer> goods;
@@ -176,8 +177,9 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
                 .sum();
     }
 
-    // TODO: implement as the sum across all components of not NONE exposed connectors
-    public int getExposedConnectorsNumber() { return 0; }
+    public int getExposedConnectorsNumber() {
+        return exposedConnectorsNumber;
+    }
 
     public boolean[] getShieldDirections() {
         boolean[] res = new boolean[this.shieldDirections.length];
