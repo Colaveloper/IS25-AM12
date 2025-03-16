@@ -24,6 +24,7 @@ public class PlanetsCard extends AdventureCard{
         }
         this.goods = new ArrayList<>(goods);
         this.flightDaysLost = flightDaysLost;
+        this.name = "[PLANETS]";
 
         //cardState init
         cardStates = new ArrayList<>();

@@ -15,6 +15,7 @@ public class OpenSpaceCard extends AdventureCard{
     public OpenSpaceCard(int numPlayers){
         //attributes init
         this.numPlayers = numPlayers;
+        this.name = "[OPEN SPACE]";
 
         //cardState init
         cardStates = new ArrayList<>();

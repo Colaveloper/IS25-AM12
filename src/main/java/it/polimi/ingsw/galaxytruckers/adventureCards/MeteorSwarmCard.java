@@ -18,6 +18,7 @@ public class MeteorSwarmCard extends AdventureCard{
         //attributes init
         this.projectileDirections = new ArrayList<>(projectileDirections);
         this.projectileType = new ArrayList<>(projectileType);
+        this.name = "[METEOR SWARM]";
 
         //cardState init
         cardStates = new ArrayList<>();
