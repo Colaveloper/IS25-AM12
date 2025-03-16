@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers;
 
+import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
 import java.util.List;
 
 public class TestDeck extends Deck{
@@ -21,7 +22,8 @@ public class TestDeck extends Deck{
     }
 
     @Override
-    public void drawCard() {
+    public AdventureCard drawCard() {
         //TODO: implement method
+        return null;
     }
 }
