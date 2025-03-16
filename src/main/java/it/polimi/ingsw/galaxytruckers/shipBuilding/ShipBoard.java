@@ -147,6 +147,8 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     //Observers
 
+    // Ship stats observers
+
     public int getFirePower() {
         return (firePower > 0 && aliens.contains(CrewType.PURPLE)) ? firePower+2 : firePower;
     }
@@ -179,6 +181,42 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
             res[i] = this.shieldDirections[i] > 0;
         }
         return res;
+    }
+
+    // Components Observers
+
+    public Map<Point, Component> getComponentMap() {
+        return componentMap;
+    }
+
+    public Map<Point, Cannon> getCannons() { return cannons; }
+
+    public Map<Point, Engine> getEngines() {
+        return engines;
+    }
+
+    public Map<Point, Battery> getBatteries() {
+        return batteries;
+    }
+
+    public Map<Point, Shield> getShields() {
+        return shields;
+    }
+
+    public Map<Point, Cabin> getCabins() {
+        return cabins;
+    }
+
+    public Map<Point, CargoHold> getCargoHolds() {
+        return cargoHolds;
+    }
+
+    public Map<Point, LifeSupport> getLifeSupports() {
+        return lifeSupports;
+    }
+
+    public Map<Point, Activatable> getActivatables() {
+        return activatables;
     }
 
     //CargoHold methods
