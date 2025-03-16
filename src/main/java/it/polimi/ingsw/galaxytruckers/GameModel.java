@@ -80,6 +80,11 @@ public class GameModel {
         System.out.println("current player has lost " + goods + " goods");
     }
 
+    public void loseFlightDaysLeastResidents(int flightDaysLost){
+        //TODO: select the player with least number of residents to lose flight days
+        System.out.println("Player with least number of residents has lost " + flightDaysLost + " days");
+    }
+
 //    public int throwDice(Boolean activatable) {
 //        i = rand;
 //        if(activatable) {
