@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Goods;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -18,12 +19,6 @@ public abstract class AdventureCard {
     public int getCurrentStep(){
         return step;
     }
-    /**increments the step by one,
-    * returns the next choice*/
-    public CardState nextStep() {
-        step++;
-        return cardStates.get(step);
-    }
     /**sets the step to -1, after calling this method,
     * nextStep() should also be called*/
     public void resetSteps() {
@@ -34,6 +29,9 @@ public abstract class AdventureCard {
     }
 
     //abstract methods
+    /**increments the step by one,
+     * returns the next choice*/
+    public abstract CardState nextStep(GameModel model);
     public abstract List<Boolean> getPlanets();
     public abstract int getFirePower();
     public abstract int getCredits();

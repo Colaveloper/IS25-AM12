@@ -21,7 +21,7 @@ public class Main {
         System.out.println("The " + activeCard.getName() + " card has been drawn\nResident sacrifice: " +
                 activeCard.getSacrifice() + "\nCredit gains: " + activeCard.getCredits()  +
                 "\nFlight days cost: " + activeCard.getFlightDaysLost());
-        cardState = activeCard.nextStep();
+        cardState = activeCard.nextStep(model);
 
         while(cardState != CardState.END_CARD){
             switch (activeCardState.get(activeCard.getCurrentStep())){
@@ -46,14 +46,10 @@ public class Main {
                 case LOSE_RESIDENT:
                     model.loseResidents(activeCard.getSacrifice());//makes the current player lose residents
                     break;
-                case GRAB_CREDITS:
-                    model.grabCredits(activeCard.getCredits()); //gives current player credits
-                    model.loseFlightDays(activeCard.getFlightDaysLost());
-                    break;
                 default:
                     System.out.println("Error in processing card choice");
             }
-            cardState = activeCard.nextStep();
+            cardState = activeCard.nextStep(model);
         }
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Goods;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -16,7 +17,7 @@ public class AbandonedShipCard extends AdventureCard{
         cardStates = new ArrayList<>();
         cardStates.add(CardState.ASK_NEXT_PLAYER);
         cardStates.add(CardState.LOSE_RESIDENT);
-        cardStates.add(CardState.GRAB_CREDITS);
+        //cardStates.add(CardState.GRAB_CREDITS);
         cardStates.add(CardState.END_CARD);
 
         this.name = "[ABANDONED SHIP]";
@@ -25,7 +26,16 @@ public class AbandonedShipCard extends AdventureCard{
         this.flightDaysLost = flightDaysLost;
     }
 
-    //getters
+    //USED METHODS
+    @Override
+    public CardState nextStep(GameModel model) {
+        if(step == 1){
+            model.grabCredits(credits);
+            model.loseFlightDays(flightDaysLost);
+        }
+        step++;
+        return cardStates.get(step);
+    }
     @Override
     public int getCredits() {
         return credits;
