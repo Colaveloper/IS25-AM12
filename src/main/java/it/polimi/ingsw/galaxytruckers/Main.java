@@ -34,7 +34,7 @@ public class Main {
                     input = userScanner.nextLine();
 
                     if (input.equals("y")) {
-                        model.resetSteps();
+                        //model.resetSteps();
                         model.passCardToNextPlayer();
                         break;
                      } else if (input.equals("n")) {
