@@ -2,8 +2,9 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Goods;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+
 import java.util.List;
 
 public abstract class AdventureCard {
@@ -35,7 +36,7 @@ public abstract class AdventureCard {
     public abstract List<Boolean> getPlanets();
     public abstract int getFirePower();
     public abstract int getCredits();
-    public abstract List<Goods> getGoods();
+    public abstract List<GoodsType> getGoods();
     public abstract List<Integer> getProjectileDirections();
     public abstract List<Projectile> getProjectilesType();
     public abstract int getSacrifice();

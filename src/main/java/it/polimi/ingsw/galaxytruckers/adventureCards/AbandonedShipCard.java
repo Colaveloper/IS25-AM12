@@ -2,8 +2,8 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Goods;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,6 @@ public class AbandonedShipCard extends AdventureCard{
         cardStates = new ArrayList<>();
         cardStates.add(CardState.ASK_NEXT_PLAYER);
         cardStates.add(CardState.LOSE_RESIDENT);
-        //cardStates.add(CardState.GRAB_CREDITS);
         cardStates.add(CardState.END_CARD);
 
         this.name = "[ABANDONED SHIP]";
@@ -63,7 +62,7 @@ public class AbandonedShipCard extends AdventureCard{
         return null;
     }
     @Override
-    public List<Goods> getGoods(){
+    public List<GoodsType> getGoods(){
         return null;
     }
     @Override
