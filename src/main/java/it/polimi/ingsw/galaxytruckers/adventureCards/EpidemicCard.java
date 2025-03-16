@@ -12,20 +12,18 @@ import java.util.Arrays;
 import java.util.List;
 
 public class EpidemicCard extends AdventureCard {
-
     public EpidemicCard() {
+        this.name = "[EPIDEMIC]";
+
         cardStates = new ArrayList<>();
         cardStates.add(CardState.START_CARD);
         cardStates.add(CardState.END_CARD);
-
-        this.name = "[EPIDEMIC]";
     }
 
     @Override
     public CardState nextStep(GameModel model) {
         if (step == 0) {
             model.epidemic();
-            model.passCardToNextPlayer();
         }
         step ++;
         return cardStates.get(step);

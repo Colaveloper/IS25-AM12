@@ -12,15 +12,20 @@ import java.util.List;
 public class GameModel {
     private Deck deck;
     private AdventureCard activeCard;
+    private int maxCardPlays; //TEMPORARY, defines the maximum times a card can be played
+    private int activeCardPlayCount;
 
     //for testing, using the TempDeck, not an official Deck
     public GameModel(){
         this.deck = new TempDeck();
+        maxCardPlays = 4;
+        activeCardPlayCount = 0;
     }
 
     //CARD-RELATED METHODS
     public void drawCard(){
         activeCard = deck.drawCard();
+        activeCardPlayCount = 0;
     }
 
     public void resetSteps(){
@@ -52,9 +57,16 @@ public class GameModel {
     }
 
     public void passCardToNextPlayer(){
-        activeCard.resetSteps();    //reset only if there is another player
-        //TODO: pass the card to next player
-        System.out.println("Card has been passed to the next player.");
+        activeCardPlayCount++;
+        if(activeCardPlayCount < 4){
+            activeCard.resetSteps();    //reset only if there is another player
+            //TODO: pass the card to next player
+            System.out.println("Card has been passed to the next player.");
+        }
+        else {
+            System.out.println("Card can't be played anymore");
+        }
+
     }
 
     public int getShipPower() {
@@ -63,7 +75,8 @@ public class GameModel {
     }
 
     public void epidemic() {
-        //all players lose 1 crew member in paired cabins
+        //TODO: all players lose 1 crew member in paired cabins
+        System.out.println("Epidemic strikes!");
     }
 
     public void loseResidents(int numResidents){
