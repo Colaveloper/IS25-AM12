@@ -134,7 +134,7 @@ public class GameModel {
      * @throws IllegalArgumentException if there is not such component in the stash
      */
     public void takeStashedComponent (int playerId, int componentId) {
-        getShipFromPlayer(playerId).getStashedComponent(componentId);
+        getShipFromPlayer(playerId).grabStashedComponent(componentId);
     } // TODO: make available for second flight only!
     /**
      * Places the last component in the specified position of the ship of the specified player
