@@ -133,10 +133,10 @@ class ShipBoardTest {
     class GetConnectedSetsTest {
         @BeforeEach
         void setUp() {
-            ComponentBank bank = new ComponentBank(){
+            ComponentBank bank = new ComponentBank() {
                 @Override
                 public Component getRanComponent() {
-                    return new Component(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL,Connector.UNIVERSAL,Connector.UNIVERSAL));
+                    return new Component(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 }
             };
             shipBoard = new ShipBoard(bank, Level.SECOND, Colors.BLUE);
