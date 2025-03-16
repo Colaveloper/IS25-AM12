@@ -1,9 +1,9 @@
-/*
+package it.polimi.ingsw.galaxytruckers;/*
 * MAIN CLASS SIMULATING THE CONTROLLER CALLING MODEL METHODS
 * THIS IS FOR TESTING PURPOSES ONLY
 * */
-import adventureCards.AdventureCard;
-import adventureCards.utils.Choice;
+import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Choice;
 
 import java.util.List;
 import java.util.Scanner;
@@ -51,6 +51,6 @@ public class Main {
                 default:
                     System.out.println("Error in processing card choice");
             }
-        }while(activeCard.nextStep() != Choice.END_CARD);
+        } while(activeCard.nextStep() != Choice.END_CARD);
     }
 }

@@ -1,8 +1,8 @@
-package adventureCards;
+package it.polimi.ingsw.galaxytruckers.adventureCards;
 
-import adventureCards.utils.Choice;
-import adventureCards.utils.Goods;
-import adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Choice;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Goods;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import java.util.List;
 
 public abstract class AdventureCard {

@@ -1,7 +1,7 @@
-//TEMPORARY CLASS, TESTING ONLY
+package it.polimi.ingsw.galaxytruckers;//TEMPORARY CLASS, TESTING ONLY
 
-import adventureCards.AbandonedShipCard;
-import adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.AbandonedShipCard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
 
 import java.util.List;
 

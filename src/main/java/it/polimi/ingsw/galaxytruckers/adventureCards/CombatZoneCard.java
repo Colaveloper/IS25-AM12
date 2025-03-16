@@ -1,4 +1,4 @@
-package adventureCards;
+package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 //public class CombatZoneCard extends AdventureCard{
 //    @Override

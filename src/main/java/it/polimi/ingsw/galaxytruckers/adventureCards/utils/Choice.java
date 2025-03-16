@@ -1,4 +1,4 @@
-package adventureCards.utils;
+package it.polimi.ingsw.galaxytruckers.adventureCards.utils;
 
 public enum Choice {
     GRAB_GOODS,
