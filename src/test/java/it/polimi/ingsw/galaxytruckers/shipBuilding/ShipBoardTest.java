@@ -64,6 +64,20 @@ class ShipBoardTest {
         }
 
         @Test
+        void placeWithTakenPositionThrowsException() {
+            shipBoard.requestRandComponent();
+            shipBoard.placeComponent(new Point(7,7));
+            shipBoard.weldLastComponent();
+            assertThrows(IllegalStateException.class, () -> shipBoard.placeComponent(new Point(7,7)));
+        }
+
+        @Test
+        void weldWithoutPositionThrowsException() {
+            shipBoard.requestRandComponent();
+            assertThrows(IllegalStateException.class, () -> shipBoard.weldLastComponent());
+        }
+
+        @Test
         void componentIsRotated() {
             List<Connector> expectedConnectors = componentToAdd.getConnectors();
             Point point = new Point(7,7);
@@ -78,6 +92,39 @@ class ShipBoardTest {
         @Test
         void rotateWithoutComponentThrowsException() {
             assertThrows(IllegalStateException.class, () -> shipBoard.rotateComponent());
+        }
+
+        @Test
+        void componentIsStashed() {
+            shipBoard.requestRandComponent();
+            shipBoard.stashComponent();
+            assertTrue(shipBoard.getStashedComponents().contains(componentToAdd));
+        }
+
+        @Test
+        void stashWhenLimitIsReachedThrowsException() {
+            shipBoard.requestRandComponent();
+            shipBoard.stashComponent();
+            shipBoard.requestRandComponent();
+            shipBoard.stashComponent();
+            shipBoard.requestRandComponent();
+            assertThrows(IllegalStateException.class, () -> shipBoard.stashComponent());
+        }
+
+        @Test
+        void stashedComponentIsGrabbed() {
+            shipBoard.requestRandComponent();
+            shipBoard.stashComponent();
+            assertFalse(shipBoard.getLastComponent().isPresent());
+            shipBoard.grabStashedComponent(0);
+            assertEquals(componentToAdd, shipBoard.getLastComponent().orElse(null));
+        }
+
+        @Test
+        void grabStashedComponentOutOfBoundsThrowsException() {
+            shipBoard.requestRandComponent();
+            shipBoard.stashComponent();
+            assertThrows(IndexOutOfBoundsException.class, () -> shipBoard.grabStashedComponent(1));
         }
     }
 
