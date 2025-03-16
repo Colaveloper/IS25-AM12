@@ -122,7 +122,6 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         lastComponent = stashedComponents.remove(index);
     }
 
-    //TODO: handle exposed connectors logic
     public void weldLastComponent() throws IllegalStateException {
         if (lastComponent != null) {
             if (lastPosition == null) {
@@ -312,6 +311,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     // Ship validity methods
 
+    //TODO: handle exposed connectors update
     public boolean checkValidity() {
         Set<Point> checkedPoints = new HashSet<>();
         List<Point> toCheck = new ArrayList<>();
