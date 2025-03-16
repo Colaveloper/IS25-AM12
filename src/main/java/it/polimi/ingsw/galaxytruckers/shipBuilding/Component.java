@@ -36,10 +36,8 @@ public class Component {
 //    }
 
     public void addToVisitor(ComponentVisitor visitor) {
-        visitor.add(this);
     }
 
     public void removeFromVisitor(ComponentVisitor visitor) {
-        visitor.remove(this);
     }
 }
