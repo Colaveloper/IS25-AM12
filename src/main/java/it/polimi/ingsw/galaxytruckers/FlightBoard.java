@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class FlightBoard {
-    private final int loopLength;
+    protected final int loopLength;
     protected final Deque<Integer> startingPositionsLeft;
     protected final Set<ShipBoard> allShips; // contains playing+dead ships
     protected final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only

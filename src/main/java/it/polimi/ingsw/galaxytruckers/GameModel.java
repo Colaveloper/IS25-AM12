@@ -7,28 +7,30 @@ import com.google.common.collect.BiMap;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.Deck;
+import it.polimi.ingsw.galaxytruckers.TempDeck;
+import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import it.polimi.ingsw.galaxytruckers.Deck;
-import it.polimi.ingsw.galaxytruckers.TempDeck;
-import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
-
 public class GameModel {
-    BiMap<Integer, ShipBoard> idsToShip;
-    BuildingTime buildingTime;
-    Dice dice;
-    GameFactory gameFactory;
-    FlightBoard flightBoard;
-    Deck deck;
+    private BiMap<Integer, ShipBoard> idsToShip;
+    private BuildingTime buildingTime;
+    private Dice dice;
+    private GameFactory gameFactory;
+    private FlightBoard flightBoard;
+    private Deck deck;
+    private AdventureCard activeCard;
 
     public GameModel(Level chosenLevel, Map<Integer, Colors> chosenColors) {
         flightBoard = gameFactory.createFlightBoard();
         deck = gameFactory.createDeck();
     }
+
+    //FLIGHTBOARD-RELATED METHODS
 
     private ShipBoard getShipFromPlayer(int playerId) {
         return idsToShip.get(playerId);
@@ -74,8 +76,6 @@ public class GameModel {
                 .map(this::getPlayerFromShip)
                 .collect(Collectors.toSet());
     }
-    private Deck deck;
-    private AdventureCard activeCard;
 
     //TEMPORARY CODE, FOR TESTING ONLY ---------------------------------------------
     public GameModel(){
