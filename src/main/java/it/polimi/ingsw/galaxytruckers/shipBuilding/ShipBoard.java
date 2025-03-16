@@ -117,7 +117,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         lastPosition = null;
     }
 
-    public void getStashedComponent(int index) throws IndexOutOfBoundsException {
+    public void grabStashedComponent(int index) throws IndexOutOfBoundsException {
         weldLastComponent();
         lastComponent = stashedComponents.remove(index);
     }
@@ -218,6 +218,14 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     public Map<Point, Activatable> getActivatables() {
         return activatables;
+    }
+
+    public Optional<Component> getLastComponent() {
+        return Optional.ofNullable(lastComponent);
+    }
+
+    public List<Component> getStashedComponents() {
+        return stashedComponents;
     }
 
     //CargoHold methods
