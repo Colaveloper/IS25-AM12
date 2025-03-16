@@ -13,7 +13,7 @@ public class GameModel {
     private Deck deck;
     private AdventureCard activeCard;
 
-    //TEMPORARY CODE, FOR TESTING ONLY ---------------------------------------------
+    //for testing, using the TempDeck, not an official Deck
     public GameModel(){
         this.deck = new TempDeck();
     }

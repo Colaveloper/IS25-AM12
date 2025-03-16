@@ -8,12 +8,11 @@ import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
-public class Sabotage extends AdventureCard {
-    public Sabotage() {
+public class SabotageCard extends AdventureCard {
+    public SabotageCard() {
         cardStates = new ArrayList<>();
         cardStates.add(CardState.SABOTAGE);
         cardStates.add(CardState.END_CARD);
