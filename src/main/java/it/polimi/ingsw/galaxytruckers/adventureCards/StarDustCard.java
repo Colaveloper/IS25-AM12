@@ -1,17 +1,79 @@
-//package adventureCards;
-//
-//public class StarDustCard extends AdventureCard{
-//    @Override
-//    public void activate() {
-//        //TODO: implement method
-//        //probably some call to loseFlightDays
-//    }
-//
-//    @Override
-//    public int loseFlightDays(){
-//        //TODO: implement this method
-//        //lose flight days based on how many exposed connectors you have
-//        //in REVERSE order
-//        return flightDays;
-//    }
-//}
+package it.polimi.ingsw.galaxytruckers.adventureCards;
+
+import it.polimi.ingsw.galaxytruckers.GameModel;
+import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Goods;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class StarDustCard extends AdventureCard {
+    public StarDustCard() {
+        cardStates = new ArrayList<>();
+        cardStates.add(CardState.ASK_NEXT_PLAYER);
+        cardStates.add(CardState.END_CARD);
+    }
+
+    @Override
+    public CardState nextStep(GameModel model) {
+        if (step == 0) {
+            model.loseFlightDays(model.getExposedConnectors());
+        }
+        step++;
+        return cardStates.get(step);
+    }
+
+
+
+
+
+        //none of these do anything
+
+    @Override
+    public List<Boolean> getPlanets() {
+        return null;
+    }
+
+    @Override
+    public int getFirePower() {
+        return 0;
+    }
+
+    @Override
+    public int getCredits() {
+        return 0;
+    }
+
+    @Override
+    public List<GoodsType> getGoods() {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getProjectileDirections() {
+        return null;
+    }
+
+    @Override
+    public List<Projectile> getProjectilesType() {
+        return null;
+    }
+
+    @Override
+    public int getSacrifice() {
+        return 0;
+    }
+
+    @Override
+    public int getFlightDaysLost() {
+        return 0;
+    }
+
+    @Override
+    public void landOnPlanet(int i) {
+
+    }
+}
