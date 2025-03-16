@@ -29,6 +29,7 @@ public class PlanetsCard extends AdventureCard{
         //cardState init
         cardStates = new ArrayList<>();
         cardStates.add(CardState.CHOOSE_PLANET);
+        cardStates.add(CardState.GRAB_GOODS);
         cardStates.add(CardState.END_CARD);
     }
 

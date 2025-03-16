@@ -18,9 +18,9 @@ public class CombatZoneCard extends AdventureCard{
     public CombatZoneCard(int flightDaysLost, int numResidentsLost, List<Integer> projectileDirections, List<Projectile> projectileType){
         //cardState init
         cardStates = new ArrayList<>();
+        cardStates.add(CardState.START_CARD);
         cardStates.add(CardState.ACTIVATE_ENGINE);
         cardStates.add(CardState.ACTIVATE_CANNON);
-        cardStates.add(CardState.ACTIVATE_SHIELD);
         cardStates.add(CardState.END_CARD);
 
         //attributes init
