@@ -11,12 +11,11 @@ import java.util.List;
 public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     private final Map<Point, Component> componentMap;
-    private final Map<Point, Component> stashedComponentMap;
+    private final List<Component> stashedComponents;
     private Component lastComponent;  // can be null
     private Point lastPosition;  // can be null
     private final ComponentBank componentBank;
     private final List<Point> shipArea;
-    private final List<Point> stashArea;
     private final Colors color;
 
     private int firePower;
@@ -43,12 +42,11 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     public ShipBoard(ComponentBank componentBank, Level level, Colors color) { // (, Color color)
         this.componentMap = new HashMap<>();
-        this.stashedComponentMap = new HashMap<>();
+        this.stashedComponents = new ArrayList<>();
         this.componentBank = componentBank;
         this.lastComponent = null;
         this.lastPosition = null;
         this.shipArea = level.getShipArea();
-        this.stashArea = level.getStashArea();
 
         this.firePower = 0;
         this.enginePower = 0;
@@ -111,22 +109,17 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         if (lastComponent == null) {
             throw new IllegalStateException("There is no component to stash");
         }
-        if (stashedComponentMap.size() >= 2) {
+        if (stashedComponents.size() >= 2) {
             throw new IllegalStateException("You can only have up to 2 stashed components");
         }
-        for (Point stashPosition : stashArea) {
-            if (!stashedComponentMap.containsKey(stashPosition)) {
-                stashedComponentMap.put(stashPosition, lastComponent);
-            }
-        }
+        stashedComponents.add(lastComponent);
         lastComponent = null;
         lastPosition = null;
     }
 
-    //TODO: consider changing method signature
     public void getStashedComponent(int index) throws IndexOutOfBoundsException {
         weldLastComponent();
-        lastComponent = stashedComponentMap.remove(index);
+        lastComponent = stashedComponents.remove(index);
     }
 
     //TODO: handle exposed connectors logic
