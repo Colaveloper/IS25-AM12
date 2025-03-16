@@ -16,7 +16,7 @@ public class Main {
 
         //simulating drawing the AbandonedShip card
         AdventureCard activeCard = model.drawCard();
-        List<Choice> activeCardChoices = activeCard.getChoices();
+        List<Choice> activeCardChoices = activeCard.getChoicesList();
         System.out.println("The " + activeCard.getName() + " card has been drawn\nResident sacrifice: " +
                 activeCard.getSacrifice() + "\nCredit gains: " + activeCard.getCredits()  +
                 "\nFlight days cost: " + activeCard.getFlightDaysLost());

@@ -25,10 +25,6 @@ public class AbandonedShipCard extends AdventureCard{
         this.flightDaysLost = flightDaysLost;
     }
 
-    public List<Choice> getChoicesList(){
-        return choices;
-    }
-
     //getters
     @Override
     public int getCredits() {
@@ -38,7 +34,6 @@ public class AbandonedShipCard extends AdventureCard{
     public int getSacrifice() {
         return numResidents;
     }
-
     @Override
     public int getFlightDaysLost() {
         return flightDaysLost;
@@ -49,7 +44,6 @@ public class AbandonedShipCard extends AdventureCard{
     public int getFirePower() {
         return 0;
     }
-
     @Override
     public List<Integer> getProjectileDirections() {
         return null;
@@ -62,14 +56,10 @@ public class AbandonedShipCard extends AdventureCard{
     public List<Goods> getGoods(){
         return null;
     }
-
     @Override
     public List<Projectile> getProjectilesType() {
         return null;
     }
-
     @Override
-    public void landOnPlanet(int i) {
-
-    }
+    public void landOnPlanet(int i) {}
 }
