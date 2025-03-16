@@ -123,11 +123,13 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         lastPosition = null;
     }
 
+    //TODO: consider changing method signature
     public void getStashedComponent(int index) throws IndexOutOfBoundsException {
         weldLastComponent();
         lastComponent = stashedComponentMap.remove(index);
     }
 
+    //TODO: handle exposed connectors logic
     public void weldLastComponent() throws IllegalStateException {
         if (lastComponent != null) {
             if (lastPosition == null) {
@@ -140,6 +142,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         }
     }
 
+    //TODO: handle exposed connectors logic
     public void removeComponent(Point position) {
         lastPosition = position;
         componentMap.remove(lastPosition).removeFromVisitor(this);
@@ -227,6 +230,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     //CargoHold methods
 
+    //TODO: handle update of ship's goods
     public void placeGoods(Point position, GoodsType goods, int amount) throws IllegalStateException, IllegalArgumentException {
         if (!cargoHolds.containsKey(position)) {
             throw new IllegalStateException("There is no cargo hold for this position");
@@ -234,6 +238,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         cargoHolds.get(position).addGoods(goods, amount);
     }
 
+    //TODO: handle update of ship's goods
     public void removeGoods(Point position, GoodsType goods, int amount) throws IllegalStateException, IllegalArgumentException {
         if (!cargoHolds.containsKey(position)) {
             throw new IllegalStateException("There is no cargo hold for this position");
@@ -277,6 +282,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         if (!cabins.containsKey(position)) {
             throw new IllegalStateException("There is no cabin for this position");
         }
+        //this block is probably not needed, controller can handle crewType
         if (!getCrewTypeOptions(position).contains(crewType)) {
             throw new IllegalStateException("This alien cannot to survive here");
         }
@@ -374,6 +380,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     //Utilities methods
 
+    //  Not a very elegant solution, consider extending Point / defining utilities / creating an abstraction for orientation
     private List<Point> getNeighbours(Point position) {
         List<Point> res = new ArrayList<>();
         res.add(new Point(position.x, position.y-1));
@@ -420,6 +427,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         }
     }
 
+    //TODO: consider removing this method
     @Override
     public void add(Component component) {
         return;
@@ -476,8 +484,8 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     }
 
     @Override
+    //TODO: Consider removing this method
     public void remove(Component component) {
-        // Should probably remove this method since it isn't really needed
     }
 
     @Override
@@ -502,33 +510,38 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     public void remove(Cabin cabin) {
         this.cabins.remove(this.lastPosition);
         this.crewSize -= cabin.getNumResidents();
+        //TODO: handle alien loss
     }
 
     @Override
     public void remove(Shield shield) {
         this.shields.remove(this.lastPosition);
-        // Handle shield deactivation/removal
+        //TODO: Handle shield deactivation/removal
     }
 
     @Override
     public void remove(LifeSupport lifeSupport) {
         this.lifeSupports.remove(this.lastPosition);
+        //TODO: handle alien loss
     }
 
     @Override
     public void remove(CargoHold cargoHold) {
         this.cargoHolds.remove(this.lastPosition);
+        //TODO: handle goods loss
     }
 
     @Override
     public void remove(DoubleCannon doubleCannon) {
         this.cannons.remove(this.lastPosition);
         this.activatables.remove(this.lastPosition);
+        //TODO: handle cannon deactivation/removal
     }
 
     @Override
     public void remove(DoubleEngine doubleEngine) {
         this.engines.remove(this.lastPosition);
         this.activatables.remove(this.lastPosition);
+        //TODO: handle engine deactivation/removal
     }
 }
