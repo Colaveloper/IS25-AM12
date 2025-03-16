@@ -27,6 +27,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     private int losses;
     private final int[] shieldDirections;
     private final Set<CrewType> aliens;
+    private Map<GoodsType, Integer> goods;
     // We might need this attribute to handle meteors and cannon hits better
     // private List<Map<Integer, Integer>> cannonDirections;
 
@@ -169,8 +170,11 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     public int getLosses() { return 0; }
 
-    // TODO: implement as a the weighted sum of goods
-    public int getGoodsValue() { return 0; }
+    public int getGoodsValue() {
+        return goods.keySet().stream()
+                .mapToInt(g -> g.getValue()*goods.get(g))
+                .sum();
+    }
 
     // TODO: implement as the sum across all components of not NONE exposed connectors
     public int getExposedConnectorsNumber() { return 0; }
