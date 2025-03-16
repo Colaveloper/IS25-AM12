@@ -40,7 +40,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     private Map<Point, LifeSupport> lifeSupports;
     private Map<Point, Activatable> activatables;
 
-    public ShipBoard(ComponentBank componentBank, Level level, Colors color) { // (, Color color)
+    ShipBoard(ComponentBank componentBank, Level level, Colors color) { // (, Color color)
         this.componentMap = new HashMap<>();
         this.stashedComponents = new ArrayList<>();
         this.componentBank = componentBank;
@@ -61,6 +61,10 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         this.aliens = new HashSet<>();
         this.color = color;
 
+    }
+
+    public ShipBoard(Level level, Colors color) {
+        this(ComponentBank.getInstance(), level, color);
     }
 
     public void gainCredits (int credits) {

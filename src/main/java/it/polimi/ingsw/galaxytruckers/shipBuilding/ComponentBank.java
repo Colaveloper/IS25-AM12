@@ -1,12 +1,25 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
-import java.util.Deque;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ComponentBank {
-    private List<Component> coveredComponents;
-    private Map<Integer, Component> uncoveredComponents;
+    private static ComponentBank instance;
+
+    private final List<Component> coveredComponents;
+    private final Map<Integer, Component> uncoveredComponents;
+
+    ComponentBank() {
+        //TODO: read components from file and shuffle them
+        this.coveredComponents = new ArrayList<>();
+        this.uncoveredComponents = new HashMap<>();
+    }
+
+    public static ComponentBank getInstance() {
+        if (instance == null) {
+            instance = new ComponentBank();
+        }
+        return instance;
+    }
 
     public Component getComponent(int id) {
         if (!uncoveredComponents.containsKey(id)) {
