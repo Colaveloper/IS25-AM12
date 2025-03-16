@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Choice;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Goods;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 
@@ -13,11 +13,11 @@ public class AbandonedShipCard extends AdventureCard{
     private final int flightDaysLost;
 
     public AbandonedShipCard(int credits, int numResidents, int flightDaysLost){
-        choices = new ArrayList<>();
-        choices.add(Choice.ASK_NEXT_PLAYER);
-        choices.add(Choice.LOSE_RESIDENT);
-        choices.add(Choice.GRAB_CREDITS);
-        choices.add(Choice.END_CARD);
+        cardStates = new ArrayList<>();
+        cardStates.add(CardState.ASK_NEXT_PLAYER);
+        cardStates.add(CardState.LOSE_RESIDENT);
+        cardStates.add(CardState.GRAB_CREDITS);
+        cardStates.add(CardState.END_CARD);
 
         this.name = "[ABANDONED SHIP]";
         this.credits = credits;

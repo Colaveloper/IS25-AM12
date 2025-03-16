@@ -1,6 +1,6 @@
 //package adventureCards;
 //
-//import adventureCards.utils.Choice;
+//import adventureCards.utils.CardState;
 //import adventureCards.utils.Goods;
 //import adventureCards.utils.Projectile;
 //
@@ -14,11 +14,11 @@
 //
 //    public SmugglersCard(List<Goods> loot) {
 //        super(Arrays.asList(
-//                Choice.ACTIVATE_CANNON,
-//                Choice.SUBMIT_POWER,
-//                Choice.LOSE_GOODS,
-//                Choice.GRAB_GOODS,
-//                Choice.END_CARD
+//                CardState.ACTIVATE_CANNON,
+//                CardState.SUBMIT_POWER,
+//                CardState.LOSE_GOODS,
+//                CardState.GRAB_GOODS,
+//                CardState.END_CARD
 //        ));
 //        this.loot = loot;
 //    }

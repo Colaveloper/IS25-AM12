@@ -1,6 +1,6 @@
 //package adventureCards;
 //
-//import adventureCards.utils.Choice;
+//import adventureCards.utils.CardState;
 //import adventureCards.utils.Goods;
 //import adventureCards.utils.Projectile;
 //
@@ -15,13 +15,13 @@
 //
 //    public SlaversCard(int firePower, int credits, int sacrifices) {
 //        super(Arrays.asList(
-//                Choice.ACTIVATE_CANNON,
-//                Choice.SUBMIT_POWER,
-//                Choice.LOSE_RESIDENT,
-//                Choice.GRAB_CREDITS,
-//                Choice.ASK_NEXT_PLAYER,
-//                Choice.LOSE_GOODS,
-//                Choice.END_CARD
+//                CardState.ACTIVATE_CANNON,
+//                CardState.SUBMIT_POWER,
+//                CardState.LOSE_RESIDENT,
+//                CardState.GRAB_CREDITS,
+//                CardState.ASK_NEXT_PLAYER,
+//                CardState.LOSE_GOODS,
+//                CardState.END_CARD
 //        ));
 //        this.firePower = firePower;
 //        this.credits = credits;

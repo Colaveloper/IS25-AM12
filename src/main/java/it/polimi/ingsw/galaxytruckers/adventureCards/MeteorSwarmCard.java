@@ -1,6 +1,6 @@
 //package adventureCards;
 //
-//import adventureCards.utils.Choice;
+//import adventureCards.utils.CardState;
 //import adventureCards.utils.Goods;
 //import adventureCards.utils.Projectile;
 //
@@ -14,9 +14,9 @@
 //
 //    public MeteorSwarmCard(List<Integer> projectileDirections, List<Projectile> projectileTypes) {
 //        super(Arrays.asList(
-//                Choice.ACTIVATE_CANNON,
-//                Choice.ASK_NEXT_PLAYER,
-//                Choice.END_CARD
+//                CardState.ACTIVATE_CANNON,
+//                CardState.ASK_NEXT_PLAYER,
+//                CardState.END_CARD
 //        ));
 //        this.projectileDirections = projectileDirections;
 //        this.projectileTypes = projectileTypes;

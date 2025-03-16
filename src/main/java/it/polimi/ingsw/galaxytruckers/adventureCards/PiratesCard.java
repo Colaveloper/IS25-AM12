@@ -1,6 +1,6 @@
 //package adventureCards;
 //
-//import adventureCards.utils.Choice;
+//import adventureCards.utils.CardState;
 //import adventureCards.utils.Goods;
 //import adventureCards.utils.Projectile;
 //
@@ -17,12 +17,12 @@
 //
 //    public PiratesCard(int firePower, List<Integer> projectileDirections, List<Projectile> projectileTypes, int credits){
 //        super(Arrays.asList(
-//                Choice.ACTIVATE_CANNON,
-//                Choice.SUBMIT_POWER,
-//                Choice.ACTIVATE_SHIELD,
-//                Choice.GRAB_CREDITS,
-//                Choice.ASK_NEXT_PLAYER,
-//                Choice.END_CARD));
+//                CardState.ACTIVATE_CANNON,
+//                CardState.SUBMIT_POWER,
+//                CardState.ACTIVATE_SHIELD,
+//                CardState.GRAB_CREDITS,
+//                CardState.ASK_NEXT_PLAYER,
+//                CardState.END_CARD));
 //        this.firePower = firePower;
 //        this.projectileDirections = projectileDirections;
 //        this.projectileTypes = projectileTypes;

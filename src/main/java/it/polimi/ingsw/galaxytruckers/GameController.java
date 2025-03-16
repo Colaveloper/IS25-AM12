@@ -1,4 +1,4 @@
-//import adventureCards.utils.Choice;
+//import adventureCards.utils.CardState;
 //
 //import adventureCards.AdventureCard;
 //import java.util.List;
@@ -7,7 +7,7 @@
 //    private GameModel model;
 //    private GameView view;
 //    private int currentPlayer;
-//    private Choice choice;
+//    private CardState choice;
 //    private Boolean submit;
 //
 //    //example interaction between controller with view and model
@@ -33,7 +33,7 @@
 //        view.displayCard(card);
 //
 //
-//        while (choice = model.nextStep() != Choice.END_CARD) {
+//        while (choice = model.nextStep() != CardState.END_CARD) {
 //            switch(choice){
 //                case GRAB_GOODS -> model.grabGoods(view.getInput(currentPlayer));
 //                case GRAB_CREDITS -> {      //useless if getting credits is automatic

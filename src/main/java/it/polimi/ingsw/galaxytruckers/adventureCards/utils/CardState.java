@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards.utils;
 
-public enum Choice {
+public enum CardState {
     GRAB_GOODS,
     PLACE_GOODS,
     //SPEND_BATTERIES,  //use more specific methods

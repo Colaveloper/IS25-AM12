@@ -1,14 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Choice;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Goods;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import java.util.List;
 
 public abstract class AdventureCard {
     //attributes
-    protected int step = 0;
-    protected List<Choice> choices;
+    protected int step = -1;
+    protected List<CardState> cardStates;
     protected String name;
 
     //public methods
@@ -20,17 +20,17 @@ public abstract class AdventureCard {
     }
     /**increments the step by one,
     * returns the next choice*/
-    public  Choice nextStep() {
+    public CardState nextStep() {
         step++;
-        return choices.get(step);
+        return cardStates.get(step);
     }
     /**sets the step to -1, after calling this method,
     * nextStep() should also be called*/
     public void resetSteps() {
         step = -1;
     }
-    public List<Choice> getChoicesList(){
-        return choices;
+    public List<CardState> getChoicesList(){
+        return cardStates;
     }
 
     //abstract methods

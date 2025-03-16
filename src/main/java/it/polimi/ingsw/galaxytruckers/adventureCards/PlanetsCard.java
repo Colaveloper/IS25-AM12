@@ -1,6 +1,6 @@
 //package adventureCards;
 //
-//import adventureCards.utils.Choice;
+//import adventureCards.utils.CardState;
 //import adventureCards.utils.Goods;
 //import adventureCards.utils.Projectile;
 //
@@ -14,10 +14,10 @@
 //
 //    public PlanetsCard(List<Goods> goods, int planets) {
 //        super(Arrays.asList(
-//                Choice.CHOOSE_PLANET,
-//                Choice.GRAB_GOODS,
-//                Choice.ASK_NEXT_PLAYER,
-//                Choice.END_CARD
+//                CardState.CHOOSE_PLANET,
+//                CardState.GRAB_GOODS,
+//                CardState.ASK_NEXT_PLAYER,
+//                CardState.END_CARD
 //        ));
 //        this.goods = goods;
 //        for (int i = 0; i < planets; i++) {

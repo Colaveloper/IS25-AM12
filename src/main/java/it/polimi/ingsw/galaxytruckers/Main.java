@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers;/*
 * THIS IS FOR TESTING PURPOSES ONLY
 * */
 import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Choice;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
 
 import java.util.List;
 import java.util.Scanner;
@@ -13,16 +13,18 @@ public class Main {
         GameModel model = new GameModel();
         Scanner userScanner = new Scanner(System.in);
         String input;
+        CardState cardState;
 
         //simulating drawing the AbandonedShip card
         AdventureCard activeCard = model.drawCard();
-        List<Choice> activeCardChoices = activeCard.getChoicesList();
+        List<CardState> activeCardState = activeCard.getChoicesList();
         System.out.println("The " + activeCard.getName() + " card has been drawn\nResident sacrifice: " +
                 activeCard.getSacrifice() + "\nCredit gains: " + activeCard.getCredits()  +
                 "\nFlight days cost: " + activeCard.getFlightDaysLost());
+        cardState = activeCard.nextStep();
 
-        do{
-            switch (activeCardChoices.get(activeCard.getCurrentStep())){
+        while(cardState != CardState.END_CARD){
+            switch (activeCardState.get(activeCard.getCurrentStep())){
                 case ASK_NEXT_PLAYER:
                     //this is simulating the controller passing this onto the view,
                     //which will ask for user input
@@ -51,6 +53,7 @@ public class Main {
                 default:
                     System.out.println("Error in processing card choice");
             }
-        } while(activeCard.nextStep() != Choice.END_CARD);
+            cardState = activeCard.nextStep();
+        }
     }
 }

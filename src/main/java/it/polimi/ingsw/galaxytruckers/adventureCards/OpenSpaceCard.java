@@ -1,6 +1,6 @@
 //package adventureCards;
 //
-//import adventureCards.utils.Choice;
+//import adventureCards.utils.CardState;
 //import adventureCards.utils.Goods;
 //import adventureCards.utils.Projectile;
 //
@@ -12,10 +12,10 @@
 //
 //    public OpenSpaceCard() {
 //        super(Arrays.asList(
-//                Choice.ACTIVATE_ENGINE,
-//                Choice.SUBMIT_POWER,
-//                Choice.ASK_NEXT_PLAYER,
-//                Choice.END_CARD
+//                CardState.ACTIVATE_ENGINE,
+//                CardState.SUBMIT_POWER,
+//                CardState.ASK_NEXT_PLAYER,
+//                CardState.END_CARD
 //        ));
 //    }
 //
