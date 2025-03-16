@@ -12,14 +12,17 @@ import java.util.List;
 public class StarDustCard extends AdventureCard {
     public StarDustCard() {
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.ASK_NEXT_PLAYER);
+        cardStates.add(CardState.START_CARD);
         cardStates.add(CardState.END_CARD);
+
+        this.name = "[STAR DUST]";
     }
 
     @Override
     public CardState nextStep(GameModel model) {
         if (step == 0) {
             model.loseFlightDays(model.getExposedConnectors());
+            model.passCardToNextPlayer();
         }
         step++;
         return cardStates.get(step);
@@ -29,7 +32,7 @@ public class StarDustCard extends AdventureCard {
 
 
 
-        //none of these do anything
+    //UNUSED METHODS--------------------------------------------------------
 
     @Override
     public List<Boolean> getPlanets() {

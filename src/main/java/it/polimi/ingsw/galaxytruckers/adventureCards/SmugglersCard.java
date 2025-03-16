@@ -24,7 +24,7 @@ public class SmugglersCard extends AdventureCard{
         cardStates.add(CardState.ACTIVATE_CANNON);
         cardStates.add(CardState.SUBMIT_POWER);
         cardStates.add(CardState.LOSE_GOODS);
-        cardStates.add(CardState.ASK_NEXT_PLAYER);
+        //cardStates.add(CardState.ASK_NEXT_PLAYER);
         cardStates.add(CardState.GRAB_GOODS);
         cardStates.add(CardState.END_CARD);
 
@@ -32,22 +32,21 @@ public class SmugglersCard extends AdventureCard{
         this.loot = loot;
         this.goodsStolen = goodsStolen;
         this.firePower = firePower;
+        this.name = "[SMUGGLERS]";
     }
 
     @Override
     public CardState nextStep(GameModel model) {
         if (step == 1) {
             if (model.getShipPower() > firePower) {
-                step = step + 3;
-                //return cardStates.get(step);
+                model.loseFlightDays(flightDaysLost);
+                step = step + 2;    //2 as the states to skip as a player wins
             } else if (model.getShipPower() == firePower) {
                 model.passCardToNextPlayer();
-                //return cardStates.get(step);
             }
             else {
-                model.loseFlightDays(goodsStolen);
+                model.loseGoods(goodsStolen);
                 model.passCardToNextPlayer();
-                //return cardStates.get(step);
             }
         }
         step ++;
@@ -71,43 +70,30 @@ public class SmugglersCard extends AdventureCard{
     }
 
 
-        //none of these do anything
-
+    //UNUSED METHODS------------------------------------------
     @Override
-    public void landOnPlanet(int i) {   //do nothing
-
+    public void landOnPlanet(int i) {
     }
-
-
-
     @Override
     public List<Boolean> getPlanets() { //do nothing
         return null;
     }
-
-
-
     @Override
-    public int getCredits() {                           //do nothing
+    public int getCredits() {
         return 0;
     }
-
-
-
     @Override
-    public List<Integer> getProjectileDirections() {    //do nothing
-        return null;
-    }//do nothing
-
-    @Override
-    public List<Projectile> getProjectilesType() {  //do nothing
+    public List<Integer> getProjectileDirections() {
         return null;
     }
-
     @Override
-    public int getSacrifice() {                         //do nothing
+    public List<Projectile> getProjectilesType() {
+        return null;
+    }
+    @Override
+    public int getSacrifice() {
         return 0;
-    }       //do nothing
+    }
 
 
 }
