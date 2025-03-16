@@ -14,17 +14,19 @@ public class Main {
         Scanner userScanner = new Scanner(System.in);
         String input;
         CardState cardState;
+        model.drawCard();
+        cardState = model.getCardState();
 
         //simulating drawing the AbandonedShip card
-        AdventureCard activeCard = model.drawCard();
-        List<CardState> activeCardState = activeCard.getChoicesList();
-        System.out.println("The " + activeCard.getName() + " card has been drawn\nResident sacrifice: " +
-                activeCard.getSacrifice() + "\nCredit gains: " + activeCard.getCredits()  +
-                "\nFlight days cost: " + activeCard.getFlightDaysLost());
-        cardState = activeCard.nextStep(model);
+
+        //List<CardState> activeCardState = model.getCardStates();
+        System.out.println("The " + model.getCardName() + " card has been drawn\nResident sacrifice: " +
+                model.getCardSacrifice() + "\nCredit gains: " + model.getCardCredits()  +
+                "\nFlight days cost: " + model.getCardFlightDaysLost());
+
 
         while(cardState != CardState.END_CARD){
-            switch (activeCardState.get(activeCard.getCurrentStep())){
+            switch (cardState){
                 case ASK_NEXT_PLAYER:
                     //this is simulating the controller passing this onto the view,
                     //which will ask for user input
@@ -32,7 +34,7 @@ public class Main {
                     input = userScanner.nextLine();
 
                     if (input.equals("y")) {
-                        activeCard.resetSteps();
+                        model.resetSteps();
                         model.passCardToNextPlayer();
                         break;
                      } else if (input.equals("n")) {
@@ -44,12 +46,12 @@ public class Main {
                     }
                     break;
                 case LOSE_RESIDENT:
-                    model.loseResidents(activeCard.getSacrifice());//makes the current player lose residents
+                    model.loseResidents(model.getCardSacrifice());//makes the current player lose residents
                     break;
                 default:
                     System.out.println("Error in processing card choice");
             }
-            cardState = activeCard.nextStep(model);
+            cardState = model.getCardState();
         }
     }
 }

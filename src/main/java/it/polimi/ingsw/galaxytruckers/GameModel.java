@@ -5,6 +5,9 @@ package it.polimi.ingsw.galaxytruckers;// DESCRIPTION:
 import it.polimi.ingsw.galaxytruckers.Deck;
 import it.polimi.ingsw.galaxytruckers.TempDeck;
 import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+
+import java.util.List;
 
 public class GameModel {
     private Deck deck;
@@ -16,9 +19,36 @@ public class GameModel {
     }
 
     //CARD-RELATED METHODS
-    public AdventureCard drawCard(){
+    public void drawCard(){
         activeCard = deck.drawCard();
-        return activeCard;
+    }
+
+    public void resetSteps(){
+        activeCard.resetSteps();
+    }
+
+    public List<CardState> getCardStates(){
+        return activeCard.getChoicesList();
+    }
+
+    public String getCardName() {
+        return activeCard.getName();
+    }
+
+    public int getCardSacrifice() {
+        return activeCard.getSacrifice();
+    }
+
+    public int getCardCredits() {
+        return activeCard.getCredits();
+    }
+
+    public int getCardFlightDaysLost() {
+        return activeCard.getFlightDaysLost();
+    }
+
+    public CardState getCardState() {
+        return activeCard.nextStep(this);
     }
 
     public void passCardToNextPlayer(){
@@ -44,6 +74,10 @@ public class GameModel {
         //TODO: use shipboard method to get exposed connectors
         System.out.println("current player has 3 exposed connectors");
         return 3;
+    }
+
+    public void loseGoods(int goods){
+        System.out.println("current player has lost " + goods + " goods");
     }
 
 //    public int throwDice(Boolean activatable) {
