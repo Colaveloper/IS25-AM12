@@ -3,7 +3,6 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Goods;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
