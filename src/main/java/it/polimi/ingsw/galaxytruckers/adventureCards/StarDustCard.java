@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -9,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StarDustCard extends AdventureCard {
-    public StarDustCard() {
-        super();
+    public StarDustCard(FlightBoard flightBoard) {
+        super(flightBoard);
         cardStates = new ArrayList<>();
         cardStates.add(PlayerAction.START_CARD);
         cardStates.add(PlayerAction.END_CARD);
@@ -19,10 +20,10 @@ public class StarDustCard extends AdventureCard {
     }
 
     @Override
-    public PlayerAction nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         if (step == 0) {
-            model.loseFlightDays(model.getExposedConnectors());
-            model.passCardToNextPlayer();
+            flightBoard.displaceShip(currentShipBoard, currentShipBoard.getExposedConnectorsNumber());
+            passCardToNextPlayer();
         }
         step++;
         return cardStates.get(step);

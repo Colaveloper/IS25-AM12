@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -12,17 +13,17 @@ import java.util.List;
 
 
 public class SabotageCard extends AdventureCard {
-    public SabotageCard() {
-        super();
+    public SabotageCard(FlightBoard flightBoard) {
+        super(flightBoard);
         cardStates = new ArrayList<>();
-        cardStates.add(PlayerAction.SABOTAGE);
+        //cardStates.add(PlayerAction.SABOTAGE);
         cardStates.add(PlayerAction.END_CARD);
 
         this.name = "[SABOTAGE]";
     }
 
     @Override
-    public PlayerAction nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         step ++;
         return cardStates.get(step);
     }

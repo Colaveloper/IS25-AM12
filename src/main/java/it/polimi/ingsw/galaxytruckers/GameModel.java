@@ -163,7 +163,7 @@ public class GameModel {
 
     //TEMPORARY CODE, FOR TESTING ONLY ---------------------------------------------
     public GameModel(){
-        this.deck = new TempDeck();
+        this.deck = new TempDeck(flightBoard);
         maxCardPlays = 4;
         activeCardPlayCount = 0;
     }

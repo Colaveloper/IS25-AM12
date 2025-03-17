@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -11,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EpidemicCard extends AdventureCard {
-    public EpidemicCard() {
-        super();
+    public EpidemicCard(FlightBoard flightBoard) {
+        super(flightBoard);
         this.name = "[EPIDEMIC]";
 
         cardStates = new ArrayList<>();
@@ -21,9 +22,9 @@ public class EpidemicCard extends AdventureCard {
     }
 
     @Override
-    public PlayerAction nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         if (step == 0) {
-            model.epidemic();
+            //model.epidemic();
         }
         step ++;
         return cardStates.get(step);

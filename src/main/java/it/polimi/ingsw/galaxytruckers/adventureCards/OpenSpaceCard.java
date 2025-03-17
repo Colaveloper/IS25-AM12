@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -12,9 +13,9 @@ public class OpenSpaceCard extends AdventureCard{
     //attributes
     private int numPlayers;
 
-    public OpenSpaceCard(int numPlayers){
+    public OpenSpaceCard(FlightBoard flightBoard, int numPlayers){
         //attributes init
-        super();
+        super(flightBoard);
         this.numPlayers = numPlayers;
         this.name = "[OPEN SPACE]";
 
@@ -29,7 +30,7 @@ public class OpenSpaceCard extends AdventureCard{
 
     //USED METHODS
     @Override
-    public PlayerAction nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         step++;
         return cardStates.get(step);
     }

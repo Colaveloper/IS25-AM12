@@ -26,7 +26,9 @@ enum CardType{
 
 public class TempDeck extends Deck{
 
-    public TempDeck(){
+    FlightBoard flightBoard;
+    public TempDeck(FlightBoard flightBoard){
+        this.flightBoard = flightBoard;
         //default constructor
     }
 
@@ -45,13 +47,13 @@ public class TempDeck extends Deck{
         randomCard = CardType.PIRATES;
         switch (randomCard){
             case ABANDONED_SHIP:
-                returnCard = new AbandonedShipCard(4,3,1);
+                returnCard = new AbandonedShipCard(flightBoard,4,3,1);
                 break;
             case ABANDONED_STATION:
                 goodsList.clear();
                 goodsList.add(GoodsType.YELLOW);
                 goodsList.add(GoodsType.GREEN);
-                returnCard = new AbandonedStationCard(goodsList, 5, 1);
+                returnCard = new AbandonedStationCard(flightBoard, goodsList, 5, 1);
                 break;
             case COMBAT_ZONE:
                 //0 from below, 1 left, 2 above, 3 right
@@ -63,10 +65,10 @@ public class TempDeck extends Deck{
                 projectilesType.add(Projectile.LIGHT_FIRE);
                 projectilesType.add(Projectile.HEAVY_FIRE);
 
-                returnCard = new CombatZoneCard(3,2,projectileDirections,projectilesType);
+                returnCard = new CombatZoneCard(flightBoard, 3,2,projectileDirections,projectilesType);
                 break;
             case EPIDEMIC:
-                returnCard = new EpidemicCard();
+                returnCard = new EpidemicCard(flightBoard);
                 break;
             case METEOR_SWARM:
                 //0 from below, 1 left, 2 above, 3 right
@@ -80,10 +82,10 @@ public class TempDeck extends Deck{
                 projectilesType.add(Projectile.LARGE_METEOR);
                 projectilesType.add(Projectile.SMALL_METEOR);
 
-                returnCard = new MeteorSwarmCard(projectileDirections,projectilesType);
+                returnCard = new MeteorSwarmCard(flightBoard, projectileDirections,projectilesType);
                 break;
             case OPEN_SPACE:
-                returnCard = new OpenSpaceCard(4);
+                returnCard = new OpenSpaceCard(flightBoard, 4);
                 break;
             case PIRATES:
                 projectileDirections.clear();
@@ -100,7 +102,7 @@ public class TempDeck extends Deck{
                 projectilesType.add(Projectile.LIGHT_FIRE);
                 projectilesType.add(Projectile.LIGHT_FIRE);
 
-                returnCard = new PiratesCard(10,projectileDirections,projectilesType,2,12);
+                returnCard = new PiratesCard(flightBoard, 10,projectileDirections,projectilesType,2,12);
                 break;
             case PLANETS:
                 goodsList.clear();
@@ -111,13 +113,13 @@ public class TempDeck extends Deck{
                 goodsList.add(GoodsType.BLUE);
                 goodsList.add(GoodsType.YELLOW);
 
-                returnCard = new PlanetsCard(3,goodsList,2);
+                returnCard = new PlanetsCard(flightBoard, 3,goodsList,2);
                 break;
             case SABOTAGE:
-                returnCard = new SabotageCard();
+                returnCard = new SabotageCard(flightBoard);
                 break;
             case SLAVERS:
-                returnCard = new SlaversCard(7,8,4,2);
+                returnCard = new SlaversCard(flightBoard, 7,8,4,2);
                 break;
             case SMUGGLERS:
                 goodsList.clear();
@@ -125,10 +127,10 @@ public class TempDeck extends Deck{
                 goodsList.add(GoodsType.GREEN);
                 goodsList.add(GoodsType.YELLOW);
 
-                returnCard = new SmugglersCard(goodsList,1,4,2);
+                returnCard = new SmugglersCard(flightBoard, goodsList,1,4,2);
                 break;
             case STARDUST:
-                returnCard = new StarDustCard();
+                returnCard = new StarDustCard(flightBoard);
                 break;
             default:
                 //TODO: this is bad, please fix

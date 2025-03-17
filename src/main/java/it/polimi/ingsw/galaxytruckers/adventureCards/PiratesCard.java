@@ -72,6 +72,7 @@ public class PiratesCard extends AdventureCard{
             }
         }
 
+
         step ++;
         return cardStates.get(step);
     }

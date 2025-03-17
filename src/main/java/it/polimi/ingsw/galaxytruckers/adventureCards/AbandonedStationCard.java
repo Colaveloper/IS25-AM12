@@ -12,15 +12,15 @@ import java.util.List;
 public class AbandonedStationCard extends AdventureCard{
     //attributes
     private List<GoodsType> goodsList;
-    private int numRequiredResidents;
-    private int flightDaysLost;
+    private final int numRequiredResidents;
+    private final int flightDaysLost;
 
     public AbandonedStationCard(FlightBoard flightBoard, List<GoodsType> goodsList, int numRequiredResidents, int flightDaysLost){
         //states init
         super(flightBoard);
         cardStates = new ArrayList<>();
         cardStates.add(PlayerAction.ASK_IF_PASS);
-        cardStates.add(PlayerAction.MANANGE_GOODS);
+        cardStates.add(PlayerAction.MANAGE_GOODS);
         cardStates.add(PlayerAction.END_CARD);
 
         //attributes init
@@ -34,7 +34,9 @@ public class AbandonedStationCard extends AdventureCard{
     @Override
     public PlayerAction nextStep() {
         if(step == 1){
-            model.loseFlightDays(flightDaysLost);
+
+            flightBoard.
+            flightBoard.displaceShip(currentShipBoard, flightDaysLost);
         }
         step++;
         return cardStates.get(step);

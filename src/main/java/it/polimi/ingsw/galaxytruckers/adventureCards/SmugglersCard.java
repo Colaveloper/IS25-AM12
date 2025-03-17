@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -18,8 +19,8 @@ public class SmugglersCard extends AdventureCard{
     private final int flightDaysLost;
 
 
-    public SmugglersCard(List<GoodsType> loot, int flightDaysLost, int firePower, int goodsStolen) {
-        super();
+    public SmugglersCard(FlightBoard flightBoard, List<GoodsType> loot, int flightDaysLost, int firePower, int goodsStolen) {
+        super(flightBoard);
         cardStates = new ArrayList<>();
         cardStates.add(PlayerAction.ACTIVATE_CANNON);
         cardStates.add(PlayerAction.SUBMIT_POWER);
@@ -36,7 +37,7 @@ public class SmugglersCard extends AdventureCard{
     }
 
     @Override
-    public PlayerAction nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         if (step == 1) {
             if (model.getShipPower() > firePower) {
                 model.loseFlightDays(flightDaysLost);

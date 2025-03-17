@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -15,9 +16,9 @@ public class CombatZoneCard extends AdventureCard{
     private List<Integer> projectileDirections;
     private List<Projectile> projectileType;
 
-    public CombatZoneCard(int flightDaysLost, int numResidentsLost, List<Integer> projectileDirections, List<Projectile> projectileType){
+    public CombatZoneCard(FlightBoard flightBoard, int flightDaysLost, int numResidentsLost, List<Integer> projectileDirections, List<Projectile> projectileType){
         //cardState init
-        super();
+        super(flightBoard);
         cardStates = new ArrayList<>();
         cardStates.add(PlayerAction.START_CARD);
         cardStates.add(PlayerAction.ACTIVATE_ENGINE);

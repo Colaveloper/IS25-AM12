@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -16,8 +17,8 @@ public class SlaversCard extends AdventureCard {
     private final int sacrifices;
     private final int flightDaysLost;
 
-    public SlaversCard(int firePower, int credits, int sacrifices, int flightDaysLost) {
-        super();
+    public SlaversCard(FlightBoard flightBoard, int firePower, int credits, int sacrifices, int flightDaysLost) {
+        super(flightBoard);
         cardStates = new ArrayList<>();
         cardStates.add(PlayerAction.ACTIVATE_CANNON);
         cardStates.add(PlayerAction.SUBMIT_POWER);
@@ -33,11 +34,11 @@ public class SlaversCard extends AdventureCard {
     }
 
     @Override
-    public PlayerAction nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         if (step == 1) {
             if (model.getShipPower() > firePower) {
-                model.grabCredits(credits);
-                model.loseFlightDays(flightDaysLost);
+                currentShipBoard.gainCredits(credits);
+                flightBoard.displaceShip(currentShipBoard, flightDaysLost);
                 step = step + 2;    //2 as the states to skip as a player wins
             } else if (model.getShipPower() == firePower) {
                 model.passCardToNextPlayer();
