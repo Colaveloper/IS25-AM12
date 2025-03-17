@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
-import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -30,7 +29,7 @@ class ShipBoardTest {
                     return componentToAdd;
                 }
             };
-            shipBoard = new ShipBoard(componentBank, Level.SECOND, Colors.BLUE);
+            shipBoard = new SecondShipBoard(componentBank, Colors.BLUE);
             componentToAdd = new Component(Arrays.asList(Connector.UNIVERSAL, Connector.SINGLE, Connector.DOUBLE, Connector.NONE));
         }
 
@@ -139,7 +138,7 @@ class ShipBoardTest {
                     return new Component(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 }
             };
-            shipBoard = new ShipBoard(bank, Level.SECOND, Colors.BLUE);
+            shipBoard = new SecondShipBoard(bank, Colors.BLUE);
             for (int i = 5; i <= 9; i++) {
                 shipBoard.requestRandComponent();
                 shipBoard.placeComponent(new Point(i,7));
