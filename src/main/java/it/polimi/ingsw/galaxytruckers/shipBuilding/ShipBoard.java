@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
-import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.awt.Point;
@@ -110,13 +109,9 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         lastComponent.rotateLeft();
     }
 
-    public void stashComponent() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("");
-    };
+    public void stashComponent() {};
 
-    public void grabStashedComponent(int index) throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("");
-    }
+    public void grabStashedComponent(int index) {}
 
     public void weldLastComponent() {
         if (lastComponent != null) {
@@ -211,8 +206,8 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         return cargoHolds;
     }
 
-    public Map<Point, LifeSupport> getLifeSupports() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("");
+    public Map<Point, LifeSupport> getLifeSupports() {
+        return null;
     }
 
     public Map<Point, Activatable> getActivatables() {
@@ -223,8 +218,8 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         return Optional.ofNullable(lastComponent);
     }
 
-    public List<Component> getStashedComponents() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("");
+    public List<Component> getStashedComponents() {
+        return null;
     }
 
     //CargoHold methods
