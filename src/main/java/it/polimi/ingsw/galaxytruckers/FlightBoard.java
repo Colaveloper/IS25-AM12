@@ -7,15 +7,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class FlightBoard {
-    protected final int loopLength;
-    protected final Deque<Integer> startingPositionsLeft;
+    protected int loopLength;
+    protected List<Integer> startingPositionsLeft;
     protected final Set<ShipBoard> allShips; // contains playing+dead ships
     protected final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
     protected final Map<ShipBoard, Integer> finalScores; // can be populated early by giving up
 
-    public FlightBoard(Level level, Set<ShipBoard> allShips) {
-        this.loopLength = level.getLoopLength();
-        this.startingPositionsLeft = level.getStartingPositions();
+    public FlightBoard(Set<ShipBoard> allShips) {
         this.allShips = allShips;
         this.shipToPlace = new HashMap<>();
         this.finalScores = new HashMap<>();

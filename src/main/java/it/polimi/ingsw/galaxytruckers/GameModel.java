@@ -149,11 +149,16 @@ public class GameModel {
     public void placeComponent(int playerId, Point position) {
         getShipFromPlayer(playerId).placeComponent(position);
     } // TODO: handle illegal positions!
-
+    /**
+     *
+     */
     void removeComponent(int playerId, Point position) {
         getShipFromPlayer(playerId).removeComponent(position);
     } // TODO: hide from controller, consider whether to remove
 
+    boolean checkShipValidity(int playerId) {
+        return getShipFromPlayer(playerId).checkValidity();
+    }
 
 
 

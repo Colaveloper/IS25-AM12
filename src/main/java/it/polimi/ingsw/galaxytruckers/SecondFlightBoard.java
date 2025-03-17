@@ -3,13 +3,16 @@ package it.polimi.ingsw.galaxytruckers;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SecondFlightBoard extends FlightBoard{
-    public SecondFlightBoard(Level level, Set<ShipBoard> allShips) {
-        super(level, allShips);
+    public SecondFlightBoard(Set<ShipBoard> allShips) {
+        super(allShips);
+        this.loopLength = Level.SECOND.getLoopLength();
+        this.startingPositionsLeft = new ArrayList<>(Level.SECOND.getStartingPositions());
     }
 
     @Override
@@ -18,7 +21,7 @@ public class SecondFlightBoard extends FlightBoard{
         if (!startingPositionsLeft.contains(startingPosition)) {
             throw new IllegalArgumentException("Position not available for start");
         } else {
-            startingPositionsLeft.remove(startingPosition);
+            startingPositionsLeft.remove(startingPositionsLeft.indexOf(startingPosition));
             shipToPlace.put(shipBoard, startingPosition);
             // to be interpreted as "building phase is finished for everybody"
             return startingPositionsLeft.size() + allShips.size() == 4;
