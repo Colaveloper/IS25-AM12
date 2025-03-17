@@ -92,7 +92,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     //Ship building methods
 
-    public void placeComponent(Point newPosition) throws IllegalStateException, IllegalArgumentException {
+    public void placeComponent(Point newPosition) {
         if (lastComponent == null) {
             throw new IllegalStateException("There is no component to place");
         } else if (componentMap.containsKey(newPosition)) {
@@ -103,7 +103,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         lastPosition = newPosition;
     }
 
-    public void rotateComponent() throws IllegalStateException {
+    public void rotateComponent() {
         if (lastComponent == null) {
             throw new IllegalStateException("There is no component to rotate");
         }
@@ -230,7 +230,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     //CargoHold methods
 
     //TODO: handle update of ship's goods
-    public void placeGoods(Point position, GoodsType goods, int amount) throws IllegalStateException, IllegalArgumentException {
+    public void placeGoods(Point position, GoodsType goods, int amount) {
         if (!cargoHolds.containsKey(position)) {
             throw new IllegalStateException("There is no cargo hold for this position");
         }
@@ -238,7 +238,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     }
 
     //TODO: handle update of ship's goods
-    public void removeGoods(Point position, GoodsType goods, int amount) throws IllegalStateException, IllegalArgumentException {
+    public void removeGoods(Point position, GoodsType goods, int amount) {
         if (!cargoHolds.containsKey(position)) {
             throw new IllegalStateException("There is no cargo hold for this position");
         }
@@ -247,7 +247,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     //Batteries methods
 
-    public void useBatteries(Point position, int amount) throws IllegalStateException, IllegalArgumentException {
+    public void useBatteries(Point position, int amount) {
         if (!batteries.containsKey(position)) {
             throw new IllegalStateException("There is no battery for this position");
         }
@@ -263,7 +263,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         return res;
     }
 
-    public void initializeCabin(Point position, CrewType crewType) throws IllegalStateException {
+    public void initializeCabin(Point position, CrewType crewType) {
         if (!cabins.containsKey(position)) {
             throw new IllegalStateException("There is no cabin for this position");
         }
@@ -275,7 +275,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         crewSize += cabins.get(position).getNumResidents();
     }
 
-    public void loseCrew(Point position, int amount)  throws IllegalStateException, IllegalArgumentException {
+    public void loseCrew(Point position, int amount) {
         if (!cabins.containsKey(position)) {
             throw new IllegalStateException("There is no cabin for this position");
         }
@@ -285,14 +285,14 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     // Activatables methods
 
-    public void activateComponent(Point position) throws IllegalStateException {
+    public void activateComponent(Point position) {
         if (!activatables.containsKey(position)) {
             throw new IllegalStateException("There is no activatable for this position");
         }
         activatables.get(position).activate(this);
     }
 
-    public void deactivateComponent(Point position) throws IllegalStateException {
+    public void deactivateComponent(Point position) {
         if (!activatables.containsKey(position)) {
             throw new IllegalStateException("There is no activatable for this position");
         }

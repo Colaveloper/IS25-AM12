@@ -79,7 +79,7 @@ public class SecondShipBoard extends ShipBoard {
         lastComponent = stashedComponents.remove(index);
     }
 
-    public void weldLastComponent() throws IllegalStateException {
+    public void weldLastComponent() {
         if (lastComponent != null) {
             if (lastPosition == null) {
                 throw new IllegalStateException("You cannot weld last component without setting its position");
@@ -138,14 +138,14 @@ public class SecondShipBoard extends ShipBoard {
         return res;
     }
 
-    public void initializeCabin(Point position, CrewType crewType)  throws IllegalStateException {
+    public void initializeCabin(Point position, CrewType crewType) {
         super.initializeCabin(position, crewType);
         if (crewType != CrewType.HUMAN) {
             aliens.add(crewType);
         }
     }
 
-    public void loseCrew(Point position, int amount)  throws IllegalStateException, IllegalArgumentException {
+    public void loseCrew(Point position, int amount) {
         if (!cabins.containsKey(position)) {
             throw new IllegalStateException("There is no cabin for this position");
         }
