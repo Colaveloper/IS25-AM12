@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
@@ -50,7 +50,7 @@ public abstract class AdventureCard {
     //abstract methods
     /**increments the step by one,
      * returns the next choice*/
-    public abstract CardState nextStep(GameModel model);
+    public abstract PlayerAction nextStep();
     public abstract List<Boolean> getPlanets();
     public abstract int getFirePower();
     public abstract int getCredits();
@@ -60,4 +60,8 @@ public abstract class AdventureCard {
     public abstract int getSacrifice();
     public abstract int getFlightDaysLost();
     public abstract void landOnPlanet(int i);
+
+    public void fireCannonAtPlayer() {
+        currentShipBoard.removeFirst(); //
+    }
 }

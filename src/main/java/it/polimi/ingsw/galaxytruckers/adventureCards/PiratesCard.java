@@ -1,9 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 
-import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
@@ -36,9 +35,12 @@ public class PiratesCard extends AdventureCard{
                 System.out.println("ERROR: PROJECTILE OF INCORRECT TYPE IN CONSTRUCTOR");
             }
         }
-        cardStates.add(CardState.ACTIVATE_SHIELD);
-        cardStates.add(CardState.END_CARD);
+        //cardStates.add(CardState.ACTIVATE_SHIELD);
+        cardStates.add(PlayerAction.END_CARD);
 
+
+        this.projectileDirections = projectileDirections;
+        this.projectileTypes = projectileTypes;
         this.firePower = firePower;
         this.flightDaysLost = flightDaysLost;
         this.credits = credits;
@@ -50,18 +52,22 @@ public class PiratesCard extends AdventureCard{
 
 
     @Override
-    public CardState nextStep(GameModel model) {
-        if (step == 1) {
-            if (model.getShipPower() > firePower) {
-                model.loseFlightDays(flightDaysLost);
-                model.grabCredits(credits);
+    public PlayerAction nextStep() {
+        // flightBoard.getOrderedShips()
+
+        if (step == 0) { // ESTABLISHING WHO WINS, DRAWS, OR GETS DEFEATED BY PIRATES
+            if (currentShipBoard.getFirePower() > firePower) {
+                // current player defeats pirates
+                flightBoard.displaceShip(currentShipBoard, flightDaysLost);
+                currentShipBoard.gainCredits(credits);
                 //step = step + projectileTypes.size() + 2;       //skip meteors if player has firepower
-            } else if (model.getShipPower() == firePower) {
-                model.passCardToNextPlayer();
-            }
-            else{
-                playerShot.add(model.getCurrentPlayerIndex());
-                model.passCardToNextPlayer();
+            } else if (currentShipBoard.getFirePower() == firePower) {
+                // current player draws with pirates
+                passCardToNextPlayer();
+            } else {
+                // pirates defeat current player
+                defeatedPlayers.add(currentShipBoard);
+                passCardToNextPlayer();
             }
         }
         if (step == 1) { // THE LEADER ROLLS THE DICE

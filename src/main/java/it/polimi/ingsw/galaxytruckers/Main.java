@@ -51,9 +51,6 @@ public class Main {
                 case LOSE_RESIDENT:
                     model.loseResidents(model.getCardSacrifice());//makes the current player lose residents
                     break;
-                case SABOTAGE:
-                    model.sabotage();
-                    break;
                 case ACTIVATE_CANNON:
                     //user input
                     submit = false;
@@ -74,18 +71,21 @@ public class Main {
                     break;
                 case ACTIVATE_SHIELD:
                     //user input
+                    System.out.println("Press ENTER to roll the dice");
+                    input = userScanner.nextLine();
+                    roll = model.rollDice();
+
                     System.out.println("Do you want to activate a SHIELD? (y/n):");
                     input = userScanner.nextLine();
-                    model.rollDice();
+
                     if (input.equals("y")) {
-                        System.out.println("Press ENTER to roll the dice");
+                        // print available shields that would defend the player
+                        System.out.println("What shield to activate (int, int):");
                         input = userScanner.nextLine();
                         model.activateShield(3, 7);
 
                     } else if (input.equals("n")) {
-                        System.out.println("Press ENTER to roll the dice");
-                        input = userScanner.nextLine();
-                        model.fireCannonAtPlayer();
+                        model.fireCannonAtPlayer(roll);
                     } else {
                         System.out.println("Invalid input. Going ahead to next step");
                     }

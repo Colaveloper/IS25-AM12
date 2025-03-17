@@ -308,6 +308,7 @@ public class GameModel {
 
     public void fireCannonAtPlayer(){
         //TODO: roll dice and fire
+        currentCard.fireCannonAtPlayer();
     }
 
     public int rollDice(){
