@@ -16,9 +16,9 @@ public class PiratesCard extends AdventureCard{
     private final int firePower;
     private final List<Integer> projectileDirections;
     private final List<Projectile> projectileTypes;
+    private List<Integer> playerShot;
     private final int credits;
     private final int flightDaysLost;
-
 
     public PiratesCard(int firePower, List<Integer> projectileDirections, List<Projectile> projectileTypes, int flightDaysLost, int credits){
         this.projectileDirections = projectileDirections;
@@ -43,6 +43,7 @@ public class PiratesCard extends AdventureCard{
         this.firePower = firePower;
         this.flightDaysLost = flightDaysLost;
         this.credits = credits;
+        this.playerShot = new ArrayList<>();
         this.name = "[PIRATES]";
 
 
@@ -54,10 +55,17 @@ public class PiratesCard extends AdventureCard{
             if (model.getShipPower() > firePower) {
                 model.loseFlightDays(flightDaysLost);
                 model.grabCredits(credits);
-                step = step + projectileTypes.size();       //skip meteors if player has firepower
+                //step = step + projectileTypes.size() + 2;       //skip meteors if player has firepower
             } else if (model.getShipPower() == firePower) {
                 model.passCardToNextPlayer();
             }
+            else{
+                playerShot.add(model.getCurrentPlayerIndex());
+                model.passCardToNextPlayer();
+            }
+        }
+        else if(step == 2){
+
         }
         step ++;
         return cardStates.get(step);

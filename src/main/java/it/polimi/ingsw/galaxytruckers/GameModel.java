@@ -15,12 +15,27 @@ public class GameModel{
     private AdventureCard activeCard;
     private int maxCardPlays; //TEMPORARY, defines the maximum times a card can be played
     private int activeCardPlayCount;
+    private List<Integer> playerShot;//TODO: list of shipboard, method maps coming int to ships here
 
     //for testing, using the TempDeck, not an official Deck
     public GameModel(){
         this.deck = new TempDeck();
         maxCardPlays = 4;
         activeCardPlayCount = 0;
+    }
+
+    public void setPlayerShot(List<Integer> playerShot) {
+        this.playerShot = playerShot;
+    }
+
+    public void shootPlayers() {
+        for (Integer p : playerShot){
+            System.out.println("player " + p + " gets shot");
+        }
+    }
+
+    public int getCurrentPlayerIndex(){
+        return activeCardPlayCount;
     }
 
     //CARD-RELATED METHODS

@@ -43,6 +43,7 @@ public class TempDeck extends Deck{
         List<GoodsType> goodsList = new ArrayList<>();
         
         //TODO: generate values for cards from JSON
+        randomCard = CardType.PIRATES;
         switch (randomCard){
             case ABANDONED_SHIP:
                 returnCard = new AbandonedShipCard(4,3,1);

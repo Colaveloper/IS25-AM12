@@ -13,6 +13,7 @@ public class Main {
         GameModel model = new GameModel();
         Scanner userScanner = new Scanner(System.in);
         String input;
+        boolean submit = false;
         CardState cardState;
         model.drawCard();
         cardState = model.getCardState();
@@ -29,21 +30,23 @@ public class Main {
         while(cardState != CardState.END_CARD){
             switch (cardState){
                 case ASK_NEXT_PLAYER:
-                    //this is simulating the controller passing this onto the view,
-                    //which will ask for user input
-                    System.out.println("Do you wish to pass this card to the next player?(y/n): ");
-                    input = userScanner.nextLine();
-
-                    if (input.equals("y")) {
-                        //model.resetSteps();
-                        model.passCardToNextPlayer();
-                        break;
-                     } else if (input.equals("n")) {
-                        //continue with the switch case
-                    } else {
-                        System.out.println("Invalid input.");
+                    if (model.getCurrentPlayerIndex() < 4) {
+                        //this is simulating the controller passing this onto the view,
+                        //which will ask for user input
                         System.out.println("Do you wish to pass this card to the next player?(y/n): ");
                         input = userScanner.nextLine();
+
+                        if (input.equals("y")) {
+                            //model.resetSteps();
+                            model.passCardToNextPlayer();
+                            break;
+                        } else if (input.equals("n")) {
+                            //continue with the switch case
+                        } else {
+                            System.out.println("Invalid input.");
+                            System.out.println("Do you wish to pass this card to the next player?(y/n): ");
+                            input = userScanner.nextLine();
+                        }
                     }
                     break;
                 case LOSE_RESIDENT:
@@ -54,22 +57,27 @@ public class Main {
                     break;
                 case ACTIVATE_CANNON:
                     //user input
-                    System.out.println("Do you want to activate a CANNON to increase power? (y/n):");
-                    input = userScanner.nextLine();
-                    if (input.equals("y")) {
-                        model.activateCannon(3, 7);
-                    } else if (input.equals("n")) {
-                        //just continues onto next step
-                        //model.getCardStates();
-                    } else {
-                        System.out.println("Invalid input. Going ahead to next step");
-                        //model.getCardState();
+                    submit = false;
+                    while (!submit) {
+                        System.out.println("Do you want to activate a CANNON to increase power? (y/n):");
+                        input = userScanner.nextLine();
+                        if (input.equals("y")) {
+                            model.activateCannon(3, 7);
+                        } else if (input.equals("n")) {
+                            submit = true;
+                            //just continues onto next step
+                            //model.getCardStates();
+                        } else {
+                            System.out.println("Invalid input. Going ahead to next step");
+                            //model.getCardState();
+                        }
                     }
                     break;
                 case ACTIVATE_SHIELD:
                     //user input
-                    System.out.println("Do you want to activate a SHIELD to increase power? (y/n):");
+                    System.out.println("Do you want to activate a SHIELD? (y/n):");
                     input = userScanner.nextLine();
+                    model.rollDice();
                     if (input.equals("y")) {
                         System.out.println("Press ENTER to roll the dice");
                         input = userScanner.nextLine();
@@ -78,7 +86,6 @@ public class Main {
                         System.out.println("Press ENTER to roll the dice");
                         input = userScanner.nextLine();
                         model.fireCannonAtPlayer();
-                        model.rollDice();
                     } else {
                         System.out.println("Invalid input. Going ahead to next step");
                     }
@@ -91,20 +98,20 @@ public class Main {
                     //it may be completely automatic
                     break;
                 case START_CARD:
-                    System.out.println("PLAYING THE " + model.getCardName() + " CARD");
+                    System.out.println("start card state");
                     break;
                 case GET_BLASTED:
-                    System.out.println("PLAYING THE " + model.getCardName() + " CARD");
+                    System.out.println("get blasted state");
                     break;
                 case SUBMIT_POWER:
-                    System.out.println("PLAYING THE " + model.getCardName() + " CARD");
+                    System.out.println("submit state");
                     break;
                 case CHOOSE_PLANET:
                     int numPlanetInput;
                     //TODO: fix this to account for number of planets available
                     System.out.println("Choose planet (0,1,2)");
                     numPlanetInput = userScanner.nextInt();
-                    if(numPlanetInput != 0 || numPlanetInput != 1 || numPlanetInput != 2){
+                    if(numPlanetInput != 0 && numPlanetInput != 1 && numPlanetInput != 2){
                         System.out.println("Invalid planet to land on. Going to next player");
                         model.passCardToNextPlayer();
                     }
