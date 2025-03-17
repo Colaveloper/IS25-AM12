@@ -15,6 +15,8 @@ public abstract class AdventureCard {
     protected final FlightBoard flightBoard;
     protected String name;
     protected ShipBoard currentShipBoard;
+    protected int diceRoll;
+    //protected final List<Integer> projectileDirections;
 
     protected AdventureCard(FlightBoard flightBoard) {
         this.flightBoard = flightBoard;
@@ -47,6 +49,10 @@ public abstract class AdventureCard {
         return cardStates;
     }
 
+    public void setDiceRoll(int diceRoll){
+        this.diceRoll = diceRoll;
+    }
+
     //abstract methods
     /**increments the step by one,
      * returns the next choice*/
@@ -61,7 +67,5 @@ public abstract class AdventureCard {
     public abstract int getFlightDaysLost();
     public abstract void landOnPlanet(int i);
 
-    public void fireCannonAtPlayer() {
-        currentShipBoard.removeFirst(); //
-    }
+    public abstract void fireCannonAtPlayer(int projectileIndex);
 }

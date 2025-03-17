@@ -15,7 +15,7 @@ public class Main {
         PlayerAction playerAction;
         model.drawCard();
         playerAction = model.getNextPlayerAction();
-        int roll;
+        int projectileIndex = 0;
 
         //simulating drawing the AbandonedShip card
 
@@ -69,23 +69,26 @@ public class Main {
                         }
                     }
                     break;
-                case ACTIVATE_SHIELD:
+                case ROLL_DICE:
                     //user input
                     System.out.println("Press ENTER to roll the dice");
                     input = userScanner.nextLine();
-                    roll = model.rollDice();
+                    model.setRollDice();
+                    projectileIndex += 1;
+                    //roll = model.rollDice();
+                case ACTIVATE_SHIELD:
 
                     System.out.println("Do you want to activate a SHIELD? (y/n):");
                     input = userScanner.nextLine();
 
                     if (input.equals("y")) {
                         // print available shields that would defend the player
-                        System.out.println("What shield to activate (int, int):");
-                        input = userScanner.nextLine();
+//                        System.out.println("What shield to activate (int, int):");
+//                        input = userScanner.nextLine();
                         model.activateShield(3, 7);
 
                     } else if (input.equals("n")) {
-                        model.fireCannonAtPlayer(roll);
+                        model.fireCannonAtPlayer(projectileIndex);
                     } else {
                         System.out.println("Invalid input. Going ahead to next step");
                     }

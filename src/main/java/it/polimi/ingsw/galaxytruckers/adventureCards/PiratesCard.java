@@ -18,6 +18,7 @@ public class PiratesCard extends AdventureCard{
     private List<ShipBoard> defeatedPlayers;
     private final int credits;
     private final int flightDaysLost;
+    private int projectileHittingIndex;
 
     public PiratesCard(FlightBoard flightBoard, int firePower, List<Integer> projectileDirections, List<Projectile> projectileTypes, int flightDaysLost, int credits){
         super(flightBoard);
@@ -25,7 +26,7 @@ public class PiratesCard extends AdventureCard{
         cardStates = new ArrayList<>();
         cardStates.add(PlayerAction.ACTIVATE_CANNON); // 0
         for (int i = 0; i < projectileTypes.size(); i++){       //adds commands for each cannon shot
-            if(projectileTypes.get(i) == Projectile.LIGHT_FIRE){
+            if(projectileTypes.get(i) == Projectile.LIGHT_FIRE){    //TODO: AND there is a shield in that direction
                 cardStates.add(PlayerAction.ROLL_DICE);
                 cardStates.add(PlayerAction.ACTIVATE_SHIELD);
             } else if (projectileTypes.get(i) == Projectile.HEAVY_FIRE) {
@@ -49,7 +50,10 @@ public class PiratesCard extends AdventureCard{
 
     }
 
-
+    @Override
+    public void fireCannonAtPlayer(int projectileIndex) {
+        currentShipBoard.removeComponent(getFirstAt(diceRoll, projectileTypes.get(projectileIndex)));
+    }
 
     @Override
     public PlayerAction nextStep() {
@@ -70,14 +74,7 @@ public class PiratesCard extends AdventureCard{
                 passCardToNextPlayer();
             }
         }
-        if (step == 1) { // THE LEADER ROLLS THE DICE
 
-        } else if() { // ITERATE DEFEATED PLAYERS TO SHOOT THEM
-            //model.setPlayerShot(defeatedPlayers);
-            for (ShipBoard shipBoard : defeatedPlayers){
-                shipBoard.
-            }
-        }
         step ++;
         return cardStates.get(step);
     }
