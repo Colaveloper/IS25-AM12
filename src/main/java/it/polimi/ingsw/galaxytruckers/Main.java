@@ -104,6 +104,7 @@ public class Main {
                     System.out.println("get blasted state");
                     break;
                 case SUBMIT_POWER:
+                    submit = false;
                     System.out.println("submit state");
                     break;
                 case CHOOSE_PLANET:

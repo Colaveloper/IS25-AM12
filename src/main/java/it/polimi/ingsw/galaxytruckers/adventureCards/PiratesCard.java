@@ -65,7 +65,7 @@ public class PiratesCard extends AdventureCard{
             }
         }
         else if(step == 2){
-
+            model.setPlayerShot(playerShot);
         }
         step ++;
         return cardStates.get(step);
