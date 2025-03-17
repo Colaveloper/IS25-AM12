@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 
 import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
@@ -13,15 +13,16 @@ import java.util.List;
 
 public class SabotageCard extends AdventureCard {
     public SabotageCard() {
+        super();
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.SABOTAGE);
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.SABOTAGE);
+        cardStates.add(PlayerAction.END_CARD);
 
         this.name = "[SABOTAGE]";
     }
 
     @Override
-    public CardState nextStep(GameModel model) {
+    public PlayerAction nextStep(GameModel model) {
         step ++;
         return cardStates.get(step);
     }

@@ -2,10 +2,8 @@ package it.polimi.ingsw.galaxytruckers;/*
 * MAIN CLASS SIMULATING THE CONTROLLER CALLING MODEL METHODS
 * THIS IS FOR TESTING PURPOSES ONLY
 * */
-import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -14,9 +12,10 @@ public class Main {
         Scanner userScanner = new Scanner(System.in);
         String input;
         boolean submit = false;
-        CardState cardState;
+        PlayerAction playerAction;
         model.drawCard();
-        cardState = model.getCardState();
+        playerAction = model.getNextPlayerAction();
+        int roll;
 
         //simulating drawing the AbandonedShip card
 
@@ -27,9 +26,9 @@ public class Main {
 
 
         System.out.println("The " + model.getCardName() + " card has been drawn!");
-        while(cardState != CardState.END_CARD){
-            switch (cardState){
-                case ASK_NEXT_PLAYER:
+        while(playerAction != PlayerAction.END_CARD){
+            switch (playerAction){
+                case ASK_IF_PASS:
                     if (model.getCurrentPlayerIndex() < 4) {
                         //this is simulating the controller passing this onto the view,
                         //which will ask for user input
@@ -82,6 +81,7 @@ public class Main {
                         System.out.println("Press ENTER to roll the dice");
                         input = userScanner.nextLine();
                         model.activateShield(3, 7);
+
                     } else if (input.equals("n")) {
                         System.out.println("Press ENTER to roll the dice");
                         input = userScanner.nextLine();
@@ -90,7 +90,7 @@ public class Main {
                         System.out.println("Invalid input. Going ahead to next step");
                     }
                     break;
-                case GRAB_GOODS:
+                case MANANGE_GOODS:
                     model.grabGoods(model.getCardGoods());
                     break;
                 case LOSE_GOODS:
@@ -137,7 +137,7 @@ public class Main {
                 default:
                     System.out.println("Error in processing card choice");
             }
-            cardState = model.getCardState();
+            playerAction = model.getNextPlayerAction();
         }
     }
 }

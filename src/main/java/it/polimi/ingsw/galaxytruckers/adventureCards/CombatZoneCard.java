@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
@@ -17,11 +17,12 @@ public class CombatZoneCard extends AdventureCard{
 
     public CombatZoneCard(int flightDaysLost, int numResidentsLost, List<Integer> projectileDirections, List<Projectile> projectileType){
         //cardState init
+        super();
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.START_CARD);
-        cardStates.add(CardState.ACTIVATE_ENGINE);
-        cardStates.add(CardState.ACTIVATE_CANNON);
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.START_CARD);
+        cardStates.add(PlayerAction.ACTIVATE_ENGINE);
+        cardStates.add(PlayerAction.ACTIVATE_CANNON);
+        cardStates.add(PlayerAction.END_CARD);
 
         //attributes init
         this.name = "[COMBAT ZONE]";
@@ -33,7 +34,7 @@ public class CombatZoneCard extends AdventureCard{
 
     //USED METHODS
     @Override
-    public CardState nextStep(GameModel model) {
+    public PlayerAction nextStep(GameModel model) {
         if(step == 0){
             model.loseFlightDaysLeastResidents(flightDaysLost);
         }

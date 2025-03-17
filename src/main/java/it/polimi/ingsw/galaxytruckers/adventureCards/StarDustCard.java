@@ -1,8 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
@@ -11,15 +10,16 @@ import java.util.List;
 
 public class StarDustCard extends AdventureCard {
     public StarDustCard() {
+        super();
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.START_CARD);
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.START_CARD);
+        cardStates.add(PlayerAction.END_CARD);
 
         this.name = "[STAR DUST]";
     }
 
     @Override
-    public CardState nextStep(GameModel model) {
+    public PlayerAction nextStep(GameModel model) {
         if (step == 0) {
             model.loseFlightDays(model.getExposedConnectors());
             model.passCardToNextPlayer();

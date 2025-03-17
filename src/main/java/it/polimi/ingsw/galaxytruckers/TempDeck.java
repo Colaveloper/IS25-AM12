@@ -5,7 +5,6 @@ import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
-import javax.smartcardio.Card;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -61,8 +60,8 @@ public class TempDeck extends Deck{
                 projectileDirections.add(0);
 
                 projectilesType.clear();
-                projectilesType.add(Projectile.SMALL_CANNON);
-                projectilesType.add(Projectile.BIG_CANNON);
+                projectilesType.add(Projectile.LIGHT_FIRE);
+                projectilesType.add(Projectile.HEAVY_FIRE);
 
                 returnCard = new CombatZoneCard(3,2,projectileDirections,projectilesType);
                 break;
@@ -78,7 +77,7 @@ public class TempDeck extends Deck{
 
                 projectilesType.clear();
                 projectilesType.add(Projectile.SMALL_METEOR);
-                projectilesType.add(Projectile.BIG_METEOR);
+                projectilesType.add(Projectile.LARGE_METEOR);
                 projectilesType.add(Projectile.SMALL_METEOR);
 
                 returnCard = new MeteorSwarmCard(projectileDirections,projectilesType);
@@ -95,11 +94,11 @@ public class TempDeck extends Deck{
                 projectileDirections.add(3);
 
                 projectilesType.clear();
-                projectilesType.add(Projectile.BIG_CANNON);
-                projectilesType.add(Projectile.SMALL_CANNON);
-                projectilesType.add(Projectile.BIG_CANNON);
-                projectilesType.add(Projectile.SMALL_CANNON);
-                projectilesType.add(Projectile.SMALL_CANNON);
+                projectilesType.add(Projectile.HEAVY_FIRE);
+                projectilesType.add(Projectile.LIGHT_FIRE);
+                projectilesType.add(Projectile.HEAVY_FIRE);
+                projectilesType.add(Projectile.LIGHT_FIRE);
+                projectilesType.add(Projectile.LIGHT_FIRE);
 
                 returnCard = new PiratesCard(10,projectileDirections,projectilesType,2,12);
                 break;

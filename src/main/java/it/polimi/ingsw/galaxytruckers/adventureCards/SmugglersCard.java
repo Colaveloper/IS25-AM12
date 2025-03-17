@@ -3,12 +3,11 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 
 import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SmugglersCard extends AdventureCard{
@@ -20,13 +19,14 @@ public class SmugglersCard extends AdventureCard{
 
 
     public SmugglersCard(List<GoodsType> loot, int flightDaysLost, int firePower, int goodsStolen) {
+        super();
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.ACTIVATE_CANNON);
-        cardStates.add(CardState.SUBMIT_POWER);
-        cardStates.add(CardState.LOSE_GOODS);
+        cardStates.add(PlayerAction.ACTIVATE_CANNON);
+        cardStates.add(PlayerAction.SUBMIT_POWER);
+        cardStates.add(PlayerAction.LOSE_GOODS);
         //cardStates.add(CardState.ASK_NEXT_PLAYER);
-        cardStates.add(CardState.GRAB_GOODS);
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.MANANGE_GOODS);
+        cardStates.add(PlayerAction.END_CARD);
 
         this.flightDaysLost = flightDaysLost;
         this.loot = loot;
@@ -36,7 +36,7 @@ public class SmugglersCard extends AdventureCard{
     }
 
     @Override
-    public CardState nextStep(GameModel model) {
+    public PlayerAction nextStep(GameModel model) {
         if (step == 1) {
             if (model.getShipPower() > firePower) {
                 model.loseFlightDays(flightDaysLost);

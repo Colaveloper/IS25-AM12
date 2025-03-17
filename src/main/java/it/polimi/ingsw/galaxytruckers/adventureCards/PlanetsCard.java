@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
@@ -17,6 +17,7 @@ public class PlanetsCard extends AdventureCard{
 
     public PlanetsCard(int numPlanets, List<GoodsType> goods, int flightDaysLost){
         //attributes init
+        super();
         planets = new ArrayList<>();
         for (int i = 0; i < numPlanets; i++) {
             //TRUE indicates an occupied planet
@@ -28,14 +29,14 @@ public class PlanetsCard extends AdventureCard{
 
         //cardState init
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.CHOOSE_PLANET);
-        cardStates.add(CardState.GRAB_GOODS);
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.CHOOSE_PLANET);
+        cardStates.add(PlayerAction.MANANGE_GOODS);
+        cardStates.add(PlayerAction.END_CARD);
     }
 
     //USED METHODS
     @Override
-    public CardState nextStep(GameModel model) {
+    public PlayerAction nextStep(GameModel model) {
         step++;
         return cardStates.get(step);
     }

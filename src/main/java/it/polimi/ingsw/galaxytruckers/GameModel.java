@@ -7,16 +7,13 @@ import com.google.common.collect.BiMap;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.Deck;
-import it.polimi.ingsw.galaxytruckers.TempDeck;
 import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.List;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,7 +25,7 @@ public class GameModel {
     private GameFactory gameFactory;
     private FlightBoard flightBoard;
     private Deck deck;
-    private AdventureCard activeCard;
+    private AdventureCard currentCard;
     private int maxCardPlays; //TEMPORARY, defines the maximum times a card can be played
     private int activeCardPlayCount;
     private List<Integer> playerShot;//TODO: list of shipboard, method maps coming int to ships here
@@ -187,50 +184,50 @@ public class GameModel {
 
     //CARD-RELATED METHODS
     public void drawCard(){
-        activeCard = deck.drawCard();
+        currentCard = deck.drawCard();
         activeCardPlayCount = 0;
     }
 
     public void resetSteps(){
-        activeCard.resetSteps();
+        currentCard.passCardToNextPlayer();
     }
 
-    public List<CardState> getCardStates(){
-        return activeCard.getChoicesList();
+    public List<PlayerAction> getCardStates(){
+        return currentCard.getChoicesList();
     }
 
     public String getCardName() {
-        return activeCard.getName();
+        return currentCard.getName();
     }
 
     public int getCardSacrifice() {
-        return activeCard.getSacrifice();
+        return currentCard.getSacrifice();
     }
 
     public int getCardCredits() {
-        return activeCard.getCredits();
+        return currentCard.getCredits();
     }
 
     public int getCardFlightDaysLost() {
-        return activeCard.getFlightDaysLost();
+        return currentCard.getFlightDaysLost();
     }
 
-    public CardState getCardState() {
-        return activeCard.nextStep(this);
+    public PlayerAction getNextPlayerAction() {
+        return currentCard.nextStep();
     }
 
-    public void passCardToNextPlayer(){
-        activeCardPlayCount++;
-        if(activeCardPlayCount < 4){
-            activeCard.resetSteps();    //reset only if there is another player
-            //TODO: pass the card to next player
-            System.out.println("Card has been passed to the next player.");
-        }
-        else {
-            System.out.println("Card can't be played anymore");
-        }
-
-    }
+//    public void passCardToNextPlayer(){
+//        activeCardPlayCount++;
+//        if(activeCardPlayCount < 4){
+//            activeCard.resetSteps();    //reset only if there is another player
+//            //TODO: pass the card to next player
+//            System.out.println("Card has been passed to the next player.");
+//        }
+//        else {
+//            System.out.println("Card can't be played anymore");
+//        }
+//
+//    }
 
     public int getShipPower() {
         //TODO: get actual shipboard model to do this
@@ -284,7 +281,7 @@ public class GameModel {
     }
 
     public List<GoodsType> getCardGoods(){
-        return activeCard.getGoods();
+        return currentCard.getGoods();
     }
 
     //TODO: possibly condense these three methods into one method ------------------------------------
@@ -306,7 +303,7 @@ public class GameModel {
 
     public void landOnPlanet(int i){
         //TODO: current player lands on planet
-        activeCard.landOnPlanet(i);
+        currentCard.landOnPlanet(i);
     }
 
     public void fireCannonAtPlayer(){

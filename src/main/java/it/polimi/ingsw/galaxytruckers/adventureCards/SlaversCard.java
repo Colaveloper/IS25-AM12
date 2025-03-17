@@ -2,13 +2,11 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 
 import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SlaversCard extends AdventureCard {
@@ -19,12 +17,13 @@ public class SlaversCard extends AdventureCard {
     private final int flightDaysLost;
 
     public SlaversCard(int firePower, int credits, int sacrifices, int flightDaysLost) {
+        super();
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.ACTIVATE_CANNON);
-        cardStates.add(CardState.SUBMIT_POWER);
-        cardStates.add(CardState.LOSE_RESIDENT);
+        cardStates.add(PlayerAction.ACTIVATE_CANNON);
+        cardStates.add(PlayerAction.SUBMIT_POWER);
+        cardStates.add(PlayerAction.LOSE_RESIDENT);
         //cardStates.add(CardState.ASK_NEXT_PLAYER);
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.END_CARD);
 
         this.firePower = firePower;
         this.credits = credits;
@@ -34,7 +33,7 @@ public class SlaversCard extends AdventureCard {
     }
 
     @Override
-    public CardState nextStep(GameModel model) {
+    public PlayerAction nextStep(GameModel model) {
         if (step == 1) {
             if (model.getShipPower() > firePower) {
                 model.grabCredits(credits);

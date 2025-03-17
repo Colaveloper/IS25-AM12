@@ -1,11 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
-import javax.smartcardio.Card;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +15,7 @@ public class MeteorSwarmCard extends AdventureCard{
 
     public MeteorSwarmCard(List<Integer> projectileDirections, List<Projectile> projectileType){
         //attributes init
+        super();
         this.projectileDirections = new ArrayList<>(projectileDirections);
         this.projectileType = new ArrayList<>(projectileType);
         this.name = "[METEOR SWARM]";
@@ -24,20 +24,20 @@ public class MeteorSwarmCard extends AdventureCard{
         cardStates = new ArrayList<>();
         for (int i = 0; i < projectileType.size(); i++) {
             if(projectileType.get(i) == Projectile.SMALL_METEOR){
-                cardStates.add(CardState.ACTIVATE_SHIELD);
-            } else if (projectileType.get(i) == Projectile.BIG_METEOR) {
-                cardStates.add(CardState.ACTIVATE_CANNON);
+                cardStates.add(PlayerAction.ACTIVATE_SHIELD);
+            } else if (projectileType.get(i) == Projectile.LARGE_METEOR) {
+                cardStates.add(PlayerAction.ACTIVATE_CANNON);
             } else {
                 //TODO: make this launch some kind of exception or proper error message
                 System.out.println("ERROR: PROJECTILE OF INCORRECT TYPE IN CONSTRUCTOR");
             }
         }
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.END_CARD);
     }
 
     //USED METHODS
     @Override
-    public CardState nextStep(GameModel model) {
+    public PlayerAction nextStep(GameModel model) {
         step++;
         return cardStates.get(step);
     }
