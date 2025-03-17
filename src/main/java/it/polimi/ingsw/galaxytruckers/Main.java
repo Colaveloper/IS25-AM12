@@ -12,9 +12,8 @@ public class Main {
         Scanner userScanner = new Scanner(System.in);
         String input;
         boolean submit = false;
-        PlayerAction playerAction;
         model.drawCard();
-        playerAction = model.getNextPlayerAction();
+        PlayerAction playerAction = model.getNextPlayerAction();
         int projectileIndex = 0;
 
         //simulating drawing the AbandonedShip card
@@ -26,8 +25,8 @@ public class Main {
 
 
         System.out.println("The " + model.getCardName() + " card has been drawn!");
-        while(playerAction != PlayerAction.END_CARD){
-            switch (playerAction){
+        while(playerAction != PlayerAction.END_CARD) {
+            switch (playerAction) {
                 case ASK_IF_PASS:
                     if (model.getCurrentPlayerIndex() < 4) {
                         //this is simulating the controller passing this onto the view,
@@ -37,6 +36,7 @@ public class Main {
 
                         if (input.equals("y")) {
                             //model.resetSteps();
+
                             model.passCardToNextPlayer();
                             break;
                         } else if (input.equals("n")) {

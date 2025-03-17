@@ -24,7 +24,7 @@ public class PiratesCard extends AdventureCard{
         super(flightBoard);
 
         cardStates = new ArrayList<>();
-        cardStates.add(PlayerAction.ACTIVATE_CANNON); // 0
+        cardStates.add(PlayerAction.ACTIVATE_CANNON);
         for (int i = 0; i < projectileTypes.size(); i++){       //adds commands for each cannon shot
             if(projectileTypes.get(i) == Projectile.LIGHT_FIRE){    //TODO: AND there is a shield in that direction
                 cardStates.add(PlayerAction.ROLL_DICE);
@@ -50,13 +50,16 @@ public class PiratesCard extends AdventureCard{
 
     }
 
+    // 0: ESTABLISHING WHO WINS, DRAWS, OR GETS DEFEATED BY PIRATES
+    // 1: LEADER THROWS DICE
+
 
 
     @Override
     public PlayerAction nextStep() {
         // flightBoard.getOrderedShips()
 
-        if (step == 0) { // ESTABLISHING WHO WINS, DRAWS, OR GETS DEFEATED BY PIRATES
+        if (step == 0) {
             if (currentShipBoard.getFirePower() > firePower) {
                 // current player defeats pirates
                 flightBoard.displaceShip(currentShipBoard, flightDaysLost);
@@ -70,7 +73,12 @@ public class PiratesCard extends AdventureCard{
                 defeatedPlayers.add(currentShipBoard);
                 passCardToNextPlayer();
             }
+        } else if (step == 1) {
+
         }
+//        if (cardStates.get(step) == PlayerAction.ACTIVATE_SHIELD) {
+//
+//        }
 
 
         step ++;

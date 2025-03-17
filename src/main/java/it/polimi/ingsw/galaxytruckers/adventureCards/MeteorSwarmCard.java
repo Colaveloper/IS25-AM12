@@ -51,10 +51,8 @@ public class MeteorSwarmCard extends AdventureCard{
     public List<Projectile> getProjectilesType() {
         return projectileTypes;
     }
-    @Override
-    public void fireCannonAtPlayer(int projectileIndex) {
-        currentShipBoard.removeComponent(getFirstAt(diceRoll, projectileDirections.get(projectileIndex)));
-    }
+
+
 
     //UNUSED METHODS
     @Override

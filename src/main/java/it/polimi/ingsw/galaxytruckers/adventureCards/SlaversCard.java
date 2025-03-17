@@ -21,7 +21,7 @@ public class SlaversCard extends AdventureCard {
         super(flightBoard);
         cardStates = new ArrayList<>();
         cardStates.add(PlayerAction.ACTIVATE_CANNON);
-        cardStates.add(PlayerAction.SUBMIT_POWER);
+        //cardStates.add(PlayerAction.SUBMIT_POWER);
         cardStates.add(PlayerAction.LOSE_RESIDENT);
         //cardStates.add(CardState.ASK_NEXT_PLAYER);
         cardStates.add(PlayerAction.END_CARD);
@@ -35,17 +35,17 @@ public class SlaversCard extends AdventureCard {
 
     @Override
     public PlayerAction nextStep() {
-        if (step == 1) {
-            if (model.getShipPower() > firePower) {
+        if (step == 0) {
+            if (currentShipBoard.getFirePower() > firePower) {
                 currentShipBoard.gainCredits(credits);
                 flightBoard.displaceShip(currentShipBoard, flightDaysLost);
                 step = step + 2;    //2 as the states to skip as a player wins
-            } else if (model.getShipPower() == firePower) {
-                model.passCardToNextPlayer();
+            } else if (currentShipBoard.getFirePower() == firePower) {
+                passCardToNextPlayer();
             }
             else {
-                model.loseResidents(sacrifices);
-                model.passCardToNextPlayer();
+                //currentShipBoard.loseCrew();
+                //passCardToNextPlayer();
             }
         }
         step ++;

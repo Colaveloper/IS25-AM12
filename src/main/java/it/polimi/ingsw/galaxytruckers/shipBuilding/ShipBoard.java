@@ -222,6 +222,12 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         return null;
     }
 
+    public Point getFirstComponentAt(int diceRoll, int direction) {
+        return new java.awt.Point(5, 4);
+        // TODO: make return with first component hit by the said projectile
+        // TODO: choose how to handle different projectiles
+    }
+
     //CargoHold methods
 
     //TODO: handle update of ship's goods

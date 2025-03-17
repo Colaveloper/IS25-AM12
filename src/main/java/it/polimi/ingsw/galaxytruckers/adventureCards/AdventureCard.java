@@ -4,8 +4,10 @@ import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
+import java.awt.*;
 import java.util.List;
 
 public abstract class AdventureCard {
@@ -24,8 +26,18 @@ public abstract class AdventureCard {
         this.currentShipBoard = flightBoard.getOrderedShips().getFirst();
     }
 
-    public void fireCannonAtPlayer(int projectileIndex) {
-        currentShipBoard.removeComponent(getFirstAt(diceRoll, projectileDirections.get(projectileIndex)));
+    // called after player failed to prevent projectile
+    public void projectileAtPlayer(int projectileIndex) {
+        Point projectileTarget = currentShipBoard.getFirstComponentAt(diceRoll, projectileDirections.get(projectileIndex));
+        if (projectileTypes.get(projectileIndex) == Projectile.SMALL_METEOR &&
+                currentShipBoard
+                        .getComponentMap()
+                        .get(projectileTarget)
+                        .getConnectors()
+                        .get(projectileDirections.get(projectileIndex))
+                        == Connector.NONE
+            ) { return;}
+        currentShipBoard.removeComponent(projectileTarget); //in case of big/small fire, bigMeteor and smallMeteor on openConnector
     }
 
     //public methods

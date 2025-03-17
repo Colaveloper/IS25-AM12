@@ -216,6 +216,9 @@ public class GameModel {
         return currentCard.nextStep();
     }
 
+    public  void  passCardToNextPlayer() {
+        currentCard.passCardToNextPlayer();
+    }
 //    public void passCardToNextPlayer(){
 //        activeCardPlayCount++;
 //        if(activeCardPlayCount < 4){
@@ -308,7 +311,7 @@ public class GameModel {
 
     public void fireCannonAtPlayer(int projectileIndex){
         //TODO: roll dice and fire
-        currentCard.fireCannonAtPlayer(projectileIndex);
+        currentCard.projectileAtPlayer(projectileIndex);
     }
 
     public void setRollDice(){
