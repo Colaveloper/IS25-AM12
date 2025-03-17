@@ -3,50 +3,45 @@ package it.polimi.ingsw.galaxytruckers.shipBuilding;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import jdk.jshell.spi.ExecutionControl;
 
 import java.awt.Point;
 import java.util.*;
 import java.util.List;
 
-public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
+public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
-    private final Map<Point, Component> componentMap;
-    private final List<Component> stashedComponents;
-    private Component lastComponent;  // can be null
-    private Point lastPosition;  // can be null
-    private final ComponentBank componentBank;
-    private final List<Point> shipArea;
-    private final Colors color;
+    protected final Map<Point, Component> componentMap;
+    protected Component lastComponent;  // can be null
+    protected Point lastPosition;  // can be null
+    protected final ComponentBank componentBank;
+    protected final Colors color;
 
-    private int firePower;
-    private int enginePower;
-    private int numBatteries;
-    private int crewSize;
-    private int credits;
-    private int losses;
-    private int exposedConnectorsNumber;
-    private final int[] shieldDirections;
-    private final Set<CrewType> aliens;
-    private Map<GoodsType, Integer> goods;
+    protected int firePower;
+    protected int enginePower;
+    protected int numBatteries;
+    protected int crewSize;
+    protected int credits;
+    protected int losses;
+    protected int exposedConnectorsNumber;
+    protected final int[] shieldDirections;
+    protected final Map<GoodsType, Integer> goods;
     // We might need this attribute to handle meteors and cannon hits better
-    // private List<Map<Integer, Integer>> cannonDirections;
+    // protected List<Map<Integer, Integer>> cannonDirections;
 
-    private Map<Point, Cannon> cannons;
-    private Map<Point, Engine> engines;
-    private Map<Point, Battery> batteries;
-    private Map<Point, Shield> shields;
-    private Map<Point, CargoHold>  cargoHolds;
-    private Map<Point, Cabin> cabins;
-    private Map<Point, LifeSupport> lifeSupports;
-    private Map<Point, Activatable> activatables;
+    protected final Map<Point, Cannon> cannons;
+    protected final Map<Point, Engine> engines;
+    protected final Map<Point, Battery> batteries;
+    protected final Map<Point, Shield> shields;
+    protected final Map<Point, CargoHold>  cargoHolds;
+    protected final Map<Point, Cabin> cabins;
+    protected final Map<Point, Activatable> activatables;
 
-    ShipBoard(ComponentBank componentBank, Level level, Colors color) { // (, Color color)
+    ShipBoard(ComponentBank componentBank, Colors color) { // (, Color color)
         this.componentMap = new HashMap<>();
-        this.stashedComponents = new ArrayList<>();
         this.componentBank = componentBank;
         this.lastComponent = null;
         this.lastPosition = null;
-        this.shipArea = level.getShipArea();
 
         this.firePower = 0;
         this.enginePower = 0;
@@ -54,18 +49,24 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         this.crewSize = 0;
         this.credits = 0;
         this.losses = 0;
-        this.shieldDirections = new int[4];
-        for (int i = 0; i < 4; i++) {
-            this.shieldDirections[i] = 0;
-        }
-        this.aliens = new HashSet<>();
+        this.shieldDirections = new int[]{0,0,0,0};
         this.color = color;
+        this.goods = new HashMap<>();
+        this.cannons = new HashMap<>();
+        this.engines = new HashMap<>();
+        this.batteries = new HashMap<>();
+        this.shields = new HashMap<>();
+        this.cargoHolds = new HashMap<>();
+        this.cabins = new HashMap<>();
+        this.activatables = new HashMap<>();
 
     }
 
-    public ShipBoard(Level level, Colors color) {
-        this(ComponentBank.getInstance(), level, color);
+    public ShipBoard(Colors color) {
+        this(ComponentBank.getInstance(), color);
     }
+
+    protected abstract boolean containsPoint(Point point);
 
     public void gainCredits (int credits) {
         this.credits += credits;
@@ -96,7 +97,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
             throw new IllegalStateException("There is no component to place");
         } else if (componentMap.containsKey(newPosition)) {
             throw new IllegalStateException("The position is already taken");
-        } else if (!shipArea.contains(newPosition)) {
+        } else if (!containsPoint(newPosition)) {
             throw new IllegalArgumentException("The position is outside the ship");
         }
         lastPosition = newPosition;
@@ -109,24 +110,15 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         lastComponent.rotateLeft();
     }
 
-    public void stashComponent() throws IllegalStateException {
-        if (lastComponent == null) {
-            throw new IllegalStateException("There is no component to stash");
-        }
-        if (stashedComponents.size() >= 2) {
-            throw new IllegalStateException("You can only have up to 2 stashed components");
-        }
-        stashedComponents.add(lastComponent);
-        lastComponent = null;
-        lastPosition = null;
+    public void stashComponent() throws ExecutionControl.NotImplementedException {
+        throw new ExecutionControl.NotImplementedException("");
+    };
+
+    public void grabStashedComponent(int index) throws ExecutionControl.NotImplementedException {
+        throw new ExecutionControl.NotImplementedException("");
     }
 
-    public void grabStashedComponent(int index) throws IndexOutOfBoundsException {
-        weldLastComponent();
-        lastComponent = stashedComponents.remove(index);
-    }
-
-    public void weldLastComponent() throws IllegalStateException {
+    public void weldLastComponent() {
         if (lastComponent != null) {
             if (lastPosition == null) {
                 throw new IllegalStateException("You cannot weld last component without setting its position");
@@ -143,7 +135,10 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         lastPosition = position;
         componentMap.remove(lastPosition).removeFromVisitor(this);
         lastPosition = null;
-        losses += 1;
+    }
+
+    public void incrementLosses(int amount) {
+        losses += amount;
     }
 
     //Observers
@@ -151,11 +146,11 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     // Ship stats observers
 
     public int getFirePower() {
-        return (firePower > 0 && aliens.contains(CrewType.PURPLE)) ? firePower+2 : firePower;
+        return firePower;
     }
 
     public int getEnginePower() {
-        return (enginePower > 0 && aliens.contains(CrewType.BROWN)) ? enginePower+2 : enginePower;
+        return enginePower;
     }
 
     public int getNumBatteries() {
@@ -168,7 +163,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     public int getCredits() { return credits; }
 
-    public int getLosses() { return 0; }
+    public int getLosses() { return losses; }
 
     public int getGoodsValue() {
         return goods.keySet().stream()
@@ -216,8 +211,8 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         return cargoHolds;
     }
 
-    public Map<Point, LifeSupport> getLifeSupports() {
-        return lifeSupports;
+    public Map<Point, LifeSupport> getLifeSupports() throws ExecutionControl.NotImplementedException {
+        throw new ExecutionControl.NotImplementedException("");
     }
 
     public Map<Point, Activatable> getActivatables() {
@@ -228,8 +223,8 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         return Optional.ofNullable(lastComponent);
     }
 
-    public List<Component> getStashedComponents() {
-        return stashedComponents;
+    public List<Component> getStashedComponents() throws ExecutionControl.NotImplementedException {
+        throw new ExecutionControl.NotImplementedException("");
     }
 
     //CargoHold methods
@@ -262,23 +257,9 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     //Cabin (and LifeSupport) methods
 
-    public Set<CrewType> getCrewTypeOptions(Point position) throws IllegalStateException, IllegalArgumentException {
+    public Set<CrewType> getCrewTypeOptions(Point position) {
         Set<CrewType> res = new HashSet<>();
-        if (!cabins.containsKey(position)) {
-            throw new IllegalStateException("There is no cabin for this position");
-        }
         res.add(CrewType.HUMAN);
-
-        // aliens are not allowed on the starting cabin
-        if(!position.equals(new Point(7, 7))) {
-            List<Point> neighbours = getNeighbours(position);
-            for (int i = 0; i < neighbours.size(); i++) {
-                Point neighbour = neighbours.get(i);
-                if (lifeSupports.containsKey(neighbour) && componentMap.get(position).getConnectors().get(i) != Connector.NONE) {
-                    res.add(lifeSupports.get(neighbour).getAlienType());
-                }
-            }
-        }
         return res;
     }
 
@@ -292,9 +273,6 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
         }
         cabins.get(position).initialize(crewType);
         crewSize += cabins.get(position).getNumResidents();
-        if (crewType != CrewType.HUMAN) {
-            aliens.add(crewType);
-        }
     }
 
     public void loseCrew(Point position, int amount)  throws IllegalStateException, IllegalArgumentException {
@@ -324,6 +302,7 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     // Ship validity methods
 
     //TODO: handle exposed connectors update
+    //TODO: handle Components who are not connected
     public boolean checkValidity() {
         Set<Point> checkedPoints = new HashSet<>();
         List<Point> toCheck = new ArrayList<>();
@@ -386,167 +365,12 @@ public class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     //Utilities methods
 
     //  Not a very elegant solution, consider extending Point / defining utilities / creating an abstraction for orientation
-    private List<Point> getNeighbours(Point position) {
+    protected List<Point> getNeighbours(Point position) {
         List<Point> res = new ArrayList<>();
         res.add(new Point(position.x, position.y-1));
         res.add(new Point(position.x-1, position.y));
         res.add(new Point(position.x, position.y+1));
         res.add(new Point(position.x+1, position.y));
         return res;
-    }
-
-    //Visitor pattern methods
-
-    @Override
-    public void activate(DoubleCannon doubleCannon) {
-        this.firePower += doubleCannon.getFirePower();
-    }
-
-    @Override
-    public void activate(DoubleEngine doubleEngine) {
-        this.enginePower += doubleEngine.getEnginePower();
-    }
-
-    @Override
-    public void activate(Shield shield) {
-        for (int direction : shield.getProtectedDirections()) {
-            this.shieldDirections[direction] += 1;
-        }
-    }
-
-    @Override
-    public void deactivate(DoubleCannon doubleCannon) {
-        this.firePower -= doubleCannon.getFirePower();
-    }
-
-    @Override
-    public void deactivate(DoubleEngine doubleEngine) {
-        this.enginePower -= doubleEngine.getEnginePower();
-    }
-
-    @Override
-    public void deactivate(Shield shield) {
-        // REVIEW: change shield behaviour to simplify management
-        for (int direction : shield.getProtectedDirections()) {
-            this.shieldDirections[direction] -= 1;
-        }
-    }
-
-    //TODO: consider removing this method
-    @Override
-    public void add(Component component) {
-        return;
-    }
-
-    @Override
-    public void add(Cannon cannon) {
-        this.cannons.put(this.lastPosition, cannon);
-        this.firePower += cannon.getFirePower();
-    }
-
-    @Override
-    public void add(Engine engine) {
-        this.engines.put(this.lastPosition, engine);
-        this.enginePower += engine.getEnginePower();
-    }
-
-    @Override
-    public void add(Battery battery) {
-        this.batteries.put(this.lastPosition, battery);
-        this.numBatteries += battery.getNumBatteries();
-    }
-
-    @Override
-    public void add(Cabin cabin) {
-        this.cabins.put(this.lastPosition, cabin);
-    }
-
-    @Override
-    public void add(Shield shield) {
-        this.shields.put(this.lastPosition, shield);
-    }
-
-    @Override
-    public void add(LifeSupport lifeSupport) {
-        this.lifeSupports.put(this.lastPosition, lifeSupport);
-    }
-
-    @Override
-    public void add(CargoHold cargoHold) {
-        this.cargoHolds.put(this.lastPosition, cargoHold);
-    }
-
-    @Override
-    public void add(DoubleCannon doubleCannon) {
-        this.cannons.put(this.lastPosition, doubleCannon);
-        this.activatables.put(this.lastPosition, doubleCannon);
-    }
-
-    @Override
-    public void add(DoubleEngine doubleEngine) {
-        this.engines.put(this.lastPosition, doubleEngine);
-        this.activatables.put(this.lastPosition, doubleEngine);
-    }
-
-    @Override
-    //TODO: Consider removing this method
-    public void remove(Component component) {
-    }
-
-    @Override
-    public void remove(Cannon cannon) {
-        this.cannons.remove(this.lastPosition);
-        this.firePower -= cannon.getFirePower();
-    }
-
-    @Override
-    public void remove(Engine engine) {
-        this.engines.remove(this.lastPosition);
-        this.enginePower -= engine.getEnginePower();
-    }
-
-    @Override
-    public void remove(Battery battery) {
-        this.batteries.remove(this.lastPosition);
-        this.numBatteries -= battery.getNumBatteries();
-    }
-
-    @Override
-    public void remove(Cabin cabin) {
-        this.cabins.remove(this.lastPosition);
-        this.crewSize -= cabin.getNumResidents();
-        //TODO: handle alien loss
-    }
-
-    @Override
-    public void remove(Shield shield) {
-        this.shields.remove(this.lastPosition);
-        //TODO: Handle shield deactivation/removal
-    }
-
-    @Override
-    public void remove(LifeSupport lifeSupport) {
-        this.lifeSupports.remove(this.lastPosition);
-        //TODO: handle alien loss
-    }
-
-    @Override
-    public void remove(CargoHold cargoHold) {
-        this.cargoHolds.remove(this.lastPosition);
-        //TODO: handle goods loss
-    }
-
-    @Override
-    public void remove(DoubleCannon doubleCannon) {
-        this.cannons.remove(this.lastPosition);
-        this.activatables.remove(this.lastPosition);
-        //TODO: handle cannon deactivation/removal
-    }
-
-    @Override
-    public void remove(DoubleEngine doubleEngine) {
-        this.engines.remove(this.lastPosition);
-        this.activatables.remove(this.lastPosition);
-        //TODO: handle engine deactivation/removal
     }
 }
