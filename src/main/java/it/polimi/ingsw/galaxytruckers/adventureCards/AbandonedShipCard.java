@@ -1,8 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Choice;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Goods;
+import it.polimi.ingsw.galaxytruckers.GameModel;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +14,10 @@ public class AbandonedShipCard extends AdventureCard{
     private final int flightDaysLost;
 
     public AbandonedShipCard(int credits, int numResidents, int flightDaysLost){
-        choices = new ArrayList<>();
-        choices.add(Choice.ASK_NEXT_PLAYER);
-        choices.add(Choice.LOSE_RESIDENT);
-        choices.add(Choice.GRAB_CREDITS);
-        choices.add(Choice.END_CARD);
+        cardStates = new ArrayList<>();
+        cardStates.add(CardState.ASK_NEXT_PLAYER);
+        cardStates.add(CardState.LOSE_RESIDENT);
+        cardStates.add(CardState.END_CARD);
 
         this.name = "[ABANDONED SHIP]";
         this.credits = credits;
@@ -25,11 +25,16 @@ public class AbandonedShipCard extends AdventureCard{
         this.flightDaysLost = flightDaysLost;
     }
 
-    public List<Choice> getChoicesList(){
-        return choices;
+    //USED METHODS
+    @Override
+    public CardState nextStep(GameModel model) {
+        if(step == 1){
+            model.grabCredits(credits);
+            model.loseFlightDays(flightDaysLost);
+        }
+        step++;
+        return cardStates.get(step);
     }
-
-    //getters
     @Override
     public int getCredits() {
         return credits;
@@ -38,7 +43,6 @@ public class AbandonedShipCard extends AdventureCard{
     public int getSacrifice() {
         return numResidents;
     }
-
     @Override
     public int getFlightDaysLost() {
         return flightDaysLost;
@@ -49,7 +53,6 @@ public class AbandonedShipCard extends AdventureCard{
     public int getFirePower() {
         return 0;
     }
-
     @Override
     public List<Integer> getProjectileDirections() {
         return null;
@@ -59,17 +62,13 @@ public class AbandonedShipCard extends AdventureCard{
         return null;
     }
     @Override
-    public List<Goods> getGoods(){
+    public List<GoodsType> getGoods(){
         return null;
     }
-
     @Override
     public List<Projectile> getProjectilesType() {
         return null;
     }
-
     @Override
-    public void landOnPlanet(int i) {
-
-    }
+    public void landOnPlanet(int i) {}
 }

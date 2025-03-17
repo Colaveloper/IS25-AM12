@@ -10,6 +10,10 @@ import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.Deck;
 import it.polimi.ingsw.galaxytruckers.TempDeck;
 import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+
+import java.util.List;
 
 import java.awt.*;
 import java.util.List;
@@ -25,6 +29,9 @@ public class GameModel {
     private FlightBoard flightBoard;
     private Deck deck;
     private AdventureCard activeCard;
+    private int maxCardPlays; //TEMPORARY, defines the maximum times a card can be played
+    private int activeCardPlayCount;
+    private List<Integer> playerShot;//TODO: list of shipboard, method maps coming int to ships here
 
     public GameModel(Level chosenLevel, Map<Integer, Colors> chosenColors) {
         flightBoard = gameFactory.createFlightBoard();
@@ -155,17 +162,79 @@ public class GameModel {
     //TEMPORARY CODE, FOR TESTING ONLY ---------------------------------------------
     public GameModel(){
         this.deck = new TempDeck();
+        maxCardPlays = 4;
+        activeCardPlayCount = 0;
+    }
+
+    public void setPlayerShot(List<Integer> playerShot) {
+        this.playerShot = playerShot;
+    }
+
+    public void shootPlayers() {
+        for (Integer p : playerShot){
+            System.out.println("player " + p + " gets shot");
+        }
+    }
+
+    public int getCurrentPlayerIndex(){
+        return activeCardPlayCount;
     }
 
     //CARD-RELATED METHODS
-    public AdventureCard drawCard(){
+    public void drawCard(){
         activeCard = deck.drawCard();
-        return activeCard;
+        activeCardPlayCount = 0;
+    }
+
+    public void resetSteps(){
+        activeCard.resetSteps();
+    }
+
+    public List<CardState> getCardStates(){
+        return activeCard.getChoicesList();
+    }
+
+    public String getCardName() {
+        return activeCard.getName();
+    }
+
+    public int getCardSacrifice() {
+        return activeCard.getSacrifice();
+    }
+
+    public int getCardCredits() {
+        return activeCard.getCredits();
+    }
+
+    public int getCardFlightDaysLost() {
+        return activeCard.getFlightDaysLost();
+    }
+
+    public CardState getCardState() {
+        return activeCard.nextStep(this);
     }
 
     public void passCardToNextPlayer(){
-        //TODO: pass the card to next player
-        System.out.println("Card has been passed to the next player.");
+        activeCardPlayCount++;
+        if(activeCardPlayCount < 4){
+            activeCard.resetSteps();    //reset only if there is another player
+            //TODO: pass the card to next player
+            System.out.println("Card has been passed to the next player.");
+        }
+        else {
+            System.out.println("Card can't be played anymore");
+        }
+
+    }
+
+    public int getShipPower() {
+        //TODO: get actual shipboard model to do this
+        return 2;
+    }
+
+    public void epidemic() {
+        //TODO: all players lose 1 crew member in paired cabins
+        System.out.println("Epidemic strikes!");
     }
 
     public void loseResidents(int numResidents){
@@ -173,19 +242,74 @@ public class GameModel {
         System.out.println("current player has lost " + numResidents + " residents");
     }
     public void grabCredits(int credits){
-        //TODO: update current player shipbpard to reflect gain in credits
+        //TODO: update current player shipboard to reflect gain in credits
         System.out.println("current player has received " + credits + " credits");
     }
     public void loseFlightDays(int flightDaysLost){
-        //TODO: make currecnt player lose flight days
+        //TODO: make current player lose flight days
         //or potentially all players depending on card
         System.out.println("current player has lost " + flightDaysLost + " days");
     }
 
-//    public int throwDice(Boolean activatable) {
-//        i = rand;
-//        if(activatable) {
-//            shipboard.setDice(i);
-//        }
-//    }
+    public int getExposedConnectors() {
+        //TODO: use shipboard method to get exposed connectors
+        System.out.println("current player has 3 exposed connectors");
+        return 3;
+    }
+
+    public void loseGoods(int goods){
+        System.out.println("current player has lost " + goods + " goods");
+    }
+
+    public void loseFlightDaysLeastResidents(int flightDaysLost){
+        //TODO: select the player with least number of residents to lose flight days
+        System.out.println("Player with least number of residents has lost " + flightDaysLost + " days");
+    }
+
+    public void sabotage(){
+        //TODO: select player with least amount of residents
+        //roll two dice for column and two dice for row
+        //lose that component
+        System.out.println("Player with least amount of residents has been sabotaged!");
+    }
+
+    public void grabGoods(List<GoodsType> goodsList){
+        //TODO: give goods to current player
+        System.out.println("Current player has been given the goods");
+    }
+
+    public List<GoodsType> getCardGoods(){
+        return activeCard.getGoods();
+    }
+
+    //TODO: possibly condense these three methods into one method ------------------------------------
+    public void activateEngine(int x, int y){
+        //TODO: increase the current players engine power by spending batteries
+        System.out.println("Increasing engine power at (x=" + x +",y="+ y +") for the current player");
+    }
+
+    public void activateCannon(int x, int y){
+        //TODO: increase the current players engine power by spending batteries
+        System.out.println("Increasing cannon power at (x=" + x +",y="+ y +") for the current player");
+    }
+
+    public void activateShield(int x, int y){
+        //TODO: increase the current players engine power by spending batteries
+        System.out.println("Increasing shield power at (x=" + x +",y="+ y +") for the current player");
+    }
+    //TODO: ----------------------------------------------------------------------------------------------
+
+    public void landOnPlanet(int i){
+        //TODO: current player lands on planet
+        activeCard.landOnPlanet(i);
+    }
+
+    public void fireCannonAtPlayer(){
+        //TODO: roll dice and fire
+    }
+
+    public int rollDice(){
+        Dice dice = Dice.create();
+        return dice.roll();
+    }
 }

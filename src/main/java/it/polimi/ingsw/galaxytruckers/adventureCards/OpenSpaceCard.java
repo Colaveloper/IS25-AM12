@@ -1,63 +1,73 @@
-//package adventureCards;
-//
-//import adventureCards.utils.Choice;
-//import adventureCards.utils.Goods;
-//import adventureCards.utils.Projectile;
-//
-//import java.util.Arrays;
-//import java.util.List;
-//
-//
-//public class OpenSpaceCard extends AdventureCard{
-//
-//    public OpenSpaceCard() {
-//        super(Arrays.asList(
-//                Choice.ACTIVATE_ENGINE,
-//                Choice.SUBMIT_POWER,
-//                Choice.ASK_NEXT_PLAYER,
-//                Choice.END_CARD
-//        ));
-//    }
-//
-//    @Override
-//    public List<Boolean> getPlanets() { //do nothing
-//        return null;
-//    }
-//
-//    @Override
-//    public int getFirePower() {         //do nothing
-//        return 0;
-//    }
-//
-//    @Override
-//    public int getCredits() {           //do nothing
-//        return 0;
-//    }
-//
-//    @Override
-//    public List<Goods> getGoods() {     //do nothing
-//        return null;
-//    }
-//
-//    @Override
-//    public List<Integer> getProjectileDirections() {//do nothing
-//        return null;
-//    }
-//
-//    @Override
-//    public List<Projectile> getProjectilesType() {  //do nothing
-//        return null;
-//    }
-//
-//    @Override
-//    public int getSacrifice() {         //do nothing
-//        return 0;
-//    }
-//
-//
-//    @Override
-//    public void landOnPlanet(int i) {   //do nothing
-//
-//    }
-//
-//}
+package it.polimi.ingsw.galaxytruckers.adventureCards;
+
+import it.polimi.ingsw.galaxytruckers.GameModel;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class OpenSpaceCard extends AdventureCard{
+    //attributes
+    private int numPlayers;
+
+    public OpenSpaceCard(int numPlayers){
+        //attributes init
+        this.numPlayers = numPlayers;
+        this.name = "[OPEN SPACE]";
+
+        //cardState init
+        cardStates = new ArrayList<>();
+        for (int i = 0; i < numPlayers; i++) {
+            cardStates.add(CardState.ACTIVATE_ENGINE);
+        }
+        cardStates.add(CardState.END_CARD);
+
+    }
+
+    //USED METHODS
+    @Override
+    public CardState nextStep(GameModel model) {
+        step++;
+        return cardStates.get(step);
+    }
+
+    //UNUSED METHODS
+    @Override
+    public List<Boolean> getPlanets() {
+        return null;
+    }
+    @Override
+    public int getFirePower() {
+        return 0;
+    }
+    @Override
+    public int getCredits() {
+        return 0;
+    }
+    @Override
+    public List<GoodsType> getGoods() {
+        return null;
+    }
+    @Override
+    public List<Integer> getProjectileDirections() {
+        return null;
+    }
+    @Override
+    public List<Projectile> getProjectilesType() {
+        return null;
+    }
+    @Override
+    public int getSacrifice() {
+        return 0;
+    }
+    @Override
+    public int getFlightDaysLost() {
+        return 0;
+    }
+    @Override
+    public void landOnPlanet(int i) {
+
+    }
+}
