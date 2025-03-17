@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -10,20 +11,21 @@ import java.util.List;
 
 public class MeteorSwarmCard extends AdventureCard{
     //attributes
-    private List<Integer> projectileDirections;
-    private List<Projectile> projectileType;
+//    private List<Integer> projectileDirections;
+//    private List<Projectile> projectileTypes;
 
-    public MeteorSwarmCard(List<Integer> projectileDirections, List<Projectile> projectileType){
+    public MeteorSwarmCard(FlightBoard flightBoard, List<Integer> projectileDirections, List<Projectile> projectileType){
         //attributes init
-        super();
+        super(flightBoard);
         this.projectileDirections = new ArrayList<>(projectileDirections);
-        this.projectileType = new ArrayList<>(projectileType);
+        this.projectileTypes = new ArrayList<>(projectileType);
         this.name = "[METEOR SWARM]";
 
         //cardState init
         cardStates = new ArrayList<>();
         for (int i = 0; i < projectileType.size(); i++) {
             if(projectileType.get(i) == Projectile.SMALL_METEOR){
+                cardStates.add(PlayerAction.ROLL_DICE);
                 cardStates.add(PlayerAction.ACTIVATE_SHIELD);
             } else if (projectileType.get(i) == Projectile.LARGE_METEOR) {
                 cardStates.add(PlayerAction.ACTIVATE_CANNON);
@@ -37,7 +39,7 @@ public class MeteorSwarmCard extends AdventureCard{
 
     //USED METHODS
     @Override
-    public PlayerAction nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         step++;
         return cardStates.get(step);
     }
@@ -47,7 +49,11 @@ public class MeteorSwarmCard extends AdventureCard{
     }
     @Override
     public List<Projectile> getProjectilesType() {
-        return projectileType;
+        return projectileTypes;
+    }
+    @Override
+    public void fireCannonAtPlayer(int projectileIndex) {
+        currentShipBoard.removeComponent(getFirstAt(diceRoll, projectileDirections.get(projectileIndex)));
     }
 
     //UNUSED METHODS
@@ -80,4 +86,5 @@ public class MeteorSwarmCard extends AdventureCard{
     public void landOnPlanet(int i) {
 
     }
+
 }

@@ -93,7 +93,7 @@ public class Main {
                         System.out.println("Invalid input. Going ahead to next step");
                     }
                     break;
-                case MANANGE_GOODS:
+                case MANAGE_GOODS:
                     model.grabGoods(model.getCardGoods());
                     break;
                 case LOSE_GOODS:
@@ -103,13 +103,13 @@ public class Main {
                 case START_CARD:
                     System.out.println("start card state");
                     break;
-                case GET_BLASTED:
-                    System.out.println("get blasted state");
-                    break;
-                case SUBMIT_POWER:
-                    submit = false;
-                    System.out.println("submit state");
-                    break;
+//                case GET_BLASTED:
+//                    System.out.println("get blasted state");
+//                    break;
+//                case SUBMIT_POWER:
+//                    submit = false;
+//                    System.out.println("submit state");
+//                    break;
                 case CHOOSE_PLANET:
                     int numPlanetInput;
                     //TODO: fix this to account for number of planets available
@@ -117,7 +117,7 @@ public class Main {
                     numPlanetInput = userScanner.nextInt();
                     if(numPlanetInput != 0 && numPlanetInput != 1 && numPlanetInput != 2){
                         System.out.println("Invalid planet to land on. Going to next player");
-                        model.passCardToNextPlayer();
+                        //model.passCardToNextPlayer();
                     }
                     else{
                         model.landOnPlanet(numPlanetInput);

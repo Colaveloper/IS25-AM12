@@ -13,8 +13,8 @@ import java.util.List;
 public class PiratesCard extends AdventureCard{
 
     private final int firePower;
-    private final List<Integer> projectileDirections;
-    private final List<Projectile> projectileTypes;
+    //private final List<Integer> projectileDirections;
+    //private final List<Projectile> projectileTypes;
     private List<ShipBoard> defeatedPlayers;
     private final int credits;
     private final int flightDaysLost;
@@ -50,10 +50,7 @@ public class PiratesCard extends AdventureCard{
 
     }
 
-    @Override
-    public void fireCannonAtPlayer(int projectileIndex) {
-        currentShipBoard.removeComponent(getFirstAt(diceRoll, projectileTypes.get(projectileIndex)));
-    }
+
 
     @Override
     public PlayerAction nextStep() {

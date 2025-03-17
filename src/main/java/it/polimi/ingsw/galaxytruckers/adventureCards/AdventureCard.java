@@ -16,11 +16,16 @@ public abstract class AdventureCard {
     protected String name;
     protected ShipBoard currentShipBoard;
     protected int diceRoll;
-    //protected final List<Integer> projectileDirections;
+    protected List<Integer> projectileDirections;
+    protected List<Projectile> projectileTypes;
 
     protected AdventureCard(FlightBoard flightBoard) {
         this.flightBoard = flightBoard;
         this.currentShipBoard = flightBoard.getOrderedShips().getFirst();
+    }
+
+    public void fireCannonAtPlayer(int projectileIndex) {
+        currentShipBoard.removeComponent(getFirstAt(diceRoll, projectileDirections.get(projectileIndex)));
     }
 
     //public methods
@@ -67,5 +72,4 @@ public abstract class AdventureCard {
     public abstract int getFlightDaysLost();
     public abstract void landOnPlanet(int i);
 
-    public abstract void fireCannonAtPlayer(int projectileIndex);
 }

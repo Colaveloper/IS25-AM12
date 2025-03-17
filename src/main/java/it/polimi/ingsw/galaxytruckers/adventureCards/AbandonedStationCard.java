@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -14,9 +15,9 @@ public class AbandonedStationCard extends AdventureCard{
     private int numRequiredResidents;
     private int flightDaysLost;
 
-    public AbandonedStationCard(List<GoodsType> goodsList, int numRequiredResidents, int flightDaysLost){
+    public AbandonedStationCard(FlightBoard flightBoard, List<GoodsType> goodsList, int numRequiredResidents, int flightDaysLost){
         //states init
-        super();
+        super(flightBoard);
         cardStates = new ArrayList<>();
         cardStates.add(PlayerAction.ASK_IF_PASS);
         cardStates.add(PlayerAction.MANANGE_GOODS);
@@ -31,7 +32,7 @@ public class AbandonedStationCard extends AdventureCard{
 
     //USED METHODS
     @Override
-    public PlayerAction nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         if(step == 1){
             model.loseFlightDays(flightDaysLost);
         }
