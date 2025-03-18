@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
@@ -22,7 +21,7 @@ public class OpenSpaceCard extends AdventureCard{
         //cardState init
         cardStates = new ArrayList<>();
         for (int i = 0; i < numPlayers; i++) {
-            cardStates.add(PlayerAction.ACTIVATE_ENGINE);
+            cardStates.add(PlayerAction.ACTIVATE_ENGINES);
         }
         cardStates.add(PlayerAction.END_CARD);
 
@@ -41,11 +40,11 @@ public class OpenSpaceCard extends AdventureCard{
         return null;
     }
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return 0;
     }
     @Override
@@ -65,7 +64,7 @@ public class OpenSpaceCard extends AdventureCard{
         return 0;
     }
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return 0;
     }
     @Override

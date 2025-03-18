@@ -8,7 +8,7 @@ public class ComponentBank {
     private final List<Component> coveredComponents;
     private final Map<Integer, Component> uncoveredComponents;
 
-    ComponentBank() {
+    public ComponentBank() {
         //TODO: read components from file and shuffle them
         this.coveredComponents = new ArrayList<>();
         this.uncoveredComponents = new HashMap<>();

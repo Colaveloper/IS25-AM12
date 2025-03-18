@@ -33,12 +33,12 @@ public class AbandonedStationCard extends AdventureCard{
     //USED METHODS
     @Override
     public PlayerAction nextStep() {
-        if(step == 1){
-
-            flightBoard.
-            flightBoard.displaceShip(currentShipBoard, flightDaysLost);
-        }
-        step++;
+//        if(step == 1){
+//
+//            flightBoard.
+//            flightBoard.displaceShip(currentShipBoard, flightDaysLost);
+//        }
+//        step++;
         return cardStates.get(step);
     }
     @Override
@@ -46,7 +46,7 @@ public class AbandonedStationCard extends AdventureCard{
         return goodsList;
     }
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return flightDaysLost;
     }
 
@@ -56,11 +56,11 @@ public class AbandonedStationCard extends AdventureCard{
         return null;
     }
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return 0;
     }
     @Override

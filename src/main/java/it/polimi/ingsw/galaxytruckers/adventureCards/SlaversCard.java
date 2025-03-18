@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
@@ -20,9 +19,9 @@ public class SlaversCard extends AdventureCard {
     public SlaversCard(FlightBoard flightBoard, int firePower, int credits, int sacrifices, int flightDaysLost) {
         super(flightBoard);
         cardStates = new ArrayList<>();
-        cardStates.add(PlayerAction.ACTIVATE_CANNON);
+        cardStates.add(PlayerAction.ACTIVATE_CANNONS);
         //cardStates.add(PlayerAction.SUBMIT_POWER);
-        cardStates.add(PlayerAction.LOSE_RESIDENT);
+        cardStates.add(PlayerAction.LOSE_RESIDENTS);
         //cardStates.add(CardState.ASK_NEXT_PLAYER);
         cardStates.add(PlayerAction.END_CARD);
 
@@ -53,12 +52,12 @@ public class SlaversCard extends AdventureCard {
     }
 
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return firePower;
     }
 
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return credits;
     }
 
@@ -68,7 +67,7 @@ public class SlaversCard extends AdventureCard {
     }
 
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return flightDaysLost;
     }
 

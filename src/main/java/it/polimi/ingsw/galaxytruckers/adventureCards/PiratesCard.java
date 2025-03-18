@@ -12,23 +12,29 @@ import java.util.List;
 
 public class PiratesCard extends AdventureCard{
 
-    private final int firePower;
-    //private final List<Integer> projectileDirections;
-    //private final List<Projectile> projectileTypes;
+    private final int firePowerThreshold;
+    private final List<Integer> projectileDirections;
+    private final List<Projectile> projectileTypes;
     private List<ShipBoard> defeatedPlayers;
-    private final int credits;
-    private final int flightDaysLost;
-    private int projectileHittingIndex;
+    private final int creditPrize;
+    private final int flightDaysLoss;
+//    private int projectileHittingIndex;
 
-    public PiratesCard(FlightBoard flightBoard, int firePower, List<Integer> projectileDirections, List<Projectile> projectileTypes, int flightDaysLost, int credits){
+    public PiratesCard(
+            FlightBoard flightBoard,
+            int firePowerThreshold,
+            int flightDaysLoss,
+            int creditPrize,
+            List<Integer> projectileDirections,
+            List<Projectile> projectileTypes
+    ) {
         super(flightBoard);
-
-        cardStates = new ArrayList<>();
-        cardStates.add(PlayerAction.ACTIVATE_CANNON);
-        for (int i = 0; i < projectileTypes.size(); i++){       //adds commands for each cannon shot
+        // ESTABLISHING WHO WINS, DRAWS, OR GETS DEFEATED BY PIRATES
+        cardStates.add(PlayerAction.ACTIVATE_CANNONS);
+        for (int i = 0; i < projectileTypes.size(); i++){           //adds commands for each cannon shot
             if(projectileTypes.get(i) == Projectile.LIGHT_FIRE){    //TODO: AND there is a shield in that direction
                 cardStates.add(PlayerAction.ROLL_DICE);
-                cardStates.add(PlayerAction.ACTIVATE_SHIELD);
+                cardStates.add(PlayerAction.ACTIVATE_SHIELDS);
             } else if (projectileTypes.get(i) == Projectile.HEAVY_FIRE) {
                 cardStates.add(PlayerAction.ROLL_DICE);
             } else {
@@ -42,30 +48,25 @@ public class PiratesCard extends AdventureCard{
 
         this.projectileDirections = projectileDirections;
         this.projectileTypes = projectileTypes;
-        this.firePower = firePower;
-        this.flightDaysLost = flightDaysLost;
-        this.credits = credits;
+        this.firePowerThreshold = firePowerThreshold;
+        this.flightDaysLoss = flightDaysLoss;
+        this.creditPrize = creditPrize;
         this.defeatedPlayers = new ArrayList<>();
         this.name = "[PIRATES]";
 
     }
-
-    // 0: ESTABLISHING WHO WINS, DRAWS, OR GETS DEFEATED BY PIRATES
-    // 1: LEADER THROWS DICE
-
-
 
     @Override
     public PlayerAction nextStep() {
         // flightBoard.getOrderedShips()
 
         if (step == 0) {
-            if (currentShipBoard.getFirePower() > firePower) {
+            if (currentShipBoard.getFirePower() > firePowerThreshold) {
                 // current player defeats pirates
-                flightBoard.displaceShip(currentShipBoard, flightDaysLost);
-                currentShipBoard.gainCredits(credits);
+                flightBoard.displaceShip(currentShipBoard, flightDaysLoss);
+                currentShipBoard.gainCredits(creditPrize);
                 //step = step + projectileTypes.size() + 2;       //skip meteors if player has firepower
-            } else if (currentShipBoard.getFirePower() == firePower) {
+            } else if (currentShipBoard.getFirePower() == firePowerThreshold) {
                 // current player draws with pirates
                 passCardToNextPlayer();
             } else {
@@ -86,16 +87,16 @@ public class PiratesCard extends AdventureCard{
     }
 
     @Override
-    public int getFlightDaysLost() {
-        return flightDaysLost;
+    public int getFlightDaysLoss() {
+        return flightDaysLoss;
     }
 
-    public int getCredits() {
-        return credits;
+    public int getCreditPrize() {
+        return creditPrize;
     }
 
-    public int getFirePower() {
-        return firePower;
+    public int getFirePowerThreshold() {
+        return firePowerThreshold;
     }
 
     public List<Integer> getProjectileDirections() {

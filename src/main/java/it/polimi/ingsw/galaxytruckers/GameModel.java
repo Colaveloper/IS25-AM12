@@ -4,8 +4,10 @@ package it.polimi.ingsw.galaxytruckers;
 // to access and modify the state of the game
 
 import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
@@ -17,6 +19,7 @@ import java.awt.*;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class GameModel {
     private BiMap<Integer, ShipBoard> idsToShip;
@@ -26,12 +29,24 @@ public class GameModel {
     private FlightBoard flightBoard;
     private Deck deck;
     private AdventureCard currentCard;
-    private int maxCardPlays; //TEMPORARY, defines the maximum times a card can be played
-    private int activeCardPlayCount;
+//    private int maxCardPlays; //TEMPORARY, defines the maximum times a card can be played
+//    private int activeCardPlayCount;
     private List<Integer> playerShot;//TODO: list of shipboard, method maps coming int to ships here
 
     public GameModel(Level chosenLevel, Map<Integer, Colors> chosenColors) {
+        switch (chosenLevel) {
+            case Level.TEST -> gameFactory = new TestFactory();
+            case Level.SECOND -> gameFactory = new SecondFactory();
+        }
         flightBoard = gameFactory.createFlightBoard();
+        idsToShip = HashBiMap.create(
+                chosenColors.entrySet()
+                    .stream()
+                    .collect(Collectors.toMap(
+                            Map.Entry::getKey,
+                            choice -> gameFactory.createShipBoard(new ComponentBank(), choice.getValue())
+                    ))
+        );
         deck = gameFactory.createDeck();
     }
 
@@ -147,45 +162,57 @@ public class GameModel {
         getShipFromPlayer(playerId).placeComponent(position);
     } // TODO: handle illegal positions!
     /**
-     *
+     * @return whether a ship adheres to corporate standards
      */
-    void removeComponent(int playerId, Point position) {
-        getShipFromPlayer(playerId).removeComponent(position);
-    } // TODO: hide from controller, consider whether to remove
-
     boolean checkShipValidity(int playerId) {
         return getShipFromPlayer(playerId).checkValidity();
     }
 
-
+    // FLIGHT METHODS
+    /**
+     * removes all components in connected sets not selected by the player, after ship broke
+     */
+    void letPartOfTheShipGo(int playerId, int setToSave) {
+        ShipBoard damagedShip = getShipFromPlayer(playerId);
+        List<Set<Point>> connectedSets = damagedShip.getConnectedSets();
+        try {
+            IntStream.range(0, connectedSets.size())
+                    .filter(index -> index != setToSave)
+                    .mapToObj(connectedSets::get)
+                    .flatMap(Set::stream)
+                    .forEach(damagedShip::removeComponent);
+        } catch (IndexOutOfBoundsException e) {
+            // TODO: let the user know he messed up and let him chose again
+        }
+    }
 
 
 
     //TEMPORARY CODE, FOR TESTING ONLY ---------------------------------------------
-    public GameModel(){
-        this.deck = new TempDeck(flightBoard);
-        maxCardPlays = 4;
-        activeCardPlayCount = 0;
-    }
-
-    public void setPlayerShot(List<Integer> playerShot) {
-        this.playerShot = playerShot;
-    }
-
-    public void shootPlayers() {
-        for (Integer p : playerShot){
-            System.out.println("player " + p + " gets shot");
-        }
-    }
-
-    public int getCurrentPlayerIndex(){
-        return activeCardPlayCount;
-    }
+//    public GameModel(){
+//        this.deck = new TempDeck(flightBoard);
+//        maxCardPlays = 4;
+//        activeCardPlayCount = 0;
+//    }
+//
+//    public void setPlayerShot(List<Integer> playerShot) {
+//        this.playerShot = playerShot;
+//    }
+//
+//    public void shootPlayers() {
+//        for (Integer p : playerShot){
+//            System.out.println("player " + p + " gets shot");
+//        }
+//    }
+//
+//    public int getCurrentPlayerIndex(){
+//        return activeCardPlayCount;
+//    }
 
     //CARD-RELATED METHODS
     public void drawCard(){
         currentCard = deck.drawCard();
-        activeCardPlayCount = 0;
+//        activeCardPlayCount = 0;
     }
 
     public void resetSteps(){
@@ -205,15 +232,20 @@ public class GameModel {
     }
 
     public int getCardCredits() {
-        return currentCard.getCredits();
+        return currentCard.getCreditPrize();
     }
 
     public int getCardFlightDaysLost() {
-        return currentCard.getFlightDaysLost();
+        return currentCard.getFlightDaysLoss();
     }
 
-    public PlayerAction getNextPlayerAction() {
-        return currentCard.nextStep();
+
+    /**
+     * Used by the controller to query a client
+     * @return a player ID and his expected action
+     */
+    public Query<Integer, PlayerAction> getNextQueryToPlayer() {
+        return new Query<>(getPlayerFromShip(currentCard.getCurrentShipBoard()), currentCard.nextStep());
     }
 
     public  void  passCardToNextPlayer() {
@@ -287,22 +319,14 @@ public class GameModel {
         return currentCard.getGoods();
     }
 
-    //TODO: possibly condense these three methods into one method ------------------------------------
-    public void activateEngine(int x, int y){
-        //TODO: increase the current players engine power by spending batteries
-        System.out.println("Increasing engine power at (x=" + x +",y="+ y +") for the current player");
+    /**
+     * Activates a double cannon / double engine / shield, at the specified location, spending one battery
+     * @throws IllegalStateException if there is no activatable at position
+     */
+    public void activateComponent(int playerID, Point position){
+        getShipFromPlayer(playerID).activateComponent(position);
+        // System.out.println("Component at ("+position.toString()+" now active));
     }
-
-    public void activateCannon(int x, int y){
-        //TODO: increase the current players engine power by spending batteries
-        System.out.println("Increasing cannon power at (x=" + x +",y="+ y +") for the current player");
-    }
-
-    public void activateShield(int x, int y){
-        //TODO: increase the current players engine power by spending batteries
-        System.out.println("Increasing shield power at (x=" + x +",y="+ y +") for the current player");
-    }
-    //TODO: ----------------------------------------------------------------------------------------------
 
     public void landOnPlanet(int i){
         //TODO: current player lands on planet

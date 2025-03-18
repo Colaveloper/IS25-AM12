@@ -50,7 +50,7 @@ public class PlanetsCard extends AdventureCard{
         return goods;
     }
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return flightDaysLost;
     }
     @Override
@@ -60,11 +60,11 @@ public class PlanetsCard extends AdventureCard{
     
     //UNUSED METHODS
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return 0;
     }
     @Override

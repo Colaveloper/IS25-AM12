@@ -36,12 +36,12 @@ public class SabotageCard extends AdventureCard {
     }
 
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
 
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return 0;
     }
 
@@ -66,7 +66,7 @@ public class SabotageCard extends AdventureCard {
     }
 
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return 0;
     }
 

@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AdventureCard {
@@ -24,6 +25,11 @@ public abstract class AdventureCard {
     protected AdventureCard(FlightBoard flightBoard) {
         this.flightBoard = flightBoard;
         this.currentShipBoard = flightBoard.getOrderedShips().getFirst();
+        cardStates = new ArrayList<>();
+    }
+
+    public ShipBoard getCurrentShipBoard() {
+        return currentShipBoard;
     }
 
     // called after player failed to prevent projectile
@@ -75,13 +81,13 @@ public abstract class AdventureCard {
      * returns the next choice*/
     public abstract PlayerAction nextStep();
     public abstract List<Boolean> getPlanets();
-    public abstract int getFirePower();
-    public abstract int getCredits();
+    public abstract int getFirePowerThreshold();
+    public abstract int getCreditPrize();
     public abstract List<GoodsType> getGoods();
     public abstract List<Integer> getProjectileDirections();
     public abstract List<Projectile> getProjectilesType();
     public abstract int getSacrifice();
-    public abstract int getFlightDaysLost();
+    public abstract int getFlightDaysLoss();
     public abstract void landOnPlanet(int i);
 
 }

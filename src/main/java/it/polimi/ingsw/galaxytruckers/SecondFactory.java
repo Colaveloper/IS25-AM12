@@ -1,5 +1,7 @@
 package it.polimi.ingsw.galaxytruckers;
 
+import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
 public class SecondFactory implements GameFactory{
@@ -18,9 +20,9 @@ public class SecondFactory implements GameFactory{
     }
 
     @Override
-    public ShipBoard createShipBoard() {
+    public ShipBoard createShipBoard(ComponentBank componentBank, Colors color) {
         return null;
         // TODO : implement method
-        // return new ShipBoard(...);
+        // return new SecondShipBoard(...);
     }
 }

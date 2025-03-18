@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
@@ -21,8 +20,8 @@ public class CombatZoneCard extends AdventureCard{
         super(flightBoard);
         cardStates = new ArrayList<>();
         cardStates.add(PlayerAction.START_CARD);
-        cardStates.add(PlayerAction.ACTIVATE_ENGINE);
-        cardStates.add(PlayerAction.ACTIVATE_CANNON);
+        cardStates.add(PlayerAction.ACTIVATE_ENGINES);
+        cardStates.add(PlayerAction.ACTIVATE_CANNONS);
         cardStates.add(PlayerAction.END_CARD);
 
         //attributes init
@@ -35,11 +34,11 @@ public class CombatZoneCard extends AdventureCard{
 
     //USED METHODS
     @Override
-    public PlayerAction nextStep(GameModel model) {
-        if(step == 0){
-            model.loseFlightDaysLeastResidents(flightDaysLost);
-        }
-        step++;
+    public PlayerAction nextStep() {
+//        if(step == 0){
+//            model.loseFlightDaysLeastResidents(flightDaysLost);
+//        }
+//        step++;
         return cardStates.get(step);
     }
     @Override
@@ -52,7 +51,7 @@ public class CombatZoneCard extends AdventureCard{
         return projectileType;
     }
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return flightDaysLost;
     }
 
@@ -62,11 +61,11 @@ public class CombatZoneCard extends AdventureCard{
         return null;
     }
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return 0;
     }
     @Override

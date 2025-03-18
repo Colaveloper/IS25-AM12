@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.GameModel;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
@@ -22,13 +21,12 @@ public class MeteorSwarmCard extends AdventureCard{
         this.name = "[METEOR SWARM]";
 
         //cardState init
-        cardStates = new ArrayList<>();
         for (int i = 0; i < projectileType.size(); i++) {
             if(projectileType.get(i) == Projectile.SMALL_METEOR){
                 cardStates.add(PlayerAction.ROLL_DICE);
-                cardStates.add(PlayerAction.ACTIVATE_SHIELD);
+                cardStates.add(PlayerAction.ACTIVATE_SHIELDS);
             } else if (projectileType.get(i) == Projectile.LARGE_METEOR) {
-                cardStates.add(PlayerAction.ACTIVATE_CANNON);
+                cardStates.add(PlayerAction.ACTIVATE_CANNONS);
             } else {
                 //TODO: make this launch some kind of exception or proper error message
                 System.out.println("ERROR: PROJECTILE OF INCORRECT TYPE IN CONSTRUCTOR");
@@ -60,11 +58,11 @@ public class MeteorSwarmCard extends AdventureCard{
         return null;
     }
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return 0;
     }
     @Override
@@ -77,7 +75,7 @@ public class MeteorSwarmCard extends AdventureCard{
     }
 
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return 0;
     }
     @Override
