@@ -128,6 +128,71 @@ class ShipBoardTest {
     }
 
     @Nested
+    @DisplayName("Cannon tests")
+    class CannonTests {
+        Cannon componentToAdd;
+
+        @BeforeEach
+        void setup() {
+            componentToAdd = new Cannon(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+            ComponentBank componentBank = new ComponentBank() {
+                @Override
+                public Component getRanComponent() {
+                    return componentToAdd;
+                }
+            };
+            shipBoard = new SecondShipBoard(componentBank, Colors.BLUE);
+        }
+
+        void addCannon(Point point) {
+            shipBoard.requestRandComponent();
+            shipBoard.placeComponent(point);
+            shipBoard.weldLastComponent();
+        }
+
+        void removeCannon(Point point) {
+            shipBoard.removeComponent(point);
+        }
+
+        boolean restIsUnchanged() {
+            return shipBoard.getActivatables().isEmpty() &&
+                    shipBoard.getCargoHolds().isEmpty() &&
+                    shipBoard.getCabins().isEmpty() &&
+                    shipBoard.getBatteries().isEmpty() &&
+                    shipBoard.getEngines().isEmpty() &&
+                    shipBoard.getLifeSupports().isEmpty() &&
+                    shipBoard.getStashedComponents().isEmpty() &&
+                    shipBoard.getCredits() == 0;
+        }
+
+        @Test
+        void addCannonUpdatesMap() {
+            addCannon(new Point(7,7));
+            assertEquals(shipBoard.getCannons().get(new Point(7,7)), componentToAdd);
+            assertEquals(1, shipBoard.getCannons().size());
+            assertTrue(restIsUnchanged());
+        }
+
+        @Test
+        void removeCannonUpdatesMap() {
+            addCannon(new Point(7,7));
+            removeCannon(new Point(7,7));
+            assertTrue(shipBoard.getCannons().isEmpty());
+            assertTrue(restIsUnchanged());
+        }
+
+        @Test
+        void getFirePowerEqualsCannonFirePowerSum() {
+            assertEquals(0, shipBoard.getFirePower());
+            for (int i = 6; i <= 8; i++) {
+                addCannon(new Point(i,7));
+            }
+            assertEquals(3*componentToAdd.getFirePower(), shipBoard.getFirePower());
+            assertTrue(restIsUnchanged());
+        }
+    }
+
+    @Nested
     @DisplayName("getConnectedSets() tests")
     class GetConnectedSetsTest {
         @BeforeEach
