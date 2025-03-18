@@ -5,9 +5,11 @@ package it.polimi.ingsw.galaxytruckers;/*
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -16,6 +18,8 @@ public class MockController {
         Scanner userScanner = new Scanner(System.in);
         String input;
         boolean submit = false;
+        List<ShipBoard> involvedShipboards = null;
+        Integer currentPlayer = null;    //TEST FOR LEADER
 
         // PLAYING STEPS
         // 1. Host starts the game session picking a game-level
@@ -56,10 +60,9 @@ public class MockController {
         // Mocking 8.
         gameModel.drawCard();
         Query<Integer, PlayerAction> query = gameModel.getNextQueryToPlayer();
-        Integer queriedPlayer = query.playerID();
+        currentPlayer = query.playerID();
         PlayerAction playerAction = query.expectedAction();
 
-        int projectileIndex = 0; // TODO: try to do without
 
 //        simulating drawing the AbandonedShip card
 //        List<CardState> activeCardState = gameModel.getCardStates();
@@ -117,23 +120,24 @@ public class MockController {
                     System.out.println("Press ENTER to roll the dice");
                     input = userScanner.nextLine();
                     gameModel.setRollDice();
-                    projectileIndex += 1;
                     //roll = gameModel.rollDice();
                 case ACTIVATE_SHIELDS:
+                    involvedShipboards = gameModel.getInvolvedShips();
+                    for (ShipBoard shipBoard : involvedShipboards) {
+                        System.out.println("Do you want to activate a SHIELD? (y/n):");
+                        input = userScanner.nextLine();
 
-                    System.out.println("Do you want to activate a SHIELD? (y/n):");
-                    input = userScanner.nextLine();
-
-                    if (input.equals("y")) {
-                        // print available shields that would defend the player
+                        if (input.equals("y")) {
+                            // print available shields that would defend the player
 //                        System.out.println("What shield to activate (int, int):");
 //                        input = userScanner.nextLine();
-                        gameModel.activateComponent(123, new Point(3, 4));
+                            gameModel.activateComponent(123, new Point(3, 4));
 
-                    } else if (input.equals("n")) {
-                        gameModel.fireCannonAtPlayer(projectileIndex);
-                    } else {
-                        System.out.println("Invalid input. Going ahead to next step");
+                        } else if (input.equals("n")) {
+                            gameModel.fireCannonAtPlayer();
+                        } else {
+                            System.out.println("Invalid input. Going ahead to next step");
+                        }
                     }
                     break;
                 case MANAGE_GOODS:
@@ -183,7 +187,10 @@ public class MockController {
                 default:
                     System.out.println("Error in processing card choice");
             }
-            playerAction = gameModel.getNextQueryToPlayer().expectedAction();
+            //playerAction = gameModel.getNextQueryToPlayer().expectedAction();
+            query = gameModel.getNextQueryToPlayer();
+            currentPlayer = query.playerID();
+            playerAction = query.expectedAction();
         }
     }
 }

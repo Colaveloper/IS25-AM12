@@ -21,6 +21,7 @@ public abstract class AdventureCard {
     protected int diceRoll;
     protected List<Integer> projectileDirections;
     protected List<Projectile> projectileTypes;
+    protected int projectileIndex;
 
     protected AdventureCard(FlightBoard flightBoard) {
         this.flightBoard = flightBoard;
@@ -33,7 +34,7 @@ public abstract class AdventureCard {
     }
 
     // called after player failed to prevent projectile
-    public void projectileAtPlayer(int projectileIndex) {
+    public void projectileAtPlayer() {
         Point projectileTarget = currentShipBoard.getFirstComponentAt(diceRoll, projectileDirections.get(projectileIndex));
         if (projectileTypes.get(projectileIndex) == Projectile.SMALL_METEOR &&
                 currentShipBoard
@@ -61,7 +62,6 @@ public abstract class AdventureCard {
         if (currentPlayerIndex < flightBoard.getOrderedShips().size()) {
             // still another player
             currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex+1);
-            passCardToNextPlayer();
             step = -1; // bringing card to initial step
         } else {
             // no players left
@@ -89,5 +89,8 @@ public abstract class AdventureCard {
     public abstract int getSacrifice();
     public abstract int getFlightDaysLoss();
     public abstract void landOnPlanet(int i);
+    public  List<ShipBoard> getInvolvedShips() {
+        return flightBoard.getOrderedShips();
+    }
 
 }

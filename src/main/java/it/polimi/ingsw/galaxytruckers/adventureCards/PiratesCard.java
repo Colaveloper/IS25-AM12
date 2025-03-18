@@ -46,6 +46,7 @@ public class PiratesCard extends AdventureCard{
         cardStates.add(PlayerAction.END_CARD);
 
 
+        this.projectileIndex = 0;
         this.projectileDirections = projectileDirections;
         this.projectileTypes = projectileTypes;
         this.firePowerThreshold = firePowerThreshold;
@@ -74,16 +75,19 @@ public class PiratesCard extends AdventureCard{
                 defeatedPlayers.add(currentShipBoard);
                 passCardToNextPlayer();
             }
-        } else if (step == 1) {
-
         }
-//        if (cardStates.get(step) == PlayerAction.ACTIVATE_SHIELD) {
-//
-//        }
+
+        if (cardStates.get(step) == PlayerAction.ROLL_DICE) {
+            projectileIndex ++;
+        }
 
 
         step ++;
         return cardStates.get(step);
+    }
+
+    public List<ShipBoard> getInvolvedShips() {
+        return defeatedPlayers;
     }
 
     @Override
