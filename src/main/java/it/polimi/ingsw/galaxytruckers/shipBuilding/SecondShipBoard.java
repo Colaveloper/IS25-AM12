@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SecondShipBoard extends ShipBoard {
     private static final Set<Point> shipArea = new HashSet<Point>(List.of(new Point(4, 7),
@@ -79,18 +80,6 @@ public class SecondShipBoard extends ShipBoard {
         lastComponent = stashedComponents.remove(index);
     }
 
-    public void weldLastComponent() {
-        if (lastComponent != null) {
-            if (lastPosition == null) {
-                throw new IllegalStateException("You cannot weld last component without setting its position");
-            }
-            componentMap.put(lastPosition, lastComponent);
-            lastComponent.addToVisitor(this);
-            lastComponent = null;
-            lastPosition = null;
-        }
-    }
-
     //Observers
 
     // Ship stats observers
@@ -157,155 +146,30 @@ public class SecondShipBoard extends ShipBoard {
     //Visitor pattern methods
 
     @Override
-    public void activate(DoubleCannon doubleCannon) {
-        this.firePower += doubleCannon.getFirePower();
-    }
-
-    @Override
-    public void activate(DoubleEngine doubleEngine) {
-        this.enginePower += doubleEngine.getEnginePower();
-    }
-
-    @Override
-    public void activate(Shield shield) {
-        for (int direction : shield.getProtectedDirections()) {
-            this.shieldDirections[direction] += 1;
-        }
-    }
-
-    @Override
-    public void deactivate(DoubleCannon doubleCannon) {
-        this.firePower -= doubleCannon.getFirePower();
-    }
-
-    @Override
-    public void deactivate(DoubleEngine doubleEngine) {
-        this.enginePower -= doubleEngine.getEnginePower();
-    }
-
-    @Override
-    public void deactivate(Shield shield) {
-        // REVIEW: change shield behaviour to simplify management
-        for (int direction : shield.getProtectedDirections()) {
-            this.shieldDirections[direction] -= 1;
-        }
-    }
-
-    //TODO: consider removing this method
-    @Override
-    public void add(Component component) {
-        return;
-    }
-
-    @Override
-    public void add(Cannon cannon) {
-        this.cannons.put(this.lastPosition, cannon);
-        this.firePower += cannon.getFirePower();
-    }
-
-    @Override
-    public void add(Engine engine) {
-        this.engines.put(this.lastPosition, engine);
-        this.enginePower += engine.getEnginePower();
-    }
-
-    @Override
-    public void add(Battery battery) {
-        this.batteries.put(this.lastPosition, battery);
-        this.numBatteries += battery.getNumBatteries();
-    }
-
-    @Override
-    public void add(Cabin cabin) {
-        this.cabins.put(this.lastPosition, cabin);
-    }
-
-    @Override
-    public void add(Shield shield) {
-        this.shields.put(this.lastPosition, shield);
-    }
-
-    @Override
     public void add(LifeSupport lifeSupport) {
         this.lifeSupports.put(this.lastPosition, lifeSupport);
     }
 
     @Override
-    public void add(CargoHold cargoHold) {
-        this.cargoHolds.put(this.lastPosition, cargoHold);
-    }
-
-    @Override
-    public void add(DoubleCannon doubleCannon) {
-        this.cannons.put(this.lastPosition, doubleCannon);
-        this.activatables.put(this.lastPosition, doubleCannon);
-    }
-
-    @Override
-    public void add(DoubleEngine doubleEngine) {
-        this.engines.put(this.lastPosition, doubleEngine);
-        this.activatables.put(this.lastPosition, doubleEngine);
-    }
-
-    @Override
-    //TODO: Consider removing this method
-    public void remove(Component component) {
-    }
-
-    @Override
-    public void remove(Cannon cannon) {
-        this.cannons.remove(this.lastPosition);
-        this.firePower -= cannon.getFirePower();
-    }
-
-    @Override
-    public void remove(Engine engine) {
-        this.engines.remove(this.lastPosition);
-        this.enginePower -= engine.getEnginePower();
-    }
-
-    @Override
-    public void remove(Battery battery) {
-        this.batteries.remove(this.lastPosition);
-        this.numBatteries -= battery.getNumBatteries();
-    }
-
-    @Override
     public void remove(Cabin cabin) {
         this.cabins.remove(this.lastPosition);
-        this.crewSize -= cabin.getNumResidents();
-        //TODO: handle alien loss
-    }
-
-    @Override
-    public void remove(Shield shield) {
-        this.shields.remove(this.lastPosition);
-        //TODO: Handle shield deactivation/removal
+        loseCrew(lastPosition, cabin.getNumResidents());
     }
 
     @Override
     public void remove(LifeSupport lifeSupport) {
         this.lifeSupports.remove(this.lastPosition);
-        //TODO: handle alien loss
-    }
+        Set<Point> adjacentCabins = getNeighbours(lastPosition).stream()
+                .filter(cabins.keySet()::contains)
+                .filter(p -> cabins.get(p).getCrewType() != CrewType.HUMAN)
+                .filter(p -> cabins.get(p).getNumResidents()>0)
+                .collect(Collectors.toSet());
 
-    @Override
-    public void remove(CargoHold cargoHold) {
-        this.cargoHolds.remove(this.lastPosition);
-        //TODO: handle goods loss
-    }
-
-    @Override
-    public void remove(DoubleCannon doubleCannon) {
-        this.cannons.remove(this.lastPosition);
-        this.activatables.remove(this.lastPosition);
-        //TODO: handle cannon deactivation/removal
-    }
-
-    @Override
-    public void remove(DoubleEngine doubleEngine) {
-        this.engines.remove(this.lastPosition);
-        this.activatables.remove(this.lastPosition);
-        //TODO: handle engine deactivation/removal
+        for (Point point : adjacentCabins) {
+            if (!getCrewTypeOptions(point).contains(cabins.get(point).getCrewType())) {
+                this.crewSize--;
+                this.aliens.remove(cabins.get(point).getCrewType());
+            }
+        }
     }
 }
