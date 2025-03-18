@@ -1,21 +1,20 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import java.util.List;
-import java.util.Optional;
 
 public class Cabin extends Component {
-    private Optional<CrewType> crewType;
+    private CrewType crewType;
     private int numResidents;
 
     public Cabin(List<Connector> connectors) {
         super(connectors);
-        this.crewType = Optional.empty();
+        this.crewType = null;
         this.numResidents = 0;
     }
 
     public void initialize(CrewType crewType) {
-        this.crewType = Optional.of(crewType);
-        if (this.crewType.get() == CrewType.HUMAN) {
+        this.crewType = crewType;
+        if (this.crewType == CrewType.HUMAN) {
             this.numResidents = 2;
         } else {
             this.numResidents = 1;
@@ -23,21 +22,21 @@ public class Cabin extends Component {
     }
 
     public int getNumResidents() {
-        if (!crewType.isPresent()) {
+        if (crewType == null) {
             throw new IllegalStateException("Cabin not initialized");
         }
         return numResidents;
     }
 
     public CrewType getCrewType() {
-        if (!crewType.isPresent()) {
+        if (crewType == null) {
             throw new IllegalStateException("Cabin not initialized");
         }
-        return crewType.get();
+        return crewType;
     }
 
     public void loseResidents(int numResidents) {
-        if (!crewType.isPresent()) {
+        if (crewType == null) {
             throw new IllegalStateException("Cabin not initialized");
         }
 
