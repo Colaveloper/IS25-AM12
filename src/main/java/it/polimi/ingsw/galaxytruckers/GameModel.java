@@ -38,7 +38,6 @@ public class GameModel {
             case Level.TEST -> gameFactory = new TestFactory();
             case Level.SECOND -> gameFactory = new SecondFactory();
         }
-        flightBoard = gameFactory.createFlightBoard();
         idsToShip = HashBiMap.create(
                 chosenColors.entrySet()
                     .stream()
@@ -47,7 +46,9 @@ public class GameModel {
                             choice -> gameFactory.createShipBoard(new ComponentBank(), choice.getValue())
                     ))
         );
-        deck = gameFactory.createDeck();
+        flightBoard = gameFactory.createFlightBoard(idsToShip.values());
+//        deck = gameFactory.createDeck(); // TODO: reintroduce
+        deck = new TempDeck(flightBoard); // for mocking purposes only
     }
 
     // UTILITY METHODS
