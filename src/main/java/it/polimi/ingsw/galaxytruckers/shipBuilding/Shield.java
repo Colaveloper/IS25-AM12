@@ -31,6 +31,11 @@ public class Shield extends Component implements Activatable{
     }
 
     @Override
+    public boolean isActive() {
+        return this.active;
+    }
+
+    @Override
     public void addToVisitor(ComponentVisitor visitor) {
         visitor.add(this);
     }

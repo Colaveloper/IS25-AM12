@@ -284,14 +284,18 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         if (!activatables.containsKey(position)) {
             throw new IllegalStateException("There is no activatable for this position");
         }
-        activatables.get(position).activate(this);
+        if (!activatables.get(position).isActive()) {
+            activatables.get(position).activate(this);
+        }
     }
 
     public void deactivateComponent(Point position) {
         if (!activatables.containsKey(position)) {
             throw new IllegalStateException("There is no activatable for this position");
         }
-        activatables.get(position).deactivate(this);
+        if (activatables.get(position).isActive()) {
+            activatables.get(position).deactivate(this);
+        }
     }
 
     // Ship validity methods

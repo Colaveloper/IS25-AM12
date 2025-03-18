@@ -273,6 +273,31 @@ class ShipBoardTest {
                 assertEquals(0, shipBoard.getFirePower());
                 assertTrue(restIsUnchanged() &&  ShipBoardTest.SpecificComponentTests.restIsUnchanged(shipBoard));
             }
+
+            @Test
+            void activateIncrementsFirePower() {
+                addComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                Map<Point, Cannon> expCannons = new HashMap<>(shipBoard.getCannons());
+                Map<Point, Activatable> expActivatables = new HashMap<>(shipBoard.getActivatables());
+                assertEquals(4, shipBoard.getFirePower());
+                assertTrue(restIsUnchanged() && ShipBoardTest.SpecificComponentTests.restIsUnchanged(shipBoard));
+                assertEquals(expCannons, shipBoard.getCannons());
+                assertEquals(expActivatables, shipBoard.getActivatables());
+            }
+
+            @Test
+            void activateTwiceDoesNothing() {
+                addComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                Map<Point, Cannon> expCannons = new HashMap<>(shipBoard.getCannons());
+                Map<Point, Activatable> expActivatables = new HashMap<>(shipBoard.getActivatables());
+                assertEquals(4, shipBoard.getFirePower());
+                assertTrue(restIsUnchanged() && ShipBoardTest.SpecificComponentTests.restIsUnchanged(shipBoard));
+                assertEquals(expCannons, shipBoard.getCannons());
+                assertEquals(expActivatables, shipBoard.getActivatables());
+            }
         }
     }
 
