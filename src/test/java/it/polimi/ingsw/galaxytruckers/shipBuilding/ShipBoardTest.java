@@ -254,7 +254,7 @@ class ShipBoardTest {
             }
 
             @Test
-            void addDoubleCannonUpdatesMaps() {
+            void addUpdatesMaps() {
                 addComponent(new Point(7,7));
                 assertEquals(shipBoard.getCannons().get(new Point(7,7)), doubleCannon);
                 assertEquals(shipBoard.getActivatables().get(new Point(7,7)), doubleCannon);
@@ -265,7 +265,7 @@ class ShipBoardTest {
             }
 
             @Test
-            void removeDoubleCannonUpdatesMaps() {
+            void removeUpdatesMaps() {
                 addComponent(new Point(7,7));
                 shipBoard.removeComponent(new Point(7,7));
                 assertTrue(shipBoard.getCannons().isEmpty());
@@ -297,6 +297,98 @@ class ShipBoardTest {
                 assertTrue(restIsUnchanged() && ShipBoardTest.SpecificComponentTests.restIsUnchanged(shipBoard));
                 assertEquals(expCannons, shipBoard.getCannons());
                 assertEquals(expActivatables, shipBoard.getActivatables());
+            }
+
+            @Test
+            void deactivateWhenNotActiveDoesNothing() {
+                addComponent(new Point(7,7));
+                Map<Point, Cannon> expCannons = new HashMap<>(shipBoard.getCannons());
+                Map<Point, Activatable> expActivatables = new HashMap<>(shipBoard.getActivatables());
+                shipBoard.deactivateComponent(new Point(7,7));
+                assertEquals(0, shipBoard.getFirePower());
+                assertEquals(expCannons, shipBoard.getCannons());
+                assertEquals(expActivatables, shipBoard.getActivatables());
+                assertTrue(restIsUnchanged() && ShipBoardTest.SpecificComponentTests.restIsUnchanged(shipBoard));
+            }
+
+            @Test
+            void deactivateWhenActiveDecrementsFirePower() {
+                addComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                Map<Point, Cannon> expCannons = new HashMap<>(shipBoard.getCannons());
+                Map<Point, Activatable> expActivatables = new HashMap<>(shipBoard.getActivatables());
+                shipBoard.deactivateComponent(new Point(7,7));
+                assertEquals(0, shipBoard.getFirePower());
+                assertEquals(expCannons, shipBoard.getCannons());
+                assertEquals(expActivatables, shipBoard.getActivatables());
+                assertTrue(restIsUnchanged() && ShipBoardTest.SpecificComponentTests.restIsUnchanged(shipBoard));
+            }
+        }
+
+        @Nested
+        @DisplayName("Double Engine tests")
+        class DoubleEngineTests {
+            DoubleEngine doubleEngine;
+
+            @BeforeEach
+            void setup() {
+                doubleEngine = new DoubleEngine(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                component = doubleEngine;
+            }
+
+            boolean restIsUnchanged() {
+                return shipBoard.getCargoHolds().isEmpty() &&
+                        shipBoard.getCabins().isEmpty() &&
+                        shipBoard.getBatteries().isEmpty() &&
+                        shipBoard.getCannons().isEmpty() &&
+                        shipBoard.getLifeSupports().isEmpty() &&
+                        SpecificComponentTests.restIsUnchanged(shipBoard);
+            }
+
+            @Test
+            void addUpdatesMaps() {
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(1, shipBoard.getEngines().size());
+                assertEquals(1, shipBoard.getActivatables().size());
+                assertEquals(doubleEngine, shipBoard.getActivatables().get(new Point(7,7)));
+                assertEquals(doubleEngine, shipBoard.getEngines().get(new Point(7,7)));
+                assertEquals(0, shipBoard.getEnginePower());
+            }
+
+            @Test
+            void removeUpdatesMaps() {
+                addComponent(new Point(7,7));
+                shipBoard.removeComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertTrue(shipBoard.getEngines().isEmpty());
+                assertTrue(shipBoard.getActivatables().isEmpty());
+                assertEquals(0, shipBoard.getEnginePower());
+            }
+
+            @Test
+            void activateUpdatesEnginePower() {
+                addComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(2, shipBoard.getEnginePower());
+                assertEquals(1, shipBoard.getEngines().size());
+                assertEquals(1, shipBoard.getActivatables().size());
+                assertEquals(doubleEngine, shipBoard.getActivatables().get(new Point(7,7)));
+                assertEquals(doubleEngine, shipBoard.getEngines().get(new Point(7,7)));
+            }
+
+            @Test
+            void deactivateUpdatesEnginePower() {
+                addComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                shipBoard.deactivateComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(0, shipBoard.getEnginePower());
+                assertEquals(1, shipBoard.getEngines().size());
+                assertEquals(1, shipBoard.getActivatables().size());
+                assertEquals(doubleEngine, shipBoard.getActivatables().get(new Point(7,7)));
+                assertEquals(doubleEngine, shipBoard.getEngines().get(new Point(7,7)));
             }
         }
     }
