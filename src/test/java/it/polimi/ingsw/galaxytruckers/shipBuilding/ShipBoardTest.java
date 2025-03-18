@@ -193,6 +193,74 @@ class ShipBoardTest {
     }
 
     @Nested
+    @DisplayName("Engine Test")
+    class EngineTests {
+        Engine componentToAdd;
+
+        @BeforeEach
+        void setup() {
+            componentToAdd = new Engine(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+            ComponentBank componentBank = new ComponentBank() {
+                @Override
+                public Component getRanComponent() {
+                    return componentToAdd;
+                }
+            };
+            shipBoard = new SecondShipBoard(componentBank, Colors.BLUE);
+        }
+
+        void addEngine(Point point) {
+            shipBoard.requestRandComponent();
+            shipBoard.placeComponent(point);
+            shipBoard.weldLastComponent();
+        }
+
+        void removeEngine(Point point) {
+            shipBoard.removeComponent(point);
+        }
+
+        boolean restIsUnchanged() {
+            return shipBoard.getActivatables().isEmpty() &&
+                    shipBoard.getCargoHolds().isEmpty() &&
+                    shipBoard.getCabins().isEmpty() &&
+                    shipBoard.getBatteries().isEmpty() &&
+                    shipBoard.getCannons().isEmpty() &&
+                    shipBoard.getLifeSupports().isEmpty() &&
+                    shipBoard.getStashedComponents().isEmpty() &&
+                    shipBoard.getCredits() == 0;
+        }
+
+        @Test
+        void addEngineUpdatesMap() {
+            addEngine(new Point(7,7));
+            assertEquals(1, shipBoard.getEngines().size());
+            assertEquals(componentToAdd, shipBoard.getEngines().get(new Point(7,7)));
+            assertTrue(restIsUnchanged());
+        }
+
+        @Test
+        void removeEngineUpdatesMap() {
+            addEngine(new Point(7,7));
+            removeEngine(new Point(7,7));
+            assertEquals(0, shipBoard.getEngines().size());
+            assertTrue(shipBoard.getEngines().isEmpty());
+            assertTrue(restIsUnchanged());
+        }
+
+        @Test
+        void getEnginePowerEqualsEnginePowerSum() {
+            assertEquals(0, shipBoard.getEnginePower());
+            for (int i = 6; i <= 8; i++) {
+                addEngine(new Point(i,7));
+            }
+            assertEquals(3*componentToAdd.getEnginePower(), shipBoard.getEnginePower());
+            assertTrue(restIsUnchanged());
+        }
+    }
+
+
+
+    @Nested
     @DisplayName("getConnectedSets() tests")
     class GetConnectedSetsTest {
         @BeforeEach
