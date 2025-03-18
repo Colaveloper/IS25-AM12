@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
-import jdk.jshell.spi.ExecutionControl;
 
 import java.awt.Point;
 import java.util.*;
@@ -109,7 +108,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         lastComponent.rotateLeft();
     }
 
-    public void stashComponent() {};
+    public void stashComponent() {}
 
     public void grabStashedComponent(int index) {}
 

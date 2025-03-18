@@ -1,17 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
-import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 
 import java.awt.*;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class TestShipBoard extends ShipBoard {
-    private final static Set<Point> shipArea = new HashSet<Point>(List.of(new Point(5, 7),
+    private final static Set<Point> shipArea = new HashSet<>(List.of(new Point(5, 7),
             new Point(5, 8),
             new Point(5, 9),
             new Point(6, 6),

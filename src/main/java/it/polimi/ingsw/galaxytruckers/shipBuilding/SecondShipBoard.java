@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SecondShipBoard extends ShipBoard {
-    private static final Set<Point> shipArea = new HashSet<Point>(List.of(new Point(4, 7),
+    private static final Set<Point> shipArea = new HashSet<>(List.of(new Point(4, 7),
             new Point(4, 8),
             new Point(4, 9),
             new Point(5, 6),
