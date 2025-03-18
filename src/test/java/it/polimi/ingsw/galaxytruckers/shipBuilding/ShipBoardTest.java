@@ -379,6 +379,19 @@ class ShipBoardTest {
             }
 
             @Test
+            void multipleActivateDoNothing() {
+                addComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(2, shipBoard.getEnginePower());
+                assertEquals(1, shipBoard.getEngines().size());
+                assertEquals(1, shipBoard.getActivatables().size());
+                assertEquals(doubleEngine, shipBoard.getActivatables().get(new Point(7,7)));
+                assertEquals(doubleEngine, shipBoard.getEngines().get(new Point(7,7)));
+            }
+
+            @Test
             void deactivateUpdatesEnginePower() {
                 addComponent(new Point(7,7));
                 shipBoard.activateComponent(new Point(7,7));
@@ -390,7 +403,22 @@ class ShipBoardTest {
                 assertEquals(doubleEngine, shipBoard.getActivatables().get(new Point(7,7)));
                 assertEquals(doubleEngine, shipBoard.getEngines().get(new Point(7,7)));
             }
+
+            @Test
+            void multipleDeactivateDoNothing() {
+                addComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                shipBoard.deactivateComponent(new Point(7,7));
+                shipBoard.deactivateComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(0, shipBoard.getEnginePower());
+                assertEquals(1, shipBoard.getEngines().size());
+                assertEquals(1, shipBoard.getActivatables().size());
+                assertEquals(doubleEngine, shipBoard.getActivatables().get(new Point(7,7)));
+                assertEquals(doubleEngine, shipBoard.getEngines().get(new Point(7,7)));
+            }
         }
+
     }
 
 
