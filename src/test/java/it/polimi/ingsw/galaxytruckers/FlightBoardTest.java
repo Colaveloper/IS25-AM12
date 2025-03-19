@@ -62,7 +62,9 @@ class FlightBoardTest {
 
         @Test
         void legalShipPlacementElseThrowExceptions() {
-            List<Integer> legalStartingPositions = Level.SECOND.getStartingPositions();
+            List<Integer> legalStartingPositions = Level.SECOND
+                    .getStartingPositions()
+                    .subList(0, flightBoard.getAllShips().size());
             // Asking for non-existing starting position
             assertThrows(
                     IllegalArgumentException.class,
@@ -75,19 +77,36 @@ class FlightBoardTest {
                     IllegalArgumentException.class,
                     () -> flightBoard.placeShipOnFlightBoard(ship2, legalStartingPositions.get(1))
             );
-
-            assertFalse(flightBoard.placeShipOnFlightBoard(ship2, legalStartingPositions.get(2)));
-            assertTrue(flightBoard.placeShipOnFlightBoard(ship3, legalStartingPositions.get(3)));
+            // Adding ship 2
+            assertTrue(flightBoard.placeShipOnFlightBoard(ship2, legalStartingPositions.get(2)));
+            // Adding ship 3: Building is over
+            assertFalse(flightBoard.placeShipOnFlightBoard(ship3, legalStartingPositions.get(0)));
 
             Map<ShipBoard, Integer> shipToPlace = flightBoard.getShipToPlace();
-            Deque<Integer> startingPositions = new ArrayDeque<>(Level.TEST.getStartingPositions());
             assertEquals(shipToPlace.get(ship1), legalStartingPositions.get(1));
             assertEquals(shipToPlace.get(ship2), legalStartingPositions.get(2));
-            assertEquals(shipToPlace.get(ship3), legalStartingPositions.get(3));
+            assertEquals(shipToPlace.get(ship3), legalStartingPositions.get(0));
+
+            List<ShipBoard> expectedOrder = Arrays.asList(ship3, ship1, ship2);
+            for (int i = 0; i<legalStartingPositions.getFirst(); i++) {
+                assertEquals(expectedOrder.get(i), flightBoard.getOrderedShips().get(i));
+            }
+
+            // 1 gets ahead, position incremented by 10+1
+            flightBoard.displaceShip(ship1, 10);
+            expectedOrder = Arrays.asList(ship1, ship3, ship2);
+            for (int i = 0; i<legalStartingPositions.getFirst(); i++) {
+                assertEquals(expectedOrder.get(i), flightBoard.getOrderedShips().get(i));
+            }
+            assertEquals(legalStartingPositions.get(1) + 11, flightBoard.getShipToPlace().get(ship1));
+
+            // 1 gets ahead and laps the others
+//            flightBoard.displaceShip(ship1, 100);
+//            assertEquals(Set.of(ship2, ship3), flightBoard.getLappedShips());
+            // TODO: FIX THIS TEST
+
         }
     }
-
-
 
     @Test
     void getOrderedShips() {

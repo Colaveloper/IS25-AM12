@@ -5,14 +5,15 @@ package it.polimi.ingsw.galaxytruckers;// DESCRIPTION:
 //Hourglass hourglass = new Hourglass();
 //hourglass.flipHourglass(() -> System.out.println("Time is up!"));
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BuildingTime {
     private int flipsLeft;
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
 
-    public BuildingTime(int rounds) {
-        this.flipsLeft = rounds;
+    public BuildingTime(Optional<Integer> rounds) {
+        this.flipsLeft = rounds.orElse(-1);
     }
 
     public void flipHourglass(Runnable hourglassIsOver, Runnable buildingIsOver) {
@@ -20,7 +21,7 @@ public class BuildingTime {
             new Thread(() -> {
                 try {
                     Thread.sleep(60000); // 1 minute
-                    if (flipsLeft > 0 ) {
+                    if (flipsLeft == 0 ) {
                         hourglassIsOver.run();
                     } else {
                         buildingIsOver.run();

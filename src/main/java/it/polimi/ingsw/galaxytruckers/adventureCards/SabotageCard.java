@@ -2,8 +2,9 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
@@ -12,16 +13,17 @@ import java.util.List;
 
 
 public class SabotageCard extends AdventureCard {
-    public SabotageCard() {
+    public SabotageCard(FlightBoard flightBoard) {
+        super(flightBoard);
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.SABOTAGE);
-        cardStates.add(CardState.END_CARD);
+        //cardStates.add(PlayerAction.SABOTAGE);
+        cardStates.add(PlayerAction.END_CARD);
 
         this.name = "[SABOTAGE]";
     }
 
     @Override
-    public CardState nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         step ++;
         return cardStates.get(step);
     }
@@ -34,12 +36,12 @@ public class SabotageCard extends AdventureCard {
     }
 
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
 
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return 0;
     }
 
@@ -64,7 +66,7 @@ public class SabotageCard extends AdventureCard {
     }
 
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return 0;
     }
 

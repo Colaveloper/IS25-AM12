@@ -19,6 +19,10 @@ public abstract class FlightBoard {
         this.finalScores = new HashMap<>();
     }
 
+    public Set<ShipBoard> getAllShips() {
+        return allShips;
+    }
+
     public Map<ShipBoard, Integer> getShipToPlace() {
         return shipToPlace;
     }
@@ -45,6 +49,7 @@ public abstract class FlightBoard {
                 tryMove += displacementLeft>0 ? 1 : -1;
             } else {
                 newPosition += tryMove;
+                tryMove = displacementLeft>0 ? 1 : -1;
                 displacementLeft += displacementLeft>0 ? -1 : 1;
             }
         }

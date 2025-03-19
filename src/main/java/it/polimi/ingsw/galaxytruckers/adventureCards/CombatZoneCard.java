@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
@@ -15,13 +15,14 @@ public class CombatZoneCard extends AdventureCard{
     private List<Integer> projectileDirections;
     private List<Projectile> projectileType;
 
-    public CombatZoneCard(int flightDaysLost, int numResidentsLost, List<Integer> projectileDirections, List<Projectile> projectileType){
+    public CombatZoneCard(FlightBoard flightBoard, int flightDaysLost, int numResidentsLost, List<Integer> projectileDirections, List<Projectile> projectileType){
         //cardState init
+        super(flightBoard);
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.START_CARD);
-        cardStates.add(CardState.ACTIVATE_ENGINE);
-        cardStates.add(CardState.ACTIVATE_CANNON);
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.START_CARD);
+        cardStates.add(PlayerAction.ACTIVATE_ENGINES);
+        cardStates.add(PlayerAction.ACTIVATE_CANNONS);
+        cardStates.add(PlayerAction.END_CARD);
 
         //attributes init
         this.name = "[COMBAT ZONE]";
@@ -33,11 +34,11 @@ public class CombatZoneCard extends AdventureCard{
 
     //USED METHODS
     @Override
-    public CardState nextStep(GameModel model) {
-        if(step == 0){
-            model.loseFlightDaysLeastResidents(flightDaysLost);
-        }
-        step++;
+    public PlayerAction nextStep() {
+//        if(step == 0){
+//            model.loseFlightDaysLeastResidents(flightDaysLost);
+//        }
+//        step++;
         return cardStates.get(step);
     }
     @Override
@@ -50,7 +51,7 @@ public class CombatZoneCard extends AdventureCard{
         return projectileType;
     }
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return flightDaysLost;
     }
 
@@ -60,11 +61,11 @@ public class CombatZoneCard extends AdventureCard{
         return null;
     }
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return 0;
     }
     @Override

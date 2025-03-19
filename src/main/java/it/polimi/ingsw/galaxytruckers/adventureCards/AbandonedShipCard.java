@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
@@ -13,11 +13,12 @@ public class AbandonedShipCard extends AdventureCard{
     private final int numResidents;
     private final int flightDaysLost;
 
-    public AbandonedShipCard(int credits, int numResidents, int flightDaysLost){
+    public AbandonedShipCard(FlightBoard flightBoard, int credits, int numResidents, int flightDaysLost){
+        super(flightBoard);
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.ASK_NEXT_PLAYER);
-        cardStates.add(CardState.LOSE_RESIDENT);
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.ASK_IF_PASS);
+        cardStates.add(PlayerAction.LOSE_RESIDENTS);
+        cardStates.add(PlayerAction.END_CARD);
 
         this.name = "[ABANDONED SHIP]";
         this.credits = credits;
@@ -27,16 +28,16 @@ public class AbandonedShipCard extends AdventureCard{
 
     //USED METHODS
     @Override
-    public CardState nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         if(step == 1){
-            model.grabCredits(credits);
-            model.loseFlightDays(flightDaysLost);
+            currentShipBoard.gainCredits(credits);
+            flightBoard.displaceShip(currentShipBoard, flightDaysLost);
         }
         step++;
         return cardStates.get(step);
     }
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return credits;
     }
     @Override
@@ -44,13 +45,13 @@ public class AbandonedShipCard extends AdventureCard{
         return numResidents;
     }
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return flightDaysLost;
     }
 
     //UNUSED METHODS ----------------------------------------
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
     @Override

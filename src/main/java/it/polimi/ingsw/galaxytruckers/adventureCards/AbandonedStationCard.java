@@ -1,7 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
@@ -11,15 +12,16 @@ import java.util.List;
 public class AbandonedStationCard extends AdventureCard{
     //attributes
     private List<GoodsType> goodsList;
-    private int numRequiredResidents;
-    private int flightDaysLost;
+    private final int numRequiredResidents;
+    private final int flightDaysLost;
 
-    public AbandonedStationCard(List<GoodsType> goodsList, int numRequiredResidents, int flightDaysLost){
+    public AbandonedStationCard(FlightBoard flightBoard, List<GoodsType> goodsList, int numRequiredResidents, int flightDaysLost){
         //states init
+        super(flightBoard);
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.ASK_NEXT_PLAYER);
-        cardStates.add(CardState.GRAB_GOODS);
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.ASK_IF_PASS);
+        cardStates.add(PlayerAction.MANAGE_GOODS);
+        cardStates.add(PlayerAction.END_CARD);
 
         //attributes init
         this.name = "[ABANDONED STATION]";
@@ -30,11 +32,13 @@ public class AbandonedStationCard extends AdventureCard{
 
     //USED METHODS
     @Override
-    public CardState nextStep(GameModel model) {
-        if(step == 1){
-            model.loseFlightDays(flightDaysLost);
-        }
-        step++;
+    public PlayerAction nextStep() {
+//        if(step == 1){
+//
+//            flightBoard.
+//            flightBoard.displaceShip(currentShipBoard, flightDaysLost);
+//        }
+//        step++;
         return cardStates.get(step);
     }
     @Override
@@ -42,7 +46,7 @@ public class AbandonedStationCard extends AdventureCard{
         return goodsList;
     }
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return flightDaysLost;
     }
 
@@ -52,11 +56,11 @@ public class AbandonedStationCard extends AdventureCard{
         return null;
     }
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return 0;
     }
     @Override

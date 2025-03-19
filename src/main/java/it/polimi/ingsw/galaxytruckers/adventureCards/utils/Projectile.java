@@ -1,8 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards.utils;
 
 public enum Projectile {
-    BIG_METEOR,
-    SMALL_METEOR,
-    BIG_CANNON,
-    SMALL_CANNON
+    LARGE_METEOR, // cannon blocks
+    SMALL_METEOR, // cannon or shield or unexposed connector blocks
+    HEAVY_FIRE,   // no defence possible
+    LIGHT_FIRE    // shield blocks
 }

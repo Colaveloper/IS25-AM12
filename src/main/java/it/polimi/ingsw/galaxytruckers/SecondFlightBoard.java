@@ -12,7 +12,7 @@ public class SecondFlightBoard extends FlightBoard{
     public SecondFlightBoard(Set<ShipBoard> allShips) {
         super(allShips);
         this.loopLength = Level.SECOND.getLoopLength();
-        this.startingPositionsLeft = new ArrayList<>(Level.SECOND.getStartingPositions());
+        this.startingPositionsLeft = new ArrayList<>(Level.SECOND.getStartingPositions().subList(0, allShips.size()));
     }
 
     @Override

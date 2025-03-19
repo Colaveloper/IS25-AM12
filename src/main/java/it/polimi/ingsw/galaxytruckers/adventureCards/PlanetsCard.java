@@ -1,7 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
@@ -15,8 +16,9 @@ public class PlanetsCard extends AdventureCard{
     private int flightDaysLost;
     private int numPlanets;
 
-    public PlanetsCard(int numPlanets, List<GoodsType> goods, int flightDaysLost){
+    public PlanetsCard(FlightBoard flightBoard, int numPlanets, List<GoodsType> goods, int flightDaysLost){
         //attributes init
+        super(flightBoard);
         planets = new ArrayList<>();
         for (int i = 0; i < numPlanets; i++) {
             //TRUE indicates an occupied planet
@@ -28,14 +30,14 @@ public class PlanetsCard extends AdventureCard{
 
         //cardState init
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.CHOOSE_PLANET);
-        cardStates.add(CardState.GRAB_GOODS);
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.CHOOSE_PLANET);
+        cardStates.add(PlayerAction.MANAGE_GOODS);
+        cardStates.add(PlayerAction.END_CARD);
     }
 
     //USED METHODS
     @Override
-    public CardState nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         step++;
         return cardStates.get(step);
     }
@@ -48,7 +50,7 @@ public class PlanetsCard extends AdventureCard{
         return goods;
     }
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return flightDaysLost;
     }
     @Override
@@ -58,11 +60,11 @@ public class PlanetsCard extends AdventureCard{
     
     //UNUSED METHODS
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return 0;
     }
     @Override

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
@@ -12,23 +12,24 @@ public class OpenSpaceCard extends AdventureCard{
     //attributes
     private int numPlayers;
 
-    public OpenSpaceCard(int numPlayers){
+    public OpenSpaceCard(FlightBoard flightBoard, int numPlayers){
         //attributes init
+        super(flightBoard);
         this.numPlayers = numPlayers;
         this.name = "[OPEN SPACE]";
 
         //cardState init
         cardStates = new ArrayList<>();
         for (int i = 0; i < numPlayers; i++) {
-            cardStates.add(CardState.ACTIVATE_ENGINE);
+            cardStates.add(PlayerAction.ACTIVATE_ENGINES);
         }
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.END_CARD);
 
     }
 
     //USED METHODS
     @Override
-    public CardState nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         step++;
         return cardStates.get(step);
     }
@@ -39,11 +40,11 @@ public class OpenSpaceCard extends AdventureCard{
         return null;
     }
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return 0;
     }
     @Override
@@ -63,7 +64,7 @@ public class OpenSpaceCard extends AdventureCard{
         return 0;
     }
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return 0;
     }
     @Override

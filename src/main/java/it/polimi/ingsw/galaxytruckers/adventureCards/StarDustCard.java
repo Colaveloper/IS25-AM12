@@ -1,8 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.GameModel;
-import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.CardState;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
@@ -10,19 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StarDustCard extends AdventureCard {
-    public StarDustCard() {
+    public StarDustCard(FlightBoard flightBoard) {
+        super(flightBoard);
         cardStates = new ArrayList<>();
-        cardStates.add(CardState.START_CARD);
-        cardStates.add(CardState.END_CARD);
+        cardStates.add(PlayerAction.START_CARD);
+        cardStates.add(PlayerAction.END_CARD);
 
         this.name = "[STAR DUST]";
     }
 
     @Override
-    public CardState nextStep(GameModel model) {
+    public PlayerAction nextStep() {
         if (step == 0) {
-            model.loseFlightDays(model.getExposedConnectors());
-            model.passCardToNextPlayer();
+            flightBoard.displaceShip(currentShipBoard, currentShipBoard.getExposedConnectorsNumber());
+            passCardToNextPlayer();
         }
         step++;
         return cardStates.get(step);
@@ -40,12 +41,12 @@ public class StarDustCard extends AdventureCard {
     }
 
     @Override
-    public int getFirePower() {
+    public int getFirePowerThreshold() {
         return 0;
     }
 
     @Override
-    public int getCredits() {
+    public int getCreditPrize() {
         return 0;
     }
 
@@ -70,7 +71,7 @@ public class StarDustCard extends AdventureCard {
     }
 
     @Override
-    public int getFlightDaysLost() {
+    public int getFlightDaysLoss() {
         return 0;
     }
 
