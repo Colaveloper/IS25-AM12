@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
@@ -11,7 +11,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AdventureCard {
+public abstract class AdventureCardDeprecated {
     //attributes
     protected int step = -1;
     protected List<PlayerAction> cardStates;
@@ -20,10 +20,10 @@ public abstract class AdventureCard {
     protected ShipBoard currentShipBoard;
     protected int diceRoll;
     protected List<Integer> projectileDirections;
-    protected List<Projectile> projectileTypes;
+    protected List<ProjectileDeprecated> projectileTypes;
     protected int projectileIndex;
 
-    protected AdventureCard(FlightBoard flightBoard) {
+    protected AdventureCardDeprecated(FlightBoard flightBoard) {
         this.flightBoard = flightBoard;
         this.currentShipBoard = flightBoard.getOrderedShips().getFirst();
         cardStates = new ArrayList<>();
@@ -36,7 +36,7 @@ public abstract class AdventureCard {
     // called after player failed to prevent projectile
     public void projectileAtPlayer() {
         Point projectileTarget = currentShipBoard.getFirstComponentAt(diceRoll, projectileDirections.get(projectileIndex));
-        if (projectileTypes.get(projectileIndex) == Projectile.SMALL_METEOR &&
+        if (projectileTypes.get(projectileIndex) == ProjectileDeprecated.SMALL_METEOR &&
                 currentShipBoard
                         .getComponentMap()
                         .get(projectileTarget)
@@ -85,7 +85,7 @@ public abstract class AdventureCard {
     public abstract int getCreditPrize();
     public abstract List<GoodsType> getGoods();
     public abstract List<Integer> getProjectileDirections();
-    public abstract List<Projectile> getProjectilesType();
+    public abstract List<ProjectileDeprecated> getProjectilesType();
     public abstract int getSacrifice();
     public abstract int getFlightDaysLoss();
     public abstract void landOnPlanet(int i);

@@ -3,18 +3,18 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PiratesCardDeprecated extends AdventureCard{
+public class PiratesCardDeprecated extends AdventureCardDeprecated {
 
     private final int firePowerThreshold;
     private final List<Integer> projectileDirections;
-    private final List<Projectile> projectileTypes;
+    private final List<ProjectileDeprecated> projectileTypes;
     private List<ShipBoard> defeatedPlayers;
     private final int creditPrize;
     private final int flightDaysLoss;
@@ -26,16 +26,16 @@ public class PiratesCardDeprecated extends AdventureCard{
             int flightDaysLoss,
             int creditPrize,
             List<Integer> projectileDirections,
-            List<Projectile> projectileTypes
+            List<ProjectileDeprecated> projectileTypes
     ) {
         super(flightBoard);
         // ESTABLISHING WHO WINS, DRAWS, OR GETS DEFEATED BY PIRATES
         cardStates.add(PlayerAction.ACTIVATE_CANNONS);
         for (int i = 0; i < projectileTypes.size(); i++){           //adds commands for each cannon shot
-            if(projectileTypes.get(i) == Projectile.LIGHT_FIRE){    //TODO: AND there is a shield in that direction
+            if(projectileTypes.get(i) == ProjectileDeprecated.LIGHT_FIRE){    //TODO: AND there is a shield in that direction
                 cardStates.add(PlayerAction.ROLL_DICE);
                 cardStates.add(PlayerAction.ACTIVATE_SHIELDS);
-            } else if (projectileTypes.get(i) == Projectile.HEAVY_FIRE) {
+            } else if (projectileTypes.get(i) == ProjectileDeprecated.HEAVY_FIRE) {
                 cardStates.add(PlayerAction.ROLL_DICE);
             } else {
                 //TODO: make this launch some kind of exception or proper error message
@@ -108,7 +108,7 @@ public class PiratesCardDeprecated extends AdventureCard{
     }
 
     @Override
-    public List<Projectile> getProjectilesType() {
+    public List<ProjectileDeprecated> getProjectilesType() {
         return projectileTypes;
     }
 

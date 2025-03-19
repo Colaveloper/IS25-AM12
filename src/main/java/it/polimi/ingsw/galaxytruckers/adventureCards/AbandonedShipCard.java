@@ -2,13 +2,13 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AbandonedShipCard extends AdventureCard{
+public class AbandonedShipCard extends AdventureCardDeprecated {
     private final int credits;
     private final int numResidents;
     private final int flightDaysLost;
@@ -67,7 +67,7 @@ public class AbandonedShipCard extends AdventureCard{
         return null;
     }
     @Override
-    public List<Projectile> getProjectilesType() {
+    public List<ProjectileDeprecated> getProjectilesType() {
         return null;
     }
     @Override

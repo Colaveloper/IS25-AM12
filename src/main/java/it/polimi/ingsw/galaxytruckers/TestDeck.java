@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers;
 
-import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCardDeprecated;
 import java.util.List;
 
 public class TestDeck extends Deck{
@@ -10,19 +10,19 @@ public class TestDeck extends Deck{
     }
 
     @Override
-    public AdventureCard getCurrentCard() {
+    public AdventureCardDeprecated getCurrentCard() {
         //TODO: implement method
         return null;
     }
 
     @Override
-    public List<AdventureCard> peekForecastDeck(int id) {
+    public List<AdventureCardDeprecated> peekForecastDeck(int id) {
         //TODO: implement method
         return null;
     }
 
     @Override
-    public AdventureCard drawCard() {
+    public AdventureCardDeprecated drawCard() {
         //TODO: implement method
         return null;
     }

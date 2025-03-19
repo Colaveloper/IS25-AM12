@@ -1,8 +1,8 @@
 package it.polimi.ingsw.galaxytruckers;//TEMPORARY CLASS, TESTING ONLY
 
 import it.polimi.ingsw.galaxytruckers.adventureCards.*;
-import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCardDeprecated;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.ArrayList;
@@ -33,14 +33,14 @@ public class TempDeck extends Deck{
     }
 
     @Override
-    public AdventureCard drawCard() {
+    public AdventureCardDeprecated drawCard() {
         CardType[] values = CardType.values(); //get all enum values
         Random rand = new Random();
         CardType randomCard = values[rand.nextInt(values.length)]; //pick random one
-        AdventureCard returnCard;
+        AdventureCardDeprecated returnCard;
 
         List<Integer> projectileDirections = new ArrayList<>();
-        List<Projectile> projectilesType = new ArrayList<>();
+        List<ProjectileDeprecated> projectilesType = new ArrayList<>();
         List<GoodsType> goodsList = new ArrayList<>();
         
         //TODO: generate values for cards from JSON
@@ -62,8 +62,8 @@ public class TempDeck extends Deck{
                 projectileDirections.add(0);
 
                 projectilesType.clear();
-                projectilesType.add(Projectile.LIGHT_FIRE);
-                projectilesType.add(Projectile.HEAVY_FIRE);
+                projectilesType.add(ProjectileDeprecated.LIGHT_FIRE);
+                projectilesType.add(ProjectileDeprecated.HEAVY_FIRE);
 
                 returnCard = new CombatZoneCard(flightBoard, 3,2,projectileDirections,projectilesType);
                 break;
@@ -78,9 +78,9 @@ public class TempDeck extends Deck{
                 projectileDirections.add(3);
 
                 projectilesType.clear();
-                projectilesType.add(Projectile.SMALL_METEOR);
-                projectilesType.add(Projectile.LARGE_METEOR);
-                projectilesType.add(Projectile.SMALL_METEOR);
+                projectilesType.add(ProjectileDeprecated.SMALL_METEOR);
+                projectilesType.add(ProjectileDeprecated.LARGE_METEOR);
+                projectilesType.add(ProjectileDeprecated.SMALL_METEOR);
 
                 returnCard = new MeteorSwarmCard(flightBoard, projectileDirections,projectilesType);
                 break;
@@ -96,11 +96,11 @@ public class TempDeck extends Deck{
                 projectileDirections.add(3);
 
                 projectilesType.clear();
-                projectilesType.add(Projectile.HEAVY_FIRE);
-                projectilesType.add(Projectile.LIGHT_FIRE);
-                projectilesType.add(Projectile.HEAVY_FIRE);
-                projectilesType.add(Projectile.LIGHT_FIRE);
-                projectilesType.add(Projectile.LIGHT_FIRE);
+                projectilesType.add(ProjectileDeprecated.HEAVY_FIRE);
+                projectilesType.add(ProjectileDeprecated.LIGHT_FIRE);
+                projectilesType.add(ProjectileDeprecated.HEAVY_FIRE);
+                projectilesType.add(ProjectileDeprecated.LIGHT_FIRE);
+                projectilesType.add(ProjectileDeprecated.LIGHT_FIRE);
 
                 returnCard = new PiratesCardDeprecated(flightBoard, 10,2,12, projectileDirections,projectilesType);
                 break;
@@ -144,11 +144,11 @@ public class TempDeck extends Deck{
 
     }
     @Override
-    public List<AdventureCard> peekForecastDeck(int id) {
+    public List<AdventureCardDeprecated> peekForecastDeck(int id) {
         return null;
     }
     @Override
-    public AdventureCard getCurrentCard() {
+    public AdventureCardDeprecated getCurrentCard() {
         return null;
     }
 

@@ -2,20 +2,20 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CombatZoneCard extends AdventureCard{
+public class CombatZoneCard extends AdventureCardDeprecated {
     //attributes
     private int flightDaysLost;
     private int numResidentsLost;
     private List<Integer> projectileDirections;
-    private List<Projectile> projectileType;
+    private List<ProjectileDeprecated> projectileType;
 
-    public CombatZoneCard(FlightBoard flightBoard, int flightDaysLost, int numResidentsLost, List<Integer> projectileDirections, List<Projectile> projectileType){
+    public CombatZoneCard(FlightBoard flightBoard, int flightDaysLost, int numResidentsLost, List<Integer> projectileDirections, List<ProjectileDeprecated> projectileType){
         //cardState init
         super(flightBoard);
         cardStates = new ArrayList<>();
@@ -47,7 +47,7 @@ public class CombatZoneCard extends AdventureCard{
         return projectileDirections;
     }
     @Override
-    public List<Projectile> getProjectilesType() {
+    public List<ProjectileDeprecated> getProjectilesType() {
         return projectileType;
     }
     @Override
