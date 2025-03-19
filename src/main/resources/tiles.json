@@ -1,0 +1,6 @@
+[
+  {
+    "type": "shield",
+    "connectors": ["none","universal","double","double"]
+  }
+]
