@@ -47,8 +47,8 @@ public class GameModel {
                     ))
         );
         flightBoard = gameFactory.createFlightBoard(idsToShip.values());
-//        deck = gameFactory.createDeck(); // TODO: reintroduce
-        deck = new TempDeck(flightBoard); // for mocking purposes only
+        deck = gameFactory.createDeck();
+//        deck = new TempDeck(flightBoard); // for mocking purposes only
     }
 
     // UTILITY METHODS
@@ -165,9 +165,29 @@ public class GameModel {
     /**
      * @return whether a ship adheres to corporate standards
      */
-    boolean checkShipValidity(int playerId) {
+    public boolean checkShipValidity(int playerId) {
         return getShipFromPlayer(playerId).checkValidity();
     }
+
+    // DECK-INTERACTION METHODS
+    /**
+     * Makes the forecast deck unavailable to other players
+     * @return the forecast deck in string format
+     */
+    public String acquireForecast(int playerId, int deckIndex) {
+        return deck.getForecastDeck(deckIndex)
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+    } // TODO: make return image if asked to
+    /**
+     * Makes the forecast deck available to other players again
+     */
+    public void releaseForecast(int playerId) {
+        // TODO: implement when concurrency logic is clearer
+    }
+
+
 
     // FLIGHT METHODS
     /**
@@ -211,10 +231,10 @@ public class GameModel {
 //    }
 
     //CARD-RELATED METHODS
-    public void drawCard(){
-        currentCard = deck.drawCard();
-//        activeCardPlayCount = 0;
-    }
+//    public void drawCard(){
+//        currentCard = deck.drawCard();
+////        activeCardPlayCount = 0;
+//    }
 
     public void resetSteps(){
         currentCard.passCardToNextPlayer();

@@ -1,18 +1,35 @@
 package it.polimi.ingsw.galaxytruckers;
 
-import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCardDeprecated;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 
 import java.util.List;
 
 public abstract class Deck{
-    private List<AdventureCardDeprecated> masterDeck;
-    private AdventureCardDeprecated currentCard;
+    protected List<AdventureCard> masterDeck;
+    private AdventureCard currentCard;
 
-    abstract public void initMasterDeck();
+    public AdventureCard getCurrentCard() {
+        return currentCard;
+    }
 
-    abstract public AdventureCardDeprecated getCurrentCard();
+    public List<AdventureCard> getForecastDeck(int id) {
+        throw new UnsupportedOperationException("This action is unsupported at the selected level");
+    }
 
-    abstract public AdventureCardDeprecated drawCard();
+    public void initMasterDeck() {
+        throw new UnsupportedOperationException("This action is unsupported at the selected level");
+    }
 
-    abstract public List<AdventureCardDeprecated> peekForecastDeck(int id);
+    /**
+     * Removes a card from the master deck and sets it as current
+     * @return true if there are still cards, false otherwise
+     */
+    public boolean tryDrawCard() {
+        if (masterDeck.isEmpty()) {
+            return false;
+        } else {
+            currentCard = masterDeck.removeFirst();
+            return true;
+        }
+    }
 }
