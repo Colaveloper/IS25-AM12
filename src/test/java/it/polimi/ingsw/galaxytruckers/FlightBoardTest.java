@@ -100,7 +100,7 @@ class FlightBoardTest {
             }
             assertEquals(legalStartingPositions.get(1) + 11, flightBoard.getShipToPlace().get(ship1));
 
-            // 1 gets ahead and laps the others
+//            // 1 gets ahead and laps the others
 //            flightBoard.displaceShip(ship1, 100);
 //            assertEquals(Set.of(ship2, ship3), flightBoard.getLappedShips());
             // TODO: FIX THIS TEST

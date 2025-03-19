@@ -30,7 +30,8 @@ public class SecondFlightBoard extends FlightBoard{
 
     @Override
     public Set<ShipBoard> getLappedShips() {
-        return shipToPlace.entrySet().stream()
+        return shipToPlace.entrySet()
+                .stream()
                 .filter(entry -> shipToPlace.get(getOrderedShips().getFirst()) - entry.getValue() > loopLength)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());

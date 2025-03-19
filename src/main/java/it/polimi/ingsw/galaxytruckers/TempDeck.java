@@ -102,7 +102,7 @@ public class TempDeck extends Deck{
                 projectilesType.add(Projectile.LIGHT_FIRE);
                 projectilesType.add(Projectile.LIGHT_FIRE);
 
-                returnCard = new PiratesCard(flightBoard, 10,2,12, projectileDirections,projectilesType);
+                returnCard = new PiratesCardDeprecated(flightBoard, 10,2,12, projectileDirections,projectilesType);
                 break;
             case PLANETS:
                 goodsList.clear();

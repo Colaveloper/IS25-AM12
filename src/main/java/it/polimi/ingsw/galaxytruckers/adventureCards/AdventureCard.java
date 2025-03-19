@@ -76,7 +76,7 @@ public abstract class AdventureCard {
         this.diceRoll = diceRoll;
     }
 
-    //abstract methods
+    //abstract methods // TODO: condense in render() and toString()
     /**increments the step by one,
      * returns the next choice*/
     public abstract PlayerAction nextStep();
