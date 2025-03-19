@@ -438,6 +438,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     @Override
     public void add(Shield shield) {
         this.shields.put(this.lastPosition, shield);
+        this.activatables.put(this.lastPosition, shield);
     }
 
     @Override
@@ -491,6 +492,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     public void remove(Shield shield) {
         shield.deactivate(this);
         this.shields.remove(this.lastPosition);
+        this.activatables.remove(this.lastPosition);
     }
 
     @Override

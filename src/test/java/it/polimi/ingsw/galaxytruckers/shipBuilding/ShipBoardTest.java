@@ -131,6 +131,7 @@ class ShipBoardTest {
     @DisplayName("Specific components tests")
     class SpecificComponentTests {
         Component component;
+        List<Connector> connectors = Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL);
 
         void addComponent(Point point) {
             shipBoard.requestRandComponent();
@@ -173,6 +174,7 @@ class ShipBoardTest {
                         shipBoard.getCabins().isEmpty() &&
                         shipBoard.getBatteries().isEmpty() &&
                         shipBoard.getEngines().isEmpty() &&
+                        shipBoard.getShields().isEmpty() &&
                         shipBoard.getLifeSupports().isEmpty();
             }
 
@@ -212,6 +214,7 @@ class ShipBoardTest {
                         shipBoard.getCabins().isEmpty() &&
                         shipBoard.getBatteries().isEmpty() &&
                         shipBoard.getCannons().isEmpty() &&
+                        shipBoard.getShields().isEmpty() &&
                         shipBoard.getLifeSupports().isEmpty();
             }
 
@@ -250,6 +253,7 @@ class ShipBoardTest {
                         shipBoard.getCabins().isEmpty() &&
                         shipBoard.getBatteries().isEmpty() &&
                         shipBoard.getEngines().isEmpty() &&
+                        shipBoard.getShields().isEmpty() &&
                         shipBoard.getLifeSupports().isEmpty();
             }
 
@@ -342,6 +346,7 @@ class ShipBoardTest {
                         shipBoard.getBatteries().isEmpty() &&
                         shipBoard.getCannons().isEmpty() &&
                         shipBoard.getLifeSupports().isEmpty() &&
+                        shipBoard.getShields().isEmpty() &&
                         SpecificComponentTests.restIsUnchanged(shipBoard);
             }
 
@@ -416,6 +421,59 @@ class ShipBoardTest {
                 assertEquals(1, shipBoard.getActivatables().size());
                 assertEquals(doubleEngine, shipBoard.getActivatables().get(new Point(7,7)));
                 assertEquals(doubleEngine, shipBoard.getEngines().get(new Point(7,7)));
+            }
+        }
+
+        @Nested
+        @DisplayName("Shield tests")
+        class ShieldTests {
+            Shield shield;
+
+            @BeforeEach
+            void setup() {
+                shield = new Shield(connectors);
+                component = shield;
+            }
+
+            boolean restIsUnchanged() {
+                return shipBoard.getCargoHolds().isEmpty() &&
+                        shipBoard.getCabins().isEmpty() &&
+                        shipBoard.getBatteries().isEmpty() &&
+                        shipBoard.getCannons().isEmpty() &&
+                        shipBoard.getLifeSupports().isEmpty() &&
+                        shipBoard.getEngines().isEmpty() &&
+                        SpecificComponentTests.restIsUnchanged(shipBoard);
+            }
+
+            @Test
+            void addUpdatesMaps() {
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(1, shipBoard.getShields().size());
+                assertEquals(shield, shipBoard.getShields().get(new Point(7,7)));
+                assertEquals(1, shipBoard.getActivatables().size());
+                assertEquals(shield, shipBoard.getActivatables().get(new Point(7,7)));
+                assertArrayEquals(new boolean[]{false, false, false, false}, shipBoard.getShieldDirections());
+            }
+
+            @Test
+            void removeUpdatesMap() {
+                addComponent(new Point(7,7));
+                shipBoard.removeComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(0, shipBoard.getShields().size());
+                assertArrayEquals(new boolean[]{false, false, false, false}, shipBoard.getShieldDirections());
+            }
+
+            @Test
+            void activateUpdatesShieldDirections() {
+                addComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(1, shipBoard.getShields().size());
+                assertEquals(1, shipBoard.getActivatables().size());
+                assertEquals(shield, shipBoard.getActivatables().get(new Point(7,7)));
+                //assertArrayEquals(new boolean[]{false, false, false, false}, shipBoard.getShieldDirections());
             }
         }
 
