@@ -23,7 +23,26 @@ class ComponentBankTest {
         assertNotNull(components);
         assertFalse(components.isEmpty());
 
-        //check first component type
+        //checking first and last component of each type in list
         assertEquals("Shield", components.get(0).getClass().getSimpleName());
+        assertEquals("Shield", components.get(7).getClass().getSimpleName());
+
+        assertEquals("LifeSupport", components.get(8).getClass().getSimpleName());
+        assertEquals("LifeSupport", components.get(19).getClass().getSimpleName());
+
+        assertEquals("DoubleCannon", components.get(20).getClass().getSimpleName());
+        assertEquals("DoubleCannon", components.get(30).getClass().getSimpleName());
+
+        assertEquals("Cannon", components.get(31).getClass().getSimpleName());
+        assertEquals("Cannon", components.get(55).getClass().getSimpleName());
+
+        assertEquals("DoubleEngine", components.get(56).getClass().getSimpleName());
+        assertEquals("DoubleEngine", components.get(64).getClass().getSimpleName());
+
+        assertEquals("Engine", components.get(65).getClass().getSimpleName());
+        assertEquals("Engine", components.get(85).getClass().getSimpleName());
+
+        assertEquals("CargoHold", components.get(86).getClass().getSimpleName());
+        assertEquals("CargoHold", components.get(94).getClass().getSimpleName());
     }
 }
