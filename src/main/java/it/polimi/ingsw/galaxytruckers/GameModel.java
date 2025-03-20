@@ -111,7 +111,7 @@ public class GameModel {
      * @return players lapped by the leader, or the empty set if in test flight
      */
     public Set<Integer> getLappedPlayers () {
-        return flightBoard.getLappedShips()
+        return flightBoard.getAndRemoveLappedShips()
                 .stream()
                 .map(this::getPlayerFromShip)
                 .collect(Collectors.toSet());

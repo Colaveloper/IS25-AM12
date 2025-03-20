@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers;
 
-import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
 import java.util.*;
@@ -32,13 +31,11 @@ public abstract class FlightBoard {
 
     public List<ShipBoard> getOrderedShips() {
         return shipToPlace.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue())
+                .sorted(Comparator.<Map.Entry<ShipBoard, Integer>>comparingInt(Map.Entry::getValue).reversed())
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
         // nth .pop() returns the nth player
     }
-
-    public abstract Set<ShipBoard> getLappedShips ();
 
     public void displaceShip (ShipBoard shipBoard, int displacement) {
         int displacementLeft = displacement;
@@ -56,9 +53,18 @@ public abstract class FlightBoard {
         shipToPlace.put(shipBoard, newPosition);
     }
 
-    public void removeShip (ShipBoard shipBoard) {
-        shipToPlace.remove(shipBoard);
-    }
+    public void removeShips (Set<ShipBoard> shipsToRemove) {
+        throw new UnsupportedOperationException("Not available for this type of FlightBoard");
+    };
+
+    public void giveUp(ShipBoard shipBoard) {
+        throw new UnsupportedOperationException("Not available for this type of FlightBoard");
+    };
+
+    public Set<ShipBoard> getAndRemoveLappedShips() {
+        throw new UnsupportedOperationException("Not available for this type of FlightBoard");
+    };
+
 
     public Map<ShipBoard, Integer> getFinalScores () {
 
@@ -69,7 +75,7 @@ public abstract class FlightBoard {
                 .orElse(-1); // impossible case: there have to be players...
 
         allShips.forEach(ship -> {
-            if (!finalScores.containsKey(ship)) { // who gave up already knows his score
+            if (shipToPlace.containsKey(ship)) {
                 finalScores.put(ship,
                         ship.getGoodsValue() + ship.getCredits() - ship.getLosses() +
                         // finish order reward
@@ -78,9 +84,7 @@ public abstract class FlightBoard {
                         (ship.getExposedConnectorsNumber() == minExposedConnectors ? 2 :0 ));
             }
         });
-
         return finalScores;
     }
-
-    public abstract void giveUp(ShipBoard shipBoard);
 }
+
