@@ -42,12 +42,13 @@ public class ComponentBank {
     }
 
     public static List<Component> loadComponents(File jsonFile) throws IOException{
-        //reading from json file and adding to coveredComponents
+        //reading from json file and returning the list of components
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(jsonFile);
 
         List<Component> components = new ArrayList<>();
 
+        //iterating through nodes and adding each as a component to list
         for (JsonNode node : rootNode){
             String type = node.get("type").asText();
             Component component;
@@ -57,10 +58,30 @@ public class ComponentBank {
                 case "shield":
                     component = new Shield(connectors);
                     break;
+                case "life support":
+                    CrewType crewType = parseCrewType(node.get("crewtype"));
+                    component = new LifeSupport(connectors, crewType);
+                    break;
+                case "double cannon":
+                    component = new DoubleCannon(connectors);
+                    break;
+                case "cannon":
+                    component = new Cannon(connectors);
+                    break;
+                case "double engine":
+                    component = new DoubleEngine(connectors);
+                    break;
+                case "engine":
+                    component = new Engine(connectors);
+                    break;
+                case "cargo hold":
+                    int size = node.get("size").asInt();
+                    Boolean isSpecial = node.get("special").asBoolean();
+                    component = new CargoHold(connectors, size, isSpecial);
+                    break;
                 default:
                     throw new IllegalArgumentException("Unknown component type: " + type);
             }
-
             components.add(component);
         }
         return components;
@@ -70,9 +91,17 @@ public class ComponentBank {
         List<Connector> connectors = new ArrayList<>();
         if(connectorNode != null && connectorNode.isArray()){
             for (JsonNode conn : connectorNode){
-                connectors.add(Connector.valueOf(conn.asText().toUpperCase()));
+                connectors.add(Connector.valueOf(conn.asText().toUpperCase())); //convert string to enum
             }
         }
         return connectors;
+    }
+
+    private static CrewType parseCrewType(JsonNode crewTypeNode){
+        CrewType crewType;
+        if(crewTypeNode != null && !crewTypeNode.isNull()){
+            return CrewType.valueOf(crewTypeNode.asText().toUpperCase()); //convert string to enum
+        }
+        return null; //TODO: potentially make this throw an exception
     }
 }
