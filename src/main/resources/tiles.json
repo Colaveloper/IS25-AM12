@@ -2,5 +2,411 @@
   {
     "type": "shield",
     "connectors": ["none","universal","double","double"]
+  },
+  {
+    "type": "shield",
+    "connectors": ["none", "universal","single","none"]
+  },
+  {
+    "type": "shield",
+    "connectors": ["single", "double","single","double"]
+  },
+  {
+    "type": "shield",
+    "connectors": ["none", "double","double","double"]
+  },
+  {
+    "type": "shield",
+    "connectors": ["none", "double","universal","none"]
+  },
+  {
+    "type": "shield",
+    "connectors": ["double", "single","double","single"]
+  },
+  {
+    "type": "shield",
+    "connectors": ["single", "single","single","none"]
+  },
+  {
+    "type": "shield",
+    "connectors": ["none", "single","universal","single"]
+  },
+  {
+    "type": "life support",
+    "connectors": ["double","universal","none","none"],
+    "crewtype": "purple"
+  },
+  {
+    "type": "life support",
+    "connectors": ["none","universal","none","single"],
+    "crewtype": "purple"
+  },
+  {
+    "type": "life support",
+    "connectors": ["none","universal","double","none"],
+    "crewtype": "purple"
+  },
+  {
+    "type": "life support",
+    "connectors": ["none","universal","none","none"],
+    "crewtype": "purple"
+  },
+  {
+    "type": "life support",
+    "connectors": ["double","double","none","double"],
+    "crewtype": "purple"
+  },
+  {
+    "type": "life support",
+    "connectors": ["single","double","none","double"],
+    "crewtype": "purple"
+  },
+  {
+    "type": "life support",
+    "connectors": ["single","universal","none","none"],
+    "crewtype": "brown"
+  },
+  {
+    "type": "life support",
+    "connectors": ["none","universal","none","double"],
+    "crewtype": "brown"
+  },
+  {
+    "type": "life support",
+    "connectors": ["none","universal","single","none"],
+    "crewtype": "brown"
+  },
+  {
+    "type": "life support",
+    "connectors": ["none","universal","none","none"],
+    "crewtype": "brown"
+  },
+  {
+    "type": "life support",
+    "connectors": ["double","single","none","single"],
+    "crewtype": "brown"
+  },
+  {
+    "type": "life support",
+    "connectors": ["single","single","none","single"],
+    "crewtype": "brown"
+  },
+  {
+    "type": "double cannon",
+    "connectors": ["none","universal","single","none"]
+  },
+  {
+    "type": "double cannon",
+    "connectors": ["none","universal","none","none"]
+  },
+  {
+    "type": "double cannon",
+    "connectors": ["none","double","single","double"]
+  },
+  {
+    "type": "double cannon",
+    "connectors": ["none","double","universal","none"]
+  },
+  {
+    "type": "double cannon",
+    "connectors": ["none","single","none","double"]
+  },
+  {
+    "type": "double cannon",
+    "connectors": ["none","single","double","single"]
+  },
+  {
+    "type": "double cannon",
+    "connectors": ["none","none","double","universal"]
+  },
+  {
+    "type": "double cannon",
+    "connectors": ["none","none","none","universal"]
+  },
+  {
+    "type": "double cannon",
+    "connectors": ["none","none","universal","single"]
+  },
+  {
+    "type": "double cannon",
+    "connectors": ["none","none","double","none"]
+  },
+  {
+    "type": "double cannon",
+    "connectors": ["none","none","single","none"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","universal","none","double"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","universal","double","none"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","double","double","double"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","double","universal","single"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","double","none","single"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","double","universal","none"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","double","single","none"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","double","none","none"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","single","none","universal"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","single","universal","double"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","single","single","single"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","single","universal","none"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","single","double","none"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","single","none","none"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","none","single","universal"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","none","universal","double"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","none","single","double"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","none","none","double"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","none","universal","single"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","none","double","single"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","none","none","single"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","none","double","none"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","none","double","none"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","none","single","none"]
+  },
+  {
+    "type": "cannon",
+    "connectors": ["none","none","single","none"]
+  },
+  {
+    "type": "double engine",
+    "connectors": ["double","universal","none","none"]
+  },
+  {
+    "type": "double engine",
+    "connectors": ["none","universal","none","universal"]
+  },
+  {
+    "type": "double engine",
+    "connectors": ["universal","double","none","none"]
+  },
+  {
+    "type": "double engine",
+    "connectors": ["double","double","none","double"]
+  },
+  {
+    "type": "double engine",
+    "connectors": ["single","single","none","single"]
+  },
+  {
+    "type": "double engine",
+    "connectors": ["universal","none","none","single"]
+  },
+  {
+    "type": "double engine",
+    "connectors": ["double","none","none","none"]
+  },
+  {
+    "type": "double engine",
+    "connectors": ["single","none","none","universal"]
+  },
+  {
+    "type": "double engine",
+    "connectors": ["single","none","none","none"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["single","universal","none","none"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["none","universal","none","double"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["none","universal","none","none"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["none","universal","none","none"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["universal","double","none","single"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["double","double","none","none"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["single","double","none","double"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["none","double","none","single"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["universal","single","none","double"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["universal","single","none","none"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["double","single","none","single"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["none","single","none","universal"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["universal","none","none","double"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["double","none","none","universal"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["double","none","none","none"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["double","none","none","none"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["single","none","none","single"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["single","none","none","none"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["single","none","none","none"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["none","none","none","universal"]
+  },
+  {
+    "type": "engine",
+    "connectors": ["none","none","none","universal"]
+  },
+  {
+    "type": "cargo hold",
+    "connectors": ["none","double","none","none"],
+    "size": 2,
+    "special": true
+  },
+  {
+    "type": "cargo hold",
+    "connectors": ["none","single","none","double"],
+    "size": 2,
+    "special": true
+  },
+  {
+    "type": "cargo hold",
+    "connectors": ["none","single","none","none"],
+    "size": 2,
+    "special": true
+  },
+  {
+    "type": "cargo hold",
+    "connectors": ["universal","universal","none","none"],
+    "size": 1,
+    "special": true
+  },
+  {
+    "type": "cargo hold",
+    "connectors": ["double","universal","double","double"],
+    "size": 1,
+    "special": true
+  },
+  {
+    "type": "cargo hold",
+    "connectors": ["double","universal","none","single"],
+    "size": 1,
+    "special": true
+  },
+  {
+    "type": "cargo hold",
+    "connectors": ["single","universal","single","single"],
+    "size": 1,
+    "special": true
+  },
+  {
+    "type": "cargo hold",
+    "connectors": ["none","universal","none","universal"],
+    "size": 1,
+    "special": true
+  },
+  {
+    "type": "cargo hold",
+    "connectors": ["none","universal","single","double"],
+    "size": 1,
+    "special": true
   }
 ]
