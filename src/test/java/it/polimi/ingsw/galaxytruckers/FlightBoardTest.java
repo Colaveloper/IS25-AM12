@@ -11,7 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.security.Provider;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,6 +34,8 @@ class FlightBoardTest {
 
         @Test
         void placeShipOnFlightBoard() {
+            assertEquals(Set.of(ship1, ship2, ship3), flightBoard.getAllShips());
+
             // starting position ignored in test flight
             assertFalse(flightBoard.placeShipOnFlightBoard(ship1, 123));
             assertFalse(flightBoard.placeShipOnFlightBoard(ship2, 324));
@@ -45,6 +46,14 @@ class FlightBoardTest {
             assertEquals(shipToPlace.get(ship1), startingPositions.pop());
             assertEquals(shipToPlace.get(ship2), startingPositions.pop());
             assertEquals(shipToPlace.get(ship3), startingPositions.pop());
+            assertEquals(Set.of(ship1, ship2, ship3), flightBoard.getAllShips());
+        }
+
+        @Test
+        void invalidCallsThrowExceptions() {
+            assertThrows(UnsupportedOperationException.class, () -> flightBoard.removeShips(Set.of(ship1)));
+            assertThrows(UnsupportedOperationException.class, () -> flightBoard.getAndRemoveLappedShips());
+            assertThrows(UnsupportedOperationException.class, () -> flightBoard.giveUp(ship1));
         }
     }
 
@@ -62,73 +71,49 @@ class FlightBoardTest {
 
         @Test
         void legalShipPlacementElseThrowExceptions() {
+            assertEquals(Set.of(ship1, ship2, ship3), flightBoard.getAllShips());
+
             List<Integer> legalStartingPositions = Level.SECOND
                     .getStartingPositions()
                     .subList(0, flightBoard.getAllShips().size());
+
             // Asking for non-existing starting position
             assertThrows(
                     IllegalArgumentException.class,
                     () -> flightBoard.placeShipOnFlightBoard(ship1, 123)
             );
+
             // Adding ship 1
             assertFalse(flightBoard.placeShipOnFlightBoard(ship1, legalStartingPositions.get(1)));
-            // Asking to add another ship at the same position
+
+            // Can't add two ships in the same position
             assertThrows(
                     IllegalArgumentException.class,
                     () -> flightBoard.placeShipOnFlightBoard(ship2, legalStartingPositions.get(1))
             );
+
             // Adding ship 2
             assertTrue(flightBoard.placeShipOnFlightBoard(ship2, legalStartingPositions.get(2)));
+
             // Adding ship 3: Building is over
             assertFalse(flightBoard.placeShipOnFlightBoard(ship3, legalStartingPositions.get(0)));
+            assertEquals(flightBoard.getShipToPlace().get(ship1), legalStartingPositions.get(1));
+            assertEquals(flightBoard.getShipToPlace().get(ship2), legalStartingPositions.get(2));
+            assertEquals(flightBoard.getShipToPlace().get(ship3), legalStartingPositions.get(0));
+            assertEquals(Arrays.asList(ship3, ship1, ship2), flightBoard.getOrderedShips());
 
-            Map<ShipBoard, Integer> shipToPlace = flightBoard.getShipToPlace();
-            assertEquals(shipToPlace.get(ship1), legalStartingPositions.get(1));
-            assertEquals(shipToPlace.get(ship2), legalStartingPositions.get(2));
-            assertEquals(shipToPlace.get(ship3), legalStartingPositions.get(0));
-
-            List<ShipBoard> expectedOrder = Arrays.asList(ship3, ship1, ship2);
-            for (int i = 0; i<legalStartingPositions.getFirst(); i++) {
-                assertEquals(expectedOrder.get(i), flightBoard.getOrderedShips().get(i));
-            }
-
-            // 1 gets ahead, position incremented by 10+1
+            // 1's position incremented by 10+1, 1 becomes leader
             flightBoard.displaceShip(ship1, 10);
-            expectedOrder = Arrays.asList(ship1, ship3, ship2);
-            for (int i = 0; i<legalStartingPositions.getFirst(); i++) {
-                assertEquals(expectedOrder.get(i), flightBoard.getOrderedShips().get(i));
-            }
+            assertEquals(Arrays.asList(ship1, ship3, ship2), flightBoard.getOrderedShips());
             assertEquals(legalStartingPositions.get(1) + 11, flightBoard.getShipToPlace().get(ship1));
 
-            // 1 gets ahead and laps the others
-//            flightBoard.displaceShip(ship1, 100);
-//            assertEquals(Set.of(ship2, ship3), flightBoard.getLappedShips());
-            // TODO: FIX THIS TEST
+            // 1 laps the others, they get removed
+            flightBoard.displaceShip(ship1, 100);
+            assertEquals(Set.of(ship2, ship3), flightBoard.getAndRemoveLappedShips()); // TODO: non pure getter?!
 
+            // 1 is first and has the most component among the survivors
+            assertEquals(Map.of(ship1, 6, ship2, 0, ship3, 0), flightBoard.getFinalScores());
+            assertEquals(Set.of(ship1, ship2, ship3), flightBoard.getAllShips());
         }
-    }
-
-    @Test
-    void getOrderedShips() {
-    }
-
-    @Test
-    void getLappedShips() {
-    }
-
-    @Test
-    void displaceShip() {
-    }
-
-    @Test
-    void removeShip() {
-    }
-
-    @Test
-    void getFinalScores() {
-    }
-
-    @Test
-    void giveUp() {
     }
 }
