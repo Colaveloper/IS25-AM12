@@ -79,6 +79,16 @@ public class ComponentBank {
                     Boolean isSpecial = node.get("special").asBoolean();
                     component = new CargoHold(connectors, size, isSpecial);
                     break;
+                case "structural":
+                    component = new Component(connectors);
+                    break;
+                case "battery":
+                    int numBatteries = node.get("batteries").asInt();
+                    component = new Battery(connectors, numBatteries);
+                    break;
+                case "cabin":
+                    component = new Cabin(connectors);
+                    break;
                 default:
                     throw new IllegalArgumentException("Unknown component type: " + type);
             }
