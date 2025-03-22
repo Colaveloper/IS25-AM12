@@ -2,13 +2,13 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpenSpaceCard extends AdventureCard{
+public class OpenSpaceCard extends AdventureCardDeprecated {
     //attributes
     private int numPlayers;
 
@@ -56,7 +56,7 @@ public class OpenSpaceCard extends AdventureCard{
         return null;
     }
     @Override
-    public List<Projectile> getProjectilesType() {
+    public List<ProjectileDeprecated> getProjectilesType() {
         return null;
     }
     @Override

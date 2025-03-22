@@ -2,18 +2,18 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MeteorSwarmCard extends AdventureCard{
+public class MeteorSwarmCard extends AdventureCardDeprecated {
     //attributes
 //    private List<Integer> projectileDirections;
-//    private List<Projectile> projectileTypes;
+//    private List<ProjectileDeprecated> projectileTypes;
 
-    public MeteorSwarmCard(FlightBoard flightBoard, List<Integer> projectileDirections, List<Projectile> projectileType){
+    public MeteorSwarmCard(FlightBoard flightBoard, List<Integer> projectileDirections, List<ProjectileDeprecated> projectileType){
         //attributes init
         super(flightBoard);
         this.projectileDirections = new ArrayList<>(projectileDirections);
@@ -22,10 +22,10 @@ public class MeteorSwarmCard extends AdventureCard{
 
         //cardState init
         for (int i = 0; i < projectileType.size(); i++) {
-            if(projectileType.get(i) == Projectile.SMALL_METEOR){
+            if(projectileType.get(i) == ProjectileDeprecated.SMALL_METEOR){
                 cardStates.add(PlayerAction.ROLL_DICE);
                 cardStates.add(PlayerAction.ACTIVATE_SHIELDS);
-            } else if (projectileType.get(i) == Projectile.LARGE_METEOR) {
+            } else if (projectileType.get(i) == ProjectileDeprecated.LARGE_METEOR) {
                 cardStates.add(PlayerAction.ACTIVATE_CANNONS);
             } else {
                 //TODO: make this launch some kind of exception or proper error message
@@ -46,7 +46,7 @@ public class MeteorSwarmCard extends AdventureCard{
         return projectileDirections;
     }
     @Override
-    public List<Projectile> getProjectilesType() {
+    public List<ProjectileDeprecated> getProjectilesType() {
         return projectileTypes;
     }
 

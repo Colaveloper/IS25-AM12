@@ -1,29 +1,15 @@
 package it.polimi.ingsw.galaxytruckers;
 
-import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import java.util.List;
 
 public class TestDeck extends Deck{
-    @Override
-    public void initMasterDeck() {
-        //TODO: implement method
-    }
-
-    @Override
-    public AdventureCard getCurrentCard() {
-        //TODO: implement method
-        return null;
+    public TestDeck() {
+        // TODO: populate masterdeck with the 8 Learning Cards from JSON
     }
 
     @Override
     public List<AdventureCard> peekForecastDeck(int id) {
-        //TODO: implement method
-        return null;
-    }
-
-    @Override
-    public AdventureCard drawCard() {
-        //TODO: implement method
-        return null;
+        return List.of();
     }
 }

@@ -1,6 +1,6 @@
 //import adventureCards.utils.CardState;
 //
-//import adventureCards.AdventureCard;
+//import adventureCards.AdventureCardDeprecated;
 //import java.util.List;
 //
 //public class GameController {

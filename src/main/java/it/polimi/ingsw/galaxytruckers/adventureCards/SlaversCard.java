@@ -3,13 +3,13 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SlaversCard extends AdventureCard {
+public class SlaversCard extends AdventureCardDeprecated {
 
     private final int firePower;
     private final int credits;
@@ -92,7 +92,7 @@ public class SlaversCard extends AdventureCard {
     }
 
     @Override
-    public List<Projectile> getProjectilesType() {
+    public List<ProjectileDeprecated> getProjectilesType() {
         return null;
     }
 
