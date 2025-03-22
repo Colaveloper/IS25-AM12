@@ -1,12 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
+import javafx.scene.image.Image;
+
 import java.util.List;
 
 public class DoubleCannon extends Cannon implements Activatable {
     private boolean active;
 
-    public DoubleCannon(List<Connector> connectors) {
-        super(connectors);
+    public DoubleCannon(Image image, List<Connector> connectors) {
+        super(image, connectors);
         this.active = false;
     }
 

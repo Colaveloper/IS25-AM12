@@ -1,7 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
+import javafx.scene.image.Image;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -36,6 +38,7 @@ public class SecondShipBoard extends ShipBoard {
             new Point(10, 8),
             new Point(10, 9)));
 
+    private static final Image image = new Image("file:src/main/resources/texture/cardboard/second-ship-board.jpg");
     
     private final List<Component> stashedComponents;
 
@@ -171,5 +174,17 @@ public class SecondShipBoard extends ShipBoard {
                 this.aliens.remove(cabins.get(point).getCrewType());
             }
         }
+    }
+
+    @Override
+    public Image getImage() {
+        return image;
+        // TODO: composite the components and resources on top
+    }
+
+    @Override
+    public String getDescription() {
+        return "Level 2 ship: "+super.getDescription();
+        // TODO: describe
     }
 }

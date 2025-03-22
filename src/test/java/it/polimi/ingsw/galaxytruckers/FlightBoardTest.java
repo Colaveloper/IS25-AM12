@@ -6,10 +6,8 @@ import it.polimi.ingsw.galaxytruckers.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.TestShipBoard;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import javafx.application.Platform;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
@@ -20,6 +18,11 @@ class FlightBoardTest {
     ShipBoard ship1, ship2, ship3;
     FlightBoard flightBoard;
     ComponentBank componentBank;
+
+    @BeforeAll
+    static void setUpClass() {
+        Platform.startup(() -> {});
+    }
 
     @Nested
     @DisplayName("Test-Flight Tests")

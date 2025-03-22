@@ -1,12 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
+import javafx.scene.image.Image;
+
 import java.util.List;
 
 public class Shield extends Component implements Activatable{
     private boolean active;
 
-    public Shield(List<Connector> connectors) {
-        super(connectors);
+    public Shield(Image image, List<Connector> connectors) {
+        super(image, connectors);
         this.active = false;
     }
 

@@ -1,10 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
+import javafx.scene.image.Image;
+
 import java.util.List;
 
 public class Engine extends Component {
-    public Engine(List<Connector> connectors) {
-        super(connectors);
+    public Engine(Image image, List<Connector> connectors) {
+        super(image, connectors);
     }
 
     public boolean isValid() {

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+import javafx.scene.image.Image;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +13,8 @@ public class CargoHold extends Component{
     private final Map<GoodsType, Integer> goods;
     private final Boolean isSpecial;
 
-    public CargoHold(List<Connector> connectors, int size, Boolean isSpecial) {
-        super(connectors);
+    public CargoHold(Image image, List<Connector> connectors, int size, Boolean isSpecial) {
+        super(image, connectors);
         this.size = size;
         this.numGoods = 0;
         this.goods = new HashMap<>();

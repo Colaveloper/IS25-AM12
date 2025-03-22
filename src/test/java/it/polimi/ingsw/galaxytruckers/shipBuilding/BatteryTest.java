@@ -12,13 +12,13 @@ class BatteryTest extends ComponentTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        myBattery = new Battery(myConnectors, 3);
+        myBattery = new Battery(null, myConnectors, 3);
     }
 
     @Test
     void constructorThrowsExceptionForNotAllowedNumBatteries() {
-        assertThrows(IllegalArgumentException.class, () -> new Battery(myConnectors, 1));
-        assertThrows(IllegalArgumentException.class, () -> new Battery(myConnectors, 4));
+        assertThrows(IllegalArgumentException.class, () -> new Battery(null, myConnectors, 1));
+        assertThrows(IllegalArgumentException.class, () -> new Battery(null,myConnectors, 4));
     }
 
     @Test
