@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 
 public abstract class AdventureCard implements Physical {
     protected FlightBoard flightBoard;
-    protected int currentPlayerIndex;
+    protected int currentPlayerIndex = 0;
     protected final Level cardLevel;
     private final Image image;
 

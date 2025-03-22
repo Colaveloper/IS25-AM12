@@ -41,29 +41,36 @@ public class PiratesCard extends AdventureCard {
 
     @Override
     public GameState nextStep() {
-        if (!defeated) {
+        if (!defeated) { // Establishing winner and defeated players, if any
+            // Evaluating previous player firepower, after double cannons activation
             if (currentShipBoard != null) {  // There is a previous player who needs their firepower evaluated
                 if (currentShipBoard.getFirePower() > firePowerThreshold) {  // player defeats the enemy
                     defeated = true;
-                    defeatedPlayerIndex = 0;
-                    return new ChoiceState();
+                    defeatedPlayerIndex = 0; // TODO: doesn't the assignment in the constructor suffice? did you mean currentShipBoard = null;
+                    return new ChoiceState(); // Let the player choose whether to collect the prize
                 } else if (currentShipBoard.getFirePower() < firePowerThreshold) { // player is defeated
                     defeatedPlayers.add(currentShipBoard);
                 }
             }
+            // Letting the currentPlayer activate double cannons
             if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {  // There are other players to evaluate
                 currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
                 currentPlayerIndex++;
                 Set<Point> availablePositions = new HashSet<>(currentShipBoard.getCannons().keySet());
                 availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
-                return new ActivateState(availablePositions, currentShipBoard);
+                return new ActivateState(availablePositions, currentShipBoard); // Let the player activate double cannons
             } else {  // There are no more players and no one has defeated the enemy
                 defeated = true;
-                defeatedPlayerIndex = 0;
+                defeatedPlayerIndex = 0; // TODO: doesn't the assignment in the constructor suffice? did you mean currentShipBoard = null;
                 return nextStep();
             }
-        } else {
-            if (currentShipBoard != null) {  // There is a previous player that has to be hit
+        } else { // Firing at defeated players
+            // TODO: add here: currentShipBoard = defeatedPlayers.get(defeatedPlayerIndex); if you don't want to shoot the winner
+            // TODO: if (defeatedPlayerIndex == 0) {
+            //      roll dice!! and show to player. save to variable and use it in fireAt(int diceRoll, ShipBoard shipBoard)
+            //  }
+            if (currentShipBoard != null) {  // There is a previous player that has to be hit // TODO: As is, always evaluated to true
+                // TODO: As is, firing at winner :(
                 if (currentProjectile.fireAt(currentShipBoard)) {  // If a component is removed I need to check shipConnection
                     List<Set<Point>> shipPieces = currentShipBoard.getConnectedSets();
                     if (shipPieces.size() > 1) {
@@ -74,7 +81,7 @@ public class PiratesCard extends AdventureCard {
             if (defeatedPlayerIndex < defeatedPlayers.size()) {  // There are still players that need to handle projectiles
                 currentShipBoard = defeatedPlayers.get(defeatedPlayerIndex);
                 defeatedPlayerIndex++;
-                return new ActivateState(currentProjectile.getActivatablePoints(currentShipBoard), currentShipBoard);
+                return new ActivateState(currentProjectile.getActivatablePoints(currentShipBoard), currentShipBoard); // Let the player activate shields
             } else {  // There are no more players that need to handle projectiles
                 if (projectiles.isEmpty()) {
                     return new DrawCardState();
@@ -89,6 +96,7 @@ public class PiratesCard extends AdventureCard {
 
     @Override
     public void choose(boolean choice) {
+        // TODO: add: if (choice) { }
         currentShipBoard.gainCredits(creditPrize);
         flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
         currentShipBoard = null;
