@@ -3,8 +3,9 @@ package it.polimi.ingsw.galaxytruckers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.adventureCards.*;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.*;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.*;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,15 +55,20 @@ public abstract class Deck{
         for (JsonNode node : rootNode){
             String type = node.get("type").asText();
             AdventureCard card;
+            Level level = Level.valueOf(node.get("connectors").asText());
 
             switch(type){
                 case "planets":
                     card = null;
-//                    card = new PlanetsCard();
                     break;
                 case "pirates":
-                    card = null;
-//                    card = new PiratesCard();
+                    card = new PiratesCard(
+                            level,
+                            node.get("firePowerThreshold").asInt(),
+                            node.get("creditPrize").asInt(),
+                            node.get("flightDaysLoss").asInt(),
+                            parseProjectiles(node.get("projectiles"))
+                            );
                     break;
                 case "smugglers":
                     card = null;
@@ -110,6 +116,27 @@ public abstract class Deck{
             cards.add(card);
         }
         return cards;
+    }
+
+    private static List<Projectile> parseProjectiles(JsonNode projectilesNode) {
+        List<Projectile> projectiles = new ArrayList<>();
+        for (JsonNode node : projectilesNode) {
+            switch (node.get(0).asText()) {
+                case "small fire":
+                    projectiles.add(new SmallFire());
+                    break;
+                case "big fire":
+                    projectiles.add(new BigFire());
+                    break;
+                case  "big meteor":
+                    projectiles.add(new BigMeteor());
+                    break;
+                case "small meteor":
+                    projectiles.add(new SmallMeteor());
+                    break;
+            }
+        }
+        return projectiles;
     }
 
 }
