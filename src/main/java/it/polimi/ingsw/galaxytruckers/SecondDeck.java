@@ -29,4 +29,9 @@ public class SecondDeck extends Deck{
         masterDeck.addAll(hiddenDeck);
         Collections.shuffle(masterDeck);
     }
+
+    @Override
+    public List<AdventureCard> peekForecastDeck(int id) {
+        return List.of(); // TODO: implement
+    }
 }

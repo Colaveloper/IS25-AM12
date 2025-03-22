@@ -7,4 +7,9 @@ public class TestDeck extends Deck{
     public TestDeck() {
         // TODO: populate masterdeck with the 8 Learning Cards from JSON
     }
+
+    @Override
+    public List<AdventureCard> peekForecastDeck(int id) {
+        return List.of();
+    }
 }
