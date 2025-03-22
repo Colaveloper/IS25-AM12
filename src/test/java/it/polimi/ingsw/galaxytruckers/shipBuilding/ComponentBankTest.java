@@ -23,6 +23,8 @@ class ComponentBankTest {
         assertNotNull(components);
         assertFalse(components.isEmpty());
 
+        // TODO: check all the other data
+
         //ensure that all 156 components have been loaded
         assertEquals(156, components.size());
 
