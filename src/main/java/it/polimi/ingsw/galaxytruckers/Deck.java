@@ -38,7 +38,6 @@ public abstract class Deck{
             switch(type){
                 case "planets":
                     card = null;
-//                    card = new PlanetsCard();
                     break;
                 case "pirates":
                     card = null;
