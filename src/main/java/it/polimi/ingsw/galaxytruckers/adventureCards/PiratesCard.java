@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.state.*;
+import javafx.scene.image.Image;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,8 +27,8 @@ public class PiratesCard extends AdventureCard {
     private ShipBoard currentShipBoard;
     private Projectile currentProjectile;
 
-    public PiratesCard(Level level, int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
-        super(level);
+    public PiratesCard(Image image, Level level, int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
+        super(image, level);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;

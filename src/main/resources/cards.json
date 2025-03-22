@@ -10,6 +10,6 @@
     ],
     "flightDaysLoss": 1,
     "creditPrize": 4,
-    "path": "galaxy_trucker_imgs/cards/pirates/GT-cards_I_IT_013.jpg"
+    "path": "file:src/main/resources/textures/cards/GT-cards_I_IT_013.jpg"
   }
 ]

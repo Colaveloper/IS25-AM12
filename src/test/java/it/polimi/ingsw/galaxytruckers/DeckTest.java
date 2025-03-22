@@ -34,14 +34,13 @@ class DeckTest {
         ObjectMapper objectMapper = new ObjectMapper();
         File jsonFile = new File("src/main/resources/cards.json");
 
-//        List<AdventureCard> deck = Deck.loadCards(jsonFile);
+        List<AdventureCard> deck = Deck.loadCards(jsonFile);
 
-//        assertNotNull(deck);
-//        assertFalse(deck.isEmpty());
-//
-//        assertEquals(1, deck.size());
+        assertNotNull(deck);
+        assertFalse(deck.isEmpty());
 
-//        assertEquals("Shield", components.get(0).getClass().getSimpleName());
+        assertEquals(1, deck.size());
 
+        assertEquals("PiratesCard", deck.getFirst().getClass().getSimpleName());
     }
 }

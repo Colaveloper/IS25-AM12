@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.adventureCards.*;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.*;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.*;
+import javafx.scene.image.Image;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +56,8 @@ public abstract class Deck{
         for (JsonNode node : rootNode){
             String type = node.get("type").asText();
             AdventureCard card;
-            Level level = Level.valueOf(node.get("connectors").asText());
+            Level level = Level.valueOf(node.get("level").asText());
+            Image image = new Image(node.get("path").asText());
 
             switch(type){
                 case "planets":
@@ -63,6 +65,7 @@ public abstract class Deck{
                     break;
                 case "pirates":
                     card = new PiratesCard(
+                            image,
                             level,
                             node.get("firePowerThreshold").asInt(),
                             node.get("creditPrize").asInt(),
