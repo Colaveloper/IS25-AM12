@@ -30,7 +30,7 @@ class ShipBoardTest {
                 }
             };
             shipBoard = new SecondShipBoard(componentBank, Colors.BLUE);
-            componentToAdd = new Component(Arrays.asList(Connector.UNIVERSAL, Connector.SINGLE, Connector.DOUBLE, Connector.NONE));
+            componentToAdd = new Component(null, Arrays.asList(Connector.UNIVERSAL, Connector.SINGLE, Connector.DOUBLE, Connector.NONE));
         }
 
         @Test
@@ -163,7 +163,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                cannon = new Cannon(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                cannon = new Cannon(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = cannon;
             }
 
@@ -202,7 +202,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                engine = new Engine(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                engine = new Engine(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = engine;
             }
 
@@ -241,7 +241,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                doubleCannon = new DoubleCannon(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                doubleCannon = new DoubleCannon(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = doubleCannon;
             }
 
@@ -332,7 +332,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                doubleEngine = new DoubleEngine(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                doubleEngine = new DoubleEngine(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = doubleEngine;
             }
 
@@ -405,7 +405,7 @@ class ShipBoardTest {
             ComponentBank bank = new ComponentBank() {
                 @Override
                 public Component getRanComponent() {
-                    return new Component(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                    return new Component(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 }
             };
             shipBoard = new SecondShipBoard(bank, Colors.BLUE);

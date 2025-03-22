@@ -1,12 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
+import javafx.scene.image.Image;
+
 import java.util.List;
 
 public class DoubleEngine extends Engine implements Activatable{
     private boolean active;
 
-    public DoubleEngine(List<Connector> connectors) {
-        super(connectors);
+    public DoubleEngine(Image image, List<Connector> connectors) {
+        super(image, connectors);
         this.active = false;
     }
 

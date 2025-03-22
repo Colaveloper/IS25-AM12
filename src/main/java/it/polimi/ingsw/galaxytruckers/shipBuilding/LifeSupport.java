@@ -1,5 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
+import javafx.scene.image.Image;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,8 +9,8 @@ import java.util.stream.Collectors;
 public class LifeSupport extends Component{
     private final CrewType crewType;
 
-    public LifeSupport(List<Connector> connectors, CrewType crewType) throws IllegalArgumentException {
-        super(connectors);
+    public LifeSupport(Image image, List<Connector> connectors, CrewType crewType) throws IllegalArgumentException {
+        super(image, connectors);
         this.crewType = crewType;
         if (crewType == CrewType.HUMAN) {
             throw new IllegalArgumentException("LifeSupport type cannot be HUMAN, allowed types: " +

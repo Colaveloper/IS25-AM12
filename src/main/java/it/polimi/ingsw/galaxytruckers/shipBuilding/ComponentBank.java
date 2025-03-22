@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.scene.image.Image;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,41 +54,42 @@ public class ComponentBank {
             String type = node.get("type").asText();
             Component component;
             List<Connector> connectors = parseConnectors(node.get("connectors"));
+            Image image = new Image(node.get("path").asText());
 
             switch(type){
                 case "shield":
-                    component = new Shield(connectors);
+                    component = new Shield(image, connectors);
                     break;
                 case "life support":
                     CrewType crewType = parseCrewType(node.get("crewtype"));
-                    component = new LifeSupport(connectors, crewType);
+                    component = new LifeSupport(image, connectors, crewType);
                     break;
                 case "double cannon":
-                    component = new DoubleCannon(connectors);
+                    component = new DoubleCannon(image, connectors);
                     break;
                 case "cannon":
-                    component = new Cannon(connectors);
+                    component = new Cannon(image, connectors);
                     break;
                 case "double engine":
-                    component = new DoubleEngine(connectors);
+                    component = new DoubleEngine(image, connectors);
                     break;
                 case "engine":
-                    component = new Engine(connectors);
+                    component = new Engine(image, connectors);
                     break;
                 case "cargo hold":
                     int size = node.get("size").asInt();
                     Boolean isSpecial = node.get("special").asBoolean();
-                    component = new CargoHold(connectors, size, isSpecial);
+                    component = new CargoHold(image, connectors, size, isSpecial);
                     break;
                 case "structural":
-                    component = new Component(connectors);
+                    component = new Component(image, connectors);
                     break;
                 case "battery":
                     int numBatteries = node.get("batteries").asInt();
-                    component = new Battery(connectors, numBatteries);
+                    component = new Battery(image, connectors, numBatteries);
                     break;
                 case "cabin":
-                    component = new Cabin(connectors);
+                    component = new Cabin(image, connectors);
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown component type: " + type);

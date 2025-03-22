@@ -1,13 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
+import javafx.scene.image.Image;
+
 import java.util.List;
 
 public class Cabin extends Component {
     private CrewType crewType;
     private int numResidents;
 
-    public Cabin(List<Connector> connectors) {
-        super(connectors);
+    public Cabin(Image image, List<Connector> connectors) {
+        super(image, connectors);
         this.crewType = null;
         this.numResidents = 0;
     }

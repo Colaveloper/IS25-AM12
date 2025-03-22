@@ -1,11 +1,13 @@
 package it.polimi.ingsw.galaxytruckers;
 
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
+import javafx.scene.image.Image;
 
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class FlightBoard {
+public abstract class FlightBoard implements Physical {
     protected int loopLength;
     protected List<Integer> startingPositionsLeft;
     protected final Set<ShipBoard> allShips; // contains playing+dead ships
@@ -86,5 +88,11 @@ public abstract class FlightBoard {
         });
         return finalScores;
     }
+
+    @Override
+    public String getDescription() {
+        return ""; // TODO: describe
+    }
 }
+
 

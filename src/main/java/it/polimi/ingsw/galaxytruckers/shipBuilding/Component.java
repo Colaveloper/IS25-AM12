@@ -1,14 +1,19 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
+import it.polimi.ingsw.galaxytruckers.Physical;
+import javafx.scene.image.Image;
+
 import java.util.Collections;
 import java.util.List;
 
-public class Component {
+public class Component implements Physical {
     private final List<Connector> connectors;
     // TODO: consider whether to make it an enum for clarity
     private int orientation;
+    private final Image image;
 
-    public Component(List<Connector> connectors) {
+    public Component(Image image, List<Connector> connectors) {
+        this.image = image;
         if (connectors == null || connectors.size() != 4) {
             throw new IllegalArgumentException("A component must have exactly 4 connectors");
         }
@@ -39,5 +44,17 @@ public class Component {
     }
 
     public void removeFromVisitor(ComponentVisitor visitor) {
+    }
+
+    @Override
+    public Image getImage() {
+        return image;
+        // TODO: override and composite with batteries/goods/crew on top
+    }
+
+    @Override
+    public String getDescription() {
+        return "Component has connectors: "+connectors.size()+" and orientation "+orientation;
+        // TODO: override
     }
 }
