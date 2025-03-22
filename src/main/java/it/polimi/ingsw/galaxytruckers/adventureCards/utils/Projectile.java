@@ -1,8 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards.utils;
 
-public enum Projectile {
-    LARGE_METEOR, // cannon blocks
-    SMALL_METEOR, // cannon or shield or unexposed connector blocks
-    HEAVY_FIRE,   // no defence possible
-    LIGHT_FIRE    // shield blocks
+import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
+
+import java.awt.*;
+import java.util.Set;
+
+public abstract class Projectile {
+    public abstract boolean fireAt(ShipBoard shipBoard);
+    public abstract Set<Point> getActivatablePoints(ShipBoard shipBoard);
 }

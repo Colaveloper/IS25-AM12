@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.adventureCards.*;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.*;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,14 +12,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Deck{
-    private List<AdventureCard> masterDeck;
+    protected List<AdventureCard> masterDeck;
     private AdventureCard currentCard;
 
-    abstract public void initMasterDeck();
+    public AdventureCard getCurrentCard() {
+        return currentCard;
+    }
 
-    abstract public AdventureCard getCurrentCard();
+    public List<AdventureCard> getForecastDeck(int id) {
+        throw new UnsupportedOperationException("This action is unsupported at the selected level");
+    }
 
-    abstract public AdventureCard drawCard();
+    public void initMasterDeck() {
+        throw new UnsupportedOperationException("This action is unsupported at the selected level");
+    }
+
+    /**
+     * Removes a card from the master deck and sets it as current
+     * @return true if there are still cards, false otherwise
+     */
+    public boolean tryDrawCard() {
+        if (masterDeck.isEmpty()) {
+            return false;
+        } else {
+            currentCard = masterDeck.removeFirst();
+            return true;
+        }
+    }
 
     abstract public List<AdventureCard> peekForecastDeck(int id);
 
