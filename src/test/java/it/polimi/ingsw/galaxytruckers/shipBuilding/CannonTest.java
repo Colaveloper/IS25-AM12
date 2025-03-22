@@ -12,7 +12,7 @@ class CannonTest extends ComponentTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        myCannon = new Cannon(myConnectors);
+        myCannon = new Cannon(null, myConnectors);
     }
 
     @Test

@@ -1,11 +1,13 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
+import javafx.scene.image.Image;
+
 import java.util.List;
 
 public class Cannon extends Component {
 
-    public Cannon(List<Connector> connectors) {
-        super(connectors);
+    public Cannon(Image image, List<Connector> connectors) {
+        super(image, connectors);
     }
 
     // TODO: consider renaming in getFirePowerHalves()

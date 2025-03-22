@@ -24,7 +24,7 @@ class ComponentTest {
                 Connector.SINGLE,
                 Connector.DOUBLE
         ));
-        myComponent = new Component(myConnectors);
+        myComponent = new Component(null, myConnectors);
         myShipBoard = new ShipBoardStub();
     }
 
@@ -45,11 +45,11 @@ class ComponentTest {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new Component(tooFew));
+                () -> new Component(null, tooFew));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new Component(tooMany));
+                () -> new Component(null, tooMany));
     }
 
     @Test
