@@ -34,11 +34,6 @@ public class TestFlightBoard extends FlightBoard{
 //    }
 
     @Override
-    public void giveUp(ShipBoard shipBoard) {
-        throw new IllegalArgumentException("cannot give up in test flight");
-    }
-
-    @Override
     public Image getImage() {
         return image;
         // TODO: composite players on top
