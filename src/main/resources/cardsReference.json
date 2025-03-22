@@ -1,6 +1,7 @@
 {
       "abandonedShip":[
             {
+                  "type": "abandonedShip",
                   "level": 1,
                   "credits": 3,
                   "days": 1,
@@ -8,6 +9,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_0117.jpg"
             },
             {
+                  "type": "abandonedShip",
                   "level": 1,
                   "credits": 4,
                   "days": 1,
@@ -15,6 +17,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_0118.jpg"
             },
             {
+                  "type": "abandonedShip",
                   "level": 2,
                   "credits": 6,
                   "days": 1,
@@ -22,6 +25,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_II_IT_0117.jpg"
             },
             {
+                  "type": "abandonedShip",
                   "level": 2,
                   "credits": 8,
                   "days": 2,
@@ -31,6 +35,7 @@
       ],
       "abandonedStation" : [
             {
+                  "type": "abandonedStation",
                   "level": 1,
                   "blue": 0,
                   "green": 1,
@@ -41,6 +46,7 @@
                   "path": "src/main/resources/textures/cardsonedStation/GT-cards_I_IT_0119.jpg"
             },
             {
+                  "type": "abandonedStation",
                   "level": 1,
                   "blue": 0,
                   "green": 0,
@@ -51,6 +57,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
             },
             {
+                  "type": "abandonedStation",
                   "level": 2,
                   "blue": 0,
                   "green": 0,
@@ -61,6 +68,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
             },
             {
+                  "type": "abandonedStation",
                   "level": 2,
                   "blue": 0,
                   "green": 1,
@@ -73,6 +81,7 @@
       ],
       "meteors" : [
             {
+                  "type": "meteors",
                   "level": 1,
                   "meteors": [
                         ["big meteor",0],
@@ -82,6 +91,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_019.jpg"
             },
             {
+                  "type": "meteors",
                   "level": 1,
                   "meteors": [
                         ["small meteor",0],
@@ -93,6 +103,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_0110.jpg"
             },
             {
+                  "type": "meteors",
                   "level": 1,
                   "meteors": [
                         ["big meteor",0],
@@ -102,6 +113,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_0111.jpg"
             },
             {
+                  "type": "meteors",
                   "level": 2,
                   "meteors": [
                         ["small meteor",0],
@@ -113,6 +125,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_II_IT_019.jpg"
             },
             {
+                  "type": "meteors",
                   "level": 2,
                   "meteors": [
                         ["big meteor",0],
@@ -123,6 +136,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_II_IT_110.jpg"
             },
             {
+                  "type": "meteors",
                   "level": 2,
                   "meteors": [
                         ["small meteor",0],
@@ -136,6 +150,7 @@
       ],
       "pirates": [
             {
+                  "type": "pirates",
                   "level": 1,
                   "firepower": 5,
                   "shoots": [
@@ -149,6 +164,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_013.jpg"
             },
             {
+                  "type": "pirates",
                   "level": 2,
                   "firepower": 6,
                   "shoots": [
@@ -163,6 +179,7 @@
       ],
       "planets": [
             {
+                  "type": "planets",
                   "level": 1,
                   "days": 3,
                   "planets": [
@@ -188,6 +205,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_0112.jpg"
             },
             {
+                  "type": "planets",
                   "level": 1,
                   "days": 2,
                   "planets": [
@@ -213,6 +231,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_0113.jpg"
             },
             {
+                  "type": "planets",
                   "level": 1,
                   "days": 3,
                   "planets": [
@@ -229,6 +248,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_0114.jpg"
             },
             {
+                  "type": "planets",
                   "level": 1,
                   "days": 1,
                   "planets": [
@@ -254,6 +274,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_0115.jpg"
             },
             {
+                  "type": "planets",
                   "level": 2,
                   "days": 4,
                   "planets": [
@@ -279,6 +300,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_0115.jpg"
             },
             {
+                  "type": "planets",
                   "level": 2,
                   "days": 4,
                   "planets": [
@@ -304,6 +326,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_II_IT_0112.jpg"
             },
             {
+                  "type": "planets",
                   "level": 2,
                   "days": 3,
                   "planets": [
@@ -323,6 +346,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_II_IT_0113.jpg"
             },
             {
+                  "type": "planets",
                   "level": 2,
                   "days": 2,
                   "planets": [
@@ -354,6 +378,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg"
             },
             {
+                  "type": "planets",
                   "level": 2,
                   "days": 3,
                   "planets": [
@@ -379,44 +404,53 @@
                   "path": "src/main/resources/textures/cards/GT-cards_II_IT_0115.jpg"
             }
       ],
-      "space": [
+      "open space": [
             {
+                  "type": "open space",
                   "level": 1,
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
             },
             {
+                  "type": "open space",
                   "level": 1,
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
             },
             {
+                  "type": "open space",
                   "level": 1,
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
             },
             {
+                  "type": "open space",
                   "level": 1,
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
             },
             {
+                  "type": "open space",
                   "level": 2,
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
             },
             {
+                  "type": "open space",
                   "level": 2,
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
             },
             {
+                  "type": "open space",
                   "level": 2,
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
             }
       ],
       "epidemic": [
             {
+                  "type": "epidemic",
                   "level": 2,
                   "path": "src/main/resources/textures/cards/GT-cards_II_IT_015.jpg"
             }
       ],
       "smugglers": [
             {
+                  "type": "smugglers",
                   "level": 1,
                   "days": 1,
                   "storage": 
@@ -431,6 +465,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_012.jpg"
             },
             {
+                  "type": "smugglers",
                   "level": 2,
                   "days": 1,
                   "storage": 
@@ -447,6 +482,7 @@
       ],
       "slavers": [
             {
+                  "type": "slavers",
                   "level": 1,
                   "days": 1,
                   "cannons": 6,
@@ -455,6 +491,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_01.jpg"
             },
             {
+                  "type": "slavers",
                   "level": 2,
                   "days": 2,
                   "cannons": 7,
@@ -465,6 +502,7 @@
       ],
       "stardust": [
             {
+                  "type": "stardust",
                   "level": 1,
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_014.jpg"
             },
@@ -475,7 +513,7 @@
       ],
       "warzone": [
             {
-
+                  "type": "warzone",
                   "engines": {
                         "humans": 2
                   },
@@ -492,7 +530,7 @@
                   "path": "src/main/resources/textures/cards/GT-cards_I_IT_0116.jpg"
             },
             {
-
+                  "type": "warzone",
                   "engines": {
                         "humans": 0,
                         "storage": 3,
