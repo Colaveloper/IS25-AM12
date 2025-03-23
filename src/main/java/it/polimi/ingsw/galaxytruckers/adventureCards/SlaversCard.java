@@ -44,7 +44,7 @@ public class SlaversCard extends AdventureCard {
                 }
             }
             // Letting the currentPlayer activate double cannons
-            if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {  // There are other players to evaluate
+            if (currentPlayerIndex < flightBoard.getShipToPlace().size()) { // There are other players to evaluate
                 currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
                 currentPlayerIndex++;
                 Set<Point> availablePositions = new HashSet<>(currentShipBoard.getCannons().keySet());

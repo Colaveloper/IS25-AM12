@@ -1,100 +1,68 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
-
-
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.state.*;
+import javafx.scene.image.Image;
 
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 
-public class SmugglersCard extends AdventureCardDeprecated {
+public class SmugglersCard extends AdventureCard {
+    private final int firePowerThreshold;
+    private final Map<GoodsType, Integer> goodsPrize;
+    private final int flightDaysLoss;
+    private final int goodsLoss;
+    private boolean defeated;
 
-    private int firePower;
-    private int goodsStolen;
-    private final List<GoodsType> loot;
-    private final int flightDaysLost;
-
-
-    public SmugglersCard(FlightBoard flightBoard, List<GoodsType> loot, int flightDaysLost, int firePower, int goodsStolen) {
-        super(flightBoard);
-        cardStates = new ArrayList<>();
-        cardStates.add(PlayerAction.ACTIVATE_CANNONS);
-//        cardStates.add(PlayerAction.SUBMIT_POWER);  // submitting is now possible in ACTIVATE_CANNON
-        cardStates.add(PlayerAction.LOSE_GOODS);
-        //cardStates.add(CardState.ASK_NEXT_PLAYER);
-        cardStates.add(PlayerAction.MANAGE_GOODS);
-        cardStates.add(PlayerAction.END_CARD);
-
-        this.flightDaysLost = flightDaysLost;
-        this.loot = loot;
-        this.goodsStolen = goodsStolen;
-        this.firePower = firePower;
-        this.name = "[SMUGGLERS]";
+    public SmugglersCard (Image image, Level cardLevel, FlightBoard flightBoard, int goodsLoss, int firePowerThreshold, Map<GoodsType, Integer> goodsPrize, int flightDaysLoss) {
+        super(image, cardLevel, flightBoard);
+        this.firePowerThreshold = firePowerThreshold;
+        this.goodsPrize = goodsPrize;
+        this.flightDaysLoss = flightDaysLoss;
+        this.goodsLoss = goodsLoss;
     }
 
     @Override
-    public PlayerAction nextStep() {
-        // TODO: change model references
-//        if (step == 1) {
-//            if (model.getShipPower() > firePower) {
-//                model.loseFlightDays(flightDaysLost);
-//                step = step + 2;    //2 as the states to skip as a player wins
-//            } else if (model.getShipPower() == firePower) {
-//                model.passCardToNextPlayer();
-//            }
-//            else {
-//                model.loseGoods(goodsStolen);
-//                model.passCardToNextPlayer();
-//            }
-//        }
-//        step ++;
-        return cardStates.get(step);
+    public GameState nextStep() {
+        // Evaluating previous player firepower, after double cannons activation
+        if (!defeated) {
+            if (currentShipBoard != null) {  // There is a previous player who needs their firepower evaluated
+                if (currentShipBoard.getFirePower() > firePowerThreshold) {  // player defeats the enemy
+                    defeated = true;
+                    return new AddGoodsState(goodsPrize, currentShipBoard); // Let the player choose whether to collect the prize
+                } else if (currentShipBoard.getFirePower() < firePowerThreshold) { // player is defeated
+                    ShipBoard tempShipBoard = currentShipBoard;
+                    currentShipBoard = null;
+                    return new RemoveGoodsState(goodsLoss, tempShipBoard);
+                }
+            }
+            // Letting the currentPlayer activate double cannons
+            if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {  // There are other players to evaluate
+                currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
+                currentPlayerIndex++;
+                Set<Point> availablePositions = new HashSet<>(currentShipBoard.getCannons().keySet());
+                availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
+                return new ActivateState(availablePositions, currentShipBoard); // Let the player activate double cannons
+            } else {  // There are no more players and no one has defeated the enemy
+                defeated = true;
+                return new DrawCardState();
+            }
+        }
+        else {
+            return new DrawCardState();
+        }
     }
 
-
     @Override
-    public int getFlightDaysLoss() {
-        return flightDaysLost;
+    public void choose(boolean choice) {
+        // TODO: add: if (choice) { }
+        currentShipBoard.gainCredits(creditPrize);
+        flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
+        currentShipBoard = null;
     }
-
-    @Override
-    public int getFirePowerThreshold() {
-        return firePower;
-    }
-
-    @Override
-    public List<GoodsType> getGoods() {     //do nothing
-        return null;
-    }
-
-
-    //UNUSED METHODS------------------------------------------
-    @Override
-    public void landOnPlanet(int i) {
-    }
-    @Override
-    public List<Boolean> getPlanets() { //do nothing
-        return null;
-    }
-    @Override
-    public int getCreditPrize() {
-        return 0;
-    }
-    @Override
-    public List<Integer> getProjectileDirections() {
-        return null;
-    }
-    @Override
-    public List<ProjectileDeprecated> getProjectilesType() {
-        return null;
-    }
-    @Override
-    public int getSacrifice() {
-        return 0;
-    }
-
-
 }
