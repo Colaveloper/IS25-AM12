@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards.utils;
 
+import it.polimi.ingsw.galaxytruckers.Dice;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
@@ -8,9 +9,14 @@ import java.awt.*;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.IntSupplier;
 import java.util.stream.Collectors;
 
 public class BigMeteor extends Projectile {
+    public BigMeteor(IntSupplier dice, int direction) {
+        super(dice, direction);
+    }
+
     public BigMeteor(int direction) {
         super(direction);
     }

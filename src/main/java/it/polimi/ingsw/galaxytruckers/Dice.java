@@ -1,27 +1,14 @@
 package it.polimi.ingsw.galaxytruckers;
 
 import java.util.Random;
+import java.util.function.IntSupplier;
 
 // DESCRIPTION:
 // returns a number between 2 and 12, sum of two random numbers between 1 and 6
-//
-// USAGE EXAMPLE:
-//it.polimi.ingsw.galaxytruckers.Dice dice = it.polimi.ingsw.galaxytruckers.Dice.create();
-//for (int i = 0; i < 5; i++) {
-//    System.out.println("You rolled " + dice.roll());
-//}
 
-
-@FunctionalInterface
-public interface Dice {
-    // single abstract method roll()
-    int roll();
-
-    static Dice create() {
-        Random random = new Random();
-
-        // implementing roll()
-        return () -> random.nextInt(6) + random.nextInt(6) + 2;
+public interface Dice extends IntSupplier {
+    @Override
+    default int getAsInt() {
+        return new Random().nextInt(6) + new Random().nextInt(6) + 2;
     }
 }
-

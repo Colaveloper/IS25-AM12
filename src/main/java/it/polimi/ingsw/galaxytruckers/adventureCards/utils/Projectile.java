@@ -9,15 +9,21 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.IntSupplier;
 
 public abstract class Projectile {
 
     protected final int direction;
     protected int diceRoll;
+    private static final Dice dice = new Dice() {};;
+
+    public Projectile(IntSupplier dice, int direction) {
+        this.direction = direction;
+        this.diceRoll = dice.getAsInt();
+    }
 
     public Projectile(int direction) {
-        this.direction = direction;
-        this.diceRoll = Dice.create().roll();
+        this(dice, direction);
     }
 
     /**

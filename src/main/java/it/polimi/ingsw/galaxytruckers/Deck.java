@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.adventureCards.*;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.*;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.shipBuilding.*;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -88,10 +87,19 @@ public abstract class Deck{
 //                    card = new SlaversCard();
                     break;
                 case "meteors":
+//                    card = new MeteorSwarmCard(
+//                            image,
+//                            level,
+//                            parseProjectiles(node.get("meteors"))
+//                    );
+//                  card = new MeteorSwarmCard();
                     card = null;
-//                    card = new MeteorSwarmCard();
                     break;
                 case "epidemic":
+//                    card = new EpidemicCard(
+//                            image,
+//                            level
+//                    );
                     card = null;
 //                    card = new EpidemicCard();
                     break;

@@ -1,9 +1,11 @@
 package it.polimi.ingsw.galaxytruckers;
 
+import java.util.function.IntSupplier;
+
 import static org.junit.jupiter.api.Assertions.*;
 class DiceTest {
 
-    Dice dice = it.polimi.ingsw.galaxytruckers.Dice.create();
+    Dice dice;
     Integer min, max;
 
     @org.junit.jupiter.api.BeforeEach
@@ -15,7 +17,7 @@ class DiceTest {
     @org.junit.jupiter.api.Test
     void roll() {
         for (int i = 0; i < 100; i++) {
-            Integer newRoll = dice.roll();
+            int newRoll = dice.getAsInt();
             min = Math.min(min, newRoll);
             max = Math.max(max, newRoll);
         }

@@ -1,86 +1,66 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.state.ActivateState;
+import it.polimi.ingsw.galaxytruckers.state.ChooseShipPieceState;
+import it.polimi.ingsw.galaxytruckers.state.DrawCardState;
+import it.polimi.ingsw.galaxytruckers.state.GameState;
+import javafx.scene.image.Image;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class MeteorSwarmCard extends AdventureCardDeprecated {
+public class MeteorSwarmCard extends AdventureCard {
     //attributes
-//    private List<Integer> projectileDirections;
-//    private List<ProjectileDeprecated> projectileTypes;
+    private List<Projectile> projectiles;
+    private Projectile currentProjectile;
 
-    public MeteorSwarmCard(FlightBoard flightBoard, List<Integer> projectileDirections, List<ProjectileDeprecated> projectileType){
-        //attributes init
-        super(flightBoard);
-        this.projectileDirections = new ArrayList<>(projectileDirections);
-        this.projectileTypes = new ArrayList<>(projectileType);
-        this.name = "[METEOR SWARM]";
 
-        //cardState init
-        for (int i = 0; i < projectileType.size(); i++) {
-            if(projectileType.get(i) == ProjectileDeprecated.SMALL_METEOR){
-                cardStates.add(PlayerAction.ROLL_DICE);
-                cardStates.add(PlayerAction.ACTIVATE_SHIELDS);
-            } else if (projectileType.get(i) == ProjectileDeprecated.LARGE_METEOR) {
-                cardStates.add(PlayerAction.ACTIVATE_CANNONS);
-            } else {
-                //TODO: make this launch some kind of exception or proper error message
-                System.out.println("ERROR: PROJECTILE OF INCORRECT TYPE IN CONSTRUCTOR");
+    public MeteorSwarmCard(Image image, Level level, FlightBoard flightBoard, List<Projectile> projectiles) {
+        super(image, level, flightBoard);
+        this.projectiles = projectiles; // list is inverted to be treated as a stack
+        this.currentProjectile = projectiles.removeFirst();
+    }
+
+    @Override
+    public GameState nextStep() {
+        if (currentShipBoard != null) {  // There is a previous player that has to be hit //
+            if (currentProjectile.fireAt(currentShipBoard)) {  // If a component is removed I need to check shipConnection
+                List<Set<Point>> shipPieces = currentShipBoard.getConnectedSets();
+                if (shipPieces.size() > 1) {
+                    ShipBoard tempShipBoard = currentShipBoard;
+                    currentShipBoard = null;
+                    return new ChooseShipPieceState(tempShipBoard.getConnectedSets(), currentShipBoard);
+                }
             }
         }
-        cardStates.add(PlayerAction.END_CARD);
-    }
+        // Letting the currentPlayer activate double cannons
+        if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {  // There are other players to evaluate
+            currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
+            currentPlayerIndex++;
+            return new ActivateState(currentProjectile.getActivatablePoints(currentShipBoard), currentShipBoard); // Let the player activate cannon
+        }
+        else {
+            if (projectiles.isEmpty()) {
+                return new DrawCardState();
+            } else {
+                currentProjectile = projectiles.removeFirst();
+                return nextStep();
+            }
+        }
 
+
+    }
     //USED METHODS
-    @Override
-    public PlayerAction nextStep() {
-        step++;
-        return cardStates.get(step);
-    }
-    @Override
-    public List<Integer> getProjectileDirections() {
-        return projectileDirections;
-    }
-    @Override
-    public List<ProjectileDeprecated> getProjectilesType() {
-        return projectileTypes;
-    }
 
-
-
-    //UNUSED METHODS
-    @Override
-    public List<Boolean> getPlanets() {
-        return null;
-    }
-    @Override
-    public int getFirePowerThreshold() {
-        return 0;
-    }
-    @Override
-    public int getCreditPrize() {
-        return 0;
-    }
-    @Override
-    public List<GoodsType> getGoods() {
-        return null;
-    }
-    @Override
-    public int getSacrifice() {
-        return 0;
-    }
-
-    @Override
-    public int getFlightDaysLoss() {
-        return 0;
-    }
-    @Override
-    public void landOnPlanet(int i) {
-
-    }
 
 }
