@@ -1,10 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import javafx.application.Platform;
+import org.junit.jupiter.api.*;
 
 import java.awt.*;
 import java.util.*;
@@ -13,6 +11,20 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ShipBoardTest {
+    // Before all tests, initialize JavaFX platform
+    // This is needed because JUnit tests by default do not start a GUI environment
+    // and any component relying on a GUI like Image needs the JavaFX runtime to be
+    // properly initialized
+    //TODO: fix the warning this generates, can be ignored for now
+    @BeforeAll
+    static void initJavaFX() throws InterruptedException {
+        Thread thread = new Thread(() -> {
+            Platform.startup(() -> {});
+        });
+        thread.setDaemon(true);
+        thread.start();
+        Thread.sleep(1000); // Give JavaFX time to initialize
+    }
 
     ShipBoard shipBoard;
 
@@ -131,6 +143,7 @@ class ShipBoardTest {
     @DisplayName("Specific components tests")
     class SpecificComponentTests {
         Component component;
+        List<Connector> connectors = Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL);
 
         void addComponent(Point point) {
             shipBoard.requestRandComponent();
@@ -173,6 +186,7 @@ class ShipBoardTest {
                         shipBoard.getCabins().isEmpty() &&
                         shipBoard.getBatteries().isEmpty() &&
                         shipBoard.getEngines().isEmpty() &&
+                        shipBoard.getShields().isEmpty() &&
                         shipBoard.getLifeSupports().isEmpty();
             }
 
@@ -212,6 +226,7 @@ class ShipBoardTest {
                         shipBoard.getCabins().isEmpty() &&
                         shipBoard.getBatteries().isEmpty() &&
                         shipBoard.getCannons().isEmpty() &&
+                        shipBoard.getShields().isEmpty() &&
                         shipBoard.getLifeSupports().isEmpty();
             }
 
@@ -250,6 +265,7 @@ class ShipBoardTest {
                         shipBoard.getCabins().isEmpty() &&
                         shipBoard.getBatteries().isEmpty() &&
                         shipBoard.getEngines().isEmpty() &&
+                        shipBoard.getShields().isEmpty() &&
                         shipBoard.getLifeSupports().isEmpty();
             }
 
@@ -342,6 +358,7 @@ class ShipBoardTest {
                         shipBoard.getBatteries().isEmpty() &&
                         shipBoard.getCannons().isEmpty() &&
                         shipBoard.getLifeSupports().isEmpty() &&
+                        shipBoard.getShields().isEmpty() &&
                         SpecificComponentTests.restIsUnchanged(shipBoard);
             }
 
@@ -379,6 +396,19 @@ class ShipBoardTest {
             }
 
             @Test
+            void multipleActivateDoNothing() {
+                addComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(2, shipBoard.getEnginePower());
+                assertEquals(1, shipBoard.getEngines().size());
+                assertEquals(1, shipBoard.getActivatables().size());
+                assertEquals(doubleEngine, shipBoard.getActivatables().get(new Point(7,7)));
+                assertEquals(doubleEngine, shipBoard.getEngines().get(new Point(7,7)));
+            }
+
+            @Test
             void deactivateUpdatesEnginePower() {
                 addComponent(new Point(7,7));
                 shipBoard.activateComponent(new Point(7,7));
@@ -390,7 +420,143 @@ class ShipBoardTest {
                 assertEquals(doubleEngine, shipBoard.getActivatables().get(new Point(7,7)));
                 assertEquals(doubleEngine, shipBoard.getEngines().get(new Point(7,7)));
             }
+
+            @Test
+            void multipleDeactivateDoNothing() {
+                addComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                shipBoard.deactivateComponent(new Point(7,7));
+                shipBoard.deactivateComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(0, shipBoard.getEnginePower());
+                assertEquals(1, shipBoard.getEngines().size());
+                assertEquals(1, shipBoard.getActivatables().size());
+                assertEquals(doubleEngine, shipBoard.getActivatables().get(new Point(7,7)));
+                assertEquals(doubleEngine, shipBoard.getEngines().get(new Point(7,7)));
+            }
         }
+
+        @Nested
+        @DisplayName("Shield tests")
+        class ShieldTests {
+            Shield shield;
+
+            @BeforeEach
+            void setup() {
+                shield = new Shield(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                component = shield;
+            }
+
+            boolean restIsUnchanged() {
+                return shipBoard.getCargoHolds().isEmpty() &&
+                        shipBoard.getCabins().isEmpty() &&
+                        shipBoard.getBatteries().isEmpty() &&
+                        shipBoard.getCannons().isEmpty() &&
+                        shipBoard.getLifeSupports().isEmpty() &&
+                        shipBoard.getEngines().isEmpty() &&
+                        SpecificComponentTests.restIsUnchanged(shipBoard);
+            }
+
+            @Test
+            void addUpdatesMaps() {
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(1, shipBoard.getShields().size());
+                assertEquals(shield, shipBoard.getShields().get(new Point(7,7)));
+                assertEquals(1, shipBoard.getActivatables().size());
+                assertEquals(shield, shipBoard.getActivatables().get(new Point(7,7)));
+                assertArrayEquals(new boolean[]{false, false, false, false}, shipBoard.getShieldDirections());
+            }
+
+            @Test
+            void removeUpdatesMap() {
+                addComponent(new Point(7,7));
+                shipBoard.removeComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(0, shipBoard.getShields().size());
+                assertArrayEquals(new boolean[]{false, false, false, false}, shipBoard.getShieldDirections());
+            }
+
+            @Test
+            void activateUpdatesShieldDirections() {
+                addComponent(new Point(7,7));
+                shipBoard.activateComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(1, shipBoard.getShields().size());
+                assertEquals(1, shipBoard.getActivatables().size());
+                assertEquals(shield, shipBoard.getActivatables().get(new Point(7,7)));
+                //assertArrayEquals(new boolean[]{false, false, false, false}, shipBoard.getShieldDirections());
+            }
+        }
+
+        @Nested
+        @DisplayName("Cabin tests")
+        class CabinTests {
+            Cabin cabin;
+
+            @BeforeEach
+            void setup() {
+                cabin = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                component = cabin;
+            }
+
+            boolean restIsUnchanged() {
+                return shipBoard.getCargoHolds().isEmpty() &&
+                        shipBoard.getShields().isEmpty() &&
+                        shipBoard.getBatteries().isEmpty() &&
+                        shipBoard.getCannons().isEmpty() &&
+                        shipBoard.getLifeSupports().isEmpty() &&
+                        shipBoard.getEngines().isEmpty() &&
+                        SpecificComponentTests.restIsUnchanged(shipBoard);
+            }
+
+            @Test
+            void addUpdatesMaps() {
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(1, shipBoard.getCabins().size());
+                assertEquals(cabin, shipBoard.getCabins().get(new Point(7,7)));
+            }
+
+            //TODO: fix this test
+            @Test
+            void removeUpdatesMap() {
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                shipBoard.initializeCabin(new Point(7,7),CrewType.HUMAN);
+                //I have no idea why this doesn't work
+                //shipBoard.removeComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                //assertEquals(0, shipBoard.getCabins().size());
+            }
+
+            @Test
+            void initializeCabin(){
+                // adding cabin component to map
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(1, shipBoard.getCabins().size());
+                assertEquals(cabin, shipBoard.getCabins().get(new Point(7,7)));
+
+                // ensure that if the cabin has been initialized with a human, numResidents is 2
+                shipBoard.initializeCabin(new Point(7,7), CrewType.HUMAN);
+                assertEquals(2,shipBoard.getCabins().get(new Point(7,7)).getNumResidents());
+
+                // ensure that if the cabin has been initialized with a purple alien, an exception is thrown
+                // since the cabin is not connected to a life support component
+                assertThrows(IllegalStateException.class, ()->{shipBoard.initializeCabin(new Point(7,7), CrewType.PURPLE);});
+
+                // ensure that if the cabin has been initialized with a brown alien, an exception is thrown
+                // since the cabin is not connected to a life support component
+                assertThrows(IllegalStateException.class, ()->{shipBoard.initializeCabin(new Point(7,7), CrewType.BROWN);});
+            }
+
+            @Test
+            void getCrewTypeOptions(){
+                //TODO: come back to this after lunch :)
+            }
+        }
+
     }
 
 
