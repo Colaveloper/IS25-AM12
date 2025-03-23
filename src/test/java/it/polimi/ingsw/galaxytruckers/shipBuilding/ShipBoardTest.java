@@ -29,6 +29,11 @@ class ShipBoardTest {
         Thread.sleep(1000); // Give JavaFX time to initialize
     }
 
+    @AfterAll
+    static void tearDownJavaFX(){
+        Platform.exit();
+    }
+
     ShipBoard shipBoard;
 
     @Nested
