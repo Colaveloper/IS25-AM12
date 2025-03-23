@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
@@ -31,8 +32,8 @@ public class CombatZoneCard extends AdventureCard {
     private boolean initialized1; // before all menaces
     private boolean initialized2; // before last menace
 
-    public CombatZoneCard(Image image, Level level, int flightDayLoss, int crewLoss, List<Projectile> projectiles) {
-        super(image, level);
+    public CombatZoneCard(Image image, Level level, FlightBoard flightBoard, int flightDayLoss, int crewLoss, List<Projectile> projectiles) {
+        super(image, level, flightBoard);
         this.flightDayLoss = flightDayLoss;
         this.crewLoss = crewLoss;
         this.crewLossLeftPerShip = crewLoss;
