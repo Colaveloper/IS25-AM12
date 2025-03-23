@@ -5,7 +5,7 @@ import java.util.function.IntSupplier;
 import static org.junit.jupiter.api.Assertions.*;
 class DiceTest {
 
-    Dice dice;
+    Dice dice = new Dice() {};
     Integer min, max;
 
     @org.junit.jupiter.api.BeforeEach

@@ -40,25 +40,21 @@ public class EpidemicCard extends AdventureCard {
                 if (cabin.getValue().getConnectors().get(cabin.getValue().getOrientation()) != Connector.NONE) {    //TODO: does it count rotation?
                     if(cabins.containsKey(new Point(cabin.getKey().x, cabin.getKey().y + 1))){
                         currentShipBoard.loseCrew(cabin.getKey(), 1);
-                        continue;
                     }
                 }
-                if (cabin.getValue().getConnectors().get(1 + cabin.getValue().getOrientation()) != Connector.NONE) {
+                else if (cabin.getValue().getConnectors().get(1 + cabin.getValue().getOrientation()) != Connector.NONE) {
                     if(cabins.containsKey(new Point(cabin.getKey().x + 1, cabin.getKey().y))){
                         currentShipBoard.loseCrew(cabin.getKey(), 1);
-                        continue;
                     }
                 }
-                if (cabin.getValue().getConnectors().get(2 + cabin.getValue().getOrientation()) != Connector.NONE) {
+                else if (cabin.getValue().getConnectors().get(2 + cabin.getValue().getOrientation()) != Connector.NONE) {
                     if(cabins.containsKey(new Point(cabin.getKey().x, cabin.getKey().y - 1))){
                         currentShipBoard.loseCrew(cabin.getKey(), 1);
-                        continue;
                     }
                 }
-                if (cabin.getValue().getConnectors().get(3 + cabin.getValue().getOrientation()) != Connector.NONE) {
+                else if (cabin.getValue().getConnectors().get(3 + cabin.getValue().getOrientation()) != Connector.NONE) {
                     if(cabins.containsKey(new Point(cabin.getKey().x - 1, cabin.getKey().y))){
                         currentShipBoard.loseCrew(cabin.getKey(), 1);
-                        continue;
                     }
                 }
             }

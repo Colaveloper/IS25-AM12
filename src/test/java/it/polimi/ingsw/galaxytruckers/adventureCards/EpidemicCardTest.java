@@ -18,35 +18,8 @@ class EpidemicCardTest {
 
     @BeforeEach
     void setUp() {
-//        FlightBoard flightBoard = new FlightBoard(null) {
-//            @Override
-//            public Map<ShipBoard, Integer> getShipToPlace() {
-//                return shipPlaces;
-//            }
-//
-//            @Override
-//            public List<ShipBoard> getOrderedShips() {
-//                return ships;
-//            }
-//
-//            @Override
-//            public void displaceShip(ShipBoard shipBoard, int displacement) {
-//                testShip = shipBoard;
-//                testDisplacement = displacement;
-//            }
-//
-//            @Override
-//            public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
-//                return true;
-//            }
-//
-//            @Override
-//            public Image getImage() {
-//                return null;
-//            }
-//        };
-//
-//        epidemicCard = new EpidemicCard(null, Level.SECOND, flightBoard);
+        
+        //epidemicCard = new EpidemicCard(null, Level.SECOND, flightBoard);
 
     }
 

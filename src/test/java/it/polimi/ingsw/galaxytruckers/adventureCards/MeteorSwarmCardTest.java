@@ -25,7 +25,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MeteorSwarmCardTest {
+class MeteorSwarmCardTest extends AdventureCardTest {
     AdventureCard meteorSwarmCard;
     List<ShipBoard> ships;
     Map<ShipBoard, Integer> shipPlaces;
@@ -37,56 +37,6 @@ class MeteorSwarmCardTest {
     SecondShipBoard ship2;
 
     Component component;
-
-    ComponentBank componentBank = new ComponentBank() {
-        @Override
-        public Component getRanComponent() {
-            return component;
-        }
-    };
-
-    private void addComponent(ShipBoard shipBoard, Point point) {
-        shipBoard.requestRandComponent();
-        shipBoard.placeComponent(point);
-        shipBoard.weldLastComponent();
-    }
-
-
-    private void buildLargeShip(ShipBoard shipBoard) {
-
-        component = new Cannon(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
-        addComponent(shipBoard, new Point(8,6));
-        addComponent(shipBoard, new Point(10,7));
-        addComponent(shipBoard, new Point(6,5));
-
-        component = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
-        addComponent(shipBoard, new Point(7,7));
-        addComponent(shipBoard, new Point(8,7));
-        addComponent(shipBoard, new Point(9,8));
-
-        component = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.NONE, Connector.UNIVERSAL, Connector.UNIVERSAL));
-        addComponent(shipBoard, new Point(6,7));
-
-        component = new Shield(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
-        addComponent(shipBoard, new Point(6,6));
-        addComponent(shipBoard, new Point(10,9));
-        addComponent(shipBoard, new Point(4,8));
-
-        component = new Engine(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
-        addComponent(shipBoard, new Point(7,8));
-        addComponent(shipBoard, new Point(9,9));
-        addComponent(shipBoard, new Point(4,7));
-
-        component = new CargoHold(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2, true);
-        addComponent(shipBoard, new Point(9,7));
-        addComponent(shipBoard, new Point(7,6));
-        addComponent(shipBoard, new Point(5,7));
-    }
-
-    @BeforeAll
-    static void setUpClass() {
-        Platform.startup(() -> {});
-    }
 
     @BeforeEach
     void setUp() {
