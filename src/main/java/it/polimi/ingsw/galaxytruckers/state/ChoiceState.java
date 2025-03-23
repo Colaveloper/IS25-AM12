@@ -4,7 +4,7 @@ public class ChoiceState extends GameState {
     boolean choice;
 
     @Override
-    public void makeChoice(boolean choice) {
+    public void makeBooleanChoice(boolean choice) {
         this.choice = choice;
     }
 
