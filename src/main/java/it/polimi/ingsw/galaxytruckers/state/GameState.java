@@ -17,6 +17,10 @@ public abstract class GameState {
         throw new UnsupportedOperationException("This action is unsupported in this state");
     }
 
+    public void makeChoice(int choice) {
+        throw new UnsupportedOperationException("This action is unsupported in this state");
+    }
+
     public void chooseShipPiece(int pieceIndex) {
         throw new UnsupportedOperationException("This action is unsupported in this state");
     }

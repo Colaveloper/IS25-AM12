@@ -24,6 +24,7 @@ public abstract class AdventureCard implements Physical {
 
     // Does nothing - does not throw exceptions because I control correct
     // method invocation through GameState
+    // TODO : consider removing this method (using GeneralChoiceState)
     public void choose(boolean choice) {}
 
     @Override

@@ -1,82 +1,70 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.state.AddGoodsState;
+import it.polimi.ingsw.galaxytruckers.state.DrawCardState;
+import it.polimi.ingsw.galaxytruckers.state.GameState;
+import it.polimi.ingsw.galaxytruckers.state.GeneralChoiceState;
+import javafx.scene.image.Image;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class PlanetsCard extends AdventureCardDeprecated {
-    //attributes
-    private List<Boolean> planets;
-    private List<GoodsType> goods;
-    private int flightDaysLost;
-    private int numPlanets;
+public class PlanetsCard extends AdventureCard {
+    ShipBoard currentShipBoard;
+    List<Map<GoodsType, Integer>> planets;
+    Map<ShipBoard, Integer> planetChoices;
+    List<ShipBoard> landedShips;
+    int flightDaysLoss;
+    boolean choosePlanet;
 
-    public PlanetsCard(FlightBoard flightBoard, int numPlanets, List<GoodsType> goods, int flightDaysLost){
-        //attributes init
-        super(flightBoard);
-        planets = new ArrayList<>();
-        for (int i = 0; i < numPlanets; i++) {
-            //TRUE indicates an occupied planet
-            planets.add(Boolean.FALSE);
+    public PlanetsCard(Image image, Level level, List<Map<GoodsType, Integer>> planets, int flightDaysLoss) {
+        super(image, level);
+        this.planets = planets;
+        this.flightDaysLoss = flightDaysLoss;
+        this.choosePlanet = true;
+    }
+
+    @Override
+    public GameState nextStep() {
+        if (choosePlanet) {
+            if (currentShipBoard == null) {
+                currentShipBoard = flightBoard.getOrderedShips().getFirst();
+            } else {
+                currentPlayerIndex++;
+                if (currentPlayerIndex >= flightBoard.getShipToPlace().size()) {
+                    choosePlanet = false;
+                    currentPlayerIndex = 0;
+                    currentShipBoard = null;
+                    return nextStep();
+                }
+                currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
+            }
+            return new GeneralChoiceState(choice -> {
+                if (choice > 0 && choice <= planetChoices.size()) {
+                    choosePlanet(choice-1);
+                }
+            }, planetChoices.size()+1);
+        } else {
+            if (currentShipBoard == null) {
+                currentShipBoard = landedShips.getFirst();
+            } else {
+                flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
+                currentPlayerIndex++;
+                if (currentPlayerIndex >= landedShips.size()) {
+                    return new DrawCardState();
+                }
+                currentShipBoard = landedShips.get(currentPlayerIndex);
+            }
+            return new AddGoodsState(planets.get(planetChoices.get(currentShipBoard)), currentShipBoard);
         }
-        this.goods = new ArrayList<>(goods);
-        this.flightDaysLost = flightDaysLost;
-        this.name = "[PLANETS]";
-
-        //cardState init
-        cardStates = new ArrayList<>();
-        cardStates.add(PlayerAction.CHOOSE_PLANET);
-        cardStates.add(PlayerAction.MANAGE_GOODS);
-        cardStates.add(PlayerAction.END_CARD);
     }
 
-    //USED METHODS
-    @Override
-    public PlayerAction nextStep() {
-        step++;
-        return cardStates.get(step);
+    public void choosePlanet(int index) {
+        planetChoices.put(currentShipBoard, index);
+        landedShips.add(currentShipBoard);
     }
-    @Override
-    public List<Boolean> getPlanets() {
-        return planets;
-    }
-    @Override
-    public List<GoodsType> getGoods() {
-        return goods;
-    }
-    @Override
-    public int getFlightDaysLoss() {
-        return flightDaysLost;
-    }
-    @Override
-    public void landOnPlanet(int i) {
-        planets.set(i, Boolean.TRUE);
-    }
-    
-    //UNUSED METHODS
-    @Override
-    public int getFirePowerThreshold() {
-        return 0;
-    }
-    @Override
-    public int getCreditPrize() {
-        return 0;
-    }
-    @Override
-    public List<Integer> getProjectileDirections() {
-        return null;
-    }
-    @Override
-    public List<ProjectileDeprecated> getProjectilesType() {
-        return null;
-    }
-    @Override
-    public int getSacrifice() {
-        return 0;
-    }
-
 }
