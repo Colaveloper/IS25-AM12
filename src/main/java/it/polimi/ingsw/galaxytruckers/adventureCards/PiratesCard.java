@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
@@ -26,8 +27,8 @@ public class PiratesCard extends AdventureCard {
     private boolean defeated;
     private Projectile currentProjectile;
 
-    public PiratesCard(Image image, Level level, int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
-        super(image, level);
+    public PiratesCard(Image image, Level level, FlightBoard flightBoard, int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
+        super(image, level, flightBoard);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;

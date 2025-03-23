@@ -9,15 +9,17 @@ import javafx.scene.image.Image;
 
 public abstract class AdventureCard implements Physical {
     protected FlightBoard flightBoard;
-    protected int currentPlayerIndex = 0;
+    protected int currentPlayerIndex;
     protected ShipBoard currentShipBoard;
     protected final Level cardLevel;
     private final Image image;
 
-    protected AdventureCard(Image image, Level cardLevel) {
+    protected AdventureCard(Image image, Level cardLevel, FlightBoard flightBoard) {
         this.image = image;
         this.cardLevel = cardLevel;
+        this.flightBoard = flightBoard;
         this.currentShipBoard = null;
+        this.currentPlayerIndex = 0;
     }
 
     public abstract GameState nextStep();

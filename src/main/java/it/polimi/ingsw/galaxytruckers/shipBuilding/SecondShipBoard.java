@@ -38,7 +38,7 @@ public class SecondShipBoard extends ShipBoard {
             new Point(10, 8),
             new Point(10, 9)));
 
-    private static final Image image = new Image("file:src/main/resources/texture/cardboard/second-ship-board.jpg");
+    private static Image image;
     
     private final List<Component> stashedComponents;
 
