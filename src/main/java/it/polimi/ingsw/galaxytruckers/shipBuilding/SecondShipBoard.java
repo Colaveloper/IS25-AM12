@@ -155,8 +155,8 @@ public class SecondShipBoard extends ShipBoard {
 
     @Override
     public void remove(Cabin cabin) {
-        this.cabins.remove(this.lastPosition);
         loseCrew(lastPosition, cabin.getNumResidents());
+        this.cabins.remove(this.lastPosition);
     }
 
     @Override
