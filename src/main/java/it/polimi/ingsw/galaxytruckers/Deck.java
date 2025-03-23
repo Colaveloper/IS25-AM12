@@ -21,10 +21,17 @@ public abstract class Deck{
         return currentCard;
     }
 
+    /**
+     * @param id the id of the forecast deck
+     * @return the requested forecast deck
+     */
     public List<AdventureCard> getForecastDeck(int id) {
         throw new UnsupportedOperationException("This action is unsupported at the selected level");
     }
 
+    /**
+     * Mixes the forecast and hidden decks  into the master deck
+     */
     public void initMasterDeck() {
         throw new UnsupportedOperationException("This action is unsupported at the selected level");
     }
@@ -41,8 +48,6 @@ public abstract class Deck{
             return true;
         }
     }
-
-    abstract public List<AdventureCard> peekForecastDeck(int id);
 
     public static List<AdventureCard> loadCards(File jsonFile) throws IOException {
         //reading from json file and returning the list of components

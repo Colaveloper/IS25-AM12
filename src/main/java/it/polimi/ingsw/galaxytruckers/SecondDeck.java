@@ -18,7 +18,12 @@ public class SecondDeck extends Deck{
     @Override
     public List<AdventureCard> getForecastDeck(int deckIndex) {
         // TODO: handle concurrency
-        return forecastDecks.get(deckIndex);
+        try {
+            return forecastDecks.get(deckIndex);
+        } catch (IndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("No forecast deck with such index");
+        }
+
     }
 
     @Override
@@ -28,10 +33,5 @@ public class SecondDeck extends Deck{
                 .forEach(card -> masterDeck.add(card));
         masterDeck.addAll(hiddenDeck);
         Collections.shuffle(masterDeck);
-    }
-
-    @Override
-    public List<AdventureCard> peekForecastDeck(int id) {
-        return List.of(); // TODO: implement
     }
 }
