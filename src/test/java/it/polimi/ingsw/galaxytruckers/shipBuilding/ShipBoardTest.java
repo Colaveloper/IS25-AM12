@@ -1,7 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import javafx.application.Platform;
+import org.junit.Before;
 import org.junit.jupiter.api.*;
 
 import java.awt.*;
@@ -518,16 +521,24 @@ class ShipBoardTest {
                 assertEquals(cabin, shipBoard.getCabins().get(new Point(7,7)));
             }
 
-            //TODO: fix this test
             @Test
             void removeUpdatesMap() {
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
                 shipBoard.initializeCabin(new Point(7,7),CrewType.HUMAN);
-                //I have no idea why this doesn't work
-                //shipBoard.removeComponent(new Point(7,7));
-                assertTrue(restIsUnchanged());
-                //assertEquals(0, shipBoard.getCabins().size());
+                shipBoard.removeComponent(new Point(7,7));
+                assertEquals(0, shipBoard.getCabins().size());
+            }
+
+            @Test
+            void startingCabinOnlyAllowsHumansInCrewTypeOptions(){
+                addComponent(new Point(7,7));
+                assertEquals(Set.of(CrewType.HUMAN), shipBoard.getCrewTypeOptions(new Point(7,7)));
+            }
+
+            @Test
+            void noCabinThrowsExceptionInCrewTypeOptions(){
+                assertThrows(IllegalStateException.class, ()->{shipBoard.getCrewTypeOptions(new Point(7,7));});
             }
 
             @Test
@@ -540,7 +551,7 @@ class ShipBoardTest {
 
                 // ensure that if the cabin has been initialized with a human, numResidents is 2
                 shipBoard.initializeCabin(new Point(7,7), CrewType.HUMAN);
-                assertEquals(2,shipBoard.getCabins().get(new Point(7,7)).getNumResidents());
+                assertEquals(2,shipBoard.getCrewSize());
 
                 // ensure that if the cabin has been initialized with a purple alien, an exception is thrown
                 // since the cabin is not connected to a life support component
@@ -552,16 +563,292 @@ class ShipBoardTest {
             }
 
             @Test
-            void getCrewTypeOptions(){
-                //TODO: come back to this after lunch :)
+            void loseCrewThrowsException(){
+                //throw an exception when there is no cabin
+                assertThrows(IllegalStateException.class, () -> shipBoard.loseCrew(new Point(7,7), 1));
+            }
+
+            @Test
+            void loseCrewHumans(){
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                shipBoard.initializeCabin(new Point(7,7),CrewType.HUMAN);
+                shipBoard.loseCrew(new Point(7,7),2);
+                assertEquals(0,shipBoard.getCrewSize());
             }
         }
 
+        // potentially tests with two and three batteries can just be simplified to be just one or the other
+        @Nested
+        @DisplayName("Battery Tests")
+        class BatteryTests{
+            Battery battery;
+
+            boolean restIsUnchanged(){
+                return shipBoard.getCargoHolds().isEmpty() &&
+                        shipBoard.getCabins().isEmpty() &&
+                        shipBoard.getCannons().isEmpty() &&
+                        shipBoard.getEngines().isEmpty() &&
+                        shipBoard.getShields().isEmpty() &&
+                        shipBoard.getLifeSupports().isEmpty() &&
+                        SpecificComponentTests.restIsUnchanged(shipBoard);
+            }
+
+            @Test
+            void addTwoBatteriesUpdatesMaps(){
+                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
+                component = battery;
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(1,shipBoard.getBatteries().size());
+                assertEquals(battery, shipBoard.getBatteries().get(new Point(7,7)));
+            }
+
+            @Test
+            void removeTwoBatteriesUpdatesMap(){
+                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
+                component = battery;
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                shipBoard.removeComponent(new Point(7,7));
+                assertEquals(0, shipBoard.getBatteries().size());
+            }
+
+            @Test
+            void addThreeBatteriesUpdatesMaps(){
+                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
+                component = battery;
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(1,shipBoard.getBatteries().size());
+                assertEquals(battery, shipBoard.getBatteries().get(new Point(7,7)));
+            }
+
+            @Test
+            void removeThreeBatteriesUpdatesMap(){
+                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
+                component = battery;
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                shipBoard.removeComponent(new Point(7,7));
+                assertEquals(0, shipBoard.getBatteries().size());
+            }
+
+            @Test
+            void useTwoBatteries(){
+                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
+                component = battery;
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                shipBoard.useBatteries(new Point(7,7),2);
+                assertEquals(0, shipBoard.getBatteries().get(new Point(7,7)).getNumBatteries());
+            }
+
+            @Test
+            void useThreeBatteries(){
+                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
+                component = battery;
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                shipBoard.useBatteries(new Point(7,7),3);
+                assertEquals(0, shipBoard.getBatteries().get(new Point(7,7)).getNumBatteries());
+            }
+
+            @Test void noTwoBatteryThrowsException(){
+                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
+                component = battery;
+                assertThrows(IllegalStateException.class, () -> shipBoard.useBatteries(new Point(7,7), 2));
+                assertTrue(restIsUnchanged());
+            }
+
+            @Test void noThreeBatteryThrowsException(){
+                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
+                component = battery;
+                assertThrows(IllegalStateException.class, () -> shipBoard.useBatteries(new Point(7,7), 2));
+                assertTrue(restIsUnchanged());
+            }
+        }
+
+        @Nested
+        @DisplayName("Cargo Hold Tests")
+        class CargoHoldTests{
+            CargoHold cargo;
+
+            @BeforeEach
+            void setup(){
+                cargo = new CargoHold(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3, false);
+                component = cargo;
+            }
+
+            boolean restIsUnchanged(){
+                return shipBoard.getShields().isEmpty() &&
+                        shipBoard.getEngines().isEmpty() &&
+                        shipBoard.getCannons().isEmpty() &&
+                        shipBoard.getCabins().isEmpty() &&
+                        shipBoard.getLifeSupports().isEmpty() &&
+                        shipBoard.getBatteries().isEmpty() &&
+                        SpecificComponentTests.restIsUnchanged(shipBoard);
+            }
+
+            @Test
+            void addUpdatesMap(){
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(1,shipBoard.getCargoHolds().size());
+                assertEquals(cargo, shipBoard.getCargoHolds().get(new Point(7,7)));
+            }
+
+            @Test
+            void removeUpdatesMap(){
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                shipBoard.removeComponent(new Point(7,7));
+                assertEquals(0, shipBoard.getCargoHolds().size());
+            }
+
+            @Test
+            void placeGoods(){
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                shipBoard.placeGoods(new Point(7,7), GoodsType.GREEN,3);
+                assertEquals(6,shipBoard.getGoodsValue());
+            }
+
+            @Test
+            void noCargoHoldThrowsException(){
+                assertThrows(IllegalStateException.class, () -> shipBoard.placeGoods(new Point(7,7), GoodsType.GREEN, 3));
+                assertTrue(restIsUnchanged());
+            }
+
+            @Test
+            void removeGoods(){
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                shipBoard.placeGoods(new Point(7,7), GoodsType.GREEN, 3);
+                shipBoard.removeGoods(new Point(7,7),GoodsType.GREEN,1);
+                assertEquals(4, shipBoard.getGoodsValue());
+            }
+
+            @Test
+            void removeGoodsThrowsException(){
+                assertThrows(IllegalStateException.class, () -> shipBoard.removeGoods(new Point(7,7), GoodsType.GREEN, 2));
+                assertTrue(restIsUnchanged());
+            }
+        }
+
+        @Nested
+        @DisplayName("Life Support Tests")
+        class LifeSupportTests{
+            LifeSupport lifeSupport;
+
+            @BeforeEach
+            void setup(){
+                lifeSupport = new LifeSupport(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL),CrewType.PURPLE);
+                component = lifeSupport;
+            }
+
+            boolean restIsUnchanged(){
+                return shipBoard.getBatteries().isEmpty() &&
+                        shipBoard.getCabins().isEmpty() &&
+                        shipBoard.getCannons().isEmpty() &&
+                        shipBoard.getEngines().isEmpty() &&
+                        shipBoard.getShields().isEmpty() &&
+                        shipBoard.getCargoHolds().isEmpty() &&
+                        SpecificComponentTests.restIsUnchanged(shipBoard);
+            }
+
+            @Test
+            void addUpdatesMap(){
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                assertEquals(1,shipBoard.getLifeSupports().size());
+                assertEquals(lifeSupport, shipBoard.getLifeSupports().get(new Point(7,7)));
+            }
+
+            @Test
+            void removeUpdatesMap(){
+                addComponent(new Point(7,7));
+                assertTrue(restIsUnchanged());
+                shipBoard.removeComponent(new Point(7,7));
+                assertEquals(0, shipBoard.getLifeSupports().size());
+            }
+        }
+
+        @Nested
+        @DisplayName("Cabin With Connected Life Support Test")
+        class CabinLifeSupportTest{
+            Cabin cabin;
+            LifeSupport lifeSupport;
+
+            @BeforeEach
+            void setup(){
+                cabin = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                lifeSupport = new LifeSupport(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL),CrewType.PURPLE);
+            }
+
+            boolean restIsUnchanged(){
+                return shipBoard.getEngines().isEmpty() &&
+                        shipBoard.getCargoHolds().isEmpty() &&
+                        shipBoard.getShields().isEmpty() &&
+                        shipBoard.getBatteries().isEmpty() &&
+                        shipBoard.getCannons().isEmpty() &&
+                        SpecificComponentTests.restIsUnchanged(shipBoard);
+            }
+
+            @Test
+            void addUpdatesMap(){
+                // add cabin adjacent to life support, NOT in starting square
+                component = cabin;
+                addComponent(new Point(8,7));
+                component = lifeSupport;
+                addComponent((new Point(9,7)));
+
+                assertTrue(restIsUnchanged());
+
+                assertEquals(1,shipBoard.getLifeSupports().size());
+                assertEquals(1, shipBoard.getCabins().size());
+
+                assertEquals(lifeSupport, shipBoard.getLifeSupports().get(new Point(9,7)));
+                assertEquals(cabin, shipBoard.getCabins().get(new Point(8,7)));
+            }
+
+            @Test
+            void removeUpdatesMap(){
+                // add cabin adjacent to life support, NOT in starting square
+                component = cabin;
+                addComponent(new Point(8,7));
+                component = lifeSupport;
+                addComponent((new Point(9,7)));
+                assertTrue(restIsUnchanged());
+
+                shipBoard.initializeCabin(new Point(8,7), CrewType.PURPLE);
+                shipBoard.removeComponent(new Point(8,7));
+                shipBoard.removeComponent(new Point(9,7));
+
+                assertEquals(0, shipBoard.getCabins().size());
+                assertEquals(0, shipBoard.getLifeSupports().size());
+            }
+
+            @Test
+            void placingAlienInCabin(){
+                // add cabin adjacent to life support, NOT in starting square
+                component = cabin;
+                addComponent(new Point(8,7));
+                component = lifeSupport;
+                addComponent((new Point(9,7)));
+                assertTrue(restIsUnchanged());
+
+                // initializing and ensuring alien is present
+                shipBoard.initializeCabin(new Point(8,7), CrewType.PURPLE);
+                assertTrue(shipBoard.getCrewTypeOptions(new Point(8,7)).contains(CrewType.PURPLE));
+                assertEquals(1,shipBoard.getCrewSize());
+
+                // losing the alien
+                shipBoard.loseCrew(new Point(8,7), 1);
+                assertEquals(0, shipBoard.getCrewSize());
+            }
+        }
     }
-
-
-
-
 
     @Nested
     @DisplayName("getConnectedSets() tests")
