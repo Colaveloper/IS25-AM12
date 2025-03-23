@@ -354,21 +354,7 @@ public class GameModel {
         currentCard.landOnPlanet(i);
     }
 
-    public void fireCannonAtPlayer(){
-        //TODO: roll dice and fire
-        currentCard.projectileAtPlayer();
-    }
-
     public List<ShipBoard> getInvolvedShips() {
         return currentCard.getInvolvedShips();
-    }
-
-    public void setRollDice(){
-        Dice dice = Dice.create();
-        currentCard.setDiceRoll(dice.roll());
-    }
-    public int rollDice(){
-        Dice dice = Dice.create();
-        return dice.roll();
     }
 }

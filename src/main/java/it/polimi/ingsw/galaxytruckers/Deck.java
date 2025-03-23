@@ -123,19 +123,20 @@ public abstract class Deck{
 
     private static List<Projectile> parseProjectiles(JsonNode projectilesNode) {
         List<Projectile> projectiles = new ArrayList<>();
+        int direction = projectilesNode.get(1).asInt();
         for (JsonNode node : projectilesNode) {
             switch (node.get(0).asText()) {
                 case "small fire":
-                    projectiles.add(new SmallFire());
+                    projectiles.add(new SmallFire(direction));
                     break;
                 case "big fire":
-                    projectiles.add(new BigFire());
+                    projectiles.add(new BigFire(direction));
                     break;
                 case  "big meteor":
-                    projectiles.add(new BigMeteor());
+                    projectiles.add(new BigMeteor(direction));
                     break;
                 case "small meteor":
-                    projectiles.add(new SmallMeteor());
+                    projectiles.add(new SmallMeteor(direction));
                     break;
             }
         }

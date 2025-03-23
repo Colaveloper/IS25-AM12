@@ -24,7 +24,6 @@ public class PiratesCard extends AdventureCard {
     private final List<ShipBoard> defeatedPlayers;
     private int defeatedPlayerIndex; // current defeated player
     private boolean defeated;
-    private ShipBoard currentShipBoard;
     private Projectile currentProjectile;
 
     public PiratesCard(Image image, Level level, int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
@@ -36,7 +35,6 @@ public class PiratesCard extends AdventureCard {
         this.defeatedPlayers = new ArrayList<>();
         this.defeatedPlayerIndex = 0;
         this.defeated = false;
-        this.currentShipBoard = null;
     }
 
     @Override

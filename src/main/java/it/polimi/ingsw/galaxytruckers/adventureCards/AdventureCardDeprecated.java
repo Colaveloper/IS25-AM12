@@ -34,18 +34,18 @@ public abstract class AdventureCardDeprecated {
     }
 
     // called after player failed to prevent projectile
-    public void projectileAtPlayer() {
-        Point projectileTarget = currentShipBoard.getFirstComponentAt(diceRoll, projectileDirections.get(projectileIndex));
-        if (projectileTypes.get(projectileIndex) == ProjectileDeprecated.SMALL_METEOR &&
-                currentShipBoard
-                        .getComponentMap()
-                        .get(projectileTarget)
-                        .getConnectors()
-                        .get(projectileDirections.get(projectileIndex))
-                        == Connector.NONE
-            ) { return;}
-        currentShipBoard.removeComponent(projectileTarget); //in case of big/small fire, bigMeteor and smallMeteor on openConnector
-    }
+//    public void projectileAtPlayer() {
+//        Point projectileTarget = currentShipBoard.getFirstComponentAt(diceRoll, projectileDirections.get(projectileIndex));
+//        if (projectileTypes.get(projectileIndex) == ProjectileDeprecated.SMALL_METEOR &&
+//                currentShipBoard
+//                        .getComponentMap()
+//                        .get(projectileTarget)
+//                        .getConnectors()
+//                        .get(projectileDirections.get(projectileIndex))
+//                        == Connector.NONE
+//            ) { return;}
+//        currentShipBoard.removeComponent(projectileTarget); //in case of big/small fire, bigMeteor and smallMeteor on openConnector
+//    }
 
     //public methods
     public String getName(){

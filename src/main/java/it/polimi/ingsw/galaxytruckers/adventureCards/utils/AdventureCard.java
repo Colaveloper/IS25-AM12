@@ -3,18 +3,21 @@ package it.polimi.ingsw.galaxytruckers.adventureCards.utils;
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.Physical;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.state.GameState;
 import javafx.scene.image.Image;
 
 public abstract class AdventureCard implements Physical {
     protected FlightBoard flightBoard;
     protected int currentPlayerIndex = 0;
+    protected ShipBoard currentShipBoard;
     protected final Level cardLevel;
     private final Image image;
 
     protected AdventureCard(Image image, Level cardLevel) {
         this.image = image;
         this.cardLevel = cardLevel;
+        this.currentShipBoard = null;
     }
 
     public abstract GameState nextStep();
