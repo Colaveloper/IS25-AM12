@@ -69,14 +69,15 @@ public abstract class Deck{
                     card = null;
                     break;
                 case "pirates":
-                    card = new PiratesCard(
-                            image,
-                            level,
-                            node.get("firePowerThreshold").asInt(),
-                            node.get("creditPrize").asInt(),
-                            node.get("flightDaysLoss").asInt(),
-                            parseProjectiles(node.get("projectiles"))
-                            );
+                    card = null;
+//                    card = new PiratesCard(
+//                            image,
+//                            level,
+//                            node.get("firePowerThreshold").asInt(),
+//                            node.get("creditPrize").asInt(),
+//                            node.get("flightDaysLoss").asInt(),
+//                            parseProjectiles(node.get("projectiles"))
+//                            );
                     break;
                 case "smugglers":
                     card = null;
