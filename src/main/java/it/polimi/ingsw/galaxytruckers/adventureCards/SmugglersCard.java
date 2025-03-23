@@ -33,7 +33,7 @@ public class SmugglersCard extends AdventureCard {
         if (!defeated) {
             if (currentShipBoard != null) {  // There is a previous player who needs their firepower evaluated
                 if (currentShipBoard.getFirePower() > firePowerThreshold) {  // player defeats the enemy
-                    defeated = true;
+                    defeated = true; //TODO: add ChoiceState
                     return new AddGoodsState(goodsPrize, currentShipBoard); // Let the player choose whether to collect the prize
                 } else if (currentShipBoard.getFirePower() < firePowerThreshold) { // player is defeated
                     ShipBoard tempShipBoard = currentShipBoard;
@@ -61,7 +61,6 @@ public class SmugglersCard extends AdventureCard {
     @Override
     public void choose(boolean choice) {
         // TODO: add: if (choice) { }
-        currentShipBoard.gainCredits(creditPrize);
         flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
         currentShipBoard = null;
     }

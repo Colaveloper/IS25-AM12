@@ -1,75 +1,63 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.state.*;
+import javafx.scene.image.Image;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-public class AbandonedShipCard extends AdventureCardDeprecated {
-    private final int credits;
-    private final int numResidents;
-    private final int flightDaysLost;
+public class AbandonedShipCard extends AdventureCard {
+    private final int flightDaysLoss;
+    private final Map<GoodsType, Integer> goodsPrize;
+    private final int requiredCrew;
+    private boolean accepted;
+    private boolean acquired;
 
-    public AbandonedShipCard(FlightBoard flightBoard, int credits, int numResidents, int flightDaysLost){
-        super(flightBoard);
-        cardStates = new ArrayList<>();
-        cardStates.add(PlayerAction.ASK_IF_PASS);
-        cardStates.add(PlayerAction.LOSE_RESIDENTS);
-        cardStates.add(PlayerAction.END_CARD);
-
-        this.name = "[ABANDONED SHIP]";
-        this.credits = credits;
-        this.numResidents = numResidents;
-        this.flightDaysLost = flightDaysLost;
+    protected AbandonedShipCard (Image image, Level cardLevel, FlightBoard flightBoard, Map<GoodsType, Integer> goodsPrize, int requiredCrew, int flightDaysLoss) {
+        super(image, cardLevel, flightBoard);
+        this.flightDaysLoss = flightDaysLoss;
+        this.goodsPrize = goodsPrize;
+        this.requiredCrew = requiredCrew;
+        this.accepted = false;
+        this.acquired = false;
     }
 
-    //USED METHODS
+
     @Override
-    public PlayerAction nextStep() {
-        if(step == 1){
-            currentShipBoard.gainCredits(credits);
-            flightBoard.displaceShip(currentShipBoard, flightDaysLost);
+    public GameState nextStep() {
+
+        if(!accepted) {
+            if (currentShipBoard != null && currentShipBoard.getCrewSize() >= requiredCrew) {
+                return new ChoiceState();
+            }
+
+            if (currentPlayerIndex < flightBoard.getShipToPlace().size()) { // There are other players to evaluate
+                currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
+                currentPlayerIndex++;
+                nextStep();
+            }
         }
-        step++;
-        return cardStates.get(step);
-    }
-    @Override
-    public int getCreditPrize() {
-        return credits;
-    }
-    @Override
-    public int getSacrifice() {
-        return numResidents;
-    }
-    @Override
-    public int getFlightDaysLoss() {
-        return flightDaysLost;
+        if (!acquired) {
+            acquired = true;
+            return new AddGoodsState(goodsPrize, currentShipBoard); // Let the player choose whether to collect the prize
+        }
+        return new DrawCardState();
     }
 
-    //UNUSED METHODS ----------------------------------------
     @Override
-    public int getFirePowerThreshold() {
-        return 0;
+    public void choose(boolean choice) {
+        if (choice) {
+            flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
+            //currentShipBoard = null;
+            accepted = true;
+        }
     }
-    @Override
-    public List<Integer> getProjectileDirections() {
-        return null;
-    }
-    @Override
-    public List<Boolean> getPlanets(){
-        return null;
-    }
-    @Override
-    public List<GoodsType> getGoods(){
-        return null;
-    }
-    @Override
-    public List<ProjectileDeprecated> getProjectilesType() {
-        return null;
-    }
-    @Override
-    public void landOnPlanet(int i) {}
 }
