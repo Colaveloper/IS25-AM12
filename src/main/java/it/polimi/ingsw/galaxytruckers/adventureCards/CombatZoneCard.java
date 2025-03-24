@@ -13,19 +13,18 @@ import java.util.*;
 import java.util.List;
 
 public class CombatZoneCard extends AdventureCard {
+    // Card data
     private final int flightDayLoss;
     private int crewLossLeft;
     private final List<Projectile> projectiles;
 
-    // targeted ships for each menace
+    // Lowest stats
     private Integer minCrewSize;
     private Integer minEnginePower;
     private Integer minFirePower;
-    private ShipBoard targetedShip; // with the weakest artillery
 
-    // utility variables
+    // Utility variables
     private Projectile currentProjectile;
-    private boolean shielded;
 
     public CombatZoneCard(Image image, Level level, FlightBoard flightBoard, int flightDayLoss, int crewLoss, List<Projectile> projectiles) {
         super(image, level, flightBoard);
@@ -95,18 +94,50 @@ public class CombatZoneCard extends AdventureCard {
         if (!projectiles.isEmpty()) { // still projectiles to throw
             if (currentProjectile == null) { // shields not yet activated
                 currentProjectile = projectiles.removeFirst();
-                return new ActivateState(currentProjectile.getActivatablePoints(targetedShip), targetedShip);
+                return new ActivateState(currentProjectile.getActivatablePoints(currentShipBoard), currentShipBoard);
             } else { // fire!
-                boolean hit = currentProjectile.fireAt(targetedShip);
+                boolean hit = currentProjectile.fireAt(currentShipBoard);
                 currentProjectile = null;
-                if(hit && targetedShip.getConnectedSets().size() > 1) {
+                if(hit && currentShipBoard.getConnectedSets().size() > 1) {
                     // a lost component broke the ship
-                    return new ChooseShipPieceState(targetedShip.getConnectedSets(), targetedShip);
+                    return new ChooseShipPieceState(currentShipBoard.getConnectedSets(), currentShipBoard);
                 } else {
                     return nextStep();
                 }
             }
         }
         return new DrawCardState();
+    }
+
+    public ShipBoard getCurrentShipBoard() {
+        return currentShipBoard;
+    }
+
+    public int getFlightDayLoss() {
+        return flightDayLoss;
+    }
+
+    public int getCrewLossLeft() {
+        return crewLossLeft;
+    }
+
+    public List<Projectile> getProjectiles() {
+        return projectiles;
+    }
+
+    public Integer getMinCrewSize() {
+        return minCrewSize;
+    }
+
+    public Integer getMinEnginePower() {
+        return minEnginePower;
+    }
+
+    public Integer getMinFirePower() {
+        return minFirePower;
+    }
+
+    public Projectile getCurrentProjectile() {
+        return currentProjectile;
     }
 }
