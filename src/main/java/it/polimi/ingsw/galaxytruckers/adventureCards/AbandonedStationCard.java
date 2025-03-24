@@ -1,81 +1,60 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.state.AddGoodsState;
+import it.polimi.ingsw.galaxytruckers.state.ChoiceState;
+import it.polimi.ingsw.galaxytruckers.state.DrawCardState;
+import it.polimi.ingsw.galaxytruckers.state.GameState;
+import javafx.scene.image.Image;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
-public class AbandonedStationCard extends AdventureCardDeprecated {
-    //attributes
-    private List<GoodsType> goodsList;
-    private final int numRequiredResidents;
-    private final int flightDaysLost;
+public class AbandonedStationCard extends AdventureCard {
+    private final int flightDaysLoss;
+    private final Map<GoodsType, Integer> goodsPrize;
+    private final int requiredCrew;
+    private boolean accepted;
+    private boolean acquired;
 
-    public AbandonedStationCard(FlightBoard flightBoard, List<GoodsType> goodsList, int numRequiredResidents, int flightDaysLost){
-        //states init
-        super(flightBoard);
-        cardStates = new ArrayList<>();
-        cardStates.add(PlayerAction.ASK_IF_PASS);
-        cardStates.add(PlayerAction.MANAGE_GOODS);
-        cardStates.add(PlayerAction.END_CARD);
-
-        //attributes init
-        this.name = "[ABANDONED STATION]";
-        this.goodsList = new ArrayList<>(goodsList);
-        this.numRequiredResidents = numRequiredResidents;
-        this.flightDaysLost = flightDaysLost;
-    }
-
-    //USED METHODS
-    @Override
-    public PlayerAction nextStep() {
-//        if(step == 1){
-//
-//            flightBoard.
-//            flightBoard.displaceShip(currentShipBoard, flightDaysLost);
-//        }
-//        step++;
-        return cardStates.get(step);
-    }
-    @Override
-    public List<GoodsType> getGoods() {
-        return goodsList;
-    }
-    @Override
-    public int getFlightDaysLoss() {
-        return flightDaysLost;
+    public AbandonedStationCard (Image image, Level cardLevel, FlightBoard flightBoard, Map<GoodsType, Integer> goodsPrize, int requiredCrew, int flightDaysLoss) {
+        super(image, cardLevel, flightBoard);
+        this.flightDaysLoss = flightDaysLoss;
+        this.goodsPrize = goodsPrize;
+        this.requiredCrew = requiredCrew;
+        this.accepted = false;
+        this.acquired = false;
     }
 
-    //UNUSED METHODS ------------------------------------
-    @Override
-    public List<Boolean> getPlanets() {
-        return null;
-    }
-    @Override
-    public int getFirePowerThreshold() {
-        return 0;
-    }
-    @Override
-    public int getCreditPrize() {
-        return 0;
-    }
-    @Override
-    public List<Integer> getProjectileDirections() {
-        return null;
-    }
-    @Override
-    public List<ProjectileDeprecated> getProjectilesType() {
-        return null;
-    }
-    @Override
-    public int getSacrifice() {
-        return 0;
-    }
-    @Override
-    public void landOnPlanet(int i) {
 
+    @Override
+    public GameState nextStep() {
+
+        if(!accepted) {
+            if (currentShipBoard != null && currentShipBoard.getCrewSize() >= requiredCrew) {
+                return new ChoiceState();
+            }
+
+            if (currentPlayerIndex < flightBoard.getShipToPlace().size()) { // There are other players to evaluate
+                currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
+                currentPlayerIndex++;
+                nextStep();
+            }
+        }
+        if (!acquired) {
+            acquired = true;
+            return new AddGoodsState(goodsPrize, currentShipBoard); // Let the player choose whether to collect the prize
+        }
+        return new DrawCardState();
+    }
+
+    @Override
+    public void choose(boolean choice) {
+        if (choice) {
+            flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
+            accepted = true;
+        }
     }
 }

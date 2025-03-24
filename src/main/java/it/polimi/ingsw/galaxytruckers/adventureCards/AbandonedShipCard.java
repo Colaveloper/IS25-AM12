@@ -16,15 +16,15 @@ import java.util.Set;
 
 public class AbandonedShipCard extends AdventureCard {
     private final int flightDaysLoss;
-    private final Map<GoodsType, Integer> goodsPrize;
+    private final int creditPrize;
     private final int requiredCrew;
     private boolean accepted;
     private boolean acquired;
 
-    protected AbandonedShipCard (Image image, Level cardLevel, FlightBoard flightBoard, Map<GoodsType, Integer> goodsPrize, int requiredCrew, int flightDaysLoss) {
+    public AbandonedShipCard (Image image, Level cardLevel, FlightBoard flightBoard,int creditPrize, int requiredCrew, int flightDaysLoss) {
         super(image, cardLevel, flightBoard);
         this.flightDaysLoss = flightDaysLoss;
-        this.goodsPrize = goodsPrize;
+        this.creditPrize = creditPrize;
         this.requiredCrew = requiredCrew;
         this.accepted = false;
         this.acquired = false;
@@ -47,7 +47,7 @@ public class AbandonedShipCard extends AdventureCard {
         }
         if (!acquired) {
             acquired = true;
-            return new AddGoodsState(goodsPrize, currentShipBoard); // Let the player choose whether to collect the prize
+            return new RemoveCrewState(requiredCrew, currentShipBoard); // Let the player choose whether to collect the prize
         }
         return new DrawCardState();
     }
@@ -55,6 +55,7 @@ public class AbandonedShipCard extends AdventureCard {
     @Override
     public void choose(boolean choice) {
         if (choice) {
+            currentShipBoard.gainCredits(creditPrize);
             flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
             accepted = true;
         }
