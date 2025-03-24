@@ -1,81 +1,36 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
-import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.Cabin;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.Connector;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.state.DrawCardState;
+import it.polimi.ingsw.galaxytruckers.state.GameState;
+import javafx.scene.image.Image;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class StarDustCard extends AdventureCardDeprecated {
-    public StarDustCard(FlightBoard flightBoard) {
-        super(flightBoard);
-        cardStates = new ArrayList<>();
-        cardStates.add(PlayerAction.START_CARD);
-        cardStates.add(PlayerAction.END_CARD);
+import static java.lang.Math.abs;
 
-        this.name = "[STAR DUST]";
+public class StarDustCard extends AdventureCard {
+
+    List<ShipBoard> invertedShips;
+
+    public StarDustCard(Image image, Level level, FlightBoard flightBoard) {
+        super(image, level, flightBoard);
+
+        this.invertedShips = flightBoard.getOrderedShips().reversed();
     }
 
-    @Override
-    public PlayerAction nextStep() {
-        if (step == 0) {
-            flightBoard.displaceShip(currentShipBoard, currentShipBoard.getExposedConnectorsNumber());
-            passCardToNextPlayer();
+    public GameState nextStep() {
+        for (ShipBoard shipBoard : invertedShips) { // ships go back on the board in inverted flight order
+            flightBoard.displaceShip(shipBoard, -shipBoard.getExposedConnectorsNumber());
         }
-        step++;
-        return cardStates.get(step);
-    }
-
-
-
-
-
-    //UNUSED METHODS--------------------------------------------------------
-
-    @Override
-    public List<Boolean> getPlanets() {
-        return null;
-    }
-
-    @Override
-    public int getFirePowerThreshold() {
-        return 0;
-    }
-
-    @Override
-    public int getCreditPrize() {
-        return 0;
-    }
-
-    @Override
-    public List<GoodsType> getGoods() {
-        return null;
-    }
-
-    @Override
-    public List<Integer> getProjectileDirections() {
-        return null;
-    }
-
-    @Override
-    public List<ProjectileDeprecated> getProjectilesType() {
-        return null;
-    }
-
-    @Override
-    public int getSacrifice() {
-        return 0;
-    }
-
-    @Override
-    public int getFlightDaysLoss() {
-        return 0;
-    }
-
-    @Override
-    public void landOnPlanet(int i) {
-
+        return new DrawCardState();
     }
 }

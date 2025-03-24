@@ -15,7 +15,7 @@ public abstract class Projectile {
 
     protected final int direction;
     protected int diceRoll;
-    private static final Dice dice = new Dice() {};;
+    private static final Dice dice = new Dice() {};
 
     public Projectile(IntSupplier dice, int direction) {
         this.direction = direction;
