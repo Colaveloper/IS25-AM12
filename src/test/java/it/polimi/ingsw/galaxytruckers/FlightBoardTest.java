@@ -1,12 +1,12 @@
 package it.polimi.ingsw.galaxytruckers;
 
+
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.TestShipBoard;
-import javafx.application.Platform;
 import org.junit.jupiter.api.*;
 
 import java.util.*;
@@ -20,8 +20,8 @@ class FlightBoardTest {
     ComponentBank componentBank;
 
     @BeforeAll
-    static void setUpClass() {
-        Platform.startup(() -> {});
+    static void setup() {
+        new JavaFXInitializer();
     }
 
     @Nested
