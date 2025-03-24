@@ -26,7 +26,6 @@ class PlanetsCardTest {
     ShipBoard testShip;
     int testDisplacement;
 
-
     @BeforeEach
     void setUp() {
         ships = new ArrayList<>();

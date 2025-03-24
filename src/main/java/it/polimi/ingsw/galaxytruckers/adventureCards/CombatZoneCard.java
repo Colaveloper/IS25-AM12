@@ -9,120 +9,101 @@ import it.polimi.ingsw.galaxytruckers.state.*;
 import javafx.scene.image.Image;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class CombatZoneCard extends AdventureCard {
     private final int flightDayLoss;
-    private final int crewLoss;
-    private final List<Projectile> projectilesLeft;
+    private int crewLossLeft;
+    private final List<Projectile> projectiles;
 
     // targeted ships for each menace
-    private final List<ShipBoard> retreatingShips; // with the smallest crew
-    private final List<ShipBoard> depopulatingShips; // with the weakest engines
-    private final List<ShipBoard> targetedShips; // with the weakest artillery
+    private Integer minCrewSize;
+    private Integer minEnginePower;
+    private Integer minFirePower;
+    private ShipBoard targetedShip; // with the weakest artillery
 
     // utility variables
-    private final List<ShipBoard> targetedShipLeftPerProjectile;
-    private final List<ShipBoard> damagedShipsLeftToAddress;
     private Projectile currentProjectile;
-    private int crewLossLeftPerShip;
-    private boolean initialized1; // before all menaces
-    private boolean initialized2; // before last menace
+    private boolean shielded;
 
     public CombatZoneCard(Image image, Level level, FlightBoard flightBoard, int flightDayLoss, int crewLoss, List<Projectile> projectiles) {
         super(image, level, flightBoard);
         this.flightDayLoss = flightDayLoss;
-        this.crewLoss = crewLoss;
-        this.crewLossLeftPerShip = crewLoss;
-        this.projectilesLeft = projectiles;
-
-        retreatingShips = new ArrayList<>();
-        depopulatingShips = new ArrayList<>();
-        targetedShips = new ArrayList<>();
-        targetedShipLeftPerProjectile = new ArrayList<>();
-        damagedShipsLeftToAddress = new ArrayList<>();
+        this.crewLossLeft = crewLoss;
+        this.projectiles = projectiles;
+        this.currentPlayerIndex = 0;
     }
 
     @Override
     public GameState nextStep() {
-        // Initialization and retreating smallest crewed ships
-        if (!initialized1) {
-            int minCrewSize = flightBoard.getOrderedShips()
+        if (minCrewSize == null) { // the ship with the smallest crew loses flight-days
+            minCrewSize = flightBoard.getOrderedShips()
                     .stream()
                     .mapToInt(ShipBoard::getCrewSize)
                     .min()
                     .orElseThrow(() -> new IllegalStateException("No players detected"));
-            int minEnginePower = flightBoard.getOrderedShips()
+            currentShipBoard = flightBoard.getOrderedShips()
                     .stream()
+                    .filter(s -> s.getCrewSize() == minCrewSize)
+                    .findFirst()
+                    .orElseThrow();
+            flightBoard.displaceShip(currentShipBoard, -flightDayLoss);
+        }
+        if (minEnginePower == null) { // establishing the ship with the weakest engines
+            if (currentPlayerIndex < flightBoard.getOrderedShips().size()) { // engine activation
+                currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
+                currentPlayerIndex++;
+                Set<Point> availablePositions = new HashSet<>(currentShipBoard.getEngines().keySet());
+                availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
+                return new ActivateState(availablePositions, currentShipBoard);
+            } else { // establishing the first ship with the weakest engines
+                minEnginePower = flightBoard.getOrderedShips().stream()
                     .mapToInt(ShipBoard::getEnginePower)
                     .min()
                     .orElseThrow(() -> new IllegalStateException("No players detected"));
-            int minFirePower = flightBoard.getOrderedShips()
-                    .stream()
-                    .mapToInt(ShipBoard::getFirePower)
-                    .min()
-                    .orElseThrow(() -> new IllegalStateException("No players detected"));
-
-            retreatingShips.addAll(flightBoard.getOrderedShips().stream()
-                    .filter(s -> s.getCrewSize() == minCrewSize)
-                    .toList());
-            depopulatingShips.addAll(flightBoard.getOrderedShips().stream()
+                currentShipBoard = flightBoard.getOrderedShips().stream()
                     .filter(s -> s.getCrewSize() == minEnginePower)
-                    .toList());
-            targetedShips.addAll(flightBoard.getOrderedShips().stream()
-                    .filter(s -> s.getCrewSize() == minFirePower)
-                    .toList());
-
-            for (ShipBoard s : retreatingShips) {
-                flightBoard.displaceShip(s, -flightDayLoss); // TODO: verify call order
-            }
-            initialized1 = true;
-            currentShipBoard = depopulatingShips.removeFirst();  // TODO: verify call order
-        }
-
-        // depopulating ships with the weakest engines
-        if (!depopulatingShips.isEmpty()) { // still ships to query
-            if (crewLossLeftPerShip>0) { // still crew to lose
-                crewLossLeftPerShip--;
-                return new ChooseCrewToLoseState(currentShipBoard);
-            } else { // query next ship
-                currentShipBoard = depopulatingShips.removeFirst();
-                crewLossLeftPerShip = crewLoss;
-                return new ChooseCrewToLoseState(currentShipBoard);
+                    .findFirst()
+                    .orElseThrow();
+                currentPlayerIndex = 0;
             }
         }
-
-        // firing at ships with the weakest artillery
-        if (!initialized2) {
-            currentShipBoard = targetedShips.removeFirst();
-            currentProjectile = projectilesLeft.removeFirst();
-            initialized2 = true;
+        if (crewLossLeft>0) { // the ship with the weakest engines still has crew to lose
+            crewLossLeft--; // TODO move this outside
+            return new ChooseCrewToLoseState(currentShipBoard);
         }
-        if (!projectilesLeft.isEmpty()) { // still projectiles to throw
-            if (!targetedShipLeftPerProjectile.isEmpty()) { // still ships to activate shields
-                return new ActivateState(
-                        currentProjectile.getActivatablePoints(targetedShipLeftPerProjectile.removeFirst()),
-                        currentShipBoard); // Let the player activate shields
-            } else {
-                if (damagedShipsLeftToAddress.isEmpty()) {
-                    damagedShipsLeftToAddress.addAll(targetedShips.stream().filter(s -> currentProjectile.fireAt(s)).toList()); // fire!
-                }
-                if (damagedShipsLeftToAddress.isEmpty()) { // no more damaged ships to process
-                    currentProjectile = projectilesLeft.removeFirst();
-                    targetedShipLeftPerProjectile.addAll(targetedShips);
-                    return nextStep(); // to the next projectile or draw new card
-                } else { // still damaged ships to process
-                    currentShipBoard = damagedShipsLeftToAddress.removeFirst();
-                    List<Set<Point>> shipPieces = currentShipBoard.getConnectedSets();
-                    if (shipPieces.size() > 1) { // the ship broke
-                        return new ChooseShipPieceState(currentShipBoard.getConnectedSets(), currentShipBoard);
-                        // Let the player choose what part of the ship to keep
-                    } else {
-                        return nextStep(); // to the next damaged ship or projectile or draw new card
-                    }
+        if (minFirePower == null) { // establishing the ship with the weakest cannons
+            if (currentPlayerIndex < flightBoard.getOrderedShips().size()) { // engine activation
+                currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
+                currentPlayerIndex++;
+                Set<Point> availablePositions = new HashSet<>(currentShipBoard.getCannons().keySet());
+                availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
+                return new ActivateState(availablePositions, currentShipBoard);
+            } else { // establishing the first ship with the weakest cannons
+                minFirePower = flightBoard.getOrderedShips().stream()
+                        .mapToInt(ShipBoard::getFirePower)
+                        .min()
+                        .orElseThrow(() -> new IllegalStateException("No players detected"));
+                currentShipBoard = flightBoard.getOrderedShips().stream()
+                        .filter(s -> s.getCrewSize() == minFirePower)
+                        .findFirst()
+                        .orElseThrow();
+            }
+        }
+        // firing at the ship with the weakest cannons
+        if (!projectiles.isEmpty()) { // still projectiles to throw
+            if (currentProjectile == null) { // shields not yet activated
+                currentProjectile = projectiles.removeFirst();
+                return new ActivateState(currentProjectile.getActivatablePoints(targetedShip), targetedShip);
+            } else { // fire!
+                boolean hit = currentProjectile.fireAt(targetedShip);
+                currentProjectile = null;
+                if(hit && targetedShip.getConnectedSets().size() > 1) {
+                    // a lost component broke the ship
+                    return new ChooseShipPieceState(targetedShip.getConnectedSets(), targetedShip);
+                } else {
+                    return nextStep();
                 }
             }
         }
