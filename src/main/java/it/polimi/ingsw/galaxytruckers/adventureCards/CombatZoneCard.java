@@ -30,7 +30,7 @@ public class CombatZoneCard extends AdventureCard {
         super(image, level, flightBoard);
         this.flightDayLoss = flightDayLoss;
         this.crewLossLeft = crewLoss;
-        this.projectiles = projectiles;
+        this.projectiles = new LinkedList<>(projectiles);
         this.currentPlayerIndex = 0;
     }
 
@@ -62,14 +62,13 @@ public class CombatZoneCard extends AdventureCard {
                     .min()
                     .orElseThrow(() -> new IllegalStateException("No players detected"));
                 currentShipBoard = flightBoard.getOrderedShips().stream()
-                    .filter(s -> s.getCrewSize() == minEnginePower)
+                    .filter(s -> s.getEnginePower() == minEnginePower)
                     .findFirst()
-                    .orElseThrow();
+                    .orElseThrow(() -> new IllegalStateException("No players detected"));
                 currentPlayerIndex = 0;
             }
         }
         if (crewLossLeft>0) { // the ship with the weakest engines still has crew to lose
-            crewLossLeft--; // TODO move this outside
             return new ChooseCrewToLoseState(currentShipBoard);
         }
         if (minFirePower == null) { // establishing the ship with the weakest cannons
@@ -85,7 +84,7 @@ public class CombatZoneCard extends AdventureCard {
                         .min()
                         .orElseThrow(() -> new IllegalStateException("No players detected"));
                 currentShipBoard = flightBoard.getOrderedShips().stream()
-                        .filter(s -> s.getCrewSize() == minFirePower)
+                        .filter(s -> s.getFirePower() == minFirePower)
                         .findFirst()
                         .orElseThrow();
             }
@@ -93,10 +92,11 @@ public class CombatZoneCard extends AdventureCard {
         // firing at the ship with the weakest cannons
         if (!projectiles.isEmpty()) { // still projectiles to throw
             if (currentProjectile == null) { // shields not yet activated
-                currentProjectile = projectiles.removeFirst();
+                currentProjectile = projectiles.getFirst();
                 return new ActivateState(currentProjectile.getActivatablePoints(currentShipBoard), currentShipBoard);
             } else { // fire!
                 boolean hit = currentProjectile.fireAt(currentShipBoard);
+                projectiles.removeFirst();
                 currentProjectile = null;
                 if(hit && currentShipBoard.getConnectedSets().size() > 1) {
                     // a lost component broke the ship
@@ -109,12 +109,16 @@ public class CombatZoneCard extends AdventureCard {
         return new DrawCardState();
     }
 
-    public ShipBoard getCurrentShipBoard() {
-        return currentShipBoard;
+    void sufferCrewLoss() {
+        if (crewLossLeft > 0) {
+            crewLossLeft--;
+        } else {
+            throw new IllegalStateException("No crew loss left to suffer");
+        }
     }
 
-    public int getFlightDayLoss() {
-        return flightDayLoss;
+    public ShipBoard getCurrentShipBoard() {
+        return currentShipBoard;
     }
 
     public int getCrewLossLeft() {
