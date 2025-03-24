@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CombatZoneTest {
+public class CombatZoneTest extends AdventureCardTestInitializer{
     CombatZoneCard combatZoneCard;
     List<ShipBoard> ships;
     Map<ShipBoard, Integer> shipPlaces;
@@ -29,48 +29,13 @@ public class CombatZoneTest {
 
     @BeforeEach
     void setUp() {
-        ships = new ArrayList<>();
-        ships.add(new SecondShipBoard(Colors.BLUE));
-        ships.add(new SecondShipBoard(Colors.RED));
-        shipPlaces = new HashMap<>();
+        super.setUp();
         flightDaysLoss = 2;
         crewLoss = 2;
-        for (int i = 0; i < ships.size(); i++) {
-            shipPlaces.put(ships.get(i), 10-i);
-        }
-        FlightBoard flightBoard = new FlightBoard(null) {
-            @Override
-            public Map<ShipBoard, Integer> getShipToPlace() {
-                return shipPlaces;
-            }
-
-            @Override
-            public List<ShipBoard> getOrderedShips() {
-                return ships;
-            }
-
-            @Override
-            public void displaceShip(ShipBoard shipBoard, int displacement) {
-                testShip = shipBoard;
-                testDisplacement = displacement;
-            }
-
-            @Override
-            public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
-                return true;
-            }
-
-            @Override
-            public Image getImage() {
-                return null;
-            }
-        };
         projectiles = new ArrayList<>(List.of(
                 new SmallMeteor(()->6,0),
                 new BigMeteor(()->5, 2)
         ));
         combatZoneCard = new CombatZoneCard(null, Level.SECOND, flightBoard, 2, 2, projectiles);
     }
-
-
 }

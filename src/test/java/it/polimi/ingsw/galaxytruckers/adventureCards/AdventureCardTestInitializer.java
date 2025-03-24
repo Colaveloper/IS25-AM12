@@ -1,15 +1,17 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.Component;
-import javafx.application.Platform;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import javafx.scene.image.Image;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.awt.*;
-import java.util.Arrays;
+import java.util.*;
+import java.util.List;
 
-public class AdventureCardTest {
+public class AdventureCardTestInitializer {
     protected Component component;
     protected ComponentBank componentBank = new ComponentBank() {
         @Override
@@ -17,6 +19,48 @@ public class AdventureCardTest {
             return component;
         }
     };
+    protected List<ShipBoard> ships;
+    protected Map<ShipBoard, Integer> shipPlaces;
+    protected ShipBoard testShip;
+    protected int testDisplacement;
+    protected FlightBoard flightBoard;
+
+    void setUp() {
+        ships = new ArrayList<>();
+        ships.add(new SecondShipBoard(Colors.BLUE));
+        ships.add(new SecondShipBoard(Colors.RED));
+        shipPlaces = new HashMap<>();
+        for (int i = 0; i < ships.size(); i++) {
+            shipPlaces.put(ships.get(i), 10-i);
+        }
+        flightBoard = new FlightBoard(null) {
+            @Override
+            public Map<ShipBoard, Integer> getShipToPlace() {
+                return shipPlaces;
+            }
+
+            @Override
+            public List<ShipBoard> getOrderedShips() {
+                return ships;
+            }
+
+            @Override
+            public void displaceShip(ShipBoard shipBoard, int displacement) {
+                testShip = shipBoard;
+                testDisplacement = displacement;
+            }
+
+            @Override
+            public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
+                return true;
+            }
+
+            @Override
+            public Image getImage() {
+                return null;
+            }
+        };
+    }
 
     private void addComponent(ShipBoard shipBoard, Point point) {
         shipBoard.requestRandComponent();

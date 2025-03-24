@@ -19,49 +19,12 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlanetsCardTest {
+class PlanetsCardTest extends AdventureCardTestInitializer{
     PlanetsCard planetsCard;
-    List<ShipBoard> ships;
-    Map<ShipBoard, Integer> shipPlaces;
-    ShipBoard testShip;
-    int testDisplacement;
 
     @BeforeEach
     void setUp() {
-        ships = new ArrayList<>();
-        ships.add(new SecondShipBoard(Colors.BLUE));
-        ships.add(new SecondShipBoard(Colors.RED));
-        shipPlaces = new HashMap<>();
-        for (int i = 0; i < ships.size(); i++) {
-            shipPlaces.put(ships.get(i), 10-i);
-        }
-        FlightBoard flightBoard = new FlightBoard(null) {
-            @Override
-            public Map<ShipBoard, Integer> getShipToPlace() {
-                return shipPlaces;
-            }
-
-            @Override
-            public List<ShipBoard> getOrderedShips() {
-                return ships;
-            }
-
-            @Override
-            public void displaceShip(ShipBoard shipBoard, int displacement) {
-                testShip = shipBoard;
-                testDisplacement = displacement;
-            }
-
-            @Override
-            public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
-                return true;
-            }
-
-            @Override
-            public Image getImage() {
-                return null;
-            }
-        };
+        super.setUp();
         List<Map<GoodsType, Integer>> planets = new ArrayList<>();
         Map<GoodsType, Integer> goodsMap = new HashMap<>();
         goodsMap.put(GoodsType.RED, 2);

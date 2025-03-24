@@ -12,12 +12,13 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EpidemicCardTest {
+class EpidemicCardTest extends AdventureCardTestInitializer{
 
     EpidemicCard epidemicCard;
 
     @BeforeEach
     void setUp() {
+        super.setUp();
         
         //epidemicCard = new EpidemicCard(null, Level.SECOND, flightBoard);
 
