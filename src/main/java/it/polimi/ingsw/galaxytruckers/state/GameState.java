@@ -29,7 +29,7 @@ public abstract class GameState {
         throw new UnsupportedOperationException("This action is unsupported in this state");
     }
 
-    public void chooseCrewToLose(ShipBoard shipBoard, Point position)  {
+    public void chooseCrewToLose(Point position)  {
         throw new UnsupportedOperationException("This action is unsupported in this state");
     }
 
