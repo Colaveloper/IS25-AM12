@@ -1,74 +1,42 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
-import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.Cabin;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.Connector;
+import it.polimi.ingsw.galaxytruckers.state.ActivateState;
+import it.polimi.ingsw.galaxytruckers.state.DrawCardState;
+import it.polimi.ingsw.galaxytruckers.state.GameState;
+import javafx.scene.image.Image;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-public class OpenSpaceCard extends AdventureCardDeprecated {
-    //attributes
-    private int numPlayers;
+import static java.lang.Math.abs;
 
-    public OpenSpaceCard(FlightBoard flightBoard, int numPlayers){
-        //attributes init
-        super(flightBoard);
-        this.numPlayers = numPlayers;
-        this.name = "[OPEN SPACE]";
+public class OpenSpaceCard extends AdventureCard {
+    public OpenSpaceCard (Image image, Level level, FlightBoard flightBoard) {
+        super(image, level, flightBoard);
+    }
 
-        //cardState init
-        cardStates = new ArrayList<>();
-        for (int i = 0; i < numPlayers; i++) {
-            cardStates.add(PlayerAction.ACTIVATE_ENGINES);
+    @Override
+    public GameState nextStep() {
+        if (currentShipBoard != null) {
+            flightBoard.displaceShip(currentShipBoard, currentShipBoard.getEnginePower());
         }
-        cardStates.add(PlayerAction.END_CARD);
+        if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {  // There are other players to evaluate
+            currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
+            currentPlayerIndex++;
 
-    }
-
-    //USED METHODS
-    @Override
-    public PlayerAction nextStep() {
-        step++;
-        return cardStates.get(step);
-    }
-
-    //UNUSED METHODS
-    @Override
-    public List<Boolean> getPlanets() {
-        return null;
-    }
-    @Override
-    public int getFirePowerThreshold() {
-        return 0;
-    }
-    @Override
-    public int getCreditPrize() {
-        return 0;
-    }
-    @Override
-    public List<GoodsType> getGoods() {
-        return null;
-    }
-    @Override
-    public List<Integer> getProjectileDirections() {
-        return null;
-    }
-    @Override
-    public List<ProjectileDeprecated> getProjectilesType() {
-        return null;
-    }
-    @Override
-    public int getSacrifice() {
-        return 0;
-    }
-    @Override
-    public int getFlightDaysLoss() {
-        return 0;
-    }
-    @Override
-    public void landOnPlanet(int i) {
-
+            Set<Point> availablePositions = new HashSet<>(currentShipBoard.getEngines().keySet());
+            availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
+            return new ActivateState(availablePositions, currentShipBoard);
+        }
+        else {
+            return new DrawCardState();
+        }
     }
 }

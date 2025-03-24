@@ -18,6 +18,7 @@ public class SmugglersCard extends AdventureCard {
     private final int flightDaysLoss;
     private final int goodsLoss;
     private boolean defeated;
+    private boolean acquired;
 
     public SmugglersCard (Image image, Level cardLevel, FlightBoard flightBoard, int goodsLoss, int firePowerThreshold, Map<GoodsType, Integer> goodsPrize, int flightDaysLoss) {
         super(image, cardLevel, flightBoard);
@@ -25,6 +26,8 @@ public class SmugglersCard extends AdventureCard {
         this.goodsPrize = goodsPrize;
         this.flightDaysLoss = flightDaysLoss;
         this.goodsLoss = goodsLoss;
+        this.acquired = false;
+        this.defeated = false;
     }
 
     @Override
@@ -34,7 +37,7 @@ public class SmugglersCard extends AdventureCard {
             if (currentShipBoard != null) {  // There is a previous player who needs their firepower evaluated
                 if (currentShipBoard.getFirePower() > firePowerThreshold) {  // player defeats the enemy
                     defeated = true; //TODO: add ChoiceState
-                    return new AddGoodsState(goodsPrize, currentShipBoard); // Let the player choose whether to collect the prize
+                    return new ChoiceState(); // Let the player choose whether to collect the prize
                 } else if (currentShipBoard.getFirePower() < firePowerThreshold) { // player is defeated
                     ShipBoard tempShipBoard = currentShipBoard;
                     currentShipBoard = null;
@@ -52,8 +55,10 @@ public class SmugglersCard extends AdventureCard {
                 defeated = true;
                 return new DrawCardState();
             }
-        }
-        else {
+        } else if (!acquired) {
+            acquired = true;
+            return new AddGoodsState(goodsPrize, currentShipBoard);
+        } else {
             return new DrawCardState();
         }
     }

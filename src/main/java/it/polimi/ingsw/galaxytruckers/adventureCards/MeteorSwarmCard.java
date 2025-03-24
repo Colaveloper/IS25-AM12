@@ -47,7 +47,9 @@ public class MeteorSwarmCard extends AdventureCard {
         if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {  // There are other players to evaluate
             currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
             currentPlayerIndex++;
-            return new ActivateState(currentProjectile.getActivatablePoints(currentShipBoard), currentShipBoard); // Let the player activate cannon
+            Set<Point> availablePositions = new HashSet<>(currentShipBoard.getCannons().keySet());
+            availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
+            return new ActivateState(availablePositions, currentShipBoard); // Let the player activate cannon
         }
         else {
             if (projectiles.isEmpty()) {

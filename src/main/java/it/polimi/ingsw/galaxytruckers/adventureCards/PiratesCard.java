@@ -79,7 +79,7 @@ public class PiratesCard extends AdventureCard {
             }
             if (defeatedPlayerIndex < defeatedPlayers.size()) {  // There are still players that need to handle projectiles
                 currentShipBoard = defeatedPlayers.get(defeatedPlayerIndex);
-                defeatedPlayerIndex++;
+                defeatedPlayerIndex++;//TODO: why not only shields as for cannons above?
                 return new ActivateState(currentProjectile.getActivatablePoints(currentShipBoard), currentShipBoard); // Let the player activate shields
             } else {  // There are no more players that need to handle projectiles
                 if (projectiles.isEmpty()) {

@@ -1,76 +1,36 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
-
-
+import it.polimi.ingsw.galaxytruckers.Dice;
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
-import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.state.DrawCardState;
+import it.polimi.ingsw.galaxytruckers.state.GameState;
+import javafx.scene.image.Image;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.*;
+
+public class SabotageCard extends AdventureCard {
+
+    private static final Dice dice = new Dice() {};
 
 
-public class SabotageCard extends AdventureCardDeprecated {
-    public SabotageCard(FlightBoard flightBoard) {
-        super(flightBoard);
-        cardStates = new ArrayList<>();
-        //cardStates.add(PlayerAction.SABOTAGE);
-        cardStates.add(PlayerAction.END_CARD);
-
-        this.name = "[SABOTAGE]";
+    protected SabotageCard(Image image, Level cardLevel, FlightBoard flightBoard) {
+        super(image, cardLevel, flightBoard);
     }
 
     @Override
-    public PlayerAction nextStep() {
-        step ++;
-        return cardStates.get(step);
-    }
+    public GameState nextStep() {
+        currentShipBoard = flightBoard.getOrderedShips().getFirst();
+        for (ShipBoard shipBoard : flightBoard.getOrderedShips()) {
+            if (shipBoard.getCrewSize() < currentShipBoard.getCrewSize()) {
+                currentShipBoard = shipBoard;
+            }
+        }
 
+        currentShipBoard.removeComponent(new Point(dice.getAsInt(),dice.getAsInt()));
 
-    //UNUSED METHODS-------------------------------------------
-    @Override
-    public List<Boolean> getPlanets() {
-        return null;
-    }
-
-    @Override
-    public int getFirePowerThreshold() {
-        return 0;
-    }
-
-    @Override
-    public int getCreditPrize() {
-        return 0;
-    }
-
-    @Override
-    public List<GoodsType> getGoods() {
-        return null;
-    }
-
-    @Override
-    public List<Integer> getProjectileDirections() {
-        return null;
-    }
-
-    @Override
-    public List<ProjectileDeprecated> getProjectilesType() {
-        return null;
-    }
-
-    @Override
-    public int getSacrifice() {
-        return 0;
-    }
-
-    @Override
-    public int getFlightDaysLoss() {
-        return 0;
-    }
-
-    @Override
-    public void landOnPlanet(int i) {
-
+        return new DrawCardState();
     }
 }

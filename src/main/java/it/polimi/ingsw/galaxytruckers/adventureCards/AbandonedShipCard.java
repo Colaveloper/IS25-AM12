@@ -56,7 +56,6 @@ public class AbandonedShipCard extends AdventureCard {
     public void choose(boolean choice) {
         if (choice) {
             flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
-            //currentShipBoard = null;
             accepted = true;
         }
     }
