@@ -9,7 +9,7 @@ import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCardDeprecated;
+import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
@@ -28,7 +28,7 @@ public class GameModel {
     private GameFactory gameFactory;
     private FlightBoard flightBoard;
     private Deck deck;
-    private AdventureCardDeprecated currentCard;
+    private AdventureCard currentCard;
 //    private int maxCardPlays; //TEMPORARY, defines the maximum times a card can be played
 //    private int activeCardPlayCount;
     private List<Integer> playerShot;//TODO: list of shipboard, method maps coming int to ships here

@@ -4,11 +4,9 @@ import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.*;
-import it.polimi.ingsw.galaxytruckers.state.AddGoodsState;
 import it.polimi.ingsw.galaxytruckers.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.state.GameState;
 import javafx.scene.image.Image;
-import org.ietf.jgss.GSSManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,20 +25,37 @@ class EpidemicCardTest {
     int testDisplacement;
     Map<Point, Cabin> testCabins;
     GameState testState;
-    Boolean removesCrew;
-    Cabin cabin;
+    Set<Point> plaguedCabins;
+    Cabin cabinAtRisk;
     Cabin unconnectedCabin;
+    Cabin emptyCabin;
 
     @BeforeEach
     void setUp() {
         ships = new ArrayList<>();
 
         testCabins = new HashMap<>();
-        cabin = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
-        unconnectedCabin = new Cabin(null, Arrays.asList(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE));
-        cabin.initialize(CrewType.HUMAN);
+        cabinAtRisk = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)) {
+            @Override
+            public int getNumResidents () {
+                return 2;
+            }
+        };
+        emptyCabin = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)) {
+            @Override
+            public int getNumResidents () {
+                return 0;
+            }
+        };
+        unconnectedCabin = new Cabin(null, Arrays.asList(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE)) {
+            @Override
+            public int getNumResidents () {
+                return 2;
+            }
+        };
+        cabinAtRisk.initialize(CrewType.HUMAN);
 
-        removesCrew = false;
+        plaguedCabins = new HashSet<>();
 
         ShipBoard shipBoardA = new SecondShipBoard(Colors.GREEN) {
             @Override
@@ -50,7 +65,7 @@ class EpidemicCardTest {
 
             @Override
             public void loseCrew(Point position, int amount) {
-                removesCrew = true;
+                plaguedCabins.add(position);
             }
         };
 
@@ -62,7 +77,7 @@ class EpidemicCardTest {
 
             @Override
             public void loseCrew(Point position, int amount) {
-                removesCrew = true;
+                plaguedCabins.add(position);
             }
         };
 
@@ -106,20 +121,34 @@ class EpidemicCardTest {
     }
 
     @Test
-    void nextStepDoesntAffectThisShip() {
+    void nextStepReturnsDrawCardState() {
+        testState = epidemicCard.nextStep();
+        assertInstanceOf(DrawCardState.class, testState);}
+
+    @Test
+    void crewIsNotLostIfCabinsAreUnconnected() {
         testCabins.put(new Point(7, 7), unconnectedCabin);
         testCabins.put(new Point(8, 7), unconnectedCabin);
         testState = epidemicCard.nextStep();
-        assertInstanceOf(DrawCardState.class, testState);
-        assertEquals(false, removesCrew);
+        assertFalse(plaguedCabins.contains(new Point(7, 7)));
+        assertFalse(plaguedCabins.contains(new Point(8, 7)));
     }
 
     @Test
-    void nextStepAffectShip() {
-        testCabins.put(new Point(7, 7), cabin);
-        testCabins.put(new Point(8, 7), cabin);
+    void crewIsNotLostIfOneCabinIsEmpty() {
+        testCabins.put(new Point(7, 7), cabinAtRisk);
+        testCabins.put(new Point(8, 7), emptyCabin);
         testState = epidemicCard.nextStep();
-        assertInstanceOf(DrawCardState.class, testState);
-        assertEquals(true, removesCrew);
+        assertFalse(plaguedCabins.contains(new Point(7, 7)));
+        assertFalse(plaguedCabins.contains(new Point(8, 7)));
+    }
+
+    @Test
+    void crewIsLostIfAllConditionsAreMet() {
+        testCabins.put(new Point(7, 7), cabinAtRisk);
+        testCabins.put(new Point(8, 7), cabinAtRisk);
+        testState = epidemicCard.nextStep();
+        assertTrue(plaguedCabins.contains(new Point(7, 7)));
+        assertTrue(plaguedCabins.contains(new Point(8, 7)));
     }
 }
