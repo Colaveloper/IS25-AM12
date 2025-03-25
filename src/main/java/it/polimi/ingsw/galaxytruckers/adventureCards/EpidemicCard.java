@@ -12,7 +12,9 @@ import it.polimi.ingsw.galaxytruckers.state.GameState;
 import javafx.scene.image.Image;
 
 import java.awt.*;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static java.lang.Math.abs;
 
@@ -29,14 +31,18 @@ public class EpidemicCard extends AdventureCard {
 
             // check currentShipboard for cabins
             Map<Point, Cabin> cabins = shipBoard.getCabins();
-            for (Map.Entry<Point, Cabin> cabin : cabins.entrySet()) {
+            for (Map.Entry<Point, Cabin> cabinEntry : cabins.entrySet()) {
                 for (int i = 0; i < 4; i++) {
-                    if (cabin.getValue().getConnectors().get(i + cabin.getValue().getOrientation()) != Connector.NONE) {//TODO: does it count rotation?
-                        if (cabins.containsKey(new Point(
-                                cabin.getKey().x + (i % 2 * 2 - 1),
-                                cabin.getKey().y + (1 - abs(i % 2 * 2 - 1))))
+                    Point infectionOrigin = new Point(
+                            cabinEntry.getKey().x + (i % 2 * 2 - 1),
+                            cabinEntry.getKey().y + (1 - abs(i % 2 * 2 - 1))
+                    );
+                    if (cabins.containsKey(infectionOrigin) // infectionOrigin is a cabin
+                            && cabinEntry.getValue().getConnectors().get(i) != Connector.NONE // they are connected
+                            && shipBoard.getCabins().get(infectionOrigin).getNumResidents() > 0 // somebody infecting
+                            && shipBoard.getCabins().get(cabinEntry.getKey()).getNumResidents() > 0 // somebody to infect
                         ) {
-                            shipBoard.loseCrew(cabin.getKey(), 1);
+                            shipBoard.loseCrew(cabinEntry.getKey(), 1);
                             break;
                         }
                     }
@@ -65,8 +71,6 @@ public class EpidemicCard extends AdventureCard {
 //                }
 //            }
             }
-        }
-
         return new DrawCardState();
     }
 }

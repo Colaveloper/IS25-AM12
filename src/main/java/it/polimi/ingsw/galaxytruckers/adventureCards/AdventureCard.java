@@ -4,14 +4,12 @@ import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AdventureCardDeprecated {
+public abstract class AdventureCard {
     //attributes
     protected int step = -1;
     protected List<PlayerAction> cardStates;
@@ -23,7 +21,7 @@ public abstract class AdventureCardDeprecated {
     protected List<ProjectileDeprecated> projectileTypes;
     protected int projectileIndex;
 
-    protected AdventureCardDeprecated(FlightBoard flightBoard) {
+    protected AdventureCard(FlightBoard flightBoard) {
         this.flightBoard = flightBoard;
         this.currentShipBoard = flightBoard.getOrderedShips().getFirst();
         cardStates = new ArrayList<>();
