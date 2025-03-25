@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
@@ -67,30 +68,37 @@ public class PlanetsCard extends AdventureCard {
         remainingChoices.remove(index);
     }
 
+    @VisibleForTesting
     public ShipBoard getCurrentShipBoard() {
         return currentShipBoard;
     }
 
+    @VisibleForTesting
     public List<Map<GoodsType, Integer>> getPlanets() {
         return planets;
     }
 
+    @VisibleForTesting
     public Set<Integer> getRemainingChoices() {
         return remainingChoices;
     }
 
+    @VisibleForTesting
     public Map<ShipBoard, Integer> getPlanetChoices() {
         return planetChoices;
     }
 
+    @VisibleForTesting
     public List<ShipBoard> getLandedShips() {
         return landedShips;
     }
 
+    @VisibleForTesting
     public int getFlightDaysLoss() {
         return flightDaysLoss;
     }
 
+    @VisibleForTesting
     public boolean isPlanetChoiceAllowed() {
         return planetChoiceAllowed;
     }

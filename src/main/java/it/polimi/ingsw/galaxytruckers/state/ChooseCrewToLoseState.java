@@ -22,7 +22,7 @@ public class ChooseCrewToLoseState extends GameState {
     @Override
     public void chooseCrewToLose(Point position) {
         if (availablePositions.contains(position)) {
-            shipBoard.getCabins().get(position).loseResidents(1);
+            shipBoard.loseCrew(position, 1);
         } else {
             throw new IllegalArgumentException("No crewed cabin at that position");
         }

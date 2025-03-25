@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.Physical;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
@@ -179,13 +180,15 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
         return res;
     }
 
-    // Components Observers
+    // Components Observers // TODO: make @VisibleForTesting to hide component methods ? Show only Set<Point>
 
     public Map<Point, Component> getComponentMap() {
         return componentMap;
     }
 
-    public Map<Point, Cannon> getCannons() { return cannons; }
+    public Map<Point, Cannon> getCannons() {
+        return cannons;
+    }
 
     public Map<Point, Engine> getEngines() {
         return engines;
