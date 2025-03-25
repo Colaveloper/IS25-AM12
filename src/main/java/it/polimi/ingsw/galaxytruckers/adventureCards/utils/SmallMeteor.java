@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards.utils;
 
-import it.polimi.ingsw.galaxytruckers.Dice;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
@@ -21,22 +20,16 @@ public class SmallMeteor extends Projectile {
     }
 
     @Override
-    public boolean fireAt(ShipBoard shipBoard) {
-        if (shipBoard.getShieldDirections()[direction]) {
-            return false;
-        }
-        Optional<Component> hitComponent = super.getHitComponent(shipBoard);
-        if (hitComponent.isEmpty() || hitComponent.get().getConnectors().get((direction+2)%4) == Connector.NONE) {
-            return false;
-        }
-        shipBoard.remove(hitComponent.get());
-        return true;
+    public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
+        return shipBoard.getShields().keySet();
     }
 
     @Override
-    public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
-        return shipBoard.getShields().keySet().stream()
-                .filter(shipBoard.getActivatables().keySet()::contains)
-                .collect(Collectors.toSet());
+    protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
+        if (shipBoard.getShieldDirections()[direction]) {
+            return Optional.empty();
+        }
+        return super.getComponentToRemove(shipBoard)
+                .filter(c -> c.getConnectors().get((direction + 2) % 4) != Connector.NONE);
     }
 }

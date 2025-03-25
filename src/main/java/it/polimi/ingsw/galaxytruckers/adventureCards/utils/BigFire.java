@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards.utils;
 
-import it.polimi.ingsw.galaxytruckers.Dice;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
@@ -16,13 +15,6 @@ public class BigFire extends Projectile{
 
     public BigFire(int direction) {
         super(direction);
-    }
-
-    @Override
-    public boolean fireAt(ShipBoard shipBoard) {
-        Optional<Component> hitComponent = super.getHitComponent(shipBoard);
-        hitComponent.ifPresent(shipBoard::remove);
-        return hitComponent.isPresent();
     }
 
     @Override

@@ -9,8 +9,6 @@ import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
 import java.util.List;
@@ -23,12 +21,9 @@ import java.util.stream.IntStream;
 
 public class GameModel {
     private BiMap<Integer, ShipBoard> idsToShip;
-    private BuildingTime buildingTime;
-    private Dice dice;
     private GameFactory gameFactory;
     private FlightBoard flightBoard;
     private Deck deck;
-    private AdventureCard currentCard;
 //    private int maxCardPlays; //TEMPORARY, defines the maximum times a card can be played
 //    private int activeCardPlayCount;
     private List<Integer> playerShot;//TODO: list of shipboard, method maps coming int to ships here
@@ -235,43 +230,43 @@ public class GameModel {
 //        currentCard = deck.drawCard();
 ////        activeCardPlayCount = 0;
 //    }
-
-    public void resetSteps(){
-        currentCard.passCardToNextPlayer();
-    }
-
-    public List<PlayerAction> getCardStates(){
-        return currentCard.getChoicesList();
-    }
-
-    public String getCardName() {
-        return currentCard.getName();
-    }
-
-    public int getCardSacrifice() {
-        return currentCard.getSacrifice();
-    }
-
-    public int getCardCredits() {
-        return currentCard.getCreditPrize();
-    }
-
-    public int getCardFlightDaysLost() {
-        return currentCard.getFlightDaysLoss();
-    }
+//
+//    public void resetSteps(){
+//        currentCard.passCardToNextPlayer();
+//    }
+//
+//    public List<PlayerAction> getCardStates(){
+//        return currentCard.getChoicesList();
+//    }
+//
+//    public String getCardName() {
+//        return currentCard.getName();
+//    }
+//
+//    public int getCardSacrifice() {
+//        return currentCard.getSacrifice();
+//    }
+//
+//    public int getCardCredits() {
+//        return currentCard.getCreditPrize();
+//    }
+//
+//    public int getCardFlightDaysLost() {
+//        return currentCard.getFlightDaysLoss();
+//    }
 
 
     /**
      * Used by the controller to query a client
      * @return a player ID and his expected action
      */
-    public Query<Integer, PlayerAction> getNextQueryToPlayer() {
-        return new Query<>(getPlayerFromShip(currentCard.getCurrentShipBoard()), currentCard.nextStep());
-    }
-
-    public  void  passCardToNextPlayer() {
-        currentCard.passCardToNextPlayer();
-    }
+//    public Query<Integer, PlayerAction> getNextQueryToPlayer() {
+//        return new Query<>(getPlayerFromShip(currentCard.getCurrentShipBoard()), currentCard.nextStep());
+//    }
+//
+//    public  void  passCardToNextPlayer() {
+//        currentCard.passCardToNextPlayer();
+//    }
 //    public void passCardToNextPlayer(){
 //        activeCardPlayCount++;
 //        if(activeCardPlayCount < 4){
@@ -336,9 +331,9 @@ public class GameModel {
         System.out.println("Current player has been given the goods");
     }
 
-    public List<GoodsType> getCardGoods(){
-        return currentCard.getGoods();
-    }
+//    public List<GoodsType> getCardGoods(){
+//        return currentCard.getGoods();
+//    }
 
     /**
      * Activates a double cannon / double engine / shield, at the specified location, spending one battery
@@ -348,13 +343,13 @@ public class GameModel {
         getShipFromPlayer(playerID).activateComponent(position);
         // System.out.println("Component at ("+position.toString()+" now active));
     }
-
-    public void landOnPlanet(int i){
-        //TODO: current player lands on planet
-        currentCard.landOnPlanet(i);
-    }
-
-    public List<ShipBoard> getInvolvedShips() {
-        return currentCard.getInvolvedShips();
-    }
+//
+//    public void landOnPlanet(int i){
+//        //TODO: current player lands on planet
+//        currentCard.landOnPlanet(i);
+//    }
+//
+//    public List<ShipBoard> getInvolvedShips() {
+//        return currentCard.getInvolvedShips();
+//    }
 }

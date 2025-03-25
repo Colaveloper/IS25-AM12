@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers;/*
 * MAIN CLASS SIMULATING THE CONTROLLER CALLING MODEL METHODS
 * THIS IS FOR TESTING PURPOSES ONLY
 * */
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;

@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.IntSupplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class Projectile {
 
@@ -17,7 +19,7 @@ public abstract class Projectile {
     protected int diceRoll;
     private static final Dice dice = new Dice() {};
 
-    public Projectile(IntSupplier dice, int direction) {
+    public Projectile( IntSupplier dice, int direction) {
         this.direction = direction;
         this.diceRoll = dice.getAsInt();
     }
@@ -32,7 +34,9 @@ public abstract class Projectile {
      * @return true if a component is removed (in that case a check on the connectivity should take place), false otherwise
      */
     public boolean fireAt(ShipBoard shipBoard) {
-        throw new UnsupportedOperationException("Method implemented only in subclasses");
+        Optional<Component> removedComponent = getComponentToRemove(shipBoard);
+        removedComponent.ifPresent(shipBoard::remove);
+        return removedComponent.isPresent();
     }
 
     /**
@@ -43,31 +47,27 @@ public abstract class Projectile {
 
     /**
      * @param shipBoard the ship that is threatened by the projectile
-     * @return an optional with the component at risk of being eliminated
+     * @return an optional with the component to be eliminated
      */
-    protected Optional<Component> getHitComponent(ShipBoard shipBoard) {
-        return switch (direction) {
-            case 0 -> // Point with maximum y.
-                    shipBoard.getComponentMap().entrySet().stream()
-                            .filter(e -> e.getKey().x == diceRoll)
-                            .max(Comparator.comparingInt(e -> e.getKey().y))
-                            .map(Map.Entry::getValue);
-            case 1 -> // Point with minimum x.
-                    shipBoard.getComponentMap().entrySet().stream()
-                            .filter(e -> e.getKey().x == diceRoll)
-                            .min(Comparator.comparingInt(e -> e.getKey().x))
-                            .map(Map.Entry::getValue);
-            case 2 -> // Point with minimum y.
-                    shipBoard.getComponentMap().entrySet().stream()
-                            .filter(e -> e.getKey().x == diceRoll)
-                            .min(Comparator.comparingInt(e -> e.getKey().y))
-                            .map(Map.Entry::getValue);
-            case 3 -> // Point with maximum x.
-                    shipBoard.getComponentMap().entrySet().stream()
-                            .filter(e -> e.getKey().x == diceRoll)
-                            .max(Comparator.comparingInt(e -> e.getKey().x))
-                            .map(Map.Entry::getValue);
-            default -> throw new IllegalArgumentException("Invalid direction");
-        };
+    protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
+        Stream<Map.Entry<Point, Component>> line = shipBoard.getComponentMap().entrySet().stream()
+                .filter(e -> (direction % 2 == 0 ? e.getKey().x : e.getKey().y) == diceRoll);
+
+        if (direction == 0) {
+            return line.min(Comparator.comparingInt(e -> e.getKey().y))
+                    .map(Map.Entry::getValue); // Min y
+        } else if (direction == 1) {
+            return line.max(Comparator.comparingInt(e -> e.getKey().x))
+                    .map(Map.Entry::getValue); // Max x
+        } else if (direction == 2) {
+            return line.max(Comparator.comparingInt(e -> e.getKey().y))
+                    .map(Map.Entry::getValue); // Max y
+        } else if (direction == 3) {
+            return line.min(Comparator.comparingInt(e -> e.getKey().x))
+                    .map(Map.Entry::getValue); // Min x
+        } else {
+            throw new IllegalArgumentException("Invalid direction");
+        }
     }
+
 }
