@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
 import java.awt.*;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.IntSupplier;
@@ -21,8 +22,13 @@ public class BigMeteor extends Projectile {
 
     @Override
     public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
-        return shipBoard.getCannons().keySet().stream()
-                .filter(shipBoard.getActivatables().keySet()::contains)
+        return shipBoard.getCannons().entrySet().stream()
+                .filter(e -> {
+                    Cannon c = e.getValue();
+                    return shipBoard.getActivatables().containsKey(e.getKey())
+                            && c.getFirePower()>0
+                            && isEffective(e);})
+                .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }
 
@@ -32,16 +38,18 @@ public class BigMeteor extends Projectile {
                 (_) -> shipBoard.getCannons().entrySet().stream()
                         .filter(e -> {
                             Cannon c = e.getValue();
-                            return c.getOrientation() == direction && c.getFirePower()>0;
+                            return c.getFirePower()>0;
                         })
-                        .anyMatch(e -> {
-                            return switch (direction) {
-                                case 0 -> e.getKey().x == diceRoll;
-                                case 1, 3 ->  Math.abs(e.getKey().y - diceRoll) < 2;
-                                case 2 ->  Math.abs(e.getKey().x - diceRoll) < 2;
-                                default -> throw new IllegalArgumentException("Nonexistent direction");
-                            };
-                        })
-        );
+                        .anyMatch(this::isEffective)
+                );
+    }
+
+    private boolean isEffective(Map.Entry<Point, Cannon> e) {
+        return e.getValue().getOrientation() == direction && switch (direction) {
+            case 0 -> e.getKey().x == diceRoll;
+            case 1, 3 ->  Math.abs(e.getKey().y - diceRoll) < 2;
+            case 2 ->  Math.abs(e.getKey().x - diceRoll) < 2;
+            default -> throw new IllegalArgumentException("Nonexistent direction");
+        };
     }
 }
