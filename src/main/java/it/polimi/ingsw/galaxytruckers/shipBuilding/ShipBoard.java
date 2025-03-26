@@ -36,7 +36,7 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
     protected final Map<Point, Cabin> cabins;
     protected final Map<Point, Activatable> activatables;
 
-    ShipBoard(ComponentBank componentBank, Colors color) { // (, Color color)
+    public ShipBoard(ComponentBank componentBank, Colors color) { // (, Color color)
         this.componentMap = new HashMap<>();
         this.componentBank = componentBank;
         this.lastComponent = null;
