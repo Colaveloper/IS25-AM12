@@ -92,7 +92,7 @@ public class CombatZoneTest {
         };
         ships = new ArrayList<>(List.of(ship1, ship2));
         shipPlaces.put(ship1, position1);
-        shipPlaces.put(ship1, position2);
+        shipPlaces.put(ship2, position2);
 
         flightBoard = new FlightBoard(null) {
             @Override

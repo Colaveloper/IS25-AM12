@@ -96,11 +96,12 @@ public class CombatZoneCard extends AdventureCard {
                 return new ActivateState(currentProjectile.getActivatablePoints(currentShipBoard), currentShipBoard);
             } else { // fire!
                 boolean hit = currentProjectile.fireAt(currentShipBoard);
+                List<Set<Point>> shipPieces = currentShipBoard.getConnectedSets();
                 projectiles.removeFirst();
                 currentProjectile = null;
-                if(hit && currentShipBoard.getConnectedSets().size() > 1) {
+                if(hit && shipPieces.size() > 1) {
                     // a lost component broke the ship
-                    return new ChooseShipPieceState(currentShipBoard.getConnectedSets(), currentShipBoard);
+                    return new ChooseShipPieceState(shipPieces, currentShipBoard);
                 } else {
                     return nextStep();
                 }

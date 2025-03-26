@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -13,19 +14,20 @@ import javafx.scene.image.Image;
 
 import java.awt.*;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 public class MeteorSwarmCard extends AdventureCard {
     //attributes
-    private List<Projectile> projectiles;
+    private final List<Projectile> projectiles;
     private Projectile currentProjectile;
 
 
     public MeteorSwarmCard(Image image, Level level, FlightBoard flightBoard, List<Projectile> projectiles) {
         super(image, level, flightBoard);
-        this.projectiles = projectiles; // list is inverted to be treated as a stack
-        this.currentProjectile = projectiles.removeFirst();
+        this.projectiles = new LinkedList<>(projectiles).reversed();
+        this.currentProjectile = this.projectiles.removeLast();
     }
 
     @Override
@@ -41,7 +43,7 @@ public class MeteorSwarmCard extends AdventureCard {
             }
         }
         // Letting the currentPlayer activate double cannons
-        if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {  // There are other players to evaluate
+        if (currentPlayerIndex < flightBoard.getOrderedShips().size()) {  // There are other players to evaluate
             currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
             currentPlayerIndex++;
             Set<Point> availablePositions = new HashSet<>(currentShipBoard.getCannons().keySet());
@@ -52,14 +54,16 @@ public class MeteorSwarmCard extends AdventureCard {
             if (projectiles.isEmpty()) {
                 return new DrawCardState();
             } else {
-                currentProjectile = projectiles.removeFirst();
+                currentProjectile = projectiles.removeLast();
+                currentShipBoard = null;
+                currentPlayerIndex = 0;
                 return nextStep();
             }
         }
-
-
     }
-    //USED METHODS
 
-
+    @VisibleForTesting
+    public ShipBoard getCurrentShipBoard() {
+        return currentShipBoard;
+    }
 }
