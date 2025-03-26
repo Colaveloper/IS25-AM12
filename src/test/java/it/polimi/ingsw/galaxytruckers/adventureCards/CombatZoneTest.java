@@ -40,19 +40,24 @@ public class CombatZoneTest {
     int position1;
     int position2;
     Projectile damagingProjectile;
+    boolean doesBreak;
 
     @BeforeEach
     void setUp() {
 
         shipPlaces = new HashMap<>();
-        crewSize1 = 1;
-        crewSize2 = 2;
-        firePower1 = 3;
-        firePower2 = 5;
-        enginePower1 = 4;
-        enginePower2 = 7;
+
+        // To have full coverage, because of lazy streams
+        // the ship on the back needs to always have the worst stats!
+        crewSize1 = 2;
+        crewSize2 = 1;
+        firePower1 = 5;
+        firePower2 = 3;
+        enginePower1 = 7;
+        enginePower2 = 4;
         position1 = 9;
         position2 = 10;
+        doesBreak = true;
 
         ship1 = new SecondShipBoard(Colors.RED) {
             @Override
@@ -69,7 +74,7 @@ public class CombatZoneTest {
             }
             @Override
             public List<Set<Point>> getConnectedSets() {
-                return List.of(Set.of(), Set.of());
+                return List.of(Set.of());
             }
         };
         ship2 = new SecondShipBoard(Colors.BLUE) {
@@ -87,8 +92,11 @@ public class CombatZoneTest {
             }
             @Override
             public List<Set<Point>> getConnectedSets() {
-                return List.of(Set.of(), Set.of());
-            }
+                if (doesBreak) {
+                    doesBreak = false;
+                    return List.of(Set.of(), Set.of());
+                }
+                return List.of(Set.of());}
         };
         ships = new ArrayList<>(List.of(ship1, ship2));
         shipPlaces.put(ship1, position1);
@@ -143,10 +151,9 @@ public class CombatZoneTest {
         GameState testState = combatZoneCard.nextStep();
 
         assertEquals(Math.min(crewSize1, crewSize2), combatZoneCard.getMinCrewSize());
-        assertEquals(testShip, ship1);
+        assertEquals(testShip, ship2);
         assertEquals(testDisplacement, -flightDaysLoss);
         assertInstanceOf(ActivateState.class, testState);
-        assertEquals(ship1, combatZoneCard.getCurrentShipBoard());
 
         // rest unchanged
         assertEquals(projectiles, combatZoneCard.getProjectiles());
@@ -272,7 +279,8 @@ public class CombatZoneTest {
     @Test
     void nextStepReturnsChooseShipPieceStateIfBroken() {
 
-        projectiles = new ArrayList<>(List.of(damagingProjectile));
+        projectiles = new ArrayList<>(List.of(damagingProjectile, damagingProjectile));
+        // only the first damaging projectile separates the ship in pieces
 
         combatZoneCard = new CombatZoneCard(null, Level.SECOND, flightBoard, 2, 2, projectiles);
 
@@ -289,5 +297,8 @@ public class CombatZoneTest {
         combatZoneCard.nextStep(); // shield activation
         GameState testState = combatZoneCard.nextStep();
         assertInstanceOf(ChooseShipPieceState.class, testState);
+        combatZoneCard.nextStep(); // useless activation
+        testState = combatZoneCard.nextStep(); // ship did not broke, all meteor finished
+        assertInstanceOf(DrawCardState.class, testState);
     }
 }

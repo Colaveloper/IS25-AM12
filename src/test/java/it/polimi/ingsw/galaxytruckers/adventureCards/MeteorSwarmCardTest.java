@@ -96,10 +96,11 @@ class MeteorSwarmCardTest {
     @Test
     void nextStepReturnsChoosePieceIfBreaking() {
         meteorSwarmCard = new MeteorSwarmCard(null, Level.FIRST, flightBoard,  List.of(damagingProjectile));
-        testState = meteorSwarmCard.nextStep(); // useless activation
+        meteorSwarmCard.nextStep(); // useless activation
         testState = meteorSwarmCard.nextStep(); // ship broke: let the player choose what piece to keep
         assertInstanceOf(ChooseShipPieceState.class, testState);
-        testState = meteorSwarmCard.nextStep(); // useless activation
+        meteorSwarmCard.nextStep(); // useless activation
         testState = meteorSwarmCard.nextStep(); // ship did not broke, all meteor finished
+        assertInstanceOf(DrawCardState.class, testState);
     }
 }
