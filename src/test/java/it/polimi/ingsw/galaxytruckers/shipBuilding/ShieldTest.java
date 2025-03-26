@@ -16,23 +16,11 @@ class ShieldTest extends ComponentTest {
     }
 
     @Test
-    void protectedDirectionChangesWithActivationAndRotation() {
-        for (int i = 1; i <= 4; i++) {
-            myShield.rotateLeft();
-            assertArrayEquals(new int[]{}, myShield.getProtectedDirections());
-        }
-
-
+    void protectedDirectionChangesWithRotation() {
         myShield.activate(myShipBoard);
         for (int i = 1; i <= 4; i++) {
             myShield.rotateLeft();
-            assertArrayEquals(new int[]{i%4, (i+1)%4}, myShield.getProtectedDirections());
-        }
-
-        myShield.deactivate(myShipBoard);
-        for (int i = 1; i <= 4; i++) {
-            myShield.rotateLeft();
-            assertArrayEquals(new int[]{}, myShield.getProtectedDirections());
+            assertArrayEquals(new int[]{i%4, (i+1)%4}, myShield.getDefensibleDirections());
         }
     }
 }

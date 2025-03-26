@@ -29,30 +29,6 @@ class ComponentTest {
     }
 
     @Test
-    void constructorThrowsExceptionForInvalidConnectorList() {
-
-        List<Connector> tooFew = new ArrayList<>(Arrays.asList(
-                Connector.SINGLE,
-                Connector.DOUBLE));
-
-        List<Connector> tooMany = new ArrayList<>(Arrays.asList(
-                Connector.SINGLE,
-                Connector.DOUBLE,
-                Connector.UNIVERSAL,
-                Connector.NONE,
-                Connector.SINGLE
-        ));
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new Component(null, tooFew));
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new Component(null, tooMany));
-    }
-
-    @Test
     void getConnectors() {
         assertEquals(myConnectors, myComponent.getConnectors());
     }
@@ -67,14 +43,4 @@ class ComponentTest {
             assertEquals(i % 4, myComponent.getOrientation());
         }
     }
-
-//    TODO: implement this tests
-//    @Test
-//    void addToVisitor() {
-//    }
-//
-//    TODO: implement this tests
-//    @Test
-//    void removeFromVisitor() {
-//    }
 }

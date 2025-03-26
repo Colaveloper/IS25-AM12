@@ -1,10 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
-import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.Physical;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
-import javafx.scene.image.Image;
 
 import java.awt.*;
 import java.util.*;
@@ -391,7 +389,7 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
 
     @Override
     public void activate(Shield shield) {
-        for (int direction : shield.getProtectedDirections()) {
+        for (int direction : shield.getDefensibleDirections()) {
             this.shieldDirections[direction] += 1;
         }
     }
@@ -408,7 +406,7 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
 
     @Override
     public void deactivate(Shield shield) {
-        for (int direction : shield.getProtectedDirections()) {
+        for (int direction : shield.getDefensibleDirections()) {
             this.shieldDirections[direction] -= 1;
         }
     }

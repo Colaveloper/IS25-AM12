@@ -5,7 +5,6 @@ import it.polimi.ingsw.galaxytruckers.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
 import java.awt.*;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.IntSupplier;
@@ -29,7 +28,7 @@ public class BigMeteor extends Projectile {
 
     @Override
     protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
-        return super.getComponentToRemove(shipBoard).filter(
+        return getFirstFoundComponent(shipBoard).filter(
                 (_) -> shipBoard.getCannons().entrySet().stream()
                         .filter(e -> {
                             Cannon c = e.getValue();

@@ -12,12 +12,8 @@ public class Shield extends Component implements Activatable{
         this.active = false;
     }
 
-    public int[] getProtectedDirections() {
-        if(this.active) {
-            return new int[]{getOrientation(), (getOrientation()+1)%4};
-        } else {
-            return new int[]{};
-        }
+    public int[] getDefensibleDirections() {
+        return new int[]{getOrientation(), (getOrientation()+1)%4};
     }
 
     @Override

@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.IntSupplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class Projectile {
@@ -49,7 +48,7 @@ public abstract class Projectile {
      * @param shipBoard the ship that is threatened by the projectile
      * @return an optional with the component to be eliminated
      */
-    protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
+    protected Optional<Component> getFirstFoundComponent(ShipBoard shipBoard) {
         Stream<Map.Entry<Point, Component>> line = shipBoard.getComponentMap().entrySet().stream()
                 .filter(e -> (direction % 2 == 0 ? e.getKey().x : e.getKey().y) == diceRoll);
 
@@ -70,4 +69,5 @@ public abstract class Projectile {
         }
     }
 
+    protected abstract Optional<Component> getComponentToRemove(ShipBoard shipBoard);
 }

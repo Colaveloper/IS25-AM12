@@ -30,6 +30,6 @@ public class SmallFire extends Projectile {
         if (shipBoard.getShieldDirections()[direction]) {
             return Optional.empty();
         }
-        return super.getComponentToRemove(shipBoard);
+        return getFirstFoundComponent(shipBoard);
     }
 }

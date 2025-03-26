@@ -14,9 +14,6 @@ public class Component implements Physical {
 
     public Component(Image image, List<Connector> connectors) {
         this.image = image;
-        if (connectors == null || connectors.size() != 4) {
-            throw new IllegalArgumentException("A component must have exactly 4 connectors");
-        }
         this.connectors = connectors;
         this.orientation = 0;
     }

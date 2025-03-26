@@ -21,4 +21,9 @@ public class BigFire extends Projectile{
     public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
         return Set.of();
     }
+
+    @Override
+    protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
+        return Optional.empty();
+    }
 }
