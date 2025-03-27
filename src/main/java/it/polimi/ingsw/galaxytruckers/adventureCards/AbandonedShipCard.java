@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
@@ -45,10 +46,11 @@ public class AbandonedShipCard extends AdventureCard {
                 return nextStep();
             }
         }
-        if (!acquired) {
+        else if(!acquired){
             acquired = true;
             return new RemoveCrewState(requiredCrew, currentShipBoard); // Let the player choose whether to collect the prize
         }
+
         return new DrawCardState();
     }
 
@@ -59,5 +61,10 @@ public class AbandonedShipCard extends AdventureCard {
             flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
             accepted = true;
         }
+    }
+
+    @VisibleForTesting
+    public boolean getAccepted(){
+        return this.accepted;
     }
 }
