@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
-import javafx.scene.image.Image;
 
 import java.util.*;
 import java.util.List;
@@ -12,6 +12,7 @@ public abstract class FlightBoard implements Physical {
     protected List<Integer> startingPositionsLeft;
     protected final Set<ShipBoard> allShips; // contains playing+dead ships
     protected final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
+    @VisibleForTesting
     protected final Map<ShipBoard, Integer> finalScores; // can be populated early by giving up
 
     public FlightBoard(Set<ShipBoard> allShips) {
@@ -67,26 +68,49 @@ public abstract class FlightBoard implements Physical {
         throw new UnsupportedOperationException("Not available for this type of FlightBoard");
     };
 
+    public Map<ShipBoard, Integer> getFinalScores() {
+        assignFinishOrderReward();
+        assignFinishOrderReward();
+        countGoodsValue();
+        countCreditsAndLosses();
+        return finalScores;
+    }
 
-    public Map<ShipBoard, Integer> getFinalScores () {
-
-        int minExposedConnectors = allShips.stream()
-                .filter(ship -> !finalScores.containsKey(ship)) // who gave up does not count!
+    @VisibleForTesting
+    protected void assignBestLookingShipReward() {
+        int minExposedConnectors = shipToPlace.keySet().stream()// who gave up does not count!
                 .mapToInt(ShipBoard::getExposedConnectorsNumber)
                 .min()
-                .orElse(-1); // impossible case: there have to be players...
+                .orElse(0); // no ship on board
 
-        allShips.forEach(ship -> {
-            if (shipToPlace.containsKey(ship)) {
-                finalScores.put(ship,
-                        ship.getGoodsValue() + ship.getCredits() - ship.getLosses() +
-                        // finish order reward
-                        (shipToPlace.containsKey(ship) ? 4 - getOrderedShips().indexOf(ship) : 0) +
-                        // best looking ship reward
-                        (ship.getExposedConnectorsNumber() == minExposedConnectors ? 2 :0 ));
+        shipToPlace.keySet().forEach(s ->
+                finalScores.merge(s, s.getExposedConnectorsNumber() == minExposedConnectors ? 2 : 0, Integer::sum)
+        );
+    }
+
+    @VisibleForTesting
+    protected void assignFinishOrderReward() {
+        shipToPlace.keySet().forEach(s ->
+                finalScores.merge(s, 4 - getOrderedShips().indexOf(s), Integer::sum)
+        );
+    }
+
+    @VisibleForTesting
+    protected void countCreditsAndLosses() {
+        shipToPlace.keySet().forEach(s ->
+                finalScores.merge(s, s.getCredits() - s.getLosses(), Integer::sum)
+        );
+    }
+
+    @VisibleForTesting
+    protected void countGoodsValue() {
+        allShips.forEach(s -> {
+            if (shipToPlace.containsKey(s)) {
+                finalScores.merge(s, s.getGoodsValue(), Integer::sum);
+            } else {
+                finalScores.merge(s, (s.getGoodsValue()+1)/2, Integer::sum);
             }
         });
-        return finalScores;
     }
 
     @Override

@@ -150,7 +150,7 @@ class SmallMeteorTest {
     }
 
     @Test
-    void getComponentToRemoveReturnsEmptyOptinalIfNoShieldsButNoExposedConnector() {
+    void getComponentToRemoveReturnsEmptyOptionalIfNoShieldsButNoExposedConnector() {
         Projectile testProjectile = new SmallMeteor(()->0,0) {
             @Override
             public Optional<Component> getFirstFoundComponent (ShipBoard shipBoard) {

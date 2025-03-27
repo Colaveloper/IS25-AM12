@@ -29,14 +29,13 @@ public class SecondFlightBoard extends FlightBoard{
             startingPositionsLeft.remove((Integer) startingPosition);
             shipToPlace.put(shipBoard, startingPosition);
             // to be interpreted as "building phase is finished for everybody"
-            return startingPositionsLeft.size() + allShips.size() == 4;
+            return startingPositionsLeft.isEmpty();
         }
     }
 
     @Override
     public void removeShips (Set<ShipBoard> shipsToRemove) {
         shipToPlace.entrySet().removeIf(entry -> shipsToRemove.contains(entry.getKey()));
-        shipsToRemove.forEach(ship ->finalScores.put(ship, (ship.getGoodsValue() + 1) / 2 + ship.getCredits() - ship.getLosses()));
     }
 
     @Override

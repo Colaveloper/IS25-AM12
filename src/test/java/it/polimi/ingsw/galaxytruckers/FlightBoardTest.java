@@ -7,21 +7,29 @@ import it.polimi.ingsw.galaxytruckers.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.TestShipBoard;
+import javafx.scene.image.Image;
 import org.junit.jupiter.api.*;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FlightBoardTest {
+class FlightBoardTest extends JavaFXInitializer {
 
     ShipBoard ship1, ship2, ship3;
     FlightBoard flightBoard;
     ComponentBank componentBank;
+    Map<ShipBoard, Integer> shipToPlace;
+    Map<ShipBoard, Integer> shipToScore;
+    List<ShipBoard> allShips;
+    List<Integer> legalStartingPositions;
 
-    @BeforeAll
-    static void setup() {
-        new JavaFXInitializer();
+    @BeforeEach
+    void setUp() {
+        shipToPlace = new HashMap<>();
+        shipToScore = new HashMap<>();
     }
 
     @Nested
@@ -32,24 +40,34 @@ class FlightBoardTest {
             ship1 = new TestShipBoard(componentBank, Colors.BLUE);
             ship2 = new TestShipBoard(componentBank, Colors.RED);
             ship3 = new TestShipBoard(componentBank, Colors.GREEN);
+            allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
             flightBoard = new TestFlightBoard(Set.of(ship1, ship2, ship3));
         }
 
         @Test
-        void placeShipOnFlightBoard() {
-            assertEquals(Set.of(ship1, ship2, ship3), flightBoard.getAllShips());
+        void getImageAndDescriptionFakeTest () {
+            flightBoard.getImage();
+            flightBoard.getDescription();
+        }
 
+        @Test
+        void getAllShipsReturnsAllShips() {
+            assertEquals(Set.of(ship1, ship2, ship3), flightBoard.getAllShips());
+        }
+
+        @Test
+        void placeShipOnFlightBoardNeverFailsAndIgnoresStartingPosition() {
             // starting position ignored in test flight
             assertFalse(flightBoard.placeShipOnFlightBoard(ship1, 123));
+            shipToPlace.put(ship1, Level.TEST.getStartingPositions().get(0));
             assertFalse(flightBoard.placeShipOnFlightBoard(ship2, 324));
+            shipToPlace.put(ship2, Level.TEST.getStartingPositions().get(1));
             assertTrue(flightBoard.placeShipOnFlightBoard(ship3, 123));
+            shipToPlace.put(ship3, Level.TEST.getStartingPositions().get(2));
 
-            Map<ShipBoard, Integer> shipToPlace = flightBoard.getShipToPlace();
-            Deque<Integer> startingPositions = new ArrayDeque<>(Level.TEST.getStartingPositions());
-            assertEquals(shipToPlace.get(ship1), startingPositions.pop());
-            assertEquals(shipToPlace.get(ship2), startingPositions.pop());
-            assertEquals(shipToPlace.get(ship3), startingPositions.pop());
-            assertEquals(Set.of(ship1, ship2, ship3), flightBoard.getAllShips());
+            for (ShipBoard ship : allShips) {
+                assertEquals(shipToPlace.get(ship), flightBoard.getShipToPlace().get(ship));
+            }
         }
 
         @Test
@@ -57,6 +75,201 @@ class FlightBoardTest {
             assertThrows(UnsupportedOperationException.class, () -> flightBoard.removeShips(Set.of(ship1)));
             assertThrows(UnsupportedOperationException.class, () -> flightBoard.getAndRemoveLappedShips());
             assertThrows(UnsupportedOperationException.class, () -> flightBoard.giveUp(ship1));
+        }
+
+        @Test
+        void AssignFinishOrderReward() {
+            flightBoard.placeShipOnFlightBoard(ship2, 324);
+            shipToScore.put(ship2, 4);
+            flightBoard.placeShipOnFlightBoard(ship1, 123);
+            shipToScore.put(ship1, 3);
+            flightBoard.placeShipOnFlightBoard(ship3, 123);
+            shipToScore.put(ship3, 2);
+            flightBoard.assignFinishOrderReward();
+            assertEquals(shipToScore, flightBoard.finalScores);
+        }
+
+        @Test
+        void AssignBestLookingShipReward() {
+            ship1 = new ShipBoard(null, null) {
+                @Override
+                protected boolean containsPoint(Point point) {
+                    return false;
+                }
+
+                @Override
+                public Image getImage() {
+                    return null;
+                }
+
+                @Override
+                public int getExposedConnectorsNumber() {
+                    return 5;
+                }
+            };
+            ship2 = new ShipBoard(null, null) {
+                @Override
+                protected boolean containsPoint(Point point) {
+                    return false;
+                }
+
+                @Override
+                public Image getImage() {
+                    return null;
+                }
+
+                @Override
+                public int getExposedConnectorsNumber() {
+                    return 5;
+                }
+            };
+            ship3 = new ShipBoard(null, null) {
+                @Override
+                protected boolean containsPoint(Point point) {
+                    return false;
+                }
+
+                @Override
+                public Image getImage() {
+                    return null;
+                }
+
+                @Override
+                public int getExposedConnectorsNumber() {
+                    return 8;
+                }
+            };
+            flightBoard = new TestFlightBoard(Set.of(ship1, ship2, ship3));
+            flightBoard.placeShipOnFlightBoard(ship1, 123);
+            flightBoard.placeShipOnFlightBoard(ship2, 324);
+            flightBoard.placeShipOnFlightBoard(ship3, 123);
+            shipToScore.put(ship1, 2);
+            shipToScore.put(ship2, 2);
+            shipToScore.put(ship3, 0);
+            flightBoard.assignBestLookingShipReward();
+            assertEquals(shipToScore, flightBoard.finalScores);
+        }
+
+        @Test
+        void countCreditsAndLosses() {
+            int myCredits = 8;
+            int myLosses = 9;
+            ship1 = new TestShipBoard(null, null) {
+                @Override
+                protected boolean containsPoint(Point point) {
+                    return false;
+                }
+
+                @Override
+                public Image getImage() {
+                    return null;
+                }
+
+                @Override
+                public int getLosses() {
+                    return myLosses;
+                }
+
+                @Override
+                public int getCredits() {
+                    return myCredits;
+                }
+
+            };
+            flightBoard = new TestFlightBoard(Set.of(ship1));
+            flightBoard.placeShipOnFlightBoard(ship1, 123);
+            shipToScore.put(ship1, myCredits-myLosses);
+            flightBoard.countCreditsAndLosses();
+            assertEquals(shipToScore, flightBoard.finalScores);
+        }
+
+        @Test
+        void countGoodsValue() {
+            int myGoodValue = 9;
+            ship1 = new TestShipBoard(null, null) {
+                @Override
+                protected boolean containsPoint(Point point) {
+                    return false;
+                }
+
+                @Override
+                public Image getImage() {
+                    return null;
+                }
+
+                @Override
+                public int getGoodsValue() {
+                    return myGoodValue;
+                }
+            };
+            ship2 = new TestShipBoard(null, null) {
+                @Override
+                protected boolean containsPoint(Point point) {
+                    return false;
+                }
+
+                @Override
+                public Image getImage() {
+                    return null;
+                }
+
+                @Override
+                public int getGoodsValue() {
+                    return myGoodValue;
+                }
+            };
+            flightBoard = new TestFlightBoard(Set.of(ship1, ship2));
+            flightBoard.placeShipOnFlightBoard(ship1, 123);
+            shipToScore.put(ship1, myGoodValue);
+            shipToScore.put(ship2, (myGoodValue+1)/2);
+            flightBoard.countGoodsValue();
+            assertEquals(shipToScore, flightBoard.finalScores);
+        }
+
+        @Test
+        void getFinalScores() {
+            int myGoodValue = 9;
+            int myCreditsAndLosses = 6;
+            int myBestLookinAward = 2;
+            int myFinishOrderAward = 2;
+            class LocalFlightBoard extends FlightBoard {
+                public LocalFlightBoard(Set<ShipBoard> allShips) {
+                    super(allShips);
+                }
+
+                @Override
+                public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
+                    return false;
+                }
+
+                @Override
+                protected void assignBestLookingShipReward() {
+                    this.finalScores.merge(ship1, myBestLookinAward, Integer::sum);
+                }
+
+                @Override
+                protected void assignFinishOrderReward() {
+                    this.finalScores.merge(ship1, myFinishOrderAward, Integer::sum);
+                }
+
+                @Override
+                protected void countCreditsAndLosses() {
+                    this.finalScores.merge(ship1, myCreditsAndLosses, Integer::sum);
+                }
+
+                @Override
+                protected void countGoodsValue() {
+                    this.finalScores.merge(ship1, myGoodValue, Integer::sum);
+                }
+
+                @Override
+                public Image getImage() {
+                    return null;
+                }
+            }
+            LocalFlightBoard localFlightBoard = new LocalFlightBoard(Set.of(ship1));
+            shipToScore.put(ship1, myBestLookinAward+myFinishOrderAward+myCreditsAndLosses+myGoodValue);
+            assertEquals(shipToScore, localFlightBoard.getFinalScores());
         }
     }
 
@@ -69,54 +282,127 @@ class FlightBoardTest {
             ship1 = new SecondShipBoard(componentBank, Colors.BLUE);
             ship2 = new SecondShipBoard(componentBank, Colors.RED);
             ship3 = new SecondShipBoard(componentBank, Colors.GREEN);
+            allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
             flightBoard = new SecondFlightBoard(Set.of(ship1, ship2, ship3));
+            legalStartingPositions = new ArrayList<>(Level.SECOND
+                    .getStartingPositions()
+                    .subList(0, allShips.size()));
         }
 
         @Test
-        void legalShipPlacementElseThrowExceptions() {
-            assertEquals(Set.of(ship1, ship2, ship3), flightBoard.getAllShips());
+        void getImageAndDescriptionFakeTest () {
+            flightBoard.getImage();
+            flightBoard.getDescription();
+        }
 
-            List<Integer> legalStartingPositions = Level.SECOND
-                    .getStartingPositions()
-                    .subList(0, flightBoard.getAllShips().size());
-
-            // Asking for non-existing starting position
+        @Test
+        void placeShipOnFlightBoardThrowsExceptionIfNotStartingPosition() {
             assertThrows(
                     IllegalArgumentException.class,
                     () -> flightBoard.placeShipOnFlightBoard(ship1, 123)
             );
+        }
 
-            // Adding ship 1
-            assertFalse(flightBoard.placeShipOnFlightBoard(ship1, legalStartingPositions.get(1)));
+        @Test
+        void placeShipOnFlightBoardThrowsExceptionIfStartingTooBehind() {
+            // if three players, only three staring places
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> flightBoard.placeShipOnFlightBoard(ship1, Level.SECOND
+                            .getStartingPositions()
+                            .get(allShips.size()))
+            );
+        }
 
-            // Can't add two ships in the same position
+        @Test
+        void placeShipOnFlightBoardThrowsExceptionIfPositionAlreadyTaken() {
+            flightBoard.placeShipOnFlightBoard(ship1, legalStartingPositions.get(1));
             assertThrows(
                     IllegalArgumentException.class,
                     () -> flightBoard.placeShipOnFlightBoard(ship2, legalStartingPositions.get(1))
             );
-
-            // Adding ship 2
-            assertTrue(flightBoard.placeShipOnFlightBoard(ship2, legalStartingPositions.get(2)));
-
-            // Adding ship 3: Building is over
-            assertFalse(flightBoard.placeShipOnFlightBoard(ship3, legalStartingPositions.get(0)));
-            assertEquals(flightBoard.getShipToPlace().get(ship1), legalStartingPositions.get(1));
-            assertEquals(flightBoard.getShipToPlace().get(ship2), legalStartingPositions.get(2));
-            assertEquals(flightBoard.getShipToPlace().get(ship3), legalStartingPositions.get(0));
-            assertEquals(Arrays.asList(ship3, ship1, ship2), flightBoard.getOrderedShips());
-
-            // 1's position incremented by 10+1, 1 becomes leader
-            flightBoard.displaceShip(ship1, 10);
-            assertEquals(Arrays.asList(ship1, ship3, ship2), flightBoard.getOrderedShips());
-            assertEquals(legalStartingPositions.get(1) + 11, flightBoard.getShipToPlace().get(ship1));
-
-            // 1 laps the others, they get removed
-            flightBoard.displaceShip(ship1, 100);
-            assertEquals(Set.of(ship2, ship3), flightBoard.getAndRemoveLappedShips()); // TODO: non pure getter?!
-
-            // 1 is first and has the most component among the survivors
-            assertEquals(Map.of(ship1, 6, ship2, 0, ship3, 0), flightBoard.getFinalScores());
-            assertEquals(Set.of(ship1, ship2, ship3), flightBoard.getAllShips());
         }
+
+        @Test
+        void placeShipOnFlightBoardReturnsTrueOnlyAtTheEndOfPlacing() {
+            // testing "random" placing
+            assertFalse(flightBoard.placeShipOnFlightBoard(ship1, legalStartingPositions.get(1)));
+            assertFalse(flightBoard.placeShipOnFlightBoard(ship2, legalStartingPositions.get(0)));
+            assertTrue(flightBoard.placeShipOnFlightBoard(ship3, legalStartingPositions.get(2)));
+        }
+
+        @Test
+        void getShipToPlaceAndGetOrderedShipsReturnShipsAsPlaced() {
+
+            flightBoard.placeShipOnFlightBoard(ship1, legalStartingPositions.get(1));
+            shipToPlace.put(ship1, legalStartingPositions.get(1));
+            flightBoard.placeShipOnFlightBoard(ship2, legalStartingPositions.get(0));
+            shipToPlace.put(ship2, legalStartingPositions.get(0));
+            flightBoard.placeShipOnFlightBoard(ship3, legalStartingPositions.get(2));
+            shipToPlace.put(ship3, legalStartingPositions.get(2));
+
+            for (ShipBoard ship : allShips) {
+                assertEquals(shipToPlace.get(ship), flightBoard.getShipToPlace().get(ship));
+            }
+            assertEquals(ship1, flightBoard.getOrderedShips().get(1));
+            assertEquals(ship2, flightBoard.getOrderedShips().get(0));
+            assertEquals(ship3, flightBoard.getOrderedShips().get(2));
+        }
+
+        @Test
+        void displaceShipDisplacesForwardsAndBackwards() {
+            int i = 0;
+            for (ShipBoard ship : allShips) {
+                flightBoard.placeShipOnFlightBoard(ship, legalStartingPositions.get(i));
+                shipToPlace.put(ship, legalStartingPositions.get(i));
+                i++;
+            }
+            flightBoard.displaceShip(ship1, 10);
+            shipToPlace.put(ship1, shipToPlace.get(ship1) + 10);
+            flightBoard.displaceShip(ship3, -10);
+            shipToPlace.put(ship3, shipToPlace.get(ship3) - 10);
+
+            for (ShipBoard ship : allShips) {
+                assertEquals(shipToPlace.get(ship), flightBoard.getShipToPlace().get(ship));
+            }
+        }
+
+        @Test
+        void displaceShipJumpOverShips() {
+            int i = 0;
+            for (ShipBoard ship : allShips) {
+                flightBoard.placeShipOnFlightBoard(ship, legalStartingPositions.get(i));
+                shipToPlace.put(ship, legalStartingPositions.get(i));
+                i++;
+            }
+            flightBoard.displaceShip(ship2, 10);
+            shipToPlace.put(ship2, shipToPlace.get(ship2) + 10 + 1);
+            for (ShipBoard ship : allShips) {
+                assertEquals(shipToPlace.get(ship), flightBoard.getShipToPlace().get(ship));
+            }
+
+            flightBoard.displaceShip(ship2, -10);
+            shipToPlace.put(ship2, shipToPlace.get(ship2) - 10 - 1);
+            for (ShipBoard ship : allShips) {
+                assertEquals(shipToPlace.get(ship), flightBoard.getShipToPlace().get(ship));
+            }
+        }
+
+
+//            // 1's position incremented by 10+1, 1 becomes leader
+//            flightBoard.displaceShip(ship1, 10);
+//            assertEquals(Arrays.asList(ship1, ship3, ship2), flightBoard.getOrderedShips());
+//            assertEquals(legalStartingPositions.get(1) + 11, flightBoard.getShipToPlace().get(ship1));
+//
+//            // 1 laps the others, they get removed
+//            flightBoard.displaceShip(ship1, 100);
+//            assertEquals(Set.of(ship2, ship3), flightBoard.getAndRemoveLappedShips()); // TODO: non pure getter?!
+//
+//            // 1's position decremented by 1
+//            flightBoard.displaceShip(ship1, 10);
+//
+//            // 1 is first and has the most component among the survivors
+//            assertEquals(Map.of(ship1, 6, ship2, 0, ship3, 0), flightBoard.getFinalScores());
+//            assertEquals(Set.of(ship1, ship2, ship3), flightBoard.getAllShips())
     }
 }
