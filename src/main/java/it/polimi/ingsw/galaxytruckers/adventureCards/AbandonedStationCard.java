@@ -40,7 +40,7 @@ public class AbandonedStationCard extends AdventureCard {
             if (currentPlayerIndex < flightBoard.getShipToPlace().size()) { // There are other players to evaluate
                 currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
                 currentPlayerIndex++;
-                nextStep();
+                return nextStep();
             }
         }
         if (!acquired) {
