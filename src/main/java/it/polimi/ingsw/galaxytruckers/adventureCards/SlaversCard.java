@@ -62,9 +62,10 @@ public class SlaversCard extends AdventureCard {
 
     @Override
     public void choose(boolean choice) {
-        // TODO: add: if (choice) { }
-        currentShipBoard.gainCredits(creditPrize);
-        flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
+        if (choice) {
+            currentShipBoard.gainCredits(creditPrize);
+            flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
+        }
         currentShipBoard = null;
     }
 }
