@@ -3,8 +3,6 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.shipBuilding.Cabin;
-import it.polimi.ingsw.galaxytruckers.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.state.ActivateState;
 import it.polimi.ingsw.galaxytruckers.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.state.GameState;
@@ -12,10 +10,7 @@ import javafx.scene.image.Image;
 
 import java.awt.*;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-
-import static java.lang.Math.abs;
 
 public class OpenSpaceCard extends AdventureCard {
     public OpenSpaceCard (Image image, Level level, FlightBoard flightBoard) {
