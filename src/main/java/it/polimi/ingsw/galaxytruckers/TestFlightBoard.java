@@ -27,11 +27,6 @@ public class TestFlightBoard extends FlightBoard{
         // to be interpreted as "building phase is finished for everybody"
         return startingPositionsLeft.size() + allShips.size() == 4;
     }
-//
-//    @Override
-//    public Set<ShipBoard> getLappedShips() {
-//        return Set.of();
-//    }
 
     @Override
     public Image getImage() {

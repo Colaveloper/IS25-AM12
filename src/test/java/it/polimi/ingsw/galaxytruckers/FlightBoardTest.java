@@ -388,21 +388,41 @@ class FlightBoardTest extends JavaFXInitializer {
             }
         }
 
+        @Test
+        void giveUpRemovesShip() {
+            int i = 0;
+            for (ShipBoard ship : allShips) {
+                flightBoard.placeShipOnFlightBoard(ship, legalStartingPositions.get(i));
+                shipToPlace.put(ship, legalStartingPositions.get(i));
+                i++;
+            }
+            flightBoard.giveUp(ship1);
+            shipToPlace.remove(ship1);
+            assertEquals(shipToPlace, flightBoard.getShipToPlace());
+        }
 
-//            // 1's position incremented by 10+1, 1 becomes leader
-//            flightBoard.displaceShip(ship1, 10);
-//            assertEquals(Arrays.asList(ship1, ship3, ship2), flightBoard.getOrderedShips());
-//            assertEquals(legalStartingPositions.get(1) + 11, flightBoard.getShipToPlace().get(ship1));
-//
-//            // 1 laps the others, they get removed
-//            flightBoard.displaceShip(ship1, 100);
-//            assertEquals(Set.of(ship2, ship3), flightBoard.getAndRemoveLappedShips()); // TODO: non pure getter?!
-//
-//            // 1's position decremented by 1
-//            flightBoard.displaceShip(ship1, 10);
-//
-//            // 1 is first and has the most component among the survivors
-//            assertEquals(Map.of(ship1, 6, ship2, 0, ship3, 0), flightBoard.getFinalScores());
-//            assertEquals(Set.of(ship1, ship2, ship3), flightBoard.getAllShips())
+        @Test
+        void giveUpWithOneLeftChangesGameRules() {
+            int i = 0;
+            for (ShipBoard ship : allShips) {
+                flightBoard.placeShipOnFlightBoard(ship, legalStartingPositions.get(i));
+                i++;
+            }
+            flightBoard.giveUp(ship1);
+            flightBoard.giveUp(ship2);
+            assertTrue(true); // TODO: implement and test one-left logic
+        }
+
+        @Test
+        void getAndRemoveLappedShips() {
+            int i = 0;
+            for (ShipBoard ship : allShips) {
+                flightBoard.placeShipOnFlightBoard(ship, legalStartingPositions.get(i));
+                i++;
+            }
+            flightBoard.displaceShip(ship1, 100);
+            assertEquals(Set.of(ship2, ship3), flightBoard.getAndRemoveLappedShips());
+            assertEquals(Set.of(ship1), flightBoard.getShipToPlace().keySet());
+        }
     }
 }

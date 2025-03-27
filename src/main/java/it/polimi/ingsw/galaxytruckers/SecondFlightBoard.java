@@ -40,9 +40,6 @@ public class SecondFlightBoard extends FlightBoard{
 
     @Override
     public Set<ShipBoard> getAndRemoveLappedShips() {
-        System.out.println(shipToPlace.entrySet().stream()
-                .filter(entry -> shipToPlace.get(getOrderedShips().getFirst()) - entry.getValue() > loopLength).toString());
-
         Set<ShipBoard> lappedShips = shipToPlace.entrySet().stream()
                 .filter(entry -> shipToPlace.get(getOrderedShips().getFirst()) - entry.getValue() > loopLength)
                 .map(Map.Entry::getKey)
@@ -56,7 +53,7 @@ public class SecondFlightBoard extends FlightBoard{
     @Override
     public void giveUp(ShipBoard shipBoard) {
         removeShips(Set.of(shipBoard));
-        if (allShips.size() - finalScores.size() == 1) {
+        if (allShips.size() - shipToPlace.size() == 1) {
             // TODO: one-player is left!
             //  ignore the Combat Zone and Sabotage adventures
         }
