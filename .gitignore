@@ -39,3 +39,4 @@ build/
 
 ## probs don't want this ##
 /.idea
+/.run/
