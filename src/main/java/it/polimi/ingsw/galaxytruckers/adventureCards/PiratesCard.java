@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -23,19 +24,21 @@ public class PiratesCard extends AdventureCard {
 
     // Card state descriptors
     private final List<ShipBoard> defeatedPlayers;
-    private int defeatedPlayerIndex; // current defeated player
     private boolean defeated;
     private Projectile currentProjectile;
+    private ShipBoard winnerShipBoard;
 
-    public PiratesCard(Image image, Level level, FlightBoard flightBoard, int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
+    public PiratesCard(Image image, Level level, FlightBoard flightBoard,
+                       int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
         super(image, level, flightBoard);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;
         this.projectiles = projectiles.reversed();  // list is inverted to be treated as a stack
         this.defeatedPlayers = new ArrayList<>();
-        this.defeatedPlayerIndex = 0;
         this.defeated = false;
+        this.winnerShipBoard = null;
+        this.currentProjectile = this.projectiles.removeLast();
     }
 
     @Override
@@ -45,7 +48,9 @@ public class PiratesCard extends AdventureCard {
             if (currentShipBoard != null) {  // There is a previous player who needs their firepower evaluated
                 if (currentShipBoard.getFirePower() > firePowerThreshold) {  // player defeats the enemy
                     defeated = true;
-                    defeatedPlayerIndex = 0; // TODO: doesn't the assignment in the constructor suffice? did you mean currentShipBoard = null;
+                    currentPlayerIndex = 0;
+                    winnerShipBoard = currentShipBoard;
+                    currentShipBoard = null;
                     return new ChoiceState(); // Let the player choose whether to collect the prize
                 } else if (currentShipBoard.getFirePower() < firePowerThreshold) { // player is defeated
                     defeatedPlayers.add(currentShipBoard);
@@ -60,44 +65,75 @@ public class PiratesCard extends AdventureCard {
                 return new ActivateState(availablePositions, currentShipBoard); // Let the player activate double cannons
             } else {  // There are no more players and no one has defeated the enemy
                 defeated = true;
-                defeatedPlayerIndex = 0; // TODO: doesn't the assignment in the constructor suffice? did you mean currentShipBoard = null;
+                currentPlayerIndex = 0;
+                currentShipBoard = null;
                 return nextStep();
             }
         } else { // Firing at defeated players
-            // TODO: add here: currentShipBoard = defeatedPlayers.get(defeatedPlayerIndex); if you don't want to shoot the winner
-            // TODO: if (defeatedPlayerIndex == 0) {
-            //      roll dice!! and show to player. save to variable and use it in fireAt(int diceRoll, ShipBoard shipBoard)
-            //  }
-            if (currentShipBoard != null) {  // There is a previous player that has to be hit // TODO: As is, always evaluated to true
-                // TODO: As is, firing at winner :(
+            if (currentShipBoard != null) {
                 if (currentProjectile.fireAt(currentShipBoard)) {  // If a component is removed I need to check shipConnection
                     List<Set<Point>> shipPieces = currentShipBoard.getConnectedSets();
                     if (shipPieces.size() > 1) {
-                        return new ChooseShipPieceState(currentShipBoard.getConnectedSets(), currentShipBoard);
+                        GameState gameState = new ChooseShipPieceState(shipPieces, currentShipBoard);
+                        currentShipBoard = null;
+                        return gameState;
                     }
                 }
             }
-            if (defeatedPlayerIndex < defeatedPlayers.size()) {  // There are still players that need to handle projectiles
-                currentShipBoard = defeatedPlayers.get(defeatedPlayerIndex);
-                defeatedPlayerIndex++;//TODO: why not only shields as for cannons above?
+            if (currentPlayerIndex < defeatedPlayers.size()) {  // There are still players that need to handle projectiles
+                currentShipBoard = defeatedPlayers.get(currentPlayerIndex);
+                currentPlayerIndex++;
                 return new ActivateState(currentProjectile.getActivatablePoints(currentShipBoard), currentShipBoard); // Let the player activate shields
             } else {  // There are no more players that need to handle projectiles
                 if (projectiles.isEmpty()) {
                     return new DrawCardState();
                 } else {
+                    currentPlayerIndex = 0;
+                    currentShipBoard = null;
                     currentProjectile = projectiles.removeLast();
-                    defeatedPlayerIndex = 0;
                     return nextStep();
                 }
             }
         }
     }
 
-    @Override
-    public void choose(boolean choice) {
-        // TODO: add: if (choice) { }
-        currentShipBoard.gainCredits(creditPrize);
-        flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
-        currentShipBoard = null;
+    public void getReward() {
+        if (winnerShipBoard == null) {
+            throw new IllegalStateException("No one can claim the reward right now");
+        }
+        winnerShipBoard.gainCredits(creditPrize);
+        flightBoard.displaceShip(winnerShipBoard, -flightDaysLoss);
+    }
+
+    public int getFirePowerThreshold() {
+        return firePowerThreshold;
+    }
+
+    public List<Projectile> getProjectiles() {
+        return projectiles;
+    }
+
+    public int getCreditPrize() {
+        return creditPrize;
+    }
+
+    public int getFlightDaysLoss() {
+        return flightDaysLoss;
+    }
+
+    List<ShipBoard> getDefeatedPlayers() {
+        return defeatedPlayers;
+    }
+
+    boolean isDefeated() {
+        return defeated;
+    }
+
+    Projectile getCurrentProjectile() {
+        return currentProjectile;
+    }
+
+    ShipBoard getWinnerShipBoard() {
+        return winnerShipBoard;
     }
 }
