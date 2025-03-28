@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 
@@ -10,19 +11,18 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class SecondDeck extends Deck{
+    private final List<List<AdventureCard>> forecastDecks;
+    private final List<AdventureCard> hiddenDeck;
 
-    List<List<AdventureCard>> forecastDecks;
-    List<AdventureCard> hiddenDeck;
-
-    public SecondDeck() throws IOException {
-        super(loadRelevantCards(Set.of(Level.TEST, Level.FIRST, Level.SECOND)));
+    public SecondDeck(FlightBoard flightBoard) throws IOException {
+        super(Set.of(Level.TEST, Level.FIRST, Level.SECOND), flightBoard);
         List<AdventureCard> easyCards = relevantCards.stream()
                 .filter(c -> c.getCardLevel() == Level.TEST || c.getCardLevel() == Level.FIRST)
-                .limit(8)
+                .limit(4)
                 .toList();
         List<AdventureCard> hardCards = relevantCards.stream()
                 .filter(c -> c.getCardLevel() == Level.SECOND)
-                .limit(4)
+                .limit(8)
                 .toList();
         forecastDecks = IntStream.range(0, 3)
                 .mapToObj(i -> {
@@ -32,8 +32,9 @@ public class SecondDeck extends Deck{
                     return forecastDeck;
                 })
                 .toList();
-        hiddenDeck.addAll(easyCards.subList(4, 5));
-        hiddenDeck.addAll(hardCards.subList(8, 10));
+        hiddenDeck = new ArrayList<>();
+        hiddenDeck.addAll(easyCards.subList(3, 4));
+        hiddenDeck.addAll(hardCards.subList(6, 8));
     }
     @Override
     public List<AdventureCard> getForecastDeck(int deckIndex) {

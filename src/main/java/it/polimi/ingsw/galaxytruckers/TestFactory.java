@@ -11,8 +11,8 @@ import java.util.Set;
 
 public class TestFactory implements GameFactory{
     @Override
-    public Deck createDeck() throws IOException {
-        return new TestDeck();
+    public Deck createDeck(FlightBoard flightBoard) throws IOException {
+        return new TestDeck(flightBoard);
     }
 
     @Override

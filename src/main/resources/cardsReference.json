@@ -9,7 +9,7 @@
       },
       {
             "type": "abandonedShip",
-            "level": "FIRST",
+            "level": "TEST",
             "credits": 4,
             "flightDaysLoss": 1,
             "people": 3,
@@ -33,11 +33,14 @@
       },
       {
             "type": "abandonedStation",
-            "level": "FIRST",
-            "blue": 0,
-            "green": 1,
-            "yellow": 1,
-            "red": 0,
+            "level": "TEST",
+            "storage":
+            {
+                  "blue": 0,
+                  "green": 1,
+                  "yellow": 1,
+                  "red": 0
+            },
             "flightDaysLoss": 1,
             "people": 5,
             "path": "src/main/resources/textures/cardsonedStation/GT-cards_I_IT_0119.jpg"
@@ -45,10 +48,13 @@
       {
             "type": "abandonedStation",
             "level": "FIRST",
-            "blue": 0,
-            "green": 0,
-            "yellow": 0,
-            "red": 2,
+            "storage":
+            {
+                  "blue": 0,
+                  "green": 0,
+                  "yellow": 0,
+                  "red": 2
+            },
             "flightDaysLoss": 1,
             "people": 6,
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
@@ -56,10 +62,13 @@
       {
             "type": "abandonedStation",
             "level": "SECOND",
-            "blue": 0,
-            "green": 0,
-            "yellow": 1,
-            "red": 1,
+            "storage":
+            {
+                  "blue": 0,
+                  "green": 0,
+                  "yellow": 1,
+                  "red": 1
+            },
             "flightDaysLoss": 1,
             "people": 7,
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
@@ -67,17 +76,20 @@
       {
             "type": "abandonedStation",
             "level": "SECOND",
-            "blue": 0,
-            "green": 1,
-            "yellow": 2,
-            "red": 0,
+            "storage":
+            {
+                  "blue": 0,
+                  "green": 1,
+                  "yellow": 2,
+                  "red": 0
+            },
             "flightDaysLoss": 2,
             "people": 8,
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
       },
       {
             "type": "meteors",
-            "level": "FIRST",
+            "level": "TEST",
             "meteors": [
                   ["big meteor",0],
                   ["small meteor",3],
@@ -196,7 +208,7 @@
       },
       {
             "type": "planets",
-            "level": "FIRST",
+            "level": "TEST",
             "flightDaysLoss": 2,
             "planets": [
                   {
@@ -226,7 +238,10 @@
             "flightDaysLoss": 3,
             "planets": [
                   {
-                        "yellow": 2
+                        "blue": 0,
+                        "green": 0,
+                        "yellow": 2,
+                        "red": 0
                   },
                   {
                         "blue": 0,
@@ -395,12 +410,7 @@
       },
       {
             "type": "open space",
-            "level": "FIRST",
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
-      },
-      {
-            "type": "open space",
-            "level": "FIRST",
+            "level": "TEST",
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
       },
       {
@@ -435,7 +445,7 @@
       },
       {
             "type": "smugglers",
-            "level": "FIRST",
+            "level": "TEST",
             "flightDaysLoss": 1,
             "storage":
                   {
@@ -483,11 +493,7 @@
       },
       {
             "type": "stardust",
-            "level": "FIRST",
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_014.jpg"
-      },
-      {
-            "level": "SECOND",
+            "level": "TEST",
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_014.jpg"
       },
       {
@@ -504,7 +510,7 @@
             "humans": {
                   "flightDaysLoss": 3
             },
-            "level": "FIRST",
+            "level": "TEST",
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_0116.jpg"
       },
       {

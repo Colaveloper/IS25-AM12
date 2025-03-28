@@ -2,26 +2,28 @@ package it.polimi.ingsw.galaxytruckers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.adventureCards.*;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.*;
+import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import javafx.scene.image.Image;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public abstract class Deck{
     protected final List<AdventureCard> relevantCards;
+    @VisibleForTesting
     protected List<AdventureCard> masterDeck;
     private AdventureCard currentCard;
-    protected static String jsonPath;
+    protected static String jsonPath = "src/main/resources/cardsReference.json";
+    private final FlightBoard flightBoard;
 
-    public Deck(List<AdventureCard> relevantCards) {
-        jsonPath = "src/main/resources/cards.json";
-        this.relevantCards = relevantCards;
+    public Deck(Set<Level> relevantLevels, FlightBoard flightBoard) throws IOException {
+        this.flightBoard = flightBoard;
+        this.relevantCards = loadRelevantCards(relevantLevels);
         Collections.shuffle(this.relevantCards);
     }
 
@@ -57,12 +59,11 @@ public abstract class Deck{
         }
     }
 
-    protected static List<AdventureCard> loadRelevantCards(Set<Level> levels) throws IOException {
+    protected List<AdventureCard> loadRelevantCards(Set<Level> levels) throws IOException {
         //reading from json file and returning the list of components
         File jsonFile = new File(jsonPath);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(jsonFile);
-        FlightBoard flightBoard = null;
 
         List<AdventureCard> cards = new ArrayList<>();
 
@@ -73,71 +74,114 @@ public abstract class Deck{
                 String type = node.get("type").asText();
                 AdventureCard card;
 
-                Image image = new Image(node.get("path").asText());
+                Image image = new Image("file:"+node.get("path").asText());
 
                 switch(type){
                     case "planets":
-                        card = null;
+                        card = new PlanetsCard(
+                                image,
+                                level,
+                                flightBoard,
+                                parsePlanets(node.get("planets")),
+                                node.get("flightDaysLoss").asInt()
+                        );
                         break;
                     case "pirates":
-                        card = null;
-//                    card = new PiratesCard(
-//                            image,
-//                            level,
-//                            node.get("firePowerThreshold").asInt(),
-//                            node.get("creditPrize").asInt(),
-//                            node.get("flightDaysLoss").asInt(),
-//                            parseProjectiles(node.get("projectiles"))
-//                            );
+                        card = new PiratesCard(
+                                image,
+                                level,
+                                flightBoard,
+                                node.get("firePowerThreshold").asInt(),
+                                node.get("credits").asInt(),
+                                node.get("flightDaysLoss").asInt(),
+                                parseProjectiles(node.get("shoots"))
+                        );
                         break;
                     case "smugglers":
-                        card = null;
-//                    card = new SmugglersCard();
+                        card = new SmugglersCard(
+                                image,
+                                level,
+                                flightBoard,
+                                node.get("penalty").asInt(),
+                                node.get("cannons").asInt(),
+                                parseGoods(node.get("storage")),
+                                node.get("flightDaysLoss").asInt()
+                        );
                         break;
                     case "slavers":
-                        card = null;
-//                    card = new SlaversCard();
+                        card = new SlaversCard(
+                                image,
+                                level,
+                                flightBoard,
+                                node.get("penalty").asInt(),
+                                node.get("cannons").asInt(),
+                                node.get("credits").asInt(),
+                                node.get("flightDaysLoss").asInt()
+                        );
                         break;
                     case "meteors":
-//                    card = new MeteorSwarmCard(
-//                            image,
-//                            level,
-//                            parseProjectiles(node.get("meteors"))
-//                    );
-//                  card = new MeteorSwarmCard();
-                        card = null;
+                        card = new MeteorSwarmCard(
+                                image,
+                                level,
+                                flightBoard,
+                                parseProjectiles(node.get("meteors"))
+                        );
                         break;
                     case "epidemic":
-//                    card = new EpidemicCard(
-//                            image,
-//                            level
-//                    );
-                        card = null;
-//                    card = new EpidemicCard();
+                        card = new EpidemicCard(
+                                image,
+                                level,
+                                flightBoard
+                        );
                         break;
                     case "stardust":
-                        card = null;
-//                    card = new StarDustCard();
+                        card = new StarDustCard(
+                                image,
+                                level,
+                                flightBoard
+                        );
                         break;
-                    case "abandoned Ship":
-                        card = null;
-//                    card = new AbandonedShipCard();
+                    case "abandonedShip":
+                        card = new AbandonedShipCard(
+                                image,
+                                level,
+                                flightBoard,
+                                node.get("credits").asInt(),
+                                node.get("people").asInt(),
+                                node.get("flightDaysLoss").asInt()
+                        );
                         break;
-                    case "abandoned station":
-                        card = null;
-//                    card = new AbandonedShipCard();
+                    case "abandonedStation":
+                        card = new AbandonedStationCard(
+                                image,
+                                level,
+                                flightBoard,
+                                parseGoods(node.get("storage")),
+                                node.get("people").asInt(),
+                                node.get("flightDaysLoss").asInt()
+                        );
                         break;
-                    case "combat zone":
-                        card = null;
-//                    card = new CombatZoneCard();
+                    case "warzone":
+                        card = new OpenSpaceCard(
+                                image,
+                                level,
+                                flightBoard
+                                ); // TODO: Update
+//                        card = new CombatZoneCard(
+//                                image,
+//                                level,
+//                                flightBoard,
+//                                node.get("flightDaysLoss").asInt(),
+//                                node.get("humans").asInt(),
+//                                parseProjectiles(node.get("shoots"))
+//                        );
                         break;
                     case "open space":
-                        card = null;
-//                    card = new OpenSpaceCard();
-                        break;
-                    case "sabotage":
-                        card = null;
-//                    card = new SabotageCard();
+                        card = new OpenSpaceCard(
+                                image,
+                                level,
+                                flightBoard
+                        );
                         break;
                     default:
                         throw new IllegalArgumentException("Unknown card type: " + type);
@@ -171,4 +215,24 @@ public abstract class Deck{
         return projectiles;
     }
 
+    private static  List<Map<GoodsType, Integer>> parsePlanets(JsonNode planetsNode) {
+        List<Map<GoodsType, Integer>> planets = new ArrayList<>();
+        int direction = planetsNode.get(1).asInt();
+        for (JsonNode node : planetsNode) {
+            Map<GoodsType, Integer> map = new HashMap<>();
+            for (GoodsType type : GoodsType.values()) {
+                map.put(type, node.get(type.name().toLowerCase()).asInt());
+            }
+            planets.add(map);
+        }
+        return planets;
+    }
+
+    private static Map<GoodsType, Integer> parseGoods(JsonNode goodsNode) {
+        Map<GoodsType, Integer> goods = new HashMap<>();
+        for (GoodsType type : GoodsType.values()) {
+            goods.put(type, goodsNode.get(type.name().toLowerCase()).asInt());
+        }
+        return goods;
+    }
 }
