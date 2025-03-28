@@ -11,12 +11,15 @@ import javafx.scene.image.Image;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class CombatZoneCard extends AdventureCard {
     // Card data
-    private final int flightDayLoss;
+    private int flightDayLoss;
     private int crewLossLeft;
-    private final List<Projectile> projectiles;
+    private int currentTask;
+    private List<Projectile> projectiles;
+    private final List<Supplier> tasks; // evaluations and punishments
 
     // Lowest stats
     private Integer minCrewSize;
@@ -32,64 +35,100 @@ public class CombatZoneCard extends AdventureCard {
         this.crewLossLeft = crewLoss;
         this.projectiles = new LinkedList<>(projectiles);
         this.currentPlayerIndex = 0;
+        this.currentTask = 0;
+        this.tasks = new ArrayList<>(List.of(
+                setCurrentShipToLeastCrewed, currentShipLosesFlightDays,
+                setCurrentShipToWeakestEngine, currentShipLosesCrew,
+                setCurrentShipToWeakestCannons, currentShipGetsShot,
+                drawCard
+        ));
     }
 
     @Override
     public GameState nextStep() {
-        if (minCrewSize == null) { // the ship with the smallest crew loses flight-days
-            minCrewSize = flightBoard.getOrderedShips()
-                    .stream()
-                    .mapToInt(ShipBoard::getCrewSize)
-                    .min()
-                    .orElseThrow(() -> new IllegalStateException("No players detected"));
-            currentShipBoard = flightBoard.getOrderedShips()
-                    .stream()
-                    .filter(s -> s.getCrewSize() == minCrewSize)
-                    .findFirst()
-                    .orElseThrow();
-            flightBoard.displaceShip(currentShipBoard, -flightDayLoss);
-        }
-        if (minEnginePower == null) { // establishing the ship with the weakest engines
-            if (currentPlayerIndex < flightBoard.getOrderedShips().size()) { // engine activation
-                currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
-                currentPlayerIndex++;
+        return (GameState) tasks.get(currentTask).get();
+    }
+
+    public Supplier<GameState> setCurrentShipToLeastCrewed = () -> {
+        minCrewSize = flightBoard.getOrderedShips()
+                .stream()
+                .mapToInt(ShipBoard::getCrewSize)
+                .min()
+                .orElseThrow(() -> new IllegalStateException("No players detected"));
+        currentShipBoard = flightBoard.getOrderedShips()
+                .stream()
+                .filter(s -> s.getCrewSize() == minCrewSize)
+                .findFirst()
+                .orElseThrow();
+        currentTask++;
+        currentPlayerIndex = 0;
+        return nextStep();
+    };
+
+    public Supplier<GameState> setCurrentShipToWeakestEngine = () -> {
+        if (currentPlayerIndex < flightBoard.getOrderedShips().size()) { // engine activation
+                currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex++);
                 Set<Point> availablePositions = new HashSet<>(currentShipBoard.getEngines().keySet());
                 availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
                 return new ActivateState(availablePositions, currentShipBoard);
-            } else { // establishing the first ship with the weakest engines
-                minEnginePower = flightBoard.getOrderedShips().stream()
-                    .mapToInt(ShipBoard::getEnginePower)
-                    .min()
-                    .orElseThrow(() -> new IllegalStateException("No players detected"));
-                currentShipBoard = flightBoard.getOrderedShips().stream()
-                    .filter(s -> s.getEnginePower() == minEnginePower)
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalStateException("No players detected"));
-                currentPlayerIndex = 0;
-            }
         }
-        if (crewLossLeft>0) { // the ship with the weakest engines still has crew to lose
+
+        // establishing the first ship with the weakest engines
+        minEnginePower = flightBoard.getOrderedShips().stream()
+            .mapToInt(ShipBoard::getEnginePower)
+            .min()
+            .orElseThrow(() -> new IllegalStateException("No players detected"));
+        currentShipBoard = flightBoard.getOrderedShips().stream()
+            .filter(s -> s.getEnginePower() == minEnginePower)
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("No players detected"));
+
+        currentTask++;
+        currentPlayerIndex = 0;
+        return nextStep();
+    };
+
+    public Supplier<GameState> setCurrentShipToWeakestCannons = () -> {
+        if (currentPlayerIndex < flightBoard.getOrderedShips().size()) { // engine activation
+            currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
+            currentPlayerIndex++;
+            Set<Point> availablePositions = new HashSet<>(currentShipBoard.getCannons().keySet());
+            availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
+            return new ActivateState(availablePositions, currentShipBoard);
+        }
+
+        // establishing the first ship with the weakest cannons
+        minFirePower = flightBoard.getOrderedShips().stream()
+                .mapToInt(ShipBoard::getFirePower)
+                .min()
+                .orElseThrow(() -> new IllegalStateException("No players detected"));
+        currentShipBoard = flightBoard.getOrderedShips().stream()
+                .filter(s -> s.getFirePower() == minFirePower)
+                .findFirst()
+                .orElseThrow();
+
+        currentTask++;
+        currentPlayerIndex = 0;
+        return nextStep();
+    };
+
+    public Supplier<GameState> currentShipLosesFlightDays = () -> {
+        flightBoard.displaceShip(currentShipBoard, -flightDayLoss);
+        currentTask++;
+        currentPlayerIndex = 0;
+        return nextStep();
+    };
+
+    public Supplier<GameState> currentShipLosesCrew = () -> {
+        if (crewLossLeft>0) { // current ship still has crew to lose
             return new ChooseCrewToLoseState(currentShipBoard);
         }
-        if (minFirePower == null) { // establishing the ship with the weakest cannons
-            if (currentPlayerIndex < flightBoard.getOrderedShips().size()) { // engine activation
-                currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
-                currentPlayerIndex++;
-                Set<Point> availablePositions = new HashSet<>(currentShipBoard.getCannons().keySet());
-                availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
-                return new ActivateState(availablePositions, currentShipBoard);
-            } else { // establishing the first ship with the weakest cannons
-                minFirePower = flightBoard.getOrderedShips().stream()
-                        .mapToInt(ShipBoard::getFirePower)
-                        .min()
-                        .orElseThrow(() -> new IllegalStateException("No players detected"));
-                currentShipBoard = flightBoard.getOrderedShips().stream()
-                        .filter(s -> s.getFirePower() == minFirePower)
-                        .findFirst()
-                        .orElseThrow();
-            }
-        }
-        // firing at the ship with the weakest cannons
+        currentTask++;
+        currentPlayerIndex = 0;
+        return nextStep();
+    };
+
+    public Supplier<GameState> currentShipGetsShot = () -> {
         if (!projectiles.isEmpty()) { // still projectiles to throw
             if (currentProjectile == null) { // shields not yet activated
                 currentProjectile = projectiles.getFirst();
@@ -107,8 +146,14 @@ public class CombatZoneCard extends AdventureCard {
                 }
             }
         }
+        currentTask++;
+        currentPlayerIndex = 0;
+        return nextStep();
+    };
+
+    public Supplier<GameState> drawCard = () -> {
         return new DrawCardState();
-    }
+    };
 
     void sufferCrewLoss() {
         if (crewLossLeft > 0) {

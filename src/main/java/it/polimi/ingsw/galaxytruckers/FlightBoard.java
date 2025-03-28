@@ -33,6 +33,7 @@ public abstract class FlightBoard implements Physical {
 
     protected abstract int getLoopLength();
 
+    // TODO: create a local variable to store this data
     public List<ShipBoard> getOrderedShips() {
         return shipToPlace.entrySet().stream()
                 .sorted(Comparator.<Map.Entry<ShipBoard, Integer>>comparingInt(Map.Entry::getValue).reversed())
