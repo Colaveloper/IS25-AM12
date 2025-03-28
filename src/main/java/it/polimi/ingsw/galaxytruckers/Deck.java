@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -19,8 +20,9 @@ public abstract class Deck{
     protected static String jsonPath;
 
     public Deck(List<AdventureCard> relevantCards) {
-        this.relevantCards = relevantCards;
         jsonPath = "src/main/resources/cards.json";
+        this.relevantCards = relevantCards;
+        Collections.shuffle(this.relevantCards);
     }
 
     public AdventureCard getCurrentCard() {

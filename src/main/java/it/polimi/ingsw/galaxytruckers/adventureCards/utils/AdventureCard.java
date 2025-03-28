@@ -14,6 +14,7 @@ public abstract class AdventureCard implements Physical {
     protected final Level cardLevel;
     private final Image image;
 
+
     protected AdventureCard(Image image, Level cardLevel, FlightBoard flightBoard) {
         this.image = image;
         this.cardLevel = cardLevel;
@@ -22,6 +23,9 @@ public abstract class AdventureCard implements Physical {
         this.currentPlayerIndex = 0;
     }
 
+    public Level getCardLevel() {
+        return cardLevel;
+    }
     public abstract GameState nextStep();
 
     // Does nothing - does not throw exceptions because I control correct
