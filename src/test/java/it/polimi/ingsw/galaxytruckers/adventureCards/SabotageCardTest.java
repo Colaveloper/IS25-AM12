@@ -106,6 +106,11 @@ class SabotageCardTest {
 
         flightBoard = new FlightBoard(null) {
             @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+
+            @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return shipPlaces;
             }
@@ -129,6 +134,11 @@ class SabotageCardTest {
 
         largerFlightBoard = new FlightBoard(null) {
             @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+
+            @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return largerShipPlaces;
             }
@@ -149,7 +159,6 @@ class SabotageCardTest {
                 return null;
             }
         };
-
 
         sabotageCard = new SabotageCard (null, Level.FIRST, flightBoard);
     }

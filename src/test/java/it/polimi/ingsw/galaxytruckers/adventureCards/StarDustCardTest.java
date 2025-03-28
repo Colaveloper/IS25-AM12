@@ -63,6 +63,11 @@ class StarDustCardTest {
 
         flightBoard = new FlightBoard(null) {
             @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+
+            @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return shipPlaces;
             }
@@ -89,9 +94,6 @@ class StarDustCardTest {
                 return null;
             }
         };
-
-
-
 
         starDustCard = new StarDustCard(null, Level.FIRST, flightBoard);
     }

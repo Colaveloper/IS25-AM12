@@ -93,6 +93,11 @@ class SlaversCardTest {
 
         flightBoard = new FlightBoard(null) {
             @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+
+            @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return shipPlaces;
             }
@@ -105,8 +110,6 @@ class SlaversCardTest {
             @Override
             public void displaceShip(ShipBoard shipBoard, int displacement) {
                 displacedShips.add(shipBoard);
-//                testShip = shipBoard;
-//                testDisplacement = displacement;
             }
 
             @Override
@@ -122,6 +125,11 @@ class SlaversCardTest {
 
         flightBoardOfLosers = new FlightBoard(null) {
             @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+
+            @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return loserShipPlaces;
             }
@@ -134,8 +142,6 @@ class SlaversCardTest {
             @Override
             public void displaceShip(ShipBoard shipBoard, int displacement) {
                 displacedShips.add(shipBoard);
-//                testShip = shipBoard;
-//                testDisplacement = displacement;
             }
 
             @Override
@@ -202,7 +208,7 @@ class SlaversCardTest {
 
 
 
-
+    // Tests on Choose()
 
     @Test
     void chooseToGetCredits() {

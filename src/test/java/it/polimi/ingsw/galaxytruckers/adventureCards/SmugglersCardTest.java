@@ -91,6 +91,11 @@ class SmugglersCardTest {
 
         flightBoard = new FlightBoard(null) {
             @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+
+            @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return shipPlaces;
             }
@@ -118,6 +123,11 @@ class SmugglersCardTest {
 
         flightBoardOfLosers = new FlightBoard(null) {
             @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+
+            @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return loserShipPlaces;
             }
@@ -142,8 +152,6 @@ class SmugglersCardTest {
                 return null;
             }
         };
-
-
 
         smugglersCard = new SmugglersCard(null, Level.FIRST, flightBoard, 1, 1, goodsWon, 1);
     }
@@ -211,7 +219,6 @@ class SmugglersCardTest {
         assertInstanceOf(ChoiceState.class, testState);
 
         smugglersCard.choose(true);
-//        assertTrue(creditGained);
         assertTrue(displacedShips.contains(ship2));
         assertFalse(displacedShips.contains(ship1));
     }
@@ -225,7 +232,6 @@ class SmugglersCardTest {
         assertInstanceOf(ChoiceState.class, testState);
 
         smugglersCard.choose(false);
-//        assertFalse(creditGained);
         assertFalse(displacedShips.contains(ship1));
         assertFalse(displacedShips.contains(ship2));
 

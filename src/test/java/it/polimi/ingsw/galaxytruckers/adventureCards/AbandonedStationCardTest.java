@@ -96,6 +96,11 @@ class AbandonedStationCardTest {
 
         flightBoard = new FlightBoard(null) {
             @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+
+            @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return shipPlaces;
             }
@@ -122,6 +127,11 @@ class AbandonedStationCardTest {
         };
 
         flightBoardOfLosers = new FlightBoard(null) {
+            @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+
             @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return loserShipPlaces;
@@ -164,6 +174,9 @@ class AbandonedStationCardTest {
         testState = abandonedStationCard.nextStep();
         assertInstanceOf(ChoiceState.class, testState);
     }
+
+
+    //Test on Choose()
 
     @Test
     void chooseToTakeAndProcessUntilEndCard() {

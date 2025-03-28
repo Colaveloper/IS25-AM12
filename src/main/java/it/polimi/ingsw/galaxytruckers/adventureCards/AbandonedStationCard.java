@@ -44,6 +44,7 @@ public class AbandonedStationCard extends AdventureCard {
             }
 
             currentPlayerIndex++;
+
             if (currentShipBoard.getCrewSize() >= requiredCrew) {
                 return new ChoiceState();
             }
