@@ -18,15 +18,15 @@ public class SlaversCard extends AdventureCard {
     private final int firePowerThreshold;
     private final int creditPrize;
     private final int flightDaysLoss;
-    private final int goodsLoss;
+    private final int crewLoss;
     private boolean defeated;
 
-    protected SlaversCard(Image image, Level cardLevel, FlightBoard flightBoard, int goodsLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss) {
+    protected SlaversCard(Image image, Level cardLevel, FlightBoard flightBoard, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss) {
         super(image, cardLevel, flightBoard);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;
-        this.goodsLoss = goodsLoss;
+        this.crewLoss = crewLoss;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class SlaversCard extends AdventureCard {
                 } else if (currentShipBoard.getFirePower() < firePowerThreshold) { // player is defeated
                     ShipBoard tempShipBoard = currentShipBoard;
                     currentShipBoard = null;
-                    return new RemoveGoodsState(goodsLoss, tempShipBoard);
+                    return new RemoveCrewState (crewLoss, tempShipBoard);
                 }
             }
             // Letting the currentPlayer activate double cannons
