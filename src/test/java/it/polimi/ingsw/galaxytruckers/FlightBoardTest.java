@@ -278,7 +278,7 @@ class FlightBoardTest extends JavaFXInitializer {
 
         @Test
         void getLoopLenght() {
-            assertEquals(SecondFlightBoard.loopLength, flightBoard.getLoopLength());
+            assertEquals(TestFlightBoard.loopLength, flightBoard.getLoopLength());
         }
     }
 
