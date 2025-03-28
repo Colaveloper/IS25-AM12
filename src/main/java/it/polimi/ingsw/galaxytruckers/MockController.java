@@ -7,13 +7,14 @@ import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class MockController {
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         Scanner userScanner = new Scanner(System.in);
         String input;
         boolean submit = false;

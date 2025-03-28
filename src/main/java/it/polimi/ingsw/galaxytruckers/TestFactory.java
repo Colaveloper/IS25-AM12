@@ -5,12 +5,14 @@ import it.polimi.ingsw.galaxytruckers.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.TestShipBoard;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Set;
 
 public class TestFactory implements GameFactory{
     @Override
-    public Deck createDeck() {
-        return new TestDeck();
+    public Deck createDeck() throws IOException {
+        return new TestDeck(new File("src/main/resources/cards.json"));
     }
 
     @Override

@@ -11,10 +11,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Deck{
+    protected final List<AdventureCard> relevantCards;
     protected List<AdventureCard> masterDeck;
     private AdventureCard currentCard;
+
+    public Deck(List<AdventureCard> relevantCards) {
+        this.relevantCards = relevantCards;
+    }
 
     public AdventureCard getCurrentCard() {
         return currentCard;
@@ -48,7 +54,7 @@ public abstract class Deck{
         }
     }
 
-    public static List<AdventureCard> loadCards(File jsonFile) throws IOException {
+    protected static List<AdventureCard> loadCards(File jsonFile, Set<Level> levels) throws IOException {
         //reading from json file and returning the list of components
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(jsonFile);
@@ -58,17 +64,19 @@ public abstract class Deck{
 
         //iterating through nodes and adding each as a card to list
         for (JsonNode node : rootNode){
-            String type = node.get("type").asText();
-            AdventureCard card;
             Level level = Level.valueOf(node.get("level").asText());
-            Image image = new Image(node.get("path").asText());
+            if (levels.contains(level)) {
+                String type = node.get("type").asText();
+                AdventureCard card;
 
-            switch(type){
-                case "planets":
-                    card = null;
-                    break;
-                case "pirates":
-                    card = null;
+                Image image = new Image(node.get("path").asText());
+
+                switch(type){
+                    case "planets":
+                        card = null;
+                        break;
+                    case "pirates":
+                        card = null;
 //                    card = new PiratesCard(
 //                            image,
 //                            level,
@@ -77,60 +85,62 @@ public abstract class Deck{
 //                            node.get("flightDaysLoss").asInt(),
 //                            parseProjectiles(node.get("projectiles"))
 //                            );
-                    break;
-                case "smugglers":
-                    card = null;
+                        break;
+                    case "smugglers":
+                        card = null;
 //                    card = new SmugglersCard();
-                    break;
-                case "slavers":
-                    card = null;
+                        break;
+                    case "slavers":
+                        card = null;
 //                    card = new SlaversCard();
-                    break;
-                case "meteors":
+                        break;
+                    case "meteors":
 //                    card = new MeteorSwarmCard(
 //                            image,
 //                            level,
 //                            parseProjectiles(node.get("meteors"))
 //                    );
 //                  card = new MeteorSwarmCard();
-                    card = null;
-                    break;
-                case "epidemic":
+                        card = null;
+                        break;
+                    case "epidemic":
 //                    card = new EpidemicCard(
 //                            image,
 //                            level
 //                    );
-                    card = null;
+                        card = null;
 //                    card = new EpidemicCard();
-                    break;
-                case "stardust":
-                    card = null;
+                        break;
+                    case "stardust":
+                        card = null;
 //                    card = new StarDustCard();
-                    break;
-                case "abandoned Ship":
-                    card = null;
+                        break;
+                    case "abandoned Ship":
+                        card = null;
 //                    card = new AbandonedShipCard();
-                    break;
-                case "abandoned station":
-                    card = null;
+                        break;
+                    case "abandoned station":
+                        card = null;
 //                    card = new AbandonedShipCard();
-                    break;
-                case "combat zone":
-                    card = null;
+                        break;
+                    case "combat zone":
+                        card = null;
 //                    card = new CombatZoneCard();
-                    break;
-                case "open space":
-                    card = null;
+                        break;
+                    case "open space":
+                        card = null;
 //                    card = new OpenSpaceCard();
-                    break;
-                case "sabotage":
-                    card = null;
+                        break;
+                    case "sabotage":
+                        card = null;
 //                    card = new SabotageCard();
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown card type: " + type);
-            }
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unknown card type: " + type);
+                }
+
             cards.add(card);
+            }
         }
         return cards;
     }

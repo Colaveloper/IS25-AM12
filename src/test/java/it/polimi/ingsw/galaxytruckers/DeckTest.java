@@ -2,12 +2,14 @@ package it.polimi.ingsw.galaxytruckers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,7 +36,7 @@ class DeckTest {
         ObjectMapper objectMapper = new ObjectMapper();
         File jsonFile = new File("src/main/resources/cards.json");
 
-        List<AdventureCard> deck = Deck.loadCards(jsonFile);
+        List<AdventureCard> deck = Deck.loadCards(jsonFile, Set.of(Level.TEST, Level.FIRST, Level.SECOND));
 
         assertNotNull(deck);
         assertFalse(deck.isEmpty());

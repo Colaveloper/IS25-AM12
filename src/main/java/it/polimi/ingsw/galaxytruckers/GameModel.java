@@ -11,6 +11,7 @@ import it.polimi.ingsw.galaxytruckers.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 
+import java.io.IOException;
 import java.util.List;
 
 import java.awt.*;
@@ -28,7 +29,7 @@ public class GameModel {
 //    private int activeCardPlayCount;
     private List<Integer> playerShot;//TODO: list of shipboard, method maps coming int to ships here
 
-    public GameModel(Level chosenLevel, Map<Integer, Colors> chosenColors) {
+    public GameModel(Level chosenLevel, Map<Integer, Colors> chosenColors) throws IOException {
         switch (chosenLevel) {
             case Level.TEST -> gameFactory = new TestFactory();
             case Level.SECOND -> gameFactory = new SecondFactory();
