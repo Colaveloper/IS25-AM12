@@ -8,12 +8,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class FlightBoard implements Physical {
-    protected int loopLength;
-    protected List<Integer> startingPositionsLeft;
     protected final Set<ShipBoard> allShips; // contains playing+dead ships
     protected final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
     @VisibleForTesting
     protected final Map<ShipBoard, Integer> finalScores; // can be populated early by giving up
+    protected List<Integer> startingPositionsLeft;
 
     public FlightBoard(Set<ShipBoard> allShips) {
         this.allShips = allShips;
@@ -32,6 +31,8 @@ public abstract class FlightBoard implements Physical {
     // return value to be interpreted as "building phase is finished for everybody"
     public abstract boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition);
 
+    protected abstract int getLoopLength();
+
     public List<ShipBoard> getOrderedShips() {
         return shipToPlace.entrySet().stream()
                 .sorted(Comparator.<Map.Entry<ShipBoard, Integer>>comparingInt(Map.Entry::getValue).reversed())
@@ -45,7 +46,13 @@ public abstract class FlightBoard implements Physical {
         int tryMove = displacementLeft>0 ? 1 : -1;
         int newPosition = shipToPlace.get(shipBoard);
         while (displacementLeft!=0) {
-            if (shipToPlace.containsValue(newPosition + tryMove)) {
+            int finalNewPosition = newPosition;
+            int finalTryMove = tryMove;
+            if (
+                    shipToPlace.entrySet().stream()
+                            .map(e->e.getValue())
+                            .anyMatch(p -> p%getLoopLength() == (finalNewPosition + finalTryMove))
+            ) {
                 tryMove += displacementLeft>0 ? 1 : -1;
             } else {
                 newPosition += tryMove;

@@ -1,31 +1,36 @@
 package it.polimi.ingsw.galaxytruckers;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import javafx.scene.image.Image;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 public class TestFlightBoard extends FlightBoard{
     private static Image image;
+    @VisibleForTesting
+    protected static int loopLength;
+    @VisibleForTesting
+    protected static List<Integer> startingPositions;
+
 
     public TestFlightBoard(Set<ShipBoard> allShips) {
         super(allShips);
-        this.loopLength = Level.TEST.getLoopLength();
-        this.startingPositionsLeft = new ArrayList<>(Level.TEST.getStartingPositions());
+        loopLength = 18;
+        startingPositions = Arrays.asList(4, 2, 1, 0).subList(0, allShips.size());
         image = new Image("file:src/main/resources/texture/cardboard/learning-flight-board.png");
+        this.startingPositionsLeft = new ArrayList<>(startingPositions);
     }
 
     @Override
     public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
         shipToPlace.put(shipBoard, startingPositionsLeft.removeFirst());
         // to be interpreted as "building phase is finished for everybody"
-        return startingPositionsLeft.size() + allShips.size() == 4;
+        return startingPositionsLeft.isEmpty();
     }
 
     @Override
@@ -38,5 +43,10 @@ public class TestFlightBoard extends FlightBoard{
     public String getDescription() {
         return "Test-Flight: "+super.getDescription();
         // TODO: describe
+    }
+
+    @Override
+    protected int getLoopLength() {
+        return loopLength;
     }
 }

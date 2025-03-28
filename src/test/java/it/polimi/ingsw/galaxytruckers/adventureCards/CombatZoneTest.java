@@ -10,6 +10,7 @@ import it.polimi.ingsw.galaxytruckers.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.state.*;
 import javafx.scene.image.Image;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -127,6 +128,11 @@ public class CombatZoneTest {
             @Override
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return true;
+            }
+
+            @Override
+            protected int getLoopLength() {
+                return 0;
             }
         };
 

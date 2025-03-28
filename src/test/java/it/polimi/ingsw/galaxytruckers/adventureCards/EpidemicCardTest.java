@@ -111,6 +111,11 @@ class EpidemicCardTest {
             }
 
             @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+
+            @Override
             public Image getImage() {
                 return null;
             }

@@ -1,23 +1,27 @@
 package it.polimi.ingsw.galaxytruckers;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import javafx.scene.image.Image;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SecondFlightBoard extends FlightBoard{
     private static Image image;
+    @VisibleForTesting
+    protected static int loopLength;
+    @VisibleForTesting
+    protected static List<Integer> startingPositions;
 
     public SecondFlightBoard(Set<ShipBoard> allShips) {
         super(allShips);
-        this.loopLength = Level.SECOND.getLoopLength();
-        this.startingPositionsLeft = new ArrayList<>(Level.SECOND.getStartingPositions().subList(0, allShips.size()));
+        loopLength = 24;
+        startingPositions = Arrays.asList(6, 3, 1, 0).subList(0, allShips.size());
         image = new Image("file:src/main/resources/texture/cardboard/second-flight-board.png");
+        this.startingPositionsLeft = new ArrayList<>(startingPositions);
     }
 
     @Override
@@ -69,5 +73,10 @@ public class SecondFlightBoard extends FlightBoard{
     public String getDescription() {
         return "Second-Flight: "+super.getDescription();
         // TODO: describe positions
+    }
+
+    @Override
+    protected int getLoopLength() {
+        return loopLength;
     }
 }

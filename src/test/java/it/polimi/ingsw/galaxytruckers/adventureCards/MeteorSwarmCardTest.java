@@ -64,6 +64,11 @@ class MeteorSwarmCardTest {
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return true;
             }
+
+            @Override
+            protected int getLoopLength() {
+                return 0;
+            }
         };
         safeProjectiles = new ArrayList<>(List.of(
                 new SmallMeteor(()->6,0),

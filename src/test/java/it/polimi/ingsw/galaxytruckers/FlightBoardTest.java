@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers;
 
 
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
-import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
@@ -59,11 +58,11 @@ class FlightBoardTest extends JavaFXInitializer {
         void placeShipOnFlightBoardNeverFailsAndIgnoresStartingPosition() {
             // starting position ignored in test flight
             assertFalse(flightBoard.placeShipOnFlightBoard(ship1, 123));
-            shipToPlace.put(ship1, Level.TEST.getStartingPositions().get(0));
+            shipToPlace.put(ship1, TestFlightBoard.startingPositions.get(0));
             assertFalse(flightBoard.placeShipOnFlightBoard(ship2, 324));
-            shipToPlace.put(ship2, Level.TEST.getStartingPositions().get(1));
+            shipToPlace.put(ship2, TestFlightBoard.startingPositions.get(1));
             assertTrue(flightBoard.placeShipOnFlightBoard(ship3, 123));
-            shipToPlace.put(ship3, Level.TEST.getStartingPositions().get(2));
+            shipToPlace.put(ship3, TestFlightBoard.startingPositions.get(2));
 
             for (ShipBoard ship : allShips) {
                 assertEquals(shipToPlace.get(ship), flightBoard.getShipToPlace().get(ship));
@@ -230,7 +229,7 @@ class FlightBoardTest extends JavaFXInitializer {
         void getFinalScores() {
             int myGoodValue = 9;
             int myCreditsAndLosses = 6;
-            int myBestLookinAward = 2;
+            int myBestLookingAward = 2;
             int myFinishOrderAward = 2;
             class LocalFlightBoard extends FlightBoard {
                 public LocalFlightBoard(Set<ShipBoard> allShips) {
@@ -243,8 +242,13 @@ class FlightBoardTest extends JavaFXInitializer {
                 }
 
                 @Override
+                protected int getLoopLength() {
+                    return 0;
+                }
+
+                @Override
                 protected void assignBestLookingShipReward() {
-                    this.finalScores.merge(ship1, myBestLookinAward, Integer::sum);
+                    this.finalScores.merge(ship1, myBestLookingAward, Integer::sum);
                 }
 
                 @Override
@@ -268,8 +272,13 @@ class FlightBoardTest extends JavaFXInitializer {
                 }
             }
             LocalFlightBoard localFlightBoard = new LocalFlightBoard(Set.of(ship1));
-            shipToScore.put(ship1, myBestLookinAward+myFinishOrderAward+myCreditsAndLosses+myGoodValue);
+            shipToScore.put(ship1, myBestLookingAward+myFinishOrderAward+myCreditsAndLosses+myGoodValue);
             assertEquals(shipToScore, localFlightBoard.getFinalScores());
+        }
+
+        @Test
+        void getLoopLenght() {
+            assertEquals(SecondFlightBoard.loopLength, flightBoard.getLoopLength());
         }
     }
 
@@ -284,8 +293,7 @@ class FlightBoardTest extends JavaFXInitializer {
             ship3 = new SecondShipBoard(componentBank, Colors.GREEN);
             allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
             flightBoard = new SecondFlightBoard(Set.of(ship1, ship2, ship3));
-            legalStartingPositions = new ArrayList<>(Level.SECOND
-                    .getStartingPositions()
+            legalStartingPositions = new ArrayList<>(SecondFlightBoard.startingPositions
                     .subList(0, allShips.size()));
         }
 
@@ -300,17 +308,6 @@ class FlightBoardTest extends JavaFXInitializer {
             assertThrows(
                     IllegalArgumentException.class,
                     () -> flightBoard.placeShipOnFlightBoard(ship1, 123)
-            );
-        }
-
-        @Test
-        void placeShipOnFlightBoardThrowsExceptionIfStartingTooBehind() {
-            // if three players, only three staring places
-            assertThrows(
-                    IllegalArgumentException.class,
-                    () -> flightBoard.placeShipOnFlightBoard(ship1, Level.SECOND
-                            .getStartingPositions()
-                            .get(allShips.size()))
             );
         }
 

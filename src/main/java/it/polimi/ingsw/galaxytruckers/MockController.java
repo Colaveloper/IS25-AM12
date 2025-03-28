@@ -48,11 +48,11 @@ public class MockController {
         GameModel gameModel = new GameModel(chosenLevel, chosenColors);
 
         // Mocking 6.
-        BuildingTime buildingTime = new BuildingTime(chosenLevel.getHourglassFlips());
+//        BuildingTime buildingTime = new BuildingTime(chosenLevel.getHourglassFlips());
         gameModel.requestRanComponent(1234);
         gameModel.rotateComponent(1234);
         gameModel.placeComponent(1234, new Point(7,8));
-        gameModel.placeShipOnFlightBoard(1234, chosenLevel.getStartingPositions().get(2));
+//        gameModel.placeShipOnFlightBoard(1234, chosenLevel.getStartingPositions().get(2));
 
         // Assuming 7.
 
