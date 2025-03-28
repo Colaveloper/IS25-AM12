@@ -2,81 +2,84 @@ package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.state.*;
+import it.polimi.ingsw.galaxytruckers.state.AddGoodsState;
+import it.polimi.ingsw.galaxytruckers.state.ChoiceState;
+import it.polimi.ingsw.galaxytruckers.state.DrawCardState;
+import it.polimi.ingsw.galaxytruckers.state.GameState;
 import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SlaversCardTest {
+class AbandonedStationCardTest {
 
-    SlaversCard slaversCard;
+    AbandonedStationCard abandonedStationCard;
     FlightBoard flightBoard;
     FlightBoard flightBoardOfLosers;
 
     SecondShipBoard ship1;
     SecondShipBoard ship2;
     SecondShipBoard ship3;
+    SecondShipBoard ship4;
     List<ShipBoard> ships;
     List<ShipBoard> loserShips;
     Map<ShipBoard, Integer> shipPlaces;
     Map<ShipBoard, Integer> loserShipPlaces;
+    Map<GoodsType, Integer> goodsWon;
     GameState testState;
 
     List<ShipBoard> displacedShips;
-    boolean creditGained;
-
 
     @BeforeEach
     void setUp() {
-
         displacedShips = new ArrayList<>();
 
+        goodsWon = new HashMap<>();
         ships = new ArrayList<>();
         loserShips = new ArrayList<>();
 
         ship1 = new SecondShipBoard(Colors.RED) {
-            @Override
-            public int getFirePower() {
-                return 0;
-            }
 
             @Override
-            public void gainCredits(int credits) {
-                creditGained = true;
-            }
-        };
-
-        ship2 = new SecondShipBoard(Colors.RED) {
-            @Override
-            public int getFirePower() {
-                return 2;
-            }
-
-            @Override
-            public void gainCredits(int credits) {
-                creditGained = true;
-            }
-        };
-
-        ship3 = new SecondShipBoard(Colors.RED) {
-            @Override
-            public int getFirePower() {
+            public int getCrewSize() {
                 return 1;
             }
+        };
 
+        ship2 = new SecondShipBoard(Colors.GREEN) {
+            @Override
+            public int getCrewSize() {
+                return 3;
+            }
+        };
+
+        ship3 = new SecondShipBoard(Colors.BLUE) {
+            @Override
+            public int getCrewSize() {
+                return 1;
+            }
+        };
+
+        ship4 = new SecondShipBoard(Colors.BLUE) {
+            @Override
+            public int getCrewSize() {
+                return 5;
+            }
         };
 
         ships.add(ship1);
         ships.add(ship2);
+        ships.add(ship4);
 
         loserShips.add(ship3);
         loserShips.add(ship1);
@@ -105,8 +108,6 @@ class SlaversCardTest {
             @Override
             public void displaceShip(ShipBoard shipBoard, int displacement) {
                 displacedShips.add(shipBoard);
-//                testShip = shipBoard;
-//                testDisplacement = displacement;
             }
 
             @Override
@@ -134,8 +135,6 @@ class SlaversCardTest {
             @Override
             public void displaceShip(ShipBoard shipBoard, int displacement) {
                 displacedShips.add(shipBoard);
-//                testShip = shipBoard;
-//                testDisplacement = displacement;
             }
 
             @Override
@@ -149,86 +148,57 @@ class SlaversCardTest {
             }
         };
 
-        slaversCard = new SlaversCard(null, Level.FIRST, flightBoard, 1, 1, 1, 1);
-    }
+        abandonedStationCard = new AbandonedStationCard(null, Level.FIRST, flightBoard, goodsWon, 2, 1);
 
-
-    @Test
-    void secondPlayerWinsSoChooseState() {
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        testState = slaversCard.nextStep();
-        assertInstanceOf(ChoiceState.class, testState);
     }
 
     @Test
-    void firstPlayerLoses() {
-        slaversCard.nextStep();
-        testState = slaversCard.nextStep();
-        assertInstanceOf(RemoveCrewState.class, testState);
-    }
-
-    @Test
-    void eachPlayerHasActivateState() {
-        testState = slaversCard.nextStep();
-        assertInstanceOf(ActivateState.class, testState);
-        slaversCard.nextStep();//removeGoodsState
-        testState = slaversCard.nextStep();
-        assertInstanceOf(ActivateState.class, testState);
-    }
-
-    @Test
-    void nextStepIsDrawState() {
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        testState = slaversCard.nextStep();
+    void noneCanLand() {
+        abandonedStationCard = new AbandonedStationCard(null, Level.FIRST, flightBoardOfLosers, goodsWon, 2, 1);
+        testState = abandonedStationCard.nextStep();
         assertInstanceOf(DrawCardState.class, testState);
     }
 
     @Test
-    void noneWins() {
-        slaversCard = new SlaversCard(null, Level.FIRST, flightBoardOfLosers, 1, 1, 1, 1);
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        testState = slaversCard.nextStep();
-        assertInstanceOf(DrawCardState.class, testState);
-        assertFalse(displacedShips.contains(ship1));
-        assertFalse(displacedShips.contains(ship2));
+    void firstStepSkipToFirstWhoCanLand() {
+        testState = abandonedStationCard.nextStep();
+        assertInstanceOf(ChoiceState.class, testState);
     }
 
-
-
-
-
     @Test
-    void chooseToGetCredits() {
-        slaversCard.nextStep();//activate
-        slaversCard.nextStep();//lose crew
-        slaversCard.nextStep();//activate
-        testState = slaversCard.nextStep();//choose
+    void chooseToTakeAndProcessUntilEndCard() {
+        testState = abandonedStationCard.nextStep();
         assertInstanceOf(ChoiceState.class, testState);
 
-        slaversCard.choose(true);
-        assertTrue(creditGained);
+        abandonedStationCard.choose(true);
+        testState = abandonedStationCard.nextStep();
+        assertInstanceOf(AddGoodsState.class, testState);
+
+        testState = abandonedStationCard.nextStep();
+        assertInstanceOf(DrawCardState.class, testState);
+
         assertTrue(displacedShips.contains(ship2));
-        assertFalse(displacedShips.contains(ship1));
     }
 
     @Test
-    void chooseToNOTGetCredits() {
-        slaversCard.nextStep();//activate
-        slaversCard.nextStep();//lose crew
-        slaversCard.nextStep();//activate
-        testState = slaversCard.nextStep();//choose
+    void ship2DoestTakeButShip4DoesToEnd() {
+        testState = abandonedStationCard.nextStep();
         assertInstanceOf(ChoiceState.class, testState);
 
-        slaversCard.choose(false);
-        assertFalse(creditGained);
-        assertFalse(displacedShips.contains(ship1));
+        abandonedStationCard.choose(false);
+
+        testState = abandonedStationCard.nextStep();
+        assertInstanceOf(ChoiceState.class, testState);
+
+        abandonedStationCard.choose(true);
+
+        testState = abandonedStationCard.nextStep();
+        assertInstanceOf(AddGoodsState.class, testState);
+
+        testState = abandonedStationCard.nextStep();
+        assertInstanceOf(DrawCardState.class, testState);
+
+        assertTrue(displacedShips.contains(ship4));
         assertFalse(displacedShips.contains(ship2));
     }
 }

@@ -33,13 +33,22 @@ public class AbandonedStationCard extends AdventureCard {
     public GameState nextStep() {
 
         if(!accepted) {
-            if (currentShipBoard != null && currentShipBoard.getCrewSize() >= requiredCrew) {
-                return new ChoiceState();
-            }
+
 
             if (currentPlayerIndex < flightBoard.getShipToPlace().size()) { // There are other players to evaluate
                 currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
-                currentPlayerIndex++;
+            }
+
+            else {
+                return new DrawCardState();
+            }
+
+            currentPlayerIndex++;
+            if (currentShipBoard.getCrewSize() >= requiredCrew) {
+                return new ChoiceState();
+            }
+
+            else {
                 return nextStep();
             }
         }

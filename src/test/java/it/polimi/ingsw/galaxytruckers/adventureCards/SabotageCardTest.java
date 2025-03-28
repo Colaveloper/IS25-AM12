@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +55,7 @@ class SabotageCardTest {
             }
 
             @Override
-            public void removeComponent() {
+            public void removeComponent(Point position) {
                 shipExploded.add(ship1);
             }
         };
@@ -66,21 +67,23 @@ class SabotageCardTest {
             }
 
             @Override
-            public void removeComponent() {
+            public void removeComponent(Point position) {
                 shipExploded.add(ship2);
             }
         };
 
-        ship3 = new SecondShipBoard(Colors.RED) {
+        ship3 = new SecondShipBoard(Colors.GREEN) {
             @Override
             public int getCrewSize() {
                 return 1;
             }
 
             @Override
-            public void removeComponent() {
+            public void removeComponent(Point position) {
                 shipExploded.add(ship3);
             }
+
+
         };
 
         ships.add(ship1);
@@ -95,9 +98,9 @@ class SabotageCardTest {
             shipPlaces.put(ships.get(i), 10-i);
         }
 
-        largerShipsPlaces = new HashMap<>();
+        largerShipPlaces = new HashMap<>();
         for (int i = 0; i < largerShips.size(); i++) {
-            largerShipsPlaces.put(largerShips.get(i), 10-i);
+            largerShipPlaces.put(largerShips.get(i), 10-i);
         }
 
 
@@ -154,17 +157,20 @@ class SabotageCardTest {
 
 
     @Test
-    void coorectShipExplode() {
-        testState = SabotageCard.nextStep();
+    void correctShipExplodes() {
+        testState = sabotageCard.nextStep();
         assertInstanceOf(DrawCardState.class, testState);
         assertTrue(shipExploded.contains(ship1));
+        assertFalse(shipExploded.contains(ship2));
     }
 
     @Test
     void otherOrderToCheck() {
         sabotageCard = new SabotageCard(null, Level.FIRST, largerFlightBoard);
-        testState = SabotageCard.nextStep();
+        testState = sabotageCard.nextStep();
         assertInstanceOf(DrawCardState.class, testState);
         assertTrue(shipExploded.contains(ship3));
+        assertFalse(shipExploded.contains(ship1));
+        assertFalse(shipExploded.contains(ship2));
     }
 }
