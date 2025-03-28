@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.galaxytruckers.adventureCards.*;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.*;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import javafx.scene.image.Image;
@@ -17,9 +16,11 @@ public abstract class Deck{
     protected final List<AdventureCard> relevantCards;
     protected List<AdventureCard> masterDeck;
     private AdventureCard currentCard;
+    protected static String jsonPath;
 
     public Deck(List<AdventureCard> relevantCards) {
         this.relevantCards = relevantCards;
+        jsonPath = "src/main/resources/cards.json";
     }
 
     public AdventureCard getCurrentCard() {
@@ -54,8 +55,9 @@ public abstract class Deck{
         }
     }
 
-    protected static List<AdventureCard> loadCards(File jsonFile, Set<Level> levels) throws IOException {
+    protected static List<AdventureCard> loadRelevantCards(Set<Level> levels) throws IOException {
         //reading from json file and returning the list of components
+        File jsonFile = new File(jsonPath);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(jsonFile);
         FlightBoard flightBoard = null;

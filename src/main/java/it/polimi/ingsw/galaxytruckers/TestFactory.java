@@ -12,7 +12,7 @@ import java.util.Set;
 public class TestFactory implements GameFactory{
     @Override
     public Deck createDeck() throws IOException {
-        return new TestDeck(new File("src/main/resources/cards.json"));
+        return new TestDeck();
     }
 
     @Override

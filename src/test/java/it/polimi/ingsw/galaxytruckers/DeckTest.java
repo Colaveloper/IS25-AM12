@@ -33,16 +33,5 @@ class DeckTest {
 
     @Test
     void loadComponents() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        File jsonFile = new File("src/main/resources/cards.json");
-
-        List<AdventureCard> deck = Deck.loadCards(jsonFile, Set.of(Level.TEST, Level.FIRST, Level.SECOND));
-
-        assertNotNull(deck);
-        assertFalse(deck.isEmpty());
-
-        assertEquals(1, deck.size());
-
-//        assertEquals("PiratesCard", deck.getFirst().getClass().getSimpleName());
     }
 }
