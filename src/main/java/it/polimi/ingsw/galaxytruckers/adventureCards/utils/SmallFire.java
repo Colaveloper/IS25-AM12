@@ -20,9 +20,7 @@ public class SmallFire extends Projectile {
 
     @Override
     public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
-        return shipBoard.getShields().keySet().stream()
-                .filter(shipBoard.getActivatables().keySet()::contains)
-                .collect(Collectors.toSet());
+        return shipBoard.getShields().keySet();
     }
 
     @Override

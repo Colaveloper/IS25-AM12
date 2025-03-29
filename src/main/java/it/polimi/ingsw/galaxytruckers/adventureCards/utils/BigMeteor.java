@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards.utils;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.Cannon;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
@@ -27,7 +28,8 @@ public class BigMeteor extends Projectile {
                     Cannon c = e.getValue();
                     return shipBoard.getActivatables().containsKey(e.getKey())
                             && c.getFirePower()>0
-                            && isEffective(e);})
+                            && cannonPositionIsEffective(e);
+                })
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }
@@ -36,15 +38,17 @@ public class BigMeteor extends Projectile {
     protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
         return getFirstFoundComponent(shipBoard).filter(
                 (_) -> shipBoard.getCannons().entrySet().stream()
-                        .filter(e -> {
-                            Cannon c = e.getValue();
-                            return c.getFirePower()>0;
-                        })
-                        .anyMatch(this::isEffective)
-                );
+                .filter(e -> {
+                    Cannon c = e.getValue();
+                    return c.getFirePower()>0;
+                })
+                .noneMatch(this::cannonPositionIsEffective));
     }
 
-    private boolean isEffective(Map.Entry<Point, Cannon> e) {
+    // returns firstFoundComponent if there's an effective cannon with non-zero firepower
+
+    @VisibleForTesting
+    protected boolean cannonPositionIsEffective(Map.Entry<Point, Cannon> e) {
         return e.getValue().getOrientation() == direction && switch (direction) {
             case 0 -> e.getKey().x == diceRoll;
             case 1, 3 ->  Math.abs(e.getKey().y - diceRoll) < 2;
