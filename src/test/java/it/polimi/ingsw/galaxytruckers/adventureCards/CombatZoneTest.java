@@ -1,16 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.BigMeteor;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.SmallMeteor;
+import it.polimi.ingsw.galaxytruckers.adventureCards.projectiles.BigMeteor;
+import it.polimi.ingsw.galaxytruckers.adventureCards.projectiles.Projectile;
+import it.polimi.ingsw.galaxytruckers.adventureCards.projectiles.SmallMeteor;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.state.*;
 import javafx.scene.image.Image;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

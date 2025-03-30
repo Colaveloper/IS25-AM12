@@ -2,7 +2,8 @@ package it.polimi.ingsw.galaxytruckers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.*;
+import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.projectiles.*;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import javafx.scene.image.Image;
 

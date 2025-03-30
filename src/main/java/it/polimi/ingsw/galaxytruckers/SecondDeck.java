@@ -1,13 +1,11 @@
 package it.polimi.ingsw.galaxytruckers;
 
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class SecondDeck extends Deck{
 

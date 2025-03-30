@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.adventureCards.utils;
+package it.polimi.ingsw.galaxytruckers.adventureCards.projectiles;
 
 import it.polimi.ingsw.galaxytruckers.shipBuilding.Cannon;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.Component;

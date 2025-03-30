@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.adventureCards.utils;
+package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.Physical;

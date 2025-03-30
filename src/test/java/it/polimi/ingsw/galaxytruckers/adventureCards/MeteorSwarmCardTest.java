@@ -1,14 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.BigMeteor;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.SmallMeteor;
+import it.polimi.ingsw.galaxytruckers.adventureCards.projectiles.BigMeteor;
+import it.polimi.ingsw.galaxytruckers.adventureCards.projectiles.Projectile;
+import it.polimi.ingsw.galaxytruckers.adventureCards.projectiles.SmallMeteor;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.*;
-import it.polimi.ingsw.galaxytruckers.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.state.ActivateState;
 import it.polimi.ingsw.galaxytruckers.state.ChooseShipPieceState;
 import it.polimi.ingsw.galaxytruckers.state.DrawCardState;

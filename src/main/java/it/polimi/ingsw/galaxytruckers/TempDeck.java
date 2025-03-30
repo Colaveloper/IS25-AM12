@@ -2,7 +2,7 @@
 //
 //import it.polimi.ingsw.galaxytruckers.adventureCards.*;
 //import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCardDeprecated;
-//import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
+//import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
 //import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
 //import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 //

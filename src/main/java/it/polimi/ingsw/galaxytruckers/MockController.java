@@ -49,7 +49,7 @@ public class MockController {
         GameModel gameModel = new GameModel(chosenLevel, chosenColors);
 
         // Mocking 6.
-//        BuildingTime buildingTime = new BuildingTime(chosenLevel.getHourglassFlips());
+//        Hourglass buildingTime = new Hourglass(chosenLevel.getHourglassFlips());
         gameModel.requestRanComponent(1234);
         gameModel.rotateComponent(1234);
         gameModel.placeComponent(1234, new Point(7,8));

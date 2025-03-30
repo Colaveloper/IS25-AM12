@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.state;
 
 import it.polimi.ingsw.galaxytruckers.Deck;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
 
 import java.awt.*;
