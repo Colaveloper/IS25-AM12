@@ -1,9 +1,7 @@
 package it.polimi.ingsw.galaxytruckers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.JavaFXInitializer;
 import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

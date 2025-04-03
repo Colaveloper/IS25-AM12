@@ -1,8 +1,8 @@
-package it.polimi.ingsw.galaxytruckers.state;
+package it.polimi.ingsw.galaxytruckers.model.state;
 
-import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.shipBuilding.CargoHold;
-import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 import java.util.Comparator;
@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ChooseGoodToLoseState extends GameState{
+public class ChooseGoodToLoseState extends GameState {
     private final GoodsType mostValuableGoodType; // might be null!
     private final Set<Point> availablePositions;
     private final ShipBoard shipBoard;

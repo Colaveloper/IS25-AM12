@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.galaxytruckers.JavaFXInitializer;
+import it.polimi.ingsw.galaxytruckers.model.JavaFXInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

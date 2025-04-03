@@ -6,12 +6,6 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
 import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
-import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.state.*;
 import javafx.scene.image.Image;
 
 import java.awt.*;

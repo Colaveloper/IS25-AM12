@@ -2,9 +2,6 @@ package it.polimi.ingsw.galaxytruckers.model;
 
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
 
 import java.io.IOException;
 import java.util.*;

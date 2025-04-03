@@ -3,15 +3,11 @@ package it.polimi.ingsw.galaxytruckers.model;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.*;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.adventureCards.*;
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.*;
-import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.state.GameState;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -218,5 +214,10 @@ public abstract class Deck{
             goods.put(type, goodsNode.get(type.name().toLowerCase()).asInt());
         }
         return goods;
+    }
+
+    @VisibleForTesting
+    public List<AdventureCard> getMasterDeck() {
+        return masterDeck;
     }
 }

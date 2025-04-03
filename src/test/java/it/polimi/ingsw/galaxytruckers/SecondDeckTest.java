@@ -1,6 +1,9 @@
 package it.polimi.ingsw.galaxytruckers;
 
-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.JavaFXInitializer;
+import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
+import it.polimi.ingsw.galaxytruckers.model.SecondFlightBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
