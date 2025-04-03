@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.annotations.VisibleForTesting;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -13,6 +14,7 @@ public class ComponentBank {
 
     private final List<Component> coveredComponents;
     private final Map<Integer, Component> uncoveredComponents;
+    private static final File componentJson = new File("src/main/resources/tiles.json");;
 
     public ComponentBank() {
         //TODO: read components from file and shuffle them
@@ -42,11 +44,11 @@ public class ComponentBank {
         uncoveredComponents.put(component.hashCode(), component);
     }
 
-    public static List<Component> loadComponents(File jsonFile) throws IOException{
+    @VisibleForTesting
+    protected static List<Component> loadComponents() throws IOException{
         //reading from json file and returning the list of components
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(jsonFile);
-
+        JsonNode rootNode = objectMapper.readTree(componentJson);
         List<Component> components = new ArrayList<>();
 
         //iterating through nodes and adding each as a component to list

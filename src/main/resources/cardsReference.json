@@ -3,7 +3,7 @@
             "type": "abandonedShip",
             "level": "FIRST",
             "credits": 3,
-            "flightDaysLoss": 1,
+            "flight day loss": 1,
             "people": 2,
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_0117.jpg"
       },
@@ -11,7 +11,7 @@
             "type": "abandonedShip",
             "level": "TEST",
             "credits": 4,
-            "flightDaysLoss": 1,
+            "flight day loss": 1,
             "people": 3,
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_0118.jpg"
       },
@@ -19,7 +19,7 @@
             "type": "abandonedShip",
             "level": "SECOND",
             "credits": 6,
-            "flightDaysLoss": 1,
+            "flight day loss": 1,
             "people": 4,
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0117.jpg"
       },
@@ -27,7 +27,7 @@
             "type": "abandonedShip",
             "level": "SECOND",
             "credits": 8,
-            "flightDaysLoss": 2,
+            "flight day loss": 2,
             "people": 5,
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
       },
@@ -41,7 +41,7 @@
                   "yellow": 1,
                   "red": 0
             },
-            "flightDaysLoss": 1,
+            "flight day loss": 1,
             "people": 5,
             "path": "src/main/resources/textures/cardsonedStation/GT-cards_I_IT_0119.jpg"
       },
@@ -55,7 +55,7 @@
                   "yellow": 0,
                   "red": 2
             },
-            "flightDaysLoss": 1,
+            "flight day loss": 1,
             "people": 6,
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
       },
@@ -69,7 +69,7 @@
                   "yellow": 1,
                   "red": 1
             },
-            "flightDaysLoss": 1,
+            "flight day loss": 1,
             "people": 7,
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
       },
@@ -83,7 +83,7 @@
                   "yellow": 2,
                   "red": 0
             },
-            "flightDaysLoss": 2,
+            "flight day loss": 2,
             "people": 8,
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
       },
@@ -163,7 +163,7 @@
                   ["big fire",0],
                   ["small fire",0]
             ],
-            "flightDaysLoss": 1,
+            "flight day loss": 1,
             "credits": 4,
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_013.jpg"
       },
@@ -176,14 +176,14 @@
                   ["small fire",0],
                   ["big fire",0]
             ],
-            "flightDaysLoss": 2,
+            "flight day loss": 2,
             "credits": 7,
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_013.jpg"
       },
       {
             "type": "planets",
             "level": "FIRST",
-            "flightDaysLoss": 3,
+            "flight day loss": 3,
             "planets": [
                   {
                         "blue": 3,
@@ -209,7 +209,7 @@
       {
             "type": "planets",
             "level": "TEST",
-            "flightDaysLoss": 2,
+            "flight day loss": 2,
             "planets": [
                   {
                         "blue": 2,
@@ -235,7 +235,7 @@
       {
             "type": "planets",
             "level": "FIRST",
-            "flightDaysLoss": 3,
+            "flight day loss": 3,
             "planets": [
                   {
                         "blue": 0,
@@ -255,7 +255,7 @@
       {
             "type": "planets",
             "level": "FIRST",
-            "flightDaysLoss": 1,
+            "flight day loss": 1,
             "planets": [
                   {
                         "blue": 3,
@@ -281,7 +281,7 @@
       {
             "type": "planets",
             "level": "SECOND",
-            "flightDaysLoss": 4,
+            "flight day loss": 4,
             "planets": [
                   {
                         "blue": 4,
@@ -307,7 +307,7 @@
       {
             "type": "planets",
             "level": "SECOND",
-            "flightDaysLoss": 4,
+            "flight day loss": 4,
             "planets": [
                   {
                         "blue": 4,
@@ -333,7 +333,7 @@
       {
             "type": "planets",
             "level": "SECOND",
-            "flightDaysLoss": 3,
+            "flight day loss": 3,
             "planets": [
                   {
                         "blue": 0,
@@ -353,7 +353,7 @@
       {
             "type": "planets",
             "level": "SECOND",
-            "flightDaysLoss": 2,
+            "flight day loss": 2,
             "planets": [
                   {
                         "blue": 0,
@@ -385,7 +385,7 @@
       {
             "type": "planets",
             "level": "SECOND",
-            "flightDaysLoss": 3,
+            "flight day loss": 3,
             "planets": [
                   {
                         "blue": 4,
@@ -446,7 +446,7 @@
       {
             "type": "smugglers",
             "level": "TEST",
-            "flightDaysLoss": 1,
+            "flight day loss": 1,
             "storage":
                   {
                         "blue": 1,
@@ -461,7 +461,7 @@
       {
             "type": "smugglers",
             "level": "SECOND",
-            "flightDaysLoss": 1,
+            "flight day loss": 1,
             "storage":
                   {
                         "blue": 0,
@@ -476,7 +476,7 @@
       {
             "type": "slavers",
             "level": "FIRST",
-            "flightDaysLoss": 1,
+            "flight day loss": 1,
             "cannons": 6,
             "penalty": 3,
             "credits": 5,
@@ -485,7 +485,7 @@
       {
             "type": "slavers",
             "level": "SECOND",
-            "flightDaysLoss": 2,
+            "flight day loss": 2,
             "cannons": 7,
             "penalty": 4,
             "credits": 8,
@@ -498,37 +498,41 @@
       },
       {
             "type": "warzone",
-            "engines": {
-                  "humans": 2
-            },
-            "cannons": {
-                  "shoots": [
-                        ["small fire",2],
-                        ["big fire",2]
-                  ]
-            },
-            "humans": {
-                  "flightDaysLoss": 3
-            },
+            "actions": [
+                  "min crew",
+                  "loses flight days",
+                  "min engine",
+                  "loses crew",
+                  "min cannons",
+                  "gets shot"
+            ],
+            "shoots": [
+                  ["small fire",2],
+                  ["big fire",2]
+            ],
+            "crew loss": 2,
+            "flight day loss": 3,
             "level": "TEST",
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_0116.jpg"
       },
       {
             "type": "warzone",
-            "engines": {
-                  "storage": 3
-            },
-            "cannons": {
-                  "flightDaysLoss": 4
-            },
-            "humans": {
-                  "shoots": [
-                        ["small fire",0],
-                        ["small fire",3],
-                        ["small fire",1],
-                        ["big fire",2]
-                  ]
-            },
+            "actions": [
+                  "min cannons",
+                  "loses flight days",
+                  "min engine",
+                  "loses goods",
+                  "min crew",
+                  "gets shot"
+            ],
+            "storage": 3,
+            "flight day loss": 4,
+            "shoots": [
+                  ["small fire",0],
+                  ["small fire",3],
+                  ["small fire",1],
+                  ["big fire",2]
+            ],
             "level": "SECOND",
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0116.jpg"
       }

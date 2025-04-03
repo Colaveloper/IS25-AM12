@@ -33,6 +33,10 @@ public abstract class GameState {
         throw new UnsupportedOperationException("This action is unsupported in this state");
     }
 
+    public void chooseGoodToLose(Point position)  {
+        throw new UnsupportedOperationException("This action is unsupported in this state");
+    }
+
     public abstract GameState getNextState();
 
 

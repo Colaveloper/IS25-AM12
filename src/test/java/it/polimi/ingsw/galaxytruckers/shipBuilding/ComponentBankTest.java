@@ -1,6 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.shipBuilding;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.polimi.ingsw.galaxytruckers.JavaFXInitializer;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -10,20 +12,21 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ComponentBankTest {
+class ComponentBankTest extends JavaFXInitializer {
+    ComponentBank componentBank;
+
+    @BeforeEach
+    void setUp() {
+        componentBank = new ComponentBank();
+    }
 
     @Test
-    void loadComponents() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        File jsonFile = new File("src/main/resources/tiles.json");
+    void loadComponentSizes() throws IOException {
+        List<Component> components = componentBank.loadComponents();
 
-        List<Component> components = ComponentBank.loadComponents(jsonFile);
-
-        //ensure list is not null and at least one component was loaded
+        // ensure list is not null and at least one component was loaded
         assertNotNull(components);
         assertFalse(components.isEmpty());
-
-        // TODO: check all the other data
 
         //ensure that all 156 components have been loaded
         assertEquals(156, components.size());

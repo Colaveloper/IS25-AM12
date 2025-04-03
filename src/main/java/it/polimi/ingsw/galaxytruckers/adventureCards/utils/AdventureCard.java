@@ -33,6 +33,10 @@ public abstract class AdventureCard implements Physical {
     // TODO : consider removing this method (using GeneralChoiceState)
     public void choose(boolean choice) {}
 
+    public void loseCrew() {}
+
+    public void loseGoods() {}
+
     @Override
     public Image getImage() {
         return image;
@@ -42,4 +46,5 @@ public abstract class AdventureCard implements Physical {
     public String getDescription() {
         return "Level "+ cardLevel +" card:"; // TODO: add description
     }
+
 }

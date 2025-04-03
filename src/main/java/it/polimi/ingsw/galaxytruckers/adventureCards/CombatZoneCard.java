@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.adventureCards;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
@@ -17,9 +18,10 @@ public class CombatZoneCard extends AdventureCard {
     // Card data
     private int flightDayLoss;
     private int crewLossLeft;
+    private int goodsLossLeft;
     private int currentTask;
     private List<Projectile> projectiles;
-    private final List<Supplier> tasks; // evaluations and punishments
+    private List<Supplier<GameState>> actions; // evaluations and punishments
 
     // Lowest stats
     private Integer minCrewSize;
@@ -29,24 +31,25 @@ public class CombatZoneCard extends AdventureCard {
     // Utility variables
     private Projectile currentProjectile;
 
-    public CombatZoneCard(Image image, Level level, FlightBoard flightBoard, int flightDayLoss, int crewLoss, List<Projectile> projectiles) {
+    public CombatZoneCard(Image image, Level level, FlightBoard flightBoard, int flightDayLoss, int crewLoss, int goodsLoss, List<Projectile> projectiles, List<String> actions) {
         super(image, level, flightBoard);
         this.flightDayLoss = flightDayLoss;
         this.crewLossLeft = crewLoss;
+        this.goodsLossLeft = goodsLoss;
         this.projectiles = new LinkedList<>(projectiles);
         this.currentPlayerIndex = 0;
         this.currentTask = 0;
-        this.tasks = new ArrayList<>(List.of(
-                setCurrentShipToLeastCrewed, currentShipLosesFlightDays,
-                setCurrentShipToWeakestEngine, currentShipLosesCrew,
-                setCurrentShipToWeakestCannons, currentShipGetsShot,
-                drawCard
-        ));
+        this.actions = actionParser(actions);
+        this.actions.add(drawCard);
+    }
+
+    public CombatZoneCard(Image image, Level level, FlightBoard flightBoard) {
+        super(image, level, flightBoard);
     }
 
     @Override
     public GameState nextStep() {
-        return (GameState) tasks.get(currentTask).get();
+        return (GameState) actions.get(currentTask).get();
     }
 
     public Supplier<GameState> setCurrentShipToLeastCrewed = () -> {
@@ -128,6 +131,15 @@ public class CombatZoneCard extends AdventureCard {
         return nextStep();
     };
 
+    public Supplier<GameState> currentShipLosesGoods = () -> {
+        if (goodsLossLeft>0) { // current ship still has crew to lose
+            return new ChooseGoodToLoseState(currentShipBoard);
+        }
+        currentTask++;
+        currentPlayerIndex = 0;
+        return nextStep();
+    };
+
     public Supplier<GameState> currentShipGetsShot = () -> {
         if (!projectiles.isEmpty()) { // still projectiles to throw
             if (currentProjectile == null) { // shields not yet activated
@@ -151,43 +163,75 @@ public class CombatZoneCard extends AdventureCard {
         return nextStep();
     };
 
-    public Supplier<GameState> drawCard = () -> {
-        return new DrawCardState();
-    };
+    public Supplier<GameState> drawCard = DrawCardState::new;
 
-    void sufferCrewLoss() {
-        if (crewLossLeft > 0) {
-            crewLossLeft--;
-        } else {
-            throw new IllegalStateException("No crew loss left to suffer");
-        }
+    public void loseCrew() {
+        crewLossLeft--;
     }
 
-    public ShipBoard getCurrentShipBoard() {
+    public void loseGoods() {
+        goodsLossLeft--;
+    }
+
+    List<Supplier<GameState>> actionParser(List<String> actionStrings) {
+        List<Supplier<GameState>> actions = new ArrayList<>();
+
+        for (String action : actionStrings) {
+            actions.add(switch (action) {
+                case "min crew" ->
+                    setCurrentShipToLeastCrewed;
+                case "min cannons" ->
+                    setCurrentShipToWeakestCannons;
+                case "min engine" ->
+                    setCurrentShipToWeakestEngine;
+                case "loses flight days" ->
+                    currentShipLosesFlightDays;
+                case "loses crew" ->
+                    currentShipLosesCrew;
+                case "gets shot" ->
+                    currentShipGetsShot;
+                case "loses goods" ->
+                    currentShipLosesGoods;
+                default -> throw new IllegalStateException(
+                        "Attempting to parse unknown combat action: " + action
+                );
+            });
+        }
+        return actions;
+    }
+
+    @VisibleForTesting
+    protected ShipBoard getCurrentShipBoard() {
         return currentShipBoard;
     }
 
-    public int getCrewLossLeft() {
+    @VisibleForTesting
+    protected int getCrewLossLeft() {
         return crewLossLeft;
     }
 
-    public List<Projectile> getProjectiles() {
+    @VisibleForTesting
+    protected List<Projectile> getProjectiles() {
         return projectiles;
     }
 
-    public Integer getMinCrewSize() {
+    @VisibleForTesting
+    protected Integer getMinCrewSize() {
         return minCrewSize;
     }
 
-    public Integer getMinEnginePower() {
+    @VisibleForTesting
+    protected Integer getMinEnginePower() {
         return minEnginePower;
     }
 
-    public Integer getMinFirePower() {
+    @VisibleForTesting
+    protected Integer getMinFirePower() {
         return minFirePower;
     }
 
-    public Projectile getCurrentProjectile() {
+    @VisibleForTesting
+    protected Projectile getCurrentProjectile() {
         return currentProjectile;
     }
 }

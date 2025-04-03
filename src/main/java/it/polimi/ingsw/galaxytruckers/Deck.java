@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
@@ -7,11 +8,13 @@ import it.polimi.ingsw.galaxytruckers.adventureCards.*;
 import it.polimi.ingsw.galaxytruckers.adventureCards.utils.*;
 import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.state.GameState;
 import javafx.scene.image.Image;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Supplier;
 
 public abstract class Deck{
     protected final List<AdventureCard> relevantCards;
@@ -59,6 +62,7 @@ public abstract class Deck{
         }
     }
 
+    @VisibleForTesting
     protected List<AdventureCard> loadRelevantCards(Set<Level> levels) throws IOException {
         //reading from json file and returning the list of components
         File jsonFile = new File(jsonPath);
@@ -76,116 +80,93 @@ public abstract class Deck{
 
                 Image image = new Image("file:"+node.get("path").asText());
 
-                switch(type){
-                    case "planets":
-                        card = new PlanetsCard(
+                card = switch (type) {
+                    case "planets" -> new PlanetsCard(
+                            image,
+                            level,
+                            flightBoard,
+                            parsePlanets(node.get("planets")),
+                            node.get("flight day loss").asInt()
+                    );
+                    case "pirates" -> new PiratesCard(
+                            image,
+                            level,
+                            flightBoard,
+                            node.get("firePowerThreshold").asInt(),
+                            node.get("credits").asInt(),
+                            node.get("flight day loss").asInt(),
+                            parseProjectiles(node.get("shoots"))
+                    );
+                    case "smugglers" -> new SmugglersCard(
+                            image,
+                            level,
+                            flightBoard,
+                            node.get("penalty").asInt(),
+                            node.get("cannons").asInt(),
+                            parseGoods(node.get("storage")),
+                            node.get("flight day loss").asInt()
+                    );
+                    case "slavers" -> new SlaversCard(
+                            image,
+                            level,
+                            flightBoard,
+                            node.get("penalty").asInt(),
+                            node.get("cannons").asInt(),
+                            node.get("credits").asInt(),
+                            node.get("flight day loss").asInt()
+                    );
+                    case "meteors" -> new MeteorSwarmCard(
+                            image,
+                            level,
+                            flightBoard,
+                            parseProjectiles(node.get("meteors"))
+                    );
+                    case "epidemic" -> new EpidemicCard(
+                            image,
+                            level,
+                            flightBoard
+                    );
+                    case "stardust" -> new StarDustCard(
+                            image,
+                            level,
+                            flightBoard
+                    );
+                    case "abandonedShip" -> new AbandonedShipCard(
+                            image,
+                            level,
+                            flightBoard,
+                            node.get("credits").asInt(),
+                            node.get("people").asInt(),
+                            node.get("flight day loss").asInt()
+                    );
+                    case "abandonedStation" -> new AbandonedStationCard(
+                            image,
+                            level,
+                            flightBoard,
+                            parseGoods(node.get("storage")),
+                            node.get("people").asInt(),
+                            node.get("flight day loss").asInt()
+                    );
+                    case "warzone" -> new CombatZoneCard(
                                 image,
                                 level,
                                 flightBoard,
-                                parsePlanets(node.get("planets")),
-                                node.get("flightDaysLoss").asInt()
+                                node.path("flight day loss").asInt(0),
+                                node.path("crew loss").asInt(0),
+                                node.path("goods loss").asInt(0),
+                                parseProjectiles(node.get("shoots")),
+                                new ObjectMapper().convertValue(
+                                        node.get("actions"),
+                                        new TypeReference<List<String>>(){}
+                                )
                         );
-                        break;
-                    case "pirates":
-                        card = new PiratesCard(
-                                image,
-                                level,
-                                flightBoard,
-                                node.get("firePowerThreshold").asInt(),
-                                node.get("credits").asInt(),
-                                node.get("flightDaysLoss").asInt(),
-                                parseProjectiles(node.get("shoots"))
-                        );
-                        break;
-                    case "smugglers":
-                        card = new SmugglersCard(
-                                image,
-                                level,
-                                flightBoard,
-                                node.get("penalty").asInt(),
-                                node.get("cannons").asInt(),
-                                parseGoods(node.get("storage")),
-                                node.get("flightDaysLoss").asInt()
-                        );
-                        break;
-                    case "slavers":
-                        card = new SlaversCard(
-                                image,
-                                level,
-                                flightBoard,
-                                node.get("penalty").asInt(),
-                                node.get("cannons").asInt(),
-                                node.get("credits").asInt(),
-                                node.get("flightDaysLoss").asInt()
-                        );
-                        break;
-                    case "meteors":
-                        card = new MeteorSwarmCard(
-                                image,
-                                level,
-                                flightBoard,
-                                parseProjectiles(node.get("meteors"))
-                        );
-                        break;
-                    case "epidemic":
-                        card = new EpidemicCard(
-                                image,
-                                level,
-                                flightBoard
-                        );
-                        break;
-                    case "stardust":
-                        card = new StarDustCard(
-                                image,
-                                level,
-                                flightBoard
-                        );
-                        break;
-                    case "abandonedShip":
-                        card = new AbandonedShipCard(
-                                image,
-                                level,
-                                flightBoard,
-                                node.get("credits").asInt(),
-                                node.get("people").asInt(),
-                                node.get("flightDaysLoss").asInt()
-                        );
-                        break;
-                    case "abandonedStation":
-                        card = new AbandonedStationCard(
-                                image,
-                                level,
-                                flightBoard,
-                                parseGoods(node.get("storage")),
-                                node.get("people").asInt(),
-                                node.get("flightDaysLoss").asInt()
-                        );
-                        break;
-                    case "warzone":
-                        card = new OpenSpaceCard(
-                                image,
-                                level,
-                                flightBoard
-                                ); // TODO: Update
-//                        card = new CombatZoneCard(
-//                                image,
-//                                level,
-//                                flightBoard,
-//                                node.get("flightDaysLoss").asInt(),
-//                                node.get("humans").asInt(),
-//                                parseProjectiles(node.get("shoots"))
-//                        );
-                        break;
-                    case "open space":
-                        card = new OpenSpaceCard(
-                                image,
-                                level,
-                                flightBoard
-                        );
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Unknown card type: " + type);
-                }
+                    case "open space" -> new OpenSpaceCard(
+                            image,
+                            level,
+                            flightBoard
+                    );
+                    default -> throw new IllegalArgumentException("Unknown card type: " + type);
+                };
 
             cards.add(card);
             }

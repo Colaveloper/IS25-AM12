@@ -29,5 +29,6 @@ class SecondDeckTest extends JavaFXInitializer {
 
     @Test
     void initMasterDeck() {
+
     }
 }
