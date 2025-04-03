@@ -24,6 +24,6 @@ public class BigFire extends Projectile{
 
     @Override
     protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
-        return Optional.empty();
+        return getFirstFoundComponent(shipBoard);
     }
 }
