@@ -43,10 +43,6 @@ public class CombatZoneCard extends AdventureCard {
         this.actions.add(drawCard);
     }
 
-    public CombatZoneCard(Image image, Level level, FlightBoard flightBoard) {
-        super(image, level, flightBoard);
-    }
-
     @Override
     public GameState nextStep() {
         return (GameState) actions.get(currentTask).get();
@@ -173,7 +169,8 @@ public class CombatZoneCard extends AdventureCard {
         goodsLossLeft--;
     }
 
-    List<Supplier<GameState>> actionParser(List<String> actionStrings) {
+    @VisibleForTesting
+    protected List<Supplier<GameState>> actionParser(List<String> actionStrings) {
         List<Supplier<GameState>> actions = new ArrayList<>();
 
         for (String action : actionStrings) {
@@ -192,7 +189,7 @@ public class CombatZoneCard extends AdventureCard {
                     currentShipGetsShot;
                 case "loses goods" ->
                     currentShipLosesGoods;
-                default -> throw new IllegalStateException(
+                default -> throw new IllegalArgumentException(
                         "Attempting to parse unknown combat action: " + action
                 );
             });
@@ -208,6 +205,11 @@ public class CombatZoneCard extends AdventureCard {
     @VisibleForTesting
     protected int getCrewLossLeft() {
         return crewLossLeft;
+    }
+
+    @VisibleForTesting
+    protected int getGoodLossLeft() {
+        return goodsLossLeft;
     }
 
     @VisibleForTesting
