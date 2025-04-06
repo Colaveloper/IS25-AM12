@@ -98,10 +98,12 @@ public class SecondShipBoard extends ShipBoard {
 
     // Component observers
 
+    @Override
     public Map<Point, LifeSupport> getLifeSupports() {
         return lifeSupports;
     }
 
+    @Override
     public List<Component> getStashedComponents() {
         return stashedComponents;
     }
@@ -121,7 +123,9 @@ public class SecondShipBoard extends ShipBoard {
             List<Point> neighbours = getNeighbours(position);
             for (int i = 0; i < neighbours.size(); i++) {
                 Point neighbour = neighbours.get(i);
-                if (lifeSupports.containsKey(neighbour) && componentMap.get(position).getConnectors().get(i) != Connector.NONE) {
+                if (lifeSupports.containsKey(neighbour) &&
+                        !aliens.contains(lifeSupports.get(neighbour).getAlienType()) &&
+                        componentMap.get(position).getConnectors().get(i) != Connector.NONE) {
                     res.add(lifeSupports.get(neighbour).getAlienType());
                 }
             }
@@ -137,11 +141,7 @@ public class SecondShipBoard extends ShipBoard {
     }
 
     public void loseCrew(Point position, int amount) {
-        if (!cabins.containsKey(position)) {
-            throw new IllegalStateException("There is no cabin for this position");
-        }
-        cabins.get(position).loseResidents(amount);
-        crewSize -= amount;
+        super.loseCrew(position, amount);
         aliens.remove(cabins.get(position).getCrewType());
     }
 
@@ -150,12 +150,6 @@ public class SecondShipBoard extends ShipBoard {
     @Override
     public void add(LifeSupport lifeSupport) {
         this.lifeSupports.put(this.lastPosition, lifeSupport);
-    }
-
-    @Override
-    public void remove(Cabin cabin) {
-        loseCrew(lastPosition, cabin.getNumResidents());
-        this.cabins.remove(this.lastPosition);
     }
 
     @Override
