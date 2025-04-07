@@ -6,9 +6,9 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.AddGoodsState;
+import it.polimi.ingsw.galaxytruckers.model.state.ChoosePlanetState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import it.polimi.ingsw.galaxytruckers.model.state.GeneralChoiceState;
 import javafx.scene.image.Image;
 
 import java.util.*;
@@ -47,7 +47,7 @@ public class PlanetsCard extends AdventureCard {
             }
             currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
             currentPlayerIndex++;
-            return new GeneralChoiceState(this::choosePlanet, remainingChoices, true);
+            return new ChoosePlanetState(this::choosePlanet, remainingChoices);
         } else {
             if (currentShipBoard != null) {
                 flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);

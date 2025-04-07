@@ -299,13 +299,15 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
 
     // Activatables methods
 
-    public void activateComponent(Point position) {
+    public boolean activateComponent(Point position) {
         if (!activatables.containsKey(position)) {
             throw new IllegalStateException("There is no activatable for this position");
         }
         if (!activatables.get(position).isActive()) {
             activatables.get(position).activate(this);
+            return true;
         }
+        return false;
     }
 
     public void deactivateComponent(Point position) {

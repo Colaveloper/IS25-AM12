@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+//TODO: this state is deprecated, should be removed once CombatZoneCard is implemented
 public class ChooseCrewToLoseState extends GameState {
     private final Set<Point> availablePositions;
     private final ShipBoard shipBoard;
@@ -19,18 +21,18 @@ public class ChooseCrewToLoseState extends GameState {
         this.shipBoard = shipBoard;
     }
 
-    @Override
-    public void chooseCrewToLose(Point position) {
-        if (availablePositions.contains(position)) {
-            adventureCard.loseCrew();
-            shipBoard.loseCrew(position, 1);
-        } else {
-            throw new IllegalArgumentException("No crewed cabin at that position");
-        }
-    }
-
-    @Override
-    public GameState getNextState() {
-        return adventureCard.nextStep();
-    }
+//    @Override
+//    public void chooseCrewToLose(Point position) {
+//        if (availablePositions.contains(position)) {
+//            adventureCard.loseCrew();
+//            shipBoard.loseCrew(position, 1);
+//        } else {
+//            throw new IllegalArgumentException("No crewed cabin at that position");
+//        }
+//    }
+//
+//    @Override
+//    public GameState getNextState() {
+//        return adventureCard.nextStep();
+//    }
 }

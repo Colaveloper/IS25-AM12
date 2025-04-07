@@ -49,7 +49,7 @@ public class PiratesCard extends AdventureCard {
                     currentPlayerIndex = 0;
                     winnerShipBoard = currentShipBoard;
                     currentShipBoard = null;
-                    return new ChoiceState(); // Let the player choose whether to collect the prize
+                    return new GrabRewardState(this::getReward); // Let the player choose whether to collect the prize
                 } else if (currentShipBoard.getFirePower() < firePowerThreshold) { // player is defeated
                     defeatedPlayers.add(currentShipBoard);
                 }
@@ -58,9 +58,7 @@ public class PiratesCard extends AdventureCard {
             if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {  // There are other players to evaluate
                 currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
                 currentPlayerIndex++;
-                Set<Point> availablePositions = new HashSet<>(currentShipBoard.getCannons().keySet());
-                availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
-                return new ActivateState(availablePositions, currentShipBoard); // Let the player activate double cannons
+                return new DeclareFirePowerState(currentShipBoard); // Let the player activate double cannons
             } else {  // There are no more players and no one has defeated the enemy
                 defeated = true;
                 currentPlayerIndex = 0;
@@ -68,20 +66,10 @@ public class PiratesCard extends AdventureCard {
                 return nextStep();
             }
         } else { // Firing at defeated players
-            if (currentShipBoard != null) {
-                if (currentProjectile.fireAt(currentShipBoard)) {  // If a component is removed I need to check shipConnection
-                    List<Set<Point>> shipPieces = currentShipBoard.getConnectedSets();
-                    if (shipPieces.size() > 1) {
-                        GameState gameState = new ChooseShipPieceState(shipPieces, currentShipBoard);
-                        currentShipBoard = null;
-                        return gameState;
-                    }
-                }
-            }
             if (currentPlayerIndex < defeatedPlayers.size()) {  // There are still players that need to handle projectiles
                 currentShipBoard = defeatedPlayers.get(currentPlayerIndex);
                 currentPlayerIndex++;
-                return new ActivateState(currentProjectile.getActivatablePoints(currentShipBoard), currentShipBoard); // Let the player activate shields
+                return new HandleProjectileState(currentShipBoard, currentProjectile); // Let the player activate shields
             } else {  // There are no more players that need to handle projectiles
                 if (projectiles.isEmpty()) {
                     return new DrawCardState();
@@ -96,9 +84,6 @@ public class PiratesCard extends AdventureCard {
     }
 
     public void getReward() {
-        if (winnerShipBoard == null) {
-            throw new IllegalStateException("No one can claim the reward right now");
-        }
         winnerShipBoard.gainCredits(creditPrize);
         flightBoard.displaceShip(winnerShipBoard, -flightDaysLoss);
     }

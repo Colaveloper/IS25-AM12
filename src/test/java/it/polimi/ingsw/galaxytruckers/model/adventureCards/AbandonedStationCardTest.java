@@ -7,7 +7,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.AddGoodsState;
-import it.polimi.ingsw.galaxytruckers.model.state.ChoiceState;
+import it.polimi.ingsw.galaxytruckers.model.state.GrabRewardState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import javafx.scene.image.Image;
@@ -172,7 +172,7 @@ class AbandonedStationCardTest {
     @Test
     void firstStepSkipToFirstWhoCanLand() {
         testState = abandonedStationCard.nextStep();
-        assertInstanceOf(ChoiceState.class, testState);
+        assertInstanceOf(GrabRewardState.class, testState);
     }
 
 
@@ -181,9 +181,9 @@ class AbandonedStationCardTest {
     @Test
     void chooseToTakeAndProcessUntilEndCard() {
         testState = abandonedStationCard.nextStep();
-        assertInstanceOf(ChoiceState.class, testState);
+        assertInstanceOf(GrabRewardState.class, testState);
 
-        abandonedStationCard.choose(true);
+        abandonedStationCard.getReward();
         testState = abandonedStationCard.nextStep();
         assertInstanceOf(AddGoodsState.class, testState);
 
@@ -196,14 +196,14 @@ class AbandonedStationCardTest {
     @Test
     void ship2DoestTakeButShip4DoesToEnd() {
         testState = abandonedStationCard.nextStep();
-        assertInstanceOf(ChoiceState.class, testState);
+        assertInstanceOf(GrabRewardState.class, testState);
 
-        abandonedStationCard.choose(false);
+        // abandonedStationCard.getReward();
 
         testState = abandonedStationCard.nextStep();
-        assertInstanceOf(ChoiceState.class, testState);
+        assertInstanceOf(GrabRewardState.class, testState);
 
-        abandonedStationCard.choose(true);
+        abandonedStationCard.getReward();
 
         testState = abandonedStationCard.nextStep();
         assertInstanceOf(AddGoodsState.class, testState);

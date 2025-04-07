@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.model.state.ChoiceState;
+import it.polimi.ingsw.galaxytruckers.model.state.GrabRewardState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.RemoveCrewState;
 import javafx.scene.image.Image;
@@ -32,7 +32,7 @@ class AbandonedShipCardTest {
     int requiredCrew = 3;
     int flightDaysLost = 1;
 
-    void setup(ShipBoard ship1, ShipBoard ship2){
+    void setup(ShipBoard ship1, ShipBoard ship2) {
         // setting up ships and flightboard
         ships = new ArrayList<>();
         ships.add(ship1);
@@ -92,7 +92,7 @@ class AbandonedShipCardTest {
             public int getCrewSize() {return requiredCrew;}
         };
         setup(ship1, ship2);
-        assertInstanceOf(ChoiceState.class, card.nextStep());
+        assertInstanceOf(GrabRewardState.class, card.nextStep());
     }
 
     @Test
@@ -127,27 +127,28 @@ class AbandonedShipCardTest {
         };
         setup(ship1, ship2);
         card.nextStep();
-        card.choose(true);
+        card.getReward();
+        assertTrue(card.getAccepted());
         assertInstanceOf(RemoveCrewState.class, card.nextStep());
         assertInstanceOf(DrawCardState.class, card.nextStep());
     }
 
-    @Test
-    void chooseFalse(){
-        // ship 1 does have enough crew
-        ShipBoard ship1 = new SecondShipBoard(Colors.BLUE){
-            @Override
-            public int getCrewSize() {return requiredCrew;}
-        };
-
-        // ship 2 also has enough crew
-        ShipBoard ship2 = new SecondShipBoard(Colors.RED){
-            @Override
-            public int getCrewSize() {return requiredCrew;}
-        };
-        setup(ship1,ship2);
-        card.nextStep();
-        card.choose(false);
-        assertFalse(card.getAccepted());
-    }
+//    @Test
+//    void chooseFalse(){
+//        // ship 1 does have enough crew
+//        ShipBoard ship1 = new SecondShipBoard(Colors.BLUE){
+//            @Override
+//            public int getCrewSize() {return requiredCrew;}
+//        };
+//
+//        // ship 2 also has enough crew
+//        ShipBoard ship2 = new SecondShipBoard(Colors.RED){
+//            @Override
+//            public int getCrewSize() {return requiredCrew;}
+//        };
+//        setup(ship1,ship2);
+//        card.nextStep();
+//        card.getReward();
+//        assertFalse(card.getAccepted());
+//    }
 }

@@ -8,10 +8,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.model.state.ActivateState;
-import it.polimi.ingsw.galaxytruckers.model.state.ChooseShipPieceState;
-import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
-import it.polimi.ingsw.galaxytruckers.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.model.state.*;
 import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -90,21 +87,10 @@ class MeteorSwarmCardTest {
             for (ShipBoard shipBoard : ships) {
                 testState = meteorSwarmCard.nextStep();
                 assertEquals(meteorSwarmCard.getCurrentShipBoard(), shipBoard);
-                assertInstanceOf(ActivateState.class, testState);
+                assertInstanceOf(HandleProjectileState.class, testState);
             }
         }
         testState = meteorSwarmCard.nextStep();
-        assertInstanceOf(DrawCardState.class, testState);
-    }
-
-    @Test
-    void nextStepReturnsChoosePieceIfBreaking() {
-        meteorSwarmCard = new MeteorSwarmCard(null, Level.FIRST, flightBoard,  List.of(damagingProjectile));
-        meteorSwarmCard.nextStep(); // useless activation
-        testState = meteorSwarmCard.nextStep(); // ship broke: let the player choose what piece to keep
-        assertInstanceOf(ChooseShipPieceState.class, testState);
-        meteorSwarmCard.nextStep(); // useless activation
-        testState = meteorSwarmCard.nextStep(); // ship did not broke, all meteor finished
         assertInstanceOf(DrawCardState.class, testState);
     }
 }

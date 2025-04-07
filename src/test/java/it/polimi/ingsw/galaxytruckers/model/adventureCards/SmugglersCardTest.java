@@ -165,7 +165,7 @@ class SmugglersCardTest {
         smugglersCard.nextStep();
         smugglersCard.nextStep();
         testState = smugglersCard.nextStep();
-        assertInstanceOf(ChoiceState.class, testState);
+        assertInstanceOf(GrabRewardState.class, testState);
     }
 
     @Test
@@ -176,12 +176,12 @@ class SmugglersCardTest {
     }
 
     @Test
-    void eachPlayerHasActivateState() {
+    void eachPlayerHasDeclareFirePowerState() {
         testState = smugglersCard.nextStep();
-        assertInstanceOf(ActivateState.class, testState);
+        assertInstanceOf(DeclareFirePowerState.class, testState);
         smugglersCard.nextStep();//removeGoodsState
         testState = smugglersCard.nextStep();
-        assertInstanceOf(ActivateState.class, testState);
+        assertInstanceOf(DeclareFirePowerState.class, testState);
     }
 
     @Test
@@ -206,34 +206,16 @@ class SmugglersCardTest {
         assertInstanceOf(DrawCardState.class, testState);
     }
 
-
-
-
-
     @Test
     void chooseToGetGoods() {
-        smugglersCard.nextStep();//when state is ChoiceState
+        smugglersCard.nextStep();//when state is GrabRewardState
         smugglersCard.nextStep();
         smugglersCard.nextStep();
         testState = smugglersCard.nextStep();
-        assertInstanceOf(ChoiceState.class, testState);
+        assertInstanceOf(GrabRewardState.class, testState);
 
-        smugglersCard.choose(true);
+        smugglersCard.getReward();
         assertTrue(displacedShips.contains(ship2));
         assertFalse(displacedShips.contains(ship1));
-    }
-
-    @Test
-    void chooseToNOTGetCredits() {
-        smugglersCard.nextStep();//activate
-        smugglersCard.nextStep();//loose goods
-        smugglersCard.nextStep();//activate
-        testState = smugglersCard.nextStep();//choose to get goods
-        assertInstanceOf(ChoiceState.class, testState);
-
-        smugglersCard.choose(false);
-        assertFalse(displacedShips.contains(ship1));
-        assertFalse(displacedShips.contains(ship2));
-
     }
 }
