@@ -19,12 +19,13 @@ public class Shipboard implements Physical{
 
 
     public Shipboard() {
-        componentMap = new Component[7][5];
-        //for (int i = 0; i < 6; i++) {
-        //    for (int j = 0; j < 4; j++) {
-
-//            }
- //       }
+        componentMap = new Component[columns][rows];
+        Component emptyComponent = new Component(ComponentType.NONE);
+        for (int i = 0; i < columns; i++) {       //ship columns
+            for (int j = 0; j < rows; j++) {   //ship rows
+                componentMap[i][j] = emptyComponent;
+            }
+        }
     }
 
     public void setComponentMap(Map<Point, Component> componentMap) {
@@ -38,19 +39,23 @@ public class Shipboard implements Physical{
     }
     public String getDescription() {
         StringBuilder description = new StringBuilder();
-        for (int matRow = 0; matRow < 5; matRow++) {                    //all components by rows from matrix
+        for (int matRow = 0; matRow < rows; matRow++) {                    //all components by rows from matrix
             // single component rows
             description.append("\t\t");
-            for (int matColumn = 0; matColumn < 7; matColumn++) {   //all component columns from matrix
-                //TODO: if(component != vuoto) else print space
-                //TODO: get connector in print
+            for (int matColumn = 0; matColumn < columns; matColumn++) {   //all component columns from matrix
+                if (componentMap[matColumn][matRow].getSymbol() == "empty") {
+                    description.append("     ");
+                    continue;
+                }
                 description.append("╭─" + componentMap[matColumn][matRow].getConnector(0) + "─╮");                //single comp columns
             }
 
-            description.append("\n\t\t");
-            for (int matColumn = 0; matColumn < 7; matColumn++) {   //all component columns from matrix
-                //TODO: if(component != vuoto) else print space
-                //TODO: get component type in print (batteries could print quantity too)
+            description.append("\n\t" + matRow + "\t");
+            for (int matColumn = 0; matColumn < columns; matColumn++) {   //all component columns from matrix
+                if (componentMap[matColumn][matRow].getSymbol() == "empty") {
+                    description.append("     ");
+                    continue;
+                }
                 description.append(componentMap[matColumn][matRow].getConnector(3) +
                         componentMap[matColumn][matRow].getSymbol() +
                         componentMap[matColumn][matRow].getConnector(1)
@@ -59,14 +64,17 @@ public class Shipboard implements Physical{
             System.out.println();
 
             description.append("\n\t\t");
-            for (int matColumn = 0; matColumn < 7; matColumn++) {   //all component columns from matrix
-                //TODO: if(component != vuoto) else print space
-                //TODO: get connector in print
+            for (int matColumn = 0; matColumn < columns; matColumn++) {   //all component columns from matrix
+                if (componentMap[matColumn][matRow].getSymbol() == "empty") {
+                    description.append("     ");
+                    continue;
+                }
                 description.append("╰─" + componentMap[matColumn][matRow].getConnector(2) + "─╯");                //single comp columns
             }
             description.append("\n");
         }
         description.append("\n");
+        description.append("\t\t  0    1    2    3    4    5    6");
         return description.toString();
     }
 
