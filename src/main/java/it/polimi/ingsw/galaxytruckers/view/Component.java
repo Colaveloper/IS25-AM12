@@ -18,30 +18,6 @@ public class Component implements Physical{
         this.type = type;
     }
 
-    public String getSymbol() {
-        switch (type) {
-            case CANNON:
-                return " ▲ ";
-            case CABIN:
-                return " ● ";
-            case ENGINE:
-                return " ⊓ ";
-            case LIFE_SUPPORT:
-                return " Ѫ ";
-            case BATTERY:
-                return " Θ ";
-            case STORAGE:
-                return " ▞ ";
-            case SHIELD:
-                return " S ";
-            case NONE:
-                return "empty";
-            default:
-                return "error";
-        }
-
-    }
-
     public String getConnector(int connectorDirection) {
         switch (connectorDirection) {               //switch direction once
             case 0:     //up
@@ -107,7 +83,7 @@ public class Component implements Physical{
             lines.add(2, "     ");
         } else {
             lines.add(0, "╭─" + getConnector(0) + "─╮");
-            lines.add(1, getConnector(3)+getSymbol()+getConnector(1));
+            lines.add(1, getConnector(3)+" "+type.getSymbol()+" "+getConnector(1));
             lines.add(2, "╰─" + getConnector(2) + "─╯");
         }
         return lines;
