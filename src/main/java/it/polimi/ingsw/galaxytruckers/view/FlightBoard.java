@@ -41,21 +41,16 @@ public class FlightBoard implements Physical {
     }
 
     @Override
-    public String getDescription() {
+    public List<String> getDescription() {
         char[] result = new char[loopLength];
         Arrays.fill(result, '_');
 
-        for (int pos : startingPositionLeft) {
-            if (pos >= 0 && pos < loopLength)
-                result[pos] = '□';
-        }
+        // Directly place '□' at the starting positions
+        startingPositionLeft.forEach(pos -> result[pos] = '□');
 
-        for (Map.Entry<Character, Integer> entry : colorToPlace.entrySet()) {
-            int pos = entry.getValue();
-            if (pos >= 0 && pos < loopLength)
-                result[pos] = entry.getKey();
-        }
+        // Place characters from colorToPlace
+        colorToPlace.forEach((ch, pos) -> result[pos] = ch);
 
-        return new String(result);
+        return List.of(new String(result));
     }
 }

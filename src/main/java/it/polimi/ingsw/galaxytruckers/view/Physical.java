@@ -2,8 +2,9 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import javafx.scene.image.Image;
 
+import java.util.List;
+
 public interface Physical {
     public Image getImage();
-    public abstract String getDescription();
-//    public abstract Character[][] getDescription();
+    public List<String> getDescription();
 }

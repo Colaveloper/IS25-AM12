@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import javafx.scene.image.Image;
 
+import java.util.List;
 import java.util.Map;
 
 public class ClientGameModel implements Physical {
@@ -29,8 +30,7 @@ public class ClientGameModel implements Physical {
     }
 
     @Override
-//    public Character[][] getDescription() {
-        public String getDescription() {
+        public List<String> getDescription() {
         StringBuilder result =
                 new StringBuilder("Current player is: " + currentPlayerNickname + "\n"
                         + flightBoard.getDescription());
@@ -38,10 +38,13 @@ public class ClientGameModel implements Physical {
         for(Map.Entry<String, Shipboard> e : playerToShip.entrySet()) {
             result.append("\n")
                     .append(e.getKey())
-                    .append("\n")
-                    .append(e.getValue().getDescription());
+                    .append("\n");
+
+            for(String line : e.getValue().getDescription()) {
+                result.append(line).append("\n");
+            }
         }
 
-        return result.toString();
+        return List.of(result.toString());
     }
 }

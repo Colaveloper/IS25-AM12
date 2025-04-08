@@ -99,7 +99,17 @@ public class Component implements Physical{
     }
 
     @Override
-    public String getDescription() {
-        return "";
+    public List<String> getDescription() {
+        List<String> lines = new ArrayList<>();
+        if (type == ComponentType.NONE) {
+            lines.add(0, "     ");
+            lines.add(1, "     ");
+            lines.add(2, "     ");
+        } else {
+            lines.add(0, "╭─" + getConnector(0) + "─╮");
+            lines.add(1, getConnector(3)+getSymbol()+getConnector(1));
+            lines.add(2, "╰─" + getConnector(2) + "─╯");
+        }
+        return lines;
     }
 }
