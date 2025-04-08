@@ -21,18 +21,16 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class GameModel {
-    private BiMap<Integer, ShipBoard> idsToShip;
+    private final BiMap<Integer, ShipBoard> idsToShip;
     private GameFactory gameFactory;
-    private FlightBoard flightBoard;
-    private Deck deck;
-//    private int maxCardPlays; //TEMPORARY, defines the maximum times a card can be played
-//    private int activeCardPlayCount;
+    private final FlightBoard flightBoard;
+    private final Deck deck;
     private List<Integer> playerShot;//TODO: list of shipboard, method maps coming int to ships here
 
     public GameModel(Level chosenLevel, Map<Integer, Colors> chosenColors) throws IOException {
         switch (chosenLevel) {
             case Level.TEST -> gameFactory = new TestFactory();
-            case Level.SECOND -> gameFactory = new SecondFactory();
+            default -> gameFactory = new SecondFactory();
         }
         idsToShip = HashBiMap.create(
                 chosenColors.entrySet()

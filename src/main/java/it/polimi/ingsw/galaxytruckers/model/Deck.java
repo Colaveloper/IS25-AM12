@@ -17,7 +17,6 @@ import java.util.function.Supplier;
 
 public abstract class Deck{
     protected final List<AdventureCard> relevantCards;
-    @VisibleForTesting
     protected List<AdventureCard> masterDeck;
     private AdventureCard currentCard;
     protected static String jsonPath = "src/main/resources/cardsReference.json";
