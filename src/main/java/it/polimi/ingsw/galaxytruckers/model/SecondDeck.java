@@ -11,8 +11,8 @@ public class SecondDeck extends Deck{
     private final List<List<AdventureCard>> forecastDecks;
     private final List<AdventureCard> hiddenDeck;
 
-    public SecondDeck(FlightBoard flightBoard) throws IOException {
-        super(Set.of(Level.TEST, Level.FIRST, Level.SECOND), flightBoard);
+    public SecondDeck() throws IOException {
+        super(Set.of(Level.TEST, Level.FIRST, Level.SECOND));
         List<AdventureCard> easyCards = relevantCards.stream()
                 .filter(c -> c.getCardLevel() == Level.TEST || c.getCardLevel() == Level.FIRST)
                 .limit(4)
@@ -50,6 +50,9 @@ public class SecondDeck extends Deck{
                 .flatMap(Collection::stream)
                 .forEach(card -> masterDeck.add(card));
         masterDeck.addAll(hiddenDeck);
-        Collections.shuffle(masterDeck);
+        do {
+            Collections.shuffle(masterDeck);
+        }
+        while (masterDeck.getLast().getCardLevel() != Level.SECOND);
     }
 }

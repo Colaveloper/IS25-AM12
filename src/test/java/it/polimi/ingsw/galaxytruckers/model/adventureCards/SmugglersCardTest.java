@@ -153,7 +153,8 @@ class SmugglersCardTest {
             }
         };
 
-        smugglersCard = new SmugglersCard(null, Level.FIRST, flightBoard, 1, 1, goodsWon, 1);
+        smugglersCard = new SmugglersCard(null, Level.FIRST, 1, 1, goodsWon, 1);
+        smugglersCard.initialize(flightBoard);
     }
 
 
@@ -198,7 +199,8 @@ class SmugglersCardTest {
 
     @Test
     void noneWins() {
-        smugglersCard = new SmugglersCard(null, Level.FIRST, flightBoardOfLosers, 1, 1, goodsWon, 1);
+        smugglersCard = new SmugglersCard(null, Level.FIRST, 1, 1, goodsWon, 1);
+        smugglersCard.initialize(flightBoardOfLosers);
         smugglersCard.nextStep();//activate (but doesn't lose)
         smugglersCard.nextStep();//activate
         smugglersCard.nextStep();//lose goods

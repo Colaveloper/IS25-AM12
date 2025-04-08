@@ -158,13 +158,14 @@ class AbandonedStationCardTest {
             }
         };
 
-        abandonedStationCard = new AbandonedStationCard(null, Level.FIRST, flightBoard, goodsWon, 2, 1);
-
+        abandonedStationCard = new AbandonedStationCard(null, Level.FIRST, goodsWon, 2, 1);
+        abandonedStationCard.initialize(flightBoard);
     }
 
     @Test
     void noneCanLand() {
-        abandonedStationCard = new AbandonedStationCard(null, Level.FIRST, flightBoardOfLosers, goodsWon, 2, 1);
+        abandonedStationCard = new AbandonedStationCard(null, Level.FIRST, goodsWon, 2, 1);
+        abandonedStationCard.initialize(flightBoardOfLosers);
         testState = abandonedStationCard.nextStep();
         assertInstanceOf(DrawCardState.class, testState);
     }

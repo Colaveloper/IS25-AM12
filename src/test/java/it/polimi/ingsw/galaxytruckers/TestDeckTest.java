@@ -15,7 +15,7 @@ class TestDeckTest extends JavaFXInitializer {
     @Test
     void masterDeckHasTheEightTestCards() throws IOException {
         flightBoard = new SecondFlightBoard(Set.of());
-        testDeck = new TestDeck(flightBoard);
+        testDeck = new TestDeck();
         assertEquals(8, testDeck.getMasterDeck().size());
     }
 }

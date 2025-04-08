@@ -18,12 +18,17 @@ public class SmugglersCard extends AdventureCard {
     private boolean defeated;
     private boolean acquired;
 
-    public SmugglersCard (Image image, Level cardLevel, FlightBoard flightBoard, int goodsLoss, int firePowerThreshold, Map<GoodsType, Integer> goodsPrize, int flightDaysLoss) {
-        super(image, cardLevel, flightBoard);
+    public SmugglersCard (Image image, Level cardLevel, int goodsLoss, int firePowerThreshold, Map<GoodsType, Integer> goodsPrize, int flightDaysLoss) {
+        super(image, cardLevel);
         this.firePowerThreshold = firePowerThreshold;
         this.goodsPrize = goodsPrize;
         this.flightDaysLoss = flightDaysLoss;
         this.goodsLoss = goodsLoss;
+    }
+
+    @Override
+    public void initialize(FlightBoard flightBoard) {
+        super.initialize(flightBoard);
         this.acquired = false;
         this.defeated = false;
     }

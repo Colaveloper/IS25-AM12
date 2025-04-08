@@ -160,7 +160,8 @@ class SabotageCardTest {
             }
         };
 
-        sabotageCard = new SabotageCard (null, Level.FIRST, flightBoard);
+        sabotageCard = new SabotageCard (null, Level.FIRST);
+        sabotageCard.initialize(flightBoard);
     }
 
 
@@ -175,7 +176,8 @@ class SabotageCardTest {
 
     @Test
     void otherOrderToCheck() {
-        sabotageCard = new SabotageCard(null, Level.FIRST, largerFlightBoard);
+        sabotageCard = new SabotageCard(null, Level.FIRST);
+        sabotageCard.initialize(largerFlightBoard);
         testState = sabotageCard.nextStep();
         assertInstanceOf(DrawCardState.class, testState);
         assertTrue(shipExploded.contains(ship3));

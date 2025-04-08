@@ -21,18 +21,23 @@ public class PiratesCard extends AdventureCard {
     private final int flightDaysLoss;
 
     // Card state descriptors
-    private final List<ShipBoard> defeatedPlayers;
+    private List<ShipBoard> defeatedPlayers;
     private boolean defeated;
     private Projectile currentProjectile;
     private ShipBoard winnerShipBoard;
 
-    public PiratesCard(Image image, Level level, FlightBoard flightBoard,
+    public PiratesCard(Image image, Level level,
                        int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
-        super(image, level, flightBoard);
+        super(image, level);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;
         this.projectiles = projectiles.reversed();  // list is inverted to be treated as a stack
+    }
+
+    @Override
+    public void initialize(FlightBoard flightBoard) {
+        super.initialize(flightBoard);
         this.defeatedPlayers = new ArrayList<>();
         this.defeated = false;
         this.winnerShipBoard = null;

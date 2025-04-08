@@ -43,7 +43,7 @@ public class GameModel {
                     ))
         );
         flightBoard = gameFactory.createFlightBoard(idsToShip.values());
-        deck = gameFactory.createDeck(flightBoard);
+        deck = gameFactory.createDeck();
 //        deck = new TempDeck(flightBoard); // for mocking purposes only
     }
 

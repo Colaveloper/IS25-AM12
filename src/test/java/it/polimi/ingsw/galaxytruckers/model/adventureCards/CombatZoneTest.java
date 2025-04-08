@@ -148,7 +148,7 @@ public class CombatZoneTest {
     void actionParserThrowsExceptionForUnknownAction() {
         actions = List.of("slurping ramen");
         assertThrows(IllegalArgumentException.class, () ->
-                new CombatZoneCard(null, null, flightBoard,
+                new CombatZoneCard(null, null,
                 flightDaysLoss, crewLoss, goodLoss, projectiles, actions));
     }
 
@@ -177,8 +177,9 @@ public class CombatZoneTest {
                     "min cannons",
                     "gets shot"
             );
-            combatZoneCard = new CombatZoneCard(null, null, flightBoard,
+            combatZoneCard = new CombatZoneCard(null, null,
                     flightDaysLoss, crewLoss, goodLoss, projectiles, actions);
+            combatZoneCard.initialize(flightBoard);
         }
 
 
@@ -348,8 +349,9 @@ public class CombatZoneTest {
                     "min engine",
                     "loses goods"
             );
-            combatZoneCard = new CombatZoneCard(null, null, flightBoard,
+            combatZoneCard = new CombatZoneCard(null, null,
                     flightDaysLoss, crewLoss, goodLoss, projectiles, actions);
+            combatZoneCard.initialize(flightBoard);
         }
 
         @Test

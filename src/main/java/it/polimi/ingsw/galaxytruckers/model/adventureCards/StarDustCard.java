@@ -15,9 +15,13 @@ public class StarDustCard extends AdventureCard {
 
     List<ShipBoard> invertedShips;
 
-    public StarDustCard(Image image, Level level, FlightBoard flightBoard) {
-        super(image, level, flightBoard);
+    public StarDustCard(Image image, Level level) {
+        super(image, level);
+    }
 
+    @Override
+    public void initialize(FlightBoard flightBoard) {
+        super.initialize(flightBoard);
         this.invertedShips = flightBoard.getOrderedShips().reversed();
     }
 

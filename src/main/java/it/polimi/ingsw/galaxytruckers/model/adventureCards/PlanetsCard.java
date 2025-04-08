@@ -18,16 +18,21 @@ import java.util.stream.IntStream;
 public class PlanetsCard extends AdventureCard {
     private ShipBoard currentShipBoard;
     private final List<Map<GoodsType, Integer>> planets;
-    private final Set<Integer> remainingChoices;
-    private final Map<ShipBoard, Integer> planetChoices;
-    private final List<ShipBoard> landedShips;
+    private Set<Integer> remainingChoices;
+    private Map<ShipBoard, Integer> planetChoices;
+    private List<ShipBoard> landedShips;
     private final int flightDaysLoss;
     private boolean planetChoiceAllowed;
 
-    public PlanetsCard(Image image, Level level, FlightBoard flightBoard, List<Map<GoodsType, Integer>> planets, int flightDaysLoss) {
-        super(image, level, flightBoard);
-        this.planets = List.copyOf(planets);
+    public PlanetsCard(Image image, Level level, List<Map<GoodsType, Integer>> planets, int flightDaysLoss) {
+        super(image, level);
+        this.planets = planets;
         this.flightDaysLoss = flightDaysLoss;
+    }
+
+    @Override
+    public void initialize(FlightBoard flightBoard) {
+        super.initialize(flightBoard);
         this.planetChoiceAllowed = true;
         this.planetChoices = new HashMap<>();
         this.landedShips = new ArrayList<>();

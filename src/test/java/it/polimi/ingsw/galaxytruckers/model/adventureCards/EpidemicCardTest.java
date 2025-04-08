@@ -121,7 +121,8 @@ class EpidemicCardTest {
             }
         };
 
-        epidemicCard = new EpidemicCard(null, Level.SECOND, flightBoard);
+        epidemicCard = new EpidemicCard(null, Level.SECOND);
+        epidemicCard.initialize(flightBoard);
 
     }
 

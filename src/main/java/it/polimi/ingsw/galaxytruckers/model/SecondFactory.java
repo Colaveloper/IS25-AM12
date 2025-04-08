@@ -10,8 +10,8 @@ import java.util.Set;
 
 public class SecondFactory implements GameFactory{
     @Override
-    public Deck createDeck(FlightBoard flightBoard) throws IOException {
-        return new SecondDeck(flightBoard);
+    public Deck createDeck() throws IOException {
+        return new SecondDeck();
     }
 
     @Override

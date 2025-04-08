@@ -15,16 +15,14 @@ import java.io.IOException;
 import java.util.*;
 import java.util.function.Supplier;
 
-public abstract class Deck{
+public abstract class Deck {
     protected final List<AdventureCard> relevantCards;
     @VisibleForTesting
     protected List<AdventureCard> masterDeck;
     private AdventureCard currentCard;
     protected static String jsonPath = "src/main/resources/cardsReference.json";
-    private final FlightBoard flightBoard;
 
-    public Deck(Set<Level> relevantLevels, FlightBoard flightBoard) throws IOException {
-        this.flightBoard = flightBoard;
+    public Deck(Set<Level> relevantLevels) throws IOException {
         this.relevantCards = loadRelevantCards(relevantLevels);
         Collections.shuffle(this.relevantCards);
     }
@@ -56,7 +54,7 @@ public abstract class Deck{
         if (masterDeck.isEmpty()) {
             return false;
         } else {
-            currentCard = masterDeck.removeFirst();
+            currentCard = masterDeck.removeLast();
             return true;
         }
     }
@@ -83,14 +81,12 @@ public abstract class Deck{
                     case "planets" -> new PlanetsCard(
                             image,
                             level,
-                            flightBoard,
                             parsePlanets(node.get("planets")),
                             node.get("flight day loss").asInt()
                     );
                     case "pirates" -> new PiratesCard(
                             image,
                             level,
-                            flightBoard,
                             node.get("firePowerThreshold").asInt(),
                             node.get("credits").asInt(),
                             node.get("flight day loss").asInt(),
@@ -99,7 +95,6 @@ public abstract class Deck{
                     case "smugglers" -> new SmugglersCard(
                             image,
                             level,
-                            flightBoard,
                             node.get("penalty").asInt(),
                             node.get("cannons").asInt(),
                             parseGoods(node.get("storage")),
@@ -108,7 +103,6 @@ public abstract class Deck{
                     case "slavers" -> new SlaversCard(
                             image,
                             level,
-                            flightBoard,
                             node.get("penalty").asInt(),
                             node.get("cannons").asInt(),
                             node.get("credits").asInt(),
@@ -117,23 +111,19 @@ public abstract class Deck{
                     case "meteors" -> new MeteorSwarmCard(
                             image,
                             level,
-                            flightBoard,
                             parseProjectiles(node.get("meteors"))
                     );
                     case "epidemic" -> new EpidemicCard(
                             image,
-                            level,
-                            flightBoard
+                            level
                     );
                     case "stardust" -> new StarDustCard(
                             image,
-                            level,
-                            flightBoard
+                            level
                     );
                     case "abandonedShip" -> new AbandonedShipCard(
                             image,
                             level,
-                            flightBoard,
                             node.get("credits").asInt(),
                             node.get("people").asInt(),
                             node.get("flight day loss").asInt()
@@ -141,7 +131,6 @@ public abstract class Deck{
                     case "abandonedStation" -> new AbandonedStationCard(
                             image,
                             level,
-                            flightBoard,
                             parseGoods(node.get("storage")),
                             node.get("people").asInt(),
                             node.get("flight day loss").asInt()
@@ -149,7 +138,6 @@ public abstract class Deck{
                     case "warzone" -> new CombatZoneCard(
                                 image,
                                 level,
-                                flightBoard,
                                 node.path("flight day loss").asInt(0),
                                 node.path("crew loss").asInt(0),
                                 node.path("goods loss").asInt(0),
@@ -161,8 +149,7 @@ public abstract class Deck{
                         );
                     case "open space" -> new OpenSpaceCard(
                             image,
-                            level,
-                            flightBoard
+                            level
                     );
                     default -> throw new IllegalArgumentException("Unknown card type: " + type);
                 };

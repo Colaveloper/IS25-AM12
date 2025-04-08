@@ -18,12 +18,18 @@ public class SlaversCard extends AdventureCard {
     private final int crewLoss;
     private boolean defeated;
 
-    public SlaversCard(Image image, Level cardLevel, FlightBoard flightBoard, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss) {
-        super(image, cardLevel, flightBoard);
+    public SlaversCard(Image image, Level cardLevel, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss) {
+        super(image, cardLevel);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;
         this.crewLoss = crewLoss;
+    }
+
+    @Override
+    public void initialize(FlightBoard flightBoard) {
+        super.initialize(flightBoard);
+        defeated = false;
     }
 
     @Override

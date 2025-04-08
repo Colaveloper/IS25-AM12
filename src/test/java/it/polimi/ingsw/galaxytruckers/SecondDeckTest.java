@@ -20,7 +20,7 @@ class SecondDeckTest extends JavaFXInitializer {
     @BeforeEach
     void setUp() throws IOException {
         flightBoard = new SecondFlightBoard(Set.of());
-        secondDeck = new SecondDeck(flightBoard);
+        secondDeck = new SecondDeck();
     }
 
     @Test

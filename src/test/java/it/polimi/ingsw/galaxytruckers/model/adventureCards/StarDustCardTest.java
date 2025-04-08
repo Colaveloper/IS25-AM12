@@ -96,7 +96,8 @@ class StarDustCardTest {
             }
         };
 
-        starDustCard = new StarDustCard(null, Level.FIRST, flightBoard);
+        starDustCard = new StarDustCard(null, Level.FIRST);
+        starDustCard.initialize(flightBoard);
     }
 
 

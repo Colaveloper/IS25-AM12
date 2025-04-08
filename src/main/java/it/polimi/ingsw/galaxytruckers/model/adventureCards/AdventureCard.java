@@ -15,9 +15,12 @@ public abstract class AdventureCard implements Physical {
     private final Image image;
 
 
-    protected AdventureCard(Image image, Level cardLevel, FlightBoard flightBoard) {
+    protected AdventureCard(Image image, Level cardLevel) {
         this.image = image;
         this.cardLevel = cardLevel;
+    }
+
+    public void initialize(FlightBoard flightBoard) {
         this.flightBoard = flightBoard;
         this.currentShipBoard = null;
         this.currentPlayerIndex = 0;

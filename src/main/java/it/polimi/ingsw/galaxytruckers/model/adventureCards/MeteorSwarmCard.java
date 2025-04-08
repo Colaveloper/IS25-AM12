@@ -20,9 +20,14 @@ public class MeteorSwarmCard extends AdventureCard {
     private Projectile currentProjectile;
 
 
-    public MeteorSwarmCard(Image image, Level level, FlightBoard flightBoard, List<Projectile> projectiles) {
-        super(image, level, flightBoard);
+    public MeteorSwarmCard(Image image, Level level, List<Projectile> projectiles) {
+        super(image, level);
         this.projectiles = new LinkedList<>(projectiles).reversed();
+    }
+
+    @Override
+    public void initialize(FlightBoard flightBoard) {
+        super.initialize(flightBoard);
         this.currentProjectile = this.projectiles.removeLast();
     }
 

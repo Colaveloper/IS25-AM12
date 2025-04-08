@@ -59,7 +59,8 @@ class OpenSpaceCardTest {
                 return ships;
             }
         };
-        openSpaceCard = new OpenSpaceCard(null, Level.TEST, flightBoardStub);
+        openSpaceCard = new OpenSpaceCard(null, Level.TEST);
+        openSpaceCard.initialize(flightBoardStub);
     }
 
     @Test

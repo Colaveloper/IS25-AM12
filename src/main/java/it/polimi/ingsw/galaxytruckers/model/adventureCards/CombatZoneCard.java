@@ -22,7 +22,7 @@ public class CombatZoneCard extends AdventureCard {
     private int goodsLossLeft;
     private int currentTask;
     private List<Projectile> projectiles;
-    private List<Supplier<GameState>> actions; // evaluations and punishments
+    private final List<Supplier<GameState>> actions; // evaluations and punishments
 
     // Lowest stats
     private Integer minCrewSize;
@@ -32,16 +32,21 @@ public class CombatZoneCard extends AdventureCard {
     // Utility variables
     private Projectile currentProjectile;
 
-    public CombatZoneCard(Image image, Level level, FlightBoard flightBoard, int flightDayLoss, int crewLoss, int goodsLoss, List<Projectile> projectiles, List<String> actions) {
-        super(image, level, flightBoard);
+    public CombatZoneCard(Image image, Level level, int flightDayLoss, int crewLoss, int goodsLoss, List<Projectile> projectiles, List<String> actions) {
+        super(image, level);
         this.flightDayLoss = flightDayLoss;
         this.crewLossLeft = crewLoss;
         this.goodsLossLeft = goodsLoss;
         this.projectiles = new LinkedList<>(projectiles);
-        this.currentPlayerIndex = 0;
-        this.currentTask = 0;
         this.actions = actionParser(actions);
         this.actions.add(drawCard);
+    }
+
+    @Override
+    public void initialize(FlightBoard flightBoard) {
+        super.initialize(flightBoard);
+        this.currentPlayerIndex = 0;
+        this.currentTask = 0;
     }
 
     @Override

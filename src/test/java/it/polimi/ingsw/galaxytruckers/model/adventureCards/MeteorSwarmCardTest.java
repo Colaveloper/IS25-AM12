@@ -78,7 +78,8 @@ class MeteorSwarmCardTest {
                 return true;
             }
         };
-        meteorSwarmCard = new MeteorSwarmCard(null, Level.FIRST, flightBoard,  safeProjectiles);
+        meteorSwarmCard = new MeteorSwarmCard(null, Level.FIRST,  safeProjectiles);
+        meteorSwarmCard.initialize(flightBoard);
     }
 
     @Test

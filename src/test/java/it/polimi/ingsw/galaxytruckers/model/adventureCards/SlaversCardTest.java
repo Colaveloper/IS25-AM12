@@ -154,7 +154,8 @@ class SlaversCardTest {
             }
         };
 
-        slaversCard = new SlaversCard(null, Level.FIRST, flightBoard, 1, 1, 1, 1);
+        slaversCard = new SlaversCard(null, Level.FIRST, 1, 1, 1, 1);
+        slaversCard.initialize(flightBoard);
     }
 
 
@@ -195,7 +196,8 @@ class SlaversCardTest {
 
     @Test
     void noneWins() {
-        slaversCard = new SlaversCard(null, Level.FIRST, flightBoardOfLosers, 1, 1, 1, 1);
+        slaversCard = new SlaversCard(null, Level.FIRST, 1, 1, 1, 1);
+        slaversCard.initialize(flightBoardOfLosers);
         slaversCard.nextStep();
         slaversCard.nextStep();
         slaversCard.nextStep();

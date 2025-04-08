@@ -13,8 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class OpenSpaceCard extends AdventureCard {
-    public OpenSpaceCard (Image image, Level level, FlightBoard flightBoard) {
-        super(image, level, flightBoard);
+    public OpenSpaceCard (Image image, Level level) {
+        super(image, level);
     }
 
     @Override
