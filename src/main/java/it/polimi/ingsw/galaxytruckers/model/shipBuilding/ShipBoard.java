@@ -131,9 +131,7 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
         lastPosition = null;
     }
 
-    public void incrementLosses(int amount) {
-        losses += amount;
-    }
+    public void finishBuilding() {}
 
     //Observers
 

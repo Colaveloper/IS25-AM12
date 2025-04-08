@@ -30,10 +30,12 @@ public class TestShipBoard extends ShipBoard {
             new Point(9, 9)));
 
     private static Image image;
+    private boolean finishedBuilding;
 
     public TestShipBoard(ComponentBank componentBank, Colors color) {
         super(componentBank, color);
         image = new Image("textures/cardboard/first-ship-board.jpg");
+        finishedBuilding = false;
     }
 
     public TestShipBoard(Colors color) {
@@ -43,6 +45,19 @@ public class TestShipBoard extends ShipBoard {
     @Override
     protected boolean containsPoint(Point point) {
         return shipArea.contains(point);
+    }
+
+    @Override
+    public void removeComponent(Point position) {
+        super.removeComponent(position);
+        if (finishedBuilding) {
+            this.losses++;
+        }
+    }
+
+    @Override
+    public void finishBuilding() {
+        this.finishedBuilding = true;
     }
 
     @Override

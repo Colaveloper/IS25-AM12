@@ -39,7 +39,7 @@ public class SecondShipBoard extends ShipBoard {
 
     private static Image image;
     
-    private final List<it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component> stashedComponents;
+    private final List<Component> stashedComponents;
 
     private final Set<CrewType> aliens;
     // We might need this attribute to handle meteors and cannon hits better
@@ -80,6 +80,12 @@ public class SecondShipBoard extends ShipBoard {
     public void grabStashedComponent(int index) {
         weldLastComponent();
         lastComponent = stashedComponents.remove(index);
+    }
+
+    @Override
+    public void finishBuilding() {
+        this.losses += stashedComponents.size();
+        stashedComponents.clear();
     }
 
     //Observers
