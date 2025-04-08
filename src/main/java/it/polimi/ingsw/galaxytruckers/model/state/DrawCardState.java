@@ -2,24 +2,15 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Deck;
 
-//TODO : implement this class
 //TODO : determine a way to handle game end
 public class DrawCardState extends GameState {
-    boolean hasDrawn = false;
 
     @Override
-    public boolean drawCard(Deck deck) {
-        hasDrawn = true;
-        return true;
-        // return true if a card was drawn
-    }
-
-    @Override
-    public GameState getNextState() {
-        if (hasDrawn) {
-            return adventureCard.nextStep();
+    public void drawCard(Deck deck) {
+        if(game.getDeck().tryDrawCard()) {
+            game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
         } else {
-            throw new IllegalStateException("You have not drawn yet");
+            // TODO: game over, compute scores and show them to players
         }
     }
 }

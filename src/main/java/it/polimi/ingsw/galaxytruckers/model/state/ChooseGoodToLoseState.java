@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+//TODO: this state is deprecated, should be removed once CombatZoneCard is implemented
 public class ChooseGoodToLoseState extends GameState {
     private final GoodsType mostValuableGoodType; // might be null!
     private final Set<Point> availablePositions;
@@ -33,20 +34,20 @@ public class ChooseGoodToLoseState extends GameState {
         this.shipBoard = shipBoard;
     }
 
-    @Override
-    public void chooseGoodToLose(Point position)  {
-        if (availablePositions.contains(position)) {
-            adventureCard.loseGoods();
-            shipBoard.removeGoods(position, mostValuableGoodType, 1);
-        } else {
-            throw new IllegalArgumentException(
-                    "You are not allowed to remove goods from this position"
-            );
-        }
-    }
-
-    @Override
-    public GameState getNextState() {
-        return null;
-    }
+//    @Override
+//    public void chooseGoodToLose(Point position)  {
+//        if (availablePositions.contains(position)) {
+//            adventureCard.loseGoods();
+//            shipBoard.removeGoods(position, mostValuableGoodType, 1);
+//        } else {
+//            throw new IllegalArgumentException(
+//                    "You are not allowed to remove goods from this position"
+//            );
+//        }
+//    }
+//
+//    @Override
+//    public GameState getNextState() {
+//        return null;
+//    }
 }

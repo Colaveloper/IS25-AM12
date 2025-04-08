@@ -22,7 +22,6 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
     protected int crewSize;
     protected int credits;
     protected int losses;
-    protected int exposedConnectorsNumber;
     protected final int[] shieldDirections;
     protected final Map<GoodsType, Integer> goods;
     // We might need this attribute to handle meteors and cannon hits better
@@ -160,6 +159,10 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
 
     public int getLosses() { return losses; }
 
+    public Map<GoodsType, Integer> getGoods() {
+        return goods;
+    }
+
     public int getGoodsValue() {
         return goods.keySet().stream()
                 .mapToInt(g -> g.getValue()*goods.get(g))
@@ -167,6 +170,16 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
     }
 
     public int getExposedConnectorsNumber() {
+        int exposedConnectorsNumber = 0;
+        for (Point point : componentMap.keySet()) {
+            List<Point> neighbours = getNeighbours(point);
+            for (int i = 0; i < neighbours.size(); i++) {
+                if (!componentMap.containsKey(neighbours.get(i)) &&
+                        componentMap.get(point).getConnectors().get(i) != Connector.NONE) {
+                    exposedConnectorsNumber++;
+                }
+            }
+        }
         return exposedConnectorsNumber;
     }
 
@@ -178,9 +191,9 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
         return res;
     }
 
-    // Components Observers // TODO: make @VisibleForTesting to hide component methods ? Show only Set<Point>
+    // Components Observers
 
-    public Map<Point, it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component> getComponentMap() {
+    public Map<Point, Component> getComponentMap() {
         return componentMap;
     }
 
@@ -216,30 +229,34 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
         return activatables;
     }
 
-    public Optional<it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component> getLastComponent() {
+    public Optional<Component> getLastComponent() {
         return Optional.ofNullable(lastComponent);
     }
 
-    public List<it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component> getStashedComponents() {
+    public List<Component> getStashedComponents() {
         return null;
     }
 
     //CargoHold methods
 
-    //TODO: handle update of ship's goods
     public void placeGoods(Point position, GoodsType goods, int amount) {
         if (!cargoHolds.containsKey(position)) {
             throw new IllegalStateException("There is no cargo hold for this position");
         }
         cargoHolds.get(position).addGoods(goods, amount);
+        if (!this.goods.containsKey(goods)) {
+            this.goods.put(goods, amount);
+        } else {
+            this.goods.put(goods, this.goods.get(goods) + amount);
+        }
     }
 
-    //TODO: handle update of ship's goods
     public void removeGoods(Point position, GoodsType goods, int amount) {
         if (!cargoHolds.containsKey(position)) {
             throw new IllegalStateException("There is no cargo hold for this position");
         }
         cargoHolds.get(position).removeGoods(goods, amount);
+        this.goods.put(goods, this.goods.get(goods) - amount);
     }
 
     //Batteries methods
@@ -282,13 +299,15 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
 
     // Activatables methods
 
-    public void activateComponent(Point position) {
+    public boolean activateComponent(Point position) {
         if (!activatables.containsKey(position)) {
             throw new IllegalStateException("There is no activatable for this position");
         }
         if (!activatables.get(position).isActive()) {
             activatables.get(position).activate(this);
+            return true;
         }
+        return false;
     }
 
     public void deactivateComponent(Point position) {
@@ -305,22 +324,17 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
     //TODO: handle exposed connectors update
     //TODO: handle Components who are not connected
     public boolean checkValidity() {
-        Set<Point> checkedPoints = new HashSet<>();
-        List<Point> toCheck = new ArrayList<>();
-        componentMap.keySet().stream().findAny().ifPresent(toCheck::add);
-        while (!toCheck.isEmpty()) {
-            Point current = toCheck.removeLast();
-            List<Point> neighbours = getNeighbours(current);
+        for (Point point : componentMap.keySet()) {
+            List<Point> neighbours = getNeighbours(point);
             for (int i = 0; i < neighbours.size(); i++) {
                 if (componentMap.containsKey(neighbours.get(i))) {
-                    it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component currentComponent = componentMap.get(current);
-                    it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component neighbourComponent = componentMap.get(neighbours.get(i));
+                    Component currentComponent = componentMap.get(point);
+                    Component neighbourComponent = componentMap.get(neighbours.get(i));
                     if (!currentComponent.getConnectors().get(i).matches(neighbourComponent.getConnectors().get((i+2)%4))) {
                         return false;
                     }
                 }
             }
-            checkedPoints.add(current);
         }
         for (Point point : cannons.keySet()) {
             if (componentMap.containsKey(getNeighbours(point).get(cannons.get(point).getOrientation()))) {
@@ -412,7 +426,7 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
     }
 
     @Override
-    public void add(it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component component) {}
+    public void add(Component component) {}
 
     @Override
     public void add(Cannon cannon) {
@@ -486,8 +500,8 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
 
     @Override
     public void remove(Cabin cabin) {
+        loseCrew(this.lastPosition, cabin.getNumResidents());
         this.cabins.remove(this.lastPosition);
-        this.crewSize -= cabin.getNumResidents();
     }
 
     @Override
@@ -504,7 +518,7 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
     public void remove(CargoHold cargoHold) {
         Map<GoodsType, Integer> lostGoods = this.cargoHolds.get(lastPosition).getGoods();
         for (GoodsType goods: lostGoods.keySet()) {
-            this.goods.put(goods, this.goods.get(goods) - lostGoods.get(goods));
+            removeGoods(lastPosition, goods, lostGoods.get(goods));
         }
         this.cargoHolds.remove(this.lastPosition);
     }

@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.AddGoodsState;
-import it.polimi.ingsw.galaxytruckers.model.state.ChoiceState;
+import it.polimi.ingsw.galaxytruckers.model.state.GrabRewardState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import javafx.scene.image.Image;
@@ -45,7 +45,7 @@ public class AbandonedStationCard extends AdventureCard {
             currentPlayerIndex++;
 
             if (currentShipBoard.getCrewSize() >= requiredCrew) {
-                return new ChoiceState();
+                return new GrabRewardState(this::getReward);
             }
 
             else {
@@ -59,11 +59,9 @@ public class AbandonedStationCard extends AdventureCard {
         return new DrawCardState();
     }
 
-    @Override
-    public void choose(boolean choice) {
-        if (choice) {
-            flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
-            accepted = true;
-        }
+
+    public void getReward() {
+        flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
+        accepted = true;
     }
 }

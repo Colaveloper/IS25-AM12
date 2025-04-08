@@ -35,7 +35,7 @@ public class SmugglersCard extends AdventureCard {
             if (currentShipBoard != null) {  // There is a previous player who needs their firepower evaluated
                 if (currentShipBoard.getFirePower() > firePowerThreshold) {  // player defeats the enemy
                     defeated = true;
-                    return new ChoiceState(); // Let the player choose whether to collect the prize
+                    return new GrabRewardState(this::getReward); // Let the player choose whether to collect the prize
                 } else if (currentShipBoard.getFirePower() < firePowerThreshold) { // player is defeated
                     ShipBoard tempShipBoard = currentShipBoard;
                     currentShipBoard = null;
@@ -46,9 +46,7 @@ public class SmugglersCard extends AdventureCard {
             if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {  // There are other players to evaluate
                 currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
                 currentPlayerIndex++;
-                Set<Point> availablePositions = new HashSet<>(currentShipBoard.getCannons().keySet());
-                availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
-                return new ActivateState(availablePositions, currentShipBoard); // Let the player activate double cannons
+                return new DeclareFirePowerState(currentShipBoard); // Let the player activate double cannons
             } else {  // There are no more players and no one has defeated the enemy
                 defeated = true;
                 return new DrawCardState();
@@ -61,12 +59,8 @@ public class SmugglersCard extends AdventureCard {
         }
     }
 
-    @Override
-    public void choose(boolean choice) {
-        // TODO: add: if (choice) { }
-        if (choice) {
-            flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
-        }
+    public void getReward() {
+        flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
         currentShipBoard = null;
     }
 }

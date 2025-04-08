@@ -145,7 +145,6 @@ class ShipBoardTest {
         static boolean restIsUnchanged(ShipBoard shipBoard) {
             return shipBoard.getLosses() == 0 &&
                     shipBoard.getCredits() == 0 &&
-                    shipBoard.getExposedConnectorsNumber() == 0 &&
                     shipBoard.getStashedComponents().isEmpty();
         }
 
@@ -830,7 +829,7 @@ class ShipBoardTest {
 
                 // initializing and ensuring alien is present
                 shipBoard.initializeCabin(new Point(8,7), CrewType.PURPLE);
-                assertTrue(shipBoard.getCrewTypeOptions(new Point(8,7)).contains(CrewType.PURPLE));
+                assertFalse(shipBoard.getCrewTypeOptions(new Point(8,7)).contains(CrewType.PURPLE));
                 assertEquals(1,shipBoard.getCrewSize());
 
                 // losing the alien

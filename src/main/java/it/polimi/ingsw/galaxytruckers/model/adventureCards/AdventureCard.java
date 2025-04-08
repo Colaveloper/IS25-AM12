@@ -26,16 +26,8 @@ public abstract class AdventureCard implements Physical {
     public Level getCardLevel() {
         return cardLevel;
     }
+
     public abstract GameState nextStep();
-
-    // Does nothing - does not throw exceptions because I control correct
-    // method invocation through GameState
-    // TODO : consider removing this method (using GeneralChoiceState)
-    public void choose(boolean choice) {}
-
-    public void loseCrew() {}
-
-    public void loseGoods() {}
 
     @Override
     public Image getImage() {

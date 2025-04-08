@@ -5,10 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.model.state.ActivateState;
-import it.polimi.ingsw.galaxytruckers.model.state.ChooseShipPieceState;
-import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
-import it.polimi.ingsw.galaxytruckers.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.model.state.*;
 import javafx.scene.image.Image;
 
 import java.awt.*;
@@ -31,23 +28,11 @@ public class MeteorSwarmCard extends AdventureCard {
 
     @Override
     public GameState nextStep() {
-        if (currentShipBoard != null) {  // There is a previous player that has to be hit //
-            if (currentProjectile.fireAt(currentShipBoard)) {  // If a component is removed I need to check shipConnection
-                List<Set<Point>> shipPieces = currentShipBoard.getConnectedSets();
-                if (shipPieces.size() > 1) {
-                    ShipBoard tempShipBoard = currentShipBoard;
-                    currentShipBoard = null;
-                    return new ChooseShipPieceState(tempShipBoard.getConnectedSets(), currentShipBoard);
-                }
-            }
-        }
         // Letting the currentPlayer activate double cannons
         if (currentPlayerIndex < flightBoard.getOrderedShips().size()) {  // There are other players to evaluate
             currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
             currentPlayerIndex++;
-            Set<Point> availablePositions = new HashSet<>(currentShipBoard.getCannons().keySet());
-            availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
-            return new ActivateState(availablePositions, currentShipBoard); // Let the player activate cannon
+            return new HandleProjectileState(currentShipBoard, currentProjectile); // Let the player activate cannon
         }
         else {
             if (projectiles.isEmpty()) {

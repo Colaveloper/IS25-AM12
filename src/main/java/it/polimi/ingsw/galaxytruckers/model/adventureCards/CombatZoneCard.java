@@ -8,11 +8,13 @@ import it.polimi.ingsw.galaxytruckers.model.state.*;
 import com.google.common.annotations.VisibleForTesting;
 import javafx.scene.image.Image;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.Supplier;
 
+//TODO: fix class implementation
+// - make it coherent with other cards and game states
+// - find new implementation strategy (not parsed suppliers)
 public class CombatZoneCard extends AdventureCard {
     // Card data
     private int flightDayLoss;
@@ -66,9 +68,7 @@ public class CombatZoneCard extends AdventureCard {
     public Supplier<GameState> setCurrentShipToWeakestEngine = () -> {
         if (currentPlayerIndex < flightBoard.getOrderedShips().size()) { // engine activation
                 currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex++);
-                Set<Point> availablePositions = new HashSet<>(currentShipBoard.getEngines().keySet());
-                availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
-                return new ActivateState(availablePositions, currentShipBoard);
+                return new DeclareEnginePowerState(currentShipBoard);
         }
 
         // establishing the first ship with the weakest engines
@@ -90,9 +90,7 @@ public class CombatZoneCard extends AdventureCard {
         if (currentPlayerIndex < flightBoard.getOrderedShips().size()) { // engine activation
             currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
             currentPlayerIndex++;
-            Set<Point> availablePositions = new HashSet<>(currentShipBoard.getCannons().keySet());
-            availablePositions.retainAll(currentShipBoard.getActivatables().keySet());
-            return new ActivateState(availablePositions, currentShipBoard);
+            return new DeclareFirePowerState(currentShipBoard);
         }
 
         // establishing the first ship with the weakest cannons
@@ -139,19 +137,20 @@ public class CombatZoneCard extends AdventureCard {
         if (!projectiles.isEmpty()) { // still projectiles to throw
             if (currentProjectile == null) { // shields not yet activated
                 currentProjectile = projectiles.getFirst();
-                return new ActivateState(currentProjectile.getActivatablePoints(currentShipBoard), currentShipBoard);
-            } else { // fire!
-                boolean hit = currentProjectile.fireAt(currentShipBoard);
-                List<Set<Point>> shipPieces = currentShipBoard.getConnectedSets();
-                projectiles.removeFirst();
-                currentProjectile = null;
-                if(hit && shipPieces.size() > 1) {
-                    // a lost component broke the ship
-                    return new ChooseShipPieceState(shipPieces, currentShipBoard);
-                } else {
-                    return nextStep();
-                }
+                return new HandleProjectileState(currentShipBoard, currentProjectile);
             }
+//            else { // fire!
+//                boolean hit = currentProjectile.fireAt(currentShipBoard);
+//                List<Set<Point>> shipPieces = currentShipBoard.getConnectedSets();
+//                projectiles.removeFirst();
+//                currentProjectile = null;
+//                if(hit && shipPieces.size() > 1) {
+//                    // a lost component broke the ship
+//                    return new ChooseShipPieceState(shipPieces, currentShipBoard);
+//                } else {
+//                    return nextStep();
+//                }
+//            }
         }
         currentTask++;
         currentPlayerIndex = 0;

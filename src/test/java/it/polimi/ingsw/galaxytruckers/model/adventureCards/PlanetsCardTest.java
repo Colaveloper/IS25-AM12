@@ -7,9 +7,9 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.AddGoodsState;
+import it.polimi.ingsw.galaxytruckers.model.state.ChoosePlanetState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import it.polimi.ingsw.galaxytruckers.model.state.GeneralChoiceState;
 import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -111,7 +111,7 @@ class PlanetsCardTest {
         for (ShipBoard ship : ships) {
             Set<Integer> expRemainingChoices = new HashSet<>(planetsCard.getRemainingChoices());
             GameState testState = planetsCard.nextStep();
-            assertInstanceOf(GeneralChoiceState.class, testState);
+            assertInstanceOf(ChoosePlanetState.class, testState);
             assertTrue(planetsCard.isPlanetChoiceAllowed());
             assertEquals(ship, planetsCard.getCurrentShipBoard());
             assertTrue(planetsCard.getLandedShips().isEmpty());

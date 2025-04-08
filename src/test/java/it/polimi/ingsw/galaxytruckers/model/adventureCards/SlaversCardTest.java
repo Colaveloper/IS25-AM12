@@ -164,7 +164,7 @@ class SlaversCardTest {
         slaversCard.nextStep();
         slaversCard.nextStep();
         testState = slaversCard.nextStep();
-        assertInstanceOf(ChoiceState.class, testState);
+        assertInstanceOf(GrabRewardState.class, testState);
     }
 
     @Test
@@ -175,12 +175,12 @@ class SlaversCardTest {
     }
 
     @Test
-    void eachPlayerHasActivateState() {
+    void eachPlayerHasDeclareFirePowerState() {
         testState = slaversCard.nextStep();
-        assertInstanceOf(ActivateState.class, testState);
+        assertInstanceOf(DeclareFirePowerState.class, testState);
         slaversCard.nextStep();//removeGoodsState
         testState = slaversCard.nextStep();
-        assertInstanceOf(ActivateState.class, testState);
+        assertInstanceOf(DeclareFirePowerState.class, testState);
     }
 
     @Test
@@ -215,25 +215,24 @@ class SlaversCardTest {
         slaversCard.nextStep();//lose crew
         slaversCard.nextStep();//activate
         testState = slaversCard.nextStep();//choose
-        assertInstanceOf(ChoiceState.class, testState);
+        assertInstanceOf(GrabRewardState.class, testState);
 
-        slaversCard.choose(true);
+        slaversCard.getReward();
         assertTrue(creditGained);
         assertTrue(displacedShips.contains(ship2));
         assertFalse(displacedShips.contains(ship1));
     }
 
-    @Test
-    void chooseToNOTGetCredits() {
-        slaversCard.nextStep();//activate
-        slaversCard.nextStep();//lose crew
-        slaversCard.nextStep();//activate
-        testState = slaversCard.nextStep();//choose
-        assertInstanceOf(ChoiceState.class, testState);
-
-        slaversCard.choose(false);
-        assertFalse(creditGained);
-        assertFalse(displacedShips.contains(ship1));
-        assertFalse(displacedShips.contains(ship2));
-    }
+//    @Test
+//    void chooseToNOTGetCredits() {
+//        slaversCard.nextStep();//activate
+//        slaversCard.nextStep();//lose crew
+//        slaversCard.nextStep();//activate
+//        testState = slaversCard.nextStep();//choose
+//        assertInstanceOf(GrabRewardState.class, testState);
+//
+//        assertFalse(creditGained);
+//        assertFalse(displacedShips.contains(ship1));
+//        assertFalse(displacedShips.contains(ship2));
+//    }
 }
