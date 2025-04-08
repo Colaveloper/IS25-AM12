@@ -1,15 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
 
-//  □   ●   ◘	▼▶▲◀	⊐⊏⊓⊔	Ͳ	Θ	Ϫ	Ѫ	֎	①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳    ♠♥♦♣
-//  ─ 	━ 	│ 	┃ 	┄ 	┅ 	┆ 	┇ 	┈ 	┉ 	┊ 	┋ 	┌ 	┍ 	┎ 	┏
-//  ┐ 	┑ 	┒ 	┓ 	└ 	┕ 	┖ 	┗ 	┘ 	┙ 	┚ 	┛ 	├ 	┝ 	┞ 	┟
-//  ┠ 	┡ 	┢ 	┣ 	┤ 	┥ 	┦ 	┧ 	┨ 	┩ 	┪ 	┫ 	┬ 	┭ 	┮ 	┯
-//  ┰ 	┱ 	┲ 	┳ 	┴ 	┵ 	┶ 	┷ 	┸ 	┹ 	┺ 	┻ 	┼ 	┽ 	┾ 	┿
-//  ╀ 	╁ 	╂ 	╃ 	╄ 	╅ 	╆ 	╇ 	╈ 	╉ 	╊ 	╋ 	╌ 	╍ 	╎ 	╏
-//  ═ 	║ 	╒ 	╓ 	╔ 	╕ 	╖ 	╗ 	╘ 	╙ 	╚ 	╛ 	╜ 	╝ 	╞ 	╟
-//  ╠ 	╡ 	╢ 	╣ 	╤ 	╥ 	╦ 	╧ 	╨ 	╩ 	╪ 	╫ 	╬ 	╭ 	╮ 	╯
-//  ╰ 	╱ 	╲ 	╳ 	╴ 	╵ 	╶ 	╷ 	╸ 	╹ 	╺ 	╻ 	╼ 	╽ 	╾ 	╿
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
@@ -23,9 +14,11 @@ public class MockView {
 
 
     public static void main(String[] args) {
-        Printer printer = new Printer();
+        ClientGameModel game = new ClientGameModel();
+//        Printer printer = new Printer();
 
-        printer.printAdventureDrawState();
+        System.out.println(game);
 
+//        printer.printAdventureDrawState();
     }
 }

@@ -1,17 +1,29 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
+//usable characters
+//  □   ●   ◘	▼▶▲◀	⊐⊏⊓⊔	Ͳ	Θ	Ϫ	Ѫ	֎	①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳    ♠♥♦♣
+//  ─ 	━ 	│ 	┃ 	┄ 	┅ 	┆ 	┇ 	┈ 	┉ 	┊ 	┋ 	┌ 	┍ 	┎ 	┏
+//  ┐ 	┑ 	┒ 	┓ 	└ 	┕ 	┖ 	┗ 	┘ 	┙ 	┚ 	┛ 	├ 	┝ 	┞ 	┟
+//  ┠ 	┡ 	┢ 	┣ 	┤ 	┥ 	┦ 	┧ 	┨ 	┩ 	┪ 	┫ 	┬ 	┭ 	┮ 	┯
+//  ┰ 	┱ 	┲ 	┳ 	┴ 	┵ 	┶ 	┷ 	┸ 	┹ 	┺ 	┻ 	┼ 	┽ 	┾ 	┿
+//  ╀ 	╁ 	╂ 	╃ 	╄ 	╅ 	╆ 	╇ 	╈ 	╉ 	╊ 	╋ 	╌ 	╍ 	╎ 	╏
+//  ═ 	║ 	╒ 	╓ 	╔ 	╕ 	╖ 	╗ 	╘ 	╙ 	╚ 	╛ 	╜ 	╝ 	╞ 	╟
+//  ╠ 	╡ 	╢ 	╣ 	╤ 	╥ 	╦ 	╧ 	╨ 	╩ 	╪ 	╫ 	╬ 	╭ 	╮ 	╯
+//  ╰ 	╱ 	╲ 	╳ 	╴ 	╵ 	╶ 	╷ 	╸ 	╹ 	╺ 	╻ 	╼ 	╽ 	╾ 	╿
+
+
 public class Printer {
 
     public void printShip() {
 
         System.out.println(
-                "▲ cannon\t\t" +
-                        "⊓ engine\t\t" +
-                        " shield\n" +
-                        "Θ battery\t\t" +
-                        "▞ storage\t\t" +
-                        "● cabin\t\t"+
-                        "Ѫ life support\n"
+                "▲ cannon\t\t"  +
+                "⊓ engine\t\t"  +
+                " shield\n"     +
+                "Θ battery\t\t" +
+                "▞ storage\t\t" +
+                "● cabin\t\t"   +
+                "Ѫ life support\n"
         );
 
         for (int matRow = 0; matRow < 4; matRow++) {                    //all components by rows from matrix
@@ -63,16 +75,6 @@ public class Printer {
 //        );
     }
 
-    public void printFlightBoard() {
-
-        //TODO: get players in order with position
-        //TODO: for player print "_" (curr player pos - last player pos) o qualcosa di più intelligente
-        for (int pos = 0; pos < 18; pos++) {
-            System.out.print("_");
-        }
-        System.out.println("\n");
-    }
-
     public void printCurrentCard() {
         //TODO: get current state
         System.out.println("[here goes what's happening now]\n\n");
@@ -82,8 +84,8 @@ public class Printer {
 
     public void printCheckOtherPlayers() {
         System.out.println(
-                "A) previous player\t\t" +
-                "D) next player\n"
+            "A) previous player\t\t" +
+            "D) next player\n"
         );
     }
 
@@ -103,7 +105,7 @@ public class Printer {
     public void printAdventureDrawState(){
         colorTest();
         printCurrentCard();
-        printFlightBoard();
+//        printFlightBoard();
         printShip();
         printCheckOtherPlayers();
         printChoices();
