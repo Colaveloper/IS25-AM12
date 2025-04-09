@@ -46,7 +46,16 @@ public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
         int cardId = (int) (Math.random()*100);
         synchronized (this.clients){
             for(VirtualViewRmi client: clients){
-                client.showNewCardUpdate(cardId);
+                client.showNewCard(cardId);
+            }
+        }
+    }
+
+    @Override
+    public void reportError(String error) throws Exception {
+        synchronized (this.clients){
+            for(VirtualViewRmi client: clients){
+                client.reportError(error);
             }
         }
     }

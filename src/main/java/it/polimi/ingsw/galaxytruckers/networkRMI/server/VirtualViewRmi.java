@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
  */
 public interface VirtualViewRmi extends Remote, VirtualView {
     @Override
-    void showNewCardUpdate(Integer cardId) throws RemoteException;
+    void showNewCard(Integer cardId) throws RemoteException;
     @Override
     void reportError(String details) throws RemoteException;
 }
