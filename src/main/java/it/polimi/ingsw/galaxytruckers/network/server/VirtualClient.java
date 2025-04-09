@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.networkRMI.server;
+package it.polimi.ingsw.galaxytruckers.network.server;
 
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;

@@ -1,10 +1,10 @@
-package it.polimi.ingsw.galaxytruckers.networkRMI.client;
+package it.polimi.ingsw.galaxytruckers.network.client.rmi;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.networkRMI.server.VirtualClientRmi;
+import it.polimi.ingsw.galaxytruckers.network.server.rmi.VirtualClientRmi;
 import it.polimi.ingsw.galaxytruckers.view.CliView;
 import it.polimi.ingsw.galaxytruckers.view.ClientGameModel;
 import it.polimi.ingsw.galaxytruckers.view.ProjectileType;
@@ -61,7 +61,7 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClientRmi {
     @Override
     public void showNewCard(Integer cardId) throws RemoteException {
         System.out.println("new card! the id is:"+cardId);
-        // use cardId to update the current card in the model
+        // TODO: use cardId to update the current card in the model
         view.show(new NewCardVisualization());
     }
 

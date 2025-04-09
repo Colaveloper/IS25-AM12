@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.networkRMI.client;
+package it.polimi.ingsw.galaxytruckers.network.client;
 
 public interface VirtualServer {
     void drawCard() throws Exception;
