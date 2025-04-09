@@ -4,9 +4,12 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.networkRMI.server.VirtualViewRmi;
+import it.polimi.ingsw.galaxytruckers.networkRMI.server.VirtualClientRmi;
+import it.polimi.ingsw.galaxytruckers.view.CliView;
 import it.polimi.ingsw.galaxytruckers.view.ClientGameModel;
 import it.polimi.ingsw.galaxytruckers.view.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.View;
+import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.NewCardVisualization;
 
 import java.awt.*;
 import java.rmi.NotBoundException;
@@ -20,14 +23,16 @@ import java.util.List;
 /**
  * Questa classe rappresenta la logica del client implementata con tecnologia RMI.
  */
-public class RmiClient extends UnicastRemoteObject implements VirtualViewRmi {
+public class RmiClient extends UnicastRemoteObject implements VirtualClientRmi {
     final VirtualServerRmi server;
     final ClientGameModel clientModel;
+    final View view;
 
     public RmiClient(VirtualServerRmi server) throws RemoteException{
         super();
         this.server = server;
         clientModel = new ClientGameModel();
+        this.view = new CliView(clientModel); // TODO: let the player choose his view
     }
 
     public static void main(String[] args) throws RemoteException, NotBoundException {
@@ -51,6 +56,13 @@ public class RmiClient extends UnicastRemoteObject implements VirtualViewRmi {
                 server.drawCard();
             }
         }
+    }
+
+    @Override
+    public void showNewCard(Integer cardId) throws RemoteException {
+        System.out.println("new card! the id is:"+cardId);
+        // use cardId to update the current card in the model
+        view.show(new NewCardVisualization());
     }
 
     @Override
@@ -136,13 +148,6 @@ public class RmiClient extends UnicastRemoteObject implements VirtualViewRmi {
     @Override
     public void showUpdateCrew(Point position, int crew, CrewType crewType) throws Exception {
 
-    }
-
-    @Override
-    public void showNewCard(Integer cardId) throws RemoteException {
-        System.out.println("new card! the id is:"+cardId);
-        // use cardId to update the current card in the model
-        // reprint the CLI
     }
 
     @Override

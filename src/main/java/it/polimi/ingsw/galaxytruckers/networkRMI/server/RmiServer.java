@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
     final Controller controller;
-    final List<VirtualViewRmi> clients = new ArrayList<>();
+    final List<VirtualClientRmi> clients = new ArrayList<>();
 
     public RmiServer() throws RemoteException {
         super();
@@ -32,7 +32,7 @@ public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
 
 
     @Override
-    public void connect(VirtualViewRmi client) throws RemoteException {
+    public void connect(VirtualClientRmi client) throws RemoteException {
         //TODO. Attenzione, più client possono invocare questo metodo simultaneamente!
         synchronized (this.clients) {
             this.clients.add(client);
@@ -45,7 +45,7 @@ public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
         // TODO: get cardId from controller
         int cardId = (int) (Math.random()*100);
         synchronized (this.clients){
-            for(VirtualViewRmi client: clients){
+            for(VirtualClientRmi client: clients){
                 client.showNewCard(cardId);
             }
         }
@@ -54,7 +54,7 @@ public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
     @Override
     public void reportError(String error) throws Exception {
         synchronized (this.clients){
-            for(VirtualViewRmi client: clients){
+            for(VirtualClientRmi client: clients){
                 client.reportError(error);
             }
         }

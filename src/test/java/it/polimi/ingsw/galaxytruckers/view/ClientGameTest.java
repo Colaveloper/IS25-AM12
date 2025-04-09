@@ -59,8 +59,6 @@ class ClientGameTest {
 
     @Test
     public void printGame() {
-        game.getDescription().forEach(System.out::println);
-        System.out.println("\u001B[31m" + "This is red text" + "\u001B[0m");
 
     }
 }

@@ -6,7 +6,7 @@ import java.rmi.RemoteException;
 /**
  * Questa interfaccia specializza l'interfaccia VirtualView per la tecnologia RMI
  */
-public interface VirtualViewRmi extends Remote, VirtualView {
+public interface VirtualClientRmi extends Remote, VirtualClient {
     @Override
     void showNewCard(Integer cardId) throws RemoteException;
     @Override

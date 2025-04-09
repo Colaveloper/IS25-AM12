@@ -5,8 +5,9 @@ import javafx.scene.image.Image;
 import java.util.List;
 import java.util.Map;
 
-public class ClientGameModel implements Physical {
+public class ClientGameModel {
     private String currentPlayerNickname;
+    private String myNickname;
 
     private FlightBoard flightBoard;
 
@@ -24,27 +25,16 @@ public class ClientGameModel implements Physical {
         this.playerToShip = playerToShip;
     }
 
-    @Override
-    public Image getImage() {
-        return null;
+    public String getCurrentPlayerNickname() {
+        return currentPlayerNickname;
     }
 
-    @Override
-        public List<String> getDescription() {
-        StringBuilder result =
-                new StringBuilder("Current player is: " + currentPlayerNickname + "\n"
-                        + flightBoard.getDescription());
+    public List<String> getFlightBoardDescription() {
+        return flightBoard.getDescription();
+    }
 
-        for(Map.Entry<String, Shipboard> e : playerToShip.entrySet()) {
-            result.append("\n")
-                    .append(e.getKey())
-                    .append("\n");
+    public List<String> getMyShipBoardDescription() {
+        return playerToShip.get(myNickname).getDescription();
 
-            for(String line : e.getValue().getDescription()) {
-                result.append(line).append("\n");
-            }
-        }
-
-        return List.of(result.toString());
     }
 }

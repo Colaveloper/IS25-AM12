@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.networkRMI.client;
 
-import it.polimi.ingsw.galaxytruckers.networkRMI.server.VirtualViewRmi;
+import it.polimi.ingsw.galaxytruckers.networkRMI.server.VirtualClientRmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
  */
 public interface VirtualServerRmi extends Remote, VirtualServer {
 
-    void connect(VirtualViewRmi client) throws RemoteException;
+    void connect(VirtualClientRmi client) throws RemoteException;
 
     // metodi controller:
     @Override

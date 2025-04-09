@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.networkRMI.server;
 
 
-import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -14,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public interface VirtualView {
+public interface VirtualClient {
 
     // TODO: adjust some signatures to account for multiple ships
 
