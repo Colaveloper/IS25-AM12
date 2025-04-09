@@ -29,12 +29,15 @@ public class ClientGameModel implements Physical {
         return null;
     }
 
-    @Override
-        public List<String> getDescription() {
-        StringBuilder result =
-                new StringBuilder("Current player is: " + currentPlayerNickname + "\n"
-                        + flightBoard.getDescription());
 
+    private StringBuilder currentPlayerSection() {
+        return new StringBuilder(
+                "Current player is: " + currentPlayerNickname + "\n" + flightBoard.getDescription()
+        );
+    }
+    
+    private StringBuilder flightboardSection() {
+        StringBuilder result = new StringBuilder();
         for(Map.Entry<String, Shipboard> e : playerToShip.entrySet()) {
             result.append("\n")
                     .append(e.getKey())
@@ -44,7 +47,28 @@ public class ClientGameModel implements Physical {
                 result.append(line).append("\n");
             }
         }
+        return result;
+    }
 
+    private List<String> buildDrawCardView() {
+        //switch on current card
+        StringBuilder result = new StringBuilder();
+
+        result.append(currentPlayerSection());
+        result.append(flightboardSection());
+        
         return List.of(result.toString());
+    }
+
+    private List<String> buildShipBuildingView() {
+        return null;
+    }
+    
+    @Override
+    public List<String> getDescription() {
+        //switch on current state
+        List<String> result = buildDrawCardView();
+
+        return result;
     }
 }

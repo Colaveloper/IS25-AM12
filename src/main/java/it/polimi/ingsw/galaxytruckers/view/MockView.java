@@ -9,6 +9,9 @@ import java.util.List;
 public class MockView {
 
     private List<ShipBoard> ships;
+    private ClientGameModel clientGameModel;
+
+
 
 
 
@@ -16,6 +19,7 @@ public class MockView {
     public static void main(String[] args) {
         ClientGameModel game = new ClientGameModel();
 //        Printer printer = new Printer();
+
 
         System.out.println(game);
 
