@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 import it.polimi.ingsw.galaxytruckers.controller.Controller;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.VirtualServerRmi;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -40,7 +41,7 @@ public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
     }
 
     @Override
-    public void drawCard() throws RemoteException {
+    public void drawCard() throws IOException {
         System.out.println("new card request received");
         // TODO: get cardId from controller
         int cardId = (int) (Math.random()*100);

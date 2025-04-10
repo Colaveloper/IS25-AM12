@@ -3,8 +3,10 @@ package it.polimi.ingsw.galaxytruckers.network.client.rmi;
 import it.polimi.ingsw.galaxytruckers.view.*;
 import it.polimi.ingsw.galaxytruckers.view.Component;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +25,8 @@ class RmiClientTest {
     Component component;
     Map<Point, Component> componentMap;
     Point point;
+
+    Map<String, Shipboard> playerToShip;
 
     @BeforeEach
     void setUp() {
@@ -53,6 +57,9 @@ class RmiClientTest {
 
         shipboard = new Shipboard(componentMap);
 
+        playerToShip = new HashMap<>();
+        playerToShip.put("roborbio", shipboard);
+
         flightBoard = new FlightBoard();
         flightBoard.setLoopLength(10);
         flightBoard.setColorToPlace(Map.of('♠', 2, '♥', 5, '♣', 8));
@@ -64,10 +71,16 @@ class RmiClientTest {
             throw new RuntimeException(e);
         }
 
+
+        game.setModelPersonalNickname("roborbio");
+        game.setModelShipboards(playerToShip);
+
+
     }
 
 
-    public void tryToPrint() {
-        game.
+    @Test
+    public void tryToPrint() throws IOException {
+        game.showNewCard(1);
     }
 }

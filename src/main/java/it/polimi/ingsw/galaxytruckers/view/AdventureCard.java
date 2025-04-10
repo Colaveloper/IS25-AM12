@@ -12,6 +12,7 @@ import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,9 +24,9 @@ import static it.polimi.ingsw.galaxytruckers.model.Deck.parseGoods;
 
 public class AdventureCard {
     // class attributes
-    private List<String> description;
-    private List<String> losses;
-    private List<String> earnings;
+    private String description;
+    private String losses;
+    private String earnings;
 
     /*
     * card-specific attributes
@@ -64,7 +65,8 @@ public class AdventureCard {
         // loading attributes that all cards have in common
         type = cardNode.get("type").asText();
         level = Level.valueOf(cardNode.get("level").asText());
-        image = new Image("file:"+cardNode.get("path").asText());
+        //image = new Image("file:"+cardNode.get("path").asText());
+        image = null;
 
         // loading remaining attributes
         // TODO: define description, earnings, and losses for each card
@@ -82,6 +84,9 @@ public class AdventureCard {
                 projectiles = Optional.empty();
                 actions = Optional.empty();
 
+                description = "sono diponibili" + planets.get().size() + " planets";
+                //earnings = "sul pianeta sono disponibili" + "tot rossi tot gialli tot" + " loot";
+
                 // TODO: define here
                 break;
             case "pirates":
@@ -97,6 +102,11 @@ public class AdventureCard {
                 planets = Optional.empty();
                 actions = Optional.empty();
 
+                description = "l'avverisario ha firepower = " + firepower + ", attivare cannoni?";
+                earnings = "vuoi prendere crediti = " + credits + "?";
+                losses = "colpi di cannone in coordinate" + "direzioni";
+                // TODO: define projectile directions
+                // TODO: find a way to get rolls from server
                 // TODO: define here
 
                 break;
@@ -213,11 +223,15 @@ public class AdventureCard {
     }
 
     // public methods
-    public List<String> getDescription(){return description;}
+    public String getDescription(){return description;}
 
-    public List<String> getEarnings(){return earnings;}
+    public String getEarnings(){return earnings;}
 
-    public List<String> getLosses(){return losses;}
+    public String getLosses(){return losses;}
+
+    public String getCardName() {
+        return type;
+    }
 
     // private helper methods
     private void emptyAttributes(){

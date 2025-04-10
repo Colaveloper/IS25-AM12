@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.network.client.rmi;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.VirtualClientRmi;
 
+import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -16,5 +17,5 @@ public interface VirtualServerRmi extends Remote, VirtualServer {
 
     // metodi controller:
     @Override
-    void drawCard() throws RemoteException;
+    void drawCard() throws IOException;
 }

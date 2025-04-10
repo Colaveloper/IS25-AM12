@@ -5,13 +5,11 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.VirtualClientRmi;
-import it.polimi.ingsw.galaxytruckers.view.CliView;
-import it.polimi.ingsw.galaxytruckers.view.ClientGameModel;
-import it.polimi.ingsw.galaxytruckers.view.ProjectileType;
-import it.polimi.ingsw.galaxytruckers.view.View;
+import it.polimi.ingsw.galaxytruckers.view.*;
 import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.NewCardVisualization;
 
 import java.awt.*;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -35,19 +33,19 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClientRmi {
         this.view = new CliView(clientModel); // TODO: let the player choose his view
     }
 
-    public static void main(String[] args) throws RemoteException, NotBoundException {
+    public static void main(String[] args) throws IOException, NotBoundException {
         final String serverName = "GalacticServer";
         Registry registry = LocateRegistry.getRegistry(args[0], 1234);
         VirtualServerRmi server = (VirtualServerRmi) registry.lookup(serverName);
         new RmiClient(server).run();
     }
 
-    private void run() throws RemoteException {
+    private void run() throws IOException {
         this.server.connect(this);
         this.runCli();
     }
 
-    private void runCli() throws RemoteException {
+    private void runCli() throws IOException {
         Scanner scan = new Scanner(System.in);
         while (true) {
             System.out.print("Insert command: ");
@@ -59,11 +57,29 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClientRmi {
     }
 
     @Override
-    public void showNewCard(Integer cardId) throws RemoteException {
+    public void showNewCard(Integer cardId) throws IOException {
         System.out.println("new card! the id is:"+cardId);
-        // TODO: use cardId to update the current card in the model
+        clientModel.setCurrentCard(cardId);
+        //TODO:sync
         view.show(new NewCardVisualization());
     }
+
+
+
+
+    //TODO:if RmiClient creates the model this is necessary----------------------------------------------------
+    public void setModelPersonalNickname(String nickname) {
+        clientModel.setMyNickname(nickname);
+    }
+
+    public void setModelShipboards(Map<String, Shipboard> shipboards) {
+        clientModel.setPlayerToShip(shipboards);
+    }
+    //TODO: ----------------------------IMPORTANT----------------------------------------------------------------
+
+
+
+
 
     @Override
     public void showNicknameRegistration(String nickname) throws Exception {
