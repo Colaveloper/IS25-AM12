@@ -172,7 +172,7 @@ public abstract class Deck{
         return cards;
     }
 
-    private static List<Projectile> parseProjectiles(JsonNode projectilesNode) {
+    public static List<Projectile> parseProjectiles(JsonNode projectilesNode) {
         List<Projectile> projectiles = new ArrayList<>();
         int direction = projectilesNode.get(1).asInt();
         for (JsonNode node : projectilesNode) {
@@ -194,7 +194,7 @@ public abstract class Deck{
         return projectiles;
     }
 
-    private static  List<Map<GoodsType, Integer>> parsePlanets(JsonNode planetsNode) {
+    public static  List<Map<GoodsType, Integer>> parsePlanets(JsonNode planetsNode) {
         List<Map<GoodsType, Integer>> planets = new ArrayList<>();
         int direction = planetsNode.get(1).asInt();
         for (JsonNode node : planetsNode) {
@@ -207,7 +207,7 @@ public abstract class Deck{
         return planets;
     }
 
-    private static Map<GoodsType, Integer> parseGoods(JsonNode goodsNode) {
+    public static Map<GoodsType, Integer> parseGoods(JsonNode goodsNode) {
         Map<GoodsType, Integer> goods = new HashMap<>();
         for (GoodsType type : GoodsType.values()) {
             goods.put(type, goodsNode.get(type.name().toLowerCase()).asInt());
