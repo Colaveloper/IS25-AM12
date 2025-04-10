@@ -74,6 +74,10 @@ public class ClientGameModel {
         }
     }
 
+    public void setSelectablePoints(List<Point> selectablePoints) {
+        playerToShip.get(myNickname).setSelectablePoints(selectablePoints);
+    }
+
     public Physical getCurrentCard() {
         return currentCard;
     }

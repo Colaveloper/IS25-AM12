@@ -14,6 +14,7 @@ public class Component implements Physical{
     private final ComponentType type;
     private List<Connector> connectors = new ArrayList<>();   //TODO: enum for connector type?
     private int rotation;
+    private boolean isSelectable;
 
     public Component(int direction, int componentId) throws IOException {
         rotation = direction;
@@ -67,6 +68,9 @@ public class Component implements Physical{
 
     @Override
     public List<String> getDescription() {
+        String open = isSelectable ? "\u001B[32m" : "";
+        String close = isSelectable ? "\u001B[0m" : "";
+
         List<String> lines = new ArrayList<>();
         if (type == ComponentType.EMPTY_AREA) {
             lines.add(0, "     ");
@@ -77,9 +81,9 @@ public class Component implements Physical{
             lines.add(1, "     ");
             lines.add(2, "     ");
         } else {
-            lines.add(0, "╭─" + getConnector(0) + "─╮");
-            lines.add(1, getConnector(3)+" "+type.getSymbol(rotation)+" "+getConnector(1));
-            lines.add(2, "╰─" + getConnector(2) + "─╯");
+            lines.add(0, open+"╭─" + getConnector(0) + "─╮"+close);
+            lines.add(1, open+getConnector(3)+" "+type.getSymbol(rotation)+" "+getConnector(1)+close);
+            lines.add(2, open+"╰─" + getConnector(2) + "─╯"+close);
         }
         return lines;
     }
@@ -96,5 +100,9 @@ public class Component implements Physical{
             }
         }
         return connectors;
+    }
+
+    public void setSelectable() {
+        isSelectable = true;
     }
 }

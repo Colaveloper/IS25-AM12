@@ -102,4 +102,10 @@ public class Shipboard implements Physical{
 
         return result;
     }
+
+    public void setSelectablePoints(List<Point> selectablePoints) {
+        for (Point position : selectablePoints) {
+            componentMatrix.get(position.y-upLeft.y).get(position.x-upLeft.x).setSelectable();
+        }
+    }
 }

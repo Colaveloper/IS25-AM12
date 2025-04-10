@@ -146,8 +146,8 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
-    public void setSelectablePoints(List<Point> points) {
-        // model.update
+    public void showSelectablePoints(List<Point> points) {
+        model.setSelectablePoints(points);
         // view.show(ChosenStrategy)
     }
 

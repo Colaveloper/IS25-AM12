@@ -30,6 +30,8 @@ class ClientControllerTest {
         for (int i=0 ; i<shipArea.size() ; i++) {
             controller.showComponentPositioning("roborbio", i*3, i%4, shipArea.get(i));
         }
+        controller.showSelectablePoints(new ArrayList<>(List.of(new Point(7, 7))));
+        controller.showSelectablePoints(new ArrayList<>(List.of(new Point(6, 7))));
         controller.showColorSelection("roborbio", Colors.RED);
         controller.showPlayerToPlaceUpdate(Map.of("roborbio", 2));
     }
