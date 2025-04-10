@@ -171,6 +171,7 @@ public class AdventureCard {
                 planets = Optional.empty();
                 actions = Optional.empty();
 
+                description = "test description for abandoned ship";
                 // TODO: define here
 
                 break;

@@ -8,7 +8,10 @@ public class NewCardVisualization implements VisualizationStrategy {
     public void showCLI(ClientGameModel model) {
 
         System.out.println("Current Leader: "+model.getCurrentPlayerNickname()+" just drew:" + model.getCardName());
-        System.out.println(model.getMyShipBoardDescription());
+        for (String line : model.getMyShipBoardDescription()) {
+            System.out.println(line);
+        }
+        //System.out.println(model.getMyShipBoardDescription());
         System.out.println(model.getCardDescription());
     }
 }
