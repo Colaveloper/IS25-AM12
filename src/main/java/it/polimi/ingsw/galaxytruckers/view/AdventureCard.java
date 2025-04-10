@@ -12,21 +12,19 @@ import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Collectors;
+
 import javafx.scene.image.Image;
 import javax.swing.text.html.Option;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parsePlanets;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parseProjectiles;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parseGoods;
 
-public class AdventureCard {
+public class AdventureCard implements Physical{
     // class attributes
-    private String description;
-    private String losses;
-    private String earnings;
+    private List<String> description;
 
     /*
     * card-specific attributes
@@ -51,8 +49,21 @@ public class AdventureCard {
     private Image image;
 
     // constructor
+    /*
+    * for card descriptions the following convention is used:
+    * the first element is just the type of card with a choice given to the player
+    * subsequent elements go in clockwise order on the card starting in the top left corner
+    *
+    * example:
+    * pirates card with firepower threshold of 10, some shots fired, two flight days lost, and 12 credits received
+    * the description list will be
+    * element 0 - [pirates] card has been drawn! Will you fight?
+    * element 1 - firepower needed to defeat pirates: 10
+    * element 2 - projectiles fired: (TODO: determine how to print this)
+    * element 3 - flight days lost: 2
+    * element 4 - credits reward if defeated: 12
+    * */
     public AdventureCard(int id) throws IOException {
-
         // Reading array of card from JSON file
         String jsonPath = "src/main/resources/cardsReference.json";
         File jsonFile = new File(jsonPath);
@@ -70,6 +81,7 @@ public class AdventureCard {
 
         // loading remaining attributes
         // TODO: define description, earnings, and losses for each card
+        description = new ArrayList<>();
         switch (type) {
             case "planets":
                 planets = Optional.of(parsePlanets(cardNode.get("planets")));
@@ -84,10 +96,9 @@ public class AdventureCard {
                 projectiles = Optional.empty();
                 actions = Optional.empty();
 
-                description = "sono diponibili" + planets.get().size() + " planets";
-                //earnings = "sul pianeta sono disponibili" + "tot rossi tot gialli tot" + " loot";
-
-                // TODO: define here
+                // creating description
+                description.add("["+type+"] card has been drawn! Choose where to land:");
+                description.add(describePlanets());
                 break;
             case "pirates":
                 firepower = cardNode.get("firePowerThreshold").asInt();
@@ -102,12 +113,12 @@ public class AdventureCard {
                 planets = Optional.empty();
                 actions = Optional.empty();
 
-                description = "l'avverisario ha firepower = " + firepower + ", attivare cannoni?";
-                earnings = "vuoi prendere crediti = " + credits + "?";
-                losses = "colpi di cannone in coordinate" + "direzioni";
-                // TODO: define projectile directions
-                // TODO: find a way to get rolls from server
-                // TODO: define here
+                // creating description
+                description.add("["+type+"] card has been drawn! Will you fight?");
+                description.add("firepower needed to defeat pirates: " + firepower);
+                //TODO: figure out projectiles
+                description.add("flight days lost: " + flightDaysLost);
+                description.add("credits reward: " + credits);
 
                 break;
             case "smugglers":
@@ -123,8 +134,12 @@ public class AdventureCard {
                 planets = Optional.empty();
                 actions = Optional.empty();
 
-                // TODO: define here
-
+                // creating description
+                description.add("["+type+"] card has been drawn! Will you fight?");
+                description.add("firepower needed to defeat smugglers: " + firepower);
+                description.add("goods lost if you are defeated: " + numGoodsLost);
+                description.add("flight days lost: " + flightDaysLost);
+                description.add("goods reward for defeating smugglers: " + describeGoods());
                 break;
             case "slavers":
                 crewLost = cardNode.get("penalty").asInt();
@@ -171,7 +186,6 @@ public class AdventureCard {
                 planets = Optional.empty();
                 actions = Optional.empty();
 
-                description = "test description for abandoned ship";
                 // TODO: define here
 
                 break;
@@ -224,17 +238,19 @@ public class AdventureCard {
     }
 
     // public methods
-    public String getDescription(){return description;}
+    @Override
+    public List<String> getDescription(){return description;}
 
-    public String getEarnings(){return earnings;}
-
-    public String getLosses(){return losses;}
+    @Override
+    public Image getImage(){
+        return image;
+    }
 
     public String getCardName() {
         return type;
     }
 
-    // private helper methods
+    // helper methods
     private void emptyAttributes(){
         // everything is empty
         credits = 0;
@@ -247,4 +263,47 @@ public class AdventureCard {
         planets = Optional.empty();
         actions = Optional.empty();
     }
+
+    public String describePlanets() {
+        /*
+        * entrySet().stream() — loop over all good types per planet
+        * Collections.nCopies() — repeat goods names based on count
+        * flatMap() — flatten the repeated names into one stream
+        * joining(", ") — turn them into the nice comma-separated string
+        * */
+        if (planets.isEmpty()) return "No planets.";
+
+        StringBuilder sb = new StringBuilder();
+
+        List<Map<GoodsType, Integer>> planetList = planets.get();
+        List<GoodsType> orderedGoods = List.of(GoodsType.BLUE, GoodsType.GREEN, GoodsType.YELLOW, GoodsType.RED);
+
+        for (int i = 0; i < planetList.size(); i++) {
+            sb.append("planet ").append(i + 1).append(": ");
+
+            int finalI = i;
+            String goods = orderedGoods.stream()
+                    .flatMap(type -> {
+                        int count = planetList.get(finalI).getOrDefault(type, 0);
+                        return Collections.nCopies(count, type.name().toLowerCase()).stream();
+                    })
+                    .collect(Collectors.joining(", "));
+
+            sb.append(goods).append("\n");
+        }
+
+        return sb.toString().trim();
+    }
+
+    public String describeGoods() {
+        if (goods.isEmpty()) return "No goods.";
+
+        Map<GoodsType, Integer> goodsMap = goods.get();
+        List<GoodsType> orderedGoods = List.of(GoodsType.BLUE, GoodsType.GREEN, GoodsType.YELLOW, GoodsType.RED);
+
+        return orderedGoods.stream()
+                .flatMap(type -> Collections.nCopies(goodsMap.getOrDefault(type, 0), type.name().toLowerCase()).stream())
+                .collect(Collectors.joining(", "));
+    }
+
 }
