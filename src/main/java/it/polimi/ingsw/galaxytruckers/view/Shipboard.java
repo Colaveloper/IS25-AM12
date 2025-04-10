@@ -3,13 +3,15 @@ package it.polimi.ingsw.galaxytruckers.view;
 import javafx.scene.image.Image;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Shipboard implements Physical{
 
-    private final List<List<Component>> componentMatrix;
+    private List<List<Component>> componentMatrix;
     private Point upLeft;
     private Point lastPosition;
     private int credits;
@@ -18,18 +20,16 @@ public class Shipboard implements Physical{
     private int numBatteries;
     private int crewSize;
 
-    public Shipboard(Map<Point, Component> componentMap) {
-        componentMatrix = componentMatrixConstructor(componentMap);
+    public Shipboard() {
+        componentMatrix = new ArrayList<>();
     }
 
-    public List<List<Component>> componentMatrixConstructor(Map<Point, Component> map) {
-        if (map.isEmpty()) return List.of();
-
+    public void setShipArea(Set<Point> shipArea) {
         // Bounds
-        int minX = map.keySet().stream().mapToInt(p -> p.x).min().orElse(0);
-        int maxX = map.keySet().stream().mapToInt(p->p.x).max().orElse(0);
-        int minY = map.keySet().stream().mapToInt(p->p.y).min().orElse(0);
-        int maxY = map.keySet().stream().mapToInt(p->p.y).max().orElse(0);
+        int minX = shipArea.stream().mapToInt(p -> p.x).min().orElse(0);
+        int maxX = shipArea.stream().mapToInt(p -> p.x).max().orElse(0);
+        int minY = shipArea.stream().mapToInt(p -> p.y).min().orElse(0);
+        int maxY = shipArea.stream().mapToInt(p -> p.y).max().orElse(0);
 
         // Save top-left point
         upLeft = new Point(minX, minY);
@@ -39,15 +39,19 @@ public class Shipboard implements Physical{
         for (int y = minY; y <= maxY; y++) {
             List<Component> row = new ArrayList<>();
             for (int x = minX; x <= maxX; x++) {
-                row.add(map.getOrDefault(new Point(x, y), new Component(ComponentType.NONE)));
+                row.add(shipArea.contains(new Point(x, y))
+                        ? new Component(ComponentType.EMPTY_AREA)
+                        : new Component(ComponentType.EMPTY_SPACE));
             }
             result.add(row);
         }
-
-        return result;
+        componentMatrix = result;
     }
 
-
+    public void setComponent(Point position, int direction, int componentId) throws IOException {
+        Component component = new Component(direction, componentId);
+        componentMatrix.get(position.y-upLeft.y).set(position.x-upLeft.x, component);
+    }
 
     public Image getImage() {
         return null;

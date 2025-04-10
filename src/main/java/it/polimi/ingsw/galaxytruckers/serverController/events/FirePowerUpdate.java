@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.controller.events;
+package it.polimi.ingsw.galaxytruckers.serverController.events;
 
 public class FirePowerUpdate extends Event {
 

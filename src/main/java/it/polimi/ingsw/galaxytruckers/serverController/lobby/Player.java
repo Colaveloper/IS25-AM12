@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.controller.lobby;
+package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;

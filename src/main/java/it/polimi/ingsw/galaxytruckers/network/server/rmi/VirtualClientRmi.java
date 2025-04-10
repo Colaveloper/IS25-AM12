@@ -14,4 +14,6 @@ public interface VirtualClientRmi extends Remote, VirtualClient {
     void showNewCard(Integer cardId) throws IOException;
     @Override
     void reportError(String details) throws RemoteException;
+    @Override
+    void showNicknameRegistration(String nickname) throws RemoteException;
 }

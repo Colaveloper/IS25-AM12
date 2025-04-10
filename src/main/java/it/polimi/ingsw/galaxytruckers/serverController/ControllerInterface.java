@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.controller;
+package it.polimi.ingsw.galaxytruckers.serverController;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;

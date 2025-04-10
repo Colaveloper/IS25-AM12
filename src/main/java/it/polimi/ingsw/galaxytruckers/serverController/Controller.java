@@ -1,7 +1,7 @@
-package it.polimi.ingsw.galaxytruckers.controller;
+package it.polimi.ingsw.galaxytruckers.serverController;
 
-import it.polimi.ingsw.galaxytruckers.controller.lobby.Lobby;
-import it.polimi.ingsw.galaxytruckers.controller.lobby.Player;
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;

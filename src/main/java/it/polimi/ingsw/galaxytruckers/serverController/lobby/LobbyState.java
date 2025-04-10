@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.controller.lobby;
+package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 
 public enum LobbyState {
     PREPARATION,

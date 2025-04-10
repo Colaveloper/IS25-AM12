@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.controller.events;
+package it.polimi.ingsw.galaxytruckers.serverController.events;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 

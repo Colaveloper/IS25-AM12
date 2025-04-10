@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.controller.lobby;
+package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;

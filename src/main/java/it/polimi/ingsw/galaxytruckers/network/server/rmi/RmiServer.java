@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
-import it.polimi.ingsw.galaxytruckers.controller.Controller;
+import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
+import it.polimi.ingsw.galaxytruckers.serverController.Controller;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.VirtualServerRmi;
 
 import java.io.IOException;
@@ -41,6 +42,14 @@ public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
     }
 
     @Override
+    public void registerNickname(VirtualClient client, String nickname) throws RemoteException {
+        // TODO: make check on saved nicknames
+        VirtualClientRmi rmiClient = (VirtualClientRmi) client;
+        System.out.println("request accepted: registering"+nickname);
+        rmiClient.showNicknameRegistration(nickname);
+    }
+
+    @Override
     public void drawCard() throws IOException {
         System.out.println("new card request received");
         // TODO: get cardId from controller
@@ -53,7 +62,7 @@ public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
     }
 
     @Override
-    public void reportError(String error) throws Exception {
+    public void reportError(String error) throws RemoteException {
         synchronized (this.clients){
             for(VirtualClientRmi client: clients){
                 client.reportError(error);

@@ -22,7 +22,7 @@ import static it.polimi.ingsw.galaxytruckers.model.Deck.parsePlanets;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parseProjectiles;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parseGoods;
 
-public class AdventureCard {
+public class AdventureCard implements Physical {
     // class attributes
     private String description;
     private String losses;
@@ -223,8 +223,25 @@ public class AdventureCard {
         }
     }
 
+    @Override
+    public Image getImage() {
+        return null;
+    }
+
     // public methods
-    public String getDescription(){return description;}
+    // TODO: rewrite this method, just a mockup
+    public List<String> getDescription(){return List.of(
+            "┌──────────────┐",
+            "│   PIRATES!   │",
+            "│              │",
+            "│              │",
+            "│    ......    │",
+            "│              │",
+            "│              │",
+            "│              │",
+            "│              │",
+            "└──────────────┘"
+    );}
 
     public String getEarnings(){return earnings;}
 

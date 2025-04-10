@@ -1,38 +1,30 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import javafx.scene.image.Image;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FlightBoard implements Physical {
     private int loopLength;
     private List<Integer>  startingPositionLeft;
-    private Map<Character, Integer> colorToPlace;
+    private Map<Colors, Integer> playerToPlace;
 
-    public int getLoopLength() {
-        return loopLength;
-    }
-
-    public void setLoopLength(int loopLength) {
-        this.loopLength = loopLength;
-    }
-
-    public List<Integer> getStartingPositionLeft() {
-        return startingPositionLeft;
+    public FlightBoard() {
+        this.startingPositionLeft = new ArrayList<>();
+        this.playerToPlace = new HashMap<>();
     }
 
     public void setStartingPositionLeft(List<Integer> startingPositionLeft) {
         this.startingPositionLeft = startingPositionLeft;
     }
 
-    public Map<Character, Integer> getColorToPlace() {
-        return colorToPlace;
+    public void setLoopLength(int loopLength) {
+        this.loopLength = loopLength;
     }
 
-    public void setColorToPlace(Map<Character, Integer> colorToPlace) {
-        this.colorToPlace = colorToPlace;
+    public void setPlayerToPlace(Map<Colors, Integer> playerToPlace) {
+        this.playerToPlace = playerToPlace;
     }
 
     @Override
@@ -42,15 +34,15 @@ public class FlightBoard implements Physical {
 
     @Override
     public List<String> getDescription() {
-        char[] result = new char[loopLength];
-        Arrays.fill(result, '_');
+        String[] result = new String[loopLength];
+        Arrays.fill(result, "_");
 
-        // Directly place '□' at the starting positions
-        startingPositionLeft.forEach(pos -> result[pos] = '□');
+        // Place '□' at the starting positions
+        startingPositionLeft.forEach(pos -> result[pos] = "□");
 
-        // Place characters from colorToPlace
-        colorToPlace.forEach((ch, pos) -> result[pos] = ch);
+        // Place emojis from colorToPlace
+        playerToPlace.forEach((color, pos) -> result[pos] = color.getDescription());
 
-        return List.of(new String(result));
+        return List.of(String.join("", result));
     }
 }

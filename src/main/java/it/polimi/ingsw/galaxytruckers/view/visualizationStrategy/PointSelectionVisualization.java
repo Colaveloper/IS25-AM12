@@ -11,11 +11,11 @@ public class PointSelectionVisualization implements VisualizationStrategy {
     @Override
     public void showCLI(ClientGameModel model) {
 
-        model.getFlightBoardDescription().forEach(System.out::println);
+        model.getFlightBoard().getDescription().forEach(System.out::println);
 
         System.out.println("Please write the coordinates of one of the following points, then press enter.");
         System.out.println("For example: 4 2");
 
-        model.getMyShipBoardDescription().forEach(System.out::println);
+//        model.getMyShipBoard().getDescription().forEach(System.out::println);
     }
 }
