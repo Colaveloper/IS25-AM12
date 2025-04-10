@@ -48,16 +48,8 @@ public class ClientGameModel {
         this.adventureCard = new AdventureCard(cardId);
     }
 
-    public String getCardDescription() {
+    public List<String> getCardDescription() {
         return adventureCard.getDescription();
-    }
-
-    public String getLosses() {
-        return adventureCard.getLosses();
-    }
-
-    public String getEarnings() {
-        return adventureCard.getEarnings();
     }
 
     public String getCardName() {
