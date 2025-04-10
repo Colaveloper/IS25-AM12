@@ -35,6 +35,11 @@ public class ClientGameModel {
 
     public List<String> getMyShipBoardDescription() {
         return playerToShip.get(myNickname).getDescription();
-
     }
+
+    public List<String> getCardDescription() {
+        return null;
+    }
+
+
 }
