@@ -53,6 +53,10 @@ public class Shipboard implements Physical{
         componentMatrix.get(position.y-upLeft.y).set(position.x-upLeft.x, component);
     }
 
+    public Component getComponent(Point point) throws IOException {
+        return componentMatrix.get(point.y-upLeft.y).get(point.x-upLeft.x);
+    }
+
     public Image getImage() {
         return null;
     }

@@ -116,17 +116,7 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
-    public void showUpdateBatteries(Point position, int batteries) {
-        // model.update
-        // view.show(ChosenStrategy)
-    }
-
     public void showChoice(List<String> choices) {
-        // model.update
-        // view.show(ChosenStrategy)
-    }
-
-    public void showUpdateCrew(Point position, int crew, CrewType crewType) {
         // model.update
         // view.show(ChosenStrategy)
     }
@@ -136,8 +126,20 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
-    public void showUpdateCargoHold(Point position, List<GoodsType> goods) {
-        // model.update
+    // update for components
+
+    public void showUpdateBatteries(String nickname, Point position, int batteries) throws IOException {
+        model.loseBatteries(nickname, position, batteries);
+        // view.show(ChosenStrategy);
+    }
+
+    public void showUpdateCrew(String nickname, Point position, int crew, CrewType crewType) throws IOException {
+        model.setCrew(nickname, position, crew, crewType);
+        // view.show(ChosenStrategy)
+    }
+
+    public void showUpdateCargoHold(String nickname, Point position, List<GoodsType> goods) throws IOException {
+        model.setCargo(nickname, position, goods);
         // view.show(ChosenStrategy)
     }
 

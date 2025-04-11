@@ -21,11 +21,11 @@ public class Component implements Physical{
     private int componentStat;
     private CrewType crewType;
 
-    private String colorRed = "\u001b[31m";
-    private String colorGreen = "\u001b[32m";
-    private String colorBlue = "\u001b[34m";
-    private String colorYellow = "\u001b[33m";
-    private String colorReset = "\u001B[0m";
+    private final String colorRed = "\u001b[31m";
+    private final String colorGreen = "\u001b[32m";
+    private final String colorBlue = "\u001b[34m";
+    private final String colorYellow = "\u001b[33m";
+    private final String colorReset = "\u001B[0m";
 
     private List<GoodsType> cargo;
 
@@ -52,7 +52,7 @@ public class Component implements Physical{
         if (type == ComponentType.CARGO_HOLD) {
             this.componentStat = node.get("size").asInt();
             cargo = new ArrayList<>();
-            cargo.add(GoodsType.RED);
+            //cargo.add(GoodsType.RED);
         }
 
     }
@@ -180,7 +180,7 @@ public class Component implements Physical{
     }
 
     public void setCrewRace(CrewType crewType) {
-        switch (crewType) {                     //race == 0 ? toString(race) : " "
+        switch (crewType) {
             case CrewType.HUMAN:
                 crewColorOpen = "\u001B[32m";
                 crewColorClose = "\u001B[0m";

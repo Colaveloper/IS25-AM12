@@ -1,6 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 
 import java.awt.*;
 import java.io.IOException;
@@ -47,6 +49,19 @@ public class ClientGameModel {
 
     public void setComponent(String nickname, int componentId, int direction, Point position) throws IOException {
         playerToShip.get(nickname).setComponent(position, direction, componentId);
+    }
+
+    public void loseBatteries(String nickname, Point position, int batteriesLost) throws IOException {
+        playerToShip.get(myNickname).getComponent(position).subtractStat(batteriesLost);//TODO: update other players too?
+    }
+
+    public void setCrew(String nickname, Point position, int crew, CrewType crewType) throws IOException {
+        playerToShip.get(myNickname).getComponent(position).setCrewRace(crewType);
+        playerToShip.get(myNickname).getComponent(position).setStat(crew);
+    }
+
+    public void setCargo(String nickname, Point position, List<GoodsType> goods) throws IOException {
+        playerToShip.get(nickname).getComponent(position).setGoods(goods);
     }
 
     public String getCurrentPlayerNickname() {
