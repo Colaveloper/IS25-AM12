@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.*;
-import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import java.awt.*;
@@ -16,6 +16,8 @@ import java.util.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import javafx.scene.image.Image;
 import javax.swing.text.html.Option;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parsePlanets;
@@ -43,12 +45,11 @@ public class AdventureCard implements Physical {
     private int firepower;
     private int numGoodsLost;
     private Optional<Map<GoodsType, Integer>> goods;
-    private Optional<List<Projectile>> projectiles;
+    private Optional<List<Map.Entry<String, Integer>>> projectiles;
     private Optional<List<Map<GoodsType, Integer>>> planets;
     private Optional<List<String>> actions;
     private Image image;
 
-    // constructor
     /*
     * for card descriptions the following convention is used:
     * the first element is just the type of card with a choice given to the player
@@ -59,10 +60,13 @@ public class AdventureCard implements Physical {
     * the description list will be
     * element 0 - [pirates] card has been drawn! Will you fight?
     * element 1 - firepower needed to defeat pirates: 10
-    * element 2 - projectiles fired: (TODO: determine how to print this)
+    * element 2 - projectiles incoming:
+    *             big fire coming from the back
+    *             small fire coming from the back
     * element 3 - flight days lost: 2
     * element 4 - credits reward if defeated: 12
     * */
+    // constructor
     public AdventureCard(int id) throws IOException {
         // Reading array of card from JSON file
         String jsonPath = "src/main/resources/cardsReference.json";
@@ -80,7 +84,6 @@ public class AdventureCard implements Physical {
         image = null;
 
         // loading remaining attributes
-        // TODO: define description, earnings, and losses for each card
         description = new ArrayList<>();
         switch (type) {
             case "planets":
@@ -116,7 +119,7 @@ public class AdventureCard implements Physical {
                 // creating description
                 description.add("["+type+"] card has been drawn! Will you fight?");
                 description.add("firepower needed to defeat pirates: " + firepower);
-                //TODO: figure out projectiles
+                description.add("projectiles incoming:\n" + describeProjectiles());
                 description.add("flight days lost: " + flightDaysLost);
                 description.add("credits reward: " + credits);
 
@@ -154,8 +157,12 @@ public class AdventureCard implements Physical {
                 planets = Optional.empty();
                 actions = Optional.empty();
 
-                // TODO: define here
-
+                // creating description
+                description.add("["+type+"] card has been drawn! Will you fight?");
+                description.add("firepower needed to defeat slavers: " + firepower);
+                description.add("crew lost if you are defeated: " + crewLost);
+                description.add("flight days lost: " + flightDaysLost);
+                description.add("credits reward for defeating slavers: " + credits);
                 break;
             case "meteors":
                 projectiles = Optional.of(parseProjectiles(cardNode.get("meteors")));
@@ -170,8 +177,9 @@ public class AdventureCard implements Physical {
                 planets = Optional.empty();
                 actions = Optional.empty();
 
-                // TODO: define here
-
+                // creating description
+                description.add("["+type+"] card has been drawn! Meteors coming your way:");
+                description.add("projectiles incoming:\n" + describeProjectiles());
                 break;
             case "abandonedShip":
                 credits = cardNode.get("credits").asInt();
@@ -186,8 +194,11 @@ public class AdventureCard implements Physical {
                 planets = Optional.empty();
                 actions = Optional.empty();
 
-                // TODO: define here
-
+                // creating description
+                description.add("["+type+"] card has been drawn! Want to sacrifice some crew?");
+                description.add("flight days lost: " + flightDaysLost);
+                description.add("credits reward for sacrificing crew: " + credits);
+                description.add("crew to sacrifice: " + crewLost);
                 break;
             case "abandonedStation":
                 goods = Optional.of(parseGoods(cardNode.get("storage")));
@@ -202,13 +213,15 @@ public class AdventureCard implements Physical {
                 planets = Optional.empty();
                 actions = Optional.empty();
 
-                // TODO: define here
-
+                // creating description
+                description.add("["+type+"] card has been drawn! Got enough crew to take the goods?");
+                description.add("crew needed: " + crewLost);
+                description.add("flight days lost: " + flightDaysLost);
+                description.add("goods reward: " + describeGoods());
                 break;
             case "warzone":
                 flightDaysLost = cardNode.get("flight day loss").asInt(0);
                 crewLost = cardNode.get("crew loss").asInt(0);
-                numGoodsLost = cardNode.get("goods loss").asInt(0);
                 projectiles = Optional.of(parseProjectiles(cardNode.get("shoots")));
                 actions = Optional.of(new ObjectMapper().convertValue(
                         cardNode.get("actions"),
@@ -218,21 +231,34 @@ public class AdventureCard implements Physical {
                 // everything else is empty
                 credits = 0;
                 firepower = 0;
+                numGoodsLost = 0;
                 goods = Optional.empty();
                 planets = Optional.empty();
 
-                // TODO: define here
-
+                // creating description
+                description.add("["+type+"] card has been drawn! Let's hope you're ready...");
+                description.add("Player with fewest crew loses " + flightDaysLost + " flight days");
+                description.add("Player with lowest engine power loses " + crewLost + " crew members");
+                description.add("Player with lowest firepower gets shot with:\n" + describeProjectiles());
                 break;
-            case "open space", "stardust", "epidemic":
+            case "open space":
                 emptyAttributes();
-
-                // TODO: define here
-
+                // creating description
+                description.add("["+type+"] card has been drawn! Fire up those engines!");
+                break;
+            case "stardust":
+                emptyAttributes();
+                // creating description
+                description.add("["+type+"] card has been drawn! Watch out for those exposed connectors!");
+                break;
+            case "epidemic":
+                emptyAttributes();
+                // creating description
+                description.add("["+type+"] card has been drawn! Disease strikes!");
                 break;
             default:
                 emptyAttributes();
-                // TODO: description, earnings, and losses are empty
+                description.add("Error loading card.");
                 throw new IllegalArgumentException("Unknown card type: " + type);
         }
     }
@@ -251,6 +277,14 @@ public class AdventureCard implements Physical {
     }
 
     // helper methods
+    public static List<Map.Entry<String, Integer>> parseProjectiles(JsonNode projectilesNode) {
+        List<Map.Entry<String, Integer>> projectiles = new ArrayList<>();
+        for (JsonNode node : projectilesNode) {
+            projectiles.add(new AbstractMap.SimpleEntry<>(node.get(0).asText(), node.get(1).asInt()));
+        }
+        return projectiles;
+    }
+
     private void emptyAttributes(){
         // everything is empty
         credits = 0;
@@ -306,4 +340,17 @@ public class AdventureCard implements Physical {
                 .collect(Collectors.joining(", "));
     }
 
+    public String describeProjectiles() {
+        Map<Integer, String> directionMap = Map.of(
+                0, "front",
+                1, "left",
+                2, "back",
+                3, "right"
+        );
+
+        return projectiles.orElse(Collections.emptyList()).stream()
+                .map(entry -> entry.getKey() + " coming from the " +
+                        directionMap.getOrDefault(entry.getValue(), "unknown"))
+                .collect(Collectors.joining("\n"));
+    }
 }
