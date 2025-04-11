@@ -21,7 +21,7 @@ class AdventureCardTest {
                 planet 2: blue, yellow, red
                 planet 3: green, red""";
 
-        AdventureCard card = new AdventureCard(16); // using a random id doesn't matter for this test
+        AdventureCard card = new AdventureCard(16); // first planets card
         String actual = card.describePlanets();
 
         assertEquals(expected, actual);
@@ -32,8 +32,33 @@ class AdventureCardTest {
         String expected = """
                 blue, green, yellow""";
 
-        AdventureCard card = new AdventureCard(32); // using a random id doesn't matter for this test
+        AdventureCard card = new AdventureCard(32); // first smugglers card
         String actual = card.describeGoods();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void describeProjectilesOutputsCorrectStringForCard37() throws IOException {
+        String expected = """
+                small fire coming from the back
+                big fire coming from the back""";
+
+        AdventureCard card = new AdventureCard(37); // first warzone card
+        String actual = card.describeProjectiles();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void describeProjectilesOutputsCorrectStringForCard8() throws IOException {
+        String expected = """
+                big meteor coming from the front
+                small meteor coming from the right
+                small meteor coming from the left""";
+
+        AdventureCard card = new AdventureCard(8); // first meteors card
+        String actual = card.describeProjectiles();
 
         assertEquals(expected, actual);
     }
