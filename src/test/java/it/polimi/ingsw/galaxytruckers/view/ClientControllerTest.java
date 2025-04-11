@@ -28,7 +28,7 @@ class ClientControllerTest {
         controller.setShipArea(new HashSet<>(shipArea));
         controller.setFlightBoard(10, List.of(2, 4, 5));
         for (int i=0 ; i<shipArea.size() ; i++) {
-            controller.showComponentPositioning("roborbio", i*3, i%4, shipArea.get(i));
+            controller.showComponentPositioning("roborbio", i*5, i%4, shipArea.get(i)); //changing component coeff (<6) gives interesting cases for tests
         }
         controller.showSelectablePoints(new ArrayList<>(List.of(new Point(7, 7))));
         controller.showSelectablePoints(new ArrayList<>(List.of(new Point(6, 7))));
@@ -39,5 +39,7 @@ class ClientControllerTest {
     @Test
     public void tryToPrint() throws Exception {
         controller.showNewCard(1);
+        // controller.setFlightBoard is called too resulting in 2 consecutive visualizations,
+        // for now it's intentional, and it means it does work
     }
 }

@@ -2,7 +2,9 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -16,6 +18,21 @@ public class Component implements Physical{
     private int rotation;
     private boolean isSelectable;
 
+    private int componentStat;
+    private CrewType crewType;
+
+    private String colorRed = "\u001b[31m";
+    private String colorGreen = "\u001b[32m";
+    private String colorBlue = "\u001b[34m";
+    private String colorYellow = "\u001b[33m";
+    private String colorReset = "\u001B[0m";
+
+    private List<GoodsType> cargo;
+
+    private String crewColorOpen;
+    private String crewColorClose;
+    private StringBuilder cargoPrint;
+
     public Component(int direction, int componentId) throws IOException {
         rotation = direction;
         String jsonPath = "src/main/resources/tiles.json";
@@ -25,6 +42,19 @@ public class Component implements Physical{
         JsonNode node = rootNode.get(componentId);
         type = ComponentType.valueOf(node.get("type").asText().toUpperCase());
         connectors = parseConnectors(node.get("connectors"));
+        if (type == ComponentType.BATTERY) {
+            this.componentStat = node.get("batteries").asInt();
+        }
+        if (type == ComponentType.CABIN) {
+            this.crewType = CrewType.HUMAN; //TODO: initialize cabins in test
+            this.componentStat = 2;
+        }
+        if (type == ComponentType.CARGO_HOLD) {
+            this.componentStat = node.get("size").asInt();
+            cargo = new ArrayList<>();
+            cargo.add(GoodsType.RED);
+        }
+
     }
 
     public Component(ComponentType type) {
@@ -68,8 +98,8 @@ public class Component implements Physical{
 
     @Override
     public List<String> getDescription() {
-        String open = isSelectable ? "\u001B[32m" : "";
-        String close = isSelectable ? "\u001B[0m" : "";
+        String open = isSelectable ? colorGreen : "";
+        String close = isSelectable ? colorReset : "";
 
         List<String> lines = new ArrayList<>();
         if (type == ComponentType.EMPTY_AREA) {
@@ -82,7 +112,46 @@ public class Component implements Physical{
             lines.add(2, "     ");
         } else {
             lines.add(0, open+"╭─" + getConnector(0) + "─╮"+close);
-            lines.add(1, open+getConnector(3)+" "+type.getSymbol(rotation)+" "+getConnector(1)+close);
+
+            if (type == ComponentType.BATTERY) {
+                lines.add(1, open + getConnector(3) + " " + type.getSymbol(rotation) + componentStat + getConnector(1)+close);
+            }
+            else if (type == ComponentType.CABIN) {
+                lines.add(1, open + getConnector(3) + " " + crewColorOpen + type.getSymbol(rotation) + crewColorClose + componentStat + getConnector(1)+close);
+            }
+            else if (type == ComponentType.CARGO_HOLD){
+                cargoPrint = new StringBuilder();
+                cargoPrint.append(open + getConnector(3) + close);
+
+                for (GoodsType i : cargo) {
+                    switch (i) {
+                        case RED:
+                            cargoPrint.append(colorRed + "●" + colorReset);
+                            break;
+                        case YELLOW:
+                            cargoPrint.append(colorYellow + "●" + colorReset);
+                            break;
+                        case BLUE:
+                            cargoPrint.append(colorBlue + "●" + colorReset);
+                            break;
+                        case GREEN:
+                            cargoPrint.append(colorGreen + "●" + colorReset);
+                            break;
+                    }
+                }
+
+                cargoPrint.append("□".repeat(componentStat - cargo.size()));
+                cargoPrint.append( " ".repeat(3 - componentStat));
+
+                cargoPrint.append(open + getConnector(1) + close);
+                lines.add(1, cargoPrint.toString());
+               // lines.add(1, open + getConnector(3) + " " + type.getSymbol(rotation) + " " + getConnector(1)+close);
+
+            }
+            else {//default
+                lines.add(1, open + getConnector(3) + " " + type.getSymbol(rotation) + " " + getConnector(1)+close);
+            }
+
             lines.add(2, open+"╰─" + getConnector(2) + "─╯"+close);
         }
         return lines;
@@ -100,6 +169,41 @@ public class Component implements Physical{
             }
         }
         return connectors;
+    }
+
+    public void setStat(int stat) {
+        this.componentStat = stat;
+    }
+
+    public void setGoods(List<GoodsType> goods) {
+        this.cargo = goods;
+    }
+
+    public void setCrewRace(CrewType crewType) {
+        switch (crewType) {                     //race == 0 ? toString(race) : " "
+            case CrewType.HUMAN:
+                crewColorOpen = "\u001B[32m";
+                crewColorClose = "\u001B[0m";
+                this.componentStat = 2;
+                break;
+            case CrewType.PURPLE:
+                crewColorOpen = "\u001B[32m";
+                crewColorClose = "\u001B[0m";
+                this.componentStat = 1;
+                break;
+            case CrewType.BROWN:
+                crewColorOpen = "\u001B[32m";
+                crewColorClose = "\u001B[0m";
+                this.componentStat = 1;
+                break;
+            default:
+                this.componentStat = -1;
+        }
+        this.crewType = crewType;
+    }
+
+    public void subtractStat(int stat) {
+        this.componentStat -= stat;
     }
 
     public void setSelectable() {
