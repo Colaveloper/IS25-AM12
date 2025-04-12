@@ -48,6 +48,10 @@ public class Game {
         }
     }
 
+    public GameFactory getGameFactory() {
+        return gameFactory;
+    }
+
     public void setCurrentState(GameState state) {
         this.currentState = state;
         state.setGame(this);

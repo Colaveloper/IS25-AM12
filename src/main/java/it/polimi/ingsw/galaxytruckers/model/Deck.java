@@ -42,9 +42,7 @@ public abstract class Deck {
     /**
      * Mixes the forecast and hidden decks  into the master deck
      */
-    public void initMasterDeck() {
-        throw new UnsupportedOperationException("This action is unsupported at the selected level");
-    }
+    public void initMasterDeck() {}
 
     /**
      * Removes a card from the master deck and sets it as current

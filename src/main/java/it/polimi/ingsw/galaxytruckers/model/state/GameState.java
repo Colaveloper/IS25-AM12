@@ -1,8 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
@@ -48,7 +48,7 @@ public abstract class GameState {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void drawCard(ShipBoard shipBoard, Deck deck) {
+    public void drawCard(ShipBoard shipBoard) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
@@ -72,29 +72,55 @@ public abstract class GameState {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void selectOption(ShipBoard shipBoard, int option) {
+    public void choosePlanet(ShipBoard shipBoard, int option) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void requestRandComponent(ShipBoard shipBoard){}
+    public void requestRandComponent(ShipBoard shipBoard){
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
 
-    public void requestComponent(ShipBoard shipBoard, int componentId){}
+    public void requestComponent(ShipBoard shipBoard, int componentId){
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
 
-    public void rejectComponent(ShipBoard shipBoard){}
+    public void rejectComponent(ShipBoard shipBoard){
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
 
-    public void stashComponent(ShipBoard shipBoard){}
+    public void stashComponent(ShipBoard shipBoard){
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
 
-    public void grabStashedComponent(ShipBoard shipBoard, int index){}
+    public void grabStashedComponent(ShipBoard shipBoard, int index){
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
 
-    public void placeComponent(ShipBoard shipBoard, Point point, int orientation){}
+    public void placeComponent(ShipBoard shipBoard, Point point, int orientation){
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
 
-    public void flipHourglass(ShipBoard shipBoard){}
+    public void flipHourglass(ShipBoard shipBoard){
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
 
-    public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition){}
+    public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition){
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
 
-    public void acquireForecast(ShipBoard shipBoard, int deckIndex){}
+    public void acquireForecast(ShipBoard shipBoard, int deckIndex){
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
 
-    public void releaseForecast(ShipBoard shipBoard){}
+    public void releaseForecast(ShipBoard shipBoard){
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
 
-    public void removeComponent(ShipBoard shipBoard, Point point) {}
+    public void removeComponent(ShipBoard shipBoard, Point point) {
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
+
+    public void initializeCabin(ShipBoard shipBoard, CrewType crewType) {
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
 }

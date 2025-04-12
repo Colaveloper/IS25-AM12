@@ -24,7 +24,7 @@ public class Hourglass {
         return this.flipsLeft == 1;
     }
 
-    public void flipHourglass(Runnable hourglassIsOver, Runnable buildingIsOver) {
+    public void flip(Runnable hourglassIsOver, Runnable buildingIsOver) {
         if (isRunning.compareAndSet(false, true)) {
             new Thread(() -> {
                 try {

@@ -3,24 +3,13 @@ package it.polimi.ingsw.galaxytruckers.model;
 // the main logical component that provides all the methods to the controller
 // to access and modify the state of the game
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 
-import java.io.IOException;
-import java.util.List;
-
 import java.awt.*;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class GameModel implements GameModelInterface {
     @Override
@@ -94,8 +83,8 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public void initializeCabin(CrewType crewType) {
-        //TODO: create or edit a state to implement this behavior
+    public void initializeCabin(Game game, ShipBoard shipBoard, CrewType crewType) {
+        game.getCurrentState().initializeCabin(shipBoard, crewType);
     }
 
     @Override
@@ -129,7 +118,27 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
+    public void choosePlanet(Game game, ShipBoard shipBoard, int choice) {
+        game.getCurrentState().choosePlanet(shipBoard, choice);
+    }
+
+    @Override
     public void giveUp(Game game, ShipBoard shipBoard) {
         //TODO: add give up method in AdventureStates
+    }
+
+    @Override
+    public void drawCard(Game game, ShipBoard shipBoard) {
+        game.getCurrentState().drawCard(shipBoard);
+    }
+
+    @Override
+    public void loseGood(Game game, ShipBoard shipBoard, Point point) {
+        game.getCurrentState().loseGood(shipBoard, point);
+    }
+
+    @Override
+    public void goNext(Game game, ShipBoard shipBoard) {
+        game.getCurrentState().goNext(shipBoard);
     }
 }

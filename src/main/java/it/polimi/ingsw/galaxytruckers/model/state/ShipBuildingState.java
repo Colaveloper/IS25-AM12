@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -11,13 +12,16 @@ import java.util.Set;
 // TODO: move logic for requesting components to this state,
 //  instantiate ComponentBank here instead of game
 public class ShipBuildingState extends GameState {
-    Set<ShipBoard> completedShipBoards;
-    Hourglass hourglass;
-    Map<ShipBoard, Integer> shipToForecasts;
-    Set<Integer> blockedForecasts;
+    private final Set<ShipBoard> completedShipBoards;
+    private final Hourglass hourglass;
+    private final Map<ShipBoard, Integer> shipToForecasts;
+    private final Set<Integer> blockedForecasts;
 
     public ShipBuildingState() {
         this.completedShipBoards = new HashSet<>();
+        this.hourglass = game.getGameFactory().createHourglass();
+        this.shipToForecasts = new HashMap<>();
+        this.blockedForecasts = new HashSet<>();
     }
 
     @Override
@@ -74,7 +78,7 @@ public class ShipBuildingState extends GameState {
         if (hourglass.isLastFlip() && !completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship must be completed before the last flip");
         }
-        //TODO: handle flipping with state transition and just notify
+        hourglass.flip(() -> System.err.println("Hourglass is done"), this::endBuilding);
     }
 
     @Override
@@ -105,5 +109,9 @@ public class ShipBuildingState extends GameState {
             int index = shipToForecasts.remove(shipBoard);
             blockedForecasts.remove(index);
         }
+    }
+
+    private void endBuilding() {
+        game.setCurrentState(new ShipCorrectionState());
     }
 }

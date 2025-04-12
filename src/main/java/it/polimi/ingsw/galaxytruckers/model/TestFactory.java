@@ -23,4 +23,9 @@ public class TestFactory implements GameFactory{
     public ShipBoard createShipBoard(ComponentBank componentBank, Colors color) {
         return new TestShipBoard(componentBank, color);
     }
+
+    @Override
+    public Hourglass createHourglass() {
+        return new Hourglass();
+    }
 }

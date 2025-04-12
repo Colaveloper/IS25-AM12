@@ -11,4 +11,5 @@ public interface GameFactory {
     Deck createDeck() throws IOException;
     FlightBoard createFlightBoard(Set<ShipBoard> allShips);
     ShipBoard createShipBoard(ComponentBank componentBank, Colors color);
+    Hourglass createHourglass();
 }

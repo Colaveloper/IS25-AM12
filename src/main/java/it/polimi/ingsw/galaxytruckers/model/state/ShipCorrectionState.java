@@ -20,7 +20,7 @@ public class ShipCorrectionState extends GameState {
 
     private void tryStateTransition() {
         if (validShipBoards.size() == game.getShipBoards().size() && shipPieces.isEmpty()) {
-            game.setCurrentState(new DrawCardState());
+            game.setCurrentState(new ShipInitializationState());
         }
     }
 

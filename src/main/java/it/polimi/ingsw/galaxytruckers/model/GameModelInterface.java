@@ -30,15 +30,18 @@ public interface GameModelInterface {
     void chooseShipPiece(Game game, ShipBoard shipBoard, int pieceIndex);
 
     // Ship init
-    void initializeCabin(CrewType crewType);
+    void initializeCabin(Game game, ShipBoard shipBoard, CrewType crewType);
 
     // Adventure
+    void drawCard(Game game, ShipBoard shipBoard);
     void activateComponent(Game game, ShipBoard shipBoard, Point point);
     void loseCrew(Game game, ShipBoard shipBoard, Point point);
     void grabReward(Game game, ShipBoard shipBoard, boolean rewardGrabbed);
     void placeGoods(Game game, ShipBoard shipBoard, Point point, GoodsType goodsType);
     void removeGoods(Game game, ShipBoard shipBoard, Point point, GoodsType goodsType);
+    void loseGood(Game game, ShipBoard shipBoard, Point point);
     void useBattery(Game game, ShipBoard shipBoard, Point point);
-
+    void choosePlanet(Game game, ShipBoard shipBoard, int choice);
     void giveUp(Game game, ShipBoard shipBoard);
+    void goNext(Game game, ShipBoard shipBoard);
 }

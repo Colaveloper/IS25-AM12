@@ -17,7 +17,7 @@ public class ChoosePlanetState extends GameState {
     }
 
     @Override
-    public void selectOption(ShipBoard shipBoard, int choice) {
+    public void choosePlanet(ShipBoard shipBoard, int choice) {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
