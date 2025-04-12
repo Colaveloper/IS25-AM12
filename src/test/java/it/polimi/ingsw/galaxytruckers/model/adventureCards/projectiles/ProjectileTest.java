@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProjectileTest {
     ShipBoard myShipBoard;
     Component up, right, down, left;
+    Point upp, rightp, downp, leftp;
 
     @BeforeEach
     void setUp() {
@@ -24,6 +25,10 @@ class ProjectileTest {
         right = new Component(null, null);
         down = new Component(null, null);
         left = new Component(null, null);
+        upp = new Point(0, -1);
+        rightp = new Point(1, 0);
+        downp = new Point(0, 1);
+        leftp = new Point(-1, 0);
 
         myShipBoard = new ShipBoard(null, null) {
 
@@ -40,17 +45,17 @@ class ProjectileTest {
             @Override
             public Map<Point, Component> getComponentMap() {
                 return Map.of(
-                        new Point(0, -1), up,
-                        new Point(1, 0), right,
-                        new Point(0, 1), down,
-                        new Point(-1, 0), left
+                        upp, up,
+                        rightp, right,
+                        downp, down,
+                        leftp, left
                 );
             }
         };
     }
 
     @Test
-    void getFirstFoundComponent() {
+    void getFirstFoundComponentPosition() {
         // makes getFirstFoundComponent public for testing
         class TransparentProjectile extends Projectile {
             public TransparentProjectile(IntSupplier dice, int direction) {
@@ -62,31 +67,31 @@ class ProjectileTest {
                 return Set.of();
             }
 
-            public Optional<Component> getFirstFoundComponent(ShipBoard shipBoard) {
-                return super.getFirstFoundComponent(shipBoard);
+            public Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
+                return super.getFirstFoundComponentPosition(shipBoard);
             }
 
             @Override
-            protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
+            protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
                 return Optional.empty();
             }
         }
-        assertEquals(Optional.of(up), new TransparentProjectile(()->0, 0).getFirstFoundComponent(myShipBoard));
-        assertEquals(Optional.of(right), new TransparentProjectile(()->0, 1).getFirstFoundComponent(myShipBoard));
-        assertEquals(Optional.of(down), new TransparentProjectile(()->0, 2).getFirstFoundComponent(myShipBoard));
-        assertEquals(Optional.of(left), new TransparentProjectile(()->0, 3).getFirstFoundComponent(myShipBoard));
+        assertEquals(Optional.of(upp), new TransparentProjectile(()->0, 0).getFirstFoundComponentPosition(myShipBoard));
+        assertEquals(Optional.of(rightp), new TransparentProjectile(()->0, 1).getFirstFoundComponentPosition(myShipBoard));
+        assertEquals(Optional.of(downp), new TransparentProjectile(()->0, 2).getFirstFoundComponentPosition(myShipBoard));
+        assertEquals(Optional.of(leftp), new TransparentProjectile(()->0, 3).getFirstFoundComponentPosition(myShipBoard));
 
         Projectile badProjectile = new TransparentProjectile(()->0, 4);
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> badProjectile.getFirstFoundComponent(myShipBoard)
+                () -> badProjectile.getFirstFoundComponentPosition(myShipBoard)
         );
     }
 
     @Test
     void fireAtRemovesComponentIfPresent() {
-        Component targetComponent = new Component(null, null);
+        Point targetComponentPosition = new Point();
         final boolean[] getsRemoved = {false};
 
         class TargetedProjectile extends Projectile{
@@ -100,8 +105,8 @@ class ProjectileTest {
             }
 
             @Override
-            protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
-                return Optional.of(targetComponent);
+            protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
+                return Optional.of(targetComponentPosition);
             }
         }
 
@@ -117,7 +122,7 @@ class ProjectileTest {
             }
 
             @Override
-            public void remove(Component component) {
+            public void removeComponent(Point point) {
                 getsRemoved[0] = true;
             }
         };

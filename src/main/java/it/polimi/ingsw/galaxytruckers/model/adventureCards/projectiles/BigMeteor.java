@@ -35,8 +35,8 @@ public class BigMeteor extends Projectile {
     }
 
     @Override
-    protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
-        return getFirstFoundComponent(shipBoard).filter(
+    protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
+        return getFirstFoundComponentPosition(shipBoard).filter(
                 (_) -> shipBoard.getCannons().entrySet().stream()
                 .filter(e -> {
                     Cannon c = e.getValue();

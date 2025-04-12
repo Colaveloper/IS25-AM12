@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BigFireTest {
     BigFire bigFire;
     ShipBoard shipBoard;
-    Component component;
+    Point position;
 
     @BeforeEach
     void setUp() {
@@ -32,7 +32,7 @@ class BigFireTest {
                 return null;
             }
         };
-        component = new Component(null, List.of(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE));
+        position = new Point();
     }
 
     @Test
@@ -43,20 +43,20 @@ class BigFireTest {
     }
 
     @Test
-    void getComponentToRemoveReturnsFirstFoundComponent() {
+    void getComponentToRemoveReturnsFirstFoundComponentPosition() {
         class RiggedProjectile extends BigFire {
             public RiggedProjectile(IntSupplier dice, int direction) {
                 super(dice, direction);
             }
 
             @Override
-            public Optional<Component> getFirstFoundComponent (ShipBoard shipBoard) {
-                return Optional.of(component);
+            public Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
+                return Optional.of(position);
             }
         };
 
         Projectile projectile = new RiggedProjectile(()->0, 0);
 
-        assertEquals(Optional.of(component), projectile.getComponentToRemove(shipBoard));
+        assertEquals(Optional.of(position), projectile.getComponentPositionToRemove(shipBoard));
     }
 }

@@ -25,13 +25,17 @@ class SmallMeteorTest {
     Set<Point> testActivablePositions;
     List<Connector> noneConnectors;
     List<Connector> universalConnectors;
+    Point sturdyPosition;
     Component sturdyComponent;
+    Point weakPosition;
     Component weakComponent;
 
     @BeforeEach
     void setUp() {
         point1 = new Point(0, 0);
         point2 = new Point(1, 0);
+        sturdyPosition = new Point(10, 11);
+        weakPosition = new Point(12, 13);
 
         noneConnectors = new ArrayList<>(List.of(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE));
         universalConnectors = new ArrayList<>(List.of(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
@@ -65,6 +69,11 @@ class SmallMeteorTest {
             @Override
             public Map<Point, Shield> getShields() {
                 return myShields;
+            }
+
+            @Override
+            public Map<Point, Component> getComponentMap() {
+                return new HashMap<>(Map.of(weakPosition, weakComponent, sturdyPosition, sturdyComponent));
             }
         };
     }
@@ -126,7 +135,7 @@ class SmallMeteorTest {
     }
 
     @Test
-    void getComponentToRemoveReturnsEmptyOptionalIfProtected() {
+    void getComponentPositionToRemoveReturnsEmptyOptionalIfProtected() {
         myShipBoard = new ShipBoard(null) {
             @Override
             protected boolean containsPoint(Point point) {
@@ -145,35 +154,35 @@ class SmallMeteorTest {
         };
 
         for (int i = 0; i < 4; i++) {
-            assertEquals(Optional.empty(), new SmallMeteor(i).getComponentToRemove(myShipBoard));
+            assertEquals(Optional.empty(), new SmallMeteor(i).getComponentPositionToRemove(myShipBoard));
         }
     }
 
     @Test
-    void getComponentToRemoveReturnsEmptyOptionalIfNoShieldsButNoExposedConnector() {
+    void getComponentPositionToRemoveReturnsEmptyOptionalIfNoShieldsButNoExposedConnector() {
         Projectile testProjectile = new SmallMeteor(()->0,0) {
             @Override
-            public Optional<Component> getFirstFoundComponent (ShipBoard shipBoard) {
-                return Optional.of(sturdyComponent);
+            public Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
+                return Optional.of(sturdyPosition);
             }
         };
 
         for (int i = 0; i < 4; i++) {
-            assertEquals(Optional.empty(), testProjectile.getComponentToRemove(myShipBoard));
+            assertEquals(Optional.empty(), testProjectile.getComponentPositionToRemove(myShipBoard));
         }
     }
 
     @Test
-    void getComponentToRemoveReturnsComponentIfNoShieldsAndExposedConnector() {
+    void getComponentToRemoveReturnsComponentPositionIfNoShieldsAndExposedConnector() {
         Projectile testProjectile = new SmallMeteor(()->0,0) {
             @Override
-            public Optional<Component> getFirstFoundComponent (ShipBoard shipBoard) {
-                return Optional.of(weakComponent);
+            public Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
+                return Optional.of(weakPosition);
             }
         };
 
         for (int i = 0; i < 4; i++) {
-            assertEquals(Optional.of(weakComponent), testProjectile.getComponentToRemove(myShipBoard));
+            assertEquals(Optional.of(weakPosition), testProjectile.getComponentPositionToRemove(myShipBoard));
         }
     }
 }

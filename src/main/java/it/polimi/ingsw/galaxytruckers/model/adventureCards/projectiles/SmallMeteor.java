@@ -30,11 +30,11 @@ public class SmallMeteor extends Projectile {
     }
 
     @Override
-    protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
+    protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
         if (shipBoard.getShieldDirections()[direction]) {
             return Optional.empty();
         }
-        return getFirstFoundComponent(shipBoard)
-                .filter(c -> c.getConnectors().get((direction + 2) % 4) != Connector.NONE);
+        return getFirstFoundComponentPosition(shipBoard)
+                .filter(c -> shipBoard.getComponentMap().get(c).getConnectors().get((direction + 2) % 4) != Connector.NONE);
     }
 }

@@ -103,7 +103,7 @@ class PiratesCardTest {
                 }
 
                 @Override
-                protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
+                protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
                     return Optional.empty();
                 }
 

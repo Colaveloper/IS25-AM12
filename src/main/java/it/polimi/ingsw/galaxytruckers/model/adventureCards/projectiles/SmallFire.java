@@ -23,10 +23,10 @@ public class SmallFire extends Projectile {
     }
 
     @Override
-    protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
+    protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
         if (shipBoard.getShieldDirections()[direction]) {
             return Optional.empty();
         }
-        return getFirstFoundComponent(shipBoard);
+        return getFirstFoundComponentPosition(shipBoard);
     }
 }

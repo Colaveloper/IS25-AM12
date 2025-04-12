@@ -33,9 +33,9 @@ public abstract class Projectile {
      * @return true if a component is removed (in that case a check on the connectivity should take place), false otherwise
      */
     public boolean fireAt(ShipBoard shipBoard) {
-        Optional<Component> removedComponent = getComponentToRemove(shipBoard);
-        removedComponent.ifPresent(shipBoard::remove);
-        return removedComponent.isPresent();
+        Optional<Point> removalPosition = getComponentPositionToRemove(shipBoard);
+        removalPosition.ifPresent(shipBoard::removeComponent);
+        return removalPosition.isPresent();
     }
 
     /**
@@ -46,28 +46,28 @@ public abstract class Projectile {
 
     /**
      * @param shipBoard the ship that is threatened by the projectile
-     * @return an optional with the component to be eliminated
+     * @return an optional with the component position to be eliminated
      */
-    protected Optional<Component> getFirstFoundComponent(ShipBoard shipBoard) {
+    protected Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
         Stream<Map.Entry<Point, Component>> line = shipBoard.getComponentMap().entrySet().stream()
                 .filter(e -> (direction % 2 == 0 ? e.getKey().x : e.getKey().y) == diceRoll);
 
         if (direction == 0) {
             return line.min(Comparator.comparingInt(e -> e.getKey().y))
-                    .map(Map.Entry::getValue); // Min y
+                    .map(Map.Entry::getKey); // Min y
         } else if (direction == 1) {
             return line.max(Comparator.comparingInt(e -> e.getKey().x))
-                    .map(Map.Entry::getValue); // Max x
+                    .map(Map.Entry::getKey); // Max x
         } else if (direction == 2) {
             return line.max(Comparator.comparingInt(e -> e.getKey().y))
-                    .map(Map.Entry::getValue); // Max y
+                    .map(Map.Entry::getKey); // Max y
         } else if (direction == 3) {
             return line.min(Comparator.comparingInt(e -> e.getKey().x))
-                    .map(Map.Entry::getValue); // Min x
+                    .map(Map.Entry::getKey); // Min x
         } else {
             throw new IllegalArgumentException("Invalid direction");
         }
     }
 
-    protected abstract Optional<Component> getComponentToRemove(ShipBoard shipBoard);
+    protected abstract Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard);
 }

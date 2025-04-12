@@ -20,7 +20,7 @@ class BigMeteorTest {
     DoubleCannon effectiveActiveDoubleCannon;
 
     Cannon positionTestCannon;
-    Component firstFoundComponent;
+    Point firstFoundComponentPosition;
     DoubleCannon activeDoubleCannon;
 
     Cannon directedCannon;
@@ -101,8 +101,8 @@ class BigMeteorTest {
     }
 
     @Test
-    void getComponentToRemoveReturnsFirstFoundComponentIfThereIsEffectiveCannonWithNoFirePower () {
-        firstFoundComponent = new Component(null, null);
+    void getComponentToRemoveReturnsFirstFoundComponentPositionIfThereIsEffectiveCannonWithNoFirePower() {
+        firstFoundComponentPosition = new Point();
         protectingCannon = new DoubleCannon(null, null) {
             @Override
             public int getFirePower() {
@@ -132,16 +132,16 @@ class BigMeteorTest {
             }
 
             @Override
-            protected Optional<Component> getFirstFoundComponent(ShipBoard shipBoard) {
-                return Optional.of(firstFoundComponent);
+            protected Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
+                return Optional.of(firstFoundComponentPosition);
             }
         };
-        assertEquals(Optional.of(firstFoundComponent), bigMeteor.getComponentToRemove(shipBoard));
+        assertEquals(Optional.of(firstFoundComponentPosition), bigMeteor.getComponentPositionToRemove(shipBoard));
     }
 
     @Test
-    void getComponentToRemoveReturnsEmptyIfThereIsEffectiveCannonWithFirePower() {
-        firstFoundComponent = new Component(null, null);
+    void getComponentPositionToRemoveReturnsEmptyIfThereIsEffectiveCannonWithFirePower() {
+        firstFoundComponentPosition = new Point();
         protectingCannon = new DoubleCannon(null, null) {
             @Override
             public int getFirePower() {
@@ -171,11 +171,11 @@ class BigMeteorTest {
             }
 
             @Override
-            protected Optional<Component> getFirstFoundComponent(ShipBoard shipBoard) {
-                return Optional.of(firstFoundComponent);
+            protected Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
+                return Optional.of(firstFoundComponentPosition);
             }
         };
-        assertTrue(bigMeteor.getComponentToRemove(shipBoard).isEmpty());
+        assertTrue(bigMeteor.getComponentPositionToRemove(shipBoard).isEmpty());
     }
 
     @Test
