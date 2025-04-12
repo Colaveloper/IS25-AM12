@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
@@ -9,17 +10,16 @@ import java.awt.*;
 import java.util.UUID;
 
 public interface GameModelInterface {
-    Game createGame();
+    Game createGame(Level level);
     ShipBoard addShip(Game game, Colors color);
 
     //Ship building
     void requestRandComponent(Game game, ShipBoard shipBoard);
-    void requestComponent(Game game, ShipBoard shipBoard, UUID componentID);
-    void rotateComponent(Game game, ShipBoard shipBoard);
+    void requestComponent(Game game, ShipBoard shipBoard, int componentID);
     void rejectComponent(Game game, ShipBoard shipBoard);
     void stashComponent(Game game, ShipBoard shipBoard);
-    void grabStashedComponent(Game game, ShipBoard shipBoard);
-    void placeComponent(Game game, ShipBoard shipBoard, Point point);
+    void grabStashedComponent(Game game, ShipBoard shipBoard, int index);
+    void placeComponent(Game game, ShipBoard shipBoard, Point point, int orientation);
     void flipHourglass(Game game, ShipBoard shipBoard);
     void placeShipOnFlightBoard(Game game, ShipBoard shipBoard, int startingPosition);
     void acquireForecast(Game game, ShipBoard shipBoard, int deckIndex);

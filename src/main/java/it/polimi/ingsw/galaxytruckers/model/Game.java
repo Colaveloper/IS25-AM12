@@ -53,6 +53,10 @@ public class Game {
         state.setGame(this);
     }
 
+    public GameState getCurrentState() {
+        return currentState;
+    }
+
     public Deck getDeck() {
         return deck;
     }
@@ -64,37 +68,4 @@ public class Game {
     public Set<ShipBoard> getShipBoards() {
         return shipBoards;
     }
-
-    //Ship building
-    void requestRandComponent(ShipBoard shipBoard) {}
-    void requestComponent(ShipBoard shipBoard, UUID componentID) {}
-    void rotateComponent(ShipBoard shipBoard) {}
-    void rejectComponent(ShipBoard shipBoard) {}
-    void stashComponent(ShipBoard shipBoard) {}
-    void grabStashedComponent(ShipBoard shipBoard) {}
-    void placeComponent(ShipBoard shipBoard, Point point) {}
-    void flipHourglass(ShipBoard shipBoard) {}
-    void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {}
-    void acquireForecast(ShipBoard shipBoard, int deckIndex) {}
-    void releaseForecast(ShipBoard shipBoard) {}
-
-    // Ship validity check
-    void removeComponent(ShipBoard shipBoard, Point point) {}
-    void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {}
-
-    // Ship init
-    void initializeCabin(CrewType crewType) {}
-
-    // Adventure
-    void activateComponent(ShipBoard shipBoard, Point point) {}
-    void loseCrew(ShipBoard shipBoard, Point point) {}
-    void grabReward(ShipBoard shipBoard, boolean rewardGrabbed) {}
-
-    void placeGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {}
-
-    void removeGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {}
-
-    void useBattery(ShipBoard shipBoard, Point point) {}
-
-    void giveUp(ShipBoard shipBoard) {}
 }

@@ -16,7 +16,10 @@ public abstract class ActivateState extends GameState{
     }
 
     @Override
-    public void activateComponent(Point position) {
+    public void activateComponent(ShipBoard shipBoard, Point position) {
+        if (!shipBoard.equals(this.shipBoard)) {
+            throw new IllegalStateException("It's not your turn");
+        }
         if (batteriesToSpend >= shipBoard.getNumBatteries()) {
             throw new IllegalStateException("You don't have enough batteries");
         }
@@ -28,7 +31,10 @@ public abstract class ActivateState extends GameState{
     }
 
     @Override
-    public void spendBatteries(Point point, int amount) {
+    public void spendBatteries(ShipBoard shipBoard, Point point, int amount) {
+        if (!shipBoard.equals(this.shipBoard)) {
+            throw new IllegalStateException("It's not your turn");
+        }
         if (amount > batteriesToSpend) {
             throw new IllegalArgumentException("You are spending more batteries that required");
         }
@@ -37,7 +43,10 @@ public abstract class ActivateState extends GameState{
     }
 
     @Override
-    public void goNext() {
+    public void goNext(ShipBoard shipBoard) {
+        if (!shipBoard.equals(this.shipBoard)) {
+            throw new IllegalStateException("It's not your turn");
+        }
         if (batteriesToSpend > 0) {
             throw new IllegalStateException("You still have batteries to spend");
         }

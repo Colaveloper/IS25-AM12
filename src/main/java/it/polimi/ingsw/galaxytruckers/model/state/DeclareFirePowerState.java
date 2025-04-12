@@ -16,8 +16,8 @@ public class DeclareFirePowerState extends ActivateState {
     }
 
     @Override
-    public void activateComponent(Point position) {
-        super.activateComponent(position);
+    public void activateComponent(ShipBoard shipBoard, Point position) {
+        super.activateComponent(shipBoard, position);
         currentFirePower = shipBoard.getFirePower();
     }
 }

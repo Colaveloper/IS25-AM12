@@ -13,7 +13,6 @@ import java.util.stream.IntStream;
 
 public abstract class GameState {
     protected Game game;
-    protected ShipBoard shipBoard;
 
     public void setGame(Game game) {
         this.game = game;
@@ -33,47 +32,47 @@ public abstract class GameState {
         }
     }
 
-    public void activateComponent(Point position) {
+    public void activateComponent(ShipBoard shipBoard, Point position) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void spendBatteries(Point point, int amount) {
+    public void spendBatteries(ShipBoard shipBoard, Point point, int amount) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void grabReward() {
+    public void grabReward(ShipBoard shipBoard) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void chooseShipPiece(int pieceIndex) {
+    public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void drawCard(Deck deck) {
+    public void drawCard(ShipBoard shipBoard, Deck deck) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void loseCrew(Point position)  {
+    public void loseCrew(ShipBoard shipBoard, Point position)  {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void loseGood(Point position)  {
+    public void loseGood(ShipBoard shipBoard, Point position)  {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void addGood(Point position, GoodsType good)  {
+    public void addGood(ShipBoard shipBoard, Point position, GoodsType good)  {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void removeGood(Point position, GoodsType good)  {
+    public void removeGood(ShipBoard shipBoard, Point position, GoodsType good)  {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void goNext() {
+    public void goNext(ShipBoard shipBoard) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void selectOption(int option) {
+    public void selectOption(ShipBoard shipBoard, int option) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
@@ -98,6 +97,4 @@ public abstract class GameState {
     public void releaseForecast(ShipBoard shipBoard){}
 
     public void removeComponent(ShipBoard shipBoard, Point point) {}
-
-    public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {}
 }

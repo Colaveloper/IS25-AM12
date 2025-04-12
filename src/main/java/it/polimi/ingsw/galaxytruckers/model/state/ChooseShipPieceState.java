@@ -19,7 +19,10 @@ public class ChooseShipPieceState extends GameState {
     }
 
     @Override
-    public void chooseShipPiece(int pieceIndex) {
+    public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
+        if (!shipBoard.equals(this.shipBoard)) {
+            throw new IllegalStateException("It's not your turn");
+        }
         removeOtherShipPieces(shipBoard, pieceIndex, shipPieces);
         game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
     }
