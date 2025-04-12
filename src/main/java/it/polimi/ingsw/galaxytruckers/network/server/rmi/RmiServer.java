@@ -1,8 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
-import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
-import it.polimi.ingsw.galaxytruckers.serverController.Controller;
+import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualClient;
+import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.VirtualServerRmi;
+import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
+import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -16,12 +19,15 @@ import java.util.List;
  * Questa classe rappresenta la logica del server implementata con tecnologia RMI.
  */
 public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
-    final Controller controller;
+    private EventQueue eventQueue;
+    private EventHandler handler;
+
+    final ServerController controller;
     final List<VirtualClientRmi> clients = new ArrayList<>();
 
     public RmiServer() throws RemoteException {
         super();
-        this.controller = new Controller();
+        this.controller = new ServerController();
     }
 
     public static void main(String[] args) throws RemoteException {
@@ -38,6 +44,7 @@ public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
         //TODO. Attenzione, più client possono invocare questo metodo simultaneamente!
         synchronized (this.clients) {
             this.clients.add(client);
+
         }
     }
 
@@ -68,5 +75,22 @@ public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
                 client.reportError(error);
             }
         }
+    }
+
+    @Override
+    public void registerHandler(EventHandler handler) throws RemoteException {
+        this.handler = handler;
+    }
+
+    @Override
+    public void processEvents() throws IOException {
+        while (!eventQueue.isEmpty()) {
+            Event event = eventQueue.dequeue();
+            event.accept(handler);
+        }
+    }
+
+    public void addEvent(Event event) {
+        eventQueue.enqueue(event);
     }
 }

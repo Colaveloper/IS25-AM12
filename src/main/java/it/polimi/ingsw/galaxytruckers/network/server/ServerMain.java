@@ -12,21 +12,22 @@ public class ServerMain {
     public static void main(String[] args) throws RemoteException {
         System.out.println("Congratulations!");
         System.out.println("You are now the proud owner of a Galaxy Truckers Server");
-        System.out.println("Two middlewares are available to use: Socket and RMI");
 
-        Scanner scanner = new Scanner(System.in);
-        String input;
-        do {
-            System.out.println("Input S for Socket or R for Rmi: ");
-            input = scanner.nextLine();
-        } while (!input.equalsIgnoreCase("S") && !input.equalsIgnoreCase("R"));
+        // two threads are needed to handle both middlewares
 
         try {
-            if (input.equalsIgnoreCase("R")) {
-                RmiServer.main(args);
-            } else {
-                //SocketServer.main(args) // TODO: implement SocketServer
-            }
+            Thread rmiThread = new Thread(()-> {
+                try {
+                    RmiServer.main(args);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            rmiThread.start();
+
+//            socketThread = new Thread(()-> SocketServer.main(args)));
+//            socketThread.start();
+
         } catch (Exception e) {
             System.out.println("The server crashed with the following excuse: " + e.getMessage());
         }

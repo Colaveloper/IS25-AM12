@@ -16,6 +16,7 @@ public class PointSelectionVisualization implements VisualizationStrategy {
         System.out.println("Please write the coordinates of one of the following points, then press enter.");
         System.out.println("For example: 4 2");
 
-//        model.getMyShipBoard().getDescription().forEach(System.out::println);
+        model.getMyShipBoard().getDescription().forEach(System.out::println);
+
     }
 }

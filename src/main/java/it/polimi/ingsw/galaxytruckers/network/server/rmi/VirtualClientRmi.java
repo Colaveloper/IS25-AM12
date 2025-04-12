@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
-import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualClient;
 
 import java.io.IOException;
 import java.rmi.Remote;

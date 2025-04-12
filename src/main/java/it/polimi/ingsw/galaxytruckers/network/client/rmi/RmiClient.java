@@ -6,6 +6,9 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.VirtualClientRmi;
+import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
+import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
+import it.polimi.ingsw.galaxytruckers.serverController.events.NewCardUpdate;
 import it.polimi.ingsw.galaxytruckers.view.*;
 import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.NewCardVisualization;
 
@@ -22,7 +25,7 @@ import java.util.List;
 /**
  * Questa classe rappresenta la logica del client implementata con tecnologia RMI.
  */
-public class RmiClient extends UnicastRemoteObject implements VirtualClientRmi {
+public class RmiClient extends UnicastRemoteObject implements VirtualClientRmi, EventHandler {
     final VirtualServerRmi server;
     ClientController controller;
 
@@ -39,8 +42,9 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClientRmi {
         new RmiClient(server).run();
     }
 
-    private void run() throws Exception {
-        this.server.connect(this);
+    private void run() throws RemoteException {
+        server.connect(this);
+        server.registerHandler(this);
         controller.showConnected();
     }
 
@@ -162,5 +166,13 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClientRmi {
     @Override
     public void reportError(String details) throws RemoteException {
 
+    }
+
+    @Override
+    public void handleEvent(Event event) {}
+
+    @Override
+    public void handleEvent(NewCardUpdate newCardUpdate) throws IOException {
+        controller.showNewCard(newCardUpdate.getCardId());
     }
 }

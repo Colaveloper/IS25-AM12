@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.client.rmi;
 
-import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.VirtualClientRmi;
 
 import java.io.IOException;

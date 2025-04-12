@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController;
 
+import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
@@ -8,9 +9,10 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 
 import java.awt.*;
+import java.rmi.RemoteException;
 import java.util.UUID;
 
-public class Controller implements ControllerInterface {
+public class ServerController implements ServerControllerInterface {
 
     public void registerNickname(String nickname) {
         Player.addPlayer(nickname);
@@ -43,6 +45,8 @@ public class Controller implements ControllerInterface {
     public void saveGame(UUID lobbyID) {
         //TODO: implement saving current game state on disk
     }
+
+
 
     //TODO: implement these methods (calls to model methods with lobby state check
     @Override
