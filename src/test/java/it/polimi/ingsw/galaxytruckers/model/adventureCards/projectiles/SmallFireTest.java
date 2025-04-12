@@ -29,11 +29,6 @@ class SmallFireTest {
             }
 
             @Override
-            public Image getImage() {
-                return null;
-            }
-
-            @Override
             public Map<Point, Shield> getShields() {
                 return fakeShields;
             }
@@ -51,11 +46,6 @@ class SmallFireTest {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
-                }
-
-                @Override
-                public Image getImage() {
-                    return null;
                 }
 
                 @Override

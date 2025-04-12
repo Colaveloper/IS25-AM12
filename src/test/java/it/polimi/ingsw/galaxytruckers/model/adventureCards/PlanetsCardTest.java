@@ -62,10 +62,6 @@ class PlanetsCardTest {
                 return 0;
             }
 
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
         List<Map<GoodsType, Integer>> planets = new ArrayList<>();
         Map<GoodsType, Integer> goodsMap = new HashMap<>();
@@ -77,7 +73,7 @@ class PlanetsCardTest {
         goodsMap = new HashMap<>();
         goodsMap.put(GoodsType.BLUE, 4);
         planets.add(goodsMap);
-        planetsCard = new PlanetsCard(null, Level.SECOND, planets, 1);
+        planetsCard = new PlanetsCard(Level.SECOND, planets, 1);
         planetsCard.initialize(flightBoard);
     }
 

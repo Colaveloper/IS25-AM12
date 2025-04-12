@@ -17,8 +17,8 @@ import static java.lang.Math.abs;
 public class EpidemicCard extends AdventureCard {
 
 
-    public EpidemicCard(Image image, Level level) {
-        super(image, level);
+    public EpidemicCard(Level level) {
+        super(level);
     }
 
     @Override

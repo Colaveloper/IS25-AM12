@@ -8,8 +8,8 @@ public class Cabin extends Component {
     private CrewType crewType;
     private int numResidents;
 
-    public Cabin(Image image, List<Connector> connectors) {
-        super(image, connectors);
+    public Cabin(List<Connector> connectors) {
+        super(connectors);
         this.crewType = null;
         this.numResidents = 0;
     }

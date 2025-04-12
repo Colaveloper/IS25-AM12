@@ -26,7 +26,6 @@ class AbandonedShipCardTest {
     int testDisplacement;
 
     // card attributes
-    Image image = null;
     Level level = Level.SECOND;
     int creditPrize = 4;
     int requiredCrew = 3;
@@ -68,14 +67,10 @@ class AbandonedShipCardTest {
                 return 0;
             }
 
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
 
         // creating card
-        card = new AbandonedShipCard(image, level, creditPrize,requiredCrew,flightDaysLost);
+        card = new AbandonedShipCard(level, creditPrize,requiredCrew,flightDaysLost);
         card.initialize(flightBoard);
     }
 

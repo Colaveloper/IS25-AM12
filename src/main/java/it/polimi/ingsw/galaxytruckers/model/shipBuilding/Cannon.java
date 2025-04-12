@@ -6,8 +6,8 @@ import java.util.List;
 
 public class Cannon extends Component {
 
-    public Cannon(Image image, List<Connector> connectors) {
-        super(image, connectors);
+    public Cannon(List<Connector> connectors) {
+        super(connectors);
     }
 
     // TODO: consider renaming in getFirePowerHalves()

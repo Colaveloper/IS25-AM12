@@ -174,16 +174,4 @@ public class SecondShipBoard extends ShipBoard {
             }
         }
     }
-
-    @Override
-    public Image getImage() {
-        return image;
-        // TODO: composite the components and resources on top
-    }
-
-    @Override
-    public String getDescription() {
-        return "Level 2 ship: "+super.getDescription();
-        // TODO: describe
-    }
 }

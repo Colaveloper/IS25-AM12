@@ -12,7 +12,7 @@ class DoubleCannonTest extends CannonTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        myDoubleCannon = new DoubleCannon(null, myConnectors);
+        myDoubleCannon = new DoubleCannon(myConnectors);
     }
 
     @Test

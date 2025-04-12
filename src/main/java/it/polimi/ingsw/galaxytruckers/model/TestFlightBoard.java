@@ -31,18 +31,6 @@ public class TestFlightBoard extends FlightBoard{
     }
 
     @Override
-    public Image getImage() {
-        return image;
-        // TODO: composite players on top
-    }
-
-    @Override
-    public String getDescription() {
-        return "Test-Flight: "+super.getDescription();
-        // TODO: describe
-    }
-
-    @Override
     protected int getLoopLength() {
         return loopLength;
     }

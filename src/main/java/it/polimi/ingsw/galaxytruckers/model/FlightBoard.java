@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class FlightBoard implements Physical {
+public abstract class FlightBoard {
     protected final Set<ShipBoard> allShips; // contains playing+dead ships
     protected final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
     @VisibleForTesting
@@ -119,11 +119,6 @@ public abstract class FlightBoard implements Physical {
                 finalScores.merge(s, (s.getGoodsValue()+1)/2, Integer::sum);
             }
         });
-    }
-
-    @Override
-    public String getDescription() {
-        return ""; // TODO: describe
     }
 }
 

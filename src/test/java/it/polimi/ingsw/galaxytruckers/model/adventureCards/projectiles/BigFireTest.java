@@ -27,10 +27,6 @@ class BigFireTest {
                 return false;
             }
 
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
         position = new Point();
     }

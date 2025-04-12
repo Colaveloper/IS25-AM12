@@ -89,14 +89,9 @@ class StarDustCardTest {
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return true;
             }
-
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
 
-        starDustCard = new StarDustCard(null, Level.FIRST);
+        starDustCard = new StarDustCard(Level.FIRST);
         starDustCard.initialize(flightBoard);
     }
 

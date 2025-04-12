@@ -7,8 +7,8 @@ import java.util.List;
 public class Shield extends Component implements Activatable{
     private boolean active;
 
-    public Shield(Image image, List<Connector> connectors) {
-        super(image, connectors);
+    public Shield(List<Connector> connectors) {
+        super(connectors);
         this.active = false;
     }
 

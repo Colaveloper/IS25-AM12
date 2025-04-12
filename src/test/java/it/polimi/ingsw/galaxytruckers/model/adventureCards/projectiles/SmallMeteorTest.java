@@ -40,13 +40,13 @@ class SmallMeteorTest {
         noneConnectors = new ArrayList<>(List.of(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE));
         universalConnectors = new ArrayList<>(List.of(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
 
-        sturdyComponent = new Component(null, null) {
+        sturdyComponent = new Component(null) {
             @Override
             public List<Connector> getConnectors() {
                 return new ArrayList<>(noneConnectors);
             }
         };
-        weakComponent = new Component(null, null) {
+        weakComponent = new Component(null) {
             @Override
             public List<Connector> getConnectors() {
                 return new ArrayList<>(universalConnectors);
@@ -59,11 +59,6 @@ class SmallMeteorTest {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
-            }
-
-            @Override
-            public Image getImage() {
-                return null;
             }
 
             @Override
@@ -81,13 +76,13 @@ class SmallMeteorTest {
     @Test
     void getActivatablePointsReturnsUsefulShieldsPositions() {
         myShields = new HashMap<>(Map.of(
-                point1, new Shield(null, new ArrayList<>(noneConnectors)) {
+                point1, new Shield(new ArrayList<>(noneConnectors)) {
                     @Override
                     public int[] getDefensibleDirections() {
                         return new int[]{0, 1};
                     }
                 },
-                point2, new Shield(null, new ArrayList<>(noneConnectors)) {
+                point2, new Shield(new ArrayList<>(noneConnectors)) {
                     @Override
                     public int[] getDefensibleDirections() {
                         return new int[]{2, 3};
@@ -109,13 +104,13 @@ class SmallMeteorTest {
     @Test
     void getActivatablePointsReturnsEmptySetIf() {
         myShields = new HashMap<>(Map.of(
-                point1, new Shield(null, new ArrayList<>(noneConnectors)) {
+                point1, new Shield(new ArrayList<>(noneConnectors)) {
                     @Override
                     public int[] getDefensibleDirections() {
                         return new int[]{0, 1};
                     }
                 },
-                point2, new Shield(null, new ArrayList<>(noneConnectors)) {
+                point2, new Shield(new ArrayList<>(noneConnectors)) {
                     @Override
                     public int[] getDefensibleDirections() {
                         return new int[]{2, 3};
@@ -140,11 +135,6 @@ class SmallMeteorTest {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
-            }
-
-            @Override
-            public Image getImage() {
-                return null;
             }
 
             @Override

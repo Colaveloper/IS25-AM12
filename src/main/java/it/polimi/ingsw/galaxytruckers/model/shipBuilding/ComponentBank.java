@@ -60,38 +60,38 @@ public class ComponentBank {
 
             switch(type){
                 case "shield":
-                    component = new Shield(image, connectors);
+                    component = new Shield(connectors);
                     break;
                 case "life support":
                     CrewType crewType = parseCrewType(node.get("crewtype"));
-                    component = new LifeSupport(image, connectors, crewType);
+                    component = new LifeSupport(connectors, crewType);
                     break;
                 case "double cannon":
-                    component = new DoubleCannon(image, connectors);
+                    component = new DoubleCannon(connectors);
                     break;
                 case "cannon":
-                    component = new Cannon(image, connectors);
+                    component = new Cannon(connectors);
                     break;
                 case "double engine":
-                    component = new DoubleEngine(image, connectors);
+                    component = new DoubleEngine(connectors);
                     break;
                 case "engine":
-                    component = new Engine(image, connectors);
+                    component = new Engine(connectors);
                     break;
                 case "cargo hold":
                     int size = node.get("size").asInt();
                     Boolean isSpecial = node.get("special").asBoolean();
-                    component = new CargoHold(image, connectors, size, isSpecial);
+                    component = new CargoHold(connectors, size, isSpecial);
                     break;
                 case "structural":
-                    component = new Component(image, connectors);
+                    component = new Component(connectors);
                     break;
                 case "battery":
                     int numBatteries = node.get("batteries").asInt();
-                    component = new Battery(image, connectors, numBatteries);
+                    component = new Battery(connectors, numBatteries);
                     break;
                 case "cabin":
-                    component = new Cabin(image, connectors);
+                    component = new Cabin(connectors);
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown component type: " + type);

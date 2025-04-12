@@ -13,13 +13,13 @@ class LifeSupportTest extends ComponentTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        myBrownLifeSupport = new LifeSupport(null, myConnectors, CrewType.BROWN);
-        myPurpleLifeSupport = new LifeSupport(null, myConnectors, CrewType.PURPLE);
+        myBrownLifeSupport = new LifeSupport(myConnectors, CrewType.BROWN);
+        myPurpleLifeSupport = new LifeSupport(myConnectors, CrewType.PURPLE);
     }
 
     @Test
     void constructorThrowsExceptionForHumanCrewType() {
-        assertThrows(IllegalArgumentException.class, () -> new LifeSupport(null, myConnectors, CrewType.HUMAN));
+        assertThrows(IllegalArgumentException.class, () -> new LifeSupport(myConnectors, CrewType.HUMAN));
     }
 
     @Test

@@ -26,9 +26,8 @@ public class PiratesCard extends AdventureCard {
     private Projectile currentProjectile;
     private ShipBoard winnerShipBoard;
 
-    public PiratesCard(Image image, Level level,
-                       int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
-        super(image, level);
+    public PiratesCard(Level level, int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
+        super(level);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;

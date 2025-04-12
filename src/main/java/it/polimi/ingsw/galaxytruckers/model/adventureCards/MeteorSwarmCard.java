@@ -20,8 +20,8 @@ public class MeteorSwarmCard extends AdventureCard {
     private Projectile currentProjectile;
 
 
-    public MeteorSwarmCard(Image image, Level level, List<Projectile> projectiles) {
-        super(image, level);
+    public MeteorSwarmCard(Level level, List<Projectile> projectiles) {
+        super(level);
         this.projectiles = new LinkedList<>(projectiles).reversed();
     }
 

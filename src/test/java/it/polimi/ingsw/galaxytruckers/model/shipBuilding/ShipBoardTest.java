@@ -33,7 +33,7 @@ class ShipBoardTest {
                 }
             };
             shipBoard = new SecondShipBoard(componentBank, Colors.BLUE);
-            componentToAdd = new it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component(null, Arrays.asList(Connector.UNIVERSAL, Connector.SINGLE, Connector.DOUBLE, Connector.NONE));
+            componentToAdd = new it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component(Arrays.asList(Connector.UNIVERSAL, Connector.SINGLE, Connector.DOUBLE, Connector.NONE));
         }
 
         @Test
@@ -166,7 +166,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                cannon = new Cannon(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                cannon = new Cannon(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = cannon;
             }
 
@@ -206,7 +206,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                engine = new Engine(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                engine = new Engine(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = engine;
             }
 
@@ -246,7 +246,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                doubleCannon = new DoubleCannon(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                doubleCannon = new DoubleCannon(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = doubleCannon;
             }
 
@@ -338,7 +338,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                doubleEngine = new DoubleEngine(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                doubleEngine = new DoubleEngine(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = doubleEngine;
             }
 
@@ -433,7 +433,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                shield = new Shield(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                shield = new Shield(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = shield;
             }
 
@@ -486,7 +486,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                cabin = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                cabin = new Cabin(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = cabin;
             }
 
@@ -583,7 +583,7 @@ class ShipBoardTest {
 
             @Test
             void addTwoBatteriesUpdatesMaps(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
@@ -593,7 +593,7 @@ class ShipBoardTest {
 
             @Test
             void removeTwoBatteriesUpdatesMap(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
@@ -603,7 +603,7 @@ class ShipBoardTest {
 
             @Test
             void addThreeBatteriesUpdatesMaps(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
@@ -613,7 +613,7 @@ class ShipBoardTest {
 
             @Test
             void removeThreeBatteriesUpdatesMap(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
@@ -623,7 +623,7 @@ class ShipBoardTest {
 
             @Test
             void useTwoBatteries(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
@@ -633,7 +633,7 @@ class ShipBoardTest {
 
             @Test
             void useThreeBatteries(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
@@ -642,14 +642,14 @@ class ShipBoardTest {
             }
 
             @Test void noTwoBatteryThrowsException(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
                 component = battery;
                 assertThrows(IllegalStateException.class, () -> shipBoard.useBatteries(new Point(7,7), 2));
                 assertTrue(restIsUnchanged());
             }
 
             @Test void noThreeBatteryThrowsException(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
                 component = battery;
                 assertThrows(IllegalStateException.class, () -> shipBoard.useBatteries(new Point(7,7), 2));
                 assertTrue(restIsUnchanged());
@@ -663,7 +663,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup(){
-                cargo = new CargoHold(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3, false);
+                cargo = new CargoHold(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3, false);
                 component = cargo;
             }
 
@@ -732,7 +732,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup(){
-                lifeSupport = new LifeSupport(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL),CrewType.PURPLE);
+                lifeSupport = new LifeSupport(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL),CrewType.PURPLE);
                 component = lifeSupport;
             }
 
@@ -771,8 +771,8 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup(){
-                cabin = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
-                lifeSupport = new LifeSupport(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL),CrewType.PURPLE);
+                cabin = new Cabin(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                lifeSupport = new LifeSupport(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL),CrewType.PURPLE);
             }
 
             boolean restIsUnchanged(){
@@ -847,7 +847,7 @@ class ShipBoardTest {
             ComponentBank bank = new ComponentBank() {
                 @Override
                 public it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component getRanComponent() {
-                    return new Component(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                    return new Component(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 }
             };
             shipBoard = new SecondShipBoard(bank, Colors.BLUE);

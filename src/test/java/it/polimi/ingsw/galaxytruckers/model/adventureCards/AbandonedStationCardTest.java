@@ -119,11 +119,6 @@ class AbandonedStationCardTest {
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return true;
             }
-
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
 
         flightBoardOfLosers = new FlightBoard(null) {
@@ -151,20 +146,15 @@ class AbandonedStationCardTest {
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return true;
             }
-
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
 
-        abandonedStationCard = new AbandonedStationCard(null, Level.FIRST, goodsWon, 2, 1);
+        abandonedStationCard = new AbandonedStationCard(Level.FIRST, goodsWon, 2, 1);
         abandonedStationCard.initialize(flightBoard);
     }
 
     @Test
     void noneCanLand() {
-        abandonedStationCard = new AbandonedStationCard(null, Level.FIRST, goodsWon, 2, 1);
+        abandonedStationCard = new AbandonedStationCard(Level.FIRST, goodsWon, 2, 1);
         abandonedStationCard.initialize(flightBoardOfLosers);
         testState = abandonedStationCard.nextStep();
         assertInstanceOf(DrawCardState.class, testState);

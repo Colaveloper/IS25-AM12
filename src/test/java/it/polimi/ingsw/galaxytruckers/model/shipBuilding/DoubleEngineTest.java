@@ -12,7 +12,7 @@ class DoubleEngineTest extends EngineTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        myDoubleEngine = new DoubleEngine(null, myConnectors);
+        myDoubleEngine = new DoubleEngine(myConnectors);
     }
 
     @Test @Override

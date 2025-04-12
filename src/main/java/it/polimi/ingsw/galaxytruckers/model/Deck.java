@@ -8,12 +8,10 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import com.google.common.annotations.VisibleForTesting;
-import javafx.scene.image.Image;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.function.Supplier;
 
 public abstract class Deck {
     protected final List<AdventureCard> relevantCards;
@@ -73,17 +71,13 @@ public abstract class Deck {
                 String type = node.get("type").asText();
                 AdventureCard card;
 
-                Image image = new Image("file:"+node.get("path").asText());
-
                 card = switch (type) {
                     case "planets" -> new PlanetsCard(
-                            image,
                             level,
                             parsePlanets(node.get("planets")),
                             node.get("flight day loss").asInt()
                     );
                     case "pirates" -> new PiratesCard(
-                            image,
                             level,
                             node.get("firePowerThreshold").asInt(),
                             node.get("credits").asInt(),
@@ -91,7 +85,6 @@ public abstract class Deck {
                             parseProjectiles(node.get("shoots"))
                     );
                     case "smugglers" -> new SmugglersCard(
-                            image,
                             level,
                             node.get("penalty").asInt(),
                             node.get("cannons").asInt(),
@@ -99,7 +92,6 @@ public abstract class Deck {
                             node.get("flight day loss").asInt()
                     );
                     case "slavers" -> new SlaversCard(
-                            image,
                             level,
                             node.get("penalty").asInt(),
                             node.get("cannons").asInt(),
@@ -107,35 +99,29 @@ public abstract class Deck {
                             node.get("flight day loss").asInt()
                     );
                     case "meteors" -> new MeteorSwarmCard(
-                            image,
                             level,
                             parseProjectiles(node.get("meteors"))
                     );
                     case "epidemic" -> new EpidemicCard(
-                            image,
                             level
                     );
                     case "stardust" -> new StarDustCard(
-                            image,
                             level
                     );
                     case "abandonedShip" -> new AbandonedShipCard(
-                            image,
                             level,
                             node.get("credits").asInt(),
                             node.get("people").asInt(),
                             node.get("flight day loss").asInt()
                     );
                     case "abandonedStation" -> new AbandonedStationCard(
-                            image,
                             level,
                             parseGoods(node.get("storage")),
                             node.get("people").asInt(),
                             node.get("flight day loss").asInt()
                     );
                     case "warzone" -> new CombatZoneCard(
-                                image,
-                                level,
+                                    level,
                                 node.path("flight day loss").asInt(0),
                                 node.path("crew loss").asInt(0),
                                 node.path("goods loss").asInt(0),
@@ -146,7 +132,6 @@ public abstract class Deck {
                                 )
                         );
                     case "open space" -> new OpenSpaceCard(
-                            image,
                             level
                     );
                     default -> throw new IllegalArgumentException("Unknown card type: " + type);

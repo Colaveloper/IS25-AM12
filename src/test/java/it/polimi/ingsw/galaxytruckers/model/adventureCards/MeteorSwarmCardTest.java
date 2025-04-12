@@ -46,10 +46,6 @@ class MeteorSwarmCardTest {
         };
         ships = new ArrayList<>(List.of(ship1, ship2));
         flightBoard = new FlightBoard(null) {
-            @Override
-            public Image getImage() {
-                return null;
-            }
 
             @Override
             public List<ShipBoard> getOrderedShips() {
@@ -78,7 +74,7 @@ class MeteorSwarmCardTest {
                 return true;
             }
         };
-        meteorSwarmCard = new MeteorSwarmCard(null, Level.FIRST,  safeProjectiles);
+        meteorSwarmCard = new MeteorSwarmCard(Level.FIRST,  safeProjectiles);
         meteorSwarmCard.initialize(flightBoard);
     }
 

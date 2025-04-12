@@ -5,8 +5,8 @@ import javafx.scene.image.Image;
 import java.util.List;
 
 public class Engine extends Component {
-    public Engine(Image image, List<Connector> connectors) {
-        super(image, connectors);
+    public Engine(List<Connector> connectors) {
+        super(connectors);
     }
 
     public boolean isValid() {

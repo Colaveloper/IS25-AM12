@@ -62,18 +62,6 @@ public class SecondFlightBoard extends FlightBoard{
     }
 
     @Override
-    public Image getImage() {
-        return image;
-        // TODO: composite ships on top
-    }
-
-    @Override
-    public String getDescription() {
-        return "Second-Flight: "+super.getDescription();
-        // TODO: describe positions
-    }
-
-    @Override
     protected int getLoopLength() {
         return loopLength;
     }

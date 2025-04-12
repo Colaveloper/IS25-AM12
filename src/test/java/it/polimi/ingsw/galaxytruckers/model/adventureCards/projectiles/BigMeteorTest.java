@@ -46,15 +46,15 @@ class BigMeteorTest {
 
     @Test
     void getActivatablePointsReturnsEffectiveActiveDoubleCannons() {
-        singleCannon = new Cannon(null, null);
-        inactiveDoubleCannon = new DoubleCannon(null, null);
-        ineffectiveActiveDoubleCannon = new DoubleCannon(null, null) {
+        singleCannon = new Cannon(null);
+        inactiveDoubleCannon = new DoubleCannon( null);
+        ineffectiveActiveDoubleCannon = new DoubleCannon( null) {
             @Override
             public int getFirePower() {
                 return 1;
             }
         };
-        effectiveActiveDoubleCannon = new DoubleCannon(null, null) {
+        effectiveActiveDoubleCannon = new DoubleCannon( null) {
             @Override
             public int getFirePower() {
                 return 1;
@@ -64,11 +64,6 @@ class BigMeteorTest {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
-            }
-
-            @Override
-            public Image getImage() {
-                return null;
             }
 
             @Override
@@ -103,7 +98,7 @@ class BigMeteorTest {
     @Test
     void getComponentToRemoveReturnsFirstFoundComponentPositionIfThereIsEffectiveCannonWithNoFirePower() {
         firstFoundComponentPosition = new Point();
-        protectingCannon = new DoubleCannon(null, null) {
+        protectingCannon = new DoubleCannon( null) {
             @Override
             public int getFirePower() {
                 return 0;
@@ -113,11 +108,6 @@ class BigMeteorTest {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
-            }
-
-            @Override
-            public Image getImage() {
-                return null;
             }
 
             @Override
@@ -142,7 +132,7 @@ class BigMeteorTest {
     @Test
     void getComponentPositionToRemoveReturnsEmptyIfThereIsEffectiveCannonWithFirePower() {
         firstFoundComponentPosition = new Point();
-        protectingCannon = new DoubleCannon(null, null) {
+        protectingCannon = new DoubleCannon( null) {
             @Override
             public int getFirePower() {
                 return 1;
@@ -152,11 +142,6 @@ class BigMeteorTest {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
-            }
-
-            @Override
-            public Image getImage() {
-                return null;
             }
 
             @Override
@@ -181,7 +166,7 @@ class BigMeteorTest {
     @Test
     void cannonPositionIsEffectiveThrowsExceptionForUnknownDirection() {
         impossibleBigMeteor = new BigMeteor(4);
-        impossibleCannon = new Cannon(null, null) {
+        impossibleCannon = new Cannon( null) {
             @Override
             public int getOrientation() {
                 return 4;
@@ -198,10 +183,10 @@ class BigMeteorTest {
 
     @Test
     void cannonPositionIsEffectiveForMatchingOrientationAndDirection() {
-        directedCannon = new Cannon(null, null);
+        directedCannon = new Cannon( null);
         for (int i = 0; i < 4; i++) {
             int finalI = i;
-            directedCannon = new Cannon(null, null) {
+            directedCannon = new Cannon( null) {
                 @Override
                 public int getOrientation() {
                     return finalI;
@@ -216,7 +201,7 @@ class BigMeteorTest {
 
     @Test
     void cannonPositionIsNotEffectiveWhenDirectionNotMatchingOrientation() {
-        directedCannon = new Cannon(null, null) {
+        directedCannon = new Cannon( null) {
             @Override
             public int getOrientation() {
                 return 0;
@@ -231,7 +216,7 @@ class BigMeteorTest {
     @Test
     void cannonPositionIsNotEffectiveWhenTooMuchOnOneSide() {
         // FROM ABOVE
-        directedCannon = new Cannon(null, null) {
+        directedCannon = new Cannon( null) {
             @Override
             public int getOrientation() {
                 return 0;
@@ -243,7 +228,7 @@ class BigMeteorTest {
         )));
 
         // FROM SIDE
-        directedCannon = new Cannon(null, null) {
+        directedCannon = new Cannon( null) {
             @Override
             public int getOrientation() {
                 return 1;
@@ -258,7 +243,7 @@ class BigMeteorTest {
         )));
 
         // FROM BEHIND
-        directedCannon = new Cannon(null, null) {
+        directedCannon = new Cannon( null) {
             @Override
             public int getOrientation() {
                 return 2;
@@ -276,13 +261,13 @@ class BigMeteorTest {
 
 //    @Test
 //    void cannonPositionIsEffective() {
-//        directedCannon = new Cannon(null, null);
+//        directedCannon = new Cannon( null);
 //        cannon00 = new AbstractMap.SimpleEntry<>(new Point(0, 0), directedCannon);
 //        cannon02 = new AbstractMap.SimpleEntry<>(new Point(0, 2), directedCannon);
 //        cannon20 = new AbstractMap.SimpleEntry<>(new Point(2, 0), directedCannon);
 //        cannonPositions = new HashMap<Point, Cannon>(Map.ofEntries(cannon00, cannon02, cannon20));
 //
-//        directedCannon = new Cannon(null, null) {
+//        directedCannon = new Cannon( null) {
 //            @Override
 //            public int getOrientation() {
 //                return 0;
@@ -293,7 +278,7 @@ class BigMeteorTest {
 //        assertTrue(bigMeteor.cannonPositionIsEffective(cannon02));
 //        assertFalse(bigMeteor.cannonPositionIsEffective(cannon20));
 //
-//        directedCannon = new Cannon(null, null) {
+//        directedCannon = new Cannon( null) {
 //            @Override
 //            public int getOrientation() {
 //                return 1;

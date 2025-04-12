@@ -40,11 +40,6 @@ class OpenSpaceCardTest {
             }
 
             @Override
-            public Image getImage() {
-                return null;
-            }
-
-            @Override
             public void displaceShip(ShipBoard shipBoard, int displacement) {
 
             }
@@ -59,7 +54,7 @@ class OpenSpaceCardTest {
                 return ships;
             }
         };
-        openSpaceCard = new OpenSpaceCard(null, Level.TEST);
+        openSpaceCard = new OpenSpaceCard(Level.TEST);
         openSpaceCard.initialize(flightBoardStub);
     }
 

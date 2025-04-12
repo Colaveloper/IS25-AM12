@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.Physical;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 
@@ -8,7 +7,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public abstract class ShipBoard implements Physical, ComponentVisitor, ActivatableVisitor {
+public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
     protected final Map<Point, it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component> componentMap;
     protected it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component lastComponent;  // can be null
@@ -533,10 +532,5 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
         doubleEngine.deactivate(this);
         this.engines.remove(this.lastPosition);
         this.activatables.remove(this.lastPosition);
-    }
-
-    @Override
-    public String getDescription() {
-        return ""; // TODO: describe
     }
 }

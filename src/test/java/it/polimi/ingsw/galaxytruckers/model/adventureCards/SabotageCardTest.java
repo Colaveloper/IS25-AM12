@@ -125,11 +125,6 @@ class SabotageCardTest {
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return true;
             }
-
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
 
         largerFlightBoard = new FlightBoard(null) {
@@ -153,14 +148,9 @@ class SabotageCardTest {
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return true;
             }
-
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
 
-        sabotageCard = new SabotageCard (null, Level.FIRST);
+        sabotageCard = new SabotageCard (Level.FIRST);
         sabotageCard.initialize(flightBoard);
     }
 
@@ -176,7 +166,7 @@ class SabotageCardTest {
 
     @Test
     void otherOrderToCheck() {
-        sabotageCard = new SabotageCard(null, Level.FIRST);
+        sabotageCard = new SabotageCard(Level.FIRST);
         sabotageCard.initialize(largerFlightBoard);
         testState = sabotageCard.nextStep();
         assertInstanceOf(DrawCardState.class, testState);

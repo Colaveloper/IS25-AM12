@@ -14,8 +14,8 @@ public class SabotageCard extends AdventureCard {
 
     private static final Dice dice = new Dice() {};
 
-    protected SabotageCard(Image image, Level cardLevel) {
-        super(image, cardLevel);
+    protected SabotageCard(Level cardLevel) {
+        super(cardLevel);
     }
 
     @Override

@@ -106,10 +106,6 @@ public class CombatZoneTest {
         shipPlaces.put(ship2, position2);
 
         flightBoard = new FlightBoard(null) {
-            @Override
-            public Image getImage() {
-                return null;
-            }
 
             @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
@@ -148,7 +144,7 @@ public class CombatZoneTest {
     void actionParserThrowsExceptionForUnknownAction() {
         actions = List.of("slurping ramen");
         assertThrows(IllegalArgumentException.class, () ->
-                new CombatZoneCard(null, null,
+                new CombatZoneCard(null,
                 flightDaysLoss, crewLoss, goodLoss, projectiles, actions));
     }
 
@@ -177,7 +173,7 @@ public class CombatZoneTest {
                     "min cannons",
                     "gets shot"
             );
-            combatZoneCard = new CombatZoneCard(null, null,
+            combatZoneCard = new CombatZoneCard(null,
                     flightDaysLoss, crewLoss, goodLoss, projectiles, actions);
             combatZoneCard.initialize(flightBoard);
         }
@@ -318,7 +314,7 @@ public class CombatZoneTest {
 //            projectiles = new ArrayList<>(List.of(damagingProjectile, damagingProjectile));
 //            // only the first damaging projectile separates the ship in pieces
 //
-//            combatZoneCard = new CombatZoneCard(null, Level.SECOND, flightBoard, flightDaysLoss, crewLoss,goodLoss, projectiles, actions);
+//            combatZoneCard = new CombatZoneCard(Level.SECOND, flightBoard, flightDaysLoss, crewLoss,goodLoss, projectiles, actions);
 //
 //            for (ShipBoard ship : ships) { // engine activation
 //                combatZoneCard.nextStep();
@@ -349,7 +345,7 @@ public class CombatZoneTest {
                     "min engine",
                     "loses goods"
             );
-            combatZoneCard = new CombatZoneCard(null, null,
+            combatZoneCard = new CombatZoneCard(null,
                     flightDaysLoss, crewLoss, goodLoss, projectiles, actions);
             combatZoneCard.initialize(flightBoard);
         }

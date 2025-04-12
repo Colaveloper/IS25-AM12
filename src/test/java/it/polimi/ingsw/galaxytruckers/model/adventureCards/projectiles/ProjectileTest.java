@@ -21,25 +21,20 @@ class ProjectileTest {
 
     @BeforeEach
     void setUp() {
-        up = new Component(null, null);
-        right = new Component(null, null);
-        down = new Component(null, null);
-        left = new Component(null, null);
+        up = new Component(null);
+        right = new Component(null);
+        down = new Component(null);
+        left = new Component(null);
         upp = new Point(0, -1);
         rightp = new Point(1, 0);
         downp = new Point(0, 1);
         leftp = new Point(-1, 0);
 
-        myShipBoard = new ShipBoard(null, null) {
+        myShipBoard = new ShipBoard(null) {
 
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
-            }
-
-            @Override
-            public Image getImage() {
-                return null;
             }
 
             @Override
@@ -110,12 +105,7 @@ class ProjectileTest {
             }
         }
 
-        ShipBoard myShipBoard = new ShipBoard(null, null) {
-            @Override
-            public Image getImage() {
-                return null;
-            }
-
+        ShipBoard myShipBoard = new ShipBoard(null) {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;

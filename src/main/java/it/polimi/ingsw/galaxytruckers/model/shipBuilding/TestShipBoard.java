@@ -59,16 +59,4 @@ public class TestShipBoard extends ShipBoard {
     public void finishBuilding() {
         this.finishedBuilding = true;
     }
-
-    @Override
-    public Image getImage() {
-        return image;
-        // TODO: composite components and resources on top
-    }
-
-    @Override
-    public String getDescription() {
-        return "Level 1 ship: "+super.getDescription();
-        // TODO: print stats too
-    }
 }

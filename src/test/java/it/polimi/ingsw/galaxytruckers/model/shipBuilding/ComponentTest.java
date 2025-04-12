@@ -24,7 +24,7 @@ class ComponentTest {
                 Connector.SINGLE,
                 Connector.DOUBLE
         ));
-        myComponent = new Component(null, myConnectors);
+        myComponent = new Component(myConnectors);
         myShipBoard = new ShipBoardStub();
     }
 

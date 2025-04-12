@@ -65,11 +65,6 @@ class PiratesCardTest {
             }
 
             @Override
-            public Image getImage() {
-                return null;
-            }
-
-            @Override
             public void displaceShip(ShipBoard shipBoard, int displacement) {
 
             }
@@ -113,7 +108,7 @@ class PiratesCardTest {
                 }
             });
         }
-        piratesCard = new PiratesCard(null, Level.SECOND,
+        piratesCard = new PiratesCard(Level.SECOND,
                 firePowerThreshold,creditPrize,flightDaysLost,new ArrayList<>(projectiles));
         piratesCard.initialize(flightBoardStub);
     }

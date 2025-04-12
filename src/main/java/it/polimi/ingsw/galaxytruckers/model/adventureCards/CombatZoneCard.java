@@ -32,8 +32,8 @@ public class CombatZoneCard extends AdventureCard {
     // Utility variables
     private Projectile currentProjectile;
 
-    public CombatZoneCard(Image image, Level level, int flightDayLoss, int crewLoss, int goodsLoss, List<Projectile> projectiles, List<String> actions) {
-        super(image, level);
+    public CombatZoneCard(Level level, int flightDayLoss, int crewLoss, int goodsLoss, List<Projectile> projectiles, List<String> actions) {
+        super(level);
         this.flightDayLoss = flightDayLoss;
         this.crewLossLeft = crewLoss;
         this.goodsLossLeft = goodsLoss;

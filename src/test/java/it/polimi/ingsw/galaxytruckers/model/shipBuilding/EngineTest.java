@@ -11,7 +11,7 @@ class EngineTest extends ComponentTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        myEngine = new Engine(null, myConnectors);
+        myEngine = new Engine(myConnectors);
     }
 
     @Test

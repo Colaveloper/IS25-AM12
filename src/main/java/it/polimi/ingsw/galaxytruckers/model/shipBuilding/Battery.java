@@ -6,8 +6,8 @@ import java.util.List;
 
 public class Battery extends Component{
     int numBatteries;
-    public Battery(Image image, List<Connector> connectors, int numBatteries) {
-        super(image, connectors);
+    public Battery(List<Connector> connectors, int numBatteries) {
+        super(connectors);
         if (numBatteries != 2 && numBatteries != 3) {
             throw new IllegalArgumentException("Number of batteries must be 2 or 3");
         }

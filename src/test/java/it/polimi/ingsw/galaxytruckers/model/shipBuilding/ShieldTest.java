@@ -12,7 +12,7 @@ class ShieldTest extends ComponentTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        myShield = new Shield(null, myConnectors);
+        myShield = new Shield(myConnectors);
     }
 
     @Test
