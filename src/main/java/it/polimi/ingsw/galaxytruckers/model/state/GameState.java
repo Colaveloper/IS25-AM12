@@ -58,4 +58,24 @@ public abstract class GameState {
     public void selectOption(int option) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
+
+    public void requestRandComponent(ShipBoard shipBoard){}
+
+    public void requestComponent(ShipBoard shipBoard, int componentId){}
+
+    public void rejectComponent(ShipBoard shipBoard){}
+
+    public void stashComponent(ShipBoard shipBoard){}
+
+    public void grabStashedComponent(ShipBoard shipBoard, int index){}
+
+    public void placeComponent(ShipBoard shipBoard, Point point, int orientation){}
+
+    public void flipHourglass(ShipBoard shipBoard){}
+
+    public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition){}
+
+    public void acquireForecast(ShipBoard shipBoard, int deckIndex){}
+
+    public void releaseForecast(ShipBoard shipBoard){}
 }
