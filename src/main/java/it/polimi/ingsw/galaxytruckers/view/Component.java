@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class Component implements Physical{
     private final ComponentType type;
-    private List<Connector> connectors = new ArrayList<>();   //TODO: enum for connector type?
+    private List<Connector> connectors = new ArrayList<>();
     private int rotation;
     private boolean isSelectable;
 
@@ -28,6 +29,8 @@ public class Component implements Physical{
     private final String colorReset = "\u001B[0m";
 
     private List<GoodsType> cargo;
+    @VisibleForTesting
+    private Boolean isSpecial;
 
     private String crewColorOpen;
     private String crewColorClose;
@@ -52,6 +55,7 @@ public class Component implements Physical{
         if (type == ComponentType.CARGO_HOLD) {
             this.componentStat = node.get("size").asInt();
             cargo = new ArrayList<>();
+            this.isSpecial = node.get("special").asBoolean();
             //cargo.add(GoodsType.RED);
         }
 
@@ -101,6 +105,8 @@ public class Component implements Physical{
         String open = isSelectable ? colorGreen : "";
         String close = isSelectable ? colorReset : "";
 
+
+
         List<String> lines = new ArrayList<>();
         if (type == ComponentType.EMPTY_AREA) {
             lines.add(0, "     ");
@@ -121,26 +127,28 @@ public class Component implements Physical{
             }
             else if (type == ComponentType.CARGO_HOLD){
                 cargoPrint = new StringBuilder();
+                String specialOpen = isSpecial ? colorRed : "";
+                String specialClose = isSpecial ? colorReset : "";
                 cargoPrint.append(open + getConnector(3) + close);
 
                 for (GoodsType i : cargo) {
                     switch (i) {
                         case RED:
-                            cargoPrint.append(colorRed + "●" + colorReset);
+                            cargoPrint.append(colorRed + type.getSymbol(rotation) + colorReset);
                             break;
                         case YELLOW:
-                            cargoPrint.append(colorYellow + "●" + colorReset);
+                            cargoPrint.append(colorYellow + type.getSymbol(rotation) + colorReset);
                             break;
                         case BLUE:
-                            cargoPrint.append(colorBlue + "●" + colorReset);
+                            cargoPrint.append(colorBlue + type.getSymbol(rotation) + colorReset);
                             break;
                         case GREEN:
-                            cargoPrint.append(colorGreen + "●" + colorReset);
+                            cargoPrint.append(colorGreen + type.getSymbol(rotation) + colorReset);
                             break;
                     }
                 }
 
-                cargoPrint.append("□".repeat(componentStat - cargo.size()));
+                cargoPrint.append(specialOpen + "□".repeat(componentStat - cargo.size()) + specialClose);
                 cargoPrint.append( " ".repeat(3 - componentStat));
 
                 cargoPrint.append(open + getConnector(1) + close);

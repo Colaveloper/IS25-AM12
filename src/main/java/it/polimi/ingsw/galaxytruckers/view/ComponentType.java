@@ -16,7 +16,7 @@ public enum ComponentType {
     DOUBLE_ENGINE(
             List.of("⇓", "⇐", "⇑", "⇒")),
     CARGO_HOLD(
-            List.of("▞")),
+            List.of("■")),
     STRUCTURAL(
             List.of(" ")),
     BATTERY(
