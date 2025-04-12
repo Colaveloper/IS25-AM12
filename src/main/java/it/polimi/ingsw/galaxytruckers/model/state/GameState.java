@@ -6,6 +6,10 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.IntStream;
 
 public abstract class GameState {
     protected Game game;
@@ -13,6 +17,20 @@ public abstract class GameState {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    static void removeOtherShipPieces(ShipBoard shipBoard, int pieceIndex, List<Set<Point>> currentShipPieces) {
+        if (pieceIndex < 0 || pieceIndex >= currentShipPieces.size()) {
+            throw new IllegalArgumentException("Invalid piece index");
+        }
+        List<Point> componentsToRemove = IntStream.range(0, currentShipPieces.size())
+                .filter(x -> x != pieceIndex)
+                .mapToObj(currentShipPieces::get)
+                .flatMap(Collection::stream)
+                .toList();
+        for (Point p : componentsToRemove) {
+            shipBoard.removeComponent(p);
+        }
     }
 
     public void activateComponent(Point position) {
@@ -78,4 +96,8 @@ public abstract class GameState {
     public void acquireForecast(ShipBoard shipBoard, int deckIndex){}
 
     public void releaseForecast(ShipBoard shipBoard){}
+
+    public void removeComponent(ShipBoard shipBoard, Point point) {}
+
+    public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {}
 }

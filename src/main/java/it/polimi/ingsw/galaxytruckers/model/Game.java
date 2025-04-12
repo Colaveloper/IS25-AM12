@@ -10,8 +10,11 @@ import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 public class Game {
     GameFactory gameFactory;
@@ -56,6 +59,10 @@ public class Game {
 
     public FlightBoard getFlightBoard() {
         return flightBoard;
+    }
+
+    public Set<ShipBoard> getShipBoards() {
+        return shipBoards;
     }
 
     //Ship building
