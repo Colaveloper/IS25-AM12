@@ -41,8 +41,8 @@ class ClientControllerTest {
         }
 
         controller.showUpdateCargoHold("roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE)); //TODO: doesn t work
-        controller.showSelectablePoints(new ArrayList<>(List.of(new Point(7, 7))));
-        controller.showSelectablePoints(new ArrayList<>(List.of(new Point(6, 7))));
+        controller.showSelectablePoints(new ArrayList<>(List.of(new Point(8, 8))));
+        controller.showSelectablePoints(new ArrayList<>(List.of(new Point(9, 7))));
         controller.showColorSelection("roborbio", Colors.RED);
         controller.showPlayerToPlaceUpdate(Map.of("roborbio", 2));
     }

@@ -29,7 +29,6 @@ public class Component implements Physical{
     private final String colorReset = "\u001B[0m";
 
     private List<GoodsType> cargo;
-    @VisibleForTesting
     private Boolean isSpecial;
 
     private String crewColorOpen;
@@ -106,7 +105,6 @@ public class Component implements Physical{
         String close = isSelectable ? colorReset : "";
 
 
-
         List<String> lines = new ArrayList<>();
         if (type == ComponentType.EMPTY_AREA) {
             lines.add(0, "     ");
@@ -127,28 +125,29 @@ public class Component implements Physical{
             }
             else if (type == ComponentType.CARGO_HOLD){
                 cargoPrint = new StringBuilder();
-                String specialOpen = isSpecial ? colorRed : "";
-                String specialClose = isSpecial ? colorReset : "";
+
+                String empty = isSpecial ? "○" : "□";
+                String full = isSpecial ? "●" : "■";
                 cargoPrint.append(open + getConnector(3) + close);
 
                 for (GoodsType i : cargo) {
                     switch (i) {
                         case RED:
-                            cargoPrint.append(colorRed + type.getSymbol(rotation) + colorReset);
+                            cargoPrint.append(colorRed + full + colorReset);
                             break;
                         case YELLOW:
-                            cargoPrint.append(colorYellow + type.getSymbol(rotation) + colorReset);
+                            cargoPrint.append(colorYellow + full + colorReset);
                             break;
                         case BLUE:
-                            cargoPrint.append(colorBlue + type.getSymbol(rotation) + colorReset);
+                            cargoPrint.append(colorBlue + full + colorReset);
                             break;
                         case GREEN:
-                            cargoPrint.append(colorGreen + type.getSymbol(rotation) + colorReset);
+                            cargoPrint.append(colorGreen + full + colorReset);
                             break;
                     }
                 }
 
-                cargoPrint.append(specialOpen + "□".repeat(componentStat - cargo.size()) + specialClose);
+                cargoPrint.append(empty.repeat(componentStat - cargo.size()));
                 cargoPrint.append( " ".repeat(3 - componentStat));
 
                 cargoPrint.append(open + getConnector(1) + close);
