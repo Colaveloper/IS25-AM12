@@ -57,6 +57,7 @@ public class CombatZoneCard extends AdventureCard {
                 }
             } else {
                 penalizedShipBoard = checks.get(checkIndex).getWeakestPlayer(flightBoard);
+                flightBoard.getShipToPlace().keySet().forEach(ShipBoard::deactivateAll);
                 return nextStep();
             }
         } else {

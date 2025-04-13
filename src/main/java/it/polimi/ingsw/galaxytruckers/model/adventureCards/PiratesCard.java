@@ -44,13 +44,15 @@ public class PiratesCard extends AdventureCard {
         if (!defeated) { // Establishing winner and defeated players, if any
             // Evaluating previous player firepower, after double cannons activation
             if (currentShipBoard != null) {  // There is a previous player who needs their firepower evaluated
-                if (currentShipBoard.getFirePower() > firePowerThreshold) {  // player defeats the enemy
+                int currentFirePower = currentShipBoard.getFirePower();
+                currentShipBoard.deactivateAll();
+                if (currentFirePower > firePowerThreshold) {  // player defeats the enemy
                     defeated = true;
                     currentPlayerIndex = 0;
                     winnerShipBoard = currentShipBoard;
                     currentShipBoard = null;
                     return new GrabRewardState(this::getReward); // Let the player choose whether to collect the prize
-                } else if (currentShipBoard.getFirePower() < firePowerThreshold) { // player is defeated
+                } else if (currentFirePower < firePowerThreshold) { // player is defeated
                     defeatedPlayers.add(currentShipBoard);
                 }
             }
@@ -66,6 +68,9 @@ public class PiratesCard extends AdventureCard {
                 return nextStep();
             }
         } else { // Firing at defeated players
+            if (currentShipBoard != null) {
+                currentShipBoard.deactivateAll();
+            }
             if (currentPlayerIndex < defeatedPlayers.size()) {  // There are still players that need to handle projectiles
                 currentShipBoard = defeatedPlayers.get(currentPlayerIndex);
                 currentPlayerIndex++;

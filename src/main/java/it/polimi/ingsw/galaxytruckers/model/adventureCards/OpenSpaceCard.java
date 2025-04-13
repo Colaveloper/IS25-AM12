@@ -14,6 +14,7 @@ public class OpenSpaceCard extends AdventureCard {
     public GameState nextStep() {
         if (currentShipBoard != null) {
             flightBoard.displaceShip(currentShipBoard, currentShipBoard.getEnginePower());
+            currentShipBoard.deactivateAll();
         }
         if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {  // There are other players to evaluate
             currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);

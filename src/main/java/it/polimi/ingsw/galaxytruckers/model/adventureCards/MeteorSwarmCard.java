@@ -30,6 +30,9 @@ public class MeteorSwarmCard extends AdventureCard {
     @Override
     public GameState nextStep() {
         // Letting the currentPlayer activate double cannons
+        if (currentShipBoard != null) {
+            currentShipBoard.deactivateAll();
+        }
         if (currentPlayerIndex < flightBoard.getOrderedShips().size()) {  // There are other players to evaluate
             currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
             currentPlayerIndex++;

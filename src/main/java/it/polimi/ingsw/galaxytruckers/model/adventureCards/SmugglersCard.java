@@ -36,10 +36,12 @@ public class SmugglersCard extends AdventureCard {
         // Evaluating previous player firepower, after double cannons activation
         if (!defeated) {
             if (currentShipBoard != null) {  // There is a previous player who needs their firepower evaluated
-                if (currentShipBoard.getFirePower() > firePowerThreshold) {  // player defeats the enemy
+                int currentFirePower = currentShipBoard.getFirePower();
+                currentShipBoard.deactivateAll();
+                if (currentFirePower > firePowerThreshold) {  // player defeats the enemy
                     defeated = true;
                     return new GrabRewardState(this::getReward); // Let the player choose whether to collect the prize
-                } else if (currentShipBoard.getFirePower() < firePowerThreshold) { // player is defeated
+                } else if (currentFirePower < firePowerThreshold) { // player is defeated
                     ShipBoard tempShipBoard = currentShipBoard;
                     currentShipBoard = null;
                     return new RemoveGoodsState(goodsLoss, tempShipBoard);

@@ -316,10 +316,16 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
     }
 
+    public void deactivateAll() {
+        for (Point p : activatables.keySet()) {
+            if (activatables.get(p).isActive()) {
+                activatables.get(p).deactivate(this);
+            }
+        }
+    }
+
     // Ship validity methods
 
-    //TODO: handle exposed connectors update
-    //TODO: handle Components who are not connected
     public boolean checkValidity() {
         for (Point point : componentMap.keySet()) {
             List<Point> neighbours = getNeighbours(point);
