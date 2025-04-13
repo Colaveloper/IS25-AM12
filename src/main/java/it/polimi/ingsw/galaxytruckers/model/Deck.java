@@ -4,6 +4,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.*;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CombatZoneCheck;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CrewSizeCheck;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.EnginePowerCheck;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.FirePowerCheck;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.penalty.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -56,7 +61,7 @@ public abstract class Deck {
     }
 
     @VisibleForTesting
-    protected List<AdventureCard> loadRelevantCards(Set<Level> levels) throws IOException {
+    protected static List<AdventureCard> loadRelevantCards(Set<Level> levels) throws IOException {
         //reading from json file and returning the list of components
         File jsonFile = new File(jsonPath);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -121,16 +126,9 @@ public abstract class Deck {
                             node.get("flight day loss").asInt()
                     );
                     case "warzone" -> new CombatZoneCard(
-                                    level,
-                                node.path("flight day loss").asInt(0),
-                                node.path("crew loss").asInt(0),
-                                node.path("goods loss").asInt(0),
-                                parseProjectiles(node.get("shoots")),
-                                new ObjectMapper().convertValue(
-                                        node.get("actions"),
-                                        new TypeReference<List<String>>(){}
-                                )
-                        );
+                            level,
+                            parseChecks(node.path("checks")),
+                            parsePenalties(node.path("penalties"), node));
                     case "open space" -> new OpenSpaceCard(
                             level
                     );
@@ -184,6 +182,35 @@ public abstract class Deck {
             goods.put(type, goodsNode.get(type.name().toLowerCase()).asInt());
         }
         return goods;
+    }
+
+    private static List<CombatZoneCheck> parseChecks(JsonNode checkNode) {
+        List<String> checkNames = new ObjectMapper().convertValue(checkNode, new TypeReference<>(){});
+        List<CombatZoneCheck> checks = new ArrayList<>();
+        for (String name : checkNames) {
+            checks.add(switch (name) {
+                case "min cannons" -> FirePowerCheck.getInstance();
+                case "min engine" -> EnginePowerCheck.getInstance();
+                case "min crew" -> CrewSizeCheck.getInstance();
+                default -> throw new IllegalArgumentException("Unknown check name: " + name);
+            });
+        }
+        return checks;
+    }
+
+    private static List<Penalty> parsePenalties(JsonNode penaltiesNode, JsonNode cardNode) {
+        List<Penalty> penalties = new ArrayList<>();
+        List<String> penaltiesNames = new ObjectMapper().convertValue(penaltiesNode, new TypeReference<>(){});
+        for (String name : penaltiesNames) {
+            penalties.add(switch (name) {
+                case "loses flight days" -> new FlightDaysLoss(cardNode.path("flight day loss").asInt());
+                case "loses goods" -> new GoodsLoss(cardNode.path("storage").asInt());
+                case "gets shot" -> new ProjectileThreat(parseProjectiles(cardNode.path("shoots")));
+                case "loses crew" -> new CrewLoss(cardNode.path("crew loss").asInt());
+                default -> throw new IllegalArgumentException("Unknown penalty name: " + name);
+            });
+        }
+        return penalties;
     }
 
     @VisibleForTesting

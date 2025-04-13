@@ -498,12 +498,14 @@
       },
       {
             "type": "warzone",
-            "actions": [
+            "checks": [
                   "min crew",
-                  "loses flight days",
                   "min engine",
+                  "min cannons"
+            ],
+            "penalties": [
+                  "loses flight days",
                   "loses crew",
-                  "min cannons",
                   "gets shot"
             ],
             "shoots": [
@@ -517,12 +519,14 @@
       },
       {
             "type": "warzone",
-            "actions": [
+            "checks": [
                   "min cannons",
-                  "loses flight days",
                   "min engine",
+                  "min crew"
+            ],
+            "penalties": [
+                  "loses flight days",
                   "loses goods",
-                  "min crew",
                   "gets shot"
             ],
             "storage": 3,

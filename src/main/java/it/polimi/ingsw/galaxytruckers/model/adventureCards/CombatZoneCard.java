@@ -1,242 +1,79 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CombatZoneCheck;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.penalty.Penalty;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
-import com.google.common.annotations.VisibleForTesting;
-import javafx.scene.image.Image;
 
-import java.util.*;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.Optional;
 
 //TODO: fix class implementation
 // - make it coherent with other cards and game states
 // - find new implementation strategy (not parsed suppliers)
 public class CombatZoneCard extends AdventureCard {
-    // Card data
-    private int flightDayLoss;
-    private int crewLossLeft;
-    private int goodsLossLeft;
-    private int currentTask;
-    private List<Projectile> projectiles;
-    private final List<Supplier<GameState>> actions; // evaluations and punishments
+    private final List<CombatZoneCheck> checks;
+    private final List<Penalty> penalties;
+    private int checkIndex;
+    ShipBoard penalizedShipBoard;
 
-    // Lowest stats
-    private Integer minCrewSize;
-    private Integer minEnginePower;
-    private Integer minFirePower;
-
-    // Utility variables
-    private Projectile currentProjectile;
-
-    public CombatZoneCard(Level level, int flightDayLoss, int crewLoss, int goodsLoss, List<Projectile> projectiles, List<String> actions) {
+    public CombatZoneCard(Level level, List<CombatZoneCheck> checks, List<Penalty> penalties) {
         super(level);
-        this.flightDayLoss = flightDayLoss;
-        this.crewLossLeft = crewLoss;
-        this.goodsLossLeft = goodsLoss;
-        this.projectiles = new LinkedList<>(projectiles);
-        this.actions = actionParser(actions);
-        this.actions.add(drawCard);
+        this.checks = checks;
+        this.penalties = penalties;
     }
 
     @Override
     public void initialize(FlightBoard flightBoard) {
         super.initialize(flightBoard);
-        this.currentPlayerIndex = 0;
-        this.currentTask = 0;
+        checkIndex = 0;
+        penalizedShipBoard = null;
+    }
+
+    @VisibleForTesting
+    public List<CombatZoneCheck> getChecks() {
+        return checks;
+    }
+
+    @VisibleForTesting
+    public List<Penalty> getPenalties() {
+        return penalties;
     }
 
     @Override
     public GameState nextStep() {
-        return (GameState) actions.get(currentTask).get();
-    }
-
-    public Supplier<GameState> setCurrentShipToLeastCrewed = () -> {
-        minCrewSize = flightBoard.getOrderedShips()
-                .stream()
-                .mapToInt(ShipBoard::getCrewSize)
-                .min()
-                .orElseThrow(() -> new IllegalStateException("No players detected"));
-        currentShipBoard = flightBoard.getOrderedShips()
-                .stream()
-                .filter(s -> s.getCrewSize() == minCrewSize)
-                .findFirst()
-                .orElseThrow();
-        currentTask++;
-        currentPlayerIndex = 0;
-        return nextStep();
-    };
-
-    public Supplier<GameState> setCurrentShipToWeakestEngine = () -> {
-        if (currentPlayerIndex < flightBoard.getOrderedShips().size()) { // engine activation
+        if (penalizedShipBoard == null) {
+            if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {
                 currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex++);
-                return new DeclareEnginePowerState(currentShipBoard);
-        }
-
-        // establishing the first ship with the weakest engines
-        minEnginePower = flightBoard.getOrderedShips().stream()
-            .mapToInt(ShipBoard::getEnginePower)
-            .min()
-            .orElseThrow(() -> new IllegalStateException("No players detected"));
-        currentShipBoard = flightBoard.getOrderedShips().stream()
-            .filter(s -> s.getEnginePower() == minEnginePower)
-            .findFirst()
-            .orElseThrow(() -> new IllegalStateException("No players detected"));
-
-        currentTask++;
-        currentPlayerIndex = 0;
-        return nextStep();
-    };
-
-    public Supplier<GameState> setCurrentShipToWeakestCannons = () -> {
-        if (currentPlayerIndex < flightBoard.getOrderedShips().size()) { // engine activation
-            currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
-            currentPlayerIndex++;
-            return new DeclareFirePowerState(currentShipBoard);
-        }
-
-        // establishing the first ship with the weakest cannons
-        minFirePower = flightBoard.getOrderedShips().stream()
-                .mapToInt(ShipBoard::getFirePower)
-                .min()
-                .orElseThrow(() -> new IllegalStateException("No players detected"));
-        currentShipBoard = flightBoard.getOrderedShips().stream()
-                .filter(s -> s.getFirePower() == minFirePower)
-                .findFirst()
-                .orElseThrow();
-
-        currentTask++;
-        currentPlayerIndex = 0;
-        return nextStep();
-    };
-
-    public Supplier<GameState> currentShipLosesFlightDays = () -> {
-        flightBoard.displaceShip(currentShipBoard, -flightDayLoss);
-        currentTask++;
-        currentPlayerIndex = 0;
-        return nextStep();
-    };
-
-    public Supplier<GameState> currentShipLosesCrew = () -> {
-        if (crewLossLeft>0) { // current ship still has crew to lose
-            return new ChooseCrewToLoseState(currentShipBoard);
-        }
-        currentTask++;
-        currentPlayerIndex = 0;
-        return nextStep();
-    };
-
-    public Supplier<GameState> currentShipLosesGoods = () -> {
-        if (goodsLossLeft>0) { // current ship still has crew to lose
-            return new ChooseGoodToLoseState(currentShipBoard);
-        }
-        currentTask++;
-        currentPlayerIndex = 0;
-        return nextStep();
-    };
-
-    public Supplier<GameState> currentShipGetsShot = () -> {
-        if (!projectiles.isEmpty()) { // still projectiles to throw
-            if (currentProjectile == null) { // shields not yet activated
-                currentProjectile = projectiles.getFirst();
-                return new HandleProjectileState(currentShipBoard, currentProjectile);
+                Optional<GameState> availableAction = checks.get(checkIndex).getAvailableAction(currentShipBoard);
+                if (availableAction.isPresent()) {
+                    return availableAction.get();
+                } else {
+                    penalizedShipBoard = checks.get(checkIndex).getWeakestPlayer(flightBoard);
+                    return nextStep();
+                }
+            } else {
+                penalizedShipBoard = checks.get(checkIndex).getWeakestPlayer(flightBoard);
+                return nextStep();
             }
-//            else { // fire!
-//                boolean hit = currentProjectile.fireAt(currentShipBoard);
-//                List<Set<Point>> shipPieces = currentShipBoard.getConnectedSets();
-//                projectiles.removeFirst();
-//                currentProjectile = null;
-//                if(hit && shipPieces.size() > 1) {
-//                    // a lost component broke the ship
-//                    return new ChooseShipPieceState(shipPieces, currentShipBoard);
-//                } else {
-//                    return nextStep();
-//                }
-//            }
+        } else {
+            Optional<GameState> penaltyAction = penalties.get(checkIndex).givePenalty(penalizedShipBoard, flightBoard);
+            if (penaltyAction.isPresent()) {
+                return penaltyAction.get();
+            } else {
+                penalizedShipBoard = null;
+                checkIndex++;
+                if (checkIndex >= checks.size()) {
+                    return new DrawCardState();
+                }
+                return nextStep();
+            }
         }
-        currentTask++;
-        currentPlayerIndex = 0;
-        return nextStep();
-    };
 
-    public Supplier<GameState> drawCard = DrawCardState::new;
 
-    public void loseCrew() {
-        crewLossLeft--;
-    }
 
-    public void loseGoods() {
-        goodsLossLeft--;
-    }
-
-    @VisibleForTesting
-    protected List<Supplier<GameState>> actionParser(List<String> actionStrings) {
-        List<Supplier<GameState>> actions = new ArrayList<>();
-
-        for (String action : actionStrings) {
-            actions.add(switch (action) {
-                case "min crew" ->
-                    setCurrentShipToLeastCrewed;
-                case "min cannons" ->
-                    setCurrentShipToWeakestCannons;
-                case "min engine" ->
-                    setCurrentShipToWeakestEngine;
-                case "loses flight days" ->
-                    currentShipLosesFlightDays;
-                case "loses crew" ->
-                    currentShipLosesCrew;
-                case "gets shot" ->
-                    currentShipGetsShot;
-                case "loses goods" ->
-                    currentShipLosesGoods;
-                default -> throw new IllegalArgumentException(
-                        "Attempting to parse unknown combat action: " + action
-                );
-            });
-        }
-        return actions;
-    }
-
-    @VisibleForTesting
-    protected ShipBoard getCurrentShipBoard() {
-        return currentShipBoard;
-    }
-
-    @VisibleForTesting
-    protected int getCrewLossLeft() {
-        return crewLossLeft;
-    }
-
-    @VisibleForTesting
-    protected int getGoodLossLeft() {
-        return goodsLossLeft;
-    }
-
-    @VisibleForTesting
-    protected List<Projectile> getProjectiles() {
-        return projectiles;
-    }
-
-    @VisibleForTesting
-    protected Integer getMinCrewSize() {
-        return minCrewSize;
-    }
-
-    @VisibleForTesting
-    protected Integer getMinEnginePower() {
-        return minEnginePower;
-    }
-
-    @VisibleForTesting
-    protected Integer getMinFirePower() {
-        return minFirePower;
-    }
-
-    @VisibleForTesting
-    protected Projectile getCurrentProjectile() {
-        return currentProjectile;
     }
 }
