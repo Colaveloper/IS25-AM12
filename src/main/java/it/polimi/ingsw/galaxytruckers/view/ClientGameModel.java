@@ -19,6 +19,7 @@ public class ClientGameModel {
     private final FlightBoard flightBoard;
     private final Map<String, Shipboard> playerToShip;
     private final Map<String, Colors> playerToColor;
+    private Planets planets;
 
     private AdventureCard currentCard;
 
@@ -77,6 +78,8 @@ public class ClientGameModel {
     public Physical getMyShipBoard() {
         return playerToShip.get(myNickname);
     }
+
+    public Physical getPlanets(){ return planets; }
 
     public void setMyNickname(String myNickname) {
         this.myNickname = myNickname;
