@@ -31,13 +31,9 @@ public class TestShipBoard extends ShipBoard {
 
     private boolean finishedBuilding;
 
-    public TestShipBoard(ComponentBank componentBank, Colors color) {
-        super(componentBank, color);
-        finishedBuilding = false;
-    }
-
     public TestShipBoard(Colors color) {
-        this(ComponentBank.getInstance(), color);
+        super(color);
+        finishedBuilding = false;
     }
 
     @Override

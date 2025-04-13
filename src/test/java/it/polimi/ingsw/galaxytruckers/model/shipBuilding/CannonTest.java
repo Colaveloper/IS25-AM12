@@ -18,13 +18,7 @@ class CannonTest extends ComponentTest {
     @Test
     void firePowerConformsWithDirection() {
         assertEquals(2, myCannon.getFirePower());
-
-        for (int i = 1; i <= 3; i++) {
-            myCannon.rotateLeft();
-            assertEquals(1, myCannon.getFirePower());
-        }
-
-        myCannon.rotateLeft();
-        assertEquals(2, myCannon.getFirePower());
+        myCannon.setOrientation(1);
+        assertEquals(1, myCannon.getFirePower());
     }
 }

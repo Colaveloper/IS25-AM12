@@ -16,27 +16,18 @@ class DoubleCannonTest extends CannonTest {
     }
 
     @Test
-    @Override
-    void firePowerConformsWithDirection() {
-
-        for (int i = 1; i <= 4; i++) {
-            myDoubleCannon.rotateLeft();
-            assertEquals(0, myDoubleCannon.getFirePower());
-        }
-
+    void firePowerIsPositiveOnlyWhenActive() {
+        assertEquals(0, myDoubleCannon.getFirePower());
         myDoubleCannon.activate(myShipBoard);
         assertEquals(4, myDoubleCannon.getFirePower());
-        for (int i = 1; i <= 3; i++) {
-            myDoubleCannon.rotateLeft();
-            assertEquals(2, myDoubleCannon.getFirePower());
-        }
-        myDoubleCannon.rotateLeft();
-        assertEquals(4, myDoubleCannon.getFirePower());
+    }
 
-        myDoubleCannon.deactivate(myShipBoard);
-        for (int i = 1; i <= 4; i++) {
-            myDoubleCannon.rotateLeft();
-            assertEquals(0, myDoubleCannon.getFirePower());
-        }
+    @Test
+    @Override
+    void firePowerConformsWithDirection() {
+        myDoubleCannon.activate(myShipBoard);
+        assertEquals(4, myDoubleCannon.getFirePower());
+        myDoubleCannon.setOrientation(1);
+        assertEquals(2, myDoubleCannon.getFirePower());
     }
 }

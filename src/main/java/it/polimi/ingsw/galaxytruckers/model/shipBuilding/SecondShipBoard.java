@@ -45,15 +45,11 @@ public class SecondShipBoard extends ShipBoard {
 
     private final Map<Point, LifeSupport> lifeSupports;
 
-    public SecondShipBoard(ComponentBank componentBank, Colors color) {
-        super(componentBank, color);
+    public SecondShipBoard(Colors color) {
+        super(color);
         this.lifeSupports = new HashMap<>();
         this.stashedComponents = new ArrayList<>();
         this.aliens = new HashSet<>();
-    }
-
-    public SecondShipBoard(Colors color) {
-        this(ComponentBank.getInstance(), color);
     }
 
     @Override

@@ -18,8 +18,8 @@ class ShieldTest extends ComponentTest {
     @Test
     void protectedDirectionChangesWithRotation() {
         myShield.activate(myShipBoard);
-        for (int i = 1; i <= 4; i++) {
-            myShield.rotateLeft();
+        for (int i = 0; i < 4; i++) {
+            myShield.setOrientation(i);
             assertArrayEquals(new int[]{i%4, (i+1)%4}, myShield.getDefensibleDirections());
         }
     }

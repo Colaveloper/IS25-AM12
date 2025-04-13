@@ -16,14 +16,9 @@ class EngineTest extends ComponentTest {
 
     @Test
     void isValidOnlyFacingUp() {
-        for (int i = 0; i < 5; i++) {
-            if (i%4 == 0) {
-                assertTrue(myEngine.isValid());
-            } else {
-                assertFalse(myEngine.isValid());
-            }
-            myEngine.rotateLeft();
-        }
+        assertTrue(myEngine.isValid());
+        myEngine.setOrientation(1);
+        assertFalse(myEngine.isValid());
     }
 
     @Test

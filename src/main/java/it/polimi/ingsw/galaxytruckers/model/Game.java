@@ -2,16 +2,15 @@ package it.polimi.ingsw.galaxytruckers.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.model.state.ShipBuildingState;
 
 import java.io.IOException;
 import java.util.Set;
 
 public class Game {
     GameFactory gameFactory;
-    ComponentBank componentBank;
     Set<ShipBoard> shipBoards;
     FlightBoard flightBoard;
     Deck deck;
@@ -23,11 +22,10 @@ public class Game {
             case SECOND -> this.gameFactory = new SecondFactory();
             default -> throw new IllegalArgumentException("Level not supported");
         }
-        this.componentBank = new ComponentBank();
     }
 
     public ShipBoard addShipBoard(Colors color) {
-        ShipBoard shipBoard = gameFactory.createShipBoard(componentBank, color);
+        ShipBoard shipBoard = gameFactory.createShipBoard(color);
         shipBoards.add(shipBoard);
         return shipBoard;
     }
@@ -39,6 +37,7 @@ public class Game {
         } catch (IOException exception) {
             throw new IllegalStateException("Cannot create deck because an exception was thrown:\n", exception);
         }
+        setCurrentState(new ShipBuildingState());
     }
 
     public GameFactory getGameFactory() {

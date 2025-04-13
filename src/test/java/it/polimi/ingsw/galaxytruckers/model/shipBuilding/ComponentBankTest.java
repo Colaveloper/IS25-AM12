@@ -18,7 +18,7 @@ class ComponentBankTest {
 
     @Test
     void loadComponentSizes() throws IOException {
-        List<Component> components = componentBank.loadComponents();
+        List<Component> components = ComponentBank.loadComponents();
 
         // ensure list is not null and at least one component was loaded
         assertNotNull(components);

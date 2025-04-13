@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class ComponentBank {
-    private static ComponentBank instance;
-
-    private final List<Component> coveredComponents;
+    private List<Component> coveredComponents;
     private final Map<Integer, Component> uncoveredComponents;
     private static final File componentJson = new File("src/main/resources/tiles.json");
 
@@ -21,11 +19,8 @@ public class ComponentBank {
         this.uncoveredComponents = new HashMap<>();
     }
 
-    public static ComponentBank getInstance() {
-        if (instance == null) {
-            instance = new ComponentBank();
-        }
-        return instance;
+    public void initialize() throws IOException {
+        this.coveredComponents = loadComponents();
     }
 
     public Component getComponent(int id) {
@@ -35,7 +30,7 @@ public class ComponentBank {
         return uncoveredComponents.remove(id);
     }
 
-    public Component getRanComponent() {
+    public Component getRandComponent() {
         return coveredComponents.removeLast();
     }
 

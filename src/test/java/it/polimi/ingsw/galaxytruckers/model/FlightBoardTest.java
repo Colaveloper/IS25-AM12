@@ -35,9 +35,9 @@ class FlightBoardTest {
     class TestFlightTests {
         @BeforeEach
         void setUp() {
-            ship1 = new TestShipBoard(componentBank, Colors.BLUE);
-            ship2 = new TestShipBoard(componentBank, Colors.RED);
-            ship3 = new TestShipBoard(componentBank, Colors.GREEN);
+            ship1 = new TestShipBoard(Colors.BLUE);
+            ship2 = new TestShipBoard(Colors.RED);
+            ship3 = new TestShipBoard(Colors.GREEN);
             allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
             flightBoard = new TestFlightBoard(Set.of(ship1, ship2, ship3));
         }
@@ -83,7 +83,7 @@ class FlightBoardTest {
 
         @Test
         void AssignBestLookingShipReward() {
-            ship1 = new ShipBoard(null, null) {
+            ship1 = new ShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
@@ -94,7 +94,7 @@ class FlightBoardTest {
                     return 5;
                 }
             };
-            ship2 = new ShipBoard(null, null) {
+            ship2 = new ShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
@@ -105,7 +105,7 @@ class FlightBoardTest {
                     return 5;
                 }
             };
-            ship3 = new ShipBoard(null, null) {
+            ship3 = new ShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
@@ -131,7 +131,7 @@ class FlightBoardTest {
         void countCreditsAndLosses() {
             int myCredits = 8;
             int myLosses = 9;
-            ship1 = new TestShipBoard(null, null) {
+            ship1 = new TestShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
@@ -158,7 +158,7 @@ class FlightBoardTest {
         @Test
         void countGoodsValue() {
             int myGoodValue = 9;
-            ship1 = new TestShipBoard(null, null) {
+            ship1 = new TestShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
@@ -169,7 +169,7 @@ class FlightBoardTest {
                     return myGoodValue;
                 }
             };
-            ship2 = new TestShipBoard(null, null) {
+            ship2 = new TestShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
@@ -246,9 +246,9 @@ class FlightBoardTest {
     class SecondFlightTests {
         @BeforeEach
         void setUp() {
-            ship1 = new SecondShipBoard(componentBank, Colors.BLUE);
-            ship2 = new SecondShipBoard(componentBank, Colors.RED);
-            ship3 = new SecondShipBoard(componentBank, Colors.GREEN);
+            ship1 = new SecondShipBoard(Colors.BLUE);
+            ship2 = new SecondShipBoard(Colors.RED);
+            ship3 = new SecondShipBoard(Colors.GREEN);
             allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
             flightBoard = new SecondFlightBoard(Set.of(ship1, ship2, ship3));
             legalStartingPositions = new ArrayList<>(SecondFlightBoard.startingPositions

@@ -20,8 +20,8 @@ public class TestFactory implements GameFactory{
     }
 
     @Override
-    public ShipBoard createShipBoard(ComponentBank componentBank, Colors color) {
-        return new TestShipBoard(componentBank, color);
+    public ShipBoard createShipBoard(Colors color) {
+        return new TestShipBoard(color);
     }
 
     @Override

@@ -20,8 +20,8 @@ public class SecondFactory implements GameFactory{
     }
 
     @Override
-    public ShipBoard createShipBoard(ComponentBank componentBank, Colors color) {
-         return new SecondShipBoard(componentBank, color);
+    public ShipBoard createShipBoard(Colors color) {
+         return new SecondShipBoard(color);
     }
 
     @Override

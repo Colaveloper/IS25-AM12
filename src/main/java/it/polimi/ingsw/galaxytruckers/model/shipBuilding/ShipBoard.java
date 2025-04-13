@@ -9,10 +9,9 @@ import java.util.List;
 
 public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
-    protected final Map<Point, it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component> componentMap;
-    protected it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component lastComponent;  // can be null
+    protected final Map<Point, Component> componentMap;
+    protected Component lastComponent;  // can be null
     protected Point lastPosition;  // can be null
-    protected final ComponentBank componentBank;
     protected final Colors color;
 
     protected int firePower;
@@ -34,9 +33,8 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     protected final Map<Point, Cabin> cabins;
     protected final Map<Point, Activatable> activatables;
 
-    public ShipBoard(ComponentBank componentBank, Colors color) { // (, Color color)
+    public ShipBoard(Colors color) { // (, Color color)
         this.componentMap = new HashMap<>();
-        this.componentBank = componentBank;
         this.lastComponent = null;
         this.lastPosition = null;
 
@@ -59,10 +57,6 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     }
 
-    public ShipBoard(Colors color) {
-        this(ComponentBank.getInstance(), color);
-    }
-
     protected abstract boolean containsPoint(Point point);
 
     public void gainCredits (int credits) {
@@ -71,25 +65,21 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     //ComponentBank interaction methods
 
-    public void requestRandComponent() {
+    public void offerComponent(Component component) {
         weldLastComponent();
-        lastComponent = componentBank.getRanComponent();
+        lastComponent = component;
     }
 
-    public void requestComponent(int id) {
-        weldLastComponent();
-        lastComponent = componentBank.getComponent(id);
-    }
-
-    public void rejectComponent() {
-        componentBank.addUncovered(lastComponent);
+    public Component rejectComponent() {
+        Component rejectedComponent = lastComponent;
         lastComponent = null;
         lastPosition = null;
+        return rejectedComponent;
     }
 
     //Ship building methods
 
-    public void placeComponent(Point newPosition) {
+    public void placeComponent(Point newPosition, int orientation) {
         if (lastComponent == null) {
             throw new IllegalStateException("There is no component to place");
         } else if (componentMap.containsKey(newPosition)) {
@@ -98,13 +88,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
             throw new IllegalArgumentException("The position is outside the ship");
         }
         lastPosition = newPosition;
-    }
-
-    public void rotateComponent() {
-        if (lastComponent == null) {
-            throw new IllegalStateException("There is no component to rotate");
-        }
-        lastComponent.rotateLeft();
+        lastComponent.setOrientation(orientation);
     }
 
     public void stashComponent() {}

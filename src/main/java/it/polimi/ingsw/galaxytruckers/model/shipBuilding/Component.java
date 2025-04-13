@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,23 +15,20 @@ public class Component {
     }
 
     public List<Connector> getConnectors() {
-        return connectors;
+        List<Connector> res = new ArrayList<>();
+        for (int i = 0; i < connectors.size(); i++) {
+            res.add(connectors.get((i-orientation+connectors.size())%connectors.size()));
+        }
+        return res;
     }
 
     public int getOrientation() {
         return orientation;
     }
 
-    public void rotateLeft() {
-        Collections.rotate(connectors, +1);
-        orientation = (orientation+1) % 4;
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
     }
-
-//    TODO: consider whether to remove this method (now untested)
-//    public void rotateRight() {
-//        Collections.rotate(connectors, -1);
-//        orientation = (orientation-1) % 4;
-//    }
 
     public void addToVisitor(ComponentVisitor visitor) {
     }
