@@ -66,14 +66,12 @@ public class CombatZoneCard extends AdventureCard {
             } else {
                 penalizedShipBoard = null;
                 checkIndex++;
+                currentPlayerIndex = 0;
                 if (checkIndex >= checks.size()) {
                     return new DrawCardState();
                 }
                 return nextStep();
             }
         }
-
-
-
     }
 }
