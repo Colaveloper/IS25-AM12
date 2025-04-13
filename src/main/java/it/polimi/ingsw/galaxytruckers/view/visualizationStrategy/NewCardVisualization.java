@@ -7,7 +7,7 @@ public class NewCardVisualization implements VisualizationStrategy {
     @Override
     public void showCLI(ClientGameModel model) {
         System.out.println("Current Leader: "+model.getCurrentPlayerNickname()+" just drew:" + model.getCardName());
-        model.getMyShipBoard().getDescription().forEach(System.out::println); // TODO: maybe remove?
+        model.getMyShipBoard().getDescription().forEach(System.out::println);
         model.getCurrentCard().getDescription().forEach(System.out::println);
     }
 }

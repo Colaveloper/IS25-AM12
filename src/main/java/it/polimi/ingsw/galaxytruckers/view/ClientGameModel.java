@@ -19,6 +19,8 @@ public class ClientGameModel {
     private final FlightBoard flightBoard;
     private final Map<String, Shipboard> playerToShip;
     private final Map<String, Colors> playerToColor;
+    private CurrentProjectile currentProjectile;
+
     private Planets planets;
 
     private AdventureCard currentCard;
@@ -80,6 +82,14 @@ public class ClientGameModel {
     }
 
     public Physical getPlanets(){ return planets; }
+
+    public void setProjectile(ProjectileType projectileType, int direction, int roll) {
+        currentProjectile = new CurrentProjectile (projectileType, direction, roll);
+    }
+
+    public CurrentProjectile getCurrentProjectile() {
+        return currentProjectile;
+    }
 
     public void setMyNickname(String myNickname) {
         this.myNickname = myNickname;

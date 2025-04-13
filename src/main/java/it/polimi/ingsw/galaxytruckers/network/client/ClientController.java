@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.view.*;
 import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.NewCardVisualization;
 import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.PointSelectionVisualization;
+import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.ProjectilesVisualization;
 import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.WelcomeVisualization;
 
 import java.awt.*;
@@ -122,8 +123,8 @@ public class ClientController {
     }
 
     public void showProjectile(ProjectileType projectileType, int direction, int roll) {
-        // model.update
-        // view.show(ChosenStrategy)
+        model.setProjectile(projectileType, direction, roll);
+        view.show(new ProjectilesVisualization());
     }
 
     // update for components
