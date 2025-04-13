@@ -37,8 +37,6 @@ public class SecondShipBoard extends ShipBoard {
             new Point(10, 8),
             new Point(10, 9)));
 
-    private static Image image;
-    
     private final List<Component> stashedComponents;
 
     private final Set<CrewType> aliens;

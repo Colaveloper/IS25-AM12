@@ -1,13 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Cabin;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 
 import java.awt.*;
 import java.util.Map;
@@ -43,30 +41,7 @@ public class EpidemicCard extends AdventureCard {
                         }
                     }
                 }
-
-//             if the for above doesn't work here is the hard coded version
-//
-//            if (cabin.getValue().getConnectors().get(cabin.getValue().getOrientation()) != Connector.NONE) {
-//                if(cabins.containsKey(new Point(cabin.getKey().x, cabin.getKey().y + 1))){
-//                    shipBoard.loseCrew(cabin.getKey(), 1);
-//                }
-//            }
-//            else if (cabin.getValue().getConnectors().get(1 + cabin.getValue().getOrientation()) != Connector.NONE) {
-//                if(cabins.containsKey(new Point(cabin.getKey().x + 1, cabin.getKey().y))){
-//                    shipBoard.loseCrew(cabin.getKey(), 1);
-//                }
-//            }
-//            else if (cabin.getValue().getConnectors().get(2 + cabin.getValue().getOrientation()) != Connector.NONE) {
-//                if(cabins.containsKey(new Point(cabin.getKey().x, cabin.getKey().y - 1))){
-//                    shipBoard.loseCrew(cabin.getKey(), 1);
-//                }
-//            }
-//            else if (cabin.getValue().getConnectors().get(3 + cabin.getValue().getOrientation()) != Connector.NONE) {
-//                if(cabins.containsKey(new Point(cabin.getKey().x - 1, cabin.getKey().y))){
-//                    shipBoard.loseCrew(cabin.getKey(), 1);
-//                }
-//            }
-            }
+        }
         return new DrawCardState();
     }
 }

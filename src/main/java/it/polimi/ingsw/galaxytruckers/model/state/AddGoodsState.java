@@ -50,8 +50,4 @@ public class AddGoodsState extends GameState {
         game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
     }
 
-    //    @Override
-//    public GameState getNextState() {
-//        return null;
-//    }
 }

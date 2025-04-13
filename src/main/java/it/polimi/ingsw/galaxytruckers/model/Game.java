@@ -1,20 +1,13 @@
 package it.polimi.ingsw.galaxytruckers.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
-import java.awt.*;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
-import java.util.UUID;
-import java.util.stream.IntStream;
 
 public class Game {
     GameFactory gameFactory;

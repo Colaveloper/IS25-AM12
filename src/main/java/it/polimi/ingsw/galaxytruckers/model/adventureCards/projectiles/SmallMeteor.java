@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 

@@ -1,17 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.galaxytruckers.model.JavaFXInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ComponentBankTest extends JavaFXInitializer {
+class ComponentBankTest {
     ComponentBank componentBank;
 
     @BeforeEach

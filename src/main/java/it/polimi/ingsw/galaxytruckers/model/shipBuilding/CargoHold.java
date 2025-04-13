@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import javafx.scene.image.Image;
 
 import java.util.HashMap;
 import java.util.List;

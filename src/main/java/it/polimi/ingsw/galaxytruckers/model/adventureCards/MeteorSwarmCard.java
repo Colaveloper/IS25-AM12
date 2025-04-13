@@ -6,13 +6,9 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectil
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
-import javafx.scene.image.Image;
 
-import java.awt.*;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class MeteorSwarmCard extends AdventureCard {
     //attributes

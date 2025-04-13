@@ -7,7 +7,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
-import java.util.UUID;
 
 public interface GameModelInterface {
     Game createGame(Level level);

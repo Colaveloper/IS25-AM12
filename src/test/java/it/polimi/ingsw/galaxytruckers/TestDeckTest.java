@@ -8,7 +8,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestDeckTest extends JavaFXInitializer {
+class TestDeckTest {
     Deck testDeck;
     FlightBoard flightBoard;
 

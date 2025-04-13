@@ -50,8 +50,7 @@ public abstract class FlightBoard {
             int finalNewPosition = newPosition;
             int finalTryMove = tryMove;
             if (
-                    shipToPlace.entrySet().stream()
-                            .map(e->e.getValue())
+                    shipToPlace.values().stream()
                             .anyMatch(p -> p%getLoopLength() == (finalNewPosition + finalTryMove))
             ) {
                 tryMove += displacementLeft>0 ? 1 : -1;
@@ -66,15 +65,15 @@ public abstract class FlightBoard {
 
     public void removeShips (Set<ShipBoard> shipsToRemove) {
         throw new UnsupportedOperationException("Not available for this type of FlightBoard");
-    };
+    }
 
     public void giveUp(ShipBoard shipBoard) {
         throw new UnsupportedOperationException("Not available for this type of FlightBoard");
-    };
+    }
 
     public Set<ShipBoard> getAndRemoveLappedShips() {
         throw new UnsupportedOperationException("Not available for this type of FlightBoard");
-    };
+    }
 
     public Map<ShipBoard, Integer> getFinalScores() {
         assignFinishOrderReward();

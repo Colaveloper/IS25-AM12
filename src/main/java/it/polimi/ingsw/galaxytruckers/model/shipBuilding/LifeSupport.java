@@ -1,7 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import javafx.scene.image.Image;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

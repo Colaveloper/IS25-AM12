@@ -5,9 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
-import javafx.scene.image.Image;
 
-import java.awt.*;
 import java.util.*;
 
 public class SmugglersCard extends AdventureCard {

@@ -9,7 +9,6 @@ import it.polimi.ingsw.galaxytruckers.model.state.AddGoodsState;
 import it.polimi.ingsw.galaxytruckers.model.state.ChoosePlanetState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 
 import java.util.*;
 import java.util.stream.Collectors;

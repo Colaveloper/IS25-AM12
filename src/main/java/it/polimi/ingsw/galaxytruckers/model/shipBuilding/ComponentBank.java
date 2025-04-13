@@ -3,7 +3,6 @@ package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
-import javafx.scene.image.Image;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +13,7 @@ public class ComponentBank {
 
     private final List<Component> coveredComponents;
     private final Map<Integer, Component> uncoveredComponents;
-    private static final File componentJson = new File("src/main/resources/tiles.json");;
+    private static final File componentJson = new File("src/main/resources/tiles.json");
 
     public ComponentBank() {
         //TODO: read components from file and shuffle them
@@ -56,7 +55,6 @@ public class ComponentBank {
             String type = node.get("type").asText();
             Component component;
             List<Connector> connectors = parseConnectors(node.get("connectors"));
-            Image image = new Image(node.get("path").asText());
 
             switch(type){
                 case "shield":
@@ -112,7 +110,6 @@ public class ComponentBank {
     }
 
     private static CrewType parseCrewType(JsonNode crewTypeNode){
-        CrewType crewType;
         if(crewTypeNode != null && !crewTypeNode.isNull()){
             return CrewType.valueOf(crewTypeNode.asText().toUpperCase()); //convert string to enum
         }

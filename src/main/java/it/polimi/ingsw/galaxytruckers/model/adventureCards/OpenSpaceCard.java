@@ -1,16 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.state.ActivateState;
 import it.polimi.ingsw.galaxytruckers.model.state.DeclareEnginePowerState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
-
-import java.awt.*;
-import java.util.HashSet;
-import java.util.Set;
 
 public class OpenSpaceCard extends AdventureCard {
     public OpenSpaceCard (Level level) {

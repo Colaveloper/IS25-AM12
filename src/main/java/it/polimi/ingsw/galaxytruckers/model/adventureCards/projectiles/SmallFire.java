@@ -1,12 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.IntSupplier;
+import java.util.stream.Collectors;
 
 public class SmallFire extends Projectile {
     public SmallFire(IntSupplier dice, int direction) {
@@ -19,7 +21,10 @@ public class SmallFire extends Projectile {
 
     @Override
     public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
-        return shipBoard.getShields().keySet();
+        return shipBoard.getShields().entrySet().stream()
+                .filter(e -> Arrays.stream(e.getValue().getDefensibleDirections()).anyMatch(d -> d == direction))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
     }
 
     @Override

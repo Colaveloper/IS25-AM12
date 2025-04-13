@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.JavaFXInitializer;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import org.junit.jupiter.api.*;
@@ -12,10 +11,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ShipBoardTest {
-    @BeforeAll
-    static void setup() {
-        new JavaFXInitializer(); // Ensure JavaFX is initialized
-    }
 
     ShipBoard shipBoard;
 

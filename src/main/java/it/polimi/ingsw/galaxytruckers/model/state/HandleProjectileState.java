@@ -9,7 +9,6 @@ import java.util.Set;
 
 public class HandleProjectileState extends ActivateState{
     Projectile projectile;
-    ShipBoard shipBoard;
 
     public HandleProjectileState(ShipBoard shipBoard, Projectile projectile) {
         super(shipBoard);

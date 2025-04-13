@@ -29,12 +29,10 @@ public class TestShipBoard extends ShipBoard {
             new Point(9, 8),
             new Point(9, 9)));
 
-    private static Image image;
     private boolean finishedBuilding;
 
     public TestShipBoard(ComponentBank componentBank, Colors color) {
         super(componentBank, color);
-        image = new Image("textures/cardboard/first-ship-board.jpg");
         finishedBuilding = false;
     }
 

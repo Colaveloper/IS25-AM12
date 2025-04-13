@@ -7,7 +7,6 @@ import it.polimi.ingsw.galaxytruckers.model.state.GrabRewardState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.model.state.RemoveCrewState;
-import javafx.scene.image.Image;
 
 public class AbandonedShipCard extends AdventureCard {
     private final int flightDaysLoss;

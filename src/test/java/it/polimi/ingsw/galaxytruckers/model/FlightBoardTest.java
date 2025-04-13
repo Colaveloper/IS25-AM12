@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.TestShipBoard;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.*;
 
 import java.awt.*;
@@ -15,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FlightBoardTest extends JavaFXInitializer {
+class FlightBoardTest {
 
     ShipBoard ship1, ship2, ship3;
     FlightBoard flightBoard;

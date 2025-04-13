@@ -4,11 +4,6 @@ import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
-import javafx.scene.image.Image;
-
-import java.awt.*;
-import java.util.HashSet;
-import java.util.Set;
 
 public class SlaversCard extends AdventureCard {
 

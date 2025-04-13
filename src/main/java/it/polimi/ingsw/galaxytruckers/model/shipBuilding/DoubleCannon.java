@@ -1,7 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import javafx.scene.image.Image;
-
 import java.util.List;
 
 public class DoubleCannon extends Cannon implements Activatable {
