@@ -9,7 +9,7 @@ import java.util.List;
 public class MockView {
 
     private List<ShipBoard> ships;
-    private ClientGameModel clientGameModel;
+    private ClientModel clientGameModel;
 
 
 
@@ -17,7 +17,7 @@ public class MockView {
 
 
     public static void main(String[] args) {
-        ClientGameModel game = new ClientGameModel();
+        ClientModel game = new ClientModel();
 //        Printer printer = new Printer();
 
 

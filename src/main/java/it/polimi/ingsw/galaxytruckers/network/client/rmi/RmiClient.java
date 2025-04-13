@@ -10,11 +10,9 @@ import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
 import it.polimi.ingsw.galaxytruckers.serverController.events.NewCardUpdate;
 import it.polimi.ingsw.galaxytruckers.view.*;
-import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.NewCardVisualization;
 
 import java.awt.*;
 import java.io.IOException;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -28,15 +26,15 @@ import java.util.List;
 public class RmiClient extends UnicastRemoteObject implements VirtualClientRmi, EventHandler {
     final VirtualServerRmi server;
     ClientController controller;
+    private static final String serverName = "RMI server";
 
     public RmiClient(VirtualServerRmi server) throws RemoteException{
         super();
         this.server = server;
-        controller = new ClientController(this, server);
+        controller = new ClientController(server);
     }
 
     public static void main(String[] args) throws Exception {
-        final String serverName = "GalacticServer";
         Registry registry = LocateRegistry.getRegistry(args[0], 1234);
         VirtualServerRmi server = (VirtualServerRmi) registry.lookup(serverName);
         new RmiClient(server).run();
@@ -44,8 +42,8 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClientRmi, 
 
     private void run() throws RemoteException {
         server.connect(this);
-        server.registerHandler(this);
-        controller.showConnected();
+        // setting temporary nickName
+        controller.showConnected(String.valueOf(this.hashCode()));
     }
 
     @Override

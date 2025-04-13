@@ -6,26 +6,26 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ClientGameModel {
+public class ClientModel {
     private String currentPlayerNickname;
     private String myNickname;
 
     private final FlightBoard flightBoard;
     private final Map<String, Shipboard> playerToShip;
     private final Map<String, Colors> playerToColor;
+    private final List<Point> selectablePoints;
 
     private AdventureCard currentCard;
 
-    public ClientGameModel() {
+    public ClientModel() {
         this.flightBoard = new FlightBoard();
         this.playerToColor = new HashMap<>();
         this.playerToShip = new HashMap<>();
+        this.selectablePoints = new ArrayList<>();
     }
 
     public void setCurrentPlayerNickname(String currentPlayerNickname) {
@@ -78,6 +78,10 @@ public class ClientGameModel {
         return playerToShip.get(myNickname);
     }
 
+    public String getMyNickname() {
+        return myNickname;
+    }
+
     public void setMyNickname(String myNickname) {
         this.myNickname = myNickname;
         addPlayer(myNickname);
@@ -91,6 +95,11 @@ public class ClientGameModel {
 
     public void setSelectablePoints(List<Point> selectablePoints) {
         playerToShip.get(myNickname).setSelectablePoints(selectablePoints);
+        this.selectablePoints.addAll(selectablePoints);
+    }
+
+    public List<Point> getSelectablePoints() {
+        return selectablePoints;
     }
 
     public Physical getCurrentCard() {

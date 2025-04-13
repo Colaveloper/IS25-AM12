@@ -1,9 +1,8 @@
-package it.polimi.ingsw.galaxytruckers.network.server;
+package it.polimi.ingsw.galaxytruckers;
 
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;
 
 import java.rmi.RemoteException;
-import java.util.Scanner;
 
 /**
  * Questa classe rappresenta la logica del server implementata con tecnologia RMI.

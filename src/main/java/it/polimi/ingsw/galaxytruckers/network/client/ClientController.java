@@ -7,9 +7,9 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.*;
-import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.NewCardVisualization;
-import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.PointSelectionVisualization;
-import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.WelcomeVisualization;
+import it.polimi.ingsw.galaxytruckers.view.screen.NewCardScreen;
+import it.polimi.ingsw.galaxytruckers.view.screen.NicknameChoiceScreen;
+import it.polimi.ingsw.galaxytruckers.view.screen.PointSelectionScreen;
 
 import java.awt.*;
 import java.io.IOException;
@@ -18,19 +18,18 @@ import java.util.*;
 import java.util.List;
 
 public class ClientController {
-    final VirtualClient client;
-    final VirtualServer server;
-    final ClientGameModel model;
-    final View view;
+    private final VirtualServer server;
+    private final ClientModel model;
+    private View view;
+    private boolean usingGui;
 
-    public ClientController(VirtualClient client, VirtualServer server) {
-        this.client = client;
+    public ClientController(VirtualServer server) {
         this.server = server;
-        this.model = new ClientGameModel();
-        this.view = new CliView(model, this); // TODO: let the player choose his view
+        this.model = new ClientModel();
+        this.view = new CliView(model, server); // View should only observe the model, not modify it
     }
 
-    // REQUESTS TO THE SERVER
+    // REQUESTS TO THE SERVER // TODO MOVE IN STRATEGY
     public void drawCard() throws IOException {
         server.drawCard();
     }
@@ -38,18 +37,34 @@ public class ClientController {
     // UPDATES FROM THE SERVER
     public void showNewCard(Integer cardId) throws IOException {
         model.setCurrentCard(cardId);
-        view.show(new NewCardVisualization());
+        view.run(new NewCardScreen());
     }
 
-    public void showConnected() throws RemoteException {
-        view.show(new WelcomeVisualization());
-        server.registerNickname(client, new Scanner(System.in).nextLine());
+    public void showConnected(String tempNickname) throws RemoteException {
+        model.setMyNickname(tempNickname);
+        view.run(new NicknameChoiceScreen());
     }
 
     public void setNickname(String nickname) { // gets called only after legal registration
         model.setMyNickname(nickname);
-        // TODO Show next view
-        System.out.println("registered with: "+nickname);
+        System.out.println("Nice to meet you, "+model.getMyNickname()+"!");
+        System.out.println("You can play from this terminal or switch to a Graphical Interface");
+
+        Scanner scanner = new Scanner(System.in);
+        String input;
+        do {
+            System.out.println("Input T for Terminal, G for Graphical Interface: ");
+            input = scanner.nextLine().trim().toUpperCase();
+        } while (!input.equals("T") && !input.equals("G"));
+
+        if (input.equals("G")) {
+            System.out.println("Requesting not implemented feature, please restart ⚠️");
+//            this.view = new GuiView(model, this);
+        }
+    }
+
+    public void showFirstScreen() {
+
     }
 
     public void showGameCreation(Level level, int playersNum) {
@@ -67,9 +82,9 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
-    public void setFlightBoard(int loopLength, List<Integer> startingPositions) {
+    public void setFlightBoard(int loopLength, List<Integer> startingPositions) throws RemoteException {
         model.setFlightBoard(loopLength, startingPositions);
-        view.show(new PointSelectionVisualization());
+        view.run(new PointSelectionScreen());
     }
 
     public void setShipArea(Set<Point> shipArea) {

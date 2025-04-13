@@ -1,7 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
-import it.polimi.ingsw.galaxytruckers.network.shared.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.VirtualServerRmi;
 import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
@@ -12,8 +13,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Questa classe rappresenta la logica del server implementata con tecnologia RMI.
@@ -21,9 +20,10 @@ import java.util.List;
 public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
     private EventQueue eventQueue;
     private EventHandler handler;
+    private static final String serverName = "RMI server";
 
     final ServerController controller;
-    final List<VirtualClientRmi> clients = new ArrayList<>();
+    final BiMap<String, VirtualClientRmi> nicknameToClient = HashBiMap.create();
 
     public RmiServer() throws RemoteException {
         super();
@@ -31,29 +31,37 @@ public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
     }
 
     public static void main(String[] args) throws RemoteException {
-        final String serverName = "GalacticServer";
+//        final String serverName = "GalacticServer";
         VirtualServerRmi server = new RmiServer();
         Registry registry = LocateRegistry.createRegistry(1234);
         registry.rebind(serverName, server);
-        System.out.println("Server bound");
+        System.out.println(serverName+": bound ✅");
     }
 
 
     @Override
     public void connect(VirtualClientRmi client) throws RemoteException {
         //TODO. Attenzione, più client possono invocare questo metodo simultaneamente!
-        synchronized (this.clients) {
-            this.clients.add(client);
-
+        synchronized (this.nicknameToClient) {
+            // we use a temporary nickname to immediately use communication by nickname
+            // the nickname is then overwritten by one of user's choice
+            this.nicknameToClient.put(String.valueOf(client.hashCode()), client);
+            System.out.println(serverName+": new unnamed player added ✅");
         }
     }
 
     @Override
-    public void registerNickname(VirtualClient client, String nickname) throws RemoteException {
-        // TODO: make check on saved nicknames
-        VirtualClientRmi rmiClient = (VirtualClientRmi) client;
-        System.out.println("request accepted: registering"+nickname);
-        rmiClient.showNicknameRegistration(nickname);
+    public void registerNickname(String tempNickname, String newNickname) throws RemoteException {
+        if (nicknameToClient.containsKey(newNickname)) {
+            nicknameToClient.get(newNickname).reportError("Request refused: Nickname already taken");
+            // TODO: Give another chance for input
+            System.out.println("Request accepted: nickname \"" + newNickname + "\" already taken ⛔");
+        } else {
+            VirtualClientRmi client = nicknameToClient.get(tempNickname);
+            nicknameToClient.forcePut(newNickname, client);
+            System.out.println("Request accepted: registering " + newNickname + " ✅");
+            client.showNicknameRegistration(newNickname);
+        }
     }
 
     @Override
@@ -61,8 +69,8 @@ public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
         System.out.println("new card request received");
         // TODO: get cardId from controller
         int cardId = (int) (Math.random()*100);
-        synchronized (this.clients){
-            for(VirtualClientRmi client: clients){
+        synchronized (this.nicknameToClient){
+            for(VirtualClientRmi client: nicknameToClient.inverse().keySet()){
                 client.showNewCard(cardId);
             }
         }
@@ -70,8 +78,8 @@ public class RmiServer extends UnicastRemoteObject implements VirtualServerRmi {
 
     @Override
     public void reportError(String error) throws RemoteException {
-        synchronized (this.clients){
-            for(VirtualClientRmi client: clients){
+        synchronized (this.nicknameToClient){
+            for(VirtualClientRmi client: nicknameToClient.inverse().keySet()){
                 client.reportError(error);
             }
         }

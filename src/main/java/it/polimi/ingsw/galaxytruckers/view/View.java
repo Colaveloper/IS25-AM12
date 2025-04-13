@@ -1,16 +1,18 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.VisualizationStrategy;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.screen.ScreenStrategy;
+
+import java.rmi.RemoteException;
 
 public abstract class View {
-    final ClientGameModel model;
-    final ClientController controller;
+    final ClientModel model;
+    final VirtualServer server;
 
-    public View (ClientGameModel model, ClientController controller) {
+    public View (ClientModel model, VirtualServer server) {
         this.model = model;
-        this.controller = controller;
+        this.server = server;
     }
 
-    public abstract void show(VisualizationStrategy strategy);
+    public abstract void run(ScreenStrategy strategy) throws RemoteException;
 }
