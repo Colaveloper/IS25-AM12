@@ -22,6 +22,7 @@ public class ClientModel {
     private final List<Point> selectablePoints;
     private Planets planets;
     private CurrentProjectile currentProjectile;
+    private GoodsBuffer goods;
 
     private AdventureCard currentCard;
 
@@ -87,6 +88,8 @@ public class ClientModel {
     }
 
     public Physical getPlanets(){ return planets; }
+
+    public Physical getGoodsBuffer(){ return goods; }
 
     public void setProjectile(ProjectileType projectileType, int direction, int roll) {
         currentProjectile = new CurrentProjectile (projectileType, direction, roll);

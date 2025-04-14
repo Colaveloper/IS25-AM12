@@ -278,6 +278,8 @@ public class AdventureCard implements Physical {
 
     public Optional<List<Map<GoodsType, Integer>>> getPlanets(){ return planets;}
 
+    public Optional<Map<GoodsType, Integer>> getGoods(){ return goods; }
+
     // helper methods
     public static List<Map.Entry<String, Integer>> parseProjectiles(JsonNode projectilesNode) {
         List<Map.Entry<String, Integer>> projectiles = new ArrayList<>();
