@@ -1,15 +1,17 @@
-package it.polimi.ingsw.galaxytruckers.view.screen;
+package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
 
 import java.rmi.RemoteException;
 
-public class WelcomeScreen implements ScreenStrategy {
+public class NewCardScreen implements ScreenStrategy {
 
     @Override
     public void showCLI(ClientModel model) {
-
+        System.out.println("Current Leader: "+model.getCurrentLeader()+" just drew: " + model.getCardName());
+        model.getMyShipBoard().getDescription().forEach(System.out::println);
+        model.getCurrentCard().getDescription().forEach(System.out::println);
     }
 
     @Override
@@ -19,6 +21,5 @@ public class WelcomeScreen implements ScreenStrategy {
 
     @Override
     public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws RemoteException {
-
     }
 }

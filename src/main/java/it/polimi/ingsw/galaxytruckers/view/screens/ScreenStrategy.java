@@ -1,10 +1,9 @@
-package it.polimi.ingsw.galaxytruckers.view.screen;
+package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 
 public interface ScreenStrategy {
     void showCLI(ClientModel model);

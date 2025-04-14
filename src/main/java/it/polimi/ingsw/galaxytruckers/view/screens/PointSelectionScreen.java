@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.view.screen;
+package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;

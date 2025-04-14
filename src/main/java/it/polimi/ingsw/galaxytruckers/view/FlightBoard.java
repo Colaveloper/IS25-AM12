@@ -45,4 +45,11 @@ public class FlightBoard implements Physical {
 
         return List.of(String.join("", result));
     }
+
+    public Colors getCurrentLeaderColor() {
+        return playerToPlace.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(null);
+    }
 }

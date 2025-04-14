@@ -4,16 +4,12 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.network.shared.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.*;
-import it.polimi.ingsw.galaxytruckers.view.screen.NewCardScreen;
-import it.polimi.ingsw.galaxytruckers.view.screen.NicknameChoiceScreen;
-import it.polimi.ingsw.galaxytruckers.view.screen.PointSelectionScreen;
-import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.NewCardVisualization;
-import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.PointSelectionVisualization;
-import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.ProjectilesVisualization;
-import it.polimi.ingsw.galaxytruckers.view.visualizationStrategy.WelcomeVisualization;
+import it.polimi.ingsw.galaxytruckers.view.screens.NewCardScreen;
+import it.polimi.ingsw.galaxytruckers.view.screens.NicknameChoiceScreen;
+import it.polimi.ingsw.galaxytruckers.view.screens.PointSelectionScreen;
+import it.polimi.ingsw.galaxytruckers.view.screens.ProjectilesScreen;
 
 import java.awt.*;
 import java.io.IOException;
@@ -120,9 +116,9 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
-    public void showProjectile(ProjectileType projectileType, int direction, int roll) {
+    public void showProjectile(ProjectileType projectileType, int direction, int roll) throws IOException {
         model.setProjectile(projectileType, direction, roll);
-        view.show(new ProjectilesVisualization());
+        view.run(new ProjectilesScreen());
     }
 
     // update for components

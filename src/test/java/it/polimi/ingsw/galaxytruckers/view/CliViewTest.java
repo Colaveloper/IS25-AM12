@@ -2,10 +2,10 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;
-import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
-import it.polimi.ingsw.galaxytruckers.view.screen.PointSelectionScreen;
+import it.polimi.ingsw.galaxytruckers.view.screens.NewCardScreen;
+import it.polimi.ingsw.galaxytruckers.view.screens.NicknameChoiceScreen;
+import it.polimi.ingsw.galaxytruckers.view.screens.PointSelectionScreen;
+import it.polimi.ingsw.galaxytruckers.view.screens.ProjectilesScreen;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,21 +33,29 @@ class CliViewTest {
             new Point(10, 7),new Point(10, 8),new Point(10, 9)
         ));
 
-        model.setMyNickname("roborbio");
+        model.setMyNickname("Roborbio");
         model.setShipArea(new HashSet<>(shipArea));
         model.setFlightBoard(10, List.of(2, 4, 5));
         for (int i=0 ; i<shipArea.size() ; i++) {
-            model.setComponent("roborbio", i*5, i%4, shipArea.get(i)); //changing component coeff (<6) gives interesting cases for tests
+            model.setComponent("Roborbio", i*5, i%4, shipArea.get(i)); //changing component coeff (<6) gives interesting cases for tests
         }
 
-        model.setCargo("roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE)); //TODO: doesn t work
+        model.setCargo("Roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE)); //TODO: doesn t work
         model.setSelectablePoints(new ArrayList<>(List.of(new Point(8, 8), new Point(9, 7))));
-        model.setPlayerColor("roborbio", Colors.RED);
-        model.setPlayerToPlace(Map.of("roborbio", 2));
+        model.setPlayerColor("Roborbio", Colors.RED);
+        model.setPlayerToPlace(Map.of("Roborbio", 2));
+        model.setCurrentCard(3);
+        model.setProjectile(ProjectileType.BIGFIRE, 1, 7);
     }
 
     @Test
-    public void tryToPrint() throws Exception {
+    public void showAllScreens() throws Exception {
+        new NicknameChoiceScreen().showCLI(model);
+        System.out.println("_______________________________________________________________");
+        new NewCardScreen().showCLI(model);
+        System.out.println("_______________________________________________________________");
         new PointSelectionScreen().showCLI(model);
+        System.out.println("_______________________________________________________________");
+        new ProjectilesScreen().showCLI(model);
     }
 }

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -16,7 +18,7 @@ public class ClientModel {
 
     private final FlightBoard flightBoard;
     private final Map<String, Shipboard> playerToShip;
-    private final Map<String, Colors> playerToColor;
+    private final BiMap<String, Colors> playerToColor;
     private final List<Point> selectablePoints;
     private Planets planets;
     private CurrentProjectile currentProjectile;
@@ -25,7 +27,7 @@ public class ClientModel {
 
     public ClientModel() {
         this.flightBoard = new FlightBoard();
-        this.playerToColor = new HashMap<>();
+        this.playerToColor = HashBiMap.create();
         this.playerToShip = new HashMap<>();
         this.selectablePoints = new ArrayList<>();
     }
@@ -108,6 +110,10 @@ public class ClientModel {
     public void setSelectablePoints(List<Point> selectablePoints) {
         playerToShip.get(myNickname).setSelectablePoints(selectablePoints);
         this.selectablePoints.addAll(selectablePoints);
+    }
+
+    public String getCurrentLeader() {
+        return playerToColor.inverse().get(flightBoard.getCurrentLeaderColor());
     }
 
     public List<Point> getSelectablePoints() {
