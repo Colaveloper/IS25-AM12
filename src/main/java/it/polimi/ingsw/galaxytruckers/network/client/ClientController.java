@@ -18,21 +18,18 @@ import java.util.*;
 import java.util.List;
 
 public class ClientController {
-    private final VirtualServer server;
     private final ClientModel model;
-    private View view;
-    private boolean usingGui;
+    private final View view;
 
     public ClientController(VirtualServer server) {
-        this.server = server;
         this.model = new ClientModel();
         this.view = new CliView(model, server); // View should only observe the model, not modify it
     }
 
     // REQUESTS TO THE SERVER // TODO MOVE IN STRATEGY
-    public void drawCard() throws IOException {
-        server.drawCard();
-    }
+//    public void drawCard() throws IOException {
+//        server.drawCard();
+//    }
 
     // UPDATES FROM THE SERVER
     public void showNewCard(Integer cardId) throws IOException {
@@ -40,31 +37,13 @@ public class ClientController {
         view.run(new NewCardScreen());
     }
 
-    public void showConnected(String tempNickname) throws RemoteException {
+    public void showConnected(String tempNickname) throws IOException {
         model.setMyNickname(tempNickname);
         view.run(new NicknameChoiceScreen());
     }
 
     public void setNickname(String nickname) { // gets called only after legal registration
         model.setMyNickname(nickname);
-        System.out.println("Nice to meet you, "+model.getMyNickname()+"!");
-        System.out.println("You can play from this terminal or switch to a Graphical Interface");
-
-        Scanner scanner = new Scanner(System.in);
-        String input;
-        do {
-            System.out.println("Input T for Terminal, G for Graphical Interface: ");
-            input = scanner.nextLine().trim().toUpperCase();
-        } while (!input.equals("T") && !input.equals("G"));
-
-        if (input.equals("G")) {
-            System.out.println("Requesting not implemented feature, please restart ⚠️");
-//            this.view = new GuiView(model, this);
-        }
-    }
-
-    public void showFirstScreen() {
-
     }
 
     public void showGameCreation(Level level, int playersNum) {
@@ -82,7 +61,7 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
-    public void setFlightBoard(int loopLength, List<Integer> startingPositions) throws RemoteException {
+    public void setFlightBoard(int loopLength, List<Integer> startingPositions) throws IOException {
         model.setFlightBoard(loopLength, startingPositions);
         view.run(new PointSelectionScreen());
     }

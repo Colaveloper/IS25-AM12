@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 /**
  * Questa interfaccia specializza l'interfaccia VirtualView per la tecnologia RMI
  */
-public interface VirtualClientRmi extends Remote, VirtualClient {
+public interface RmiVirtualClient extends Remote, VirtualClient {
     @Override
     void showNewCard(Integer cardId) throws IOException;
     @Override

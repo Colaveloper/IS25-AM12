@@ -30,7 +30,7 @@ public class ServerController implements ServerControllerInterface {
 
     @Override
     public void leaveLobby(String nickname) {
-        //TODO : decide whether to implement this method
+        //TODO : decide whether to implement this methodName
     }
 
     @Override

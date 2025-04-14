@@ -22,9 +22,11 @@ public class Player {
     public static void addPlayer(String nickname) {
         synchronized (nicknameToPlayer) {
             if (nicknameToPlayer.containsKey(nickname)) {
+                System.out.println("Request refused: nickname \"" + nickname + "\" already taken ⛔");
                 throw new IllegalArgumentException("Nickname already exists");
             }
             nicknameToPlayer.put(nickname, new Player(nickname));
+            System.out.println("Request accepted: registering " + nickname + " ✅");
         }
     }
 

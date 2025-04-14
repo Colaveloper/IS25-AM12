@@ -1,6 +1,7 @@
-package it.polimi.ingsw.galaxytruckers;
+package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RmiClient;
+import it.polimi.ingsw.galaxytruckers.network.client.socket.SocketClient;
 
 import java.util.*;
 
@@ -23,10 +24,10 @@ public class ClientMain {
             if (input.equalsIgnoreCase("R")) {
                 RmiClient.main(args);
             } else {
-                //SocketServer.main(args) // TODO: implement SocketServer
+                SocketClient.main(args);
             }
         } catch (Exception e) {
-            System.out.println("The whole server crashed ⚠️: " + e.getMessage());
+            System.out.println("Server error ⚠️: " + e.getMessage());
         }
     }
 }

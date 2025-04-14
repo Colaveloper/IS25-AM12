@@ -3,12 +3,14 @@ package it.polimi.ingsw.galaxytruckers.view.screen;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 
 public class NicknameChoiceScreen implements ScreenStrategy {
     @Override
     public void showCLI(ClientModel model) {
         System.out.println("Successfully bound to the server ✅");
+        System.out.println("Top-secret: you temporary nickname is: "+model.getMyNickname());
         System.out.println("Please choose a unique nickname in order to proceed: ");
     }
 
@@ -18,7 +20,7 @@ public class NicknameChoiceScreen implements ScreenStrategy {
     }
 
     @Override
-    public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws RemoteException {
+    public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {
         // passing temporary nickname as first parameter
         server.registerNickname(model.getMyNickname(), input);
     }

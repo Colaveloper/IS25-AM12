@@ -1,6 +1,9 @@
-package it.polimi.ingsw.galaxytruckers;
+package it.polimi.ingsw.galaxytruckers.network.server;
 
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;
+import it.polimi.ingsw.galaxytruckers.network.server.socket.SocketServer;
+import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
+import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
 
 import java.rmi.RemoteException;
 
@@ -15,17 +18,20 @@ public class ServerMain {
         // two threads are needed to handle both middlewares
 
         try {
+
+            ServerControllerInterface serverController = new ServerController();
+
             Thread rmiThread = new Thread(()-> {
                 try {
-                    RmiServer.main(args);
+                    RmiServer.start(serverController);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
             });
-            rmiThread.start();
+            Thread socketThread = new Thread(()-> SocketServer.start(serverController));
 
-//            socketThread = new Thread(()-> SocketServer.main(args)));
-//            socketThread.start();
+            socketThread.start();
+            rmiThread.start();
 
         } catch (Exception e) {
             System.out.println("The server crashed with the following excuse: " + e.getMessage());

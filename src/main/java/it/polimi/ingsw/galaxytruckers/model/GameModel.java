@@ -25,7 +25,7 @@ public class GameModel {
     private GameFactory gameFactory;
     private final FlightBoard flightBoard;
     private final Deck deck;
-    private List<Integer> playerShot;//TODO: list of shipboard, method maps coming int to ships here
+    private List<Integer> playerShot;//TODO: list of shipboard, methodName maps coming int to ships here
 
     public GameModel(Level chosenLevel, Map<Integer, Colors> chosenColors) throws IOException {
         switch (chosenLevel) {
@@ -304,7 +304,7 @@ public class GameModel {
     }
 
     public int getExposedConnectors() {
-        //TODO: use shipboard method to get exposed connectors
+        //TODO: use shipboard methodName to get exposed connectors
         System.out.println("current player has 3 exposed connectors");
         return 3;
     }

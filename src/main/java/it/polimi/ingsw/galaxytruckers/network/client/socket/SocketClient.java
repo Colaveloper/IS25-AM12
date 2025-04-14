@@ -1,59 +1,67 @@
-package it.polimi.ingsw.galaxytruckers.network.client.rmi;
+package it.polimi.ingsw.galaxytruckers.network.client.socket;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiVirtualClient;
-import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
-import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
-import it.polimi.ingsw.galaxytruckers.serverController.events.NewCardUpdate;
-import it.polimi.ingsw.galaxytruckers.view.*;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualClient;
+import it.polimi.ingsw.galaxytruckers.view.ProjectileType;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
-/**
- * Questa classe rappresenta la logica del client implementata con tecnologia RMI.
- */
-public class RmiClient extends UnicastRemoteObject implements RmiVirtualClient, EventHandler {
-    final RmiVirtualServer server;
-    ClientController controller;
-    private static final String serverName = "RMI server";
+public class SocketClient implements VirtualClient {
+    private final ClientController controller;
+    private final ObjectOutputStream out;
+//    private final ObjectInputStream in;
+    private static final int PORT = 1235;
 
-    public RmiClient(RmiVirtualServer server) throws RemoteException{
-        super();
-        this.server = server;
-        controller = new ClientController(server);
+    public SocketClient(Socket socket) throws IOException {
+        this.out = new ObjectOutputStream(socket.getOutputStream());
+//        this.in = new ObjectInputStream(socket.getInputStream());
+        this.controller = new ClientController(new SocketVirtualServer(out));
+
+//        new Thread(this::listenToServer).start();
     }
 
     public static void main(String[] args) throws Exception {
-        Registry registry = LocateRegistry.getRegistry(args[0], 1234);
-        RmiVirtualServer server = (RmiVirtualServer) registry.lookup(serverName);
-        new RmiClient(server).run();
+        String host = args[0]; // e.g., "localhost"
+        try (Socket socket = new Socket(host, PORT)) {
+            SocketClient client = new SocketClient(socket);
+            client.run();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
+//    private void listenToServer() {
+//        try {
+//            while (true) {
+//                Object obj = in.readObject();
+//                // Example: handle incoming server messages/events
+//                System.out.println("Received: " + obj);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Disconnected from server.");
+//        }
+//    }
+
     private void run() throws IOException {
-        server.connect(this);
-        // setting temporary nickName
         controller.showConnected(String.valueOf(this.hashCode()));
     }
 
     @Override
     public void showNicknameRegistration(String nickname) throws RemoteException {
         controller.setNickname(nickname);
-    }
-
-    @Override
-    public void showNewCard(Integer cardId) throws IOException {
-        controller.showNewCard(cardId);
     }
 
     @Override
@@ -137,6 +145,11 @@ public class RmiClient extends UnicastRemoteObject implements RmiVirtualClient, 
     }
 
     @Override
+    public void showNewCard(Integer cardId) throws Exception {
+
+    }
+
+    @Override
     public void showProjectile(ProjectileType projectileType, int direction, int roll) throws Exception {
 
     }
@@ -162,15 +175,7 @@ public class RmiClient extends UnicastRemoteObject implements RmiVirtualClient, 
     }
 
     @Override
-    public void reportError(String details) throws RemoteException {
+    public void reportError(String details) throws Exception {
 
-    }
-
-    @Override
-    public void handleEvent(Event event) {}
-
-    @Override
-    public void handleEvent(NewCardUpdate newCardUpdate) throws IOException {
-        controller.showNewCard(newCardUpdate.getCardId());
     }
 }

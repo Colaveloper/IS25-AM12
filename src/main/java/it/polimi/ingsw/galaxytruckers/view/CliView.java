@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.screen.ScreenStrategy;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
@@ -15,10 +16,8 @@ public class CliView extends View{
         scanner = new Scanner(System.in);
     }
 
-    public void run(ScreenStrategy strategy) throws RemoteException {
-        // clearing the console
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+    public void run(ScreenStrategy strategy) throws IOException {
+        // TODO: clearing the console
 
         // showing the visualization
         strategy.showCLI(model);

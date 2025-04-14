@@ -31,7 +31,7 @@ public class Component implements Physical {
         orientation = (orientation+1) % 4;
     }
 
-//    TODO: consider whether to remove this method (now untested)
+//    TODO: consider whether to remove this methodName (now untested)
 //    public void rotateRight() {
 //        Collections.rotate(connectors, -1);
 //        orientation = (orientation-1) % 4;

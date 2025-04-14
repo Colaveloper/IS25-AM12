@@ -1,0 +1,53 @@
+package it.polimi.ingsw.galaxytruckers.view;
+
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;
+import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
+import it.polimi.ingsw.galaxytruckers.view.screen.PointSelectionScreen;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.*;
+import java.util.List;
+
+class CliViewTest {
+    View view;
+    ClientModel model;
+    List<Point> shipArea;
+
+    @BeforeEach
+    void setUp() throws IOException {
+        model = new ClientModel();
+
+        shipArea = new ArrayList<>(List.of(
+            new Point(4, 7), new Point(4, 8), new Point(4, 9),
+            new Point(5, 6), new Point(5, 7), new Point(5, 8), new Point(5, 9),
+            new Point(6, 5), new Point(6, 6), new Point(6, 7), new Point(6, 8), new Point(6, 9),
+                                   new Point(7, 6), new Point(7, 7), new Point(7, 8),
+            new Point(8, 5), new Point(8, 6), new Point(8, 7), new Point(8, 8), new Point(8, 9),
+            new Point(9, 6), new Point(9, 7), new Point(9, 8), new Point(9, 9),
+            new Point(10, 7),new Point(10, 8),new Point(10, 9)
+        ));
+
+        model.setMyNickname("roborbio");
+        model.setShipArea(new HashSet<>(shipArea));
+        model.setFlightBoard(10, List.of(2, 4, 5));
+        for (int i=0 ; i<shipArea.size() ; i++) {
+            model.setComponent("roborbio", i*5, i%4, shipArea.get(i)); //changing component coeff (<6) gives interesting cases for tests
+        }
+
+        model.setCargo("roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE)); //TODO: doesn t work
+        model.setSelectablePoints(new ArrayList<>(List.of(new Point(8, 8), new Point(9, 7))));
+        model.setPlayerColor("roborbio", Colors.RED);
+        model.setPlayerToPlace(Map.of("roborbio", 2));
+    }
+
+    @Test
+    public void tryToPrint() throws Exception {
+        new PointSelectionScreen().showCLI(model);
+    }
+}
