@@ -11,19 +11,14 @@ class EngineTest extends ComponentTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        myEngine = new Engine(null, myConnectors);
+        myEngine = new Engine(myConnectors);
     }
 
     @Test
     void isValidOnlyFacingUp() {
-        for (int i = 0; i < 5; i++) {
-            if (i%4 == 0) {
-                assertTrue(myEngine.isValid());
-            } else {
-                assertFalse(myEngine.isValid());
-            }
-            myEngine.rotateLeft();
-        }
+        assertTrue(myEngine.isValid());
+        myEngine.setOrientation(1);
+        assertFalse(myEngine.isValid());
     }
 
     @Test

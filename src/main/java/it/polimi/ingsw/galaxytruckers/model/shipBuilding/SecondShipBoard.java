@@ -37,9 +37,7 @@ public class SecondShipBoard extends ShipBoard {
             new Point(10, 8),
             new Point(10, 9)));
 
-    private static Image image;
-    
-    private final List<it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component> stashedComponents;
+    private final List<Component> stashedComponents;
 
     private final Set<CrewType> aliens;
     // We might need this attribute to handle meteors and cannon hits better
@@ -47,15 +45,11 @@ public class SecondShipBoard extends ShipBoard {
 
     private final Map<Point, LifeSupport> lifeSupports;
 
-    public SecondShipBoard(ComponentBank componentBank, Colors color) {
-        super(componentBank, color);
+    public SecondShipBoard(Colors color) {
+        super(color);
         this.lifeSupports = new HashMap<>();
         this.stashedComponents = new ArrayList<>();
         this.aliens = new HashSet<>();
-    }
-
-    public SecondShipBoard(Colors color) {
-        this(ComponentBank.getInstance(), color);
     }
 
     @Override
@@ -80,6 +74,12 @@ public class SecondShipBoard extends ShipBoard {
     public void grabStashedComponent(int index) {
         weldLastComponent();
         lastComponent = stashedComponents.remove(index);
+    }
+
+    @Override
+    public void finishBuilding() {
+        this.losses += stashedComponents.size();
+        stashedComponents.clear();
     }
 
     //Observers
@@ -167,17 +167,5 @@ public class SecondShipBoard extends ShipBoard {
                 this.aliens.remove(cabins.get(point).getCrewType());
             }
         }
-    }
-
-    @Override
-    public Image getImage() {
-        return image;
-        // TODO: composite the components and resources on top
-    }
-
-    @Override
-    public String getDescription() {
-        return "Level 2 ship: "+super.getDescription();
-        // TODO: describe
     }
 }

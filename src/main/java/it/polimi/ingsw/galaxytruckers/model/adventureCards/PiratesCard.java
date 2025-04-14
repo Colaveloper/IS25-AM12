@@ -6,13 +6,9 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectil
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
-import javafx.scene.image.Image;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class PiratesCard extends AdventureCard {
     // Card Parameters
@@ -22,18 +18,22 @@ public class PiratesCard extends AdventureCard {
     private final int flightDaysLoss;
 
     // Card state descriptors
-    private final List<ShipBoard> defeatedPlayers;
+    private List<ShipBoard> defeatedPlayers;
     private boolean defeated;
     private Projectile currentProjectile;
     private ShipBoard winnerShipBoard;
 
-    public PiratesCard(Image image, Level level, FlightBoard flightBoard,
-                       int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
-        super(image, level, flightBoard);
+    public PiratesCard(Level level, int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
+        super(level);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;
         this.projectiles = projectiles.reversed();  // list is inverted to be treated as a stack
+    }
+
+    @Override
+    public void initialize(FlightBoard flightBoard) {
+        super.initialize(flightBoard);
         this.defeatedPlayers = new ArrayList<>();
         this.defeated = false;
         this.winnerShipBoard = null;
@@ -45,13 +45,15 @@ public class PiratesCard extends AdventureCard {
         if (!defeated) { // Establishing winner and defeated players, if any
             // Evaluating previous player firepower, after double cannons activation
             if (currentShipBoard != null) {  // There is a previous player who needs their firepower evaluated
-                if (currentShipBoard.getFirePower() > firePowerThreshold) {  // player defeats the enemy
+                int currentFirePower = currentShipBoard.getFirePower();
+                currentShipBoard.deactivateAll();
+                if (currentFirePower > firePowerThreshold) {  // player defeats the enemy
                     defeated = true;
                     currentPlayerIndex = 0;
                     winnerShipBoard = currentShipBoard;
                     currentShipBoard = null;
                     return new GrabRewardState(this::getReward); // Let the player choose whether to collect the prize
-                } else if (currentShipBoard.getFirePower() < firePowerThreshold) { // player is defeated
+                } else if (currentFirePower < firePowerThreshold) { // player is defeated
                     defeatedPlayers.add(currentShipBoard);
                 }
             }
@@ -67,6 +69,9 @@ public class PiratesCard extends AdventureCard {
                 return nextStep();
             }
         } else { // Firing at defeated players
+            if (currentShipBoard != null) {
+                currentShipBoard.deactivateAll();
+            }
             if (currentPlayerIndex < defeatedPlayers.size()) {  // There are still players that need to handle projectiles
                 currentShipBoard = defeatedPlayers.get(currentPlayerIndex);
                 currentPlayerIndex++;

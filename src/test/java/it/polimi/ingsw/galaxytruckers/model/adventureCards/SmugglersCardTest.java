@@ -114,11 +114,6 @@ class SmugglersCardTest {
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return true;
             }
-
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
 
         flightBoardOfLosers = new FlightBoard(null) {
@@ -146,14 +141,10 @@ class SmugglersCardTest {
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return true;
             }
-
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
 
-        smugglersCard = new SmugglersCard(null, Level.FIRST, flightBoard, 1, 1, goodsWon, 1);
+        smugglersCard = new SmugglersCard(Level.FIRST, 1, 1, goodsWon, 1);
+        smugglersCard.initialize(flightBoard);
     }
 
 
@@ -198,7 +189,8 @@ class SmugglersCardTest {
 
     @Test
     void noneWins() {
-        smugglersCard = new SmugglersCard(null, Level.FIRST, flightBoardOfLosers, 1, 1, goodsWon, 1);
+        smugglersCard = new SmugglersCard(Level.FIRST, 1, 1, goodsWon, 1);
+        smugglersCard.initialize(flightBoardOfLosers);
         smugglersCard.nextStep();//activate (but doesn't lose)
         smugglersCard.nextStep();//activate
         smugglersCard.nextStep();//lose goods

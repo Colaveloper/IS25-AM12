@@ -115,11 +115,6 @@ class SlaversCardTest {
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return true;
             }
-
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
 
         flightBoardOfLosers = new FlightBoard(null) {
@@ -147,14 +142,10 @@ class SlaversCardTest {
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return true;
             }
-
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
 
-        slaversCard = new SlaversCard(null, Level.FIRST, flightBoard, 1, 1, 1, 1);
+        slaversCard = new SlaversCard(Level.FIRST, 1, 1, 1, 1);
+        slaversCard.initialize(flightBoard);
     }
 
 
@@ -195,7 +186,8 @@ class SlaversCardTest {
 
     @Test
     void noneWins() {
-        slaversCard = new SlaversCard(null, Level.FIRST, flightBoardOfLosers, 1, 1, 1, 1);
+        slaversCard = new SlaversCard(Level.FIRST, 1, 1, 1, 1);
+        slaversCard.initialize(flightBoardOfLosers);
         slaversCard.nextStep();
         slaversCard.nextStep();
         slaversCard.nextStep();

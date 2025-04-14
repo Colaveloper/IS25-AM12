@@ -5,19 +5,20 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 
 import java.util.List;
-
-import static java.lang.Math.abs;
 
 public class StarDustCard extends AdventureCard {
 
     List<ShipBoard> invertedShips;
 
-    public StarDustCard(Image image, Level level, FlightBoard flightBoard) {
-        super(image, level, flightBoard);
+    public StarDustCard(Level level) {
+        super(level);
+    }
 
+    @Override
+    public void initialize(FlightBoard flightBoard) {
+        super.initialize(flightBoard);
         this.invertedShips = flightBoard.getOrderedShips().reversed();
     }
 

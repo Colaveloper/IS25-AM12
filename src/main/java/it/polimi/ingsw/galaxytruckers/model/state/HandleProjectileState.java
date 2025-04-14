@@ -17,16 +17,16 @@ public class HandleProjectileState extends ActivateState{
     }
 
     @Override
-    public void activateComponent(Point position) {
+    public void activateComponent(ShipBoard shipBoard, Point position) {
         if (batteriesToSpend == 0) {
-            super.activateComponent(position);
+            super.activateComponent(shipBoard, position);
         } else {
             throw new IllegalStateException("You already activated a component");
         }
     }
 
     @Override
-    public void goNext() {
+    public void goNext(ShipBoard shipBoard) {
         if (batteriesToSpend > 0) {
             throw new IllegalStateException("You still have batteries to spend");
         }

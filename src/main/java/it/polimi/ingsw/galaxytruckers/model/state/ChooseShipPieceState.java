@@ -3,10 +3,8 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.IntStream;
 
 
 // TODO : this state used also in ship-building,
@@ -21,18 +19,11 @@ public class ChooseShipPieceState extends GameState {
     }
 
     @Override
-    public void chooseShipPiece(int pieceIndex) {
-        if (pieceIndex < 0 || pieceIndex >= shipPieces.size()) {
-            throw new IllegalArgumentException("Invalid piece index");
+    public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
+        if (!shipBoard.equals(this.shipBoard)) {
+            throw new IllegalStateException("It's not your turn");
         }
-        List<Point> componentsToRemove = IntStream.range(0, shipPieces.size())
-                .filter(x -> x != pieceIndex)
-                .mapToObj(shipPieces::get)
-                .flatMap(Collection::stream)
-                .toList();
-        for (Point p : componentsToRemove) {
-            shipBoard.removeComponent(p);
-        }
+        removeOtherShipPieces(shipBoard, pieceIndex, shipPieces);
         game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
     }
 }

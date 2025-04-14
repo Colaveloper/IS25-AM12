@@ -1,17 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.galaxytruckers.model.JavaFXInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ComponentBankTest extends JavaFXInitializer {
+class ComponentBankTest {
     ComponentBank componentBank;
 
     @BeforeEach
@@ -21,7 +18,7 @@ class ComponentBankTest extends JavaFXInitializer {
 
     @Test
     void loadComponentSizes() throws IOException {
-        List<Component> components = componentBank.loadComponents();
+        List<Component> components = ComponentBank.loadComponents();
 
         // ensure list is not null and at least one component was loaded
         assertNotNull(components);

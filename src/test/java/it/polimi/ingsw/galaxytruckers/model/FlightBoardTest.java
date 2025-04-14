@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.TestShipBoard;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.*;
 
 import java.awt.*;
@@ -15,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FlightBoardTest extends JavaFXInitializer {
+class FlightBoardTest {
 
     ShipBoard ship1, ship2, ship3;
     FlightBoard flightBoard;
@@ -36,17 +35,11 @@ class FlightBoardTest extends JavaFXInitializer {
     class TestFlightTests {
         @BeforeEach
         void setUp() {
-            ship1 = new TestShipBoard(componentBank, Colors.BLUE);
-            ship2 = new TestShipBoard(componentBank, Colors.RED);
-            ship3 = new TestShipBoard(componentBank, Colors.GREEN);
+            ship1 = new TestShipBoard(Colors.BLUE);
+            ship2 = new TestShipBoard(Colors.RED);
+            ship3 = new TestShipBoard(Colors.GREEN);
             allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
             flightBoard = new TestFlightBoard(Set.of(ship1, ship2, ship3));
-        }
-
-        @Test
-        void getImageAndDescriptionFakeTest () {
-            flightBoard.getImage();
-            flightBoard.getDescription();
         }
 
         @Test
@@ -90,15 +83,10 @@ class FlightBoardTest extends JavaFXInitializer {
 
         @Test
         void AssignBestLookingShipReward() {
-            ship1 = new ShipBoard(null, null) {
+            ship1 = new ShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
-                }
-
-                @Override
-                public Image getImage() {
-                    return null;
                 }
 
                 @Override
@@ -106,15 +94,10 @@ class FlightBoardTest extends JavaFXInitializer {
                     return 5;
                 }
             };
-            ship2 = new ShipBoard(null, null) {
+            ship2 = new ShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
-                }
-
-                @Override
-                public Image getImage() {
-                    return null;
                 }
 
                 @Override
@@ -122,15 +105,10 @@ class FlightBoardTest extends JavaFXInitializer {
                     return 5;
                 }
             };
-            ship3 = new ShipBoard(null, null) {
+            ship3 = new ShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
-                }
-
-                @Override
-                public Image getImage() {
-                    return null;
                 }
 
                 @Override
@@ -153,15 +131,10 @@ class FlightBoardTest extends JavaFXInitializer {
         void countCreditsAndLosses() {
             int myCredits = 8;
             int myLosses = 9;
-            ship1 = new TestShipBoard(null, null) {
+            ship1 = new TestShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
-                }
-
-                @Override
-                public Image getImage() {
-                    return null;
                 }
 
                 @Override
@@ -185,15 +158,10 @@ class FlightBoardTest extends JavaFXInitializer {
         @Test
         void countGoodsValue() {
             int myGoodValue = 9;
-            ship1 = new TestShipBoard(null, null) {
+            ship1 = new TestShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
-                }
-
-                @Override
-                public Image getImage() {
-                    return null;
                 }
 
                 @Override
@@ -201,15 +169,10 @@ class FlightBoardTest extends JavaFXInitializer {
                     return myGoodValue;
                 }
             };
-            ship2 = new TestShipBoard(null, null) {
+            ship2 = new TestShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
-                }
-
-                @Override
-                public Image getImage() {
-                    return null;
                 }
 
                 @Override
@@ -265,11 +228,6 @@ class FlightBoardTest extends JavaFXInitializer {
                 protected void countGoodsValue() {
                     this.finalScores.merge(ship1, myGoodValue, Integer::sum);
                 }
-
-                @Override
-                public Image getImage() {
-                    return null;
-                }
             }
             LocalFlightBoard localFlightBoard = new LocalFlightBoard(Set.of(ship1));
             shipToScore.put(ship1, myBestLookingAward+myFinishOrderAward+myCreditsAndLosses+myGoodValue);
@@ -288,19 +246,13 @@ class FlightBoardTest extends JavaFXInitializer {
     class SecondFlightTests {
         @BeforeEach
         void setUp() {
-            ship1 = new SecondShipBoard(componentBank, Colors.BLUE);
-            ship2 = new SecondShipBoard(componentBank, Colors.RED);
-            ship3 = new SecondShipBoard(componentBank, Colors.GREEN);
+            ship1 = new SecondShipBoard(Colors.BLUE);
+            ship2 = new SecondShipBoard(Colors.RED);
+            ship3 = new SecondShipBoard(Colors.GREEN);
             allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
             flightBoard = new SecondFlightBoard(Set.of(ship1, ship2, ship3));
             legalStartingPositions = new ArrayList<>(SecondFlightBoard.startingPositions
                     .subList(0, allShips.size()));
-        }
-
-        @Test
-        void getImageAndDescriptionFakeTest () {
-            flightBoard.getImage();
-            flightBoard.getDescription();
         }
 
         @Test

@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class FlightBoard implements Physical {
+public abstract class FlightBoard {
     protected final Set<ShipBoard> allShips; // contains playing+dead ships
     protected final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
     @VisibleForTesting
@@ -50,8 +50,7 @@ public abstract class FlightBoard implements Physical {
             int finalNewPosition = newPosition;
             int finalTryMove = tryMove;
             if (
-                    shipToPlace.entrySet().stream()
-                            .map(e->e.getValue())
+                    shipToPlace.values().stream()
                             .anyMatch(p -> p%getLoopLength() == (finalNewPosition + finalTryMove))
             ) {
                 tryMove += displacementLeft>0 ? 1 : -1;
@@ -66,15 +65,15 @@ public abstract class FlightBoard implements Physical {
 
     public void removeShips (Set<ShipBoard> shipsToRemove) {
         throw new UnsupportedOperationException("Not available for this type of FlightBoard");
-    };
+    }
 
     public void giveUp(ShipBoard shipBoard) {
         throw new UnsupportedOperationException("Not available for this type of FlightBoard");
-    };
+    }
 
     public Set<ShipBoard> getAndRemoveLappedShips() {
         throw new UnsupportedOperationException("Not available for this type of FlightBoard");
-    };
+    }
 
     public Map<ShipBoard, Integer> getFinalScores() {
         assignFinishOrderReward();
@@ -119,11 +118,6 @@ public abstract class FlightBoard implements Physical {
                 finalScores.merge(s, (s.getGoodsValue()+1)/2, Integer::sum);
             }
         });
-    }
-
-    @Override
-    public String getDescription() {
-        return ""; // TODO: describe
     }
 }
 

@@ -1,12 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.Dice;
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 
 import java.awt.*;
 
@@ -14,9 +12,8 @@ public class SabotageCard extends AdventureCard {
 
     private static final Dice dice = new Dice() {};
 
-
-    protected SabotageCard(Image image, Level cardLevel, FlightBoard flightBoard) {
-        super(image, cardLevel, flightBoard);
+    protected SabotageCard(Level cardLevel) {
+        super(cardLevel);
     }
 
     @Override

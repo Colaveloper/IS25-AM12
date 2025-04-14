@@ -4,26 +4,27 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.*;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CombatZoneCheck;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CrewSizeCheck;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.EnginePowerCheck;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.FirePowerCheck;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.penalty.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import com.google.common.annotations.VisibleForTesting;
-import javafx.scene.image.Image;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.function.Supplier;
 
-public abstract class Deck{
+public abstract class Deck {
     protected final List<AdventureCard> relevantCards;
     protected List<AdventureCard> masterDeck;
     private AdventureCard currentCard;
     protected static String jsonPath = "src/main/resources/cardsReference.json";
-    private final FlightBoard flightBoard;
 
-    public Deck(Set<Level> relevantLevels, FlightBoard flightBoard) throws IOException {
-        this.flightBoard = flightBoard;
+    public Deck(Set<Level> relevantLevels) throws IOException {
         this.relevantCards = loadRelevantCards(relevantLevels);
         Collections.shuffle(this.relevantCards);
     }
@@ -43,9 +44,7 @@ public abstract class Deck{
     /**
      * Mixes the forecast and hidden decks  into the master deck
      */
-    public void initMasterDeck() {
-        throw new UnsupportedOperationException("This action is unsupported at the selected level");
-    }
+    public void initMasterDeck() {}
 
     /**
      * Removes a card from the master deck and sets it as current
@@ -55,13 +54,13 @@ public abstract class Deck{
         if (masterDeck.isEmpty()) {
             return false;
         } else {
-            currentCard = masterDeck.removeFirst();
+            currentCard = masterDeck.removeLast();
             return true;
         }
     }
 
     @VisibleForTesting
-    protected List<AdventureCard> loadRelevantCards(Set<Level> levels) throws IOException {
+    protected static List<AdventureCard> loadRelevantCards(Set<Level> levels) throws IOException {
         //reading from json file and returning the list of components
         File jsonFile = new File(jsonPath);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -76,92 +75,61 @@ public abstract class Deck{
                 String type = node.get("type").asText();
                 AdventureCard card;
 
-                Image image = new Image("file:"+node.get("path").asText());
-
                 card = switch (type) {
                     case "planets" -> new PlanetsCard(
-                            image,
                             level,
-                            flightBoard,
                             parsePlanets(node.get("planets")),
                             node.get("flight day loss").asInt()
                     );
                     case "pirates" -> new PiratesCard(
-                            image,
                             level,
-                            flightBoard,
                             node.get("firePowerThreshold").asInt(),
                             node.get("credits").asInt(),
                             node.get("flight day loss").asInt(),
                             parseProjectiles(node.get("shoots"))
                     );
                     case "smugglers" -> new SmugglersCard(
-                            image,
                             level,
-                            flightBoard,
                             node.get("penalty").asInt(),
                             node.get("cannons").asInt(),
                             parseGoods(node.get("storage")),
                             node.get("flight day loss").asInt()
                     );
                     case "slavers" -> new SlaversCard(
-                            image,
                             level,
-                            flightBoard,
                             node.get("penalty").asInt(),
                             node.get("cannons").asInt(),
                             node.get("credits").asInt(),
                             node.get("flight day loss").asInt()
                     );
                     case "meteors" -> new MeteorSwarmCard(
-                            image,
                             level,
-                            flightBoard,
                             parseProjectiles(node.get("meteors"))
                     );
                     case "epidemic" -> new EpidemicCard(
-                            image,
-                            level,
-                            flightBoard
+                            level
                     );
                     case "stardust" -> new StarDustCard(
-                            image,
-                            level,
-                            flightBoard
+                            level
                     );
                     case "abandonedShip" -> new AbandonedShipCard(
-                            image,
                             level,
-                            flightBoard,
                             node.get("credits").asInt(),
                             node.get("people").asInt(),
                             node.get("flight day loss").asInt()
                     );
                     case "abandonedStation" -> new AbandonedStationCard(
-                            image,
                             level,
-                            flightBoard,
                             parseGoods(node.get("storage")),
                             node.get("people").asInt(),
                             node.get("flight day loss").asInt()
                     );
                     case "warzone" -> new CombatZoneCard(
-                                image,
-                                level,
-                                flightBoard,
-                                node.path("flight day loss").asInt(0),
-                                node.path("crew loss").asInt(0),
-                                node.path("goods loss").asInt(0),
-                                parseProjectiles(node.get("shoots")),
-                                new ObjectMapper().convertValue(
-                                        node.get("actions"),
-                                        new TypeReference<List<String>>(){}
-                                )
-                        );
-                    case "open space" -> new OpenSpaceCard(
-                            image,
                             level,
-                            flightBoard
+                            parseChecks(node.path("checks")),
+                            parsePenalties(node.path("penalties"), node));
+                    case "open space" -> new OpenSpaceCard(
+                            level
                     );
                     default -> throw new IllegalArgumentException("Unknown card type: " + type);
                 };
@@ -213,6 +181,35 @@ public abstract class Deck{
             goods.put(type, goodsNode.get(type.name().toLowerCase()).asInt());
         }
         return goods;
+    }
+
+    private static List<CombatZoneCheck> parseChecks(JsonNode checkNode) {
+        List<String> checkNames = new ObjectMapper().convertValue(checkNode, new TypeReference<>(){});
+        List<CombatZoneCheck> checks = new ArrayList<>();
+        for (String name : checkNames) {
+            checks.add(switch (name) {
+                case "min cannons" -> FirePowerCheck.getInstance();
+                case "min engine" -> EnginePowerCheck.getInstance();
+                case "min crew" -> CrewSizeCheck.getInstance();
+                default -> throw new IllegalArgumentException("Unknown check name: " + name);
+            });
+        }
+        return checks;
+    }
+
+    private static List<Penalty> parsePenalties(JsonNode penaltiesNode, JsonNode cardNode) {
+        List<Penalty> penalties = new ArrayList<>();
+        List<String> penaltiesNames = new ObjectMapper().convertValue(penaltiesNode, new TypeReference<>(){});
+        for (String name : penaltiesNames) {
+            penalties.add(switch (name) {
+                case "loses flight days" -> new FlightDaysLoss(cardNode.path("flight day loss").asInt());
+                case "loses goods" -> new GoodsLoss(cardNode.path("storage").asInt());
+                case "gets shot" -> new ProjectileThreat(parseProjectiles(cardNode.path("shoots")));
+                case "loses crew" -> new CrewLoss(cardNode.path("crew loss").asInt());
+                default -> throw new IllegalArgumentException("Unknown penalty name: " + name);
+            });
+        }
+        return penalties;
     }
 
     @VisibleForTesting

@@ -13,8 +13,8 @@ class CargoHoldTest extends ComponentTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        myNormalCargoHold = new CargoHold(null, myConnectors, 2, Boolean.FALSE);
-        mySpecialCargoHold = new CargoHold(null, myConnectors, 3, Boolean.TRUE);
+        myNormalCargoHold = new CargoHold(myConnectors, 2, Boolean.FALSE);
+        mySpecialCargoHold = new CargoHold(myConnectors, 3, Boolean.TRUE);
     }
 
     @Test

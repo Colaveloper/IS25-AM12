@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.Physical;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 
@@ -8,12 +7,11 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public abstract class ShipBoard implements Physical, ComponentVisitor, ActivatableVisitor {
+public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor {
 
-    protected final Map<Point, it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component> componentMap;
-    protected it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component lastComponent;  // can be null
+    protected final Map<Point, Component> componentMap;
+    protected Component lastComponent;  // can be null
     protected Point lastPosition;  // can be null
-    protected final ComponentBank componentBank;
     protected final Colors color;
 
     protected int firePower;
@@ -35,9 +33,8 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
     protected final Map<Point, Cabin> cabins;
     protected final Map<Point, Activatable> activatables;
 
-    public ShipBoard(ComponentBank componentBank, Colors color) { // (, Color color)
+    public ShipBoard(Colors color) { // (, Color color)
         this.componentMap = new HashMap<>();
-        this.componentBank = componentBank;
         this.lastComponent = null;
         this.lastPosition = null;
 
@@ -60,10 +57,6 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
 
     }
 
-    public ShipBoard(Colors color) {
-        this(ComponentBank.getInstance(), color);
-    }
-
     protected abstract boolean containsPoint(Point point);
 
     public void gainCredits (int credits) {
@@ -72,25 +65,21 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
 
     //ComponentBank interaction methods
 
-    public void requestRandComponent() {
+    public void offerComponent(Component component) {
         weldLastComponent();
-        lastComponent = componentBank.getRanComponent();
+        lastComponent = component;
     }
 
-    public void requestComponent(int id) {
-        weldLastComponent();
-        lastComponent = componentBank.getComponent(id);
-    }
-
-    public void rejectComponent() {
-        componentBank.addUncovered(lastComponent);
+    public Component rejectComponent() {
+        Component rejectedComponent = lastComponent;
         lastComponent = null;
         lastPosition = null;
+        return rejectedComponent;
     }
 
     //Ship building methods
 
-    public void placeComponent(Point newPosition) {
+    public void placeComponent(Point newPosition, int orientation) {
         if (lastComponent == null) {
             throw new IllegalStateException("There is no component to place");
         } else if (componentMap.containsKey(newPosition)) {
@@ -99,13 +88,7 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
             throw new IllegalArgumentException("The position is outside the ship");
         }
         lastPosition = newPosition;
-    }
-
-    public void rotateComponent() {
-        if (lastComponent == null) {
-            throw new IllegalStateException("There is no component to rotate");
-        }
-        lastComponent.rotateLeft();
+        lastComponent.setOrientation(orientation);
     }
 
     public void stashComponent() {}
@@ -131,9 +114,7 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
         lastPosition = null;
     }
 
-    public void incrementLosses(int amount) {
-        losses += amount;
-    }
+    public void finishBuilding() {}
 
     //Observers
 
@@ -319,10 +300,16 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
         }
     }
 
+    public void deactivateAll() {
+        for (Point p : activatables.keySet()) {
+            if (activatables.get(p).isActive()) {
+                activatables.get(p).deactivate(this);
+            }
+        }
+    }
+
     // Ship validity methods
 
-    //TODO: handle exposed connectors update
-    //TODO: handle Components who are not connected
     public boolean checkValidity() {
         for (Point point : componentMap.keySet()) {
             List<Point> neighbours = getNeighbours(point);
@@ -535,10 +522,5 @@ public abstract class ShipBoard implements Physical, ComponentVisitor, Activatab
         doubleEngine.deactivate(this);
         this.engines.remove(this.lastPosition);
         this.activatables.remove(this.lastPosition);
-    }
-
-    @Override
-    public String getDescription() {
-        return ""; // TODO: describe
     }
 }

@@ -127,7 +127,7 @@ public class Lobby {
     }
 
     private synchronized void startGame() {
-        Game game = model.createGame();
+        Game game = model.createGame(this.level);
         for (Player player : players) {
             ShipBoard ship = model.addShip(game, player.getColor().orElseThrow(
                     () -> new IllegalStateException("Player " + player.getNickname() + " has not chosen a color")

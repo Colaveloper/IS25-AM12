@@ -17,7 +17,10 @@ public class AddGoodsState extends GameState {
     }
 
     @Override
-    public void addGood(Point position, GoodsType good) {
+    public void addGood(ShipBoard shipBoard, Point position, GoodsType good) {
+        if (!shipBoard.equals(this.shipBoard)) {
+            throw new IllegalStateException("It's not your turn");
+        }
         if (goodsBuffer.containsKey(good) && goodsBuffer.get(good) > 0) {
             shipBoard.placeGoods(position, good, 1);
             goodsBuffer.put(good, goodsBuffer.get(good) - 1);
@@ -27,7 +30,10 @@ public class AddGoodsState extends GameState {
     }
 
     @Override
-    public void removeGood(Point position, GoodsType good) {
+    public void removeGood(ShipBoard shipBoard, Point position, GoodsType good) {
+        if (!shipBoard.equals(this.shipBoard)) {
+            throw new IllegalStateException("It's not your turn");
+        }
         shipBoard.removeGoods(position, good, 1);
         if (goodsBuffer.containsKey(good)) {
             goodsBuffer.put(good, goodsBuffer.get(good) + 1);
@@ -37,12 +43,11 @@ public class AddGoodsState extends GameState {
     }
 
     @Override
-    public void goNext() {
+    public void goNext(ShipBoard shipBoard) {
+        if (!shipBoard.equals(this.shipBoard)) {
+            throw new IllegalStateException("It's not your turn");
+        }
         game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
     }
 
-    //    @Override
-//    public GameState getNextState() {
-//        return null;
-//    }
 }

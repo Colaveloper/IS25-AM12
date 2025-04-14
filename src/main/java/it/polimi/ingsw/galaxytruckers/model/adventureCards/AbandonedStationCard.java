@@ -7,7 +7,6 @@ import it.polimi.ingsw.galaxytruckers.model.state.AddGoodsState;
 import it.polimi.ingsw.galaxytruckers.model.state.GrabRewardState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 
 import java.util.Map;
 
@@ -18,36 +17,33 @@ public class AbandonedStationCard extends AdventureCard {
     private boolean accepted;
     private boolean acquired;
 
-    public AbandonedStationCard (Image image, Level cardLevel, FlightBoard flightBoard, Map<GoodsType, Integer> goodsPrize, int requiredCrew, int flightDaysLoss) {
-        super(image, cardLevel, flightBoard);
+    public AbandonedStationCard (Level cardLevel, Map<GoodsType, Integer> goodsPrize, int requiredCrew, int flightDaysLoss) {
+        super(cardLevel);
         this.flightDaysLoss = flightDaysLoss;
         this.goodsPrize = goodsPrize;
         this.requiredCrew = requiredCrew;
+    }
+
+    @Override
+    public void initialize(FlightBoard flightBoard) {
+        super.initialize(flightBoard);
         this.accepted = false;
         this.acquired = false;
     }
 
-
     @Override
     public GameState nextStep() {
-
         if(!accepted) {
-
-
             if (currentPlayerIndex < flightBoard.getShipToPlace().size()) { // There are other players to evaluate
                 currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
             }
-
             else {
                 return new DrawCardState();
             }
-
             currentPlayerIndex++;
-
             if (currentShipBoard.getCrewSize() >= requiredCrew) {
                 return new GrabRewardState(this::getReward);
             }
-
             else {
                 return nextStep();
             }

@@ -4,11 +4,6 @@ import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
-import javafx.scene.image.Image;
-
-import java.awt.*;
-import java.util.HashSet;
-import java.util.Set;
 
 public class SlaversCard extends AdventureCard {
 
@@ -18,8 +13,8 @@ public class SlaversCard extends AdventureCard {
     private final int crewLoss;
     private boolean defeated;
 
-    public SlaversCard(Image image, Level cardLevel, FlightBoard flightBoard, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss) {
-        super(image, cardLevel, flightBoard);
+    public SlaversCard(Level cardLevel, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss) {
+        super(cardLevel);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;
@@ -27,14 +22,22 @@ public class SlaversCard extends AdventureCard {
     }
 
     @Override
+    public void initialize(FlightBoard flightBoard) {
+        super.initialize(flightBoard);
+        defeated = false;
+    }
+
+    @Override
     public GameState nextStep() {
         // Evaluating previous player firepower, after double cannons activation
         if (!defeated) {
             if (currentShipBoard != null) {  // There is a previous player who needs their firepower evaluated
-                if (currentShipBoard.getFirePower() > firePowerThreshold) {  // player defeats the enemy
+                int currentFirePower = currentShipBoard.getFirePower();
+                currentShipBoard.deactivateAll();
+                if (currentFirePower > firePowerThreshold) {  // player defeats the enemy
                     defeated = true;
                     return new GrabRewardState(this::getReward); // Let the player choose whether to collect the prize
-                } else if (currentShipBoard.getFirePower() < firePowerThreshold) { // player is defeated
+                } else if (currentFirePower < firePowerThreshold) { // player is defeated
                     ShipBoard tempShipBoard = currentShipBoard;
                     currentShipBoard = null;
                     return new RemoveCrewState(crewLoss, tempShipBoard);

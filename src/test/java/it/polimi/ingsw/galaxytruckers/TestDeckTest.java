@@ -8,14 +8,14 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestDeckTest extends JavaFXInitializer {
+class TestDeckTest {
     Deck testDeck;
     FlightBoard flightBoard;
 
     @Test
     void masterDeckHasTheEightTestCards() throws IOException {
         flightBoard = new SecondFlightBoard(Set.of());
-        testDeck = new TestDeck(flightBoard);
+        testDeck = new TestDeck();
         assertEquals(8, testDeck.getMasterDeck().size());
     }
 }

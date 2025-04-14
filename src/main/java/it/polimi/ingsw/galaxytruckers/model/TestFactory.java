@@ -10,8 +10,8 @@ import java.util.Set;
 
 public class TestFactory implements GameFactory{
     @Override
-    public Deck createDeck(FlightBoard flightBoard) throws IOException {
-        return new TestDeck(flightBoard);
+    public Deck createDeck() throws IOException {
+        return new TestDeck();
     }
 
     @Override
@@ -20,7 +20,12 @@ public class TestFactory implements GameFactory{
     }
 
     @Override
-    public ShipBoard createShipBoard(ComponentBank componentBank, Colors color) {
-        return new TestShipBoard(componentBank, color);
+    public ShipBoard createShipBoard(Colors color) {
+        return new TestShipBoard(color);
+    }
+
+    @Override
+    public Hourglass createHourglass() {
+        return new Hourglass();
     }
 }

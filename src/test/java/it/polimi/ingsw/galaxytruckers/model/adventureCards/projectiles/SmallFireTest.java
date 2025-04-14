@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SmallFireTest {
     ShipBoard shipBoard;
     SmallFire smallFire;
-    Component firstFoundComponent;
+    Point firstFoundComponentPosition;
     Map<Point, Shield> fakeShields;
 
     @Test
@@ -29,11 +29,6 @@ class SmallFireTest {
             }
 
             @Override
-            public Image getImage() {
-                return null;
-            }
-
-            @Override
             public Map<Point, Shield> getShields() {
                 return fakeShields;
             }
@@ -43,19 +38,14 @@ class SmallFireTest {
     }
 
     @Test
-    void getComponentToRemoveReturnsEmptyIfProjectileComesFromShieldDirectionElseFirstFound() {
-        firstFoundComponent = new Component(null, null);
+    void getComponentPositionToRemoveReturnsEmptyIfProjectileComesFromShieldDirectionElseFirstFound() {
+        firstFoundComponentPosition = new Point();
         for (int i = 0; i < 4; i++) {
             int finalI = i;
             shipBoard = new ShipBoard(null) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return false;
-                }
-
-                @Override
-                public Image getImage() {
-                    return null;
                 }
 
                 @Override
@@ -68,14 +58,14 @@ class SmallFireTest {
             for (int j=0; j<4; j++) {
                 smallFire = new SmallFire(j) {
                     @Override
-                    protected Optional<Component> getFirstFoundComponent(ShipBoard shipBoard) {
-                        return Optional.of(firstFoundComponent);
+                    protected Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
+                        return Optional.of(firstFoundComponentPosition);
                     }
                 };
                 if (i==j) {
-                    assertTrue(smallFire.getComponentToRemove(shipBoard).isEmpty());
+                    assertTrue(smallFire.getComponentPositionToRemove(shipBoard).isEmpty());
                 } else {
-                    assertEquals(firstFoundComponent, smallFire.getComponentToRemove(shipBoard).get());
+                    assertEquals(firstFoundComponentPosition, smallFire.getComponentPositionToRemove(shipBoard).get());
                 }
             }
         }

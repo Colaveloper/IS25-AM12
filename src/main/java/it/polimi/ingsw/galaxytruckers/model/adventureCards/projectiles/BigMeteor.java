@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Cannon;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
@@ -27,7 +26,6 @@ public class BigMeteor extends Projectile {
                 .filter(e -> {
                     Cannon c = e.getValue();
                     return shipBoard.getActivatables().containsKey(e.getKey())
-                            && c.getFirePower()>0
                             && cannonPositionIsEffective(e);
                 })
                 .map(Map.Entry::getKey)
@@ -35,8 +33,8 @@ public class BigMeteor extends Projectile {
     }
 
     @Override
-    protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
-        return getFirstFoundComponent(shipBoard).filter(
+    protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
+        return getFirstFoundComponentPosition(shipBoard).filter(
                 (_) -> shipBoard.getCannons().entrySet().stream()
                 .filter(e -> {
                     Cannon c = e.getValue();

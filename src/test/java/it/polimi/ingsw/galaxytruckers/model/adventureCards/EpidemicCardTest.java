@@ -35,19 +35,19 @@ class EpidemicCardTest {
         ships = new ArrayList<>();
 
         testCabins = new HashMap<>();
-        cabinAtRisk = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)) {
+        cabinAtRisk = new Cabin(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)) {
             @Override
             public int getNumResidents () {
                 return 2;
             }
         };
-        emptyCabin = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)) {
+        emptyCabin = new Cabin(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)) {
             @Override
             public int getNumResidents () {
                 return 0;
             }
         };
-        unconnectedCabin = new Cabin(null, Arrays.asList(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE)) {
+        unconnectedCabin = new Cabin(Arrays.asList(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE)) {
             @Override
             public int getNumResidents () {
                 return 2;
@@ -114,14 +114,10 @@ class EpidemicCardTest {
             protected int getLoopLength() {
                 return 0;
             }
-
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
 
-        epidemicCard = new EpidemicCard(null, Level.SECOND, flightBoard);
+        epidemicCard = new EpidemicCard(Level.SECOND);
+        epidemicCard.initialize(flightBoard);
 
     }
 

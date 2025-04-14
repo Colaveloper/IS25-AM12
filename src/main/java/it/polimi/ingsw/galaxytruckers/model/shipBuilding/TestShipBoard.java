@@ -29,15 +29,11 @@ public class TestShipBoard extends ShipBoard {
             new Point(9, 8),
             new Point(9, 9)));
 
-    private static Image image;
-
-    public TestShipBoard(ComponentBank componentBank, Colors color) {
-        super(componentBank, color);
-        image = new Image("textures/cardboard/first-ship-board.jpg");
-    }
+    private boolean finishedBuilding;
 
     public TestShipBoard(Colors color) {
-        this(ComponentBank.getInstance(), color);
+        super(color);
+        finishedBuilding = false;
     }
 
     @Override
@@ -46,14 +42,15 @@ public class TestShipBoard extends ShipBoard {
     }
 
     @Override
-    public Image getImage() {
-        return image;
-        // TODO: composite components and resources on top
+    public void removeComponent(Point position) {
+        super.removeComponent(position);
+        if (finishedBuilding) {
+            this.losses++;
+        }
     }
 
     @Override
-    public String getDescription() {
-        return "Level 1 ship: "+super.getDescription();
-        // TODO: print stats too
+    public void finishBuilding() {
+        this.finishedBuilding = true;
     }
 }

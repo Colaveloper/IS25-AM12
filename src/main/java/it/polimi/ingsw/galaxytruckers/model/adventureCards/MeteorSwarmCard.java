@@ -6,13 +6,9 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectil
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
-import javafx.scene.image.Image;
 
-import java.awt.*;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class MeteorSwarmCard extends AdventureCard {
     //attributes
@@ -20,15 +16,23 @@ public class MeteorSwarmCard extends AdventureCard {
     private Projectile currentProjectile;
 
 
-    public MeteorSwarmCard(Image image, Level level, FlightBoard flightBoard, List<Projectile> projectiles) {
-        super(image, level, flightBoard);
+    public MeteorSwarmCard(Level level, List<Projectile> projectiles) {
+        super(level);
         this.projectiles = new LinkedList<>(projectiles).reversed();
+    }
+
+    @Override
+    public void initialize(FlightBoard flightBoard) {
+        super.initialize(flightBoard);
         this.currentProjectile = this.projectiles.removeLast();
     }
 
     @Override
     public GameState nextStep() {
         // Letting the currentPlayer activate double cannons
+        if (currentShipBoard != null) {
+            currentShipBoard.deactivateAll();
+        }
         if (currentPlayerIndex < flightBoard.getOrderedShips().size()) {  // There are other players to evaluate
             currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
             currentPlayerIndex++;

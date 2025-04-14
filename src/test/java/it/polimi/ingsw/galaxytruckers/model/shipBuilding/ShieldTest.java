@@ -12,14 +12,14 @@ class ShieldTest extends ComponentTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        myShield = new Shield(null, myConnectors);
+        myShield = new Shield(myConnectors);
     }
 
     @Test
     void protectedDirectionChangesWithRotation() {
         myShield.activate(myShipBoard);
-        for (int i = 1; i <= 4; i++) {
-            myShield.rotateLeft();
+        for (int i = 0; i < 4; i++) {
+            myShield.setOrientation(i);
             assertArrayEquals(new int[]{i%4, (i+1)%4}, myShield.getDefensibleDirections());
         }
     }

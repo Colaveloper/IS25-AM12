@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.JavaFXInitializer;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import org.junit.jupiter.api.*;
@@ -12,110 +11,94 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ShipBoardTest {
-    @BeforeAll
-    static void setup() {
-        new JavaFXInitializer(); // Ensure JavaFX is initialized
-    }
 
     ShipBoard shipBoard;
 
     @Nested
     @DisplayName("Ship-building tests")
     class ShipBuildingTest {
-        it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component componentToAdd;
+        Component componentToAdd;
 
         @BeforeEach
         void setup() {
-            ComponentBank componentBank = new ComponentBank() {
-                @Override
-                public it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component getRanComponent() {
-                    return componentToAdd;
-                }
-            };
-            shipBoard = new SecondShipBoard(componentBank, Colors.BLUE);
-            componentToAdd = new it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component(null, Arrays.asList(Connector.UNIVERSAL, Connector.SINGLE, Connector.DOUBLE, Connector.NONE));
+            shipBoard = new SecondShipBoard(Colors.BLUE);
+            componentToAdd = new Component(Arrays.asList(Connector.UNIVERSAL, Connector.SINGLE, Connector.DOUBLE, Connector.NONE));
         }
 
         @Test
         void placeWithoutWeldDoesNotUpdateMap() {
-            Map<Point, it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component> prevMap = new HashMap<>(shipBoard.getComponentMap());
-            shipBoard.requestRandComponent();
-            shipBoard.placeComponent(new Point(7,7));
+            Map<Point, Component> prevMap = new HashMap<>(shipBoard.getComponentMap());
+            shipBoard.offerComponent(componentToAdd);
+            shipBoard.placeComponent(new Point(7,7),0);
             assertEquals(prevMap, shipBoard.getComponentMap());
         }
 
         @Test
         void placeWithWeldDoesUpdateMap() {
-            Map<Point, it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component> expectedMap = new HashMap<>(shipBoard.getComponentMap());
+            Map<Point, Component> expectedMap = new HashMap<>(shipBoard.getComponentMap());
             Point point = new Point(7,7);
             expectedMap.put(point, componentToAdd);
-            shipBoard.requestRandComponent();
-            shipBoard.placeComponent(point);
+            shipBoard.offerComponent(componentToAdd);
+            shipBoard.placeComponent(point,0);
             shipBoard.weldLastComponent();
             assertEquals(expectedMap, shipBoard.getComponentMap());
         }
 
         @Test
         void placeWithoutComponentThrowsException() {
-            assertThrows(IllegalStateException.class, () -> shipBoard.placeComponent(new Point(7,7)));
+            assertThrows(IllegalStateException.class, () -> shipBoard.placeComponent(new Point(7,7),0));
         }
 
         @Test
         void placeWithIllegalPositionThrowsException() {
-            assertThrows(IllegalStateException.class, () -> shipBoard.placeComponent(new Point(-1,-1)));
+            assertThrows(IllegalStateException.class, () -> shipBoard.placeComponent(new Point(-1,-1),0));
         }
 
         @Test
         void placeWithTakenPositionThrowsException() {
-            shipBoard.requestRandComponent();
-            shipBoard.placeComponent(new Point(7,7));
+            shipBoard.offerComponent(componentToAdd);
+            shipBoard.placeComponent(new Point(7,7),0);
             shipBoard.weldLastComponent();
-            assertThrows(IllegalStateException.class, () -> shipBoard.placeComponent(new Point(7,7)));
+            assertThrows(IllegalStateException.class, () -> shipBoard.placeComponent(new Point(7,7),0));
         }
 
         @Test
         void weldWithoutPositionThrowsException() {
-            shipBoard.requestRandComponent();
+            shipBoard.offerComponent(componentToAdd);
             assertThrows(IllegalStateException.class, () -> shipBoard.weldLastComponent());
         }
 
         @Test
         void componentIsRotated() {
-            List<Connector> expectedConnectors = componentToAdd.getConnectors();
+            List<Connector> expectedConnectors = new ArrayList<>(componentToAdd.getConnectors());
             Point point = new Point(7,7);
             Collections.rotate(expectedConnectors, 1);
-            shipBoard.requestRandComponent();
-            shipBoard.placeComponent(point);
-            shipBoard.rotateComponent();
+            shipBoard.offerComponent(componentToAdd);
+            shipBoard.placeComponent(point,1);
             shipBoard.weldLastComponent();
             assertEquals(expectedConnectors, shipBoard.getComponentMap().get(point).getConnectors());
         }
 
         @Test
-        void rotateWithoutComponentThrowsException() {
-            assertThrows(IllegalStateException.class, () -> shipBoard.rotateComponent());
-        }
-
-        @Test
         void componentIsStashed() {
-            shipBoard.requestRandComponent();
+            shipBoard.offerComponent(componentToAdd);
             shipBoard.stashComponent();
             assertTrue(shipBoard.getStashedComponents().contains(componentToAdd));
         }
 
         @Test
         void stashWhenLimitIsReachedThrowsException() {
-            shipBoard.requestRandComponent();
+            shipBoard.offerComponent(componentToAdd);
             shipBoard.stashComponent();
-            shipBoard.requestRandComponent();
+            shipBoard.offerComponent(componentToAdd);
             shipBoard.stashComponent();
-            shipBoard.requestRandComponent();
+            shipBoard.offerComponent(componentToAdd);
             assertThrows(IllegalStateException.class, () -> shipBoard.stashComponent());
         }
 
         @Test
         void stashedComponentIsGrabbed() {
-            shipBoard.requestRandComponent();
+            shipBoard.offerComponent(componentToAdd);
             shipBoard.stashComponent();
             assertFalse(shipBoard.getLastComponent().isPresent());
             shipBoard.grabStashedComponent(0);
@@ -124,7 +107,7 @@ class ShipBoardTest {
 
         @Test
         void grabStashedComponentOutOfBoundsThrowsException() {
-            shipBoard.requestRandComponent();
+            shipBoard.offerComponent(componentToAdd);
             shipBoard.stashComponent();
             assertThrows(IndexOutOfBoundsException.class, () -> shipBoard.grabStashedComponent(1));
         }
@@ -133,12 +116,11 @@ class ShipBoardTest {
     @Nested
     @DisplayName("Specific components tests")
     class SpecificComponentTests {
-        it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component component;
-        List<Connector> connectors = Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL);
+        Component component;
 
         void addComponent(Point point) {
-            shipBoard.requestRandComponent();
-            shipBoard.placeComponent(point);
+            shipBoard.offerComponent(component);
+            shipBoard.placeComponent(point,0);
             shipBoard.weldLastComponent();
         }
 
@@ -150,13 +132,7 @@ class ShipBoardTest {
 
         @BeforeEach
         void setup() {
-            ComponentBank componentBank = new ComponentBank() {
-                @Override
-                public it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component getRanComponent() {
-                    return component;
-                }
-            };
-            shipBoard = new SecondShipBoard(componentBank, Colors.BLUE);
+            shipBoard = new SecondShipBoard(Colors.BLUE);
         }
 
         @Nested
@@ -166,7 +142,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                cannon = new Cannon(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                cannon = new Cannon(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = cannon;
             }
 
@@ -206,7 +182,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                engine = new Engine(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                engine = new Engine(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = engine;
             }
 
@@ -246,7 +222,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                doubleCannon = new DoubleCannon(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                doubleCannon = new DoubleCannon(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = doubleCannon;
             }
 
@@ -338,7 +314,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                doubleEngine = new DoubleEngine(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                doubleEngine = new DoubleEngine(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = doubleEngine;
             }
 
@@ -433,7 +409,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                shield = new Shield(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                shield = new Shield(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = shield;
             }
 
@@ -486,7 +462,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup() {
-                cabin = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                cabin = new Cabin(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
                 component = cabin;
             }
 
@@ -525,7 +501,7 @@ class ShipBoardTest {
 
             @Test
             void noCabinThrowsExceptionInCrewTypeOptions(){
-                assertThrows(IllegalStateException.class, ()->{shipBoard.getCrewTypeOptions(new Point(7,7));});
+                assertThrows(IllegalStateException.class, ()-> shipBoard.getCrewTypeOptions(new Point(7,7)));
             }
 
             @Test
@@ -542,11 +518,11 @@ class ShipBoardTest {
 
                 // ensure that if the cabin has been initialized with a purple alien, an exception is thrown
                 // since the cabin is not connected to a life support component
-                assertThrows(IllegalStateException.class, ()->{shipBoard.initializeCabin(new Point(7,7), CrewType.PURPLE);});
+                assertThrows(IllegalStateException.class, ()-> shipBoard.initializeCabin(new Point(7,7), CrewType.PURPLE));
 
                 // ensure that if the cabin has been initialized with a brown alien, an exception is thrown
                 // since the cabin is not connected to a life support component
-                assertThrows(IllegalStateException.class, ()->{shipBoard.initializeCabin(new Point(7,7), CrewType.BROWN);});
+                assertThrows(IllegalStateException.class, ()-> shipBoard.initializeCabin(new Point(7,7), CrewType.BROWN));
             }
 
             @Test
@@ -583,7 +559,7 @@ class ShipBoardTest {
 
             @Test
             void addTwoBatteriesUpdatesMaps(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
@@ -593,7 +569,7 @@ class ShipBoardTest {
 
             @Test
             void removeTwoBatteriesUpdatesMap(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
@@ -603,7 +579,7 @@ class ShipBoardTest {
 
             @Test
             void addThreeBatteriesUpdatesMaps(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
@@ -613,7 +589,7 @@ class ShipBoardTest {
 
             @Test
             void removeThreeBatteriesUpdatesMap(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
@@ -623,7 +599,7 @@ class ShipBoardTest {
 
             @Test
             void useTwoBatteries(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
@@ -633,7 +609,7 @@ class ShipBoardTest {
 
             @Test
             void useThreeBatteries(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
@@ -642,14 +618,14 @@ class ShipBoardTest {
             }
 
             @Test void noTwoBatteryThrowsException(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2);
                 component = battery;
                 assertThrows(IllegalStateException.class, () -> shipBoard.useBatteries(new Point(7,7), 2));
                 assertTrue(restIsUnchanged());
             }
 
             @Test void noThreeBatteryThrowsException(){
-                battery = new Battery(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
+                battery = new Battery(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3);
                 component = battery;
                 assertThrows(IllegalStateException.class, () -> shipBoard.useBatteries(new Point(7,7), 2));
                 assertTrue(restIsUnchanged());
@@ -663,7 +639,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup(){
-                cargo = new CargoHold(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3, false);
+                cargo = new CargoHold(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 3, false);
                 component = cargo;
             }
 
@@ -732,7 +708,7 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup(){
-                lifeSupport = new LifeSupport(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL),CrewType.PURPLE);
+                lifeSupport = new LifeSupport(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL),CrewType.PURPLE);
                 component = lifeSupport;
             }
 
@@ -771,8 +747,8 @@ class ShipBoardTest {
 
             @BeforeEach
             void setup(){
-                cabin = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
-                lifeSupport = new LifeSupport(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL),CrewType.PURPLE);
+                cabin = new Cabin(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+                lifeSupport = new LifeSupport(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL),CrewType.PURPLE);
             }
 
             boolean restIsUnchanged(){
@@ -842,24 +818,20 @@ class ShipBoardTest {
     @Nested
     @DisplayName("getConnectedSets() tests")
     class GetConnectedSetsTest {
+        Component component;
         @BeforeEach
         void setUp() {
-            ComponentBank bank = new ComponentBank() {
-                @Override
-                public it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component getRanComponent() {
-                    return new Component(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
-                }
-            };
-            shipBoard = new SecondShipBoard(bank, Colors.BLUE);
+            component = new Component(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
+            shipBoard = new SecondShipBoard(Colors.BLUE);
             for (int i = 5; i <= 9; i++) {
-                shipBoard.requestRandComponent();
-                shipBoard.placeComponent(new Point(i,7));
+                shipBoard.offerComponent(component);
+                shipBoard.placeComponent(new Point(i,7),0);
             }
-            shipBoard.requestRandComponent();
-            shipBoard.placeComponent(new Point(7,6));
-            shipBoard.requestRandComponent();
-            shipBoard.placeComponent(new Point(7,8));
-            shipBoard.requestRandComponent();
+            shipBoard.offerComponent(component);
+            shipBoard.placeComponent(new Point(7,6),0);
+            shipBoard.offerComponent(component);
+            shipBoard.placeComponent(new Point(7,8),0);
+            shipBoard.offerComponent(component);
         }
 
         @Test

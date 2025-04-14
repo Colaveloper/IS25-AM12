@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +25,7 @@ class ComponentTest {
                 Connector.SINGLE,
                 Connector.DOUBLE
         ));
-        myComponent = new Component(null, myConnectors);
+        myComponent = new Component(myConnectors);
         myShipBoard = new ShipBoardStub();
     }
 
@@ -34,13 +35,13 @@ class ComponentTest {
     }
 
     @Test
-    void orientationChangesAndLoops() {
+    void setOrientationUpdatesConnectorsOrder() {
         assertEquals(0, myComponent.getOrientation());
 
-        // Rotating left should loop back
-        for (int i = 1; i <= 10; i++) {
-            myComponent.rotateLeft();
-            assertEquals(i % 4, myComponent.getOrientation());
-        }
+        myComponent.setOrientation(1);
+        assertEquals(1, myComponent.getOrientation());
+        List<Connector> expConnectors = new ArrayList<>(myConnectors);
+        Collections.rotate(expConnectors,1);
+        assertEquals(expConnectors, myComponent.getConnectors());
     }
 }

@@ -18,7 +18,10 @@ public class RemoveGoodsState extends GameState {
     }
 
     @Override
-    public void loseGood(Point position) {
+    public void loseGood(ShipBoard shipBoard, Point position) {
+        if (!shipBoard.equals(this.shipBoard)) {
+            throw new IllegalStateException("It's not your turn");
+        }
         if (mostValuableGood != null) {
             shipBoard.removeGoods(position, mostValuableGood, 1);
             computeMostValuableGood();

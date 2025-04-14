@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
@@ -23,7 +22,7 @@ public class BigFire extends Projectile{
     }
 
     @Override
-    protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
-        return getFirstFoundComponent(shipBoard);
+    protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
+        return getFirstFoundComponentPosition(shipBoard);
     }
 }

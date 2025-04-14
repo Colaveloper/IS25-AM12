@@ -14,7 +14,10 @@ public class RemoveCrewState extends GameState{
     }
 
     @Override
-    public void loseCrew(Point position) {
+    public void loseCrew(ShipBoard shipBoard, Point position) {
+        if (!shipBoard.equals(this.shipBoard)) {
+            throw new IllegalStateException("It's not your turn");
+        }
         if (shipBoard.getCrewSize() > 0 && crewSacrifice > 0) {
             shipBoard.loseCrew(position,1);
             crewSacrifice--;

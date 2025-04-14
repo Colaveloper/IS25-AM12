@@ -2,13 +2,11 @@ package it.polimi.ingsw.galaxytruckers.model;
 
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import javafx.scene.image.Image;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class SecondFlightBoard extends FlightBoard{
-    private static Image image;
     @VisibleForTesting
     protected static int loopLength;
     @VisibleForTesting
@@ -18,7 +16,6 @@ public class SecondFlightBoard extends FlightBoard{
         super(allShips);
         loopLength = 24;
         startingPositions = Arrays.asList(6, 3, 1, 0).subList(0, allShips.size());
-        image = new Image("file:src/main/resources/texture/cardboard/second-flight-board.png");
         this.startingPositionsLeft = new ArrayList<>(startingPositions);
     }
 
@@ -59,18 +56,6 @@ public class SecondFlightBoard extends FlightBoard{
             // TODO: one-player is left!
             //  ignore the Combat Zone and Sabotage adventures
         }
-    }
-
-    @Override
-    public Image getImage() {
-        return image;
-        // TODO: composite ships on top
-    }
-
-    @Override
-    public String getDescription() {
-        return "Second-Flight: "+super.getDescription();
-        // TODO: describe positions
     }
 
     @Override

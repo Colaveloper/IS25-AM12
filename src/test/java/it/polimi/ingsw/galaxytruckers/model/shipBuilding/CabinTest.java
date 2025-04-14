@@ -11,7 +11,7 @@ class CabinTest extends ComponentTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        myCabin = new Cabin(null, myConnectors);
+        myCabin = new Cabin(myConnectors);
     }
 
     @Test

@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.util.Set;
 
 public interface GameFactory {
-    Deck createDeck(FlightBoard flightBoard) throws IOException;
+    Deck createDeck() throws IOException;
     FlightBoard createFlightBoard(Set<ShipBoard> allShips);
-    ShipBoard createShipBoard(ComponentBank componentBank, Colors color);
+    ShipBoard createShipBoard(Colors color);
+    Hourglass createHourglass();
 }

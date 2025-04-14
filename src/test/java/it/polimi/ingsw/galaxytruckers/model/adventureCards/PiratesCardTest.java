@@ -65,11 +65,6 @@ class PiratesCardTest {
             }
 
             @Override
-            public Image getImage() {
-                return null;
-            }
-
-            @Override
             public void displaceShip(ShipBoard shipBoard, int displacement) {
 
             }
@@ -103,7 +98,7 @@ class PiratesCardTest {
                 }
 
                 @Override
-                protected Optional<Component> getComponentToRemove(ShipBoard shipBoard) {
+                protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
                     return Optional.empty();
                 }
 
@@ -113,8 +108,9 @@ class PiratesCardTest {
                 }
             });
         }
-        piratesCard = new PiratesCard(null, Level.SECOND,
-                flightBoardStub,firePowerThreshold,creditPrize,flightDaysLost,new ArrayList<>(projectiles));
+        piratesCard = new PiratesCard(Level.SECOND,
+                firePowerThreshold,creditPrize,flightDaysLost,new ArrayList<>(projectiles));
+        piratesCard.initialize(flightBoardStub);
     }
 
     @Test

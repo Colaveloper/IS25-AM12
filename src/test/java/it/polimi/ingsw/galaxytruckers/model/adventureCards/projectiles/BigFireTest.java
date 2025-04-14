@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -17,22 +18,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class BigFireTest {
     BigFire bigFire;
     ShipBoard shipBoard;
-    Component component;
+    Point position;
 
     @BeforeEach
     void setUp() {
-        shipBoard = new ShipBoard(null, null) {
+        shipBoard = new ShipBoard(Colors.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
             }
 
-            @Override
-            public Image getImage() {
-                return null;
-            }
         };
-        component = new Component(null, List.of(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE));
+        position = new Point();
     }
 
     @Test
@@ -43,20 +40,20 @@ class BigFireTest {
     }
 
     @Test
-    void getComponentToRemoveReturnsFirstFoundComponent() {
+    void getComponentToRemoveReturnsFirstFoundComponentPosition() {
         class RiggedProjectile extends BigFire {
             public RiggedProjectile(IntSupplier dice, int direction) {
                 super(dice, direction);
             }
 
             @Override
-            public Optional<Component> getFirstFoundComponent (ShipBoard shipBoard) {
-                return Optional.of(component);
+            public Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
+                return Optional.of(position);
             }
         };
 
         Projectile projectile = new RiggedProjectile(()->0, 0);
 
-        assertEquals(Optional.of(component), projectile.getComponentToRemove(shipBoard));
+        assertEquals(Optional.of(position), projectile.getComponentPositionToRemove(shipBoard));
     }
 }
