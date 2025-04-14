@@ -18,6 +18,8 @@ public class ClientModel {
     private final Map<String, Shipboard> playerToShip;
     private final Map<String, Colors> playerToColor;
     private final List<Point> selectablePoints;
+    private Planets planets;
+    private CurrentProjectile currentProjectile;
 
     private AdventureCard currentCard;
 
@@ -80,6 +82,16 @@ public class ClientModel {
 
     public String getMyNickname() {
         return myNickname;
+    }
+
+    public Physical getPlanets(){ return planets; }
+
+    public void setProjectile(ProjectileType projectileType, int direction, int roll) {
+        currentProjectile = new CurrentProjectile (projectileType, direction, roll);
+    }
+
+    public CurrentProjectile getCurrentProjectile() {
+        return currentProjectile;
     }
 
     public void setMyNickname(String myNickname) {
