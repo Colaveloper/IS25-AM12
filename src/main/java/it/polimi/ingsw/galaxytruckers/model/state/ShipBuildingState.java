@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -14,13 +15,12 @@ import java.util.Set;
 public class ShipBuildingState extends GameState {
     private final ComponentBank componentBank;
     private final Set<ShipBoard> completedShipBoards;
-    private final Hourglass hourglass;
+    private Hourglass hourglass;
     private final Map<ShipBoard, Integer> shipToForecasts;
     private final Set<Integer> blockedForecasts;
 
     public ShipBuildingState() {
         this.completedShipBoards = new HashSet<>();
-        this.hourglass = game.getGameFactory().createHourglass();
         this.shipToForecasts = new HashMap<>();
         this.blockedForecasts = new HashSet<>();
         this.componentBank = new ComponentBank();
@@ -29,6 +29,12 @@ public class ShipBuildingState extends GameState {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void setGame(Game game) {
+        super.setGame(game);
+        this.hourglass = game.getGameFactory().createHourglass();
     }
 
     @Override

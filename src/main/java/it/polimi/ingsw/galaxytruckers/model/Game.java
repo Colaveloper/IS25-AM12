@@ -7,14 +7,15 @@ import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.model.state.ShipBuildingState;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Game {
-    GameFactory gameFactory;
-    Set<ShipBoard> shipBoards;
-    FlightBoard flightBoard;
-    Deck deck;
-    GameState currentState;
+    private final GameFactory gameFactory;
+    private final Set<ShipBoard> shipBoards;
+    private FlightBoard flightBoard;
+    private Deck deck;
+    private GameState currentState;
 
     public Game(Level level) {
         switch(level) {
@@ -22,6 +23,7 @@ public class Game {
             case SECOND -> this.gameFactory = new SecondFactory();
             default -> throw new IllegalArgumentException("Level not supported");
         }
+        this.shipBoards = new HashSet<>();
     }
 
     public ShipBoard addShipBoard(Colors color) {
@@ -35,7 +37,7 @@ public class Game {
         try {
             this.deck = gameFactory.createDeck();
         } catch (IOException exception) {
-            throw new IllegalStateException("Cannot create deck because an exception was thrown:\n", exception);
+            throw new RuntimeException("Cannot create deck because an exception was thrown:\n", exception);
         }
         setCurrentState(new ShipBuildingState());
     }
