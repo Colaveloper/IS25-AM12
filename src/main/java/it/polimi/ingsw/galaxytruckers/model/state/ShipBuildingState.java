@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
@@ -42,7 +43,7 @@ public class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        shipBoard.offerComponent(componentBank.getRandComponent());
+        shipBoard.offerComponent(componentBank.drawRandComponent());
     }
 
     @Override
@@ -50,7 +51,7 @@ public class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        shipBoard.offerComponent(componentBank.getComponent(componentId));  //TODO: define componentIdentifiers
+        shipBoard.offerComponent(componentBank.removeUncoveredComponent(componentId));  //TODO: define componentIdentifiers
     }
 
     @Override
@@ -58,7 +59,7 @@ public class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        componentBank.addUncovered(shipBoard.rejectComponent());
+        componentBank.addToUncoveredComponents(shipBoard.rejectComponent());
     }
 
     @Override
@@ -98,6 +99,7 @@ public class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
+        releaseForecast(shipBoard);
         game.getFlightBoard().placeShipOnFlightBoard(shipBoard, startingPosition);
         completedShipBoards.add(shipBoard);
     }
@@ -125,5 +127,30 @@ public class ShipBuildingState extends GameState {
 
     private void endBuilding() {
         game.setCurrentState(new ShipCorrectionState());
+    }
+
+    @VisibleForTesting
+    public ComponentBank getComponentBank() {
+        return componentBank;
+    }
+
+    @VisibleForTesting
+    public Set<ShipBoard> getCompletedShipBoards() {
+        return new HashSet<>(completedShipBoards);
+    }
+
+    @VisibleForTesting
+    public Hourglass getHourglass() {
+        return hourglass;
+    }
+
+    @VisibleForTesting
+    public Map<ShipBoard, Integer> getShipToForecasts() {
+        return new HashMap<>(shipToForecasts);
+    }
+
+    @VisibleForTesting
+    public Set<Integer> getBlockedForecasts() {
+        return new HashSet<>(blockedForecasts);
     }
 }

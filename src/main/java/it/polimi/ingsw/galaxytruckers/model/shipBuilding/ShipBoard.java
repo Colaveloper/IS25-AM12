@@ -214,6 +214,10 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         return Optional.ofNullable(lastComponent);
     }
 
+    public Optional<Point> getLastPosition() {
+        return Optional.ofNullable(lastPosition);
+    }
+
     public List<Component> getStashedComponents() {
         return null;
     }

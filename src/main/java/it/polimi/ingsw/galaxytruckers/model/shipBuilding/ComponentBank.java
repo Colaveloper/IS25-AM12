@@ -23,19 +23,29 @@ public class ComponentBank {
         this.coveredComponents = loadComponents();
     }
 
-    public Component getComponent(int id) {
+    public Component removeUncoveredComponent(int id) {
         if (!uncoveredComponents.containsKey(id)) {
             throw new IllegalArgumentException("No component with id " + id + " exists");
         }
         return uncoveredComponents.remove(id);
     }
 
-    public Component getRandComponent() {
+    public Component drawRandComponent() {
         return coveredComponents.removeLast();
     }
 
-    public void addUncovered(Component component) {
+    public void addToUncoveredComponents(Component component) {
         uncoveredComponents.put(component.hashCode(), component);
+    }
+
+    @VisibleForTesting
+    public List<Component> getCoveredComponents() {
+        return new ArrayList<>(coveredComponents);
+    }
+
+    @VisibleForTesting
+    public Map<Integer, Component> getUncoveredComponents() {
+        return new HashMap<>(uncoveredComponents);
     }
 
     @VisibleForTesting
