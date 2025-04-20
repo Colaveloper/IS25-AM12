@@ -71,6 +71,8 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
+    // update for ship building
+
     public void showStashUpdate(List<Integer> stashedComponentIds) {
         // model.update
         // view.show(ChosenStrategy)

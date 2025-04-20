@@ -14,8 +14,13 @@ public class Shipboard implements Physical{
     private List<List<Component>> componentMatrix;
     private Point upLeft;
     private Point lastPosition;
+
+    private List<Integer> stashedComponents;
+    private boolean hasStashedComponents;
+    private int lostComponents;
+
     private int credits;
-    private int losses;
+    private int losses;                 //TODO: what s this
     private int firepower;
     private int numBatteries;
     private int crewSize;
@@ -25,6 +30,13 @@ public class Shipboard implements Physical{
     }
 
     public void setShipArea(Set<Point> shipArea) {
+
+        // Player stashed components
+        stashedComponents = new ArrayList<>();
+        hasStashedComponents = true;
+        losses = 0;
+
+
         // Bounds
         int minX = shipArea.stream().mapToInt(p -> p.x).min().orElse(0);
         int maxX = shipArea.stream().mapToInt(p -> p.x).max().orElse(0);
@@ -48,9 +60,15 @@ public class Shipboard implements Physical{
         componentMatrix = result;
     }
 
+    public void endBuildingShipboard() {
+        hasStashedComponents = false;
+        losses = stashedComponents.size();
+    }
+
     public void setComponent(Point position, int direction, int componentId) throws IOException {
         Component component = new Component(direction, componentId);
         componentMatrix.get(position.y-upLeft.y).set(position.x-upLeft.x, component);
+        lastPosition = position;
     }
 
     public Component getComponent(Point point) throws IOException {
@@ -59,6 +77,10 @@ public class Shipboard implements Physical{
 
     public Image getImage() {
         return null;
+    }
+
+    public void setStashedComponents(int componentId) {
+
     }
 
     public List<String> getDescription() {

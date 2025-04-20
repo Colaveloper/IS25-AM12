@@ -2,10 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.view.screens.NewCardScreen;
-import it.polimi.ingsw.galaxytruckers.view.screens.NicknameChoiceScreen;
-import it.polimi.ingsw.galaxytruckers.view.screens.PointSelectionScreen;
-import it.polimi.ingsw.galaxytruckers.view.screens.ProjectilesScreen;
+import it.polimi.ingsw.galaxytruckers.view.screens.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +37,7 @@ class CliViewTest {
             model.setComponent("Roborbio", i*5, i%4, shipArea.get(i)); //changing component coeff (<6) gives interesting cases for tests
         }
 
-        model.setCargo("Roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE)); //TODO: doesn t work
+        model.setCargo("Roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE));
         model.setSelectablePoints(new ArrayList<>(List.of(new Point(8, 8), new Point(9, 7))));
         model.setPlayerColor("Roborbio", Colors.RED);
         model.setPlayerToPlace(Map.of("Roborbio", 2));
@@ -57,5 +54,7 @@ class CliViewTest {
         new PointSelectionScreen().showCLI(model);
         System.out.println("_______________________________________________________________");
         new ProjectilesScreen().showCLI(model);
+        System.out.println("_______________________________________________________________");
+        new ShipBuildingScreen().showCLI(model);
     }
 }

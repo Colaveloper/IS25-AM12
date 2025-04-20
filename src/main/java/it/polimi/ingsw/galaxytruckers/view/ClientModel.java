@@ -23,6 +23,7 @@ public class ClientModel {
     private Planets planets;
     private CurrentProjectile currentProjectile;
     private GoodsBuffer goods;
+    private ComponentBank shipBuilder;
 
     private AdventureCard currentCard;
 
@@ -32,6 +33,8 @@ public class ClientModel {
         this.playerToShip = new HashMap<>();
         this.selectablePoints = new ArrayList<>();
     }
+
+        // SETUP PHASE
 
     public void setCurrentPlayerNickname(String currentPlayerNickname) {
         this.currentPlayerNickname = currentPlayerNickname;
@@ -52,12 +55,21 @@ public class ClientModel {
 
     public void setPlayerColor(String nickname, Colors color) {playerToColor.put(nickname, color);}
 
-    public void setComponent(String nickname, int componentId, int direction, Point position) throws IOException {
-        playerToShip.get(nickname).setComponent(position, direction, componentId);
+    public void setMyNickname(String myNickname) {
+        this.myNickname = myNickname;
+        addPlayer(myNickname);
     }
 
-    public void loseBatteries(String nickname, Point position, int batteriesLost) throws IOException {
-        playerToShip.get(myNickname).getComponent(position).subtractStat(batteriesLost);//TODO: update other players too?
+    public void setShipArea(Set<Point> shipArea) {
+        for (Shipboard s : playerToShip.values()) {
+            s.setShipArea(shipArea);
+        }
+    }
+
+        // SHIP BUILDING PHASE
+
+    public void setComponent(String nickname, int componentId, int direction, Point position) throws IOException {
+        playerToShip.get(nickname).setComponent(position, direction, componentId);
     }
 
     public void setCrew(String nickname, Point position, int crew, CrewType crewType) throws IOException {
@@ -65,9 +77,45 @@ public class ClientModel {
         playerToShip.get(myNickname).getComponent(position).setStat(crew);
     }
 
+    public Physical getShipBuilder() {
+        return shipBuilder;
+    }
+
+        // ADVENTURE PHASE
+
+    public void loseBatteries(String nickname, Point position, int batteriesLost) throws IOException {
+        playerToShip.get(myNickname).getComponent(position).subtractStat(batteriesLost);//TODO: update other players too?
+    }
+
     public void setCargo(String nickname, Point position, List<GoodsType> goods) throws IOException {
         playerToShip.get(nickname).getComponent(position).setGoods(goods);
     }
+
+    public Physical getPlanets(){ return planets; }
+
+    public Physical getGoodsBuffer(){ return goods; }
+
+    public void setProjectile(ProjectileType projectileType, int direction, int roll) {
+        currentProjectile = new CurrentProjectile (projectileType, direction, roll);
+    }
+
+    public CurrentProjectile getCurrentProjectile() {
+        return currentProjectile;
+    }
+
+    public Physical getCurrentCard() {
+        return currentCard;
+    }
+
+    public void setCurrentCard(int cardId) throws IOException {
+        this.currentCard = new AdventureCard(cardId);
+    }
+
+    public String getCardName() {
+        return currentCard.getCardName();
+    }
+
+        // OTHER
 
     public String getCurrentPlayerNickname() {
         return currentPlayerNickname;
@@ -87,29 +135,6 @@ public class ClientModel {
         return myNickname;
     }
 
-    public Physical getPlanets(){ return planets; }
-
-    public Physical getGoodsBuffer(){ return goods; }
-
-    public void setProjectile(ProjectileType projectileType, int direction, int roll) {
-        currentProjectile = new CurrentProjectile (projectileType, direction, roll);
-    }
-
-    public CurrentProjectile getCurrentProjectile() {
-        return currentProjectile;
-    }
-
-    public void setMyNickname(String myNickname) {
-        this.myNickname = myNickname;
-        addPlayer(myNickname);
-    }
-
-    public void setShipArea(Set<Point> shipArea) {
-        for (Shipboard s : playerToShip.values()) {
-            s.setShipArea(shipArea);
-        }
-    }
-
     public void setSelectablePoints(List<Point> selectablePoints) {
         playerToShip.get(myNickname).setSelectablePoints(selectablePoints);
         this.selectablePoints.addAll(selectablePoints);
@@ -121,18 +146,6 @@ public class ClientModel {
 
     public List<Point> getSelectablePoints() {
         return selectablePoints;
-    }
-
-    public Physical getCurrentCard() {
-        return currentCard;
-    }
-
-    public void setCurrentCard(int cardId) throws IOException {
-        this.currentCard = new AdventureCard(cardId);
-    }
-
-    public String getCardName() {
-        return currentCard.getCardName();
     }
 
     public void addPlayer(String nickname) {
