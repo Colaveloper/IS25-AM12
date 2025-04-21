@@ -35,7 +35,7 @@ public class ComponentBank {
     }
 
     public void addToUncoveredComponents(Component component) {
-        uncoveredComponents.put(component.hashCode(), component);
+        uncoveredComponents.put(component.getId(), component);
     }
 
     @VisibleForTesting
@@ -60,41 +60,42 @@ public class ComponentBank {
             String type = node.get("type").asText();
             Component component;
             List<Connector> connectors = parseConnectors(node.get("connectors"));
+            int id = node.get("id").asInt();
 
             switch(type){
                 case "shield":
-                    component = new Shield(connectors);
+                    component = new Shield(connectors, id);
                     break;
                 case "life support":
                     CrewType crewType = parseCrewType(node.get("crewtype"));
-                    component = new LifeSupport(connectors, crewType);
+                    component = new LifeSupport(connectors, id, crewType);
                     break;
                 case "double cannon":
-                    component = new DoubleCannon(connectors);
+                    component = new DoubleCannon(connectors, id);
                     break;
                 case "cannon":
-                    component = new Cannon(connectors);
+                    component = new Cannon(connectors, id);
                     break;
                 case "double engine":
-                    component = new DoubleEngine(connectors);
+                    component = new DoubleEngine(connectors, id);
                     break;
                 case "engine":
-                    component = new Engine(connectors);
+                    component = new Engine(connectors, id);
                     break;
                 case "cargo hold":
                     int size = node.get("size").asInt();
                     Boolean isSpecial = node.get("special").asBoolean();
-                    component = new CargoHold(connectors, size, isSpecial);
+                    component = new CargoHold(connectors, id, isSpecial, size);
                     break;
                 case "structural":
-                    component = new Component(connectors);
+                    component = new Component(connectors, id);
                     break;
                 case "battery":
                     int numBatteries = node.get("batteries").asInt();
-                    component = new Battery(connectors, numBatteries);
+                    component = new Battery(connectors, id, numBatteries);
                     break;
                 case "cabin":
-                    component = new Cabin(connectors);
+                    component = new Cabin(connectors, id);
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown component type: " + type);

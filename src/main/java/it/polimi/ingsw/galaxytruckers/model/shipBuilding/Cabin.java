@@ -1,11 +1,20 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import java.util.List;
 
 public class Cabin extends Component {
     private CrewType crewType;
     private int numResidents;
 
+    public Cabin(List<Connector> connectors, int id) {
+        super(connectors,id);
+        this.crewType = null;
+        this.numResidents = 0;
+    }
+
+    @VisibleForTesting
     public Cabin(List<Connector> connectors) {
         super(connectors);
         this.crewType = null;

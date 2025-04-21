@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 
 import java.util.HashMap;
@@ -12,6 +13,15 @@ public class CargoHold extends Component{
     private final Map<GoodsType, Integer> goods;
     private final Boolean isSpecial;
 
+    public CargoHold(List<Connector> connectors, int id, Boolean isSpecial, int size) {
+        super(connectors, id);
+        this.isSpecial = isSpecial;
+        this.size = size;
+        this.goods = new HashMap<>();
+        this.numGoods = 0;
+    }
+
+    @VisibleForTesting
     public CargoHold(List<Connector> connectors, int size, Boolean isSpecial) {
         super(connectors);
         this.size = size;

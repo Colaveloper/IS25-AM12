@@ -2,858 +2,1014 @@
   {
     "type": "shield",
     "connectors": ["none","universal","double","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web156.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web156.jpg",
+    "id": 156
   },
   {
     "type": "shield",
     "connectors": ["none", "universal","single","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web155.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web155.jpg",
+    "id": 155
   },
   {
     "type": "shield",
     "connectors": ["single", "double","single","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web154.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web154.jpg",
+    "id": 154
   },
   {
     "type": "shield",
     "connectors": ["none", "double","double","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web153.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web153.jpg",
+    "id": 153
   },
   {
     "type": "shield",
     "connectors": ["none", "double","universal","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web152.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web152.jpg",
+    "id": 152
   },
   {
     "type": "shield",
     "connectors": ["double", "single","double","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web151.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web151.jpg",
+    "id": 151
   },
   {
     "type": "shield",
     "connectors": ["single", "single","single","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web150.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web150.jpg",
+    "id": 150
   },
   {
     "type": "shield",
     "connectors": ["none", "single","universal","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web149.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web149.jpg",
+    "id": 149
   },
   {
     "type": "life support",
     "connectors": ["double","universal","none","none"],
     "crewtype": "purple",
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web148.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web148.jpg",
+    "id": 148
   },
   {
     "type": "life support",
     "connectors": ["none","universal","none","single"],
     "crewtype": "purple",
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web147.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web147.jpg",
+    "id": 147
   },
   {
     "type": "life support",
     "connectors": ["none","universal","double","none"],
     "crewtype": "purple",
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web146.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web146.jpg",
+    "id": 146
   },
   {
     "type": "life support",
     "connectors": ["none","universal","none","none"],
     "crewtype": "purple",
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web145.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web145.jpg",
+    "id": 145
   },
   {
     "type": "life support",
     "connectors": ["double","double","none","double"],
     "crewtype": "purple",
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web144.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web144.jpg",
+    "id": 144
   },
   {
     "type": "life support",
     "connectors": ["single","double","none","double"],
     "crewtype": "purple",
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web143.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web143.jpg",
+    "id": 143
   },
   {
     "type": "life support",
     "connectors": ["single","universal","none","none"],
     "crewtype": "brown",
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web142.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web142.jpg",
+    "id": 142
   },
   {
     "type": "life support",
     "connectors": ["none","universal","none","double"],
     "crewtype": "brown",
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web141.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web141.jpg",
+    "id": 141
   },
   {
     "type": "life support",
     "connectors": ["none","universal","single","none"],
     "crewtype": "brown",
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web140.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web140.jpg",
+    "id": 140
   },
   {
     "type": "life support",
     "connectors": ["none","universal","none","none"],
     "crewtype": "brown",
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web139.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web139.jpg",
+    "id": 139
   },
   {
     "type": "life support",
     "connectors": ["double","single","none","single"],
     "crewtype": "brown",
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web138.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web138.jpg",
+    "id": 138
   },
   {
     "type": "life support",
     "connectors": ["single","single","none","single"],
     "crewtype": "brown",
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web137.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web137.jpg",
+    "id": 137
   },
   {
     "type": "double cannon",
     "connectors": ["none","universal","single","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web136.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web136.jpg",
+    "id": 136
   },
   {
     "type": "double cannon",
     "connectors": ["none","universal","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web135.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web135.jpg",
+    "id": 135
   },
   {
     "type": "double cannon",
     "connectors": ["none","double","single","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web134.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web134.jpg",
+    "id": 134
   },
   {
     "type": "double cannon",
     "connectors": ["none","double","universal","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web133.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web133.jpg",
+    "id": 133
   },
   {
     "type": "double cannon",
     "connectors": ["none","single","none","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web132.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web132.jpg",
+    "id": 132
   },
   {
     "type": "double cannon",
     "connectors": ["none","single","double","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web131.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web131.jpg",
+    "id": 131
   },
   {
     "type": "double cannon",
     "connectors": ["none","none","double","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web130.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web130.jpg",
+    "id": 130
   },
   {
     "type": "double cannon",
     "connectors": ["none","none","none","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web129.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web129.jpg",
+    "id": 129
   },
   {
     "type": "double cannon",
     "connectors": ["none","none","universal","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web128.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web128.jpg",
+    "id": 128
   },
   {
     "type": "double cannon",
     "connectors": ["none","none","double","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web127.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web127.jpg",
+    "id": 127
   },
   {
     "type": "double cannon",
     "connectors": ["none","none","single","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web126.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web126.jpg",
+    "id": 126
   },
   {
     "type": "cannon",
     "connectors": ["none","universal","none","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web125.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web125.jpg",
+    "id": 125
   },
   {
     "type": "cannon",
     "connectors": ["none","universal","double","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web124.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web124.jpg",
+    "id": 124
   },
   {
     "type": "cannon",
     "connectors": ["none","double","double","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web123.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web123.jpg",
+    "id": 123
   },
   {
     "type": "cannon",
     "connectors": ["none","double","universal","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web122.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web122.jpg",
+    "id": 122
   },
   {
     "type": "cannon",
     "connectors": ["none","double","none","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web121.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web121.jpg",
+    "id": 121
   },
   {
     "type": "cannon",
     "connectors": ["none","double","universal","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web120.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web120.jpg",
+    "id": 120
   },
   {
     "type": "cannon",
     "connectors": ["none","double","single","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web119.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web119.jpg",
+    "id": 119
   },
   {
     "type": "cannon",
     "connectors": ["none","double","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web118.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web118.jpg",
+    "id": 118
   },
   {
     "type": "cannon",
     "connectors": ["none","single","none","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web117.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web117.jpg",
+    "id": 117
   },
   {
     "type": "cannon",
     "connectors": ["none","single","universal","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web116.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web116.jpg",
+    "id": 116
   },
   {
     "type": "cannon",
     "connectors": ["none","single","single","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web115.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web115.jpg",
+    "id": 115
   },
   {
     "type": "cannon",
     "connectors": ["none","single","universal","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web114.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web114.jpg",
+    "id": 114
   },
   {
     "type": "cannon",
     "connectors": ["none","single","double","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web113.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web113.jpg",
+    "id": 113
   },
   {
     "type": "cannon",
     "connectors": ["none","single","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web112.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web112.jpg",
+    "id": 112
   },
   {
     "type": "cannon",
     "connectors": ["none","none","single","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web111.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web111.jpg",
+    "id": 111
   },
   {
     "type": "cannon",
     "connectors": ["none","none","universal","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web110.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web110.jpg",
+    "id": 110
   },
   {
     "type": "cannon",
     "connectors": ["none","none","single","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web109.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web109.jpg",
+    "id": 109
   },
   {
     "type": "cannon",
     "connectors": ["none","none","none","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web108.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web108.jpg",
+    "id": 108
   },
   {
     "type": "cannon",
     "connectors": ["none","none","universal","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web107.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web107.jpg",
+    "id": 107
   },
   {
     "type": "cannon",
     "connectors": ["none","none","double","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web106.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web106.jpg",
+    "id": 106
   },
   {
     "type": "cannon",
     "connectors": ["none","none","none","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web105.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web105.jpg",
+    "id": 105
   },
   {
     "type": "cannon",
     "connectors": ["none","none","double","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web104.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web104.jpg",
+    "id": 104
   },
   {
     "type": "cannon",
     "connectors": ["none","none","double","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web103.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web103.jpg",
+    "id": 103
   },
   {
     "type": "cannon",
     "connectors": ["none","none","single","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web102.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web102.jpg",
+    "id": 102
   },
   {
     "type": "cannon",
     "connectors": ["none","none","single","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web101.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web101.jpg",
+    "id": 101
   },
   {
     "type": "double engine",
     "connectors": ["double","universal","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web100.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web100.jpg",
+    "id": 100
   },
   {
     "type": "double engine",
     "connectors": ["none","universal","none","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web99.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web99.jpg",
+    "id": 99
   },
   {
     "type": "double engine",
     "connectors": ["universal","double","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web98.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web98.jpg",
+    "id": 98
   },
   {
     "type": "double engine",
     "connectors": ["double","double","none","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web97.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web97.jpg",
+    "id": 97
   },
   {
     "type": "double engine",
     "connectors": ["single","single","none","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web96.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web96.jpg",
+    "id": 96
   },
   {
     "type": "double engine",
     "connectors": ["universal","none","none","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web95.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web95.jpg",
+    "id": 95
   },
   {
     "type": "double engine",
     "connectors": ["double","none","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web94.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web94.jpg",
+    "id": 94
   },
   {
     "type": "double engine",
     "connectors": ["single","none","none","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web93.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web93.jpg",
+    "id": 93
   },
   {
     "type": "double engine",
     "connectors": ["single","none","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web92.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web92.jpg",
+    "id": 92
   },
   {
     "type": "engine",
     "connectors": ["single","universal","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web91.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web91.jpg",
+    "id": 91
   },
   {
     "type": "engine",
     "connectors": ["none","universal","none","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web90.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web90.jpg",
+    "id": 90
   },
   {
     "type": "engine",
     "connectors": ["none","universal","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web89.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web89.jpg",
+    "id": 89
   },
   {
     "type": "engine",
     "connectors": ["none","universal","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web88.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web88.jpg",
+    "id": 88
   },
   {
     "type": "engine",
     "connectors": ["universal","double","none","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web87.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web87.jpg",
+    "id": 87
   },
   {
     "type": "engine",
     "connectors": ["double","double","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web86.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web86.jpg",
+    "id": 86
   },
   {
     "type": "engine",
     "connectors": ["single","double","none","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web85.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web85.jpg",
+    "id": 85
   },
   {
     "type": "engine",
     "connectors": ["none","double","none","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web84.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web84.jpg",
+    "id": 84
   },
   {
     "type": "engine",
     "connectors": ["universal","single","none","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web83.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web83.jpg",
+    "id": 83
   },
   {
     "type": "engine",
     "connectors": ["universal","single","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web82.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web82.jpg",
+    "id": 82
   },
   {
     "type": "engine",
     "connectors": ["double","single","none","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web81.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web81.jpg",
+    "id": 81
   },
   {
     "type": "engine",
     "connectors": ["none","single","none","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web80.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web80.jpg",
+    "id": 80
   },
   {
     "type": "engine",
     "connectors": ["universal","none","none","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web79.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web79.jpg",
+    "id": 79
   },
   {
     "type": "engine",
     "connectors": ["double","none","none","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web78.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web78.jpg",
+    "id": 78
   },
   {
     "type": "engine",
     "connectors": ["double","none","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web77.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web77.jpg",
+    "id": 77
   },
   {
     "type": "engine",
     "connectors": ["double","none","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web76.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web76.jpg",
+    "id": 76
   },
   {
     "type": "engine",
     "connectors": ["single","none","none","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web75.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web75.jpg",
+    "id": 75
   },
   {
     "type": "engine",
     "connectors": ["single","none","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web74.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web74.jpg",
+    "id": 74
   },
   {
     "type": "engine",
     "connectors": ["single","none","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web73.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web73.jpg",
+    "id": 73
   },
   {
     "type": "engine",
     "connectors": ["none","none","none","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web72.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web72.jpg",
+    "id": 72
   },
   {
     "type": "engine",
     "connectors": ["none","none","none","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web71.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web71.jpg",
+    "id": 71
   },
   {
     "type": "cargo hold",
     "connectors": ["none","double","none","none"],
     "size": 2,
     "special": true,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web70.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web70.jpg",
+    "id": 70
   },
   {
     "type": "cargo hold",
     "connectors": ["none","single","none","double"],
     "size": 2,
     "special": true,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web69.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web69.jpg",
+    "id": 69
   },
   {
     "type": "cargo hold",
     "connectors": ["none","single","none","none"],
     "size": 2,
     "special": true,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web68.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web68.jpg",
+    "id": 68
   },
   {
     "type": "cargo hold",
     "connectors": ["universal","universal","none","none"],
     "size": 1,
     "special": true,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web67.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web67.jpg",
+    "id": 67
   },
   {
     "type": "cargo hold",
     "connectors": ["double","universal","double","double"],
     "size": 1,
     "special": true,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web66.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web66.jpg",
+    "id": 66
   },
   {
     "type": "cargo hold",
     "connectors": ["double","universal","none","single"],
     "size": 1,
     "special": true,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web65.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web65.jpg",
+    "id": 65
   },
   {
     "type": "cargo hold",
     "connectors": ["single","universal","single","single"],
     "size": 1,
     "special": true,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web64.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web64.jpg",
+    "id": 64
   },
   {
     "type": "cargo hold",
     "connectors": ["none","universal","none","universal"],
     "size": 1,
     "special": true,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web63.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web63.jpg",
+    "id": 63
   },
   {
     "type": "cargo hold",
     "connectors": ["none","universal","single","double"],
     "size": 1,
     "special": true,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web62.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web62.jpg",
+    "id": 62
   },
   {
     "type": "structural",
     "connectors": ["universal","universal","double","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web60.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web60.jpg",
+    "id": 60
   },
   {
     "type": "structural",
     "connectors": ["universal","universal","none","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web59.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web59.jpg",
+    "id": 59
   },
   {
     "type": "structural",
     "connectors": ["universal","universal","double","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web58.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web58.jpg",
+    "id": 58
   },
   {
     "type": "structural",
     "connectors": ["double","universal","none","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web57.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web57.jpg",
+    "id": 57
   },
   {
     "type": "structural",
     "connectors": ["single","universal","double","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web56.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web56.jpg",
+    "id": 56
   },
   {
     "type": "structural",
     "connectors": ["single","universal","single","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web55.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web55.jpg",
+    "id": 55
   },
   {
     "type": "structural",
     "connectors": ["single","universal","none","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web54.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web54.jpg",
+    "id": 54
   },
   {
     "type": "structural",
     "connectors": ["universal","single","none","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web53.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web53.jpg",
+    "id": 53
   },
   {
     "type": "cargo hold",
     "connectors": ["double","double","single","none"],
     "size": 3,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web32.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web32.jpg",
+    "id": 32
   },
   {
     "type": "cargo hold",
     "connectors": ["single","single","double","none"],
     "size": 3,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web31.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web31.jpg",
+    "id": 31
   },
   {
     "type": "cargo hold",
     "connectors": ["double","none","double","none"],
     "size": 3,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web30.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web30.jpg",
+    "id": 30
   },
   {
     "type": "cargo hold",
     "connectors": ["none","double","none","none"],
     "size": 3,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web29.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web29.jpg",
+    "id": 29
   },
   {
     "type": "cargo hold",
     "connectors": ["single","none","single","none"],
     "size": 3,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web28.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web28.jpg",
+    "id": 28
   },
   {
     "type": "cargo hold",
     "connectors": ["none","single","none","none"],
     "size": 3,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web27.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web27.jpg",
+    "id": 27
   },
   {
     "type": "cargo hold",
     "connectors": ["universal","universal","none","none"],
     "size": 2,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web26.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web26.jpg",
+    "id": 26
   },
   {
     "type": "cargo hold",
     "connectors": ["double","universal","double","single"],
     "size": 2,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web25.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web25.jpg",
+    "id": 25
   },
   {
     "type": "cargo hold",
     "connectors": ["none","universal","none","double"],
     "size": 2,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web24.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web24.jpg",
+    "id": 24
   },
   {
     "type": "cargo hold",
     "connectors": ["none","universal","none","single"],
     "size": 2,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web23.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web23.jpg",
+    "id": 23
   },
   {
     "type": "cargo hold",
     "connectors": ["none","universal","none","none"],
     "size": 2,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web22.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web22.jpg",
+    "id": 22
   },
   {
     "type": "cargo hold",
     "connectors": ["none","universal","none","none"],
     "size": 2,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web21.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web21.jpg",
+    "id": 21
   },
   {
     "type": "cargo hold",
     "connectors": ["double","single","none","universal"],
     "size": 2,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web20.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web20.jpg",
+    "id": 20
   },
   {
     "type": "cargo hold",
     "connectors": ["double","single","universal","single"],
     "size": 2,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web19.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web19.jpg",
+    "id": 19
   },
   {
     "type": "cargo hold",
     "connectors": ["double","none","universal","single"],
     "size": 2,
     "special": false,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web18.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web18.jpg",
+    "id": 18
   },
   {
     "type": "battery",
     "connectors": ["none","single","none","none"],
     "batteries": 3,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web17.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web17.jpg",
+    "id": 17
   },
   {
     "type": "battery",
     "connectors": ["double","none","single","double"],
     "batteries": 3,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web16.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web16.jpg",
+    "id": 16
   },
   {
     "type": "battery",
     "connectors": ["double","none","none","single"],
     "batteries": 3,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web15.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web15.jpg",
+    "id": 15
   },
   {
     "type": "battery",
     "connectors": ["double","none","none","none"],
     "batteries": 3,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web14.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web14.jpg",
+    "id": 14
   },
   {
     "type": "battery",
     "connectors": ["single","none","double","single"],
     "batteries": 3,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web13.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web13.jpg",
+    "id": 13
   },
   {
     "type": "battery",
     "connectors": ["single","none","double","none"],
     "batteries": 3,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web12.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web12.jpg",
+    "id": 12
   },
   {
     "type": "battery",
     "connectors": ["universal","universal","none","none"],
     "batteries": 2,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web11.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web11.jpg",
+    "id": 11
   },
   {
     "type": "battery",
     "connectors": ["none","universal","none","universal"],
     "batteries": 2,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web10.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web10.jpg",
+    "id": 10
   },
   {
     "type": "battery",
     "connectors": ["none","universal","none","none"],
     "batteries": 2,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web9.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web9.jpg",
+    "id": 9
   },
   {
     "type": "battery",
     "connectors": ["none","universal","none","none"],
     "batteries": 2,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web8.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web8.jpg",
+    "id": 8
   },
   {
     "type": "battery",
     "connectors": ["universal","double","double","double"],
     "batteries": 2,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web7.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web7.jpg",
+    "id": 7
   },
   {
     "type": "battery",
     "connectors": ["universal","single","single","single"],
     "batteries": 2,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web6.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web6.jpg",
+    "id": 6
   },
   {
     "type": "battery",
     "connectors": ["universal","single","none","none"],
     "batteries": 2,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web5.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web5.jpg",
+    "id": 5
   },
   {
     "type": "battery",
     "connectors": ["double","single","double","single"],
     "batteries": 2,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web4.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web4.jpg",
+    "id": 4
   },
   {
     "type": "battery",
     "connectors": ["universal","none","single","double"],
     "batteries": 2,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web3.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web3.jpg",
+    "id": 3
   },
   {
     "type": "battery",
     "connectors": ["universal","none","none","double"],
     "batteries": 2,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web2.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web2.jpg",
+    "id": 2
   },
   {
     "type": "battery",
     "connectors": ["universal","none","double","single"],
     "batteries": 2,
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web.jpg",
+    "id": 1
   },
   {
     "type": "cabin",
     "connectors": ["double","universal","none","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web51.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web51.jpg",
+    "id": 51
   },
   {
     "type": "cabin",
     "connectors": ["double","universal","double","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web50.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web50.jpg",
+    "id": 50
   },
   {
     "type": "cabin",
     "connectors": ["single","universal","double","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web49.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web49.jpg",
+    "id": 49
   },
   {
     "type": "cabin",
     "connectors": ["single","universal","single","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web48.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web48.jpg",
+    "id": 48
   },
   {
     "type": "cabin",
     "connectors": ["none","universal","none","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web47.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web47.jpg",
+    "id": 47
   },
   {
     "type": "cabin",
     "connectors": ["none","universal","single","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web46.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web46.jpg",
+    "id": 46
   },
   {
     "type": "cabin",
     "connectors": ["none","universal","none","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web45.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web45.jpg",
+    "id": 45
   },
   {
     "type": "cabin",
     "connectors": ["universal","double","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web44.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web44.jpg",
+    "id": 44
   },
   {
     "type": "cabin",
     "connectors": ["double","double","double","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web43.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web43.jpg",
+    "id": 43
   },
   {
     "type": "cabin",
     "connectors": ["single","double","none","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web42.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web42.jpg",
+    "id": 42
   },
   {
     "type": "cabin",
     "connectors": ["none","double","universal","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web41.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web41.jpg",
+    "id": 41
   },
   {
     "type": "cabin",
     "connectors": ["double","single","double","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web40.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web40.jpg",
+    "id": 40
   },
   {
     "type": "cabin",
     "connectors": ["double","single","none","single"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web39.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web39.jpg",
+    "id": 39
   },
   {
     "type": "cabin",
     "connectors": ["double","single","none","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web38.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web38.jpg",
+    "id": 38
   },
   {
     "type": "cabin",
     "connectors": ["single","single","double","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web37.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web37.jpg",
+    "id": 37
   },
   {
     "type": "cabin",
     "connectors": ["single","single","single","double"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web36.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web36.jpg",
+    "id": 36
   },
   {
     "type": "cabin",
     "connectors": ["none","single","universal","none"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web35.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web35.jpg",
+    "id": 35
   },
   {
     "type": "cabin",
     "connectors": ["universal","universal","universal","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web61.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web61.jpg",
+    "id": 61
   },
   {
     "type": "cabin",
     "connectors": ["universal","universal","universal","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web52.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web52.jpg",
+    "id": 52
   },
   {
     "type": "cabin",
     "connectors": ["universal","universal","universal","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web34.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web34.jpg",
+    "id": 34
   },
   {
     "type": "cabin",
     "connectors": ["universal","universal","universal","universal"],
-    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web33.jpg"
+    "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web33.jpg",
+    "id": 33
   }
 ]

@@ -51,7 +51,7 @@ public class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        shipBoard.offerComponent(componentBank.removeUncoveredComponent(componentId));  //TODO: define componentIdentifiers
+        shipBoard.offerComponent(componentBank.removeUncoveredComponent(componentId));
     }
 
     @Override

@@ -55,8 +55,12 @@ class ShipBuildingStateTest {
 
     @Test
     void requestComponentRemovesFromUncoveredAndAddsToShipBoard() {
-        //TODO: define Component identifiers in the JSON file and the constructor
-        // shipBuildingState.requestComponent(shipBoards.getFirst(), 0);
+        Component requestedComponent = shipBuildingState.getComponentBank().getCoveredComponents().getLast();
+        shipBuildingState.requestRandComponent(shipBoards.getLast());
+        shipBuildingState.rejectComponent(shipBoards.getLast());
+        shipBuildingState.requestComponent(shipBoards.getFirst(), requestedComponent.getId());
+        assertTrue(shipBuildingState.getComponentBank().getUncoveredComponents().isEmpty());
+        assertEquals(requestedComponent, shipBoards.getFirst().getLastComponent().orElse(null));
     }
 
     @Test
