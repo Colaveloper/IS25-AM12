@@ -1,8 +1,5 @@
-package it.polimi.ingsw.galaxytruckers;
+package it.polimi.ingsw.galaxytruckers.model;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
-import it.polimi.ingsw.galaxytruckers.model.SecondFlightBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

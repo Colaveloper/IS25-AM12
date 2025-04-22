@@ -108,6 +108,10 @@ public abstract class GameState {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
+    public void placeShipOnFlightBoard(ShipBoard shipBoard) {
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
+
     public void acquireForecast(ShipBoard shipBoard, int deckIndex){
         throw new IllegalStateException("This action is unsupported in this state");
     }

@@ -114,7 +114,13 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         lastPosition = null;
     }
 
-    public void finishBuilding() {}
+    public void finishBuilding() {
+        try {
+            weldLastComponent();
+        } catch (IllegalStateException e) {
+            rejectComponent();
+        }
+    }
 
     //Observers
 

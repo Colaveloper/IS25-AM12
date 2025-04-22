@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
@@ -13,6 +14,11 @@ public class ShipCorrectionState extends GameState {
     public ShipCorrectionState() {
         this.validShipBoards = new HashSet<>();
         this.shipPieces = new HashMap<>();
+    }
+
+    @Override
+    public void setGame(Game game) {
+        super.setGame(game);
         for (ShipBoard shipBoard : game.getShipBoards()) {
             validateShipBoard(shipBoard);
         }

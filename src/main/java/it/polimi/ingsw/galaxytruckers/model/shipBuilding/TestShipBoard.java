@@ -29,11 +29,8 @@ public class TestShipBoard extends ShipBoard {
             new Point(9, 8),
             new Point(9, 9)));
 
-    private boolean finishedBuilding;
-
     public TestShipBoard(Colors color) {
         super(color);
-        finishedBuilding = false;
     }
 
     @Override
@@ -44,13 +41,5 @@ public class TestShipBoard extends ShipBoard {
     @Override
     public void removeComponent(Point position) {
         super.removeComponent(position);
-        if (finishedBuilding) {
-            this.losses++;
-        }
-    }
-
-    @Override
-    public void finishBuilding() {
-        this.finishedBuilding = true;
     }
 }

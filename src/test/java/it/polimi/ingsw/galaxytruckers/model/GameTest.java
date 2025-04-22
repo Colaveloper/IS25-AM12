@@ -2,12 +2,16 @@ package it.polimi.ingsw.galaxytruckers.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.model.factory.SecondFactory;
+import it.polimi.ingsw.galaxytruckers.model.factory.TestFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.ShipBuildingState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOError;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +41,11 @@ class GameTest {
 
     @Test
     void gameStartsCorrectly() {
-        game.start();
+        try {
+            game.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         assertInstanceOf(ShipBuildingState.class,  game.getCurrentState());
         assertNotNull(game.getFlightBoard());
         assertNotNull(game.getDeck());
