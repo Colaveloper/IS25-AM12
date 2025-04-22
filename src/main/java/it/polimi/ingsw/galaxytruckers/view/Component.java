@@ -18,6 +18,7 @@ public class Component implements Physical{
     private List<Connector> connectors = new ArrayList<>();
     private int rotation;
     private boolean isSelectable;
+    private int componentId;
 
     private int componentStat;
     private CrewType crewType;
@@ -36,6 +37,7 @@ public class Component implements Physical{
     private StringBuilder cargoPrint;
 
     public Component(int direction, int componentId) throws IOException {
+        this.componentId = componentId;
         rotation = direction;
         String jsonPath = "src/main/resources/tiles.json";
         File jsonFile = new File(jsonPath);

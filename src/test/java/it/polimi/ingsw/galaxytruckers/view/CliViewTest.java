@@ -43,6 +43,9 @@ class CliViewTest {
         model.setPlayerToPlace(Map.of("Roborbio", 2));
         model.setCurrentCard(3);
         model.setProjectile(ProjectileType.BIGFIRE, 1, 7);
+        model.addRevealedComponent(3);
+        model.addStashedComponent(4);
+        model.setCurrentComponent(3);
     }
 
     @Test

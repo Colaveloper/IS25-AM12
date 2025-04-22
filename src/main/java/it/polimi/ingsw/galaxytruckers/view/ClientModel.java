@@ -23,7 +23,7 @@ public class ClientModel {
     private Planets planets;
     private CurrentProjectile currentProjectile;
     private GoodsBuffer goods;
-    private ComponentBank shipBuilder;
+    private ComponentBank componentBank;
 
     private AdventureCard currentCard;
 
@@ -32,6 +32,7 @@ public class ClientModel {
         this.playerToColor = HashBiMap.create();
         this.playerToShip = new HashMap<>();
         this.selectablePoints = new ArrayList<>();
+        this.componentBank = new ComponentBank();
     }
 
         // SETUP PHASE
@@ -68,6 +69,32 @@ public class ClientModel {
 
         // SHIP BUILDING PHASE
 
+            // COMPONENT BANK
+    public void addRevealedComponent(int componentId) throws IOException {
+        componentBank.addRevealedComponent(componentId);
+    }
+
+    public void removeRevealedComponent(int componentId) throws IOException { //TODO: edit bank and shipboard in one go
+        componentBank.removeStashedComponent(componentId);
+    }
+
+    public void addStashedComponent(int componentId) throws IOException {
+        componentBank.stashComponent(componentId);
+    }
+
+    public void removeStashedComponent(int componentId) throws IOException {
+        componentBank.removeStashedComponent(componentId);
+    }
+
+    public void setCurrentComponent(int componentId) throws IOException {
+        componentBank.setCurrentComponent(componentId);
+    }
+
+    public void clearCurrentComponent() {
+        componentBank.clearCurrentComponent();
+    }
+
+            // SHIPBOARD
     public void setComponent(String nickname, int componentId, int direction, Point position) throws IOException {
         playerToShip.get(nickname).setComponent(position, direction, componentId);
     }
@@ -77,8 +104,8 @@ public class ClientModel {
         playerToShip.get(myNickname).getComponent(position).setStat(crew);
     }
 
-    public Physical getShipBuilder() {
-        return shipBuilder;
+    public Physical getComponentBank() {
+        return componentBank;
     }
 
         // ADVENTURE PHASE
