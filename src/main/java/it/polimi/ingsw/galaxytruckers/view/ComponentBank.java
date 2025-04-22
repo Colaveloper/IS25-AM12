@@ -19,6 +19,12 @@ public class ComponentBank implements Physical {
         this.stashedComponents = new ArrayList<>();
     }
 
+    public void setStashedComponents(List<Integer> components) throws IOException {
+        stashedComponents = new ArrayList<>();
+        for (Integer componentId : components) {
+            stashedComponents.add(new Component(0, componentId));
+        }
+    }
 
     public void addRevealedComponent(int componentId) throws IOException {
         revealedComponents.add(new Component(0, componentId));
@@ -51,6 +57,7 @@ public class ComponentBank implements Physical {
 
     @Override
     public List<String> getDescription() {
+        String padding = "  ";
         StringBuilder row = new StringBuilder();
         description = new ArrayList<>();
 
@@ -60,12 +67,13 @@ public class ComponentBank implements Physical {
         for (int i = 0; i < 3; i++) {
             for (Component component : revealedComponents) {
                 row.append(component.getDescription().get(i));
+                row.append(padding);
             }
             description.add(row.toString());
             row.setLength(0);
         }
         for (int n = 1; n <= revealedComponents.size(); n++) {
-            row.append("  ").append(n).append("  ");
+            row.append("  ").append(n).append("  ").append(padding);
         }
         description.add(row.toString());
         row.setLength(0);
@@ -74,12 +82,13 @@ public class ComponentBank implements Physical {
         for (int i = 0; i < 3; i++) {
             for (Component component : stashedComponents) {
                 row.append(component.getDescription().get(i));
+                row.append(padding);
             }
             description.add(row.toString());
             row.setLength(0);
         }
-        for (int n = 1; n <= stashedComponents.size(); n++) { // TODO: use letters
-            row.append("  ").append(n).append("  ");
+        for (int n = 0; n < stashedComponents.size(); n++) { // TODO: use letters
+            row.append("  ").append((char) ('A' + n)).append("  ").append(padding);
         }
         description.add(row.toString());
 

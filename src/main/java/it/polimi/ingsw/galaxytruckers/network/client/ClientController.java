@@ -73,8 +73,8 @@ public class ClientController {
 
     // update for ship building
 
-    public void showStashUpdate(List<Integer> stashedComponentIds) {
-        // model.update
+    public void showStashUpdate(List<Integer> stashedComponentIds) throws IOException {
+        model.setStashedComponents(stashedComponentIds);
         // view.show(ChosenStrategy)
     }
 
@@ -103,8 +103,8 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
-    public void showComponentRemoval(Point position) {
-        // model.update
+    public void showComponentRemoval(Point position, String nickname) throws IOException {
+        model.removeComponent(position, nickname);
         // view.show(ChosenStrategy)
     }
 

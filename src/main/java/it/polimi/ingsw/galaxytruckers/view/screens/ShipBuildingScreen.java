@@ -12,7 +12,7 @@ public class ShipBuildingScreen implements ScreenStrategy {
         model.getComponentBank().getDescription().forEach(System.out::println);
         model.getMyShipBoard().getDescription().forEach(System.out::println);
         System.out.println("N) to pick new piece");
-        System.out.println("select one piece by number");
+        System.out.println("select one piece on the board by number or from stashed by letter");
     }
 
     @Override

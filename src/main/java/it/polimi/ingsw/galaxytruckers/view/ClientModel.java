@@ -70,12 +70,9 @@ public class ClientModel {
         // SHIP BUILDING PHASE
 
             // COMPONENT BANK
-    public void addRevealedComponent(int componentId) throws IOException {
-        componentBank.addRevealedComponent(componentId);
-    }
 
-    public void removeRevealedComponent(int componentId) throws IOException { //TODO: edit bank and shipboard in one go
-        componentBank.removeStashedComponent(componentId);
+    public void setStashedComponents(List<Integer> stashedComponentIds) throws IOException {
+        componentBank.setStashedComponents(stashedComponentIds);
     }
 
     public void addStashedComponent(int componentId) throws IOException {
@@ -95,6 +92,10 @@ public class ClientModel {
     }
 
             // SHIPBOARD
+    public void removeComponent (Point position, String nickname) throws IOException {
+        playerToShip.get(nickname).removeComponent(position);
+    }
+
     public void setComponent(String nickname, int componentId, int direction, Point position) throws IOException {
         playerToShip.get(nickname).setComponent(position, direction, componentId);
     }
