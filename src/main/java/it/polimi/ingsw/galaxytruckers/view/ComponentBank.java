@@ -78,11 +78,18 @@ public class ComponentBank implements Physical {
         description.add(row.toString());
         row.setLength(0);
 
-        description.add("Stashed components: ");
+        description.add("Stashed components: " + "\tCurrent component: ");
         for (int i = 0; i < 3; i++) {
             for (Component component : stashedComponents) {
                 row.append(component.getDescription().get(i));
                 row.append(padding);
+            }
+            for (int n = 0; n < 2 - stashedComponents.size(); n++) {
+                row.append("     ").append(padding);
+            }
+            row.append("\t\t\t");
+            if (currentComponent != null) {
+                row.append(currentComponent.getDescription().get(i));
             }
             description.add(row.toString());
             row.setLength(0);
@@ -91,11 +98,6 @@ public class ComponentBank implements Physical {
             row.append("  ").append((char) ('A' + n)).append("  ").append(padding);
         }
         description.add(row.toString());
-
-        if(currentComponent != null) {
-            description.add("Current component: ");
-            description.addAll(currentComponent.getDescription());
-        }
 
         return description;
     }
