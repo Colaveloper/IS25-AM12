@@ -34,7 +34,7 @@ public abstract class Projectile {
      */
     public boolean fireAt(ShipBoard shipBoard) {
         Optional<Point> removalPosition = getComponentPositionToRemove(shipBoard);
-        removalPosition.ifPresent(shipBoard::removeComponent);
+        removalPosition.ifPresent(shipBoard::discardComponent);
         return removalPosition.isPresent();
     }
 

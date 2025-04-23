@@ -125,8 +125,7 @@ class ShipBoardTest {
         }
 
         static boolean restIsUnchanged(ShipBoard shipBoard) {
-            return shipBoard.getLosses() == 0 &&
-                    shipBoard.getCredits() == 0 &&
+            return shipBoard.getCredits() == 0 &&
                     shipBoard.getStashedComponents().isEmpty();
         }
 
@@ -168,7 +167,7 @@ class ShipBoardTest {
             @Test
             void removeCannonUpdatesMapAndFirePower() {
                 addComponent(new Point(7,7));
-                shipBoard.removeComponent(new Point(7,7));
+                shipBoard.discardComponent(new Point(7,7));
                 assertTrue(shipBoard.getCannons().isEmpty());
                 assertEquals(0, shipBoard.getFirePower());
                 assertTrue(restIsUnchanged() &&  ShipBoardTest.SpecificComponentTests.restIsUnchanged(shipBoard));
@@ -208,7 +207,7 @@ class ShipBoardTest {
             @Test
             void removeEngineUpdatesMapAndEnginePower() {
                 addComponent(new Point(7,7));
-                shipBoard.removeComponent(new Point(7,7));
+                shipBoard.discardComponent(new Point(7,7));
                 assertEquals(0, shipBoard.getEngines().size());
                 assertTrue(shipBoard.getEngines().isEmpty());
                 assertTrue(restIsUnchanged() && ShipBoardTest.SpecificComponentTests.restIsUnchanged(shipBoard));
@@ -249,7 +248,7 @@ class ShipBoardTest {
             @Test
             void removeUpdatesMaps() {
                 addComponent(new Point(7,7));
-                shipBoard.removeComponent(new Point(7,7));
+                shipBoard.discardComponent(new Point(7,7));
                 assertTrue(shipBoard.getCannons().isEmpty());
                 assertTrue(shipBoard.getCannons().isEmpty());
                 assertEquals(0, shipBoard.getFirePower());
@@ -342,7 +341,7 @@ class ShipBoardTest {
             @Test
             void removeUpdatesMaps() {
                 addComponent(new Point(7,7));
-                shipBoard.removeComponent(new Point(7,7));
+                shipBoard.discardComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
                 assertTrue(shipBoard.getEngines().isEmpty());
                 assertTrue(shipBoard.getActivatables().isEmpty());
@@ -437,7 +436,7 @@ class ShipBoardTest {
             @Test
             void removeUpdatesMap() {
                 addComponent(new Point(7,7));
-                shipBoard.removeComponent(new Point(7,7));
+                shipBoard.discardComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
                 assertEquals(0, shipBoard.getShields().size());
                 assertArrayEquals(new boolean[]{false, false, false, false}, shipBoard.getShieldDirections());
@@ -489,7 +488,7 @@ class ShipBoardTest {
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
                 shipBoard.initializeCabin(new Point(7,7),CrewType.HUMAN);
-                shipBoard.removeComponent(new Point(7,7));
+                shipBoard.discardComponent(new Point(7,7));
                 assertEquals(0, shipBoard.getCabins().size());
             }
 
@@ -573,7 +572,7 @@ class ShipBoardTest {
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
-                shipBoard.removeComponent(new Point(7,7));
+                shipBoard.discardComponent(new Point(7,7));
                 assertEquals(0, shipBoard.getBatteries().size());
             }
 
@@ -593,7 +592,7 @@ class ShipBoardTest {
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
-                shipBoard.removeComponent(new Point(7,7));
+                shipBoard.discardComponent(new Point(7,7));
                 assertEquals(0, shipBoard.getBatteries().size());
             }
 
@@ -665,7 +664,7 @@ class ShipBoardTest {
             void removeUpdatesMap(){
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
-                shipBoard.removeComponent(new Point(7,7));
+                shipBoard.discardComponent(new Point(7,7));
                 assertEquals(0, shipBoard.getCargoHolds().size());
             }
 
@@ -734,7 +733,7 @@ class ShipBoardTest {
             void removeUpdatesMap(){
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
-                shipBoard.removeComponent(new Point(7,7));
+                shipBoard.discardComponent(new Point(7,7));
                 assertEquals(0, shipBoard.getLifeSupports().size());
             }
         }
@@ -787,8 +786,8 @@ class ShipBoardTest {
                 assertTrue(restIsUnchanged());
 
                 shipBoard.initializeCabin(new Point(8,7), CrewType.PURPLE);
-                shipBoard.removeComponent(new Point(8,7));
-                shipBoard.removeComponent(new Point(9,7));
+                shipBoard.discardComponent(new Point(8,7));
+                shipBoard.discardComponent(new Point(9,7));
 
                 assertEquals(0, shipBoard.getCabins().size());
                 assertEquals(0, shipBoard.getLifeSupports().size());
@@ -841,14 +840,14 @@ class ShipBoardTest {
 
         @Test
         void shipHas4differentConnectedSets() {
-            shipBoard.removeComponent(new Point(7,7));
+            shipBoard.discardComponent(new Point(7,7));
 
             assertEquals(4, shipBoard.getConnectedSets().size());
         }
 
         @Test
         void connectedSetsHaveTheRightMembers() {
-            shipBoard.removeComponent(new Point(7,7));
+            shipBoard.discardComponent(new Point(7,7));
             List<Set<Point>> expectedSets = new ArrayList<>();
             for (int i = 0; i < 4; i++) {expectedSets.add(new HashSet<>());}
             expectedSets.get(0).add(new Point(5,7));

@@ -7,6 +7,6 @@ import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import java.util.Optional;
 
 public interface CombatZoneCheck {
-    public ShipBoard getWeakestPlayer(FlightBoard flightBoard);
-    public abstract Optional<GameState> getAvailableAction(ShipBoard shipBoard);
+    ShipBoard getWeakestPlayer(FlightBoard flightBoard);
+    Optional<GameState> getAvailableAction(ShipBoard shipBoard);
 }

@@ -85,7 +85,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
             releaseForecast(shipBoard);
             shipBoard.finishBuilding();
         }
-        game.setCurrentState(new ShipCorrectionState()); //TODO: set SecondShipCorrectionState
+        game.setCurrentState(new SecondShipCorrectionState()); //TODO: set SecondShipCorrectionState
     }
 
     protected void notifyHourglassEnd() {

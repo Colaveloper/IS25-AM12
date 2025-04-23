@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
-import javafx.scene.image.Image;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -39,7 +38,7 @@ public class TestShipBoard extends ShipBoard {
     }
 
     @Override
-    public void removeComponent(Point position) {
-        super.removeComponent(position);
+    public void discardComponent(Point position) {
+        super.discardComponent(position);
     }
 }

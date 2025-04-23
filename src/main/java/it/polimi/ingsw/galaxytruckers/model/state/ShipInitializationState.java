@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
@@ -14,6 +15,11 @@ public class ShipInitializationState extends GameState {
     public ShipInitializationState() {
         shipRelevantCabins = new HashMap<>();
         currentCabins = new HashMap<>();
+    }
+
+    @Override
+    public void setGame(Game game) {
+        super.setGame(game);
         for (ShipBoard shipBoard : game.getShipBoards()) {
             List<Point> relevantCabins = new ArrayList<>();
             for (Point p : shipBoard.getCabins().keySet()) {

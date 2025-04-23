@@ -107,7 +107,11 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
     }
 
-    //TODO: handle exposed connectors logic
+    public void discardComponent(Point position) {
+        removeComponent(position);
+        losses++;
+    }
+
     public void removeComponent(Point position) {
         lastPosition = position;
         componentMap.remove(lastPosition).removeFromVisitor(this);

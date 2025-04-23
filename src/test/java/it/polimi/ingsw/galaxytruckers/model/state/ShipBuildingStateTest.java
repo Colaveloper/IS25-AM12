@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -11,15 +12,12 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-//TODO:
-// - test state transition
 class ShipBuildingStateTest {
     Game game;
     List<ShipBoard> shipBoards;
@@ -38,6 +36,20 @@ class ShipBuildingStateTest {
             game = new Game(Level.SECOND);
             shipBoards.add(game.addShipBoard(Colors.BLUE));
             shipBoards.add(game.addShipBoard(Colors.RED));
+
+            // Make the first ship invalid so that it does not automatically change state
+            ShipBoard invalidShip = shipBoards.getFirst();
+            invalidShip.offerComponent(new Component(
+                    List.of(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)
+            ));
+            invalidShip.placeComponent(new Point(5,9), 0);
+            invalidShip.weldLastComponent();
+            invalidShip.offerComponent(new Component(
+                    List.of(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE)
+            ));
+            invalidShip.placeComponent(new Point(6,9), 0);
+            invalidShip.weldLastComponent();
+
             try {
                 game.start();
             } catch (IOException e) {
@@ -254,6 +266,20 @@ class ShipBuildingStateTest {
             game = new Game(Level.TEST);
             shipBoards.add(game.addShipBoard(Colors.BLUE));
             shipBoards.add(game.addShipBoard(Colors.RED));
+
+            // Make the first ship invalid so that it does not automatically change state
+            ShipBoard invalidShip = shipBoards.getFirst();
+            invalidShip.offerComponent(new Component(
+                    List.of(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)
+            ));
+            invalidShip.placeComponent(new Point(5,9), 0);
+            invalidShip.weldLastComponent();
+            invalidShip.offerComponent(new Component(
+                    List.of(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE)
+            ));
+            invalidShip.placeComponent(new Point(6,9), 0);
+            invalidShip.weldLastComponent();
+
             try {
                 game.start();
             } catch (IOException e) {

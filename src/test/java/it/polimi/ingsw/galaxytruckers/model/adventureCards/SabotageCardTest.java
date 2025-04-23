@@ -55,7 +55,7 @@ class SabotageCardTest {
             }
 
             @Override
-            public void removeComponent(Point position) {
+            public void discardComponent(Point position) {
                 shipExploded.add(ship1);
             }
         };
@@ -67,7 +67,7 @@ class SabotageCardTest {
             }
 
             @Override
-            public void removeComponent(Point position) {
+            public void discardComponent(Point position) {
                 shipExploded.add(ship2);
             }
         };
@@ -79,7 +79,7 @@ class SabotageCardTest {
             }
 
             @Override
-            public void removeComponent(Point position) {
+            public void discardComponent(Point position) {
                 shipExploded.add(ship3);
             }
 

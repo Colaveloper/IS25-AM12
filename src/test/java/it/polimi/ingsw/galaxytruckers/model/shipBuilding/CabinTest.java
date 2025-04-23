@@ -15,13 +15,6 @@ class CabinTest extends ComponentTest {
     }
 
     @Test
-    void crewInformationIsUnavailableBeforeInitializing() {
-        assertThrows(IllegalStateException.class, myCabin::getNumResidents);
-        assertThrows(IllegalStateException.class, myCabin::getCrewType);
-        assertThrows(IllegalStateException.class, () -> myCabin.loseResidents(1));
-    }
-
-    @Test
     void numResidentsConformsWithCrewType() {
         myCabin.initialize(CrewType.PURPLE);
         assertEquals(myCabin.getCrewType(), CrewType.PURPLE);

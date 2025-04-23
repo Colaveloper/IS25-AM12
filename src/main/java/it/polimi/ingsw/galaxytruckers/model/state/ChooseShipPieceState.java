@@ -23,7 +23,8 @@ public class ChooseShipPieceState extends GameState {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
-        removeOtherShipPieces(shipBoard, pieceIndex, shipPieces);
+        Set<Point> componentsToRemove = shipBoard.getComponentMap().keySet();
+        componentsToRemove.removeAll(shipPieces.get(pieceIndex));
         game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
     }
 }

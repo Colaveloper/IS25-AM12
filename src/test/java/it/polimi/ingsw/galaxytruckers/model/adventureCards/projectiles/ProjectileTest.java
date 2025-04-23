@@ -112,7 +112,7 @@ class ProjectileTest {
             }
 
             @Override
-            public void removeComponent(Point point) {
+            public void discardComponent(Point point) {
                 getsRemoved[0] = true;
             }
         };
