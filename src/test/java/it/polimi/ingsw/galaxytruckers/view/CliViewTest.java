@@ -46,8 +46,7 @@ class CliViewTest {
         for (int i = 0 ; i < 10 ; i++) {
             model.addRevealedComponent(i);
         }
-        model.addStashedComponent(4);
-        model.addStashedComponent(5);
+        model.setStashedComponents(new ArrayList<>(List.of(4, 5)));
         model.setCurrentComponent(3);
     }
 

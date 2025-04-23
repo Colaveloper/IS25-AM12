@@ -2,8 +2,12 @@ package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.Physical;
+import it.polimi.ingsw.galaxytruckers.view.Shipboard;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShipBuildingScreen implements ScreenStrategy {
 

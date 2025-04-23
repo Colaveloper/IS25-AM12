@@ -23,14 +23,14 @@ public class ClientModel {
     private Planets planets;
     private CurrentProjectile currentProjectile;
     private GoodsBuffer goods;
-    private ComponentBank componentBank;
+    private final ComponentBank componentBank;
 
     private AdventureCard currentCard;
 
     public ClientModel() {
         this.flightBoard = new FlightBoard();
         this.playerToColor = HashBiMap.create();
-        this.playerToShip = new HashMap<>();
+        this.playerToShip = new LinkedHashMap<>();  // need order to be always the same
         this.selectablePoints = new ArrayList<>();
         this.componentBank = new ComponentBank();
     }
@@ -70,17 +70,16 @@ public class ClientModel {
         // SHIP BUILDING PHASE
 
             // COMPONENT BANK
+    public void addRevealedComponent(int componentId) throws IOException {
+        componentBank.addRevealedComponent(componentId);
+    }
+
+    public void removeRevealedComponent(int componentId) throws IOException { //TODO: edit bank and shipboard in one go
+        componentBank.removeStashedComponent(componentId);
+    }
 
     public void setStashedComponents(List<Integer> stashedComponentIds) throws IOException {
         componentBank.setStashedComponents(stashedComponentIds);
-    }
-
-    public void addStashedComponent(int componentId) throws IOException {
-        componentBank.stashComponent(componentId);
-    }
-
-    public void removeStashedComponent(int componentId) throws IOException {
-        componentBank.removeStashedComponent(componentId);
     }
 
     public void setCurrentComponent(int componentId) throws IOException {
