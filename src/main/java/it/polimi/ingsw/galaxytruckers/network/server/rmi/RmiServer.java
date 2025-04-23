@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RmiVirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
@@ -62,6 +63,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiVirtualServer {
             nicknameToClient.get(tempNickname).reportError("Request refused: Nickname already taken"); // TODO: make event
         }
         // TODO: Give another chance for input
+    }
+
+    @Override
+    public void newGame(Level level, int playerN) throws IOException {
+
     }
 
     @Override

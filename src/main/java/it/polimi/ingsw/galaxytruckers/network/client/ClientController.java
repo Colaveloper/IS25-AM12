@@ -6,10 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.*;
-import it.polimi.ingsw.galaxytruckers.view.screens.NewCardScreen;
-import it.polimi.ingsw.galaxytruckers.view.screens.NicknameChoiceScreen;
-import it.polimi.ingsw.galaxytruckers.view.screens.PointSelectionScreen;
-import it.polimi.ingsw.galaxytruckers.view.screens.ProjectilesScreen;
+import it.polimi.ingsw.galaxytruckers.view.screens.*;
 
 import java.awt.*;
 import java.io.IOException;
@@ -19,17 +16,22 @@ import java.util.List;
 
 public class ClientController {
     private final ClientModel model;
-    private final View view;
+    private View view;
 
     public ClientController(VirtualServer server) {
         this.model = new ClientModel();
-        this.view = new CliView(model, server); // View should only observe the model, not modify it
     }
 
-    // REQUESTS TO THE SERVER // TODO MOVE IN STRATEGY
-//    public void drawCard() throws IOException {
-//        server.drawCard();
-//    }
+    public void showInterfaceChoice (VirtualServer server) throws IOException {
+        // TODO: consider whether to relocate prints and scans
+        System.out.println("Enter \"G\" to switch to the Graphical Interface, or press any other key to continue here");
+        if (new Scanner(System.in).nextLine().trim().equalsIgnoreCase("G")) {
+            view = new GuiView(model, server);
+        } else {
+            view = new CliView(model, server);
+        }
+        view.run(new NicknameChoiceScreen());
+    }
 
     // UPDATES FROM THE SERVER
     public void showNewCard(Integer cardId) throws IOException {
@@ -37,7 +39,16 @@ public class ClientController {
         view.run(new NewCardScreen());
     }
 
-    public void showConnected(String tempNickname) throws IOException {
+    public void showGameCreation() throws IOException {
+        view.run(new GameCreationScreen());
+    }
+
+    public void showLobbyUpdate(List<String> names) throws IOException {
+        model.setNicknames(names);
+        view.run(new LobbyScreen());
+    }
+
+    public void showConnectedAndNicknameChoice(String tempNickname) throws IOException {
         model.setMyNickname(tempNickname);
         view.run(new NicknameChoiceScreen());
     }
