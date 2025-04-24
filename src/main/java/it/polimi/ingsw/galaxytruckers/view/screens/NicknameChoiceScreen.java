@@ -19,6 +19,6 @@ public class NicknameChoiceScreen implements ScreenStrategy {
 
     @Override
     public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {
-        server.registerNickname(input, input);
+        server.registerNickname(input);
     }
 }

@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Planets implements Physical{
+public class Planets extends Physical{
     private final List<Optional<String>> landedPlayers;
     private Optional<List<Map<GoodsType, Integer>>> planets;
 
@@ -43,11 +43,6 @@ public class Planets implements Physical{
             return true; // success
         }
         return false; // failure, spot already taken
-    }
-
-    @Override
-    public Image getImage() {
-        return null;
     }
 
     @Override

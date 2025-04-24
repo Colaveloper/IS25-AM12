@@ -54,13 +54,13 @@ public class RmiServer extends UnicastRemoteObject implements RmiVirtualServer {
     }
 
     @Override
-    public void registerNickname(String tempNickname, String newNickname) throws RemoteException {
+    public void registerNickname(String newNickname) throws RemoteException {
         try {
             controller.registerNickname(newNickname);
-            nicknameToClient.forcePut(newNickname, nicknameToClient.get(tempNickname));
+//            nicknameToClient.forcePut(newNickname, nicknameToClient.get(tempNickname));
             nicknameToClient.get(newNickname).showNicknameRegistration(newNickname); // TODO: make event
         } catch (IllegalArgumentException e) {
-            nicknameToClient.get(tempNickname).reportError("Request refused: Nickname already taken"); // TODO: make event
+//            nicknameToClient.get(tempNickname).reportError("Request refused: Nickname already taken"); // TODO: make event
         }
         // TODO: Give another chance for input
     }

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComponentBank implements Physical {
+public class ComponentBank extends Physical {
     private List<Component> revealedComponents;
     private int coveredComponents;
     private List<String> description;
@@ -48,11 +48,6 @@ public class ComponentBank implements Physical {
 
     public void clearCurrentComponent() {
         currentComponent = null;
-    }
-
-    @Override
-    public Image getImage() {
-        return null;
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Component implements Physical{
+public class Component extends Physical {
     private final ComponentType type;
     private List<Connector> connectors = new ArrayList<>();
     private int rotation;
@@ -94,11 +94,6 @@ public class Component implements Physical{
             };
             default -> "error";
         };
-    }
-
-    @Override
-    public Image getImage() {
-        return null;
     }
 
     @Override

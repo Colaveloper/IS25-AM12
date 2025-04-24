@@ -5,14 +5,9 @@ import it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;
 
 import java.io.IOException;
 
-public abstract class View {
-    final ClientModel model;
-    final VirtualServer server;
-
-    public View (ClientModel model, VirtualServer server) {
-        this.model = model;
-        this.server = server;
-    }
-
-    public abstract void run(ScreenStrategy strategy) throws IOException;
+public interface View {
+    // this is not an abstract class in order to let GuiView extend Application
+    void setModel(ClientModel model);
+    void setServer(VirtualServer server);
+    void run(ScreenStrategy strategy) throws IOException;
 }

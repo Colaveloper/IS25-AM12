@@ -22,4 +22,9 @@ public class NewCardScreen implements ScreenStrategy {
     @Override
     public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws RemoteException {
     }
+
+//    @Override
+//    public void showGUI(ClientModel model) {
+//
+//    }
 }

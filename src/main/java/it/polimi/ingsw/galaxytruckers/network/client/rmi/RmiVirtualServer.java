@@ -20,5 +20,5 @@ public interface RmiVirtualServer extends Remote, VirtualServer {
     public void drawCard(String nickname) throws IOException;
 
     @Override
-    public void registerNickname(String tempNickname, String newNickname) throws RemoteException;
+    public void registerNickname(String newNickname) throws RemoteException;
 }

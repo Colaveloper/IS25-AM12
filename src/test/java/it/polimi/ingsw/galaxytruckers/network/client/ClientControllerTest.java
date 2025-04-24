@@ -22,9 +22,9 @@ class ClientControllerTest {
 
         server = new VirtualServer() {
             @Override
-            public void registerNickname(String tempNickname, String newNickname) throws IOException {
-                nicknames.add(tempNickname);
-                controller.setNickname(tempNickname);
+            public void registerNickname(String myNickname) throws IOException {
+                nicknames.add(myNickname);
+                controller.setNickname(myNickname);
                 controller.showGameCreation(); // granting the rights to create a new game
             }
 

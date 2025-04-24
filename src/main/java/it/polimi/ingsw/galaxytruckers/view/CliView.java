@@ -6,13 +6,24 @@ import it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class CliView extends View{
+public class CliView implements View{
     Scanner scanner;
     String input;
+    static ClientModel model;
+    static VirtualServer server;
 
-    public CliView(ClientModel model, VirtualServer server) {
-        super(model, server);
+    public CliView() {
         scanner = new Scanner(System.in);
+    }
+
+    @Override
+    public void setModel(ClientModel model) {
+        this.model = model;
+    }
+
+    @Override
+    public void setServer(VirtualServer server) {
+        this.server = server;
     }
 
     public void run(ScreenStrategy strategy) throws IOException {

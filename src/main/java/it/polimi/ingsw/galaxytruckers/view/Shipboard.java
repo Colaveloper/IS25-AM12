@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Shipboard implements Physical{
+public class Shipboard extends Physical{
 
     private List<List<Component>> componentMatrix;
     private Point upLeft;
@@ -66,10 +66,6 @@ public class Shipboard implements Physical{
 
     public Component getComponent(Point point) throws IOException {
         return componentMatrix.get(point.y-upLeft.y).get(point.x-upLeft.x);
-    }
-
-    public Image getImage() {
-        return null;
     }
 
     public void setStashedComponents(int componentId) {

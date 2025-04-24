@@ -18,8 +18,8 @@ public class SocketVirtualServer implements VirtualServer {
     }
 
     @Override
-    public void registerNickname(String tempNickname, String newNickname) throws IOException {
-        out.writeObject(new ClientRequest(tempNickname, "registerNickname", newNickname));
+    public void registerNickname(String newNickname) throws IOException {
+        out.writeObject(new ClientRequest("registerNickname", newNickname));
     }
 
     @Override
