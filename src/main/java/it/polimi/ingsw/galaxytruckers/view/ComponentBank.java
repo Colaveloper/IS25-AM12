@@ -94,7 +94,7 @@ public class ComponentBank implements Physical {
             description.add(row.toString());
             row.setLength(0);
         }
-        for (int n = 0; n < stashedComponents.size(); n++) { // TODO: use letters
+        for (int n = 0; n < stashedComponents.size(); n++) {
             row.append("  ").append((char) ('A' + n)).append("  ").append(padding);
         }
         description.add(row.toString());

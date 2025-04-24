@@ -17,22 +17,24 @@ public class ClientModel {
     private String myNickname;
 
     private final FlightBoard flightBoard;
-    private final Map<String, Shipboard> playerToShip;
+    private final LinkedHashMap<String, Shipboard> playerToShip;        // need order to be always the same
     private final BiMap<String, Colors> playerToColor;
     private final List<Point> selectablePoints;
     private Planets planets;
     private CurrentProjectile currentProjectile;
     private GoodsBuffer goods;
     private final ComponentBank componentBank;
+    private final AllShips allShips;
 
     private AdventureCard currentCard;
 
     public ClientModel() {
         this.flightBoard = new FlightBoard();
         this.playerToColor = HashBiMap.create();
-        this.playerToShip = new LinkedHashMap<>();  // need order to be always the same
+        this.playerToShip = new LinkedHashMap<>();
         this.selectablePoints = new ArrayList<>();
         this.componentBank = new ComponentBank();
+        this.allShips = new AllShips(playerToShip, 5, 3); //TODO: substitute magic numbers
     }
 
         // SETUP PHASE
@@ -143,6 +145,10 @@ public class ClientModel {
     }
 
         // OTHER
+
+    public Physical getAllShips() {
+        return allShips;
+    }
 
     public String getCurrentPlayerNickname() {
         return currentPlayerNickname;

@@ -160,4 +160,6 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
+    //TODO: notifica cambio di stato
+
 }
