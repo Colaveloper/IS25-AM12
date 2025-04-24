@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ClientModel {
+    private List<String> nicknames;
     private String currentPlayerNickname;
     private String myNickname;
 
@@ -183,5 +184,13 @@ public class ClientModel {
 
     public void addPlayer(String nickname) {
         playerToShip.put(nickname, new Shipboard());
+    }
+
+    public List<String> getNicknames() {
+        return nicknames;
+    }
+
+    public void setNicknames(List<String> nicknames) {
+        this.nicknames = nicknames;
     }
 }

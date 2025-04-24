@@ -10,5 +10,5 @@ public interface ScreenStrategy {
     boolean isLegalInput(ClientModel model, String input);
     void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException;
 
-//    void showGUI(ClientModel model);
+//    void showGUI(ClientModel model); // TODO: move, breaks Single Responsibility Principle
 }

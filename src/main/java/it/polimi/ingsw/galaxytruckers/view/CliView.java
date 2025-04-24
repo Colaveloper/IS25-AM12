@@ -20,11 +20,13 @@ public class CliView extends View{
 
         // showing the visualization
         strategy.showCLI(model);
+        input = scanner.nextLine();
 
-        // checking user input
-        do {
+        // letting the user correct format errors
+        while (!strategy.isLegalInput(model, input)) {
+            System.out.println("Invalid format, please check your input");
             input = scanner.nextLine();
-        } while (!strategy.isLegalInput(model, input));
+        };
 
         strategy.parseAndInvoke(model, input, server);
     }

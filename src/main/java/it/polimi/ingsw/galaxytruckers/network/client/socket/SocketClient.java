@@ -10,7 +10,6 @@ import it.polimi.ingsw.galaxytruckers.view.ProjectileType;
 
 import java.awt.*;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.RemoteException;
@@ -56,7 +55,7 @@ public class SocketClient implements VirtualClient {
 //    }
 
     private void run() throws IOException {
-        controller.showConnected(String.valueOf(this.hashCode()));
+        controller.showConnectedAndNicknameChoice(String.valueOf(this.hashCode()));
     }
 
     @Override

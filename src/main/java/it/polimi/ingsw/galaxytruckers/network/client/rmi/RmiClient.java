@@ -43,7 +43,7 @@ public class RmiClient extends UnicastRemoteObject implements RmiVirtualClient, 
     private void run() throws IOException {
         server.connect(this);
         // setting temporary nickName
-        controller.showConnected(String.valueOf(this.hashCode()));
+        controller.showConnectedAndNicknameChoice(String.valueOf(this.hashCode()));
     }
 
     @Override

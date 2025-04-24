@@ -5,11 +5,11 @@ import it.polimi.ingsw.galaxytruckers.view.ClientModel;
 
 import java.io.IOException;
 
-public class NicknameChoiceScreen implements ScreenStrategy {
+public class LobbyScreen implements ScreenStrategy {
+
     @Override
     public void showCLI(ClientModel model) {
-        System.out.println("Successfully bound to the server ✅");
-        System.out.println("Please choose a unique nickname in order to proceed: ");
+        System.out.print("Currently in lobby: "+model.getNicknames());
     }
 
     @Override
@@ -18,7 +18,5 @@ public class NicknameChoiceScreen implements ScreenStrategy {
     }
 
     @Override
-    public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {
-        server.registerNickname(input, input);
-    }
+    public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {}
 }

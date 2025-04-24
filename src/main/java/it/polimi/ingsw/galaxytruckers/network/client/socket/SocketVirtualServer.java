@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.client.socket;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.shared.ClientRequest;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
@@ -19,6 +20,11 @@ public class SocketVirtualServer implements VirtualServer {
     @Override
     public void registerNickname(String tempNickname, String newNickname) throws IOException {
         out.writeObject(new ClientRequest(tempNickname, "registerNickname", newNickname));
+    }
+
+    @Override
+    public void newGame(Level level, int playerN) throws IOException {
+
     }
 
     @Override
