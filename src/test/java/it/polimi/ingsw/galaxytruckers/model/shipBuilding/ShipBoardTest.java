@@ -673,8 +673,7 @@ class ShipBoardTest {
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
                 shipBoard.placeGoods(new Point(7,7), GoodsType.GREEN,3);
-                // TODO: uncomment after implementing place, remove goods
-//                assertEquals(6,shipBoard.getGoodsValue());
+                assertEquals(6,shipBoard.getGoodsValue());
             }
 
             @Test
@@ -689,8 +688,7 @@ class ShipBoardTest {
                 assertTrue(restIsUnchanged());
                 shipBoard.placeGoods(new Point(7,7), GoodsType.GREEN, 3);
                 shipBoard.removeGoods(new Point(7,7),GoodsType.GREEN,1);
-                // TODO: uncomment after implementing place, remove goods
-//                assertEquals(4, shipBoard.getGoodsValue());
+                assertEquals(4, shipBoard.getGoodsValue());
             }
 
             @Test

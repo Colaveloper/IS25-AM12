@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.Map;
 
-//TODO: implement addGoods and removeGoods methods, handle state transition
 public class AddGoodsState extends GameState {
     Map<GoodsType, Integer> goodsBuffer;
     ShipBoard shipBoard;

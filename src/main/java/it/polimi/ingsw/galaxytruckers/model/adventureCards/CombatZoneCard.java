@@ -11,9 +11,6 @@ import it.polimi.ingsw.galaxytruckers.model.state.*;
 import java.util.List;
 import java.util.Optional;
 
-//TODO: fix class implementation
-// - make it coherent with other cards and game states
-// - find new implementation strategy (not parsed suppliers)
 public class CombatZoneCard extends AdventureCard {
     private final List<CombatZoneCheck> checks;
     private final List<Penalty> penalties;

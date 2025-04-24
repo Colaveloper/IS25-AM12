@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
@@ -14,7 +15,6 @@ public class ComponentBank {
     private static final File componentJson = new File("src/main/resources/tiles.json");
 
     public ComponentBank() {
-        //TODO: read components from file and shuffle them
         this.coveredComponents = new ArrayList<>();
         this.uncoveredComponents = new HashMap<>();
     }
@@ -115,10 +115,10 @@ public class ComponentBank {
         return connectors;
     }
 
-    private static CrewType parseCrewType(JsonNode crewTypeNode){
+    private static CrewType parseCrewType(JsonNode crewTypeNode) throws JsonParseException {
         if(crewTypeNode != null && !crewTypeNode.isNull()){
             return CrewType.valueOf(crewTypeNode.asText().toUpperCase()); //convert string to enum
         }
-        return null; //TODO: potentially make this throw an exception
+        throw new JsonParseException("Cannot parse crew type");
     }
 }

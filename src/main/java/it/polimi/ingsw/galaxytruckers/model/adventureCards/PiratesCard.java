@@ -51,7 +51,7 @@ public class PiratesCard extends AdventureCard {
                     currentPlayerIndex = 0;
                     winnerShipBoard = currentShipBoard;
                     currentShipBoard = null;
-                    return new GrabRewardState(this::getReward); // Let the player choose whether to collect the prize
+                    return new GrabRewardState(winnerShipBoard, this::getReward); // Let the player choose whether to collect the prize
                 } else if (currentFirePower < firePowerThreshold) { // player is defeated
                     defeatedPlayers.add(currentShipBoard);
                 }

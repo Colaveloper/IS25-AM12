@@ -51,7 +51,7 @@ public class PlanetsCard extends AdventureCard {
             }
             currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
             currentPlayerIndex++;
-            return new ChoosePlanetState(this::choosePlanet, remainingChoices);
+            return new ChoosePlanetState(currentShipBoard, this::choosePlanet, remainingChoices);
         } else {
             if (currentShipBoard != null) {
                 flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);

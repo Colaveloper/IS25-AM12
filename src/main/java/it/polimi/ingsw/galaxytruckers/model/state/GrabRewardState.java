@@ -6,9 +6,9 @@ public class GrabRewardState extends GameState {
     Runnable rewardMethod;
     ShipBoard shipBoard;
 
-    public GrabRewardState(Runnable rewardMethod) {
+    public GrabRewardState(ShipBoard shipBoard, Runnable rewardMethod) {
         this.rewardMethod = rewardMethod;
-        //TODO : define a way to assign shipBoard attribute
+        this.shipBoard = shipBoard;
     }
 
     @Override
