@@ -3,6 +3,9 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.GuiView;
+import javafx.application.Application;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -16,6 +19,7 @@ class ClientControllerTest {
     static List<String> nicknames;
     static VirtualServer server;
     static ClientController controller;
+    static ClientModel model;
 
     static void setUp() {
         nicknames = new ArrayList<>();
@@ -52,6 +56,7 @@ class ClientControllerTest {
             public void processEvents() throws IOException {}
         };
 
+        // the following anonymous class is used to force GUI
         controller = new ClientController(server);
     }
 

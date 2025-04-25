@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -13,20 +13,21 @@ import java.io.IOException;
 public class GuiView extends Application implements View {
     static VirtualServer server;
     static ClientModel model;
+    // TODO: privatize and create setter in View
+    public static ScreenStrategy firstStrategy;
+    static Pane root;  // will be passed to screen strategies
+
 
     public GuiView() {
         super();
+        GuiView.root = new VBox(); //
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        HBox cardContainer = new HBox(20);
-        model.setCurrentCard(1);
-        Physical currentCard = model.getCurrentCard();
-        cardContainer.getChildren().addAll(currentCard.getNode());
-        VBox root = new VBox(10, cardContainer);
-        stage.setScene(new Scene(root, 200, 100));
-        stage.setTitle("Card Viewer");
+        stage.setScene(new Scene(root, 400, 300));
+        stage.setTitle("Galaxy Trucker");
+        run(firstStrategy);
         stage.show();
     }
 
@@ -42,6 +43,6 @@ public class GuiView extends Application implements View {
 
     @Override
     public void run(ScreenStrategy strategy) throws IOException {
-
+        strategy.showGUI(model, root);
     }
 }

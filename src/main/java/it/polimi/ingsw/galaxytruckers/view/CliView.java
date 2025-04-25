@@ -11,21 +11,21 @@ public class CliView implements View{
     String input;
     static ClientModel model;
     static VirtualServer server;
-
     public CliView() {
         scanner = new Scanner(System.in);
     }
 
     @Override
     public void setModel(ClientModel model) {
-        this.model = model;
+        CliView.model = model;
     }
 
     @Override
     public void setServer(VirtualServer server) {
-        this.server = server;
+        CliView.server = server;
     }
 
+    @Override
     public void run(ScreenStrategy strategy) throws IOException {
         // TODO: clearing the console
 

@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.screens;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -33,5 +34,10 @@ public class GameCreationScreen implements ScreenStrategy {
     public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {
         String[] parts = input.split("\\s");
         server.newGame(Level.valueOf(parts[0].toUpperCase()), Integer.parseInt(parts[1]));
+    }
+
+    @Override
+    public void showGUI(ClientModel model, Pane root) {
+
     }
 }

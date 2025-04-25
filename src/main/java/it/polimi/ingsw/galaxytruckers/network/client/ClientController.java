@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ClientController {
     private final ClientModel model;
-    private View view;
+    protected View view;
 
     public ClientController(VirtualServer server) {
         this.model = new ClientModel();
@@ -30,13 +30,15 @@ public class ClientController {
             view = new GuiView();
             view.setServer(server);
             view.setModel(model);
-            Application.launch(GuiView.class);
+            GuiView.firstStrategy = new NewCardScreen(); // FOR TEST
+            model.setCurrentCard(3); // FOR TEST
+            Application.launch(GuiView.class); // calls view.run(...)
         } else {
             view = new CliView();
             view.setServer(server);
             view.setModel(model);
+            view.run(new NicknameChoiceScreen());
         }
-        view.run(new NicknameChoiceScreen());
     }
 
     // UPDATES FROM THE SERVER
