@@ -22,7 +22,7 @@ public class LobbyScreen implements ScreenStrategy {
     public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {}
 
     @Override
-    public void showGUI(ClientModel model, Pane root) {
+    public void showGUI(ClientModel model, Pane root, VirtualServer server) {
 
     }
 }

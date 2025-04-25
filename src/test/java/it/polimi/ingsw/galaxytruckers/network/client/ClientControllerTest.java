@@ -28,6 +28,7 @@ class ClientControllerTest {
             @Override
             public void registerNickname(String myNickname) throws IOException {
                 nicknames.add(myNickname);
+                System.out.println("FAKE SERVER EVENT: successfully registered nickname " + myNickname);
                 controller.setNickname(myNickname);
                 controller.showGameCreation(); // granting the rights to create a new game
             }

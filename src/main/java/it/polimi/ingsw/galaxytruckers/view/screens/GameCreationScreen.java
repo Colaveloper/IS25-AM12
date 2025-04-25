@@ -37,7 +37,7 @@ public class GameCreationScreen implements ScreenStrategy {
     }
 
     @Override
-    public void showGUI(ClientModel model, Pane root) {
+    public void showGUI(ClientModel model, Pane root, VirtualServer server) {
 
     }
 }

@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,12 +21,15 @@ public class GuiView extends Application implements View {
 
     public GuiView() {
         super();
-        GuiView.root = new VBox(); //
+        GuiView.root = new VBox(); // immediately reassigned. used just to avoid NullPointerException
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setScene(new Scene(root, 400, 300));
+        Scene scene = new Scene(GuiView.root);
+        stage.setScene(scene);
+        stage.setFullScreen(true);
+        stage.setFullScreenExitHint("");
         stage.setTitle("Galaxy Trucker");
         run(firstStrategy);
         stage.show();
@@ -41,8 +45,12 @@ public class GuiView extends Application implements View {
         GuiView.server = server;
     }
 
+    /**
+     * Modifies the objects on screen as prescribed by {@code strategy}
+     * @throws IOException
+     */
     @Override
     public void run(ScreenStrategy strategy) throws IOException {
-        strategy.showGUI(model, root);
+        strategy.showGUI(model, root, server);
     }
 }

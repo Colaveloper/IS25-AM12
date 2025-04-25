@@ -30,8 +30,7 @@ public class ClientController {
             view = new GuiView();
             view.setServer(server);
             view.setModel(model);
-            GuiView.firstStrategy = new NewCardScreen(); // FOR TEST
-            model.setCurrentCard(3); // FOR TEST
+            GuiView.firstStrategy = new NicknameChoiceScreen();
             Application.launch(GuiView.class); // calls view.run(...)
         } else {
             view = new CliView();
