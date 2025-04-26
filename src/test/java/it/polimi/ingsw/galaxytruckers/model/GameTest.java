@@ -1,0 +1,53 @@
+package it.polimi.ingsw.galaxytruckers.model;
+
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.ShipBuildingState;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+class GameTest {
+    Game game;
+    List<ShipBoard> shipBoards;
+
+    @BeforeEach
+    void setUp() {
+        game = new Game(Level.SECOND);
+        shipBoards = new ArrayList<>();
+        shipBoards.add(game.addShipBoard(Colors.BLUE));
+        shipBoards.add(game.addShipBoard(Colors.GREEN));
+    }
+
+    @Test
+    void gameIsCreatedCorrectly() {
+        assertInstanceOf(SecondFactory.class, game.getGameFactory());
+        game = new Game(Level.TEST);
+        assertInstanceOf(TestFactory.class, game.getGameFactory());
+    }
+
+    @Test
+    void gameIsNotCreatedIfLevelIsNotValid() {
+        assertThrows(IllegalArgumentException.class, () -> new Game(Level.FIRST));
+    }
+
+    @Test
+    void gameStartsCorrectly() {
+        game.start();
+        assertInstanceOf(ShipBuildingState.class,  game.getCurrentState());
+        assertNotNull(game.getFlightBoard());
+        assertNotNull(game.getDeck());
+        assertTrue(game.getFlightBoard().getAllShips().containsAll(shipBoards));
+        assertEquals(shipBoards.size(), game.getFlightBoard().getAllShips().size());
+    }
+
+    @Test
+    void shipBoardsAreAddedCorrectly() {
+        assertEquals(2, game.getShipBoards().size());
+        assertTrue(game.getShipBoards().containsAll(shipBoards));
+    }
+}

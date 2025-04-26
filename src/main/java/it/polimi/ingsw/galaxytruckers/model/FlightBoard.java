@@ -119,6 +119,11 @@ public abstract class FlightBoard {
             }
         });
     }
+
+    @VisibleForTesting
+    public List<Integer> getStartingPositionsLeft() {
+        return new ArrayList<>(startingPositionsLeft);
+    }
 }
 
 

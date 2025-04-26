@@ -1,5 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -14,13 +16,12 @@ import java.util.Set;
 public class ShipBuildingState extends GameState {
     private final ComponentBank componentBank;
     private final Set<ShipBoard> completedShipBoards;
-    private final Hourglass hourglass;
+    private Hourglass hourglass;
     private final Map<ShipBoard, Integer> shipToForecasts;
     private final Set<Integer> blockedForecasts;
 
     public ShipBuildingState() {
         this.completedShipBoards = new HashSet<>();
-        this.hourglass = game.getGameFactory().createHourglass();
         this.shipToForecasts = new HashMap<>();
         this.blockedForecasts = new HashSet<>();
         this.componentBank = new ComponentBank();
@@ -32,11 +33,17 @@ public class ShipBuildingState extends GameState {
     }
 
     @Override
+    public void setGame(Game game) {
+        super.setGame(game);
+        this.hourglass = game.getGameFactory().createHourglass();
+    }
+
+    @Override
     public void requestRandComponent(ShipBoard shipBoard) {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        shipBoard.offerComponent(componentBank.getRandComponent());
+        shipBoard.offerComponent(componentBank.drawRandComponent());
     }
 
     @Override
@@ -44,7 +51,7 @@ public class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        shipBoard.offerComponent(componentBank.getComponent(componentId));  //TODO: define componentIdentifiers
+        shipBoard.offerComponent(componentBank.removeUncoveredComponent(componentId));  //TODO: define componentIdentifiers
     }
 
     @Override
@@ -52,7 +59,7 @@ public class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        componentBank.addUncovered(shipBoard.rejectComponent());
+        componentBank.addToUncoveredComponents(shipBoard.rejectComponent());
     }
 
     @Override
@@ -92,6 +99,7 @@ public class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
+        releaseForecast(shipBoard);
         game.getFlightBoard().placeShipOnFlightBoard(shipBoard, startingPosition);
         completedShipBoards.add(shipBoard);
     }
@@ -119,5 +127,30 @@ public class ShipBuildingState extends GameState {
 
     private void endBuilding() {
         game.setCurrentState(new ShipCorrectionState());
+    }
+
+    @VisibleForTesting
+    public ComponentBank getComponentBank() {
+        return componentBank;
+    }
+
+    @VisibleForTesting
+    public Set<ShipBoard> getCompletedShipBoards() {
+        return new HashSet<>(completedShipBoards);
+    }
+
+    @VisibleForTesting
+    public Hourglass getHourglass() {
+        return hourglass;
+    }
+
+    @VisibleForTesting
+    public Map<ShipBoard, Integer> getShipToForecasts() {
+        return new HashMap<>(shipToForecasts);
+    }
+
+    @VisibleForTesting
+    public Set<Integer> getBlockedForecasts() {
+        return new HashSet<>(blockedForecasts);
     }
 }
