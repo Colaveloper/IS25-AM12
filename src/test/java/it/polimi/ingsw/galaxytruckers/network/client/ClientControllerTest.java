@@ -35,6 +35,7 @@ class ClientControllerTest {
 
             @Override
             public void newGame(Level level, int playerN) throws IOException {
+                System.out.println("FAKE SERVER EVENT: successfully created lvl "+level+" game for "+playerN+" players");
                 controller.showLobbyUpdate(nicknames);
                 nicknames.add("OtherPlayer1");
                 controller.showLobbyUpdate(nicknames);

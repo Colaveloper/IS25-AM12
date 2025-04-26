@@ -28,8 +28,8 @@ public class GuiView extends Application implements View {
     public void start(Stage stage) throws Exception {
         Scene scene = new Scene(GuiView.root);
         stage.setScene(scene);
-        stage.setFullScreen(true);
-        stage.setFullScreenExitHint("");
+//        stage.setFullScreen(true);
+//        stage.setFullScreenExitHint("");
         stage.setTitle("Galaxy Trucker");
         run(firstStrategy);
         stage.show();

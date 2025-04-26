@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -41,18 +42,22 @@ public class NicknameChoiceScreen implements ScreenStrategy {
         nicknameField.setMaxWidth(200);
         Button submitButton = new Button("Submit");
 
-        submitButton.setOnAction(e -> {
-            String nickname = nicknameField.getText().trim();
-            if (!nickname.isEmpty()) {
-                try {
-                    server.registerNickname(nickname);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
+        nicknameField.setOnAction(e -> submitNickname(nicknameField, server));
+        submitButton.setOnAction(e -> submitNickname(nicknameField, server));
 
         layout.getChildren().addAll(prompt, nicknameField, submitButton);
+        Platform.runLater(nicknameField::requestFocus);
         root.getChildren().add(layout);
+    }
+
+    private void submitNickname(TextField field, VirtualServer server) {
+        String nickname = field.getText().trim();
+        if (!nickname.isEmpty()) {
+            try {
+                server.registerNickname(nickname);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 }
