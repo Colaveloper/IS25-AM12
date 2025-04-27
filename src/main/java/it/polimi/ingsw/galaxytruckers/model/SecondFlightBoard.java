@@ -50,15 +50,6 @@ public class SecondFlightBoard extends FlightBoard{
     }
 
     @Override
-    public void giveUp(ShipBoard shipBoard) {
-        removeShips(Set.of(shipBoard));
-        if (allShips.size() - shipToPlace.size() == 1) {
-            // TODO: one-player is left!
-            //  ignore the Combat Zone and Sabotage adventures
-        }
-    }
-
-    @Override
     protected int getLoopLength() {
         return loopLength;
     }

@@ -14,6 +14,7 @@ public class Game {
     private final GameFactory gameFactory;
     private final Set<ShipBoard> shipBoards = new HashSet<>();
     private FlightBoard flightBoard;
+    private Set<ShipBoard> givenUpShips = new HashSet<>();
     private Deck deck;
     private GameState currentState;
     Level level;
@@ -96,4 +97,21 @@ public class Game {
     public Level getLevel() {
         return level;
     }
+
+    public void forceShipsToGiveUp(){
+        Set<ShipBoard> shipsToGiveUp = new HashSet<>();
+        // if crew == 0, or you have no engine power -> give up
+        for (ShipBoard s : shipBoards){
+            if(s.getEnginePower() == 0 || s.getCrewSize() == 0)
+                givenUpShips.add(s);
+        }
+
+        // if you get lapped -> give up
+        givenUpShips.addAll(flightBoard.getAndRemoveLappedShips());
+
+        // make sure these ships are removed from flightboard
+        flightBoard.removeShips(givenUpShips);
+    }
+
+    public Set<ShipBoard> getGivenUpShips(){return givenUpShips;}
 }
