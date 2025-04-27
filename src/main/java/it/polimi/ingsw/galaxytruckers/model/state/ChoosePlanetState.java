@@ -13,6 +13,7 @@ public class ChoosePlanetState extends GameState {
     public ChoosePlanetState(ShipBoard shipBoard, Consumer<Integer> choosePlanetMethod, Set<Integer> options) {
         this.choosePlanetMethod = choosePlanetMethod;
         this.options = options;
+        this.shipBoard = shipBoard;
     }
 
     @Override
