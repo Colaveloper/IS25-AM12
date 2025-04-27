@@ -114,4 +114,8 @@ public abstract class GameState {
     public void initializeCabin(ShipBoard shipBoard, CrewType crewType) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
+
+    public void giveUp(ShipBoard shipBoard, boolean giveUp){
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
 }
