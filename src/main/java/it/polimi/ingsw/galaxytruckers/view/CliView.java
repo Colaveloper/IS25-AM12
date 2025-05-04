@@ -11,6 +11,7 @@ public class CliView implements View{
     String input;
     static ClientModel model;
     static VirtualServer server;
+
     public CliView() {
         scanner = new Scanner(System.in);
     }
@@ -27,10 +28,14 @@ public class CliView implements View{
 
     @Override
     public void run(ScreenStrategy strategy) throws IOException {
-        // TODO: clearing the console
+        // clearing the console (not supported in intellij, use Windows terminal)
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
 
         // showing the visualization
         strategy.showCLI(model);
+        System.out.flush();
+
         input = scanner.nextLine();
 
         // letting the user correct format errors
