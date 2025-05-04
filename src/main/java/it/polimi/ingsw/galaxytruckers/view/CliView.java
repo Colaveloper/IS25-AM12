@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class CliView extends View{
     Scanner scanner;
     String input;
+    ScreenStrategy currentStrategy;
 
     public CliView(ClientModel model, VirtualServer server) {
         super(model, server);
@@ -18,6 +19,7 @@ public class CliView extends View{
     public void run(ScreenStrategy strategy) throws IOException {
         // TODO: clearing the console
 
+        currentStrategy = strategy;
         // showing the visualization
         strategy.showCLI(model);
         input = scanner.nextLine();
@@ -29,5 +31,9 @@ public class CliView extends View{
         };
 
         strategy.parseAndInvoke(model, input, server);
+    }
+
+    public void refresh() {
+        currentStrategy.showCLI(model);
     }
 }

@@ -15,4 +15,5 @@ public abstract class View {
     }
 
     public abstract void run(ScreenStrategy strategy) throws IOException;
+    public abstract void refresh();
 }

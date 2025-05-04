@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;

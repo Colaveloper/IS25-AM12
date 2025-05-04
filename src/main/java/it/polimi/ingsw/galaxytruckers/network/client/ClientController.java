@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.*;
 import it.polimi.ingsw.galaxytruckers.view.screens.*;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.awt.*;
 import java.io.IOException;
@@ -34,10 +35,6 @@ public class ClientController {
     }
 
     // UPDATES FROM THE SERVER
-    public void showNewCard(Integer cardId) throws IOException {
-        model.setCurrentCard(cardId);
-        view.run(new NewCardScreen());
-    }
 
     public void showGameCreation() throws IOException {
         view.run(new GameCreationScreen());
@@ -134,22 +131,38 @@ public class ClientController {
         view.run(new ProjectilesScreen());
     }
 
-    // update for components
+    // update for components (only data update and nothing to ask or show)
 
     public void showUpdateBatteries(String nickname, Point position, int batteries) throws IOException {
         model.loseBatteries(nickname, position, batteries);
+        view.refresh();
         // view.show(ChosenStrategy);
     }
 
     public void showUpdateCrew(String nickname, Point position, int crew, CrewType crewType) throws IOException {
         model.setCrew(nickname, position, crew, crewType);
+        view.refresh();
         // view.show(ChosenStrategy)
     }
 
     public void showUpdateCargoHold(String nickname, Point position, List<GoodsType> goods) throws IOException {
         model.setCargo(nickname, position, goods);
+        view.refresh();
         // view.show(ChosenStrategy)
     }
+
+    // update for adventure
+
+    public void showNewCard(Integer cardId) throws IOException {
+        model.setCurrentCard(cardId);
+        view.run(new NewCardScreen());
+    }
+
+    public void setCurrentPlayer(String nickname) {
+        model.setCurrentPlayerNickname(nickname);
+    }
+
+    // other updates
 
     public void showUpdateGoodBuffer(List<GoodsType> goods) {
         // model.update
@@ -171,6 +184,8 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
-    //TODO: notifica cambio di stato
+
+
+
 
 }

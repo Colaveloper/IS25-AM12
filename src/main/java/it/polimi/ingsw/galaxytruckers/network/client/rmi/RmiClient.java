@@ -9,7 +9,7 @@ import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiVirtualClient;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
 import it.polimi.ingsw.galaxytruckers.serverController.events.NewCardUpdate;
-import it.polimi.ingsw.galaxytruckers.view.*;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.awt.*;
 import java.io.IOException;

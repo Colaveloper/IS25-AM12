@@ -15,4 +15,10 @@ public class GuiView extends View{
     public void run(ScreenStrategy strategy) throws IOException {
 
     }
+
+    @Override
+    public void refresh() {
+
+    }
+
 }

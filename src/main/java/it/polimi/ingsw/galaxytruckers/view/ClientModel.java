@@ -5,6 +5,8 @@ import com.google.common.collect.HashBiMap;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.States;
 
 import java.awt.*;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ClientModel {
+    private States state;
     private List<String> nicknames;
     private String currentPlayerNickname;
     private String myNickname;
@@ -36,13 +39,14 @@ public class ClientModel {
         this.selectablePoints = new ArrayList<>();
         this.componentBank = new ComponentBank();
         this.allShips = new AllShips(playerToShip, 5, 3); //TODO: substitute magic numbers
+        this.state = States.BUILDING; //TODO: put actual starting state
+    }
+
+    public void changeState(States newState) {
+        this.state = newState;
     }
 
         // SETUP PHASE
-
-    public void setCurrentPlayerNickname(String currentPlayerNickname) {
-        this.currentPlayerNickname = currentPlayerNickname;
-    }
 
     public void setPlayerToPlace(Map<String, Integer> playerToPlace) {
         flightBoard.setPlayerToPlace(playerToPlace.entrySet().stream()
@@ -77,7 +81,7 @@ public class ClientModel {
         componentBank.addRevealedComponent(componentId);
     }
 
-    public void removeRevealedComponent(int componentId) throws IOException { //TODO: edit bank and shipboard in one go
+    public void removeRevealedComponent(int componentId) throws IOException {
         componentBank.removeStashedComponent(componentId);
     }
 
@@ -112,6 +116,17 @@ public class ClientModel {
     }
 
         // ADVENTURE PHASE
+    public void setCurrentPlayerNickname(String currentPlayerNickname) {
+        this.currentPlayerNickname = currentPlayerNickname;
+    }
+
+    public String getCurrentPlayerNickname() {
+        return currentPlayerNickname;
+    }
+
+    public boolean isMyTurn() {
+        return currentPlayerNickname != null && currentPlayerNickname.equals(myNickname);
+    }
 
     public void loseBatteries(String nickname, Point position, int batteriesLost) throws IOException {
         playerToShip.get(myNickname).getComponent(position).subtractStat(batteriesLost);//TODO: update other players too?
@@ -149,10 +164,6 @@ public class ClientModel {
 
     public Physical getAllShips() {
         return allShips;
-    }
-
-    public String getCurrentPlayerNickname() {
-        return currentPlayerNickname;
     }
 
     public Colors getColorFromNickname(String nickname) {return playerToColor.get(nickname);}
