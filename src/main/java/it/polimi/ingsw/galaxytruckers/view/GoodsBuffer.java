@@ -25,6 +25,11 @@ public class GoodsBuffer implements Physical{
         }
     }
 
+    public GoodsBuffer(Planets planet, int planetId){
+        goodsBuffer = new ArrayList<>();
+
+    }
+
     public boolean takeGood(int indexIn) {
         int index = indexIn -1;
         if (index < 0 || index >= goodsBuffer.size()) return false;

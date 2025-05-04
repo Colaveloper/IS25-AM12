@@ -133,8 +133,14 @@ public class ClientModel {
 
     public Physical getGoodsBuffer(){ return goodsBuffer; }
 
+    // remove good from the buffer
     public void updateGoodsBuffer(int index) throws IOException {
         goodsBuffer.takeGood(index);
+    }
+
+    // in case of planets the goodBuffer must be set after the choice
+    public void setPlanetGoodBuffer(int planetId) {
+        goodsBuffer = new GoodsBuffer();
     }
 
     public void setProjectile(ProjectileType projectileType, int direction, int roll) {

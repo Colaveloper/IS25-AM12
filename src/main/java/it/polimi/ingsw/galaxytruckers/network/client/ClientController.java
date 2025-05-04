@@ -163,6 +163,10 @@ public class ClientController {
         view.run(new GoodsScreen());
     }
 
+    public void choosePlanet(int planetId) throws IOException {
+        model.
+    }
+
     // update each time player picks something
     public void updateGoodsBuffer(int index) throws IOException {
         model.updateGoodsBuffer(index);
