@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.List;
 
 public class ClientController {
-    private final ClientModel model;
+    private ClientModel model;
     private View view;
 
     public ClientController(VirtualServer server) {
@@ -33,6 +33,11 @@ public class ClientController {
         }
         view.run(new NicknameChoiceScreen());
     }
+
+    public void setCLIViewManually (VirtualServer server) {
+        view = new CliView(model, server);
+    }
+
 
     // UPDATES FROM THE SERVER
 
@@ -71,7 +76,7 @@ public class ClientController {
 
     public void setFlightBoard(int loopLength, List<Integer> startingPositions) throws IOException {
         model.setFlightBoard(loopLength, startingPositions);
-        view.run(new PointSelectionScreen());
+        //view.run(new PointSelectionScreen());
     }
 
     public void setShipArea(Set<Point> shipArea) {
@@ -79,7 +84,7 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
-    // update for ship building
+    // UPDATE FOR SHIP BUILDING
 
     public void showStashUpdate(List<Integer> stashedComponentIds) throws IOException {
         model.setStashedComponents(stashedComponentIds);
@@ -88,12 +93,16 @@ public class ClientController {
 
     public void showComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException {
         model.setComponent(nickname, componentId, direction, position);
-        // view.show(ChosenStrategy)
+        view.run(new ShipBuildingScreen());
     }
 
     public void showUncoveredUpdate(List<Integer> uncoveredComponentIds, int coveredComponents) {
         // model.update
         // view.show(ChosenStrategy)
+    }
+
+    public void addReavealedComponent(int componentId) throws IOException {
+        model.addRevealedComponent(componentId);
     }
 
     public void showForecast(List<Integer> cardsIds) {
@@ -116,22 +125,12 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
-    public void showStatsUpdate() {
-        // model.update
-        // view.show(ChosenStrategy)
-    }
-
     public void showChoice(List<String> choices) {
         // model.update
         // view.show(ChosenStrategy)
     }
 
-    public void showProjectile(ProjectileType projectileType, int direction, int roll) throws IOException {
-        model.setProjectile(projectileType, direction, roll);
-        view.run(new ProjectilesScreen());
-    }
-
-    // update for components (only data update and nothing to ask or show)
+    // UPDATE FOR COMPONENT (only data update and nothing to ask or show)
 
     public void showUpdateBatteries(String nickname, Point position, int batteries) throws IOException {
         model.loseBatteries(nickname, position, batteries);
@@ -146,20 +145,49 @@ public class ClientController {
     }
 
     public void showUpdateCargoHold(String nickname, Point position, List<GoodsType> goods) throws IOException {
-        model.setCargo(nickname, position, goods);
+        model.setGoods(nickname, position, goods);
         view.refresh();
         // view.show(ChosenStrategy)
     }
 
-    // update for adventure
+    // UPDATE FOR ADVENTURE
 
     public void showNewCard(Integer cardId) throws IOException {
         model.setCurrentCard(cardId);
+        model.setCurrentPlayerNickname(model.getCurrentLeader());
         view.run(new NewCardScreen());
+    }
+
+    // first time goods are shown on screen
+    public void showPlaceGoods() throws IOException {
+        view.run(new GoodsScreen());
+    }
+
+    // update each time player picks something
+    public void updateGoodsBuffer(int index) throws IOException {
+        model.updateGoodsBuffer(index);
+        view.refresh();
     }
 
     public void setCurrentPlayer(String nickname) {
         model.setCurrentPlayerNickname(nickname);
+    }
+
+    public void showProjectile(ProjectileType projectileType, int direction, int roll) throws IOException {
+        model.setProjectile(projectileType, direction, roll);
+        view.run(new ProjectilesScreen());
+    }
+
+    public void showStatsUpdate() {
+        // model.update
+        // view.show(ChosenStrategy)
+    }
+
+    // UPDATE FOR ENDGAME
+
+    public void showFinalStats() {
+        // model.update
+        // view.show(ChosenStrategy)
     }
 
     // other updates
@@ -171,11 +199,6 @@ public class ClientController {
 
     public void showSelectablePoints(List<Point> points) {
         model.setSelectablePoints(points);
-        // view.show(ChosenStrategy)
-    }
-
-    public void showFinalStats() {
-        // model.update
         // view.show(ChosenStrategy)
     }
 

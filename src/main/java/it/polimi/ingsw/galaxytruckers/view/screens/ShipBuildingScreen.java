@@ -16,13 +16,13 @@ public class ShipBuildingScreen implements ScreenStrategy {
         model.getComponentBank().getDescription().forEach(System.out::println);
         //model.getMyShipBoard().getDescription().forEach(System.out::println);
         model.getAllShips().getDescription().forEach(System.out::println);
-        System.out.println("N) to pick new piece");
-        System.out.println("select one piece on the board by number or from stashed by letter");
+        System.out.println("N) to pick new piece\tS) stash current component");
+        System.out.println("select one piece on the board by number OR from stashed by letter");
     }
 
     @Override
     public boolean isLegalInput(ClientModel model, String input) {
-        return false;
+        return true;
     }
 
     @Override

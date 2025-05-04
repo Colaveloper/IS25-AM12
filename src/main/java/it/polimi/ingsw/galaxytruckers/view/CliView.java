@@ -18,7 +18,6 @@ public class CliView extends View{
 
     public void run(ScreenStrategy strategy) throws IOException {
         // TODO: clearing the console
-
         currentStrategy = strategy;
         // showing the visualization
         strategy.showCLI(model);
