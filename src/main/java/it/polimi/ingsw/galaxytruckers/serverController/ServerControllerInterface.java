@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.UUID;
 
 public interface ServerControllerInterface {
@@ -17,7 +18,7 @@ public interface ServerControllerInterface {
      * @throws IllegalArgumentException if there is already a player
      * with the given nickname
      */
-    void registerNickname(String nickname);
+    void registerNickname(String nickname) throws IOException;
     /**
      * Creates a new lobby for a game of the chosen level and with
      * the specified number of players, adding the creator to it
@@ -86,7 +87,7 @@ public interface ServerControllerInterface {
     void requestRandComponent(String nickname);
 
     /**
-     * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameModelInterface#requestComponent(Game, ShipBoard, UUID)}
+     * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameModelInterface#requestComponent(Game, ShipBoard, int)}
      * passing as parameters the game the player is in and their assigned ship board
      * @param nickname the nickname of the player wishing to perform the action
      * @param componentID the id of the component the player wishes to take
@@ -97,16 +98,8 @@ public interface ServerControllerInterface {
      */
     void requestComponent(String nickname, UUID componentID);
 
-    /**
-     * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameModelInterface#rotateComponent(Game, ShipBoard)}
-     * passing as parameters the game the player is in and their assigned ship board
-     * @param nickname the nickname of the player wishing to perform the action
-     * @throws IllegalArgumentException if there is no registered player with
-     * the given nickname
-     * @throws IllegalStateException if the player has not joined a lobby or if their
-     * active lobby is not in game phase
-     */
-    void rotateComponent(String nickname);
+    // deprecated, rotations are now handled client-side
+//    void rotateComponent(String nickname);
 
     //TODO : add documentation for these game methods
     void rejectComponent(String nickname);

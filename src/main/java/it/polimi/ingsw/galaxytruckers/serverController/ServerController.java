@@ -59,10 +59,11 @@ public class ServerController implements ServerControllerInterface {
 
     }
 
-    @Override
-    public void rotateComponent(String nickname) {
-
-    }
+    // deprecated: rotations now handled client-side
+//    @Override
+//    public void rotateComponent(String nickname) {
+//
+//    }
 
     @Override
     public void rejectComponent(String nickname) {

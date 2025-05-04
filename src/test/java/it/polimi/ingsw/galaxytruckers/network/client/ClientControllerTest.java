@@ -9,6 +9,7 @@ import javafx.application.Application;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.awt.*;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -46,7 +47,57 @@ class ClientControllerTest {
             }
 
             @Override
-            public void drawCard(String nickname) throws IOException {}
+            public void requestRandComponent() {
+
+            }
+
+            @Override
+            public void requestComponent(int componentID) {
+
+            }
+
+            @Override
+            public void grabStashedComponent(int componentID) {
+
+            }
+
+            @Override
+            public void flipHourglass() {
+
+            }
+
+            @Override
+            public void placeShipOnFlightBoard(int startingPosition) {
+
+            }
+
+            @Override
+            public void acquireForecast(int deckIndex) {
+
+            }
+
+            @Override
+            public void rejectComponent() {
+
+            }
+
+            @Override
+            public void stashComponent() {
+
+            }
+
+            @Override
+            public void placeComponent(Point point) {
+
+            }
+
+            @Override
+            public void releaseForecast() {
+
+            }
+
+            @Override
+            public void drawCard() throws IOException {}
 
             @Override
             public void reportError(String error) throws RemoteException {}

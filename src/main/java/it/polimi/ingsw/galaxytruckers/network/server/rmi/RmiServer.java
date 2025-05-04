@@ -10,6 +10,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface
 import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
 
+import java.awt.*;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -59,7 +60,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiVirtualServer {
             controller.registerNickname(newNickname);
 //            nicknameToClient.forcePut(newNickname, nicknameToClient.get(tempNickname));
             nicknameToClient.get(newNickname).showNicknameRegistration(newNickname); // TODO: make event
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | IOException e) {
 //            nicknameToClient.get(tempNickname).reportError("Request refused: Nickname already taken"); // TODO: make event
         }
         // TODO: Give another chance for input
@@ -71,7 +72,57 @@ public class RmiServer extends UnicastRemoteObject implements RmiVirtualServer {
     }
 
     @Override
-    public void drawCard(String nickname) throws IOException {
+    public void requestRandComponent() {
+
+    }
+
+    @Override
+    public void requestComponent(int componentID) {
+
+    }
+
+    @Override
+    public void grabStashedComponent(int componentID) {
+
+    }
+
+    @Override
+    public void flipHourglass() {
+
+    }
+
+    @Override
+    public void placeShipOnFlightBoard(int startingPosition) {
+
+    }
+
+    @Override
+    public void acquireForecast(int deckIndex) {
+
+    }
+
+    @Override
+    public void rejectComponent() {
+
+    }
+
+    @Override
+    public void stashComponent() {
+
+    }
+
+    @Override
+    public void placeComponent(Point point) {
+
+    }
+
+    @Override
+    public void releaseForecast() {
+
+    }
+
+    @Override
+    public void drawCard() throws IOException {
         System.out.println("new card request received");
         // TODO: get cardId from controller
         int cardId = (int) (Math.random()*100);

@@ -33,7 +33,7 @@ class ClientHandler implements Runnable {
         }
     }
 
-    private void handleRequest(ClientRequest request) {
+    private void handleRequest(ClientRequest request) throws IOException {
         switch (request.methodName()) {
             case "registerNickname" -> {
                 controller.registerNickname((String) request.args()[0]);

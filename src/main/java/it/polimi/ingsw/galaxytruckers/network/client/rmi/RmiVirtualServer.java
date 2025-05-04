@@ -17,7 +17,7 @@ public interface RmiVirtualServer extends Remote, VirtualServer {
 
     // metodi controller:
     @Override
-    public void drawCard(String nickname) throws IOException;
+    public void drawCard() throws IOException;
 
     @Override
     public void registerNickname(String newNickname) throws RemoteException;

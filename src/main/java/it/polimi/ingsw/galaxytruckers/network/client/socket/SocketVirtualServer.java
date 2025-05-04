@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.network.shared.ClientRequest;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -28,7 +29,58 @@ public class SocketVirtualServer implements VirtualServer {
     }
 
     @Override
-    public void drawCard(String nickname) throws IOException {
+    public void requestRandComponent() {
+
+    }
+
+    @Override
+    public void requestComponent(int componentID) {
+
+    }
+
+    @Override
+    public void grabStashedComponent(int componentID) {
+
+    }
+
+    @Override
+    public void flipHourglass() {
+
+    }
+
+    @Override
+    public void placeShipOnFlightBoard(int startingPosition) {
+
+    }
+
+    @Override
+    public void acquireForecast(int deckIndex) {
+
+    }
+
+    @Override
+    public void rejectComponent() {
+
+    }
+
+    @Override
+    public void stashComponent() {
+
+    }
+
+    @Override
+    public void placeComponent(Point point) {
+
+    }
+
+    @Override
+    public void releaseForecast() {
+
+    }
+
+    @Override
+    public void drawCard() throws IOException {
+        String nickname = "";
         out.writeObject(new ClientRequest(nickname, "drawCard"));
     }
 

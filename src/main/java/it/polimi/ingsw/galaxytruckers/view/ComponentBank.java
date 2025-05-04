@@ -56,9 +56,9 @@ public class ComponentBank extends Physical {
         StringBuilder row = new StringBuilder();
         description = new ArrayList<>();
 
-        description.add("Hidden components on the board: " + coveredComponents);
+        description.add("Face down: " + coveredComponents);
 
-        description.add("Revealed components on the board: ");
+        description.add("Face up: ");
         for (int i = 0; i < 3; i++) {
             for (Component component : revealedComponents) {
                 row.append(component.getDescription().get(i));
@@ -73,7 +73,7 @@ public class ComponentBank extends Physical {
         description.add(row.toString());
         row.setLength(0);
 
-        description.add("Stashed components: " + "\tCurrent component: ");
+        description.add("Stash: " + "\tHand: ");
         for (int i = 0; i < 3; i++) {
             for (Component component : stashedComponents) {
                 row.append(component.getDescription().get(i));

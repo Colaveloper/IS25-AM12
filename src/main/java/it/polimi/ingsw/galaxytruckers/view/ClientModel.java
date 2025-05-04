@@ -26,6 +26,7 @@ public class ClientModel {
     private GoodsBuffer goods;
     private final ComponentBank componentBank;
     private final AllShips allShips;
+    private boolean existsUnwelded;           // update this value
 
     private AdventureCard currentCard;
 
@@ -192,5 +193,9 @@ public class ClientModel {
 
     public void setNicknames(List<String> nicknames) {
         this.nicknames = nicknames;
+    }
+
+    public boolean existsUnwelded() {
+        return existsUnwelded;
     }
 }
