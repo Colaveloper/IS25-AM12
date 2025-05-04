@@ -138,9 +138,10 @@ public class ClientModel {
         goodsBuffer.takeGood(index);
     }
 
-    // in case of planets the goodBuffer must be set after the choice
+    // in case of planets the goodBuffer must be set after the choice, this happens once, other update use updateGoodsBuffer
     public void setPlanetGoodBuffer(int planetId) {
-        goodsBuffer = new GoodsBuffer();
+        planets = new Planets(currentCard);
+        goodsBuffer = new GoodsBuffer(planets, planetId);
     }
 
     public void setProjectile(ProjectileType projectileType, int direction, int roll) {

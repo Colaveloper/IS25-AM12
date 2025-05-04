@@ -164,10 +164,10 @@ public class ClientController {
     }
 
     public void choosePlanet(int planetId) throws IOException {
-        model.
+        model.setPlanetGoodBuffer(planetId);
     }
 
-    // update each time player picks something
+    // update each time player picks something, index of good taken in the buffer
     public void updateGoodsBuffer(int index) throws IOException {
         model.updateGoodsBuffer(index);
         view.refresh();

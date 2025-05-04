@@ -45,6 +45,10 @@ public class Planets implements Physical{
         return false; // failure, spot already taken
     }
 
+    public Map<GoodsType, Integer> getPlanetGoods(int planetIndex){
+        return planets.get().get(planetIndex);
+    }
+
     @Override
     public Image getImage() {
         return null;

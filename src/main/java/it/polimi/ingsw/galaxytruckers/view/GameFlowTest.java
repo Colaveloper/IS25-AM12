@@ -50,6 +50,7 @@ public class GameFlowTest {
         //TEST
 
         controller.showNewCard(16);
+        controller.choosePlanet(1);
         controller.showPlaceGoods();
         //controller.
 

@@ -25,9 +25,13 @@ public class GoodsBuffer implements Physical{
         }
     }
 
-    public GoodsBuffer(Planets planet, int planetId){
+    public GoodsBuffer(Planets planets, int planetId){
         goodsBuffer = new ArrayList<>();
-
+        planets.getPlanetGoods(planetId).forEach((type, count) ->{
+            for (int i = 0; i < count; i++){
+                goodsBuffer.add(Optional.of(type));
+            }
+        });
     }
 
     public boolean takeGood(int indexIn) {
