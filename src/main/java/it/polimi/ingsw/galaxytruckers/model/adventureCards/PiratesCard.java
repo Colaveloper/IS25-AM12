@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -93,35 +94,43 @@ public class PiratesCard extends AdventureCard {
         flightBoard.displaceShip(winnerShipBoard, -flightDaysLoss);
     }
 
-    public int getFirePowerThreshold() {
+    @VisibleForTesting
+    protected int getFirePowerThreshold() {
         return firePowerThreshold;
     }
 
-    public List<Projectile> getProjectiles() {
+    @VisibleForTesting
+    protected List<Projectile> getProjectiles() {
         return projectiles;
     }
 
-    public int getCreditPrize() {
+    @VisibleForTesting
+    protected int getCreditPrize() {
         return creditPrize;
     }
 
-    public int getFlightDaysLoss() {
+    @VisibleForTesting
+    protected int getFlightDaysLoss() {
         return flightDaysLoss;
     }
 
-    List<ShipBoard> getDefeatedPlayers() {
+    @VisibleForTesting
+    protected List<ShipBoard> getDefeatedPlayers() {
         return defeatedPlayers;
     }
 
-    boolean isDefeated() {
+    @VisibleForTesting
+    protected boolean isDefeated() {
         return defeated;
     }
 
-    Projectile getCurrentProjectile() {
+    @VisibleForTesting
+    protected Projectile getCurrentProjectile() {
         return currentProjectile;
     }
 
-    ShipBoard getWinnerShipBoard() {
+    @VisibleForTesting
+    protected ShipBoard getWinnerShipBoard() {
         return winnerShipBoard;
     }
 }

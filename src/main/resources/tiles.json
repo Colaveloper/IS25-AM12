@@ -48,151 +48,151 @@
     "id": 149
   },
   {
-    "type": "life support",
+    "type": "life_support",
     "connectors": ["double","universal","none","none"],
     "crewtype": "purple",
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web148.jpg",
     "id": 148
   },
   {
-    "type": "life support",
+    "type": "life_support",
     "connectors": ["none","universal","none","single"],
     "crewtype": "purple",
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web147.jpg",
     "id": 147
   },
   {
-    "type": "life support",
+    "type": "life_support",
     "connectors": ["none","universal","double","none"],
     "crewtype": "purple",
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web146.jpg",
     "id": 146
   },
   {
-    "type": "life support",
+    "type": "life_support",
     "connectors": ["none","universal","none","none"],
     "crewtype": "purple",
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web145.jpg",
     "id": 145
   },
   {
-    "type": "life support",
+    "type": "life_support",
     "connectors": ["double","double","none","double"],
     "crewtype": "purple",
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web144.jpg",
     "id": 144
   },
   {
-    "type": "life support",
+    "type": "life_support",
     "connectors": ["single","double","none","double"],
     "crewtype": "purple",
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web143.jpg",
     "id": 143
   },
   {
-    "type": "life support",
+    "type": "life_support",
     "connectors": ["single","universal","none","none"],
     "crewtype": "brown",
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web142.jpg",
     "id": 142
   },
   {
-    "type": "life support",
+    "type": "life_support",
     "connectors": ["none","universal","none","double"],
     "crewtype": "brown",
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web141.jpg",
     "id": 141
   },
   {
-    "type": "life support",
+    "type": "life_support",
     "connectors": ["none","universal","single","none"],
     "crewtype": "brown",
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web140.jpg",
     "id": 140
   },
   {
-    "type": "life support",
+    "type": "life_support",
     "connectors": ["none","universal","none","none"],
     "crewtype": "brown",
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web139.jpg",
     "id": 139
   },
   {
-    "type": "life support",
+    "type": "life_support",
     "connectors": ["double","single","none","single"],
     "crewtype": "brown",
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web138.jpg",
     "id": 138
   },
   {
-    "type": "life support",
+    "type": "life_support",
     "connectors": ["single","single","none","single"],
     "crewtype": "brown",
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web137.jpg",
     "id": 137
   },
   {
-    "type": "double cannon",
+    "type": "double_cannon",
     "connectors": ["none","universal","single","none"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web136.jpg",
     "id": 136
   },
   {
-    "type": "double cannon",
+    "type": "double_cannon",
     "connectors": ["none","universal","none","none"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web135.jpg",
     "id": 135
   },
   {
-    "type": "double cannon",
+    "type": "double_cannon",
     "connectors": ["none","double","single","double"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web134.jpg",
     "id": 134
   },
   {
-    "type": "double cannon",
+    "type": "double_cannon",
     "connectors": ["none","double","universal","none"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web133.jpg",
     "id": 133
   },
   {
-    "type": "double cannon",
+    "type": "double_cannon",
     "connectors": ["none","single","none","double"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web132.jpg",
     "id": 132
   },
   {
-    "type": "double cannon",
+    "type": "double_cannon",
     "connectors": ["none","single","double","single"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web131.jpg",
     "id": 131
   },
   {
-    "type": "double cannon",
+    "type": "double_cannon",
     "connectors": ["none","none","double","universal"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web130.jpg",
     "id": 130
   },
   {
-    "type": "double cannon",
+    "type": "double_cannon",
     "connectors": ["none","none","none","universal"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web129.jpg",
     "id": 129
   },
   {
-    "type": "double cannon",
+    "type": "double_cannon",
     "connectors": ["none","none","universal","single"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web128.jpg",
     "id": 128
   },
   {
-    "type": "double cannon",
+    "type": "double_cannon",
     "connectors": ["none","none","double","none"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web127.jpg",
     "id": 127
   },
   {
-    "type": "double cannon",
+    "type": "double_cannon",
     "connectors": ["none","none","single","none"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web126.jpg",
     "id": 126
@@ -348,55 +348,55 @@
     "id": 101
   },
   {
-    "type": "double engine",
+    "type": "double_engine",
     "connectors": ["double","universal","none","none"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web100.jpg",
     "id": 100
   },
   {
-    "type": "double engine",
+    "type": "double_engine",
     "connectors": ["none","universal","none","universal"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web99.jpg",
     "id": 99
   },
   {
-    "type": "double engine",
+    "type": "double_engine",
     "connectors": ["universal","double","none","none"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web98.jpg",
     "id": 98
   },
   {
-    "type": "double engine",
+    "type": "double_engine",
     "connectors": ["double","double","none","double"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web97.jpg",
     "id": 97
   },
   {
-    "type": "double engine",
+    "type": "double_engine",
     "connectors": ["single","single","none","single"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web96.jpg",
     "id": 96
   },
   {
-    "type": "double engine",
+    "type": "double_engine",
     "connectors": ["universal","none","none","single"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web95.jpg",
     "id": 95
   },
   {
-    "type": "double engine",
+    "type": "double_engine",
     "connectors": ["double","none","none","none"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web94.jpg",
     "id": 94
   },
   {
-    "type": "double engine",
+    "type": "double_engine",
     "connectors": ["single","none","none","universal"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web93.jpg",
     "id": 93
   },
   {
-    "type": "double engine",
+    "type": "double_engine",
     "connectors": ["single","none","none","none"],
     "path": "file:src/main/resources/textures/tiles/GT-new_tiles_16_for web92.jpg",
     "id": 92
@@ -528,7 +528,7 @@
     "id": 71
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["none","double","none","none"],
     "size": 2,
     "special": true,
@@ -536,7 +536,7 @@
     "id": 70
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["none","single","none","double"],
     "size": 2,
     "special": true,
@@ -544,7 +544,7 @@
     "id": 69
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["none","single","none","none"],
     "size": 2,
     "special": true,
@@ -552,7 +552,7 @@
     "id": 68
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["universal","universal","none","none"],
     "size": 1,
     "special": true,
@@ -560,7 +560,7 @@
     "id": 67
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["double","universal","double","double"],
     "size": 1,
     "special": true,
@@ -568,7 +568,7 @@
     "id": 66
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["double","universal","none","single"],
     "size": 1,
     "special": true,
@@ -576,7 +576,7 @@
     "id": 65
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["single","universal","single","single"],
     "size": 1,
     "special": true,
@@ -584,7 +584,7 @@
     "id": 64
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["none","universal","none","universal"],
     "size": 1,
     "special": true,
@@ -592,7 +592,7 @@
     "id": 63
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["none","universal","single","double"],
     "size": 1,
     "special": true,
@@ -648,7 +648,7 @@
     "id": 53
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["double","double","single","none"],
     "size": 3,
     "special": false,
@@ -656,7 +656,7 @@
     "id": 32
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["single","single","double","none"],
     "size": 3,
     "special": false,
@@ -664,7 +664,7 @@
     "id": 31
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["double","none","double","none"],
     "size": 3,
     "special": false,
@@ -672,7 +672,7 @@
     "id": 30
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["none","double","none","none"],
     "size": 3,
     "special": false,
@@ -680,7 +680,7 @@
     "id": 29
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["single","none","single","none"],
     "size": 3,
     "special": false,
@@ -688,7 +688,7 @@
     "id": 28
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["none","single","none","none"],
     "size": 3,
     "special": false,
@@ -696,7 +696,7 @@
     "id": 27
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["universal","universal","none","none"],
     "size": 2,
     "special": false,
@@ -704,7 +704,7 @@
     "id": 26
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["double","universal","double","single"],
     "size": 2,
     "special": false,
@@ -712,7 +712,7 @@
     "id": 25
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["none","universal","none","double"],
     "size": 2,
     "special": false,
@@ -720,7 +720,7 @@
     "id": 24
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["none","universal","none","single"],
     "size": 2,
     "special": false,
@@ -728,7 +728,7 @@
     "id": 23
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["none","universal","none","none"],
     "size": 2,
     "special": false,
@@ -736,7 +736,7 @@
     "id": 22
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["none","universal","none","none"],
     "size": 2,
     "special": false,
@@ -744,7 +744,7 @@
     "id": 21
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["double","single","none","universal"],
     "size": 2,
     "special": false,
@@ -752,7 +752,7 @@
     "id": 20
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["double","single","universal","single"],
     "size": 2,
     "special": false,
@@ -760,7 +760,7 @@
     "id": 19
   },
   {
-    "type": "cargo hold",
+    "type": "cargo_hold",
     "connectors": ["double","none","universal","single"],
     "size": 2,
     "special": false,

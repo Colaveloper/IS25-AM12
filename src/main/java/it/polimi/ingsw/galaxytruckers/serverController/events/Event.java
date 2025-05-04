@@ -1,7 +1,9 @@
-package it.polimi.ingsw.galaxytruckers.controller.events;
+package it.polimi.ingsw.galaxytruckers.serverController.events;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 
+import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -17,8 +19,7 @@ public abstract class Event {
 
     protected Event() {
         this.involvedShip = null;
-    }
-
+    } // all ships are involved
 
     /**
      * Returns a reference to the ship that is involved in the event, if there is one
@@ -32,5 +33,5 @@ public abstract class Event {
      * Handles the game event as defined by {@code eventHandler}
      * @param eventHandler the {@code EventHandler} that should handle the event
      */
-    public abstract void accept(EventHandler eventHandler);
+    public abstract void accept(EventHandler eventHandler) throws IOException;
 }

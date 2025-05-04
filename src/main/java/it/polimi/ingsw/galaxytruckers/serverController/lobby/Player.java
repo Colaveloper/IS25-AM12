@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.controller.lobby;
+package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -22,9 +22,11 @@ public class Player {
     public static void addPlayer(String nickname) {
         synchronized (nicknameToPlayer) {
             if (nicknameToPlayer.containsKey(nickname)) {
+                System.out.println("Request refused: nickname \"" + nickname + "\" already taken ⛔");
                 throw new IllegalArgumentException("Nickname already exists");
             }
             nicknameToPlayer.put(nickname, new Player(nickname));
+            System.out.println("Request accepted: registering " + nickname + " ✅");
         }
     }
 

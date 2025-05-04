@@ -66,23 +66,27 @@ public class ComponentBank {
                 case "shield":
                     component = new Shield(connectors, id);
                     break;
-                case "life support":
+                case "life_support":
                     CrewType crewType = parseCrewType(node.get("crewtype"));
                     component = new LifeSupport(connectors, id, crewType);
                     break;
+                case "double_cannon":
+                    component = new DoubleCannon(connectors);
                 case "double cannon":
                     component = new DoubleCannon(connectors, id);
                     break;
                 case "cannon":
                     component = new Cannon(connectors, id);
                     break;
+                case "double_engine":
+                    component = new DoubleEngine(connectors);
                 case "double engine":
                     component = new DoubleEngine(connectors, id);
                     break;
                 case "engine":
                     component = new Engine(connectors, id);
                     break;
-                case "cargo hold":
+                case "cargo_hold":
                     int size = node.get("size").asInt();
                     Boolean isSpecial = node.get("special").asBoolean();
                     component = new CargoHold(connectors, id, isSpecial, size);

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.controller;
+package it.polimi.ingsw.galaxytruckers.serverController;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
@@ -10,7 +10,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.UUID;
 
-public interface ControllerInterface {
+public interface ServerControllerInterface {
     /**
      * Creates a new player with the given nickname
      * @param nickname the nickname of the new player
