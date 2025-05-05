@@ -52,7 +52,9 @@ public class GameFlowTest {
         controller.showNewCard(16);
         controller.choosePlanet(1);
         controller.showPlaceGoods();
-        //controller.
+        controller.updateGoodsBuffer(1);
+        controller.updateGoodsBuffer(2);
+        controller.updateGoodsBuffer(3);
 
     }
 

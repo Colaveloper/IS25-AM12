@@ -170,7 +170,8 @@ public class ClientController {
     // update each time player picks something, index of good taken in the buffer
     public void updateGoodsBuffer(int index) throws IOException {
         model.updateGoodsBuffer(index);
-        view.refresh();
+        //view.refresh();
+        view.run(new GoodsScreen());
     }
 
     public void setCurrentPlayer(String nickname) {
