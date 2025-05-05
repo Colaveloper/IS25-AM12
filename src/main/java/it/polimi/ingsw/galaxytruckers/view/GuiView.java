@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -15,7 +14,7 @@ public class GuiView extends Application implements View {
     static VirtualServer server;
     static ClientModel model;
     // TODO: privatize and create setter in View
-    public static ScreenStrategy firstStrategy;
+    public static ScreenStrategy strategy;
     static Pane root;  // will be passed to screen strategies
 
 
@@ -31,7 +30,7 @@ public class GuiView extends Application implements View {
 //        stage.setFullScreen(true);
 //        stage.setFullScreenExitHint("");
         stage.setTitle("Galaxy Trucker");
-        run(firstStrategy);
+        setScreen(strategy);
         stage.show();
     }
 
@@ -50,7 +49,10 @@ public class GuiView extends Application implements View {
      * @throws IOException
      */
     @Override
-    public void run(ScreenStrategy strategy) throws IOException {
-        strategy.showGUI(model, root, server);
+    public void setScreen(ScreenStrategy newStrategy) throws IOException {
+        if (!newStrategy.equals(strategy)) {
+            strategy = newStrategy;
+            strategy.showGUI(model, root, server);
+        }
     }
 }

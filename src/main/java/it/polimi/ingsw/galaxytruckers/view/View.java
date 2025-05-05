@@ -14,5 +14,5 @@ public interface View {
      * Provides to the user a contract to interact with the game
      * @throws IOException
      */
-    void run(ScreenStrategy strategy) throws IOException;
+    void setScreen(ScreenStrategy strategy) throws IOException;
 }

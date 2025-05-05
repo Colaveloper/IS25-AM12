@@ -1,8 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.*;
@@ -30,63 +28,50 @@ public class ClientController {
             view = new GuiView();
             view.setServer(server);
             view.setModel(model);
-            GuiView.firstStrategy = new NicknameChoiceScreen();
-            Application.launch(GuiView.class); // calls view.run(...)
+            GuiView.strategy = new NicknameChoiceScreen();
+            Application.launch(GuiView.class); // calls view.setScreen(...)
         } else {
             view = new CliView();
             view.setServer(server);
             view.setModel(model);
-            view.run(new NicknameChoiceScreen());
+            view.setScreen(new NicknameChoiceScreen());
         }
     }
 
     // UPDATES FROM THE SERVER
     public void showNewCard(Integer cardId) throws IOException {
         model.setCurrentCard(cardId);
-        view.run(new NewCardScreen());
+        view.setScreen(new NewCardScreen());
     }
 
     public void showGameCreation() throws IOException {
-        view.run(new GameCreationScreen());
+        view.setScreen(new GameCreationScreen());
     }
 
     public void showLobbyUpdate(List<String> names) throws IOException {
         model.setNicknames(names);
-        view.run(new LobbyScreen());
+        view.setScreen(new LobbyScreen());
     }
 
     public void showConnectedAndNicknameChoice(String tempNickname) throws IOException {
         model.setMyNickname(tempNickname);
-        view.run(new NicknameChoiceScreen());
+        view.setScreen(new NicknameChoiceScreen());
     }
 
     public void setNickname(String nickname) { // gets called only after legal registration
         model.setMyNickname(nickname);
     }
 
-    public void showGameCreation(Level level, int playersNum) {
-        // model.update
-        // view.show(ChosenStrategy)
-    }
+    // better to automate
+//    public void showColorSelection(String nickname, Colors color) {
+//        model.setPlayerColor(nickname, color);
+//        // view.show(ChosenStrategy)
+//    }
 
-    public void showGameJoining(String nickname) {
-        model.addPlayer(nickname);
-        // view.show(ChosenStrategy)
-    }
-
-    public void showColorSelection(String nickname, Colors color){
-        model.setPlayerColor(nickname, color);
-        // view.show(ChosenStrategy)
-    }
-
-    public void setFlightBoard(int loopLength, List<Integer> startingPositions) throws IOException {
+    public void setupGame(int loopLength, List<Integer> startingPositions, Set<Point> shipArea) throws IOException {
         model.setFlightBoard(loopLength, startingPositions);
-        view.run(new PointSelectionScreen());
-    }
-
-    public void setShipArea(Set<Point> shipArea) {
         model.setShipArea(shipArea);
-        // view.show(ChosenStrategy)
+        view.setScreen(new ShipBuildingScreen());
     }
 
     // update for ship building
@@ -138,7 +123,7 @@ public class ClientController {
 
     public void showProjectile(ProjectileType projectileType, int direction, int roll) throws IOException {
         model.setProjectile(projectileType, direction, roll);
-        view.run(new ProjectilesScreen());
+        view.setScreen(new ProjectilesScreen());
     }
 
     // update for components

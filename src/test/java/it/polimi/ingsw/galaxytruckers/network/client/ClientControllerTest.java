@@ -14,23 +14,33 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 class ClientControllerTest {
 
-    static List<String> nicknames;
     static VirtualServer server;
     static ClientController controller;
     static ClientModel model;
 
+    static List<String> nicknames;
+    static int loopLength;
+    static List<Integer> startingPositions;
+    static Set<Point> shipArea;
+
     static void setUp() {
         nicknames = new ArrayList<>();
+        loopLength = 22;
+        startingPositions = new ArrayList<>(List.of(2, 4, 5));
+        shipArea = Set.of(new Point(8,7), new Point(7,8), new Point(6,7), new Point(7,6));
 
         server = new VirtualServer() {
             @Override
             public void registerNickname(String myNickname) throws IOException {
                 nicknames.add(myNickname);
+
                 System.out.println("FAKE SERVER EVENT: successfully registered nickname " + myNickname);
                 controller.setNickname(myNickname);
+
                 controller.showGameCreation(); // granting the rights to create a new game
             }
 
@@ -44,6 +54,8 @@ class ClientControllerTest {
                 controller.showLobbyUpdate(nicknames);
                 nicknames.add("OtherPlayer3");
                 controller.showLobbyUpdate(nicknames);
+
+                controller.setupGame(loopLength, startingPositions, shipArea);
             }
 
             @Override
