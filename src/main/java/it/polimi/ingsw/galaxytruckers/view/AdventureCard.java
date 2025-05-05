@@ -12,19 +12,24 @@ import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javafx.scene.Node;
 import javafx.scene.image.Image;
-import javax.swing.text.html.Option;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parsePlanets;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parseProjectiles;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parseGoods;
 
-public class AdventureCard implements Physical {
+public class AdventureCard extends Physical {
     // class attributes
     private List<String> description;
 
@@ -48,7 +53,7 @@ public class AdventureCard implements Physical {
     private Optional<List<Map.Entry<String, Integer>>> projectiles;
     private Optional<List<Map<GoodsType, Integer>>> planets;
     private Optional<List<String>> actions;
-    private Image image;
+    private Path imagePath;
 
     /*
     * for card descriptions the following convention is used:
@@ -80,8 +85,7 @@ public class AdventureCard implements Physical {
         // loading attributes that all cards have in common
         type = cardNode.get("type").asText();
         level = Level.valueOf(cardNode.get("level").asText());
-        //image = new Image("file:"+cardNode.get("path").asText());
-        image = null;
+        imagePath = Paths.get(cardNode.get("path").asText());
 
         // loading remaining attributes
         description = new ArrayList<>();
@@ -267,11 +271,6 @@ public class AdventureCard implements Physical {
     @Override
     public List<String> getDescription(){return description;}
 
-    @Override
-    public Image getImage(){
-        return image;
-    }
-
     public String getCardName() {
         return type;
     }
@@ -356,5 +355,16 @@ public class AdventureCard implements Physical {
                 .map(entry -> entry.getKey() + " coming from the " +
                         directionMap.getOrDefault(entry.getValue(), "unknown"))
                 .collect(Collectors.joining("\n"));
+    }
+
+    @Override
+    public StackPane getNode() {
+        ImageView imageView = new ImageView(new Image("file:"+imagePath));
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(150);
+        imageView.setPreserveRatio(true);
+
+        node.getChildren().add(imageView);
+        return node;
     }
 }

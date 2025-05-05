@@ -1,5 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -11,18 +13,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ShipBuildingState extends GameState {
+public abstract class ShipBuildingState extends GameState {
     private final ComponentBank componentBank;
-    private final Set<ShipBoard> completedShipBoards;
-    private final Hourglass hourglass;
-    private final Map<ShipBoard, Integer> shipToForecasts;
-    private final Set<Integer> blockedForecasts;
+    protected final Set<ShipBoard> completedShipBoards;
 
     public ShipBuildingState() {
         this.completedShipBoards = new HashSet<>();
-        this.hourglass = game.getGameFactory().createHourglass();
-        this.shipToForecasts = new HashMap<>();
-        this.blockedForecasts = new HashSet<>();
         this.componentBank = new ComponentBank();
         try {
             componentBank.initialize();
@@ -36,7 +32,7 @@ public class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        shipBoard.offerComponent(componentBank.getRandComponent());
+        shipBoard.offerComponent(componentBank.drawRandComponent());
     }
 
     @Override
@@ -44,7 +40,7 @@ public class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        shipBoard.offerComponent(componentBank.getComponent(componentId));  //TODO: define componentIdentifiers
+        shipBoard.offerComponent(componentBank.removeUncoveredComponent(componentId));
     }
 
     @Override
@@ -52,23 +48,17 @@ public class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        componentBank.addUncovered(shipBoard.rejectComponent());
+        componentBank.addToUncoveredComponents(shipBoard.rejectComponent());
     }
 
     @Override
     public void stashComponent(ShipBoard shipBoard) {
-        if (completedShipBoards.contains(shipBoard)) {
-            throw new IllegalStateException("Ship Board already completed");
-        }
-        shipBoard.stashComponent();
+        throw new UnsupportedOperationException("This action is not available.");
     }
 
     @Override
     public void grabStashedComponent(ShipBoard shipBoard, int index) {
-        if (completedShipBoards.contains(shipBoard)) {
-            throw new IllegalStateException("Ship Board already completed");
-        }
-        shipBoard.grabStashedComponent(index);
+        throw new UnsupportedOperationException("This action is not available.");
     }
 
     @Override
@@ -81,43 +71,47 @@ public class ShipBuildingState extends GameState {
 
     @Override
     public void flipHourglass(ShipBoard shipBoard) {
-        if (hourglass.isLastFlip() && !completedShipBoards.contains(shipBoard)) {
-            throw new IllegalStateException("Ship must be completed before the last flip");
-        }
-        hourglass.flip(() -> System.err.println("Hourglass is done"), this::endBuilding);
+        throw new UnsupportedOperationException("This action is not available at level " + game.getLevel());
     }
 
     @Override
     public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
+        throw new UnsupportedOperationException("This action is not available at level " + game.getLevel());
+    }
+
+    @Override
+    public void placeShipOnFlightBoard(ShipBoard shipBoard) {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        game.getFlightBoard().placeShipOnFlightBoard(shipBoard, startingPosition);
+        int position = game.getFlightBoard().getStartingPositionsLeft().stream()
+                .mapToInt(x -> x)
+                .min().orElseThrow(() -> new IllegalStateException("There are no more available positions"));
         completedShipBoards.add(shipBoard);
+        if (game.getFlightBoard().placeShipOnFlightBoard(shipBoard, position)) {
+            endBuilding();
+        }
     }
 
     @Override
     public void acquireForecast(ShipBoard shipBoard, int deckIndex) {
-        if (completedShipBoards.contains(shipBoard)) {
-            throw new IllegalStateException("Ship Board already completed");
-        }
-        if (blockedForecasts.contains(deckIndex)) {
-            throw new IllegalArgumentException("Deck is unavailable");
-        }
-        game.getDeck().getForecastDeck(deckIndex);
-        blockedForecasts.add(deckIndex);
-        shipToForecasts.put(shipBoard, deckIndex);
+        throw new UnsupportedOperationException("This action is not available at level " + game.getLevel());
     }
 
     @Override
     public void releaseForecast(ShipBoard shipBoard) {
-        if (shipToForecasts.containsKey(shipBoard)) {
-            int index = shipToForecasts.remove(shipBoard);
-            blockedForecasts.remove(index);
-        }
+        throw new UnsupportedOperationException("This action is not available at level " + game.getLevel());
     }
 
-    private void endBuilding() {
-        game.setCurrentState(new ShipCorrectionState());
+    protected abstract void endBuilding();
+
+    @VisibleForTesting
+    public ComponentBank getComponentBank() {
+        return componentBank;
+    }
+
+    @VisibleForTesting
+    public Set<ShipBoard> getCompletedShipBoards() {
+        return new HashSet<>(completedShipBoards);
     }
 }

@@ -40,7 +40,7 @@ public class SmugglersCard extends AdventureCard {
                 currentShipBoard.deactivateAll();
                 if (currentFirePower > firePowerThreshold) {  // player defeats the enemy
                     defeated = true;
-                    return new GrabRewardState(this::getReward); // Let the player choose whether to collect the prize
+                    return new GrabRewardState(currentShipBoard, this::getReward); // Let the player choose whether to collect the prize
                 } else if (currentFirePower < firePowerThreshold) { // player is defeated
                     ShipBoard tempShipBoard = currentShipBoard;
                     currentShipBoard = null;

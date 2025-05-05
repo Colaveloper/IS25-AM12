@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrentProjectile implements Physical{
+public class CurrentProjectile extends Physical{
     private int projectileRoll;
     private int projectileDirection;
     private ProjectileType projectileType;
@@ -17,11 +17,6 @@ public class CurrentProjectile implements Physical{
         this.projectileRoll = projectileRoll;
         this.projectileDirection = projectileDirection;
         this.projectileType = projectileType;
-    }
-
-    @Override
-    public Image getImage() {
-        return null;
     }
 
     @Override

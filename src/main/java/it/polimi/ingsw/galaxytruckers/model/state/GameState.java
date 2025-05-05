@@ -10,26 +10,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public abstract class GameState {
     protected Game game;
 
     public void setGame(Game game) {
         this.game = game;
-    }
-
-    static void removeOtherShipPieces(ShipBoard shipBoard, int pieceIndex, List<Set<Point>> currentShipPieces) {
-        if (pieceIndex < 0 || pieceIndex >= currentShipPieces.size()) {
-            throw new IllegalArgumentException("Invalid piece index");
-        }
-        List<Point> componentsToRemove = IntStream.range(0, currentShipPieces.size())
-                .filter(x -> x != pieceIndex)
-                .mapToObj(currentShipPieces::get)
-                .flatMap(Collection::stream)
-                .toList();
-        for (Point p : componentsToRemove) {
-            shipBoard.removeComponent(p);
-        }
     }
 
     public void activateComponent(ShipBoard shipBoard, Point position) {
@@ -105,6 +92,10 @@ public abstract class GameState {
     }
 
     public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition){
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
+
+    public void placeShipOnFlightBoard(ShipBoard shipBoard) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 

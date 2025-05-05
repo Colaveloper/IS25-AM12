@@ -1,14 +1,20 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import java.util.List;
 
 public class Cannon extends Component {
 
+    public Cannon(List<Connector> connectors, int id) {
+        super(connectors, id);
+    }
+
+    @VisibleForTesting
     public Cannon(List<Connector> connectors) {
         super(connectors);
     }
 
-    // TODO: consider renaming in getFirePowerHalves()
     public int getFirePower() {
         return (getOrientation() == 0) ? 2 : 1;
     }

@@ -10,6 +10,7 @@ public class DrawCardState extends GameState {
     @Override
     public void setGame(Game game) {
         super.setGame(game);
+        //TODO: handle games with no ships left
         this.shipBoard = game.getFlightBoard().getOrderedShips().getFirst();
     }
 

@@ -3,6 +3,9 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.GuiView;
+import javafx.application.Application;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -16,20 +19,23 @@ class ClientControllerTest {
     static List<String> nicknames;
     static VirtualServer server;
     static ClientController controller;
+    static ClientModel model;
 
     static void setUp() {
         nicknames = new ArrayList<>();
 
         server = new VirtualServer() {
             @Override
-            public void registerNickname(String tempNickname, String newNickname) throws IOException {
-                nicknames.add(tempNickname);
-                controller.setNickname(tempNickname);
+            public void registerNickname(String myNickname) throws IOException {
+                nicknames.add(myNickname);
+                System.out.println("FAKE SERVER EVENT: successfully registered nickname " + myNickname);
+                controller.setNickname(myNickname);
                 controller.showGameCreation(); // granting the rights to create a new game
             }
 
             @Override
             public void newGame(Level level, int playerN) throws IOException {
+                System.out.println("FAKE SERVER EVENT: successfully created lvl "+level+" game for "+playerN+" players");
                 controller.showLobbyUpdate(nicknames);
                 nicknames.add("OtherPlayer1");
                 controller.showLobbyUpdate(nicknames);
@@ -52,6 +58,7 @@ class ClientControllerTest {
             public void processEvents() throws IOException {}
         };
 
+        // the following anonymous class is used to force GUI
         controller = new ClientController(server);
     }
 

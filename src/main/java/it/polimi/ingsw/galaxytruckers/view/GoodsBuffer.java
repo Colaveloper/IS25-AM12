@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class GoodsBuffer implements Physical{
+public class GoodsBuffer extends Physical{
     private List<Optional<GoodsType>> goodsBuffer;
 
     public GoodsBuffer(AdventureCard currentCard){
@@ -61,11 +61,6 @@ public class GoodsBuffer implements Physical{
 
         sb.append("-".repeat(totalWidth));
         return sb.toString();
-    }
-
-    @Override
-    public Image getImage() {
-        return null;
     }
 
     @Override

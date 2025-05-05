@@ -40,7 +40,7 @@ public class AbandonedShipCard extends AdventureCard {
             }
             currentPlayerIndex++;
             if (currentShipBoard.getCrewSize() >= requiredCrew) {
-                return new GrabRewardState(this::getReward);
+                return new GrabRewardState(currentShipBoard, this::getReward);
             }
             else {
                 return nextStep();

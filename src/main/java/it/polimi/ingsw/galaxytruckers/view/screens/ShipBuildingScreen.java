@@ -2,12 +2,9 @@ package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.Physical;
-import it.polimi.ingsw.galaxytruckers.view.Shipboard;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ShipBuildingScreen implements ScreenStrategy {
 
@@ -27,6 +24,11 @@ public class ShipBuildingScreen implements ScreenStrategy {
 
     @Override
     public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {
+
+    }
+
+    @Override
+    public void showGUI(ClientModel model, Pane root, VirtualServer server) {
 
     }
 }

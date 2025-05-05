@@ -25,7 +25,7 @@ public class SabotageCard extends AdventureCard {
             }
         }
 
-        currentShipBoard.removeComponent(new Point(dice.getAsInt(),dice.getAsInt()));
+        currentShipBoard.discardComponent(new Point(dice.getAsInt(),dice.getAsInt()));
 
         return new DrawCardState();
     }

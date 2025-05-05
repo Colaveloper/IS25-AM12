@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
@@ -20,5 +21,10 @@ public class ProjectilesScreen implements ScreenStrategy {
     @Override
     public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {
     // TODO
+    }
+
+    @Override
+    public void showGUI(ClientModel model, Pane root, VirtualServer server) {
+
     }
 }

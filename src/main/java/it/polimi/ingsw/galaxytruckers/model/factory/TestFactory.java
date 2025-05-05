@@ -1,14 +1,16 @@
-package it.polimi.ingsw.galaxytruckers.model;
+package it.polimi.ingsw.galaxytruckers.model.factory;
 
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.TestShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.model.state.TestShipBuildingState;
 
 import java.io.IOException;
 import java.util.Set;
 
-public class TestFactory implements GameFactory{
+public class TestFactory extends GameFactory{
     @Override
     public Deck createDeck() throws IOException {
         return new TestDeck();
@@ -25,7 +27,7 @@ public class TestFactory implements GameFactory{
     }
 
     @Override
-    public Hourglass createHourglass() {
-        return new Hourglass();
+    public GameState createFirstGameState() {
+        return new TestShipBuildingState();
     }
 }

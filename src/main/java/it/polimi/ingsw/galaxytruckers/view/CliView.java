@@ -6,21 +6,39 @@ import it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class CliView extends View{
+public class CliView implements View{
     Scanner scanner;
     String input;
+    static ClientModel model;
+    static VirtualServer server;
     ScreenStrategy currentStrategy;
 
-    public CliView(ClientModel model, VirtualServer server) {
-        super(model, server);
+    public CliView() {
         scanner = new Scanner(System.in);
     }
 
+    @Override
+    public void setModel(ClientModel model) {
+        CliView.model = model;
+    }
+
+    @Override
+    public void setServer(VirtualServer server) {
+        CliView.server = server;
+    }
+
+    @Override
     public void run(ScreenStrategy strategy) throws IOException {
+        // clearing the console (not supported in intellij, use Windows terminal)
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+
         // TODO: clearing the console
         currentStrategy = strategy;
         // showing the visualization
         strategy.showCLI(model);
+        System.out.flush();
+
         input = scanner.nextLine();
 
         // letting the user correct format errors

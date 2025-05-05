@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
@@ -14,7 +15,6 @@ public class ComponentBank {
     private static final File componentJson = new File("src/main/resources/tiles.json");
 
     public ComponentBank() {
-        //TODO: read components from file and shuffle them
         this.coveredComponents = new ArrayList<>();
         this.uncoveredComponents = new HashMap<>();
     }
@@ -23,19 +23,29 @@ public class ComponentBank {
         this.coveredComponents = loadComponents();
     }
 
-    public Component getComponent(int id) {
+    public Component removeUncoveredComponent(int id) {
         if (!uncoveredComponents.containsKey(id)) {
             throw new IllegalArgumentException("No component with id " + id + " exists");
         }
         return uncoveredComponents.remove(id);
     }
 
-    public Component getRandComponent() {
+    public Component drawRandComponent() {
         return coveredComponents.removeLast();
     }
 
-    public void addUncovered(Component component) {
-        uncoveredComponents.put(component.hashCode(), component);
+    public void addToUncoveredComponents(Component component) {
+        uncoveredComponents.put(component.getId(), component);
+    }
+
+    @VisibleForTesting
+    public List<Component> getCoveredComponents() {
+        return new ArrayList<>(coveredComponents);
+    }
+
+    @VisibleForTesting
+    public Map<Integer, Component> getUncoveredComponents() {
+        return new HashMap<>(uncoveredComponents);
     }
 
     @VisibleForTesting
@@ -50,41 +60,46 @@ public class ComponentBank {
             String type = node.get("type").asText();
             Component component;
             List<Connector> connectors = parseConnectors(node.get("connectors"));
+            int id = node.get("id").asInt();
 
             switch(type){
                 case "shield":
-                    component = new Shield(connectors);
+                    component = new Shield(connectors, id);
                     break;
                 case "life_support":
                     CrewType crewType = parseCrewType(node.get("crewtype"));
-                    component = new LifeSupport(connectors, crewType);
+                    component = new LifeSupport(connectors, id, crewType);
                     break;
                 case "double_cannon":
                     component = new DoubleCannon(connectors);
+                case "double cannon":
+                    component = new DoubleCannon(connectors, id);
                     break;
                 case "cannon":
-                    component = new Cannon(connectors);
+                    component = new Cannon(connectors, id);
                     break;
                 case "double_engine":
                     component = new DoubleEngine(connectors);
+                case "double engine":
+                    component = new DoubleEngine(connectors, id);
                     break;
                 case "engine":
-                    component = new Engine(connectors);
+                    component = new Engine(connectors, id);
                     break;
                 case "cargo_hold":
                     int size = node.get("size").asInt();
                     Boolean isSpecial = node.get("special").asBoolean();
-                    component = new CargoHold(connectors, size, isSpecial);
+                    component = new CargoHold(connectors, id, isSpecial, size);
                     break;
                 case "structural":
-                    component = new Component(connectors);
+                    component = new Component(connectors, id);
                     break;
                 case "battery":
                     int numBatteries = node.get("batteries").asInt();
-                    component = new Battery(connectors, numBatteries);
+                    component = new Battery(connectors, id, numBatteries);
                     break;
                 case "cabin":
-                    component = new Cabin(connectors);
+                    component = new Cabin(connectors, id);
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown component type: " + type);
@@ -104,10 +119,10 @@ public class ComponentBank {
         return connectors;
     }
 
-    private static CrewType parseCrewType(JsonNode crewTypeNode){
+    private static CrewType parseCrewType(JsonNode crewTypeNode) throws JsonParseException {
         if(crewTypeNode != null && !crewTypeNode.isNull()){
             return CrewType.valueOf(crewTypeNode.asText().toUpperCase()); //convert string to enum
         }
-        return null; //TODO: potentially make this throw an exception
+        throw new JsonParseException("Cannot parse crew type");
     }
 }

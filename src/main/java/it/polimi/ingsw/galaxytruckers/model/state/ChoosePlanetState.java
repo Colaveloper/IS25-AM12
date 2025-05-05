@@ -10,10 +10,9 @@ public class ChoosePlanetState extends GameState {
     Consumer<Integer> choosePlanetMethod;
     Set<Integer> options;
 
-    public ChoosePlanetState(Consumer<Integer> choosePlanetMethod, Set<Integer> options) {
+    public ChoosePlanetState(ShipBoard shipBoard, Consumer<Integer> choosePlanetMethod, Set<Integer> options) {
         this.choosePlanetMethod = choosePlanetMethod;
         this.options = options;
-        //TODO : add shipBoard assignment to constructor
     }
 
     @Override

@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 
 import java.util.*;
 
-public class FlightBoard implements Physical {
+public class FlightBoard extends Physical {
     private int loopLength;
     private List<Integer>  startingPositionLeft;
     private Map<Colors, Integer> playerToPlace;
@@ -25,11 +25,6 @@ public class FlightBoard implements Physical {
 
     public void setPlayerToPlace(Map<Colors, Integer> playerToPlace) {
         this.playerToPlace = playerToPlace;
-    }
-
-    @Override
-    public Image getImage() {
-        return null;
     }
 
     @Override

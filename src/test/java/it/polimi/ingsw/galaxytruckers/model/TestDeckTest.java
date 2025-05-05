@@ -1,6 +1,5 @@
-package it.polimi.ingsw.galaxytruckers;
+package it.polimi.ingsw.galaxytruckers.model;
 
-import it.polimi.ingsw.galaxytruckers.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.*;
 import it.polimi.ingsw.galaxytruckers.view.screens.*;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import javafx.application.Application;
 
 import java.awt.*;
 import java.io.IOException;
@@ -27,11 +28,17 @@ public class ClientController {
         // TODO: consider whether to relocate prints and scans
         System.out.println("Enter \"G\" to switch to the Graphical Interface, or press any other key to continue here");
         if (new Scanner(System.in).nextLine().trim().equalsIgnoreCase("G")) {
-            view = new GuiView(model, server);
+            view = new GuiView();
+            view.setServer(server);
+            view.setModel(model);
+            GuiView.firstStrategy = new NicknameChoiceScreen();
+            Application.launch(GuiView.class); // calls view.run(...)
         } else {
-            view = new CliView(model, server);
+            view = new CliView();
+            view.setServer(server);
+            view.setModel(model);
+            view.run(new NicknameChoiceScreen());
         }
-        view.run(new NicknameChoiceScreen());
     }
 
     public void setCLIViewManually (VirtualServer server) {

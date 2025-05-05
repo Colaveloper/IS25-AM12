@@ -1,13 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
 import javafx.scene.image.Image;
+import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AllShips implements Physical {
+public class AllShips extends Physical {
     private final Map<String, Shipboard> shipsMap;
     private List<List<String>> descriptions;
     private final int componentWidth;
@@ -20,7 +21,7 @@ public class AllShips implements Physical {
     }
 
     @Override
-    public Image getImage() {
+    public StackPane getNode() {
         return null;
     }
 

@@ -359,7 +359,7 @@ class FlightBoardTest {
             }
             flightBoard.giveUp(ship1);
             flightBoard.giveUp(ship2);
-            assertTrue(true); // TODO: implement and test one-left logic
+            assertTrue(true);
         }
 
         @Test

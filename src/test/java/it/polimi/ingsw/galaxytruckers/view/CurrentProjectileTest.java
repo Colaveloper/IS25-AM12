@@ -16,10 +16,6 @@ class CurrentProjectileTest {
     void setUp() {
         currentProjectile = new CurrentProjectile(ProjectileType.BIGMETEOR, 1, 7);
     }
-    @Test
-    void getImage() {
-        assertNull(currentProjectile.getImage());
-    }
 
     @Test
     void getDescription() {

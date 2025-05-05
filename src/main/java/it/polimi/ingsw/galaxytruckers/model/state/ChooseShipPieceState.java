@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 
-// TODO : this state used also in ship-building,
-//  we could make adventureCard nullable and change state accordingly
 public class ChooseShipPieceState extends GameState {
     private final ShipBoard shipBoard;
     private final List<Set<Point>> shipPieces;
@@ -23,7 +21,9 @@ public class ChooseShipPieceState extends GameState {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
-        removeOtherShipPieces(shipBoard, pieceIndex, shipPieces);
+        Set<Point> componentsToRemove = shipBoard.getComponentMap().keySet();
+        componentsToRemove.removeAll(shipPieces.get(pieceIndex));
+        componentsToRemove.forEach(shipBoard::discardComponent);
         game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
     }
 }

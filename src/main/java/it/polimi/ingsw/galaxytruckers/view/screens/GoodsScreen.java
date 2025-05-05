@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
@@ -30,5 +31,10 @@ public class GoodsScreen implements ScreenStrategy{
     @Override
     public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {
         // TODO: complete this method
+    }
+
+    @Override
+    public void showGUI(ClientModel model, Pane root, VirtualServer server) {
+
     }
 }

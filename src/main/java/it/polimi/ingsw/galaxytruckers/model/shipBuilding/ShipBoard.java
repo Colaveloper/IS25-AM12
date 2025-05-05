@@ -107,14 +107,24 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
     }
 
-    //TODO: handle exposed connectors logic
+    public void discardComponent(Point position) {
+        removeComponent(position);
+        losses++;
+    }
+
     public void removeComponent(Point position) {
         lastPosition = position;
         componentMap.remove(lastPosition).removeFromVisitor(this);
         lastPosition = null;
     }
 
-    public void finishBuilding() {}
+    public void finishBuilding() {
+        try {
+            weldLastComponent();
+        } catch (IllegalStateException e) {
+            rejectComponent();
+        }
+    }
 
     //Observers
 
@@ -212,6 +222,10 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     public Optional<Component> getLastComponent() {
         return Optional.ofNullable(lastComponent);
+    }
+
+    public Optional<Point> getLastPosition() {
+        return Optional.ofNullable(lastPosition);
     }
 
     public List<Component> getStashedComponents() {

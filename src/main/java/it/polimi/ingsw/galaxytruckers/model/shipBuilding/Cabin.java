@@ -1,15 +1,27 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import java.util.List;
 
 public class Cabin extends Component {
+    private boolean initialized;
     private CrewType crewType;
     private int numResidents;
 
+    public Cabin(List<Connector> connectors, int id) {
+        super(connectors,id);
+        this.crewType = CrewType.HUMAN;
+        this.numResidents = 0;
+        this.initialized = false;
+    }
+
+    @VisibleForTesting
     public Cabin(List<Connector> connectors) {
         super(connectors);
-        this.crewType = null;
+        this.crewType = CrewType.HUMAN;
         this.numResidents = 0;
+        this.initialized = false;
     }
 
     public void initialize(CrewType crewType) {
@@ -19,28 +31,19 @@ public class Cabin extends Component {
         } else {
             this.numResidents = 1;
         }
+        this.initialized = true;
     }
 
     public int getNumResidents() {
-        if (crewType == null) {
-            throw new IllegalStateException("Cabin not initialized");
-        }
         return numResidents;
     }
 
     public CrewType getCrewType() {
-        if (crewType == null) {
-            throw new IllegalStateException("Cabin not initialized");
-        }
         return crewType;
     }
 
     public void loseResidents(int numResidents) {
-        if (crewType == null) {
-            throw new IllegalStateException("Cabin not initialized");
-        }
-
-        if (numResidents <= 0) {
+        if (numResidents < 0) {
             throw new IllegalArgumentException("Number of residents to remove is not positive");
         } else if (numResidents > this.numResidents) {
             throw new IllegalArgumentException("Number of residents to remove exceeds the current number of residents");

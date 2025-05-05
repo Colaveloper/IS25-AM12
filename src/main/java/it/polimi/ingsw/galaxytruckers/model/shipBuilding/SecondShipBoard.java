@@ -38,6 +38,7 @@ public class SecondShipBoard extends ShipBoard {
             new Point(10, 9)));
 
     private final List<Component> stashedComponents;
+    private boolean isStashed = false;
 
     private final Set<CrewType> aliens;
     // We might need this attribute to handle meteors and cannon hits better
@@ -57,6 +58,20 @@ public class SecondShipBoard extends ShipBoard {
         return shipArea.contains(point);
     }
 
+    @Override
+    public Component rejectComponent() {
+        if (isStashed) {
+            throw new IllegalStateException("You can't reject a stashed component");
+        }
+        return super.rejectComponent();
+    }
+
+    @Override
+    public void offerComponent(Component component) {
+        super.offerComponent(component);
+        isStashed = false;
+    }
+
     //Stashing methods
 
     public void stashComponent() {
@@ -74,10 +89,16 @@ public class SecondShipBoard extends ShipBoard {
     public void grabStashedComponent(int index) {
         weldLastComponent();
         lastComponent = stashedComponents.remove(index);
+        isStashed = true;
     }
 
     @Override
     public void finishBuilding() {
+        try {
+            super.finishBuilding();
+        } catch (IllegalStateException e) {
+            this.losses++;
+        }
         this.losses += stashedComponents.size();
         stashedComponents.clear();
     }
