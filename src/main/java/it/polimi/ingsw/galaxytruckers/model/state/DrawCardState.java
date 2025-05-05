@@ -5,7 +5,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.util.Set;
 
-//TODO : determine a way to handle game end
 public class DrawCardState extends GameState {
     ShipBoard shipBoard;
 
@@ -27,9 +26,7 @@ public class DrawCardState extends GameState {
             game.forceShipsToGiveUp();
             game.setCurrentState(nextState);
         } else {
-            // TODO: game over, compute scores and show them to players
+            game.endGame();
         }
     }
-
-
 }

@@ -4,10 +4,12 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.EndGameState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Game {
@@ -17,6 +19,7 @@ public class Game {
     private Set<ShipBoard> givenUpShips = new HashSet<>();
     private Deck deck;
     private GameState currentState;
+    private Map<ShipBoard, Integer> finalScores;
     Level level;
 
     public Game(Level level) {
@@ -114,4 +117,14 @@ public class Game {
     }
 
     public Set<ShipBoard> getGivenUpShips(){return givenUpShips;}
+
+    public void endGame(){
+        finalScores = flightBoard.getFinalScores();
+        GameState endState = new EndGameState(finalScores);
+        setCurrentState(endState);
+    }
+
+    public Map<ShipBoard, Integer> getFinalScores(){
+        return finalScores;
+    }
 }

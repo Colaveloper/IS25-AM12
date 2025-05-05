@@ -118,4 +118,8 @@ public abstract class GameState {
     public void giveUp(ShipBoard shipBoard, boolean giveUp){
         throw new IllegalStateException("This action is unsupported in this state");
     }
+
+    public void endGame(){
+        throw new IllegalStateException("Game is not over");
+    }
 }
