@@ -10,14 +10,14 @@ import java.util.stream.Collectors;
 public abstract class FlightBoard {
     protected final Set<ShipBoard> allShips; // contains playing+dead ships
     protected final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
-    @VisibleForTesting
-    protected final Map<ShipBoard, Integer> finalScores; // can be populated early by giving up
+    // @VisibleForTesting
+    // protected final Map<ShipBoard, Integer> finalScores; // can be populated early by giving up
     protected List<Integer> startingPositionsLeft;
 
     public FlightBoard(Set<ShipBoard> allShips) {
         this.allShips = allShips;
         this.shipToPlace = new HashMap<>();
-        this.finalScores = new HashMap<>();
+//        this.finalScores = new HashMap<>();
     }
 
     public Set<ShipBoard> getAllShips() {
@@ -71,50 +71,50 @@ public abstract class FlightBoard {
         throw new UnsupportedOperationException("Not available for this type of FlightBoard");
     }
 
-    public Map<ShipBoard, Integer> getFinalScores() {
-        assignFinishOrderReward();
-        assignFinishOrderReward();
-        countGoodsValue();
-        countCreditsAndLosses();
-        return finalScores;
-    }
+//    public Map<ShipBoard, Integer> getFinalScores() {
+//        assignBestLookingShipReward();
+//        assignFinishOrderReward();
+//        countGoodsValue();
+//        countCreditsAndLosses();
+//        return finalScores;
+//    }
 
-    @VisibleForTesting
-    protected void assignBestLookingShipReward() {
-        int minExposedConnectors = shipToPlace.keySet().stream()// who gave up does not count!
-                .mapToInt(ShipBoard::getExposedConnectorsNumber)
-                .min()
-                .orElse(0); // no ship on board
-
-        shipToPlace.keySet().forEach(s ->
-                finalScores.merge(s, s.getExposedConnectorsNumber() == minExposedConnectors ? 2 : 0, Integer::sum)
-        );
-    }
-
-    @VisibleForTesting
-    protected void assignFinishOrderReward() {
-        shipToPlace.keySet().forEach(s ->
-                finalScores.merge(s, 4 - getOrderedShips().indexOf(s), Integer::sum)
-        );
-    }
-
-    @VisibleForTesting
-    protected void countCreditsAndLosses() {
-        shipToPlace.keySet().forEach(s ->
-                finalScores.merge(s, s.getCredits() - s.getLosses(), Integer::sum)
-        );
-    }
-
-    @VisibleForTesting
-    protected void countGoodsValue() {
-        allShips.forEach(s -> {
-            if (shipToPlace.containsKey(s)) {
-                finalScores.merge(s, s.getGoodsValue(), Integer::sum);
-            } else {
-                finalScores.merge(s, (s.getGoodsValue()+1)/2, Integer::sum);
-            }
-        });
-    }
+//    @VisibleForTesting
+//    protected void assignBestLookingShipReward() {
+//        int minExposedConnectors = shipToPlace.keySet().stream()// who gave up does not count!
+//                .mapToInt(ShipBoard::getExposedConnectorsNumber)
+//                .min()
+//                .orElse(0); // no ship on board
+//
+//        shipToPlace.keySet().forEach(s ->
+//                finalScores.merge(s, s.getExposedConnectorsNumber() == minExposedConnectors ? 2 : 0, Integer::sum)
+//        );
+//    }
+//
+//    @VisibleForTesting
+//    protected void assignFinishOrderReward() {
+//        shipToPlace.keySet().forEach(s ->
+//                finalScores.merge(s, 4 - getOrderedShips().indexOf(s), Integer::sum)
+//        );
+//    }
+//
+//    @VisibleForTesting
+//    protected void countCreditsAndLosses() {
+//        shipToPlace.keySet().forEach(s ->
+//                finalScores.merge(s, s.getCredits() - s.getLosses(), Integer::sum)
+//        );
+//    }
+//
+//    @VisibleForTesting
+//    protected void countGoodsValue() {
+//        allShips.forEach(s -> {
+//            if (shipToPlace.containsKey(s)) {
+//                finalScores.merge(s, s.getGoodsValue(), Integer::sum);
+//            } else {
+//                finalScores.merge(s, (s.getGoodsValue()+1)/2, Integer::sum);
+//            }
+//        });
+//    }
 
     @VisibleForTesting
     public List<Integer> getStartingPositionsLeft() {

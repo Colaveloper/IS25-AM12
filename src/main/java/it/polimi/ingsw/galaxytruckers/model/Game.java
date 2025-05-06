@@ -102,29 +102,60 @@ public class Game {
     }
 
     public void forceShipsToGiveUp(){
-        Set<ShipBoard> shipsToGiveUp = new HashSet<>();
-        // if crew == 0, or you have no engine power -> give up
+        // if ship has no crew -> force give up
         for (ShipBoard s : shipBoards){
-            if(s.getEnginePower() == 0 || s.getCrewSize() == 0)
+            if(s.getCrewSize() == 0) {
                 givenUpShips.add(s);
+                shipBoards.remove(s);
+            }
         }
-
-        // if you get lapped -> give up
+        // if you get lapped -> also force give up
         givenUpShips.addAll(flightBoard.getAndRemoveLappedShips());
-
-        // make sure these ships are removed from flightboard
-        flightBoard.removeShips(givenUpShips);
     }
 
     public Set<ShipBoard> getGivenUpShips(){return givenUpShips;}
 
     public void endGame(){
-        finalScores = flightBoard.getFinalScores();
+        // TODO: instead of calling flightboard method, move the logic in here
+
+        // finalScores = flightBoard.getFinalScores();
         GameState endState = new EndGameState(finalScores);
         setCurrentState(endState);
     }
 
     public Map<ShipBoard, Integer> getFinalScores(){
         return finalScores;
+    }
+
+    private void assignShipRewards(){
+        // Best-looking ship reward
+        int minExposedConnectors = shipBoards.stream()// who gave up does not count!
+                .mapToInt(ShipBoard::getExposedConnectorsNumber)
+                .min()
+                .orElse(0); // no ship on board
+
+        shipBoards.forEach(s ->
+                finalScores.merge(s, s.getExposedConnectorsNumber() == minExposedConnectors ? 2 : 0, Integer::sum)
+        );
+
+        // Finish order reward
+        shipBoards.forEach(s ->
+                finalScores.merge(s, 4 - flightBoard.getOrderedShips().indexOf(s), Integer::sum)
+        );
+
+        // Credits reward (minus the losses)
+        shipBoards.forEach(s ->
+                finalScores.merge(s, s.getCredits() - s.getLosses(), Integer::sum)
+        );
+
+        // Goods reward
+        shipBoards.forEach(s -> {
+            if (shipBoards.contains(s)) {
+                finalScores.merge(s, s.getGoodsValue(), Integer::sum);
+            } else {
+                // given up ships receive 1/2 reward
+                finalScores.merge(s, (s.getGoodsValue()+1)/2, Integer::sum);
+            }
+        });
     }
 }
