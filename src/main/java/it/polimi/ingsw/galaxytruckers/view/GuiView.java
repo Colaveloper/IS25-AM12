@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -30,7 +31,7 @@ public class GuiView extends Application implements View {
 //        stage.setFullScreen(true);
 //        stage.setFullScreenExitHint("");
         stage.setTitle("Galaxy Trucker");
-        setScreen(strategy);
+        setScreen(strategy); // TODO: to avoid this, separate setting the screen and calling a rerender
         stage.show();
     }
 
@@ -50,9 +51,11 @@ public class GuiView extends Application implements View {
      */
     @Override
     public void setScreen(ScreenStrategy newStrategy) throws IOException {
-        if (!newStrategy.equals(strategy)) {
+//        if (!newStrategy.equals(strategy)) {
             strategy = newStrategy;
-            strategy.showGUI(model, root, server);
-        }
+            Platform.runLater(() -> {
+                strategy.showGUI(model, root, server);
+            });
+//        }
     }
 }

@@ -16,7 +16,6 @@ class ClientControllerTest {
 
     static VirtualServer server;
     static ClientController controller;
-    static ClientModel model;
 
     static List<String> nicknames;
     static int loopLength;
