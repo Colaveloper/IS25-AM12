@@ -6,8 +6,6 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
-import it.polimi.ingsw.galaxytruckers.view.screens.NewCardScreen;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.awt.*;
 import java.io.IOException;
@@ -24,6 +22,13 @@ public class GameFlowTest {
         ClientController controller = new ClientController(server);
         controller.setCLIViewManually(server);
 
+        List<String> names = new ArrayList<>();
+        names.add("Giuigi");
+        names.add("Gioforchio");
+        controller.setNickname("Roborbio");
+        names.add("Roborbio");
+        controller.showLobbyUpdate(names); //TODO: resetta myNickname erroneamente?
+
         List<Point> shipArea = new ArrayList<>(List.of(
                 new Point(4, 7), new Point(4, 8), new Point(4, 9),
                 new Point(5, 6), new Point(5, 7), new Point(5, 8), new Point(5, 9),
@@ -33,28 +38,51 @@ public class GameFlowTest {
                 new Point(9, 6), new Point(9, 7), new Point(9, 8), new Point(9, 9),
                 new Point(10, 7),new Point(10, 8),new Point(10, 9)
         ));
-        controller.setNickname("Roborbio");
+
         controller.setShipArea(new HashSet<>(shipArea));
         controller.setFlightBoard(10, List.of(2, 4, 5));
 
-        for (int i=0 ; i<shipArea.size() - 20 ; i++) {
+
+        controller.showStartBuilding(50);
+        for (int i=0 ; i<shipArea.size(); i++) {
+            controller.setCoveredComponents(50-i-1);
             controller.showComponentPositioning("Roborbio", i*5, i%4, shipArea.get(i));
             controller.showStashUpdate(new ArrayList<>(List.of(4, 8)));
             controller.addReavealedComponent(i);
         }
 
-        controller.showUpdateCargoHold("Roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE));
+
         controller.showColorSelection("Roborbio", Colors.RED);
         controller.showPlayerToPlaceUpdate(Map.of("Roborbio", 2));
 
-        //TEST
+            //TEST
 
+            // abandoned ship
+        controller.showNewCard(1);
+        //(input)
+        controller.updateCredits("Roborbio", 4);
+        controller.updateCrewNumber("Roborbio", new Point(6, 6), 1);
+
+            // planets
         controller.showNewCard(16);
+        //(input)
+
         controller.choosePlanet(1);
         controller.showPlaceGoods();
+        //(input)
+
         controller.updateGoodsBuffer(1);
+        controller.updateGoods("Roborbio", new Point(9, 7), List.of(GoodsType.RED));
+        controller.showPlaceGoods();
+        //(input)
+
         controller.updateGoodsBuffer(2);
+        controller.updateGoods("Roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE));
+        controller.showPlaceGoods();
+        //(input)
+
         controller.updateGoodsBuffer(3);
+        controller.updateGoods("Roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE, GoodsType.YELLOW));
 
     }
 

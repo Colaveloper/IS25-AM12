@@ -206,10 +206,6 @@ public class Component extends Physical {
         this.crewType = crewType;
     }
 
-    public void subtractStat(int stat) {
-        this.componentStat -= stat;
-    }
-
     public void setSelectable() {
         isSelectable = true;
     }

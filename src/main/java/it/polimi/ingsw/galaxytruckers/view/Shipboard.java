@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
-import javafx.scene.image.Image;
 
 import java.awt.*;
 import java.io.IOException;
@@ -16,8 +15,8 @@ public class Shipboard extends Physical{
     private Point lastPosition;
 
     private int lostComponents;
-
     private int credits;
+
     private int losses;                 //TODO: what s this
     private int firepower;
     private int numBatteries;
@@ -52,7 +51,21 @@ public class Shipboard extends Physical{
         componentMatrix = result;
     }
 
+    public void setCredits(int creditsToAdd) {
+        credits = creditsToAdd;
+    }
 
+    public void setLostComponent(int losses) {
+        lostComponents = losses;
+    }
+
+    public int getCredits() {
+        return credits;
+    }
+
+    public int getLostComponents() {
+        return lostComponents;
+    }
 
     public void setComponent(Point position, int direction, int componentId) throws IOException {
         Component component = new Component(direction, componentId);
@@ -61,15 +74,11 @@ public class Shipboard extends Physical{
     }
 
     public void removeComponent(Point position) throws IOException {
-                componentMatrix.get(position.y-upLeft.y).set(position.x-upLeft.x, new Component(ComponentType.EMPTY_SPACE));
+        componentMatrix.get(position.y-upLeft.y).set(position.x-upLeft.x, new Component(ComponentType.EMPTY_SPACE));
     }
 
     public Component getComponent(Point point) throws IOException {
         return componentMatrix.get(point.y-upLeft.y).get(point.x-upLeft.x);
-    }
-
-    public void setStashedComponents(int componentId) {
-
     }
 
     public List<String> getDescription() {

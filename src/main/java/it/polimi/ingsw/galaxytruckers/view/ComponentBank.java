@@ -42,6 +42,10 @@ public class ComponentBank extends Physical {
         stashedComponents.add(new Component(0, componentId));
     }
 
+    public void setCoveredComponents(int coveredComponents) {
+        this.coveredComponents = coveredComponents;
+    }
+
     public void setCurrentComponent(int componentId) throws IOException {
         currentComponent = new Component(0, componentId);
     }

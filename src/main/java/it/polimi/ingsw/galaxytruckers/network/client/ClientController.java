@@ -42,7 +42,9 @@ public class ClientController {
     }
 
     public void setCLIViewManually (VirtualServer server) {
-        view = new CliView(model, server);
+        view = new CliView();
+        view.setModel(model);
+        view.setServer(server);
     }
 
 
@@ -98,6 +100,11 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
+    public void showStartBuilding(int coveredComponentsTot) throws IOException {
+        model.setCoveredComponents(coveredComponentsTot);
+        view.run(new ShipBuildingScreen());
+    }
+
     public void showComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException {
         model.setComponent(nickname, componentId, direction, position);
         view.run(new ShipBuildingScreen());
@@ -110,6 +117,10 @@ public class ClientController {
 
     public void addReavealedComponent(int componentId) throws IOException {
         model.addRevealedComponent(componentId);
+    }
+
+    public void setCoveredComponents(int coveredComponents) throws IOException {
+        model.setCoveredComponents(coveredComponents);
     }
 
     public void showForecast(List<Integer> cardsIds) {
@@ -137,24 +148,34 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
-    // UPDATE FOR COMPONENT (only data update and nothing to ask or show)
+    // UPDATE FOR COMPONENT (only data update and nothing to ask or show, called for any player independently)
 
-    public void showUpdateBatteries(String nickname, Point position, int batteries) throws IOException {
-        model.loseBatteries(nickname, position, batteries);
+    public void updateBatteries(String nickname, Point position, int batteries) throws IOException {
+        model.setBatteries(nickname, position, batteries);
         view.refresh();
-        // view.show(ChosenStrategy);
     }
 
-    public void showUpdateCrew(String nickname, Point position, int crew, CrewType crewType) throws IOException {
-        model.setCrew(nickname, position, crew, crewType);
-        view.refresh();
-        // view.show(ChosenStrategy)
+    public void initializeCabin(String nickname, Point position, CrewType crewType, int crew) throws IOException {
+        model.initializeCabin(nickname, position, crewType, crew);
     }
 
-    public void showUpdateCargoHold(String nickname, Point position, List<GoodsType> goods) throws IOException {
+    public void updateCrewNumber(String nickname, Point position, int crew) throws IOException {
+        model.setCrewNumber(nickname, position, crew);
+        view.refresh();
+    }
+
+    public void updateGoods(String nickname, Point position, List<GoodsType> goods) throws IOException {
         model.setGoods(nickname, position, goods);
         view.refresh();
-        // view.show(ChosenStrategy)
+    }
+
+    public void updateCredits(String nickname, int credits) throws IOException {
+        model.setCredits(nickname, credits);
+        view.refresh();
+    }
+
+    public void updateLostComponent(String nickname, int componentsLost) throws IOException {
+        model.setLostComponent(nickname, componentsLost);
     }
 
     // UPDATE FOR ADVENTURE
@@ -170,17 +191,19 @@ public class ClientController {
         view.run(new GoodsScreen());
     }
 
+    // planetId is an index and starts from 0, UI listing on screen starts from 1
     public void choosePlanet(int planetId) throws IOException {
         model.setPlanetGoodBuffer(planetId);
     }
 
-    // update each time player picks something, index of good taken in the buffer
+    // update each time player picks something removing good taken in the buffer by index
     public void updateGoodsBuffer(int index) throws IOException {
         model.updateGoodsBuffer(index);
         //view.refresh();
-        view.run(new GoodsScreen());
+        //view.run(new GoodsScreen());
     }
 
+    // set current player for any action that involves a decision
     public void setCurrentPlayer(String nickname) {
         model.setCurrentPlayerNickname(nickname);
     }
@@ -203,11 +226,6 @@ public class ClientController {
     }
 
     // other updates
-
-    public void showUpdateGoodBuffer(List<GoodsType> goods) {
-        // model.update
-        // view.show(ChosenStrategy)
-    }
 
     public void showSelectablePoints(List<Point> points) {
         model.setSelectablePoints(points);

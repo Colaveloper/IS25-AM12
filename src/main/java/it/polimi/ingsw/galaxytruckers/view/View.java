@@ -10,10 +10,7 @@ public interface View {
     void setModel(ClientModel model);
     void setServer(VirtualServer server);
 
-    public View (ClientModel model, VirtualServer server) {
-        this.model = model;
-        this.server = server;
-    }
+
 
     public abstract void refresh();
     /**
