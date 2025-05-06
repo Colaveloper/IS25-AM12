@@ -29,8 +29,6 @@ public class LobbyScreen implements ScreenStrategy {
 
     @Override
     public void showGUI(ClientModel model, Pane root, VirtualServer server) {
-        root.getChildren().clear();
-
         FlowPane lobbyPane = new FlowPane();
         lobbyPane.setAlignment(Pos.CENTER);
         lobbyPane.setHgap(20);

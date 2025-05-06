@@ -56,7 +56,10 @@ class ClientControllerTest {
                         nicknames.add("OtherPlayer3");
                         controller.showLobbyUpdate(nicknames);
                         controller.setupGame(loopLength, startingPositions, shipArea);
-                        controller.setCoveredComponents(44);
+                        for (int i = 44; i>0; i--) {
+                            controller.setCoveredComponents(i);
+                            Thread.sleep(500);
+                        }
                     } catch (InterruptedException | IOException e) {
                         Thread.currentThread().interrupt();
                     }

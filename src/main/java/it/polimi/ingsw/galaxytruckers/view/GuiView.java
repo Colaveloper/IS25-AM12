@@ -54,6 +54,7 @@ public class GuiView extends Application implements View {
 //        if (!newStrategy.equals(strategy)) {
             strategy = newStrategy;
             Platform.runLater(() -> {
+                root.getChildren().clear();
                 strategy.showGUI(model, root, server);
             });
 //        }
