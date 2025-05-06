@@ -11,8 +11,8 @@ public class NewCardScreen implements ScreenStrategy {
     @Override
     public void showCLI(ClientModel model) {
         System.out.println("Current Leader: "+model.getCurrentLeader()+" just drew: " + model.getCardName());
-        model.getMyShipBoard().getDescription().forEach(System.out::println);
-        model.getCurrentCard().getDescription().forEach(System.out::println);
+        model.getMyShipBoard().getNewDescription().forEach(System.out::println);
+        model.getCurrentCard().getNewDescription().forEach(System.out::println);
     }
 
     @Override

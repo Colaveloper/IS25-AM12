@@ -59,7 +59,6 @@ public class Component extends Physical {
             this.isSpecial = node.get("special").asBoolean();
             //cargo.add(GoodsType.RED);
         }
-
     }
 
     public Component(ComponentType type) {
@@ -97,7 +96,7 @@ public class Component extends Physical {
     }
 
     @Override
-    public List<String> getDescription() {
+    public List<String> getNewDescription() {
         String open = isSelectable ? colorGreen : "";
         String close = isSelectable ? colorReset : "";
 
@@ -125,21 +124,21 @@ public class Component extends Physical {
 
                 String empty = isSpecial ? "○" : "□";
                 String full = isSpecial ? "●" : "■";
-                cargoPrint.append(open + getConnector(3) + close);
+                cargoPrint.append(open).append(getConnector(3)).append(close);
 
                 for (GoodsType i : cargo) {
                     switch (i) {
                         case RED:
-                            cargoPrint.append(colorRed + full + colorReset);
+                            cargoPrint.append(colorRed).append(full).append(colorReset);
                             break;
                         case YELLOW:
-                            cargoPrint.append(colorYellow + full + colorReset);
+                            cargoPrint.append(colorYellow).append(full).append(colorReset);
                             break;
                         case BLUE:
-                            cargoPrint.append(colorBlue + full + colorReset);
+                            cargoPrint.append(colorBlue).append(full).append(colorReset);
                             break;
                         case GREEN:
-                            cargoPrint.append(colorGreen + full + colorReset);
+                            cargoPrint.append(colorGreen).append(full).append(colorReset);
                             break;
                     }
                 }
@@ -147,7 +146,7 @@ public class Component extends Physical {
                 cargoPrint.append(empty.repeat(componentStat - cargo.size()));
                 cargoPrint.append( " ".repeat(3 - componentStat));
 
-                cargoPrint.append(open + getConnector(1) + close);
+                cargoPrint.append(open).append(getConnector(1)).append(close);
                 lines.add(1, cargoPrint.toString());
                // lines.add(1, open + getConnector(3) + " " + type.getSymbol(rotation) + " " + getConnector(1)+close);
 

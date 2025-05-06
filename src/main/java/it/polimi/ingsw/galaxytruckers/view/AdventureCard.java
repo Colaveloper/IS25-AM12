@@ -269,7 +269,7 @@ public class AdventureCard extends Physical {
 
     // public methods
     @Override
-    public List<String> getDescription(){return description;}
+    public List<String> getNewDescription(){return description;}
 
     public String getCardName() {
         return type;

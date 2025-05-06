@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
-import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
@@ -26,12 +25,12 @@ public class AllShips extends Physical {
     }
 
     @Override
-    public List<String> getDescription() {
+    public List<String> getNewDescription() {
         descriptions = new ArrayList<>();
         List<String> sequenceDescription = new ArrayList<>();
         StringBuilder row = new StringBuilder();
         for (Physical physical : shipsMap.values()) {
-            descriptions.add(physical.getDescription());
+            descriptions.add(physical.getNewDescription());
         }
         for (int i = 0; i < descriptions.getFirst().size() - 1; i++) {
             if ((i + 2)%3 == 0) {

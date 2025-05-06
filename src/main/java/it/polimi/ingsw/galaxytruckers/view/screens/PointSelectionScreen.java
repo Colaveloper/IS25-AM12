@@ -12,12 +12,12 @@ public class PointSelectionScreen implements ScreenStrategy {
     @Override
     public void showCLI(ClientModel model) {
 
-        model.getFlightBoard().getDescription().forEach(System.out::println);
+        model.getFlightBoard().getNewDescription().forEach(System.out::println);
 
         System.out.println("Please write the coordinates of one of the following points, then press enter.");
         System.out.println("For example: 4 2");
 
-        model.getMyShipBoard().getDescription().forEach(System.out::println);
+        model.getMyShipBoard().getNewDescription().forEach(System.out::println);
 
     }
 

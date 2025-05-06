@@ -86,9 +86,13 @@ public class ClientController {
         // view.show(ChosenStrategy)
     }
 
-    public void showUncoveredUpdate(List<Integer> uncoveredComponentIds, int coveredComponents) {
+    public void showUncoveredUpdate(List<Integer> uncoveredComponentIds) {
         // model.update
         // view.show(ChosenStrategy)
+    }
+
+    public void setCoveredComponents(int coveredComponentsN) {
+        model.setCoveredComponents(coveredComponentsN);
     }
 
     public void showForecast(List<Integer> cardsIds) {

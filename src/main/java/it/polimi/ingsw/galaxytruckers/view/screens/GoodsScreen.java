@@ -11,10 +11,10 @@ public class GoodsScreen implements ScreenStrategy{
     @Override
     public void showCLI(ClientModel model) {
         // show the goods buffer
-        model.getGoodsBuffer().getDescription().forEach(System.out::println);
+        model.getGoodsBuffer().getNewDescription().forEach(System.out::println);
 
         // show the player's shipboard
-        model.getMyShipBoard().getDescription().forEach(System.out::println);
+        model.getMyShipBoard().getNewDescription().forEach(System.out::println);
 
         // TODO: also select where to place the good on the shipboard
         System.out.println("Type the index of the good you want, then press enter.");

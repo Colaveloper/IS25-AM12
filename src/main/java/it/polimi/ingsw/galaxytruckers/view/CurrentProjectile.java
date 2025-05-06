@@ -19,7 +19,7 @@ public class CurrentProjectile extends Physical{
     }
 
     @Override
-    public List<String> getDescription() {
+    public List<String> getNewDescription() {
         description = new StringBuilder();
         description.append("a ");
         switch (projectileType) {

@@ -4,10 +4,6 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.GuiView;
-import javafx.application.Application;
-import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 
 import java.awt.*;
 import java.io.IOException;
@@ -46,16 +42,26 @@ class ClientControllerTest {
 
             @Override
             public void newGame(Level level, int playerN) throws IOException {
-                System.out.println("FAKE SERVER EVENT: successfully created lvl "+level+" game for "+playerN+" players");
-                controller.showLobbyUpdate(nicknames);
-                nicknames.add("OtherPlayer1");
-                controller.showLobbyUpdate(nicknames);
-                nicknames.add("OtherPlayer2");
-                controller.showLobbyUpdate(nicknames);
-                nicknames.add("OtherPlayer3");
-                controller.showLobbyUpdate(nicknames);
-
-                controller.setupGame(loopLength, startingPositions, shipArea);
+                // Simulated server update thread
+                new Thread(() -> {
+                    try {
+                        System.out.println("FAKE SERVER EVENT: successfully created lvl "+level+" game for "+playerN+" players");
+                        controller.showLobbyUpdate(nicknames);
+                        Thread.sleep(1000);
+                        nicknames.add("OtherPlayer1");
+                        controller.showLobbyUpdate(nicknames);
+                        Thread.sleep(1000);
+                        nicknames.add("OtherPlayer2");
+                        controller.showLobbyUpdate(nicknames);
+                        Thread.sleep(1000);
+                        nicknames.add("OtherPlayer3");
+                        controller.showLobbyUpdate(nicknames);
+                        controller.setupGame(loopLength, startingPositions, shipArea);
+                        controller.setCoveredComponents(44);
+                    } catch (InterruptedException | IOException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }).start();
             }
 
             @Override

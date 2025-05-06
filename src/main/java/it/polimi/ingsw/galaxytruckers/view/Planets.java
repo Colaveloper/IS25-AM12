@@ -46,7 +46,7 @@ public class Planets extends Physical{
     }
 
     @Override
-    public List<String> getDescription() {
+    public List<String> getNewDescription() {
         return describePlanets();
     }
 

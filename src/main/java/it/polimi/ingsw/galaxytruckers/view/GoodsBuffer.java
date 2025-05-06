@@ -55,7 +55,7 @@ public class GoodsBuffer extends Physical{
     }
 
     @Override
-    public List<String> getDescription() {
+    public List<String> getNewDescription() {
         List<String> result = new ArrayList<>();
         result.add("Here are the goods available as a reward:");
         result.add(describeGoodsBuffer());

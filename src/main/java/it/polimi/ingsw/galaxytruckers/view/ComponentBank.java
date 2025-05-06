@@ -1,26 +1,33 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
-import javafx.scene.image.Image;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ComponentBank extends Physical {
-    private List<Component> revealedComponents;
-    private int coveredComponents;
-    private List<String> description;
+    private final List<Component> revealedComponents;
+    private final IntegerProperty coveredComponents;
     private Component currentComponent;
-    private List<Component> stashedComponents;
+    private final List<Component> stashedComponents;
 
     public ComponentBank() {
-        this.coveredComponents = 999;   //TODO: placeholder, initiate at starting value or get from server?
-        this.revealedComponents = new ArrayList<>();
-        this.stashedComponents = new ArrayList<>();
+        coveredComponents = new SimpleIntegerProperty();;   //TODO: placeholder, initiate at starting value or get from server?
+        revealedComponents = new ArrayList<>();
+        stashedComponents = new ArrayList<>();
+        super.registerObservables(coveredComponents);
+    }
+
+    public void setCoveredComponents(int coveredComponentsN) {
+        this.coveredComponents.set(coveredComponentsN);
     }
 
     public void setStashedComponents(List<Integer> components) throws IOException {
-        stashedComponents = new ArrayList<>();
+        stashedComponents.clear();
         for (Integer componentId : components) {
             stashedComponents.add(new Component(0, componentId));
         }
@@ -50,18 +57,22 @@ public class ComponentBank extends Physical {
         currentComponent = null;
     }
 
+    public IntegerProperty coveredComponentsProperty() {
+        return coveredComponents;
+    }
+
     @Override
-    public List<String> getDescription() {
+    public List<String> getNewDescription() {
         String padding = "  ";
         StringBuilder row = new StringBuilder();
-        description = new ArrayList<>();
+        List<String> description = new ArrayList<>();
 
-        description.add("Face down: " + coveredComponents);
+        description.add("Face down: " + coveredComponents.get());
 
         description.add("Face up: ");
         for (int i = 0; i < 3; i++) {
             for (Component component : revealedComponents) {
-                row.append(component.getDescription().get(i));
+                row.append(component.getNewDescription().get(i));
                 row.append(padding);
             }
             description.add(row.toString());
@@ -76,7 +87,7 @@ public class ComponentBank extends Physical {
         description.add("Stash: " + "\tHand: ");
         for (int i = 0; i < 3; i++) {
             for (Component component : stashedComponents) {
-                row.append(component.getDescription().get(i));
+                row.append(component.getNewDescription().get(i));
                 row.append(padding);
             }
             for (int n = 0; n < 2 - stashedComponents.size(); n++) {
@@ -84,7 +95,7 @@ public class ComponentBank extends Physical {
             }
             row.append("\t\t\t");
             if (currentComponent != null) {
-                row.append(currentComponent.getDescription().get(i));
+                row.append(currentComponent.getNewDescription().get(i));
             }
             description.add(row.toString());
             row.setLength(0);

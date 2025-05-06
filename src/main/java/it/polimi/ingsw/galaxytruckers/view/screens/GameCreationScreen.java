@@ -24,10 +24,14 @@ public class GameCreationScreen implements ScreenStrategy {
                 .map(Enum::name)
                 .toArray(String[]::new)));
         System.out.println("The game is available for 2, 3, or 4 players");
+        System.out.println("Default: SECOND 4");
     }
 
     @Override
     public boolean isLegalInput(ClientModel model, String input) {
+        if (input.trim().isEmpty()) {
+            return true;
+        }
         for (Level level : Level.values()) {
             if (input.matches("^" + level.name() + "\\s[2-4]$")) {
                 return true;
@@ -38,6 +42,9 @@ public class GameCreationScreen implements ScreenStrategy {
 
     @Override
     public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {
+        if (input.trim().isEmpty()) {
+            input = "SECOND 4";
+        }
         String[] parts = input.split("\\s");
         server.newGame(Level.valueOf(parts[0].toUpperCase()), Integer.parseInt(parts[1]));
     }

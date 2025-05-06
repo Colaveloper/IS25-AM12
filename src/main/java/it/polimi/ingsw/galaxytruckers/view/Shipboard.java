@@ -1,12 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
-import javafx.scene.image.Image;
-
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class Shipboard extends Physical{
@@ -72,14 +69,14 @@ public class Shipboard extends Physical{
 
     }
 
-    public List<String> getDescription() {
+    public List<String> getNewDescription() {
 
         List<String> result = new ArrayList<>();
 
         int height = componentMatrix.size();
         int width = componentMatrix.getFirst().size();
-        int componentHeight = componentMatrix.getFirst().getFirst().getDescription().size();
-        int componentWidth = componentMatrix.getFirst().getFirst().getDescription().getFirst().length();
+        int componentHeight = componentMatrix.getFirst().getFirst().getNewDescription().size();
+        int componentWidth = componentMatrix.getFirst().getFirst().getNewDescription().getFirst().length();
 
         int yIndex = upLeft.y;
 
@@ -98,7 +95,7 @@ public class Shipboard extends Physical{
                 // component
                 for (int k = 0; k < width; k++) {
                     Component component = componentMatrix.get(i).get(k);
-                    List<String> description = component.getDescription();
+                    List<String> description = component.getNewDescription();
                     row.append(description.get(j));
                 }
 

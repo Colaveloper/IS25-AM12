@@ -28,7 +28,7 @@ public class FlightBoard extends Physical {
     }
 
     @Override
-    public List<String> getDescription() {
+    public List<String> getNewDescription() {
         String[] result = new String[loopLength];
         Arrays.fill(result, "_");
 

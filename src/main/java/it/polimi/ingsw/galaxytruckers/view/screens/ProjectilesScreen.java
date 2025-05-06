@@ -9,8 +9,8 @@ import java.io.IOException;
 public class ProjectilesScreen implements ScreenStrategy {
     @Override
     public void showCLI(ClientModel model) {
-        model.getMyShipBoard().getDescription().forEach(System.out::println);
-        System.out.println(model.getCurrentProjectile().getDescription());
+        model.getMyShipBoard().getNewDescription().forEach(System.out::println);
+        System.out.println(model.getCurrentProjectile().getNewDescription());
     }
 
     @Override

@@ -5,6 +5,8 @@ import com.google.common.collect.HashBiMap;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ListProperty;
 
 import java.awt.*;
 import java.io.IOException;
@@ -197,5 +199,13 @@ public class ClientModel {
 
     public boolean existsUnwelded() {
         return existsUnwelded;
+    }
+
+    public void setCoveredComponents(int coveredComponentsN) {
+        componentBank.setCoveredComponents(coveredComponentsN);
+    }
+
+    public IntegerProperty coveredComponentsProperty() {
+        return componentBank.coveredComponentsProperty();
     }
 }

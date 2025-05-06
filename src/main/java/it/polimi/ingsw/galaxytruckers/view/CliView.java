@@ -2,11 +2,12 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;
+import javafx.beans.property.Property;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-public class CliView implements View{
+public class CliView implements View {
     Scanner scanner;
     String input;
     static ClientModel model;
@@ -14,12 +15,14 @@ public class CliView implements View{
     ScreenStrategy strategy;
 
     public CliView() {
+        startInputLoop();
         scanner = new Scanner(System.in);
     }
 
     @Override
     public void setModel(ClientModel model) {
         CliView.model = model;
+        addListenerToProperty(model.coveredComponentsProperty());
     }
 
     @Override
@@ -29,27 +32,49 @@ public class CliView implements View{
 
     @Override
     public void setScreen(ScreenStrategy newStrategy) throws IOException {
-        if (!newStrategy.equals(strategy)) {
+//        if (!newStrategy.equals(strategy)) {
             strategy = newStrategy;
 
             // clearing the console (not supported in intellij, use Windows terminal)
             System.out.print("\033[H\033[2J");
             System.out.flush();
+            System.out.println("\n");
 
             // showing the visualization
             System.out.println("█".repeat(150));
             strategy.showCLI(model);
             System.out.flush();
-        }
+//        }
+    }
 
-        input = scanner.nextLine();
+    public void startInputLoop() {
+        new Thread(() -> {
+            Scanner scanner = new Scanner(System.in);
+            while (true) {
+                input = scanner.nextLine();
 
-        // letting the user correct format errors
-        while (!strategy.isLegalInput(model, input)) {
-            System.out.println("Invalid format, please check your input");
-            input = scanner.nextLine();
-        };
+                // letting the user correct format errors
+                while (!strategy.isLegalInput(model, input)) {
+                    System.out.println("Invalid format, please check your input");
+                    input = scanner.nextLine();
+                };
 
-        strategy.parseAndInvoke(model, input, server);
+                try {
+                    strategy.parseAndInvoke(model, input, server);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
+
+    private <T> void addListenerToProperty(Property<T> property) {
+        property.addListener((obs, oldVal, newVal) -> {
+            try {
+                this.setScreen(strategy);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }
