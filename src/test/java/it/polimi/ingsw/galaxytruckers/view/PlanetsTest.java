@@ -1,9 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.Planets;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

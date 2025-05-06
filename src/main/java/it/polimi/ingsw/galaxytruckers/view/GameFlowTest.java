@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.awt.*;
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class GameFlowTest {
 
 
         controller.showStartBuilding(50);
-        for (int i=0 ; i<shipArea.size(); i++) {
+        for (int i=0 ; i<shipArea.size() -25; i++) {
             controller.setCoveredComponents(50-i-1);
             controller.showComponentPositioning("Roborbio", i*5, i%4, shipArea.get(i));
             controller.showStashUpdate(new ArrayList<>(List.of(4, 8)));
@@ -56,6 +57,10 @@ public class GameFlowTest {
         controller.showPlayerToPlaceUpdate(Map.of("Roborbio", 2));
 
             //TEST
+
+        controller.showNewCard(8);
+        controller.showProjectile(ProjectileType.BIGFIRE, 0, 6);
+        controller.showSelectablePoints(List.of(shipArea.get(1)));
 
             // abandoned ship
         controller.showNewCard(1);

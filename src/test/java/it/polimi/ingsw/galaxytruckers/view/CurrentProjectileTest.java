@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.CurrentProjectile;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

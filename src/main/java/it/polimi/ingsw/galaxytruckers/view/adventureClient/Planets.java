@@ -1,13 +1,12 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import javafx.scene.image.Image;
+import it.polimi.ingsw.galaxytruckers.view.Physical;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Planets extends Physical{
+public class Planets extends Physical {
     private final List<Optional<String>> landedPlayers;
     private Optional<List<Map<GoodsType, Integer>>> planets;
 

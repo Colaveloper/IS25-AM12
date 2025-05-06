@@ -1,6 +1,6 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.shipBuildingClient;
 
-import javafx.scene.image.Image;
+import it.polimi.ingsw.galaxytruckers.view.Physical;
 
 import java.io.IOException;
 import java.util.ArrayList;

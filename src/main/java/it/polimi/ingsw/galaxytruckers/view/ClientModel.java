@@ -5,6 +5,11 @@ import com.google.common.collect.HashBiMap;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.CurrentProjectile;
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.GoodsBuffer;
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.Planets;
+import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.awt.*;
