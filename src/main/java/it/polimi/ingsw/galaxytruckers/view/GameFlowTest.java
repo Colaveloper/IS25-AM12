@@ -28,7 +28,7 @@ public class GameFlowTest {
         names.add("Gioforchio");
         controller.setNickname("Roborbio");
         names.add("Roborbio");
-        controller.showLobbyUpdate(names); //TODO: resetta myNickname erroneamente?
+        controller.showLobbyUpdate(names);
 
         List<Point> shipArea = new ArrayList<>(List.of(
                 new Point(4, 7), new Point(4, 8), new Point(4, 9),
@@ -45,9 +45,13 @@ public class GameFlowTest {
 
 
         controller.showStartBuilding(50);
+        //(input)
+
         for (int i=0 ; i<shipArea.size() -25; i++) {
             controller.setCoveredComponents(50-i-1);
             controller.showComponentPositioning("Roborbio", i*5, i%4, shipArea.get(i));
+            //(input)
+
             controller.showStashUpdate(new ArrayList<>(List.of(4, 8)));
             controller.addReavealedComponent(i);
         }
@@ -58,9 +62,26 @@ public class GameFlowTest {
 
             //TEST
 
+            //abandoned station
+        controller.showNewCard(5);
+
+            //meteors
         controller.showNewCard(8);
+        //(input)
+
+        controller.showSelectablePoints(List.of(new Point(4, 7)));
         controller.showProjectile(ProjectileType.BIGFIRE, 0, 6);
-        controller.showSelectablePoints(List.of(shipArea.get(1)));
+        //(input)
+
+        controller.showSelectablePoints(List.of(new Point(4, 8)));
+        controller.showProjectile(ProjectileType.SMALLFIRE, 1, 7);
+        //(input)
+
+        controller.showSelectablePoints(List.of(new Point(4, 7)));
+        controller.showProjectile(ProjectileType.SMALLMETEOR, 2, 8);
+        //(input)
+
+
 
             // abandoned ship
         controller.showNewCard(1);

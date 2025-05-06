@@ -211,7 +211,6 @@ public class ClientController implements ClientControllerInterface {
     public void showNewCard(Integer cardId) throws IOException {
         model.setCurrentCard(cardId);
         model.setCurrentPlayerNickname(model.getCurrentLeader());
-        model.setSelectablePoints(null);
         view.run(new NewCardScreen());
     }
 
@@ -267,7 +266,7 @@ public class ClientController implements ClientControllerInterface {
     @Override
     public void showSelectablePoints(List<Point> points) throws IOException {
         model.setSelectablePoints(points);
-        view.run(new PointSelectionScreen());
+        //view.run(new PointSelectionScreen());
     }
 
     @Override

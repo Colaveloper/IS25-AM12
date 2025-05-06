@@ -26,7 +26,7 @@ public class ClientModel {
     private final BiMap<String, Colors> playerToColor;
 
     private final FlightBoard flightBoard;
-    private final List<Point> selectablePoints;
+    private List<Point> selectablePoints;
     private Planets planets;
     private CurrentProjectile currentProjectile;
     private GoodsBuffer goodsBuffer;
@@ -217,7 +217,7 @@ public class ClientModel {
 
     public void setSelectablePoints(List<Point> selectablePoints) {
         playerToShip.get(myNickname).setSelectablePoints(selectablePoints);
-        this.selectablePoints.addAll(selectablePoints);
+        this.selectablePoints = selectablePoints;
     }
 
     public String getCurrentLeader() {
