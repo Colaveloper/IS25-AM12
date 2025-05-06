@@ -67,10 +67,6 @@ public abstract class FlightBoard {
         throw new UnsupportedOperationException("Not available for this type of FlightBoard");
     }
 
-    public void giveUp(ShipBoard shipBoard) {
-        throw new UnsupportedOperationException("Not available for this type of FlightBoard");
-    }
-
     public Set<ShipBoard> getAndRemoveLappedShips() {
         throw new UnsupportedOperationException("Not available for this type of FlightBoard");
     }

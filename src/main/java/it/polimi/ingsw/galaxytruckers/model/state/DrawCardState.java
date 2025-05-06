@@ -3,7 +3,8 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
-//TODO : determine a way to handle game end
+import java.util.Set;
+
 public class DrawCardState extends GameState {
     ShipBoard shipBoard;
 
@@ -21,9 +22,11 @@ public class DrawCardState extends GameState {
         }
         if(game.getDeck().tryDrawCard()) {
             game.getDeck().getCurrentCard().initialize(game.getFlightBoard());
-            game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
+            GameState nextState = game.getDeck().getCurrentCard().nextStep();
+            game.forceShipsToGiveUp();
+            game.setCurrentState(nextState);
         } else {
-            // TODO: game over, compute scores and show them to players
+            game.endGame();
         }
     }
 }

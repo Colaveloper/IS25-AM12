@@ -4,18 +4,22 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.EndGameState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Game {
     private final GameFactory gameFactory;
     private final Set<ShipBoard> shipBoards = new HashSet<>();
     private FlightBoard flightBoard;
+    private Set<ShipBoard> givenUpShips = new HashSet<>();
     private Deck deck;
     private GameState currentState;
+    private Map<ShipBoard, Integer> finalScores;
     Level level;
 
     public Game(Level level) {
@@ -95,5 +99,32 @@ public class Game {
      */
     public Level getLevel() {
         return level;
+    }
+
+    public void forceShipsToGiveUp(){
+        Set<ShipBoard> shipsToGiveUp = new HashSet<>();
+        // if crew == 0, or you have no engine power -> give up
+        for (ShipBoard s : shipBoards){
+            if(s.getEnginePower() == 0 || s.getCrewSize() == 0)
+                givenUpShips.add(s);
+        }
+
+        // if you get lapped -> give up
+        givenUpShips.addAll(flightBoard.getAndRemoveLappedShips());
+
+        // make sure these ships are removed from flightboard
+        flightBoard.removeShips(givenUpShips);
+    }
+
+    public Set<ShipBoard> getGivenUpShips(){return givenUpShips;}
+
+    public void endGame(){
+        finalScores = flightBoard.getFinalScores();
+        GameState endState = new EndGameState(finalScores);
+        setCurrentState(endState);
+    }
+
+    public Map<ShipBoard, Integer> getFinalScores(){
+        return finalScores;
     }
 }

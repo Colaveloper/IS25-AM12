@@ -7,8 +7,11 @@ import java.util.function.IntSupplier;
 // returns a number between 2 and 12, sum of two random numbers between 1 and 6
 
 public interface Dice extends IntSupplier {
+    // shared instance of Random
+    Random RANDOM = new Random();
+
     @Override
     default int getAsInt() {
-        return new Random().nextInt(6) + new Random().nextInt(6) + 2;
+        return RANDOM.nextInt(6) + RANDOM.nextInt(6) + 2;
     }
 }
