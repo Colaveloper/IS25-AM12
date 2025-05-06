@@ -1,15 +1,11 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.galaxytruckers.model.adventureCards.*;
-import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import java.awt.*;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -20,13 +16,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javafx.scene.Node;
+import it.polimi.ingsw.galaxytruckers.view.Physical;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parsePlanets;
-import static it.polimi.ingsw.galaxytruckers.model.Deck.parseProjectiles;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parseGoods;
 
 public class AdventureCard extends Physical {

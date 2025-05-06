@@ -25,7 +25,7 @@ public class GoodsScreen implements ScreenStrategy{
     @Override
     public boolean isLegalInput(ClientModel model, String input) {
         // TODO: complete this method
-        return false;
+        return true;
     }
 
     @Override

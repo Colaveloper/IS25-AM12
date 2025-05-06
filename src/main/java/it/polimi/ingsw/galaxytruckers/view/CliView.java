@@ -77,4 +77,9 @@ public class CliView implements View {
             }
         });
     }
+
+    // TODO: remove
+    public void refresh() {
+        currentStrategy.showCLI(model);
+    }
 }

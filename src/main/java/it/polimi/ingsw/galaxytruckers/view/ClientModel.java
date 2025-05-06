@@ -7,6 +7,12 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.CurrentProjectile;
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.GoodsBuffer;
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.Planets;
+import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.ComponentBank;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.awt.*;
 import java.io.IOException;
@@ -18,17 +24,17 @@ public class ClientModel {
     private List<String> nicknames;
     private String currentPlayerNickname;
     private String myNickname;
-
-    private final FlightBoard flightBoard;
     private final LinkedHashMap<String, Shipboard> playerToShip;        // need order to be always the same
     private final BiMap<String, Colors> playerToColor;
-    private final List<Point> selectablePoints;
+
+    private final FlightBoard flightBoard;
+    private List<Point> selectablePoints;
     private Planets planets;
     private CurrentProjectile currentProjectile;
-    private GoodsBuffer goods;
+    private GoodsBuffer goodsBuffer;
     private final ComponentBank componentBank;
-    private final AllShips allShips;
-    private boolean existsUnwelded;           // update this value
+    private final AllShips allShips; //physical to print all ships in a row
+    private boolean existsUnwelded; // update this value
 
     private AdventureCard currentCard;
 
@@ -42,10 +48,6 @@ public class ClientModel {
     }
 
         // SETUP PHASE
-
-    public void setCurrentPlayerNickname(String currentPlayerNickname) {
-        this.currentPlayerNickname = currentPlayerNickname;
-    }
 
     public void setPlayerToPlace(Map<String, Integer> playerToPlace) {
         flightBoard.setPlayerToPlace(playerToPlace.entrySet().stream()
@@ -80,7 +82,7 @@ public class ClientModel {
         componentBank.addRevealedComponent(componentId);
     }
 
-    public void removeRevealedComponent(int componentId) throws IOException { //TODO: edit bank and shipboard in one go
+    public void removeRevealedComponent(int componentId) throws IOException {
         componentBank.removeStashedComponent(componentId);
     }
 
@@ -96,6 +98,10 @@ public class ClientModel {
         componentBank.clearCurrentComponent();
     }
 
+    public void setCoveredComponents(int coveredComponentsN) {
+        componentBank.setCoveredComponents(coveredComponentsN);
+    }
+
             // SHIPBOARD
     public void removeComponent (Point position, String nickname) throws IOException {
         playerToShip.get(nickname).removeComponent(position);
@@ -105,9 +111,13 @@ public class ClientModel {
         playerToShip.get(nickname).setComponent(position, direction, componentId);
     }
 
-    public void setCrew(String nickname, Point position, int crew, CrewType crewType) throws IOException {
-        playerToShip.get(myNickname).getComponent(position).setCrewRace(crewType);
-        playerToShip.get(myNickname).getComponent(position).setStat(crew);
+    public void initializeCabin(String nickname, Point position, CrewType crewType, int crew) throws IOException {
+        playerToShip.get(nickname).getComponent(position).setCrewRace(crewType);
+        playerToShip.get(nickname).getComponent(position).setStat(crew);
+    }
+
+    public void setCrewNumber(String nickname, Point position, int crewNumber) throws IOException {
+        playerToShip.get(nickname).getComponent(position).setStat(crewNumber);
     }
 
     public Physical getComponentBank() {
@@ -115,18 +125,57 @@ public class ClientModel {
     }
 
         // ADVENTURE PHASE
-
-    public void loseBatteries(String nickname, Point position, int batteriesLost) throws IOException {
-        playerToShip.get(myNickname).getComponent(position).subtractStat(batteriesLost);//TODO: update other players too?
+    public void setCurrentPlayerNickname(String currentPlayerNickname) {
+        this.currentPlayerNickname = currentPlayerNickname;
     }
 
-    public void setCargo(String nickname, Point position, List<GoodsType> goods) throws IOException {
+    public String getCurrentPlayerNickname() {
+        return currentPlayerNickname;
+    }
+
+    public boolean isMyTurn() {
+        return currentPlayerNickname != null && currentPlayerNickname.equals(myNickname);
+    }
+
+    public void setBatteries(String nickname, Point position, int totalBatteries) throws IOException {
+        playerToShip.get(myNickname).getComponent(position).setStat(totalBatteries);//TODO: update other players too?
+    }
+
+    public void setCredits(String nickname, int creditsToAdd) {
+        playerToShip.get(nickname).setCredits(creditsToAdd);
+    }
+
+    public int getCredits(String nickname) {
+        return playerToShip.get(nickname).getCredits();
+    }
+
+    public void setLostComponent(String nickname, int losses) {
+        playerToShip.get(nickname).setLostComponent(losses);
+    }
+
+    public int getLostComponents(String nickname) {
+        return playerToShip.get(nickname).getLostComponents();
+    }
+
+    // place goods on ship
+    public void setGoods(String nickname, Point position, List<GoodsType> goods) throws IOException {
         playerToShip.get(nickname).getComponent(position).setGoods(goods);
     }
 
     public Physical getPlanets(){ return planets; }
 
-    public Physical getGoodsBuffer(){ return goods; }
+    public Physical getGoodsBuffer(){ return goodsBuffer; }
+
+    // remove good from the buffer
+    public void updateGoodsBuffer(int index) throws IOException {
+        goodsBuffer.takeGood(index);
+    }
+
+    // in case of planets the goodBuffer must be set after the choice, this happens once, other update use updateGoodsBuffer
+    public void setPlanetGoodBuffer(int planetId) {
+        planets = new Planets(currentCard);
+        goodsBuffer = new GoodsBuffer(planets, planetId);
+    }
 
     public void setProjectile(ProjectileType projectileType, int direction, int roll) {
         currentProjectile = new CurrentProjectile (projectileType, direction, roll);
@@ -141,7 +190,8 @@ public class ClientModel {
     }
 
     public void setCurrentCard(int cardId) throws IOException {
-        this.currentCard = new AdventureCard(cardId);
+        currentCard = new AdventureCard(cardId);
+        goodsBuffer = new GoodsBuffer(currentCard);
     }
 
     public String getCardName() {
@@ -152,10 +202,6 @@ public class ClientModel {
 
     public Physical getAllShips() {
         return allShips;
-    }
-
-    public String getCurrentPlayerNickname() {
-        return currentPlayerNickname;
     }
 
     public Colors getColorFromNickname(String nickname) {return playerToColor.get(nickname);}
@@ -174,6 +220,7 @@ public class ClientModel {
 
     public void setSelectablePoints(List<Point> selectablePoints) {
         playerToShip.get(myNickname).setSelectablePoints(selectablePoints);
+        this.selectablePoints.clear();
         this.selectablePoints.addAll(selectablePoints);
     }
 
@@ -199,10 +246,6 @@ public class ClientModel {
 
     public boolean existsUnwelded() {
         return existsUnwelded;
-    }
-
-    public void setCoveredComponents(int coveredComponentsN) {
-        componentBank.setCoveredComponents(coveredComponentsN);
     }
 
     public IntegerProperty coveredComponentsProperty() {

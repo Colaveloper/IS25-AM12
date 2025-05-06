@@ -11,8 +11,14 @@ public class NewCardScreen implements ScreenStrategy {
     @Override
     public void showCLI(ClientModel model) {
         System.out.println("Current Leader: "+model.getCurrentLeader()+" just drew: " + model.getCardName());
-        model.getMyShipBoard().getNewDescription().forEach(System.out::println);
-        model.getCurrentCard().getNewDescription().forEach(System.out::println);
+        model.getMyShipBoard().getDescription().forEach(System.out::println);
+        model.getCurrentCard().getDescription().forEach(System.out::println);
+        if (model.isMyTurn()) {
+            System.out.println("it's your turn");
+        }
+        else {
+            System.out.println(model.getCurrentPlayerNickname() + " is choosing");
+        }
     }
 
     @Override

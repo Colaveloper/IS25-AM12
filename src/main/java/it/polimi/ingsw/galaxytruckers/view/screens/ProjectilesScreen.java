@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
 import javafx.scene.layout.Pane;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class ProjectilesScreen implements ScreenStrategy {
@@ -15,7 +16,15 @@ public class ProjectilesScreen implements ScreenStrategy {
 
     @Override
     public boolean isLegalInput(ClientModel model, String input) {
-        return false; // TODO
+        // check if input = number + space + number
+        if (!input.matches("\\d+ \\d+")) return false;
+
+        // check if the point made from those numbers is selectable
+        String[] parts = input.split(" ");
+        int x = Integer.parseInt(parts[0]);
+        int y = Integer.parseInt(parts[1]);
+        Point p = new Point(x, y);
+        return model.getSelectablePoints().contains(p);
     }
 
     @Override

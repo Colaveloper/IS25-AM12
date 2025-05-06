@@ -1,5 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
+import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.Component;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
+
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,8 +16,8 @@ public class Shipboard extends Physical{
     private Point lastPosition;
 
     private int lostComponents;
-
     private int credits;
+
     private int losses;                 //TODO: what s this
     private int firepower;
     private int numBatteries;
@@ -49,7 +52,21 @@ public class Shipboard extends Physical{
         componentMatrix = result;
     }
 
+    public void setCredits(int creditsToAdd) {
+        credits = creditsToAdd;
+    }
 
+    public void setLostComponent(int losses) {
+        lostComponents = losses;
+    }
+
+    public int getCredits() {
+        return credits;
+    }
+
+    public int getLostComponents() {
+        return lostComponents;
+    }
 
     public void setComponent(Point position, int direction, int componentId) throws IOException {
         Component component = new Component(direction, componentId);

@@ -1,11 +1,12 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
-import javafx.scene.image.Image;
+import it.polimi.ingsw.galaxytruckers.view.Physical;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrentProjectile extends Physical{
+public class CurrentProjectile extends Physical {
     private int projectileRoll;
     private int projectileDirection;
     private ProjectileType projectileType;
@@ -41,13 +42,13 @@ public class CurrentProjectile extends Physical{
             case 0:
                 description.append("column " + projectileRoll + " from the front!");
                 break;
-            case 1:
+            case 3:
                 description.append("row " + projectileRoll + " from the left!");
                 break;
             case 2:
                 description.append("column " + projectileRoll + " from the back!");
                 break;
-            case 3:
+            case 1:
                 description.append("row " + projectileRoll + " from the right!");
                 break;
         }

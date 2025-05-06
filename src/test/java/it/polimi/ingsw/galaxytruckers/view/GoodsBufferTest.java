@@ -1,5 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.view.adventureClient.GoodsBuffer;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

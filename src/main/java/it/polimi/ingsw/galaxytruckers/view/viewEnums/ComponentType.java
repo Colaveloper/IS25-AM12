@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.viewEnums;
 
 import java.util.List;
 

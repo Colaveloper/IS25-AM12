@@ -1,13 +1,13 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import javafx.scene.image.Image;
+import it.polimi.ingsw.galaxytruckers.view.Physical;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class GoodsBuffer extends Physical{
+public class GoodsBuffer extends Physical {
     private List<Optional<GoodsType>> goodsBuffer;
 
     public GoodsBuffer(AdventureCard currentCard){
@@ -23,6 +23,15 @@ public class GoodsBuffer extends Physical{
         else{
             goodsBuffer.add(Optional.empty());
         }
+    }
+
+    public GoodsBuffer(Planets planets, int planetId){
+        goodsBuffer = new ArrayList<>();
+        planets.getPlanetGoods(planetId).forEach((type, count) ->{
+            for (int i = 0; i < count; i++){
+                goodsBuffer.add(Optional.of(type));
+            }
+        });
     }
 
     public boolean takeGood(int indexIn) {

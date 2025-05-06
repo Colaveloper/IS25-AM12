@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.shipBuildingClient;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
@@ -22,10 +22,6 @@ public class ComponentBank extends Physical {
         super.registerObservables(coveredComponents);
     }
 
-    public void setCoveredComponents(int coveredComponentsN) {
-        this.coveredComponents.set(coveredComponentsN);
-    }
-
     public void setStashedComponents(List<Integer> components) throws IOException {
         stashedComponents.clear();
         for (Integer componentId : components) {
@@ -47,6 +43,10 @@ public class ComponentBank extends Physical {
 
     public void stashComponent(int componentId) throws IOException {
         stashedComponents.add(new Component(0, componentId));
+    }
+
+    public void setCoveredComponents(int coveredComponentsN) {
+        this.coveredComponents.set(coveredComponentsN);
     }
 
     public void setCurrentComponent(int componentId) throws IOException {
