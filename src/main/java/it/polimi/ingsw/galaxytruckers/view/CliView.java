@@ -7,7 +7,7 @@ import javafx.beans.property.Property;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class CliView implements View {
+public class CliView implements View, ChangeListener {
     Scanner scanner;
     String input;
     static ClientModel model;
@@ -22,8 +22,7 @@ public class CliView implements View {
     @Override
     public void setModel(ClientModel model) {
         CliView.model = model;
-        addListenerToProperty(model.coveredComponentsProperty());
-        addListenerToProperty(model.currentComponentDirectionProperty());
+        model.getComponentBank().setChangeListener(this);
     }
 
     @Override
@@ -69,18 +68,13 @@ public class CliView implements View {
         }).start();
     }
 
-    private <T> void addListenerToProperty(Property<T> property) {
-        property.addListener((obs, oldVal, newVal) -> {
-            try {
-                this.setScreen(strategy);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
     // TODO: remove
     public void refresh() {
         strategy.showCLI(model);
+    }
+
+    @Override
+    public void onChanged() throws IOException { // refreshing
+        this.setScreen(strategy);
     }
 }

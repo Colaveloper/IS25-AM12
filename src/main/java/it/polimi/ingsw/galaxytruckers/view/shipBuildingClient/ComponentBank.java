@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.shipBuildingClient;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.Physical;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -23,14 +24,16 @@ import java.util.List;
 public class ComponentBank extends Physical {
     private final List<Component> revealedComponents;
     private final IntegerProperty coveredComponentN;
-    private Component currentComponent;
+    private ObjectProperty<Component> currentComponent;
     private final List<Component> stashedComponents;
 
     public ComponentBank() {
         coveredComponentN = new SimpleIntegerProperty();
         revealedComponents = new ArrayList<>();
         stashedComponents = new ArrayList<>();
-        currentComponent = new Component(ComponentType.EMPTY_AREA);
+        currentComponent = new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA));
+        currentComponent.get().setChangeListener(this);
+        super.registerObservables(currentComponent);
         super.registerObservables(coveredComponentN);
     }
 
@@ -62,11 +65,12 @@ public class ComponentBank extends Physical {
     }
 
     public void setCurrentComponent(int componentId) throws IOException {
-        currentComponent = new Component(0, componentId);
+        currentComponent.set(new Component(0, componentId));
+        currentComponent.get().setChangeListener(this);
     }
 
     public void rotateCurrentComponentLeft() {
-        currentComponent.rotateLeft();
+        currentComponent.get().rotateLeft();
     }
 
     public void clearCurrentComponent() {
@@ -78,7 +82,7 @@ public class ComponentBank extends Physical {
     }
 
     public IntegerProperty currentComponentDirectionProperty() {
-        return currentComponent.directionProperty();
+        return currentComponent.get().directionProperty();
     }
 
     @Override
@@ -93,6 +97,7 @@ public class ComponentBank extends Physical {
         for (int i = 0; i < 3; i++) {
             for (Component component : revealedComponents) {
                 row.append(component.getDescription().get(i));
+                System.out.println("REVEALED");
                 row.append(padding);
             }
             description.add(row.toString());
@@ -108,15 +113,15 @@ public class ComponentBank extends Physical {
         for (int i = 0; i < 3; i++) {
             for (Component component : stashedComponents) {
                 row.append(component.getDescription().get(i));
+                System.out.println("STASHED");
                 row.append(padding);
             }
             for (int n = 0; n < 2 - stashedComponents.size(); n++) {
                 row.append("     ").append(padding);
             }
             row.append("\t\t\t");
-            if (currentComponent != null) {
-                row.append(currentComponent.getDescription().get(i));
-            }
+            row.append(currentComponent.get().getDescription().get(i));
+            System.out.println("CURRENT");
             description.add(row.toString());
             row.setLength(0);
         }

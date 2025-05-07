@@ -250,12 +250,4 @@ public class ClientModel {
     public boolean existsUnwelded() {
         return existsUnwelded;
     }
-
-    public IntegerProperty coveredComponentsProperty() {
-        return componentBank.coveredComponentNProperty();
-    }
-
-    public IntegerProperty currentComponentDirectionProperty() {
-        return componentBank.currentComponentDirectionProperty();
-    }
 }
