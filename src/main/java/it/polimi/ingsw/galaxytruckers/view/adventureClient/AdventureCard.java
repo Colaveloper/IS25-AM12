@@ -16,10 +16,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.Physical;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
 
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parsePlanets;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parseGoods;
@@ -353,7 +354,7 @@ public class AdventureCard extends Physical {
     }
 
     @Override
-    public StackPane getNode() {
+    public Node getNode(VirtualServer server) {
         ImageView imageView = new ImageView(new Image("file:"+imagePath));
         imageView.setFitWidth(100);
         imageView.setFitHeight(150);

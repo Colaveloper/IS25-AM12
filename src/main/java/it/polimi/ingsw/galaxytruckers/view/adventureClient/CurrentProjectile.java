@@ -1,7 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.Physical;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,5 +59,10 @@ public class CurrentProjectile extends Physical {
         result.add(description.toString());
 
         return result;
+    }
+
+    @Override
+    public Node getNode(VirtualServer server) {
+        return null;
     }
 }

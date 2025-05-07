@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ListProperty;
 import it.polimi.ingsw.galaxytruckers.view.adventureClient.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.adventureClient.CurrentProjectile;
 import it.polimi.ingsw.galaxytruckers.view.adventureClient.GoodsBuffer;
@@ -99,7 +98,7 @@ public class ClientModel {
     }
 
     public void setCoveredComponents(int coveredComponentsN) {
-        componentBank.setCoveredComponents(coveredComponentsN);
+        componentBank.setCoveredComponentN(coveredComponentsN);
     }
 
             // SHIPBOARD
@@ -194,6 +193,10 @@ public class ClientModel {
         goodsBuffer = new GoodsBuffer(currentCard);
     }
 
+    public void rotateCurrentComponentLeft() {
+        componentBank.rotateCurrentComponentLeft();
+    }
+
     public String getCardName() {
         return currentCard.getCardName();
     }
@@ -249,6 +252,10 @@ public class ClientModel {
     }
 
     public IntegerProperty coveredComponentsProperty() {
-        return componentBank.coveredComponentsProperty();
+        return componentBank.coveredComponentNProperty();
+    }
+
+    public IntegerProperty currentComponentDirectionProperty() {
+        return componentBank.currentComponentDirectionProperty();
     }
 }

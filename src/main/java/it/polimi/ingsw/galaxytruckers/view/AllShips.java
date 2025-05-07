@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
-import javafx.scene.layout.StackPane;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -20,7 +21,7 @@ public class AllShips extends Physical {
     }
 
     @Override
-    public StackPane getNode() {
+    public Node getNode(VirtualServer server) {
         return null;
     }
 

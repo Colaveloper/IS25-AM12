@@ -1,7 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.Physical;
+import javafx.scene.Node;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,6 +53,11 @@ public class Planets extends Physical {
     @Override
     public List<String> getNewDescription() {
         return describePlanets();
+    }
+
+    @Override
+    public Node getNode(VirtualServer server) {
+        return null;
     }
 
     // method currently public for testing TODO: fix this

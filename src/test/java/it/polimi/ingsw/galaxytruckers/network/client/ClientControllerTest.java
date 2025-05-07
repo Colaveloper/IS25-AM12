@@ -21,12 +21,14 @@ class ClientControllerTest {
     static int loopLength;
     static List<Integer> startingPositions;
     static Set<Point> shipArea;
+    static int coveredComponentsN;
 
     static void setUp() {
         nicknames = new ArrayList<>();
         loopLength = 22;
         startingPositions = new ArrayList<>(List.of(2, 4, 5));
         shipArea = Set.of(new Point(8,7), new Point(7,8), new Point(6,7), new Point(7,6));
+        coveredComponentsN = 44;
 
         server = new VirtualServer() {
             @Override
@@ -56,9 +58,10 @@ class ClientControllerTest {
                         nicknames.add("OtherPlayer3");
                         controller.showLobbyUpdate(nicknames);
                         controller.setupGame(loopLength, startingPositions, shipArea);
-                        for (int i = 44; i>0; i--) {
-                            controller.setCoveredComponents(i);
-                            Thread.sleep(500);
+                        controller.setCoveredComponents(coveredComponentsN);
+                        for (int i = 0; i<2; i++) {
+                            Thread.sleep(3000);
+                            controller.setCoveredComponents(--coveredComponentsN);
                         }
                     } catch (InterruptedException | IOException e) {
                         Thread.currentThread().interrupt();
@@ -67,8 +70,9 @@ class ClientControllerTest {
             }
 
             @Override
-            public void requestRandComponent() {
-
+            public void requestRandComponent() throws IOException {
+                controller.setCoveredComponents(--coveredComponentsN);
+                controller.setCurrentComponent(45);
             }
 
             @Override

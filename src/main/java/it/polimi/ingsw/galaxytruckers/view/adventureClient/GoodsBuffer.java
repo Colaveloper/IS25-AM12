@@ -1,7 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.Physical;
+import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,5 +71,10 @@ public class GoodsBuffer extends Physical {
         result.add("Here are the goods available as a reward:");
         result.add(describeGoodsBuffer());
         return result;
+    }
+
+    @Override
+    public Node getNode(VirtualServer server) {
+        return null;
     }
 }

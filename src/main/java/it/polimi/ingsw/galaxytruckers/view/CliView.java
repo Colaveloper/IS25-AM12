@@ -23,6 +23,7 @@ public class CliView implements View {
     public void setModel(ClientModel model) {
         CliView.model = model;
         addListenerToProperty(model.coveredComponentsProperty());
+        addListenerToProperty(model.currentComponentDirectionProperty());
     }
 
     @Override

@@ -1,7 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.Component;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
+import javafx.scene.Node;
 
 import java.awt.*;
 import java.io.IOException;
@@ -130,6 +132,11 @@ public class Shipboard extends Physical{
         result.add(xIndexes.toString());
 
         return result;
+    }
+
+    @Override
+    public Node getNode(VirtualServer server) {
+        return null;
     }
 
     public void setSelectablePoints(List<Point> selectablePoints) {

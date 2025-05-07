@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.*;
@@ -42,10 +41,9 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    public void setCLIViewManually (VirtualServer server) {
+    public void setCLIViewManually () {
         view = new CliView();
         view.setModel(model);
-        view.setServer(server);
     }
 
 
@@ -74,27 +72,11 @@ public class ClientController implements ClientControllerInterface {
     }
 
     @Override
-    public void showGameCreation(Level level, int playersNum) {
-
-    }
-
-    @Override
-    public void showGameJoining(String nickname) {
-
-    }
-
-    @Override
     public void showColorSelection(String nickname, Colors color) {
-
     }
 
     @Override
     public void setFlightBoard(int loopLength, List<Integer> startingPositions) throws IOException {
-
-    }
-
-    @Override
-    public void setShipArea(Set<Point> shipArea) {
 
     }
 
@@ -111,6 +93,11 @@ public class ClientController implements ClientControllerInterface {
     }
 
     // UPDATE FOR SHIP BUILDING
+
+    @Override
+    public void setCurrentComponent(int componentId) throws IOException {
+        model.setCurrentComponent(componentId);
+    }
 
     @Override
     public void showStashUpdate(List<Integer> stashedComponentIds) throws IOException {

@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
 import javafx.scene.layout.Pane;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 
 public class NewCardScreen implements ScreenStrategy {
@@ -31,8 +32,8 @@ public class NewCardScreen implements ScreenStrategy {
     }
 
     @Override
-    public void showGUI(ClientModel model, Pane root, VirtualServer server) {
+    public void showGUI(ClientModel model, Pane root, VirtualServer server) throws IOException {
         root.getChildren().clear();
-        root.getChildren().add(model.getCurrentCard().getNode());
+        root.getChildren().add(model.getCurrentCard().getNode(server));
     }
 }

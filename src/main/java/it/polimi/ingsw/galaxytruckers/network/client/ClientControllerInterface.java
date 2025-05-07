@@ -25,15 +25,11 @@ public interface ClientControllerInterface {
 
     void setNickname(String nickname);
 
-    void showGameCreation(Level level, int playersNum);
-
-    void showGameJoining(String nickname);
-
     void showColorSelection(String nickname, Colors color);
 
     void setFlightBoard(int loopLength, List<Integer> startingPositions) throws IOException;
 
-    void setShipArea(Set<Point> shipArea);
+    void setCurrentComponent(int componentId) throws IOException;
 
     void showStashUpdate(List<Integer> stashedComponentIds) throws IOException;
 

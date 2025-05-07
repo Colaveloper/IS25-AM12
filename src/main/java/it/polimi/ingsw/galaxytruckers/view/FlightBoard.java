@@ -1,7 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
-import javafx.scene.image.Image;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import javafx.scene.Node;
 
 import java.util.*;
 
@@ -39,6 +40,11 @@ public class FlightBoard extends Physical {
         playerToPlace.forEach((color, pos) -> result[pos] = color.getDescription());
 
         return List.of(String.join("", result));
+    }
+
+    @Override
+    public Node getNode(VirtualServer server) {
+        return null;
     }
 
     public Colors getCurrentLeaderColor() {

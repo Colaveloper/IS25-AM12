@@ -5,8 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.Physical;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
+import javafx.animation.RotateTransition;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,9 +24,10 @@ import java.util.List;
 public class Component extends Physical {
     private final ComponentType type;
     private List<Connector> connectors = new ArrayList<>();
-    private int rotation;
+    private IntegerProperty direction;
     private boolean isSelectable;
     private int componentId;
+    private String imagePath;
 
     private int componentStat;
     private CrewType crewType;
@@ -38,12 +47,17 @@ public class Component extends Physical {
 
     public Component(int direction, int componentId) throws IOException {
         this.componentId = componentId;
-        rotation = direction;
+        this.direction = new SimpleIntegerProperty(direction);
+        super.registerObservables(this.direction);
+        directionProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println("[COMPONENT] rotation changed "+oldVal+"-->"+newVal);
+        });
         String jsonPath = "src/main/resources/tiles.json";
         File jsonFile = new File(jsonPath);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(jsonFile);
         JsonNode node = rootNode.get(componentId);
+        imagePath = node.get("path").asText();
         type = ComponentType.valueOf(node.get("type").asText().toUpperCase());
         connectors = parseConnectors(node.get("connectors"));
         if (type == ComponentType.BATTERY) {
@@ -63,29 +77,31 @@ public class Component extends Physical {
 
     public Component(ComponentType type) {
         this.type = type;
+        this.direction = new SimpleIntegerProperty(0);
+        super.registerObservables(direction);
     }
 
     public String getConnector(int connectorDirection) {
         return switch (connectorDirection) {
-            case 0 -> switch (connectors.get(rotation % 4)) {
+            case 0 -> switch (connectors.get(direction.get() % 4)) {
                 case Connector.NONE -> "─";
                 case Connector.SINGLE -> "┴";
                 case Connector.DOUBLE -> "╨";
                 case Connector.UNIVERSAL -> "╩";
             };
-            case 1 -> switch (connectors.get((1 + rotation) % 4)) {
+            case 1 -> switch (connectors.get((1 + direction.get()) % 4)) {
                 case Connector.NONE -> "│";
                 case Connector.SINGLE -> "├";
                 case Connector.DOUBLE -> "╞";
                 case Connector.UNIVERSAL -> "╠";
             };
-            case 2 -> switch (connectors.get((2 + rotation) % 4)) {
+            case 2 -> switch (connectors.get((2 + direction.get()) % 4)) {
                 case Connector.NONE -> "─";
                 case Connector.SINGLE -> "┬";
                 case Connector.DOUBLE -> "╥";
                 case Connector.UNIVERSAL -> "╦";
             };
-            case 3 -> switch (connectors.get((3 + rotation) % 4)) {
+            case 3 -> switch (connectors.get((3 + direction.get()) % 4)) {
                 case Connector.NONE -> "│";
                 case Connector.SINGLE -> "┤";
                 case Connector.DOUBLE -> "╡";
@@ -114,10 +130,10 @@ public class Component extends Physical {
             lines.add(0, open+"╭─" + getConnector(0) + "─╮"+close);
 
             if (type == ComponentType.BATTERY) {
-                lines.add(1, open + getConnector(3) + " " + type.getSymbol(rotation) + componentStat + getConnector(1)+close);
+                lines.add(1, open + getConnector(3) + " " + type.getSymbol(direction.get()) + componentStat + getConnector(1)+close);
             }
             else if (type == ComponentType.CABIN) {
-                lines.add(1, open + getConnector(3) + " " + crewColorOpen + type.getSymbol(rotation) + crewColorClose + componentStat + getConnector(1)+close);
+                lines.add(1, open + getConnector(3) + " " + crewColorOpen + type.getSymbol(direction.get()) + crewColorClose + componentStat + getConnector(1)+close);
             }
             else if (type == ComponentType.CARGO_HOLD){
                 cargoPrint = new StringBuilder();
@@ -148,11 +164,11 @@ public class Component extends Physical {
 
                 cargoPrint.append(open).append(getConnector(1)).append(close);
                 lines.add(1, cargoPrint.toString());
-               // lines.add(1, open + getConnector(3) + " " + type.getSymbol(rotation) + " " + getConnector(1)+close);
+               // lines.add(1, open + getConnector(3) + " " + type.getSymbol(direction) + " " + getConnector(1)+close);
 
             }
             else {//default
-                lines.add(1, open + getConnector(3) + " " + type.getSymbol(rotation) + " " + getConnector(1)+close);
+                lines.add(1, open + getConnector(3) + " " + type.getSymbol(direction.get()) + " " + getConnector(1)+close);
             }
 
             lines.add(2, open+"╰─" + getConnector(2) + "─╯"+close);
@@ -160,8 +176,34 @@ public class Component extends Physical {
         return lines;
     }
 
-    public void setRotation(int direction) {
-        this.rotation = direction;
+    @Override
+    public Node getNode(VirtualServer server) {
+        Image image = new Image(imagePath);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageView.setRotate(0); // initial rotation
+
+        // Track and force counterclockwise rotation (by -90° per click)
+        direction.addListener((obs, oldVal, newVal) -> {
+            // Counterclockwise rotation: Always rotate by -90°
+            RotateTransition rt = new RotateTransition(Duration.millis(300), imageView);
+            rt.setByAngle(-90); // negative to rotate counterclockwise
+            rt.play();
+        });
+
+        // Click to increment direction (counterclockwise)
+        imageView.setOnMouseClicked(e -> rotateLeft());
+
+        return imageView;
+    }
+
+    public void rotateLeft() {
+        direction.setValue((direction.get()+3)%4);
+    }
+
+    public IntegerProperty directionProperty() {
+        return direction;
     }
 
     private static List<Connector> parseConnectors(JsonNode connectorNode){

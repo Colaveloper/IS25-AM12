@@ -19,9 +19,8 @@ public class GameFlowTest {
 
     public static void main(String[] args) throws IOException {
         ServerController serverController = new ServerController();
-        VirtualServer server = new RmiServer(serverController);
-        ClientController controller = new ClientController(server);
-        controller.setCLIViewManually(server);
+        ClientController controller = new ClientController(null);
+        controller.setCLIViewManually();
 
         List<String> names = new ArrayList<>();
         names.add("Giuigi");
@@ -40,9 +39,7 @@ public class GameFlowTest {
                 new Point(10, 7),new Point(10, 8),new Point(10, 9)
         ));
 
-        controller.setShipArea(new HashSet<>(shipArea));
-        controller.setFlightBoard(10, List.of(2, 4, 5));
-
+        controller.setupGame(10, List.of(2, 4, 5), new HashSet<>(shipArea));
 
         controller.showStartBuilding(50);
         //(input)

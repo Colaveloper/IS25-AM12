@@ -10,5 +10,5 @@ public interface ScreenStrategy {
     void showCLI(ClientModel model);
     boolean isLegalInput(ClientModel model, String input);
     void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException;
-    void showGUI(ClientModel model, Pane root, VirtualServer server);
+    void showGUI(ClientModel model, Pane root, VirtualServer server) throws IOException;
 }

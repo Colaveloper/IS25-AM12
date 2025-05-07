@@ -16,7 +16,7 @@ public interface VirtualServer extends EventListener {
     void newGame(Level level, int playerN) throws IOException;
 
     // BUILDING
-    void requestRandComponent();
+    void requestRandComponent() throws IOException;
     void requestComponent(int componentID);
     void grabStashedComponent(int componentID);
     void flipHourglass();
