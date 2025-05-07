@@ -40,16 +40,16 @@ public class CurrentProjectile extends Physical {
         description.append("is approaching on ");
         switch (projectileDirection) {
             case 0:
-                description.append("column " + projectileRoll + " from the front!");
+                description.append("column ").append(projectileRoll).append(" from the front!");
                 break;
             case 3:
-                description.append("row " + projectileRoll + " from the left!");
+                description.append("row ").append(projectileRoll).append(" from the left!");
                 break;
             case 2:
-                description.append("column " + projectileRoll + " from the back!");
+                description.append("column ").append(projectileRoll).append(" from the back!");
                 break;
             case 1:
-                description.append("row " + projectileRoll + " from the right!");
+                description.append("row ").append(projectileRoll).append(" from the right!");
                 break;
         }
 

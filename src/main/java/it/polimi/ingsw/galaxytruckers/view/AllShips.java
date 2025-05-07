@@ -30,7 +30,7 @@ public class AllShips extends Physical {
         List<String> sequenceDescription = new ArrayList<>();
         StringBuilder row = new StringBuilder();
         for (Physical physical : shipsMap.values()) {
-            descriptions.add(physical.getNewDescription());
+            descriptions.add(physical.getDescription());
         }
         for (int i = 0; i < descriptions.getFirst().size() - 1; i++) {
             if ((i + 2)%3 == 0) {

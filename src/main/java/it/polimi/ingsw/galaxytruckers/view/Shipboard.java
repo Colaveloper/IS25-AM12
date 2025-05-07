@@ -92,8 +92,8 @@ public class Shipboard extends Physical{
 
         int height = componentMatrix.size();
         int width = componentMatrix.getFirst().size();
-        int componentHeight = componentMatrix.getFirst().getFirst().getNewDescription().size();
-        int componentWidth = componentMatrix.getFirst().getFirst().getNewDescription().getFirst().length();
+        int componentHeight = componentMatrix.getFirst().getFirst().getDescription().size();
+        int componentWidth = componentMatrix.getFirst().getFirst().getDescription().getFirst().length();
 
         int yIndex = upLeft.y;
 

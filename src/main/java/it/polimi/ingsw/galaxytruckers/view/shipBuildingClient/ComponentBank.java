@@ -73,7 +73,7 @@ public class ComponentBank extends Physical {
         description.add("Face up: ");
         for (int i = 0; i < 3; i++) {
             for (Component component : revealedComponents) {
-                row.append(component.getNewDescription().get(i));
+                row.append(component.getDescription().get(i));
                 row.append(padding);
             }
             description.add(row.toString());
@@ -88,7 +88,7 @@ public class ComponentBank extends Physical {
         description.add("Stash: " + "\tHand: ");
         for (int i = 0; i < 3; i++) {
             for (Component component : stashedComponents) {
-                row.append(component.getNewDescription().get(i));
+                row.append(component.getDescription().get(i));
                 row.append(padding);
             }
             for (int n = 0; n < 2 - stashedComponents.size(); n++) {
@@ -96,7 +96,7 @@ public class ComponentBank extends Physical {
             }
             row.append("\t\t\t");
             if (currentComponent != null) {
-                row.append(currentComponent.getNewDescription().get(i));
+                row.append(currentComponent.getDescription().get(i));
             }
             description.add(row.toString());
             row.setLength(0);
