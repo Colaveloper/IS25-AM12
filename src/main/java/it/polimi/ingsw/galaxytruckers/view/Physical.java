@@ -33,7 +33,7 @@ public abstract class Physical implements ChangeListener {
 
     private void markDirty() throws IOException {
         dirty.set(true);
-        System.out.println("PHYSICAL DIRTY "+getClass().getSimpleName());
+//        System.out.println("PHYSICAL DIRTY "+getClass().getSimpleName());
         if (listener != null) {
             listener.onChanged();
         }
@@ -45,18 +45,18 @@ public abstract class Physical implements ChangeListener {
 
     @Override
     public void onChanged() throws IOException {
-        System.out.println("PROPAGATING UPDATE "+getClass().getSimpleName());
+//        System.out.println("PROPAGATING UPDATE "+getClass().getSimpleName());
         markDirty();
     }
 
     public List<String> getDescription() {
         if (dirty.get()) {
-            System.out.println("REDESCRIBE "+getClass().getSimpleName());
+//            System.out.println("REDESCRIBE "+getClass().getSimpleName());
             descriptionCache.clear();
             descriptionCache.addAll(getNewDescription());
             dirty.set(false);
         } else {
-            System.out.println("USE CACHED DESCRIPTION "+getClass().getSimpleName());
+//            System.out.println("USE CACHED DESCRIPTION "+getClass().getSimpleName());
         }
         return descriptionCache;
     }

@@ -138,7 +138,7 @@ public class ComponentBank extends Physical {
         VBox covered = createHorizontalPile(server,"Covered:", 1, Color.DODGERBLUE);
         VBox uncovered = createHorizontalPile( server, "Uncovered:", 7, Color.LIMEGREEN);
         VBox stash = createHorizontalPile(server, "Stash", 2, Color.TRANSPARENT);
-        VBox hand = createHorizontalPile(server, "Hand", 1, Color.TRANSPARENT);
+        VBox hand = createHorizontalPile(server, "Hand", 1, Color.INDIGO);
 
         HBox row = new HBox(20, hand, stash, covered, uncovered);
         row.setStyle("-fx-padding: 20; -fx-background-color: white;");
@@ -181,6 +181,12 @@ public class ComponentBank extends Physical {
                     }
                 });
                 cardRow.getChildren().add(stack);
+            } else if (color.equals(Color.INDIGO)) {
+                cardRow.getChildren().add(new Component(0, 12).getNode(server));
+                currentComponent.addListener((obs, oldVal, newVal) -> {
+                    cardRow.getChildren().clear();
+                    cardRow.getChildren().add(newVal.getNode(server));
+                });
             } else {
                 cardRow.getChildren().add(new Component(0, 12).getNode(server));
             }

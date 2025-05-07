@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 class ClientControllerTest {
@@ -49,20 +50,14 @@ class ClientControllerTest {
                         System.out.println("FAKE SERVER EVENT: successfully created lvl "+level+" game for "+playerN+" players");
                         controller.showLobbyUpdate(nicknames);
                         Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: another player joined, lobby is complete");
                         nicknames.add("OtherPlayer1");
-                        controller.showLobbyUpdate(nicknames);
-                        Thread.sleep(1000);
-                        nicknames.add("OtherPlayer2");
-                        controller.showLobbyUpdate(nicknames);
-                        Thread.sleep(1000);
-                        nicknames.add("OtherPlayer3");
                         controller.showLobbyUpdate(nicknames);
                         controller.setupGame(loopLength, startingPositions, shipArea);
                         controller.setCoveredComponents(coveredComponentsN);
-                        for (int i = 0; i<2; i++) {
-                            Thread.sleep(3000);
-                            controller.setCoveredComponents(--coveredComponentsN);
-                        }
+                        Thread.sleep(3000);
+                        System.out.println("FAKE SERVER EVENT: somebody took a covered component");
+                        controller.setCoveredComponents(--coveredComponentsN);
                     } catch (InterruptedException | IOException e) {
                         Thread.currentThread().interrupt();
                     }
@@ -71,8 +66,9 @@ class ClientControllerTest {
 
             @Override
             public void requestRandComponent() throws IOException {
+                System.out.println("FAKE SERVER EVENT: you took a covered component");
                 controller.setCoveredComponents(--coveredComponentsN);
-                controller.setCurrentComponent(45);
+                controller.setCurrentComponent(new Random().nextInt(30) + 1);
             }
 
             @Override

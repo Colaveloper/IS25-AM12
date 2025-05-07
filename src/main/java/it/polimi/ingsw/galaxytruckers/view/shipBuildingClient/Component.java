@@ -49,9 +49,6 @@ public class Component extends Physical {
         this.componentId = componentId;
         this.direction = new SimpleIntegerProperty(direction);
         super.registerObservables(this.direction);
-        directionProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("[COMPONENT] rotation changed "+oldVal+"-->"+newVal);
-        });
         String jsonPath = "src/main/resources/tiles.json";
         File jsonFile = new File(jsonPath);
         ObjectMapper objectMapper = new ObjectMapper();
