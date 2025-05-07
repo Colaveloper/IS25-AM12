@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.shipBuildingClient;
 
+import it.polimi.ingsw.galaxytruckers.view.Physical;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleIntegerProperty;

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.*;
@@ -48,11 +50,6 @@ public class ClientController implements ClientControllerInterface {
 
 
     // UPDATES FROM THE SERVER
-    @Override
-    public void showNewCard(Integer cardId) throws IOException {
-        model.setCurrentCard(cardId);
-        view.setScreen(new NewCardScreen());
-    }
 
     @Override
     public void showGameCreation() throws IOException {
@@ -76,6 +73,31 @@ public class ClientController implements ClientControllerInterface {
         model.setMyNickname(nickname);
     }
 
+    @Override
+    public void showGameCreation(Level level, int playersNum) {
+
+    }
+
+    @Override
+    public void showGameJoining(String nickname) {
+
+    }
+
+    @Override
+    public void showColorSelection(String nickname, Colors color) {
+
+    }
+
+    @Override
+    public void setFlightBoard(int loopLength, List<Integer> startingPositions) throws IOException {
+
+    }
+
+    @Override
+    public void setShipArea(Set<Point> shipArea) {
+
+    }
+
     // integrate with following method
 //    public void showColorSelection(String nickname, Colors color) {
 //        model.setPlayerColor(nickname, color);
@@ -97,9 +119,24 @@ public class ClientController implements ClientControllerInterface {
     }
 
     @Override
+    public void showStartBuilding(int coveredComponentsTot) throws IOException {
+
+    }
+
+    @Override
     public void showComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException {
         model.setComponent(nickname, componentId, direction, position);
-        view.run(new ShipBuildingScreen());
+        view.setScreen(new ShipBuildingScreen());
+    }
+
+    @Override
+    public void showUncoveredUpdate(List<Integer> uncoveredComponentIds, int coveredComponents) {
+
+    }
+
+    @Override
+    public void addReavealedComponent(int componentId) throws IOException {
+
     }
 
     @Override
@@ -178,14 +215,14 @@ public class ClientController implements ClientControllerInterface {
     @Override
     public void showNewCard(Integer cardId) throws IOException {
         model.setCurrentCard(cardId);
-        model.setCurrentPlayerNickname(model.getCurrentLeader());
-        view.run(new NewCardScreen());
+        model.setCurrentPlayerNickname(model.getCurrentLeader()); // TODO: mmm
+        view.setScreen(new NewCardScreen());
     }
 
     // first time goods are shown on screen
     @Override
     public void showPlaceGoods() throws IOException {
-        view.run(new GoodsScreen());
+        view.setScreen(new GoodsScreen());
     }
 
     // planetId is an index and starts from 0, UI listing on screen starts from 1
