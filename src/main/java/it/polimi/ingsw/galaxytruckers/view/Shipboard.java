@@ -98,6 +98,8 @@ public class Shipboard extends Physical{
         int componentWidth = componentMatrix.getFirst().getFirst().getDescription().getFirst().length();
 
         int yIndex = upLeft.y;
+        int yIndexPadding = 3;
+        int rightShipboardPadding = 5;
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < componentHeight; j++) {
@@ -105,10 +107,13 @@ public class Shipboard extends Physical{
 
                 // declaring y index
                 if (j == componentHeight/2) {
-                    row.append(yIndex).append(" ".repeat(componentWidth-1));
+                    //row.append(yIndex).append(" ".repeat(yIndexPadding-1));
+                    row.append(yIndex).append(" ".repeat(
+                            yIndex > 9 ? yIndexPadding - 2 : yIndexPadding - 1
+                    ));
                     yIndex++;
                 } else {
-                    row.append(" ".repeat(componentWidth));
+                    row.append(" ".repeat(yIndexPadding));
                 }
 
                 // component
@@ -117,6 +122,7 @@ public class Shipboard extends Physical{
                     List<String> description = component.getNewDescription();
                     row.append(description.get(j));
                 }
+                row.append(" ".repeat(rightShipboardPadding));
 
                 result.add(row.toString());
             }
@@ -124,11 +130,12 @@ public class Shipboard extends Physical{
 
         StringBuilder xIndexes = new StringBuilder();
         int xIndex = upLeft.x;
-        xIndexes.append(" ".repeat(componentWidth));
+        xIndexes.append(" ".repeat(yIndexPadding));
         for (int i = 0; i < width; i++) {
-            xIndexes.append(" ".repeat(componentWidth / 2)).append(xIndex).append(" ".repeat(componentWidth / 2));
+            xIndexes.append(" ".repeat((componentWidth - 1) / 2)).append(xIndex).append(" ".repeat(xIndex > 9 ? ((componentWidth - 1) / 2) - 1 : componentWidth / 2));
             xIndex++;
         }
+        xIndexes.append(" ".repeat(rightShipboardPadding));
         result.add(xIndexes.toString());
 
         return result;

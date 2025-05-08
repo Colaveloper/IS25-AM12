@@ -33,26 +33,14 @@ public class AllShips extends Physical {
         for (Physical physical : shipsMap.values()) {
             descriptions.add(physical.getDescription());
         }
-        for (int i = 0; i < descriptions.getFirst().size() - 1; i++) {
-            if ((i + 2)%3 == 0) {
-                row.append(i/componentHeight + 5).append(" ");
-            }
-            else {
-                row.append("  ");
-            }
+        for (int i = 0; i < descriptions.getFirst().size(); i++) {
             for (List<String> shipDescription : descriptions) {
-                row.append(shipDescription.get(i).substring(5)); //padding for numbers in original description
+                row.append(shipDescription.get(i));
             }
             sequenceDescription.add(row.toString());
             row.setLength(0);
         }
 
-        // remove to keep bottom coordinates for all ships (also remove -1 from for above)
-        row.append("  ");
-        for (int i = 0; i < 7; i++) {
-            row.append(" ".repeat((componentWidth-1) / 2)).append(i + 4).append(" ".repeat((componentWidth-1) / 2));
-        }
-        sequenceDescription.add(row.toString());
         return sequenceDescription;
     }
 }
