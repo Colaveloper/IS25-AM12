@@ -98,13 +98,20 @@ public class Shipboard extends Physical{
         int componentWidth = componentMatrix.getFirst().getFirst().getDescription().getFirst().length();
 
         int yIndex = upLeft.y;
-        int yIndexPadding = 3;
-        int rightShipboardPadding = 5;
+        int yIndexPadding = 2;
+        int rightShipboardPadding = 1;
+
+        StringBuilder row = new StringBuilder();
+        row.append("╭");
+        row.append("─".repeat(width * componentWidth + yIndexPadding + 2));
+        row.append("╮").append(" ".repeat(rightShipboardPadding));
+        result.add(row.toString());
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < componentHeight; j++) {
-                StringBuilder row = new StringBuilder();
+                row = new StringBuilder();
 
+                row.append("│ ");
                 // declaring y index
                 if (j == componentHeight/2) {
                     //row.append(yIndex).append(" ".repeat(yIndexPadding-1));
@@ -122,7 +129,7 @@ public class Shipboard extends Physical{
                     List<String> description = component.getNewDescription();
                     row.append(description.get(j));
                 }
-                row.append(" ".repeat(rightShipboardPadding));
+                row.append(" │").append(" ".repeat(rightShipboardPadding));
 
                 result.add(row.toString());
             }
@@ -130,13 +137,20 @@ public class Shipboard extends Physical{
 
         StringBuilder xIndexes = new StringBuilder();
         int xIndex = upLeft.x;
+        xIndexes.append("│ ");
         xIndexes.append(" ".repeat(yIndexPadding));
         for (int i = 0; i < width; i++) {
             xIndexes.append(" ".repeat((componentWidth - 1) / 2)).append(xIndex).append(" ".repeat(xIndex > 9 ? ((componentWidth - 1) / 2) - 1 : componentWidth / 2));
             xIndex++;
         }
-        xIndexes.append(" ".repeat(rightShipboardPadding));
+        xIndexes.append(" │").append(" ".repeat(rightShipboardPadding));
         result.add(xIndexes.toString());
+
+        row = new StringBuilder();
+        row.append("╰");
+        row.append("─".repeat(width * componentWidth + yIndexPadding + 2));
+        row.append("╯").append(" ".repeat(rightShipboardPadding));
+        result.add(row.toString());
 
         return result;
     }
