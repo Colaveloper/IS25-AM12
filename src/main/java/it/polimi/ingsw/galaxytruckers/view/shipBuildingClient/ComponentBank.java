@@ -121,7 +121,6 @@ public class ComponentBank extends Physical {
             }
             row.append("\t\t\t");
             row.append(currentComponent.get().getDescription().get(i));
-            System.out.println("CURRENT");
             description.add(row.toString());
             row.setLength(0);
         }

@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class Physical implements ChangeListener {
     protected StackPane node = new StackPane();
-    private AtomicBoolean dirty = new AtomicBoolean(true);
+    private final AtomicBoolean dirty = new AtomicBoolean(true);
     protected final List<String> descriptionCache = new ArrayList<>();
     private ChangeListener listener;
 
