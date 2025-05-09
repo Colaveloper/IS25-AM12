@@ -38,15 +38,11 @@ public class SecondFlightBoard extends FlightBoard{
     }
 
     @Override
-    public Set<ShipBoard> getAndRemoveLappedShips() {
-        Set<ShipBoard> lappedShips = shipToPlace.entrySet().stream()
+    public Set<ShipBoard> getLappedShips() {
+        return shipToPlace.entrySet().stream()
                 .filter(entry -> shipToPlace.get(getOrderedShips().getFirst()) - entry.getValue() > loopLength)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
-
-        removeShips(lappedShips);
-
-        return lappedShips;
     }
 
     @Override

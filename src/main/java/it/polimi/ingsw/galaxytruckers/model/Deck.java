@@ -13,6 +13,8 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.model.factory.SecondFactory;
+import it.polimi.ingsw.galaxytruckers.model.factory.TestFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,8 +26,8 @@ public abstract class Deck {
     private AdventureCard currentCard;
     protected static String jsonPath = "src/main/resources/cardsReference.json";
 
-    public Deck(Set<Level> relevantLevels) throws IOException {
-        this.relevantCards = loadRelevantCards(relevantLevels);
+    public Deck(Game game) throws IOException {
+        this.relevantCards = loadRelevantCards(game);
         Collections.shuffle(this.relevantCards);
     }
 
@@ -60,13 +62,19 @@ public abstract class Deck {
     }
 
     @VisibleForTesting
-    protected static List<AdventureCard> loadRelevantCards(Set<Level> levels) throws IOException {
+    protected static List<AdventureCard> loadRelevantCards(Game game) throws IOException {
         //reading from json file and returning the list of components
         File jsonFile = new File(jsonPath);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(jsonFile);
 
         List<AdventureCard> cards = new ArrayList<>();
+        Set<Level> levels = new HashSet<>();
+        switch (game.getLevel()) {
+            case TEST -> levels.add(Level.TEST);
+            case SECOND -> levels.addAll(Set.of(Level.TEST, Level.FIRST, Level.SECOND));
+            default -> throw new IllegalArgumentException("Unexpected level in game: " + game.getLevel());
+        }
 
         //iterating through nodes and adding each as a card to list
         for (JsonNode node : rootNode){
@@ -77,59 +85,59 @@ public abstract class Deck {
 
                 card = switch (type) {
                     case "planets" -> new PlanetsCard(
-                            level,
+                            game,
                             parsePlanets(node.get("planets")),
                             node.get("flight day loss").asInt()
                     );
                     case "pirates" -> new PiratesCard(
-                            level,
+                            game,
                             node.get("firePowerThreshold").asInt(),
                             node.get("credits").asInt(),
                             node.get("flight day loss").asInt(),
                             parseProjectiles(node.get("shoots"))
                     );
                     case "smugglers" -> new SmugglersCard(
-                            level,
+                            game,
                             node.get("penalty").asInt(),
                             node.get("cannons").asInt(),
                             parseGoods(node.get("storage")),
                             node.get("flight day loss").asInt()
                     );
                     case "slavers" -> new SlaversCard(
-                            level,
+                            game,
                             node.get("penalty").asInt(),
                             node.get("cannons").asInt(),
                             node.get("credits").asInt(),
                             node.get("flight day loss").asInt()
                     );
                     case "meteors" -> new MeteorSwarmCard(
-                            level,
+                            game,
                             parseProjectiles(node.get("meteors"))
                     );
                     case "epidemic" -> new EpidemicCard(
-                            level
+                            game
                     );
                     case "stardust" -> new StarDustCard(
-                            level
+                            game
                     );
                     case "abandonedShip" -> new AbandonedShipCard(
-                            level,
+                            game,
                             node.get("credits").asInt(),
                             node.get("people").asInt(),
                             node.get("flight day loss").asInt()
                     );
                     case "abandonedStation" -> new AbandonedStationCard(
-                            level,
+                            game,
                             parseGoods(node.get("storage")),
                             node.get("people").asInt(),
                             node.get("flight day loss").asInt()
                     );
                     case "warzone" -> new CombatZoneCard(
-                            level,
+                            game,
                             parseChecks(node.path("checks")),
                             parsePenalties(node.path("penalties"), node));
                     case "open space" -> new OpenSpaceCard(
-                            level
+                            game
                     );
                     default -> throw new IllegalArgumentException("Unknown card type: " + type);
                 };

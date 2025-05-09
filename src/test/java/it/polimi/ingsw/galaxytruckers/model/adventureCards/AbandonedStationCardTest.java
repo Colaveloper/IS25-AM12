@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -22,6 +23,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AbandonedStationCardTest {
+    Game game;
 
     AbandonedStationCard abandonedStationCard;
     FlightBoard flightBoard;
@@ -42,6 +44,7 @@ class AbandonedStationCardTest {
 
     @BeforeEach
     void setUp() {
+        game = new Game(Level.SECOND);
         displacedShips = new ArrayList<>();
 
         goodsWon = new HashMap<>();
@@ -148,14 +151,14 @@ class AbandonedStationCardTest {
             }
         };
 
-        abandonedStationCard = new AbandonedStationCard(Level.FIRST, goodsWon, 2, 1);
-        abandonedStationCard.initialize(flightBoard);
+        abandonedStationCard = new AbandonedStationCard(game, goodsWon, 2, 1);
+        abandonedStationCard.initialize();
     }
 
     @Test
     void noneCanLand() {
-        abandonedStationCard = new AbandonedStationCard(Level.FIRST, goodsWon, 2, 1);
-        abandonedStationCard.initialize(flightBoardOfLosers);
+        abandonedStationCard = new AbandonedStationCard(game, goodsWon, 2, 1);
+        abandonedStationCard.initialize();
         testState = abandonedStationCard.nextStep();
         assertInstanceOf(DrawCardState.class, testState);
     }

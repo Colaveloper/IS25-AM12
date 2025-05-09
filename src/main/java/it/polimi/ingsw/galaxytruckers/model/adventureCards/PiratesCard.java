@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -23,8 +24,8 @@ public class PiratesCard extends AdventureCard {
     private Projectile currentProjectile;
     private ShipBoard winnerShipBoard;
 
-    public PiratesCard(Level level, int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
-        super(level);
+    public PiratesCard(Game game, int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles) {
+        super(game);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;
@@ -32,8 +33,8 @@ public class PiratesCard extends AdventureCard {
     }
 
     @Override
-    public void initialize(FlightBoard flightBoard) {
-        super.initialize(flightBoard);
+    public void initialize() {
+        super.initialize();
         this.defeatedPlayers = new ArrayList<>();
         this.defeated = false;
         this.winnerShipBoard = null;

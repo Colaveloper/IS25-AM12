@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
@@ -13,8 +14,8 @@ public class SlaversCard extends AdventureCard {
     private final int crewLoss;
     private boolean defeated;
 
-    public SlaversCard(Level cardLevel, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss) {
-        super(cardLevel);
+    public SlaversCard(Game game, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss) {
+        super(game);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;
@@ -22,8 +23,8 @@ public class SlaversCard extends AdventureCard {
     }
 
     @Override
-    public void initialize(FlightBoard flightBoard) {
-        super.initialize(flightBoard);
+    public void initialize() {
+        super.initialize();
         defeated = false;
     }
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.AddGoodsState;
@@ -17,16 +18,16 @@ public class AbandonedStationCard extends AdventureCard {
     private boolean accepted;
     private boolean acquired;
 
-    public AbandonedStationCard (Level cardLevel, Map<GoodsType, Integer> goodsPrize, int requiredCrew, int flightDaysLoss) {
-        super(cardLevel);
+    public AbandonedStationCard (Game game, Map<GoodsType, Integer> goodsPrize, int requiredCrew, int flightDaysLoss) {
+        super(game);
         this.flightDaysLoss = flightDaysLoss;
         this.goodsPrize = goodsPrize;
         this.requiredCrew = requiredCrew;
     }
 
     @Override
-    public void initialize(FlightBoard flightBoard) {
-        super.initialize(flightBoard);
+    public void initialize() {
+        super.initialize();
         this.accepted = false;
         this.acquired = false;
     }

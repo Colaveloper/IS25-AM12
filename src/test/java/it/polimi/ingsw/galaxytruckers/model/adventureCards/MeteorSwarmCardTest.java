@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.BigMeteor;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.SmallMeteor;
@@ -20,6 +21,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MeteorSwarmCardTest {
+    Game game;
     MeteorSwarmCard meteorSwarmCard;
     FlightBoard flightBoard;
     List<Projectile> safeProjectiles;
@@ -32,6 +34,7 @@ class MeteorSwarmCardTest {
 
     @BeforeEach
     void setUp() {
+        game = new Game(Level.SECOND);
         ship1 = new SecondShipBoard(Colors.RED) {
             @Override
             public List<Set<Point>> getConnectedSets() {
@@ -74,8 +77,8 @@ class MeteorSwarmCardTest {
                 return true;
             }
         };
-        meteorSwarmCard = new MeteorSwarmCard(Level.FIRST,  safeProjectiles);
-        meteorSwarmCard.initialize(flightBoard);
+        meteorSwarmCard = new MeteorSwarmCard(game,  safeProjectiles);
+        meteorSwarmCard.initialize();
     }
 
     @Test

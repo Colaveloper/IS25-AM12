@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -24,6 +25,7 @@ class AbandonedShipCardTest {
     Map<ShipBoard, Integer> shipPlaces;
     ShipBoard testShip;
     int testDisplacement;
+    Game game;
 
     // card attributes
     Level level = Level.SECOND;
@@ -32,6 +34,7 @@ class AbandonedShipCardTest {
     int flightDaysLost = 1;
 
     void setup(ShipBoard ship1, ShipBoard ship2) {
+        game = new Game(Level.SECOND);
         // setting up ships and flightboard
         ships = new ArrayList<>();
         ships.add(ship1);
@@ -70,8 +73,8 @@ class AbandonedShipCardTest {
         };
 
         // creating card
-        card = new AbandonedShipCard(level, creditPrize,requiredCrew,flightDaysLost);
-        card.initialize(flightBoard);
+        card = new AbandonedShipCard(game, creditPrize,requiredCrew,flightDaysLost);
+        card.initialize();
     }
 
     @Test
@@ -128,23 +131,4 @@ class AbandonedShipCardTest {
         assertInstanceOf(RemoveCrewState.class, card.nextStep());
         assertInstanceOf(DrawCardState.class, card.nextStep());
     }
-
-//    @Test
-//    void chooseFalse(){
-//        // ship 1 does have enough crew
-//        ShipBoard ship1 = new SecondShipBoard(Colors.BLUE){
-//            @Override
-//            public int getCrewSize() {return requiredCrew;}
-//        };
-//
-//        // ship 2 also has enough crew
-//        ShipBoard ship2 = new SecondShipBoard(Colors.RED){
-//            @Override
-//            public int getCrewSize() {return requiredCrew;}
-//        };
-//        setup(ship1,ship2);
-//        card.nextStep();
-//        card.getReward();
-//        assertFalse(card.getAccepted());
-//    }
 }

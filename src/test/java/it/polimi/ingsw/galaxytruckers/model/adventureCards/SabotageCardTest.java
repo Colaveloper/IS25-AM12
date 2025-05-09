@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SabotageCardTest {
 
+    Game game = new Game(Level.SECOND);
     SabotageCard sabotageCard;
     FlightBoard flightBoard;
     FlightBoard largerFlightBoard;
@@ -150,8 +152,8 @@ class SabotageCardTest {
             }
         };
 
-        sabotageCard = new SabotageCard (Level.FIRST);
-        sabotageCard.initialize(flightBoard);
+        sabotageCard = new SabotageCard (game);
+        sabotageCard.initialize();
     }
 
 
@@ -166,8 +168,8 @@ class SabotageCardTest {
 
     @Test
     void otherOrderToCheck() {
-        sabotageCard = new SabotageCard(Level.FIRST);
-        sabotageCard.initialize(largerFlightBoard);
+        sabotageCard = new SabotageCard(game);
+        sabotageCard.initialize();
         testState = sabotageCard.nextStep();
         assertInstanceOf(DrawCardState.class, testState);
         assertTrue(shipExploded.contains(ship3));

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.Dice;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
@@ -12,8 +13,8 @@ public class SabotageCard extends AdventureCard {
 
     private static final Dice dice = new Dice() {};
 
-    protected SabotageCard(Level cardLevel) {
-        super(cardLevel);
+    protected SabotageCard(Game game) {
+        super(game);
     }
 
     @Override

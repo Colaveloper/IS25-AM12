@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EpidemicCardTest {
 
+    Game game;
     EpidemicCard epidemicCard;
     List<ShipBoard> ships;
     Map<ShipBoard, Integer> shipPlaces;
@@ -32,6 +34,7 @@ class EpidemicCardTest {
 
     @BeforeEach
     void setUp() {
+        game = new Game(Level.SECOND);
         ships = new ArrayList<>();
 
         testCabins = new HashMap<>();
@@ -116,8 +119,8 @@ class EpidemicCardTest {
             }
         };
 
-        epidemicCard = new EpidemicCard(Level.SECOND);
-        epidemicCard.initialize(flightBoard);
+        epidemicCard = new EpidemicCard(game);
+        epidemicCard.initialize();
 
     }
 

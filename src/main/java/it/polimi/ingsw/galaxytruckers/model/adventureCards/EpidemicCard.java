@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Cabin;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
@@ -15,8 +16,8 @@ import static java.lang.Math.abs;
 public class EpidemicCard extends AdventureCard {
 
 
-    public EpidemicCard(Level level) {
-        super(level);
+    public EpidemicCard(Game game) {
+        super(game);
     }
 
     @Override

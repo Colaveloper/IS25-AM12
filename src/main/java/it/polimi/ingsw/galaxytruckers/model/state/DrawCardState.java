@@ -11,8 +11,9 @@ public class DrawCardState extends GameState {
     @Override
     public void setGame(Game game) {
         super.setGame(game);
-        //TODO: handle games with no ships left
         this.shipBoard = game.getFlightBoard().getOrderedShips().getFirst();
+        game.forceShipsToGiveUp();
+        game.endGameIfAllShipsHaveGivenUp();
     }
 
     @Override
@@ -21,10 +22,8 @@ public class DrawCardState extends GameState {
             throw new IllegalStateException("It's not your turn");
         }
         if(game.getDeck().tryDrawCard()) {
-            game.getDeck().getCurrentCard().initialize(game.getFlightBoard());
+            game.getDeck().getCurrentCard().initialize();
             GameState nextState = game.getDeck().getCurrentCard().nextStep();
-            game.forceShipsToGiveUp();
-            game.setCurrentState(nextState);
         } else {
             game.endGame();
         }

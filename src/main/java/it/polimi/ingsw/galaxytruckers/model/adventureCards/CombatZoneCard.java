@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CombatZoneCheck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.penalty.Penalty;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -17,15 +18,15 @@ public class CombatZoneCard extends AdventureCard {
     private int checkIndex;
     ShipBoard penalizedShipBoard;
 
-    public CombatZoneCard(Level level, List<CombatZoneCheck> checks, List<Penalty> penalties) {
-        super(level);
+    public CombatZoneCard(Game game, List<CombatZoneCheck> checks, List<Penalty> penalties) {
+        super(game);
         this.checks = checks;
         this.penalties = penalties;
     }
 
     @Override
-    public void initialize(FlightBoard flightBoard) {
-        super.initialize(flightBoard);
+    public void initialize() {
+        super.initialize();
         checkIndex = 0;
         penalizedShipBoard = null;
     }

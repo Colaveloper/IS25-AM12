@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StarDustCardTest {
 
+    Game game = new Game(Level.SECOND);
     StarDustCard starDustCard;
     FlightBoard flightBoard;
 
@@ -91,8 +93,8 @@ class StarDustCardTest {
             }
         };
 
-        starDustCard = new StarDustCard(Level.FIRST);
-        starDustCard.initialize(flightBoard);
+        starDustCard = new StarDustCard(game);
+        starDustCard.initialize();
     }
 
 

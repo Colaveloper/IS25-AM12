@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 class PiratesCardTest {
+    Game game = new Game(Level.SECOND);
     PiratesCard piratesCard;
     List<ShipBoard> ships;
     int firePowerThreshold;
@@ -108,9 +110,9 @@ class PiratesCardTest {
                 }
             });
         }
-        piratesCard = new PiratesCard(Level.SECOND,
+        piratesCard = new PiratesCard(game,
                 firePowerThreshold,creditPrize,flightDaysLost,new ArrayList<>(projectiles));
-        piratesCard.initialize(flightBoardStub);
+        piratesCard.initialize();
     }
 
     @Test

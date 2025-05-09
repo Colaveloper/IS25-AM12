@@ -18,26 +18,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DeckTest {
     Deck deck;
+    Game game;
 
-//    @Test
-//    void initMasterDeck() {
-//    }
-//
-//    @Test
-//    void getCurrentCard() {
-//    }
-//
-//    @Test
-//    void drawCard() {
-//    }
-//
-//    @Test
-//    void peekForecastDeck() {
-//    }
+    @BeforeEach
+    void setup(){
+        game = new Game(Level.SECOND);
+    }
 
     @Test
     void loadComponents() throws IOException {
-        List<AdventureCard> allCards = Deck.loadRelevantCards(Set.of(Level.TEST, Level.FIRST, Level.SECOND));
+        List<AdventureCard> allCards = Deck.loadRelevantCards(game);
         List<CombatZoneCard> combatZoneCards = allCards.stream()
                 .filter(c -> c instanceof CombatZoneCard)
                 .map(c -> (CombatZoneCard) c)

@@ -1,29 +1,30 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
 public abstract class AdventureCard {
-    protected FlightBoard flightBoard;
     protected int currentPlayerIndex;
     protected ShipBoard currentShipBoard;
-    protected final Level cardLevel;
+    protected FlightBoard flightBoard;
+    protected final Game game;
 
 
-    protected AdventureCard(Level cardLevel) {
-        this.cardLevel = cardLevel;
+    protected AdventureCard(Game game) {
+        this.game = game;
     }
 
-    public void initialize(FlightBoard flightBoard) {
-        this.flightBoard = flightBoard;
+    public void initialize() {
+        this.flightBoard = game.getFlightBoard();
         this.currentShipBoard = null;
         this.currentPlayerIndex = 0;
     }
 
     public Level getCardLevel() {
-        return cardLevel;
+        return game.getLevel();
     }
 
     public abstract GameState nextStep();

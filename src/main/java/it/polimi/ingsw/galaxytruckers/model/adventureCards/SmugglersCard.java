@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -16,8 +17,8 @@ public class SmugglersCard extends AdventureCard {
     private boolean defeated;
     private boolean acquired;
 
-    public SmugglersCard (Level cardLevel, int goodsLoss, int firePowerThreshold, Map<GoodsType, Integer> goodsPrize, int flightDaysLoss) {
-        super(cardLevel);
+    public SmugglersCard (Game game, int goodsLoss, int firePowerThreshold, Map<GoodsType, Integer> goodsPrize, int flightDaysLoss) {
+        super(game);
         this.firePowerThreshold = firePowerThreshold;
         this.goodsPrize = goodsPrize;
         this.flightDaysLoss = flightDaysLoss;
@@ -25,8 +26,8 @@ public class SmugglersCard extends AdventureCard {
     }
 
     @Override
-    public void initialize(FlightBoard flightBoard) {
-        super.initialize(flightBoard);
+    public void initialize() {
+        super.initialize();
         this.acquired = false;
         this.defeated = false;
     }

@@ -65,177 +65,11 @@ class FlightBoardTest {
         @Test
         void invalidCallsThrowExceptions() {
             assertThrows(UnsupportedOperationException.class, () -> flightBoard.removeShips(Set.of(ship1)));
-            assertThrows(UnsupportedOperationException.class, () -> flightBoard.getAndRemoveLappedShips());
-            //assertThrows(UnsupportedOperationException.class, () -> flightBoard.giveUp(ship1));
+            assertThrows(UnsupportedOperationException.class, () -> flightBoard.getLappedShips());
         }
 
-//        @Test
-//        void AssignFinishOrderReward() {
-//            flightBoard.placeShipOnFlightBoard(ship2, 324);
-//            shipToScore.put(ship2, 4);
-//            flightBoard.placeShipOnFlightBoard(ship1, 123);
-//            shipToScore.put(ship1, 3);
-//            flightBoard.placeShipOnFlightBoard(ship3, 123);
-//            shipToScore.put(ship3, 2);
-//            flightBoard.assignFinishOrderReward();
-//            assertEquals(shipToScore, flightBoard.finalScores);
-//        }
-
-//        @Test
-//        void AssignBestLookingShipReward() {
-//            ship1 = new ShipBoard(null) {
-//                @Override
-//                protected boolean containsPoint(Point point) {
-//                    return false;
-//                }
-//
-//                @Override
-//                public int getExposedConnectorsNumber() {
-//                    return 5;
-//                }
-//            };
-//            ship2 = new ShipBoard(null) {
-//                @Override
-//                protected boolean containsPoint(Point point) {
-//                    return false;
-//                }
-//
-//                @Override
-//                public int getExposedConnectorsNumber() {
-//                    return 5;
-//                }
-//            };
-//            ship3 = new ShipBoard(null) {
-//                @Override
-//                protected boolean containsPoint(Point point) {
-//                    return false;
-//                }
-//
-//                @Override
-//                public int getExposedConnectorsNumber() {
-//                    return 8;
-//                }
-//            };
-//            flightBoard = new TestFlightBoard(Set.of(ship1, ship2, ship3));
-//            flightBoard.placeShipOnFlightBoard(ship1, 123);
-//            flightBoard.placeShipOnFlightBoard(ship2, 324);
-//            flightBoard.placeShipOnFlightBoard(ship3, 123);
-//            shipToScore.put(ship1, 2);
-//            shipToScore.put(ship2, 2);
-//            shipToScore.put(ship3, 0);
-//            flightBoard.assignBestLookingShipReward();
-//            assertEquals(shipToScore, flightBoard.finalScores);
-//        }
-
-//        @Test
-//        void countCreditsAndLosses() {
-//            int myCredits = 8;
-//            int myLosses = 9;
-//            ship1 = new TestShipBoard(null) {
-//                @Override
-//                protected boolean containsPoint(Point point) {
-//                    return false;
-//                }
-//
-//                @Override
-//                public int getLosses() {
-//                    return myLosses;
-//                }
-//
-//                @Override
-//                public int getCredits() {
-//                    return myCredits;
-//                }
-//
-//            };
-//            flightBoard = new TestFlightBoard(Set.of(ship1));
-//            flightBoard.placeShipOnFlightBoard(ship1, 123);
-//            shipToScore.put(ship1, myCredits-myLosses);
-//            flightBoard.countCreditsAndLosses();
-//            assertEquals(shipToScore, flightBoard.finalScores);
-//        }
-
-//        @Test
-//        void countGoodsValue() {
-//            int myGoodValue = 9;
-//            ship1 = new TestShipBoard(null) {
-//                @Override
-//                protected boolean containsPoint(Point point) {
-//                    return false;
-//                }
-//
-//                @Override
-//                public int getGoodsValue() {
-//                    return myGoodValue;
-//                }
-//            };
-//            ship2 = new TestShipBoard(null) {
-//                @Override
-//                protected boolean containsPoint(Point point) {
-//                    return false;
-//                }
-//
-//                @Override
-//                public int getGoodsValue() {
-//                    return myGoodValue;
-//                }
-//            };
-//            flightBoard = new TestFlightBoard(Set.of(ship1, ship2));
-//            flightBoard.placeShipOnFlightBoard(ship1, 123);
-//            shipToScore.put(ship1, myGoodValue);
-//            shipToScore.put(ship2, (myGoodValue+1)/2);
-//            flightBoard.countGoodsValue();
-//            assertEquals(shipToScore, flightBoard.finalScores);
-//        }
-
-//        @Test
-//        void getFinalScores() {
-//            int myGoodValue = 9;
-//            int myCreditsAndLosses = 6;
-//            int myBestLookingAward = 2;
-//            int myFinishOrderAward = 2;
-//            class LocalFlightBoard extends FlightBoard {
-//                public LocalFlightBoard(Set<ShipBoard> allShips) {
-//                    super(allShips);
-//                }
-//
-//                @Override
-//                public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
-//                    return false;
-//                }
-//
-//                @Override
-//                protected int getLoopLength() {
-//                    return 0;
-//                }
-//
-//                @Override
-//                protected void assignBestLookingShipReward() {
-//                    this.finalScores.merge(ship1, myBestLookingAward, Integer::sum);
-//                }
-//
-//                @Override
-//                protected void assignFinishOrderReward() {
-//                    this.finalScores.merge(ship1, myFinishOrderAward, Integer::sum);
-//                }
-//
-//                @Override
-//                protected void countCreditsAndLosses() {
-//                    this.finalScores.merge(ship1, myCreditsAndLosses, Integer::sum);
-//                }
-//
-//                @Override
-//                protected void countGoodsValue() {
-//                    this.finalScores.merge(ship1, myGoodValue, Integer::sum);
-//                }
-//            }
-//            LocalFlightBoard localFlightBoard = new LocalFlightBoard(Set.of(ship1));
-//            shipToScore.put(ship1, myBestLookingAward+myFinishOrderAward+myCreditsAndLosses+myGoodValue);
-//            assertEquals(shipToScore, localFlightBoard.getFinalScores());
-//        }
-
         @Test
-        void getLoopLenght() {
+        void getLoopLength() {
             assertEquals(TestFlightBoard.loopLength, flightBoard.getLoopLength());
         }
     }
@@ -337,40 +171,16 @@ class FlightBoardTest {
             }
         }
 
-//        @Test
-//        void giveUpRemovesShip() {
-//            int i = 0;
-//            for (ShipBoard ship : allShips) {
-//                flightBoard.placeShipOnFlightBoard(ship, legalStartingPositions.get(i));
-//                shipToPlace.put(ship, legalStartingPositions.get(i));
-//                i++;
-//            }
-//            flightBoard.giveUp(ship1);
-//            shipToPlace.remove(ship1);
-//            assertEquals(shipToPlace, flightBoard.getShipToPlace());
-//        }
-
-//        @Test
-//        void giveUpWithOneLeftChangesGameRules() {
-//            int i = 0;
-//            for (ShipBoard ship : allShips) {
-//                flightBoard.placeShipOnFlightBoard(ship, legalStartingPositions.get(i));
-//                i++;
-//            }
-//            flightBoard.giveUp(ship1);
-//            flightBoard.giveUp(ship2);
-//            assertTrue(true);
-//        }
-
+        // TODO: fix this test
         @Test
-        void getAndRemoveLappedShips() {
+        void getLappedShips() {
             int i = 0;
             for (ShipBoard ship : allShips) {
                 flightBoard.placeShipOnFlightBoard(ship, legalStartingPositions.get(i));
                 i++;
             }
             flightBoard.displaceShip(ship1, 100);
-            assertEquals(Set.of(ship2, ship3), flightBoard.getAndRemoveLappedShips());
+            assertEquals(Set.of(ship2, ship3), flightBoard.getLappedShips());
             assertEquals(Set.of(ship1), flightBoard.getShipToPlace().keySet());
         }
     }

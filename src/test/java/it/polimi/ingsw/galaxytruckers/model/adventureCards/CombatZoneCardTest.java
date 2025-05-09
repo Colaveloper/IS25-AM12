@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.SecondFlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CombatZoneCheck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CrewSizeCheck;
@@ -24,6 +25,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CombatZoneCardTest {
+    Game game;
     CombatZoneCard card;
     List<ShipBoard> shipBoards;
     List<Projectile> projectiles;
@@ -32,6 +34,7 @@ class CombatZoneCardTest {
 
     @BeforeEach
     void setUp() {
+        game = new Game(Level.SECOND);
         checks = List.of(CrewSizeCheck.getInstance(),
                 EnginePowerCheck.getInstance(),
                 FirePowerCheck.getInstance(),
@@ -110,8 +113,8 @@ class CombatZoneCardTest {
         flightBoard.placeShipOnFlightBoard(shipBoard2,3);
         flightBoard.placeShipOnFlightBoard(shipBoard3,6);
 
-        card = new CombatZoneCard(Level.FIRST, checks, penalties);
-        card.initialize(flightBoard);
+        card = new CombatZoneCard(game, checks, penalties);
+        card.initialize();
     }
 
     @Test

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -21,10 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class OpenSpaceCardTest {
     OpenSpaceCard openSpaceCard;
     List<ShipBoard> ships;
+    Game game;
 
 
     @BeforeEach
     void setUp() {
+        game = new Game(Level.SECOND);
         ships = new ArrayList<>();
         ships.add(new SecondShipBoard(Colors.BLUE));
         ships.add(new SecondShipBoard(Colors.RED));
@@ -54,8 +57,9 @@ class OpenSpaceCardTest {
                 return ships;
             }
         };
-        openSpaceCard = new OpenSpaceCard(Level.TEST);
-        openSpaceCard.initialize(flightBoardStub);
+        // TODO: fix this
+        openSpaceCard = new OpenSpaceCard(game);
+        openSpaceCard.initialize();
     }
 
     @Test

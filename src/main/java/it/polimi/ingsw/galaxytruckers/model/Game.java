@@ -11,12 +11,13 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Game {
     private final GameFactory gameFactory;
     private final Set<ShipBoard> shipBoards = new HashSet<>();
     private FlightBoard flightBoard;
-    private Set<ShipBoard> givenUpShips = new HashSet<>();
+    private final Set<ShipBoard> givenUpShips = new HashSet<>();
     private Deck deck;
     private GameState currentState;
     private Map<ShipBoard, Integer> finalScores;
@@ -103,24 +104,33 @@ public class Game {
 
     public void forceShipsToGiveUp(){
         // if ship has no crew -> force give up
-        for (ShipBoard s : shipBoards){
-            if(s.getCrewSize() == 0) {
-                givenUpShips.add(s);
-                shipBoards.remove(s);
-            }
-        }
+        givenUpShips.addAll(
+                shipBoards.stream()
+                        .filter(s -> s.getCrewSize() == 0)
+                        .collect(Collectors.toSet())
+        );
+
         // if you get lapped -> also force give up
-        givenUpShips.addAll(flightBoard.getAndRemoveLappedShips());
+        givenUpShips.addAll(flightBoard.getLappedShips());
+        flightBoard.removeShips(givenUpShips);
+    }
+
+    public void forceShipToGiveUp(ShipBoard ship){
+        givenUpShips.add(ship);
+        flightBoard.removeShips(Set.of(ship));
     }
 
     public Set<ShipBoard> getGivenUpShips(){return givenUpShips;}
 
     public void endGame(){
-        // TODO: instead of calling flightboard method, move the logic in here
+        assignShipRewards();
+        setCurrentState(new EndGameState(finalScores));
+    }
 
-        // finalScores = flightBoard.getFinalScores();
-        GameState endState = new EndGameState(finalScores);
-        setCurrentState(endState);
+    public void endGameIfAllShipsHaveGivenUp(){
+        if(givenUpShips.size() == shipBoards.size()){
+            endGame();
+        }
     }
 
     public Map<ShipBoard, Integer> getFinalScores(){

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SmugglersCardTest {
 
+    Game game = new Game(Level.SECOND);
     SmugglersCard smugglersCard;
     FlightBoard flightBoard;
     FlightBoard flightBoardOfLosers;
@@ -143,8 +145,8 @@ class SmugglersCardTest {
             }
         };
 
-        smugglersCard = new SmugglersCard(Level.FIRST, 1, 1, goodsWon, 1);
-        smugglersCard.initialize(flightBoard);
+        smugglersCard = new SmugglersCard(game, 1, 1, goodsWon, 1);
+        smugglersCard.initialize();
     }
 
 
@@ -189,8 +191,8 @@ class SmugglersCardTest {
 
     @Test
     void noneWins() {
-        smugglersCard = new SmugglersCard(Level.FIRST, 1, 1, goodsWon, 1);
-        smugglersCard.initialize(flightBoardOfLosers);
+        smugglersCard = new SmugglersCard(game, 1, 1, goodsWon, 1);
+        smugglersCard.initialize();
         smugglersCard.nextStep();//activate (but doesn't lose)
         smugglersCard.nextStep();//activate
         smugglersCard.nextStep();//lose goods

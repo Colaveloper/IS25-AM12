@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SlaversCardTest {
 
+    Game game = new Game(Level.SECOND);
     SlaversCard slaversCard;
     FlightBoard flightBoard;
     FlightBoard flightBoardOfLosers;
@@ -144,8 +146,8 @@ class SlaversCardTest {
             }
         };
 
-        slaversCard = new SlaversCard(Level.FIRST, 1, 1, 1, 1);
-        slaversCard.initialize(flightBoard);
+        slaversCard = new SlaversCard(game, 1, 1, 1, 1);
+        slaversCard.initialize();
     }
 
 
@@ -186,8 +188,8 @@ class SlaversCardTest {
 
     @Test
     void noneWins() {
-        slaversCard = new SlaversCard(Level.FIRST, 1, 1, 1, 1);
-        slaversCard.initialize(flightBoardOfLosers);
+        slaversCard = new SlaversCard(game, 1, 1, 1, 1);
+        slaversCard.initialize();
         slaversCard.nextStep();
         slaversCard.nextStep();
         slaversCard.nextStep();
@@ -214,17 +216,4 @@ class SlaversCardTest {
         assertTrue(displacedShips.contains(ship2));
         assertFalse(displacedShips.contains(ship1));
     }
-
-//    @Test
-//    void chooseToNOTGetCredits() {
-//        slaversCard.nextStep();//activate
-//        slaversCard.nextStep();//lose crew
-//        slaversCard.nextStep();//activate
-//        testState = slaversCard.nextStep();//choose
-//        assertInstanceOf(GrabRewardState.class, testState);
-//
-//        assertFalse(creditGained);
-//        assertFalse(displacedShips.contains(ship1));
-//        assertFalse(displacedShips.contains(ship2));
-//    }
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -23,15 +24,15 @@ public class PlanetsCard extends AdventureCard {
     private final int flightDaysLoss;
     private boolean planetChoiceAllowed;
 
-    public PlanetsCard(Level level, List<Map<GoodsType, Integer>> planets, int flightDaysLoss) {
-        super(level);
+    public PlanetsCard(Game game, List<Map<GoodsType, Integer>> planets, int flightDaysLoss) {
+        super(game);
         this.planets = planets;
         this.flightDaysLoss = flightDaysLoss;
     }
 
     @Override
-    public void initialize(FlightBoard flightBoard) {
-        super.initialize(flightBoard);
+    public void initialize() {
+        super.initialize();
         this.planetChoiceAllowed = true;
         this.planetChoices = new HashMap<>();
         this.landedShips = new ArrayList<>();
