@@ -23,6 +23,10 @@ public class CliView implements View, ChangeListener {
     public void setModel(ClientModel model) {
         CliView.model = model;
         model.getComponentBank().setChangeListener(this);
+        for(Shipboard shipboard : model.getShipboards().values()) {
+            shipboard.setChangeListener(this);
+        }
+        //model.getAllShips().setChangeListener(this);
     }
 
     @Override

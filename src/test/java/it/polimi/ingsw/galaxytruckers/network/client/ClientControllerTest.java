@@ -58,6 +58,7 @@ class ClientControllerTest {
                         Thread.sleep(3000);
                         System.out.println("FAKE SERVER EVENT: somebody took a covered component");
                         controller.setCoveredComponents(--coveredComponentsN);
+                        //controller.
                     } catch (InterruptedException | IOException e) {
                         Thread.currentThread().interrupt();
                     }

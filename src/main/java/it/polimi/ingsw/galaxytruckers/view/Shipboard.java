@@ -3,6 +3,10 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.Component;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 
 import java.awt.*;
@@ -13,24 +17,28 @@ import java.util.Set;
 
 public class Shipboard extends Physical{
 
-    private List<List<Component>> componentMatrix;
+    private List<List<ObjectProperty<Component>>> componentMatrix;
     private Point upLeft;
     private Point lastPosition;
 
-    private int lostComponents;
-    private int credits;
+    private IntegerProperty lostComponents;
+    private IntegerProperty credits;
 
-    private int losses;                 //TODO: what s this
-    private int firepower;
-    private int numBatteries;
-    private int crewSize;
+    private IntegerProperty firepower;
+    private IntegerProperty numBatteries;
+    private IntegerProperty crewSize;
 
     public Shipboard() {
         componentMatrix = new ArrayList<>();
+        lostComponents = new SimpleIntegerProperty(0);
+        credits = new SimpleIntegerProperty(0);
+        firepower = new SimpleIntegerProperty(0);
+        numBatteries = new SimpleIntegerProperty(0);
+        crewSize = new SimpleIntegerProperty(0);
+        super.registerObservables(lostComponents, credits, firepower, numBatteries, crewSize);
     }
 
     public void setShipArea(Set<Point> shipArea) {
-
         // Bounds
         int minX = shipArea.stream().mapToInt(p -> p.x).min().orElse(0);
         int maxX = shipArea.stream().mapToInt(p -> p.x).max().orElse(0);
@@ -40,14 +48,15 @@ public class Shipboard extends Physical{
         // Save top-left point
         upLeft = new Point(minX, minY);
 
-        List<List<Component>> result = new ArrayList<>();
+        List<List<ObjectProperty<Component>>> result = new ArrayList<>();
 
         for (int y = minY; y <= maxY; y++) {
-            List<Component> row = new ArrayList<>();
+            List<ObjectProperty<Component>> row = new ArrayList<>();
             for (int x = minX; x <= maxX; x++) {
                 row.add(shipArea.contains(new Point(x, y))
-                        ? new Component(ComponentType.EMPTY_AREA)
-                        : new Component(ComponentType.EMPTY_SPACE));
+                        ? new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA))
+                        : new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_SPACE))
+                );
             }
             result.add(row);
         }
@@ -55,33 +64,33 @@ public class Shipboard extends Physical{
     }
 
     public void setCredits(int creditsToAdd) {
-        credits = creditsToAdd;
+        credits.set(creditsToAdd);
     }
 
     public void setLostComponent(int losses) {
-        lostComponents = losses;
+        lostComponents.set(losses);
     }
 
     public int getCredits() {
-        return credits;
+        return credits.get();
     }
 
     public int getLostComponents() {
-        return lostComponents;
+        return lostComponents.get();
     }
 
     public void setComponent(Point position, int direction, int componentId) throws IOException {
-        Component component = new Component(direction, componentId);
+        ObjectProperty<Component> component = new SimpleObjectProperty<>(new Component(direction, componentId));
         componentMatrix.get(position.y-upLeft.y).set(position.x-upLeft.x, component);
         lastPosition = position;
     }
 
     public void removeComponent(Point position) throws IOException {
-                componentMatrix.get(position.y-upLeft.y).set(position.x-upLeft.x, new Component(ComponentType.EMPTY_SPACE));
+                componentMatrix.get(position.y-upLeft.y).set(position.x-upLeft.x, new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_SPACE)));
     }
 
     public Component getComponent(Point point) throws IOException {
-        return componentMatrix.get(point.y-upLeft.y).get(point.x-upLeft.x);
+        return componentMatrix.get(point.y-upLeft.y).get(point.x-upLeft.x).get();
     }
 
     public void setStashedComponents(int componentId) {
@@ -94,8 +103,8 @@ public class Shipboard extends Physical{
 
         int height = componentMatrix.size();
         int width = componentMatrix.getFirst().size();
-        int componentHeight = componentMatrix.getFirst().getFirst().getDescription().size();
-        int componentWidth = componentMatrix.getFirst().getFirst().getDescription().getFirst().length();
+        int componentHeight = componentMatrix.getFirst().getFirst().get().getDescription().size();
+        int componentWidth = componentMatrix.getFirst().getFirst().get().getDescription().getFirst().length();
 
         int yIndex = upLeft.y;
         int yIndexPadding = 2;
@@ -125,8 +134,8 @@ public class Shipboard extends Physical{
 
                 // component
                 for (int k = 0; k < width; k++) {
-                    Component component = componentMatrix.get(i).get(k);
-                    List<String> description = component.getNewDescription();
+                    ObjectProperty<Component> component = componentMatrix.get(i).get(k);
+                    List<String> description = component.get().getNewDescription();
                     row.append(description.get(j));
                 }
                 row.append(" │").append(" ".repeat(rightShipboardPadding));
@@ -162,7 +171,7 @@ public class Shipboard extends Physical{
 
     public void setSelectablePoints(List<Point> selectablePoints) {
         for (Point position : selectablePoints) {
-            componentMatrix.get(position.y-upLeft.y).get(position.x-upLeft.x).setSelectable();
+            componentMatrix.get(position.y-upLeft.y).get(position.x-upLeft.x).get().setSelectable();
         }
     }
 }

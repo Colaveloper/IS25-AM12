@@ -28,7 +28,7 @@ class AllShipsTest {
         shipboardList.put("player2", shipboard);
         shipboardList.put("player3", shipboard);
         shipboardList.put("player4", shipboard);
-        allShips = new AllShips(shipboardList, 5, 3);
+        allShips = new AllShips(shipboardList);
     }
 
     @Test

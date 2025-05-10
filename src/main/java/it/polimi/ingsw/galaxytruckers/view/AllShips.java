@@ -10,13 +10,9 @@ import java.util.Map;
 
 public class AllShips extends Physical {
     private final Map<String, Shipboard> shipsMap;
-    private List<List<String>> descriptions;
-    private final int componentWidth;
-    private final int componentHeight;
 
-    public AllShips(LinkedHashMap<String, Shipboard> shipsMap, int componentWidth, int componentHeight) {
-        this.componentWidth = componentWidth;
-        this.componentHeight = componentHeight;
+    public AllShips(LinkedHashMap<String, Shipboard> shipsMap) {
+
         this.shipsMap = shipsMap;
     }
 
@@ -27,9 +23,10 @@ public class AllShips extends Physical {
 
     @Override
     public List<String> getNewDescription() {
-        descriptions = new ArrayList<>();
+        List<List<String>> descriptions = new ArrayList<>();
         List<String> sequenceDescription = new ArrayList<>();
         StringBuilder row = new StringBuilder();
+
         for (Physical physical : shipsMap.values()) {
             descriptions.add(physical.getDescription());
         }

@@ -43,10 +43,14 @@ public class ClientModel {
         this.playerToShip = new LinkedHashMap<>();
         this.selectablePoints = new ArrayList<>();
         this.componentBank = new ComponentBank();
-        this.allShips = new AllShips(playerToShip, 5, 3); //TODO: substitute magic numbers
+        this.allShips = new AllShips(playerToShip);
     }
 
         // SETUP PHASE
+
+    public LinkedHashMap<String, Shipboard> getShipboards() {
+        return playerToShip;
+    }
 
     public void setPlayerToPlace(Map<String, Integer> playerToPlace) {
         flightBoard.setPlayerToPlace(playerToPlace.entrySet().stream()
@@ -137,7 +141,7 @@ public class ClientModel {
     }
 
     public void setBatteries(String nickname, Point position, int totalBatteries) throws IOException {
-        playerToShip.get(myNickname).getComponent(position).setStat(totalBatteries);//TODO: update other players too?
+        playerToShip.get(nickname).getComponent(position).setStat(totalBatteries);
     }
 
     public void setCredits(String nickname, int creditsToAdd) {
@@ -237,6 +241,7 @@ public class ClientModel {
 
     public void addPlayer(String nickname) {
         playerToShip.put(nickname, new Shipboard());
+        //allShips.addPlayer(nickname, playerToShip.get(nickname));
     }
 
     public List<String> getNicknames() {
