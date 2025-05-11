@@ -36,6 +36,7 @@ public class Shipboard extends Physical{
         numBatteries = new SimpleIntegerProperty(0);
         crewSize = new SimpleIntegerProperty(0);
         super.registerObservables(lostComponents, credits, firepower, numBatteries, crewSize);
+
     }
 
     public void setShipArea(Set<Point> shipArea) {
@@ -50,13 +51,26 @@ public class Shipboard extends Physical{
 
         List<List<ObjectProperty<Component>>> result = new ArrayList<>();
 
+        ObjectProperty<Component> component;
+
         for (int y = minY; y <= maxY; y++) {
             List<ObjectProperty<Component>> row = new ArrayList<>();
             for (int x = minX; x <= maxX; x++) {
-                row.add(shipArea.contains(new Point(x, y))
-                        ? new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA))
-                        : new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_SPACE))
-                );
+
+                if (shipArea.contains(new Point(x, y))) {
+                    component = new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA));
+                }
+                else {
+                    component = new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_SPACE));
+                }
+                row.add(component);
+                super.registerObservables(component);
+                component.get().setChangeListener(this);
+
+//                row.add(shipArea.contains(new Point(x, y))
+//                        ? new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA))
+//                        : new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_SPACE))
+//                );
             }
             result.add(row);
         }
@@ -80,8 +94,11 @@ public class Shipboard extends Physical{
     }
 
     public void setComponent(Point position, int direction, int componentId) throws IOException {
-        ObjectProperty<Component> component = new SimpleObjectProperty<>(new Component(direction, componentId));
-        componentMatrix.get(position.y-upLeft.y).set(position.x-upLeft.x, component);
+//        ObjectProperty<Component> component = new SimpleObjectProperty<>(new Component(direction, componentId));
+//        super.registerObservables(component);
+//        component.get().setChangeListener(this);
+        componentMatrix.get(position.y-upLeft.y).get(position.x-upLeft.x).set(new Component(direction, componentId));
+        componentMatrix.get(position.y-upLeft.y).get(position.x-upLeft.x).get().setChangeListener(this);
         lastPosition = position;
     }
 

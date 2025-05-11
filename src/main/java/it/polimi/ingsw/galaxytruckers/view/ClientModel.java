@@ -241,7 +241,7 @@ public class ClientModel {
 
     public void addPlayer(String nickname) {
         playerToShip.put(nickname, new Shipboard());
-        //allShips.addPlayer(nickname, playerToShip.get(nickname));
+        allShips.addPlayer(playerToShip.get(nickname)); // to add the listener
     }
 
     public List<String> getNicknames() {

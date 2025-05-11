@@ -3,8 +3,6 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;
-import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
@@ -25,7 +23,7 @@ public class GameFlowTest {
         List<String> names = new ArrayList<>();
         names.add("Giuigi");
         names.add("Gioforchio");
-        controller.setNickname("Roborbio");
+        controller.setMyNickname("Roborbio");
         names.add("Roborbio");
         controller.showLobbyUpdate(names);
 

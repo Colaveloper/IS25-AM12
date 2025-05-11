@@ -60,7 +60,7 @@ public class SocketClient implements VirtualClient {
 
     @Override
     public void showNicknameRegistration(String nickname) throws RemoteException {
-        controller.setNickname(nickname);
+        controller.setMyNickname(nickname);
     }
 
     @Override

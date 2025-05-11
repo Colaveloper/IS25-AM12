@@ -48,7 +48,7 @@ public class RmiClient extends UnicastRemoteObject implements RmiVirtualClient, 
 
     @Override
     public void showNicknameRegistration(String nickname) throws RemoteException {
-        controller.setNickname(nickname);
+        controller.setMyNickname(nickname);
     }
 
     @Override

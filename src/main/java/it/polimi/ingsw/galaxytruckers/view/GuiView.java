@@ -43,6 +43,7 @@ public class GuiView extends Application implements View {
         GuiView.server = server;
     }
 
+
     /**
      * Modifies the objects on screen as prescribed by {@code strategy}
      * @throws IOException

@@ -14,6 +14,10 @@ public class AllShips extends Physical {
     public AllShips(LinkedHashMap<String, Shipboard> shipsMap) {
 
         this.shipsMap = shipsMap;
+        for (Shipboard shipboard : shipsMap.values()) {
+            shipboard.setChangeListener(this);
+            //super.registerObservables(shipboard);
+        }
     }
 
     @Override
@@ -39,5 +43,9 @@ public class AllShips extends Physical {
         }
 
         return sequenceDescription;
+    }
+
+    public void addPlayer(Shipboard shipboard) {
+        shipboard.setChangeListener(this);
     }
 }

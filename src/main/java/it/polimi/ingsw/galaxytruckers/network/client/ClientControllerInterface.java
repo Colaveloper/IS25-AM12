@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
@@ -12,7 +11,6 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public interface ClientControllerInterface {
     void showInterfaceChoice(VirtualServer server) throws IOException;
@@ -22,6 +20,8 @@ public interface ClientControllerInterface {
     void showLobbyUpdate(List<String> names) throws IOException;
 
     void showConnectedAndNicknameChoice(String tempNickname) throws IOException;
+
+    void setMyNickname(String nickname);
 
     void setNickname(String nickname);
 

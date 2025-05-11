@@ -3,7 +3,6 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.ClientModel;
 
 import java.awt.*;
 import java.io.IOException;
@@ -28,7 +27,14 @@ class ClientControllerTest {
         nicknames = new ArrayList<>();
         loopLength = 22;
         startingPositions = new ArrayList<>(List.of(2, 4, 5));
-        shipArea = Set.of(new Point(8,7), new Point(7,8), new Point(6,7), new Point(7,6));
+        shipArea = Set.of(
+                new Point(4, 7), new Point(4, 8), new Point(4, 9),
+                new Point(5, 6), new Point(5, 7), new Point(5, 8), new Point(5, 9),
+                new Point(6, 5), new Point(6, 6), new Point(6, 7), new Point(6, 8), new Point(6, 9),
+                new Point(7, 6), new Point(7, 7), new Point(7, 8),
+                new Point(8, 5), new Point(8, 6), new Point(8, 7), new Point(8, 8), new Point(8, 9),
+                new Point(9, 6), new Point(9, 7), new Point(9, 8), new Point(9, 9),
+                new Point(10, 7),new Point(10, 8),new Point(10, 9));
         coveredComponentsN = 44;
 
         server = new VirtualServer() {
@@ -37,7 +43,7 @@ class ClientControllerTest {
                 nicknames.add(myNickname);
 
                 System.out.println("FAKE SERVER EVENT: successfully registered nickname " + myNickname);
-                controller.setNickname(myNickname);
+                controller.setMyNickname(myNickname);
 
                 controller.showGameCreation(); // granting the rights to create a new game
             }
@@ -52,13 +58,19 @@ class ClientControllerTest {
                         Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: another player joined, lobby is complete");
                         nicknames.add("OtherPlayer1");
+                        controller.setNickname("OtherPlayer1");
                         controller.showLobbyUpdate(nicknames);
+
                         controller.setupGame(loopLength, startingPositions, shipArea);
                         controller.setCoveredComponents(coveredComponentsN);
-                        Thread.sleep(3000);
+
+                        //Thread.sleep(3000);
                         System.out.println("FAKE SERVER EVENT: somebody took a covered component");
                         controller.setCoveredComponents(--coveredComponentsN);
-                        //controller.
+
+                        controller.showComponentPositioning("Roborbio", 5, 4, new Point(6, 7));
+                        controller.showComponentPositioning("Roborbio", 6, 4, new Point(5, 7));
+                        controller.showComponentPositioning("OtherPlayer1", 6, 4, new Point(5, 7));
                     } catch (InterruptedException | IOException e) {
                         Thread.currentThread().interrupt();
                     }

@@ -67,8 +67,13 @@ public class ClientController implements ClientControllerInterface {
     }
 
     @Override
-    public void setNickname(String nickname) { // gets called only after legal registration
+    public void setMyNickname(String nickname) { // gets called only after legal registration
         model.setMyNickname(nickname);
+    }
+
+    @Override
+    public void setNickname(String nickname) {
+        model.addPlayer(nickname);
     }
 
     @Override
@@ -113,7 +118,7 @@ public class ClientController implements ClientControllerInterface {
     @Override
     public void showComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException {
         model.setComponent(nickname, componentId, direction, position);
-        view.setScreen(new ShipBuildingScreen());
+        //view.setScreen(new ShipBuildingScreen());
     }
 
     @Override
