@@ -89,7 +89,7 @@ class ClientControllerTest {
                         controller.showComponentPositioning("qwe", 6, 4, new Point(5, 7));
                         controller.showComponentPositioning("OtherPlayer1", 6, 4, new Point(5, 7));
 
-                        controller.showPlayerToPlaceUpdate(Map.of("qwe", 2, "OtherPlayer1", 4));
+                        controller.notifyPlaceShipOnFlightBoard("OtherPlayer1", Map.of("qwe", 2, "OtherPlayer1", 4));
                     } catch (InterruptedException | IOException e) {
                         Thread.currentThread().interrupt();
                     }

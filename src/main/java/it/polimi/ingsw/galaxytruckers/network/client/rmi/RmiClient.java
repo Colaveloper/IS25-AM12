@@ -53,7 +53,7 @@ public class RmiClient extends UnicastRemoteObject implements RmiVirtualClient, 
 
     @Override
     public void showNewCard(Integer cardId) throws IOException {
-        controller.showNewCard(cardId);
+        controller.notifyNewCard(cardId);
     }
 
     @Override
@@ -171,6 +171,6 @@ public class RmiClient extends UnicastRemoteObject implements RmiVirtualClient, 
 
     @Override
     public void handleEvent(NewCardUpdate newCardUpdate) throws IOException {
-        controller.showNewCard(newCardUpdate.getCardId());
+        controller.notifyNewCard(newCardUpdate.getCardId());
     }
 }

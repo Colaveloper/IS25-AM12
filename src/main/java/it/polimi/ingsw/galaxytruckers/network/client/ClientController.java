@@ -54,11 +54,11 @@ public class ClientController implements ClientControllerInterface {
         view.setScreen(new GameCreationScreen());
     }
 
-    @Override
+    @Override//Tommy approved
     public void updateLobbyPlayers(Map<String, Colors> playerToColor) throws IOException {
         for (Map.Entry<String, Colors> entry : playerToColor.entrySet()) {
             model.setPlayerColor(entry.getKey(), entry.getValue());
-            model.addPlayer(entry.getKey());
+            model.addPlayer(entry.getKey());    // my nickname already exists and does nothing for me, but adds other players
         }
         view.setScreen(new LobbyScreen());
     }
@@ -74,12 +74,6 @@ public class ClientController implements ClientControllerInterface {
         model.setMyNickname(nickname);
     }
 
-    // integrate with following method
-//    public void showColorSelection(String nickname, Colors color) {
-//        model.setPlayerColor(nickname, color);
-//        // view.show(ChosenStrategy)
-//    }
-
     public void setupGame(int loopLength, List<Integer> startingPositions, Set<Point> shipArea, int coveredComponent) throws IOException {
         model.setFlightBoard(loopLength, startingPositions);
         model.setShipArea(shipArea);
@@ -89,23 +83,23 @@ public class ClientController implements ClientControllerInterface {
 
     // UPDATE FOR SHIP BUILDING
 
-    @Override
+    @Override//Tommy approved
     public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) throws IOException {
         model.setStashedComponents(stashComponentIds);//todo: add for other players
     }
 
-    @Override
-    public void showStartBuilding(int coveredComponentsTot) throws IOException {
-
+    @Override//Tommy approved
+    public void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) throws IOException {
+        model.setStashedComponents(stashComponentIds);//todo: add for other players
+        model.setCurrentComponent(componentId);//todo: add for other players
     }
 
     @Override
     public void showComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException {
         model.setComponent(nickname, componentId, direction, position);
-        //view.setScreen(new ShipBuildingScreen());
     }
 
-    @Override
+    @Override//Tommy approved
     public void notifyComponentRejection(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException {
         if (model.isMyNickname(playerName)) {//TODO add for other players
             model.clearCurrentComponent();
@@ -113,7 +107,7 @@ public class ClientController implements ClientControllerInterface {
         model.setRevealedComponent(faceUpComponentIds);
     }
 
-    @Override
+    @Override//Tommy approved
     public void notifyFaceDownComponentRequest(String playerName, int componentId, int numFaceDown) throws IOException {
         if (model.isMyNickname(playerName)) {//TODO add for other players
             model.setCurrentComponent(componentId);
@@ -121,7 +115,7 @@ public class ClientController implements ClientControllerInterface {
         model.setCoveredComponents(numFaceDown);
     }
 
-    @Override
+    @Override//Tommy approved
     public void notifyFaceUpComponentRequest(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException {
         if (model.isMyNickname(playerName)) {//TODO add for other players
             model.setCurrentComponent(componentId);
@@ -129,11 +123,24 @@ public class ClientController implements ClientControllerInterface {
         model.setRevealedComponent(faceUpComponentIds);
     }
 
+    @Override
+    public void notifyPeekForecast(String playerName, int deckIndex) {
+
+    }
 
     @Override
-    public void showForecast(List<Integer> cardsIds) {
-        // model.update
-        // view.show(ChosenStrategy)
+    public void notifyReleaseForecast(String playerName, int deckIndex) {
+
+    }
+
+    @Override
+    public void sendForecastDeck(int deckIndex, List<Integer> deckCardIds) {
+
+    }
+
+    @Override
+    public void notifyHourglassFlipped(String playerName, boolean isLast) {
+
     }
 
     @Override
@@ -142,53 +149,43 @@ public class ClientController implements ClientControllerInterface {
         // view.show(ChosenStrategy)
     }
 
-    @Override
-    public void showPlayerToPlaceUpdate(Map<String, Integer> playerToPlace) {
+    @Override//Tommy approved
+    public void notifyCabinUpdate(String nickname, Point position, int crew, CrewType crewType) throws IOException {
+        model.setCabinStats(nickname, position, crewType, crew);
+    }
+
+    @Override//Tommy approved
+    public void notifyPlaceShipOnFlightBoard(String nickname, Map<String, Integer> playerToPlace) {
         model.setPlayerToPlace(playerToPlace);
-        // view.show(ChosenStrategy)
+        //todo: show that nickname placed himself on the board
     }
 
     @Override
     public void showComponentRemoval(Point position, String nickname) throws IOException {
         model.removeComponent(position, nickname);
-        // view.show(ChosenStrategy)
     }
 
-    @Override
-    public void showChoice(List<String> choices) {
-        // model.update
-        // view.show(ChosenStrategy)
-    }
+    // UPDATE FOR ADVENTURE
 
-    // UPDATE FOR COMPONENT (only data update and nothing to ask or show, called for any player independently)
-
-    @Override
-    public void updateBatteries(String nickname, Point position, int batteries) throws IOException {
+    @Override//Tommy approved
+    public void notifyBatteryUpdate(String nickname, Point position, int batteries) throws IOException {
         model.setBatteries(nickname, position, batteries);
-        view.refresh();
     }
 
-    @Override
-    public void initializeCabin(String nickname, Point position, CrewType crewType, int crew) throws IOException {
-        model.initializeCabin(nickname, position, crewType, crew);
-    }
-
-    @Override
-    public void updateCrewNumber(String nickname, Point position, int crew) throws IOException {
-        model.setCrewNumber(nickname, position, crew);
-        view.refresh();
-    }
-
-    @Override
-    public void updateGoods(String nickname, Point position, List<GoodsType> goods) throws IOException {
-        model.setGoods(nickname, position, goods);
-        view.refresh();
+    @Override//Tommy approved
+    public void notifyCargoHoldUpdate(String nickname, Point position, Map<GoodsType, Integer> goods) throws IOException {
+        List<GoodsType> list = new ArrayList<>();
+        for(GoodsType goodsType : goods.keySet()) {
+            for(int index = 0; index < goods.get(goodsType); index++) {
+                list.add(goodsType);
+            }
+        }
+        model.setGoods(nickname, position, list);
     }
 
     @Override
     public void updateCredits(String nickname, int credits) throws IOException {
         model.setCredits(nickname, credits);
-        view.refresh();
     }
 
     @Override
@@ -196,10 +193,8 @@ public class ClientController implements ClientControllerInterface {
         model.setLostComponent(nickname, componentsLost);
     }
 
-    // UPDATE FOR ADVENTURE
-
-    @Override
-    public void showNewCard(int cardId) throws IOException {
+    @Override//Tommy approved
+    public void notifyNewCard(int cardId) throws IOException {
         model.setCurrentCard(cardId);
         model.setCurrentPlayerNickname(model.getCurrentLeader());
         view.setScreen(new NewCardScreen());
@@ -221,8 +216,6 @@ public class ClientController implements ClientControllerInterface {
     @Override
     public void updateGoodsBuffer(int index) throws IOException {
         model.updateGoodsBuffer(index);
-        //view.refresh();
-        //view.run(new GoodsScreen());
     }
 
     // set current player for any action that involves a decision

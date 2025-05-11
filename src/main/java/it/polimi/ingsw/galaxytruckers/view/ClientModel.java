@@ -5,7 +5,6 @@ import com.google.common.collect.HashBiMap;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import javafx.beans.property.IntegerProperty;
 import it.polimi.ingsw.galaxytruckers.view.adventureClient.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.adventureClient.CurrentProjectile;
 import it.polimi.ingsw.galaxytruckers.view.adventureClient.GoodsBuffer;
@@ -112,13 +111,9 @@ public class ClientModel {
         playerToShip.get(nickname).setComponent(position, direction, componentId);
     }
 
-    public void initializeCabin(String nickname, Point position, CrewType crewType, int crew) throws IOException {
+    public void setCabinStats(String nickname, Point position, CrewType crewType, int crew) throws IOException {
         playerToShip.get(nickname).getComponent(position).setCrewRace(crewType);
         playerToShip.get(nickname).getComponent(position).setStat(crew);
-    }
-
-    public void setCrewNumber(String nickname, Point position, int crewNumber) throws IOException {
-        playerToShip.get(nickname).getComponent(position).setStat(crewNumber);
     }
 
     public Physical getComponentBank() {

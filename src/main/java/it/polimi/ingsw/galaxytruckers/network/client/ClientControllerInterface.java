@@ -25,7 +25,7 @@ public interface ClientControllerInterface {
 
     void notifyStashComponent(String playerName, List<Integer> stashComponentIds) throws IOException;
 
-    void showStartBuilding(int coveredComponentsTot) throws IOException;
+    void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) throws IOException;
 
     void showComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException;
 
@@ -35,29 +35,31 @@ public interface ClientControllerInterface {
 
     void notifyFaceUpComponentRequest(String playerName, int componentId, List<Integer> faceup) throws IOException;
 
-    void showForecast(List<Integer> cardsIds);
+    void notifyPeekForecast(String playerName, int deckIndex);
+
+    void notifyReleaseForecast(String playerName, int deckIndex);
+
+    void sendForecastDeck(int deckIndex, List<Integer> deckCardIds);
+
+    void notifyHourglassFlipped(String playerName, boolean isLast);
 
     void showNewHourglass();
 
-    void showPlayerToPlaceUpdate(Map<String, Integer> playerToPlace);
+    void notifyPlaceShipOnFlightBoard(String nickname, Map<String, Integer> playerToPlace);
 
     void showComponentRemoval(Point position, String nickname) throws IOException;
 
-    void showChoice(List<String> choices);
+    void notifyBatteryUpdate(String nickname, Point position, int batteries) throws IOException;
 
-    void updateBatteries(String nickname, Point position, int batteries) throws IOException;
+    void notifyCabinUpdate(String nickname, Point position, int crew, CrewType crewType) throws IOException;
 
-    void initializeCabin(String nickname, Point position, CrewType crewType, int crew) throws IOException;
-
-    void updateCrewNumber(String nickname, Point position, int crew) throws IOException;
-
-    void updateGoods(String nickname, Point position, List<GoodsType> goods) throws IOException;
+    void notifyCargoHoldUpdate(String nickname, Point position, Map<GoodsType, Integer> goods) throws IOException;
 
     void updateCredits(String nickname, int credits) throws IOException;
 
     void updateLostComponent(String nickname, int componentsLost) throws IOException;
 
-    void showNewCard(int cardId) throws IOException;
+    void notifyNewCard(int cardId) throws IOException;
 
     // first time goods are shown on screen
     void showPlaceGoods() throws IOException;
