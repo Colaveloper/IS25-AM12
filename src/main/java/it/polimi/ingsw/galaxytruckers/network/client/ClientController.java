@@ -54,7 +54,7 @@ public class ClientController implements ClientControllerInterface {
         view.setScreen(new GameCreationScreen());
     }
 
-    @Override//Tommy approved
+    @Override // Tommy approved
     public void updateLobbyPlayers(Map<String, Colors> playerToColor) throws IOException {
         for (Map.Entry<String, Colors> entry : playerToColor.entrySet()) {
             model.setPlayerColor(entry.getKey(), entry.getValue());

@@ -96,7 +96,7 @@ public class ComponentBank extends Physical {
         for (int i = 0; i < 3; i++) {
             for (Component component : revealedComponents) {
                 row.append(component.getDescription().get(i));
-                System.out.println("REVEALED");
+//                System.out.println("REVEALED");
                 row.append(padding);
             }
             description.add(row.toString());

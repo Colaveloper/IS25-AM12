@@ -51,11 +51,14 @@ public class ClientModel {
     }
 
     public void setPlayerToPlace(Map<String, Integer> playerToPlace) {
-        flightBoard.setPlayerToPlace(playerToPlace.entrySet().stream()
+        // translating nicknames to colors
+        flightBoard.setPlayerToPlace(
+                playerToPlace.entrySet().stream()
                 .collect(Collectors.toMap(
-                        e -> playerToColor.get(e.getKey()),
-                        Map.Entry::getValue)
-                ));
+                        e ->
+                                playerToColor.get(e.getKey()), Map.Entry::getValue)
+                )
+        );
     }
 
     public void setFlightBoard(int loopLength, List<Integer> startingPositions) {

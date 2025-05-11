@@ -41,10 +41,9 @@ class ClientControllerTest {
         server = new VirtualServer() {
             @Override
             public void registerNickname(String myNickname) throws IOException {
-                nicknames.put(myNickname, Colors.RED);
-
                 System.out.println("FAKE SERVER EVENT: successfully registered nickname " + myNickname);
-                controller.setMyNickname(myNickname);
+                nicknames.put("qwe", Colors.RED);
+                controller.setMyNickname("qwe");
 
                 controller.showGameCreation(); // granting the rights to create a new game
             }
@@ -56,40 +55,33 @@ class ClientControllerTest {
                     try {
                         System.out.println("FAKE SERVER EVENT: successfully created lvl "+level+" game for "+playerN+" players");
                         controller.updateLobbyPlayers(nicknames);
+
                         Thread.sleep(1000);
-
-
                         System.out.println("FAKE SERVER EVENT: another player joined, lobby is complete");
                         nicknames.put("OtherPlayer1", Colors.BLUE);
                         controller.updateLobbyPlayers(nicknames);
                         controller.setupGame(loopLength, startingPositions, shipArea, coveredComponentsN);
 
+                        // TODO: SHOW
+                        // TODO: UPDATE COVERED NUMBER
+                        Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1 took a covered component");
+                        controller.notifyFaceDownComponentRequest("qwe", 5, --coveredComponentsN);
 
-                        System.out.println("FAKE SERVER EVENT: somebody rejected component");
+                        Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1 rejected component");
                         faceUpComponents.add(5);
                         controller.notifyComponentRejection("OtherPlayer1",5, faceUpComponents);
 
+                        Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1 took a covered component");
+                        controller.notifyFaceDownComponentRequest("qwe", 6, --coveredComponentsN);
 
-                        System.out.println("FAKE SERVER EVENT: somebody rejected component");
-                        faceUpComponents.add(6);
-                        controller.notifyComponentRejection("OtherPlayer1",6, faceUpComponents);
-
-                        //Thread.sleep(3000);
-                        System.out.println("FAKE SERVER EVENT: you took a covered component");
-                        controller.notifyFaceDownComponentRequest("qwe", 5, --coveredComponentsN);
-
-
-                        System.out.println("FAKE SERVER EVENT: you took a face up component");
-                        faceUpComponents.remove(1);
-                        controller.notifyFaceUpComponentRequest("qwe", 6, faceUpComponents);
-
-
-                        System.out.println("FAKE SERVER EVENT: somebody placed a component");
-                        controller.showComponentPositioning("qwe", 5, 4, new Point(6, 7));
-                        controller.showComponentPositioning("qwe", 6, 4, new Point(5, 7));
+                        // TODO: REMOVE COMPONENT IN HAND
+                        Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1's current component was successfully positioned where requested");
                         controller.showComponentPositioning("OtherPlayer1", 6, 4, new Point(5, 7));
 
-                        controller.notifyPlaceShipOnFlightBoard("OtherPlayer1", Map.of("qwe", 2, "OtherPlayer1", 4));
                     } catch (InterruptedException | IOException e) {
                         Thread.currentThread().interrupt();
                     }
@@ -103,8 +95,16 @@ class ClientControllerTest {
             }
 
             @Override
-            public void requestComponent(int componentID) {
+            public void requestComponent(int componentID) throws IOException { // TODO: MAKE THIS METHOD CALLABLE
+                faceUpComponents.remove(1);
+                System.out.println("FAKE SERVER EVENT: the requested face up component was successfully taken");
+                controller.notifyFaceUpComponentRequest("qwe", componentID, faceUpComponents);
+            }
 
+            @Override
+            public void placeComponent(Point point) throws IOException {
+                System.out.println("FAKE SERVER EVENT: your ship was successfully positioned where requested");
+                controller.showComponentPositioning("qwe", 5, 4, point);
             }
 
             @Override
@@ -113,12 +113,12 @@ class ClientControllerTest {
             }
 
             @Override
-            public void flipHourglass() {
-
+            public void placeShipOnFlightBoard(int startingPosition) {
+                controller.notifyPlaceShipOnFlightBoard("OtherPlayer1", Map.of("qwe", 2, "OtherPlayer1", 4));
             }
 
             @Override
-            public void placeShipOnFlightBoard(int startingPosition) {
+            public void flipHourglass() {
 
             }
 
@@ -134,11 +134,6 @@ class ClientControllerTest {
 
             @Override
             public void stashComponent() {
-
-            }
-
-            @Override
-            public void placeComponent(Point point) {
 
             }
 
