@@ -34,7 +34,6 @@ class CombatZoneCardTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game(Level.SECOND);
         checks = List.of(CrewSizeCheck.getInstance(),
                 EnginePowerCheck.getInstance(),
                 FirePowerCheck.getInstance(),
@@ -113,7 +112,13 @@ class CombatZoneCardTest {
         flightBoard.placeShipOnFlightBoard(shipBoard2,3);
         flightBoard.placeShipOnFlightBoard(shipBoard3,6);
 
-        card = new CombatZoneCard(game, checks, penalties);
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoard;
+            }
+        };
+
+        card = new CombatZoneCard(game, Level.SECOND, checks, penalties);
         card.initialize();
     }
 

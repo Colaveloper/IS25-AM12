@@ -7,8 +7,8 @@ import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
 public class OpenSpaceCard extends AdventureCard {
-    public OpenSpaceCard (Game game) {
-        super(game);
+    public OpenSpaceCard (Game game, Level level) {
+        super(game, level);
     }
 
     @Override

@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.Set;
 
 public class TestDeck extends Deck{
-    public TestDeck() throws IOException {
-        super(Set.of(Level.TEST));
+    public TestDeck(Game game) throws IOException {
+        super(game);
         super.masterDeck = relevantCards;
     }
 }

@@ -17,8 +17,8 @@ public class SmugglersCard extends AdventureCard {
     private boolean defeated;
     private boolean acquired;
 
-    public SmugglersCard (Game game, int goodsLoss, int firePowerThreshold, Map<GoodsType, Integer> goodsPrize, int flightDaysLoss) {
-        super(game);
+    public SmugglersCard (Game game, Level level, int goodsLoss, int firePowerThreshold, Map<GoodsType, Integer> goodsPrize, int flightDaysLoss) {
+        super(game, level);
         this.firePowerThreshold = firePowerThreshold;
         this.goodsPrize = goodsPrize;
         this.flightDaysLoss = flightDaysLoss;

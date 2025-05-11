@@ -34,7 +34,6 @@ class MeteorSwarmCardTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game(Level.SECOND);
         ship1 = new SecondShipBoard(Colors.RED) {
             @Override
             public List<Set<Point>> getConnectedSets() {
@@ -77,7 +76,14 @@ class MeteorSwarmCardTest {
                 return true;
             }
         };
-        meteorSwarmCard = new MeteorSwarmCard(game,  safeProjectiles);
+
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoard;
+            }
+        };
+
+        meteorSwarmCard = new MeteorSwarmCard(game,  Level.SECOND, safeProjectiles);
         meteorSwarmCard.initialize();
     }
 

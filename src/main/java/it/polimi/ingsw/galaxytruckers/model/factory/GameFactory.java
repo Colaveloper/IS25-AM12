@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.factory;
 
 import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.util.Set;
 
 public abstract class GameFactory {
-    public abstract Deck createDeck() throws IOException;
+    public abstract Deck createDeck(Game game) throws IOException;
     public abstract FlightBoard createFlightBoard(Set<ShipBoard> allShips);
     public abstract ShipBoard createShipBoard(Colors color);
     public abstract GameState createFirstGameState();

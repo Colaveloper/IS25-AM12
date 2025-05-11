@@ -44,7 +44,6 @@ class AbandonedStationCardTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game(Level.SECOND);
         displacedShips = new ArrayList<>();
 
         goodsWon = new HashMap<>();
@@ -151,13 +150,24 @@ class AbandonedStationCardTest {
             }
         };
 
-        abandonedStationCard = new AbandonedStationCard(game, goodsWon, 2, 1);
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoard;
+            }
+        };
+
+        abandonedStationCard = new AbandonedStationCard(game, Level.SECOND, goodsWon, 2, 1);
         abandonedStationCard.initialize();
     }
 
     @Test
     void noneCanLand() {
-        abandonedStationCard = new AbandonedStationCard(game, goodsWon, 2, 1);
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoardOfLosers;
+            }
+        };
+        abandonedStationCard = new AbandonedStationCard(game, Level.SECOND, goodsWon, 2, 1);
         abandonedStationCard.initialize();
         testState = abandonedStationCard.nextStep();
         assertInstanceOf(DrawCardState.class, testState);

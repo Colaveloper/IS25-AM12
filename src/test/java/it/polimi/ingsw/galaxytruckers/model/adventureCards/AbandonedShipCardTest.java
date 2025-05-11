@@ -12,10 +12,7 @@ import it.polimi.ingsw.galaxytruckers.model.state.RemoveCrewState;
 import javafx.scene.image.Image;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,7 +31,6 @@ class AbandonedShipCardTest {
     int flightDaysLost = 1;
 
     void setup(ShipBoard ship1, ShipBoard ship2) {
-        game = new Game(Level.SECOND);
         // setting up ships and flightboard
         ships = new ArrayList<>();
         ships.add(ship1);
@@ -72,8 +68,14 @@ class AbandonedShipCardTest {
 
         };
 
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoard;
+            }
+        };
+
         // creating card
-        card = new AbandonedShipCard(game, creditPrize,requiredCrew,flightDaysLost);
+        card = new AbandonedShipCard(game, Level.SECOND, creditPrize,requiredCrew,flightDaysLost);
         card.initialize();
     }
 

@@ -13,9 +13,11 @@ import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,10 +29,21 @@ class OpenSpaceCardTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game(Level.SECOND);
         ships = new ArrayList<>();
-        ships.add(new SecondShipBoard(Colors.BLUE));
-        ships.add(new SecondShipBoard(Colors.RED));
+        // non-zero engine power required, otherwise the ships are required to give up
+        ShipBoard ship1 = new SecondShipBoard(Colors.RED) {
+            @Override
+            public int getEnginePower(){
+                return 1;
+            }
+        };
+        ShipBoard ship2 = new SecondShipBoard(Colors.BLUE) {
+            @Override
+            public int getEnginePower(){
+                return 1;
+            }
+        };
+        ships.addAll(List.of(ship1, ship2));
         FlightBoard flightBoardStub = new FlightBoard(null) {
             @Override
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
@@ -57,8 +70,14 @@ class OpenSpaceCardTest {
                 return ships;
             }
         };
-        // TODO: fix this
-        openSpaceCard = new OpenSpaceCard(game);
+
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoardStub;
+            }
+        };
+
+        openSpaceCard = new OpenSpaceCard(game, Level.SECOND);
         openSpaceCard.initialize();
     }
 
@@ -78,4 +97,6 @@ class OpenSpaceCardTest {
 
         assertInstanceOf(DrawCardState.class, testState);
     }
+
+    // TODO: add test for when a ship doesn't have any engine power
 }

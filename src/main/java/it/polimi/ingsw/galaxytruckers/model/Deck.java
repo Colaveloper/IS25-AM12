@@ -86,11 +86,13 @@ public abstract class Deck {
                 card = switch (type) {
                     case "planets" -> new PlanetsCard(
                             game,
+                            level,
                             parsePlanets(node.get("planets")),
                             node.get("flight day loss").asInt()
                     );
                     case "pirates" -> new PiratesCard(
                             game,
+                            level,
                             node.get("firePowerThreshold").asInt(),
                             node.get("credits").asInt(),
                             node.get("flight day loss").asInt(),
@@ -98,6 +100,7 @@ public abstract class Deck {
                     );
                     case "smugglers" -> new SmugglersCard(
                             game,
+                            level,
                             node.get("penalty").asInt(),
                             node.get("cannons").asInt(),
                             parseGoods(node.get("storage")),
@@ -105,6 +108,7 @@ public abstract class Deck {
                     );
                     case "slavers" -> new SlaversCard(
                             game,
+                            level,
                             node.get("penalty").asInt(),
                             node.get("cannons").asInt(),
                             node.get("credits").asInt(),
@@ -112,32 +116,39 @@ public abstract class Deck {
                     );
                     case "meteors" -> new MeteorSwarmCard(
                             game,
+                            level,
                             parseProjectiles(node.get("meteors"))
                     );
                     case "epidemic" -> new EpidemicCard(
-                            game
+                            game,
+                            level
                     );
                     case "stardust" -> new StarDustCard(
-                            game
+                            game,
+                            level
                     );
                     case "abandonedShip" -> new AbandonedShipCard(
                             game,
+                            level,
                             node.get("credits").asInt(),
                             node.get("people").asInt(),
                             node.get("flight day loss").asInt()
                     );
                     case "abandonedStation" -> new AbandonedStationCard(
                             game,
+                            level,
                             parseGoods(node.get("storage")),
                             node.get("people").asInt(),
                             node.get("flight day loss").asInt()
                     );
                     case "warzone" -> new CombatZoneCard(
                             game,
+                            level,
                             parseChecks(node.path("checks")),
                             parsePenalties(node.path("penalties"), node));
                     case "open space" -> new OpenSpaceCard(
-                            game
+                            game,
+                            level
                     );
                     default -> throw new IllegalArgumentException("Unknown card type: " + type);
                 };

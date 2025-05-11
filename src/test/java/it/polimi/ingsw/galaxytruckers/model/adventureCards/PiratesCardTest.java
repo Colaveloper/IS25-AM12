@@ -19,7 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 class PiratesCardTest {
-    Game game = new Game(Level.SECOND);
+    Game game;
     PiratesCard piratesCard;
     List<ShipBoard> ships;
     int firePowerThreshold;
@@ -110,8 +110,13 @@ class PiratesCardTest {
                 }
             });
         }
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoardStub;
+            }
+        };
         piratesCard = new PiratesCard(game,
-                firePowerThreshold,creditPrize,flightDaysLost,new ArrayList<>(projectiles));
+                Level.SECOND, firePowerThreshold,creditPrize,flightDaysLost,new ArrayList<>(projectiles));
         piratesCard.initialize();
     }
 

@@ -11,8 +11,8 @@ public class SecondDeck extends Deck{
     private final List<List<AdventureCard>> forecastDecks;
     private final List<AdventureCard> hiddenDeck;
 
-    public SecondDeck() throws IOException {
-        super(Set.of(Level.TEST, Level.FIRST, Level.SECOND));
+    public SecondDeck(Game game) throws IOException {
+        super(game);
         List<AdventureCard> easyCards = relevantCards.stream()
                 .filter(c -> c.getCardLevel() == Level.TEST || c.getCardLevel() == Level.FIRST)
                 .limit(4)

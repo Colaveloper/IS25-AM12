@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SlaversCardTest {
 
-    Game game = new Game(Level.SECOND);
+    Game game;
     SlaversCard slaversCard;
     FlightBoard flightBoard;
     FlightBoard flightBoardOfLosers;
@@ -145,8 +145,13 @@ class SlaversCardTest {
                 return true;
             }
         };
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoard;
+            }
+        };
 
-        slaversCard = new SlaversCard(game, 1, 1, 1, 1);
+        slaversCard = new SlaversCard(game, Level.SECOND, 1, 1, 1, 1);
         slaversCard.initialize();
     }
 
@@ -188,7 +193,12 @@ class SlaversCardTest {
 
     @Test
     void noneWins() {
-        slaversCard = new SlaversCard(game, 1, 1, 1, 1);
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoardOfLosers;
+            }
+        };
+        slaversCard = new SlaversCard(game, Level.SECOND, 1, 1, 1, 1);
         slaversCard.initialize();
         slaversCard.nextStep();
         slaversCard.nextStep();

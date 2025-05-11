@@ -20,7 +20,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlanetsCardTest {
-    Game game = new Game(Level.SECOND);
+    Game game;
     PlanetsCard planetsCard;
     List<ShipBoard> ships;
     Map<ShipBoard, Integer> shipPlaces;
@@ -65,6 +65,11 @@ class PlanetsCardTest {
             }
 
         };
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoard;
+            }
+        };
         List<Map<GoodsType, Integer>> planets = new ArrayList<>();
         Map<GoodsType, Integer> goodsMap = new HashMap<>();
         goodsMap.put(GoodsType.RED, 2);
@@ -75,7 +80,7 @@ class PlanetsCardTest {
         goodsMap = new HashMap<>();
         goodsMap.put(GoodsType.BLUE, 4);
         planets.add(goodsMap);
-        planetsCard = new PlanetsCard(game, planets, 1);
+        planetsCard = new PlanetsCard(game, Level.SECOND,  planets, 1);
         planetsCard.initialize();
     }
 

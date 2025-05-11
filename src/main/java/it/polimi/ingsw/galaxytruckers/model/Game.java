@@ -47,7 +47,7 @@ public class Game {
      */
     public void start() throws IOException{
         this.flightBoard = gameFactory.createFlightBoard(shipBoards);
-        this.deck = gameFactory.createDeck();
+        this.deck = gameFactory.createDeck(this);
         setCurrentState(gameFactory.createFirstGameState());
     }
 
@@ -103,16 +103,18 @@ public class Game {
     }
 
     public void forceShipsToGiveUp(){
-        // if ship has no crew -> force give up
-        givenUpShips.addAll(
-                shipBoards.stream()
-                        .filter(s -> s.getCrewSize() == 0)
-                        .collect(Collectors.toSet())
-        );
+        if(level != Level.TEST){
+            // if ship has no crew -> force give up
+            givenUpShips.addAll(
+                    shipBoards.stream()
+                            .filter(s -> s.getCrewSize() == 0)
+                            .collect(Collectors.toSet())
+            );
 
-        // if you get lapped -> also force give up
-        givenUpShips.addAll(flightBoard.getLappedShips());
-        flightBoard.removeShips(givenUpShips);
+            // if you get lapped -> also force give up
+            givenUpShips.addAll(flightBoard.getLappedShips());
+            flightBoard.removeShips(givenUpShips);
+        }
     }
 
     public void forceShipToGiveUp(ShipBoard ship){

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SabotageCardTest {
 
-    Game game = new Game(Level.SECOND);
+    Game game;
     SabotageCard sabotageCard;
     FlightBoard flightBoard;
     FlightBoard largerFlightBoard;
@@ -151,8 +151,12 @@ class SabotageCardTest {
                 return true;
             }
         };
-
-        sabotageCard = new SabotageCard (game);
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoard;
+            }
+        };
+        sabotageCard = new SabotageCard (game, Level.SECOND);
         sabotageCard.initialize();
     }
 
@@ -168,7 +172,12 @@ class SabotageCardTest {
 
     @Test
     void otherOrderToCheck() {
-        sabotageCard = new SabotageCard(game);
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return largerFlightBoard;
+            }
+        };
+        sabotageCard = new SabotageCard(game, Level.SECOND);
         sabotageCard.initialize();
         testState = sabotageCard.nextStep();
         assertInstanceOf(DrawCardState.class, testState);

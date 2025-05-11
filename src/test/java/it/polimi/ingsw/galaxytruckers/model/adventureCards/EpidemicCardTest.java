@@ -34,7 +34,6 @@ class EpidemicCardTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game(Level.SECOND);
         ships = new ArrayList<>();
 
         testCabins = new HashMap<>();
@@ -119,7 +118,13 @@ class EpidemicCardTest {
             }
         };
 
-        epidemicCard = new EpidemicCard(game);
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoard;
+            }
+        };
+
+        epidemicCard = new EpidemicCard(game, Level.SECOND);
         epidemicCard.initialize();
 
     }

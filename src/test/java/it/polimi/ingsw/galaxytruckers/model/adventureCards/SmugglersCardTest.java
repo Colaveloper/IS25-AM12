@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SmugglersCardTest {
 
-    Game game = new Game(Level.SECOND);
+    Game game;
     SmugglersCard smugglersCard;
     FlightBoard flightBoard;
     FlightBoard flightBoardOfLosers;
@@ -144,8 +144,13 @@ class SmugglersCardTest {
                 return true;
             }
         };
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoard;
+            }
+        };
 
-        smugglersCard = new SmugglersCard(game, 1, 1, goodsWon, 1);
+        smugglersCard = new SmugglersCard(game, Level.SECOND, 1, 1, goodsWon, 1);
         smugglersCard.initialize();
     }
 
@@ -191,7 +196,12 @@ class SmugglersCardTest {
 
     @Test
     void noneWins() {
-        smugglersCard = new SmugglersCard(game, 1, 1, goodsWon, 1);
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoardOfLosers;
+            }
+        };
+        smugglersCard = new SmugglersCard(game, Level.SECOND, 1, 1, goodsWon, 1);
         smugglersCard.initialize();
         smugglersCard.nextStep();//activate (but doesn't lose)
         smugglersCard.nextStep();//activate

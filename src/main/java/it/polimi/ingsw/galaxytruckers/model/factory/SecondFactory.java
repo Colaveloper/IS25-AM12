@@ -12,8 +12,8 @@ import java.util.Set;
 
 public class SecondFactory extends GameFactory{
     @Override
-    public Deck createDeck() throws IOException {
-        return new SecondDeck();
+    public Deck createDeck(Game game) throws IOException {
+        return new SecondDeck(game);
     }
 
     @Override

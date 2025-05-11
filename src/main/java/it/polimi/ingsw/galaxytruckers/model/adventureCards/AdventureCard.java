@@ -10,11 +10,13 @@ public abstract class AdventureCard {
     protected int currentPlayerIndex;
     protected ShipBoard currentShipBoard;
     protected FlightBoard flightBoard;
+    protected final Level cardLevel;
     protected final Game game;
 
 
-    protected AdventureCard(Game game) {
+    protected AdventureCard(Game game, Level cardLevel) {
         this.game = game;
+        this.cardLevel = cardLevel;
     }
 
     public void initialize() {
@@ -24,7 +26,7 @@ public abstract class AdventureCard {
     }
 
     public Level getCardLevel() {
-        return game.getLevel();
+        return cardLevel;
     }
 
     public abstract GameState nextStep();

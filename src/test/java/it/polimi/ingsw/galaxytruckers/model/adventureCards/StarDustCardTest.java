@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StarDustCardTest {
 
-    Game game = new Game(Level.SECOND);
+    Game game;
     StarDustCard starDustCard;
     FlightBoard flightBoard;
 
@@ -92,8 +92,13 @@ class StarDustCardTest {
                 return true;
             }
         };
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoard;
+            }
+        };
 
-        starDustCard = new StarDustCard(game);
+        starDustCard = new StarDustCard(game, Level.SECOND);
         starDustCard.initialize();
     }
 

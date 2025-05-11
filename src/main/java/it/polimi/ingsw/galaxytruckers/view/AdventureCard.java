@@ -224,6 +224,7 @@ public class AdventureCard extends Physical {
                 description.add("goods reward: " + describeGoods());
                 break;
             case "warzone":
+                // TODO: warzone card parsing was updated, so this needs fixing
                 flightDaysLost = cardNode.get("flight day loss").asInt(0);
                 crewLost = cardNode.get("crew loss").asInt(0);
                 projectiles = Optional.of(parseProjectiles(cardNode.get("shoots")));

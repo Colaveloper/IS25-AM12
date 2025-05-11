@@ -24,8 +24,8 @@ public class PlanetsCard extends AdventureCard {
     private final int flightDaysLoss;
     private boolean planetChoiceAllowed;
 
-    public PlanetsCard(Game game, List<Map<GoodsType, Integer>> planets, int flightDaysLoss) {
-        super(game);
+    public PlanetsCard(Game game, Level level, List<Map<GoodsType, Integer>> planets, int flightDaysLoss) {
+        super(game, level);
         this.planets = planets;
         this.flightDaysLoss = flightDaysLoss;
     }
