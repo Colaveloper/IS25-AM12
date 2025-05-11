@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
@@ -7,26 +8,26 @@ import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import java.awt.*;
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 class ClientControllerTest {
 
     static VirtualServer server;
     static ClientController controller;
 
-    static List<String> nicknames;
+    static Map<String, Colors> nicknames;
     static int loopLength;
     static List<Integer> startingPositions;
     static Set<Point> shipArea;
     static int coveredComponentsN;
+    static List<Integer> faceUpComponents;
 
     static void setUp() {
-        nicknames = new ArrayList<>();
+        nicknames = new HashMap<>();
         loopLength = 22;
         startingPositions = new ArrayList<>(List.of(2, 4, 5));
+        faceUpComponents = new ArrayList<>();
         shipArea = Set.of(
                 new Point(4, 7), new Point(4, 8), new Point(4, 9),
                 new Point(5, 6), new Point(5, 7), new Point(5, 8), new Point(5, 9),
@@ -40,7 +41,7 @@ class ClientControllerTest {
         server = new VirtualServer() {
             @Override
             public void registerNickname(String myNickname) throws IOException {
-                nicknames.add(myNickname);
+                nicknames.put(myNickname, Colors.RED);
 
                 System.out.println("FAKE SERVER EVENT: successfully registered nickname " + myNickname);
                 controller.setMyNickname(myNickname);
@@ -54,23 +55,41 @@ class ClientControllerTest {
                 new Thread(() -> {
                     try {
                         System.out.println("FAKE SERVER EVENT: successfully created lvl "+level+" game for "+playerN+" players");
-                        controller.showLobbyUpdate(nicknames);
+                        controller.updateLobbyPlayers(nicknames);
                         Thread.sleep(1000);
-                        System.out.println("FAKE SERVER EVENT: another player joined, lobby is complete");
-                        nicknames.add("OtherPlayer1");
-                        controller.setNickname("OtherPlayer1");
-                        controller.showLobbyUpdate(nicknames);
 
-                        controller.setupGame(loopLength, startingPositions, shipArea);
-                        controller.setCoveredComponents(coveredComponentsN);
+
+                        System.out.println("FAKE SERVER EVENT: another player joined, lobby is complete");
+                        nicknames.put("OtherPlayer1", Colors.BLUE);
+                        controller.updateLobbyPlayers(nicknames);
+                        controller.setupGame(loopLength, startingPositions, shipArea, coveredComponentsN);
+
+
+                        System.out.println("FAKE SERVER EVENT: somebody rejected component");
+                        faceUpComponents.add(5);
+                        controller.notifyComponentRejection("OtherPlayer1",5, faceUpComponents);
+
+
+                        System.out.println("FAKE SERVER EVENT: somebody rejected component");
+                        faceUpComponents.add(6);
+                        controller.notifyComponentRejection("OtherPlayer1",6, faceUpComponents);
 
                         //Thread.sleep(3000);
-                        System.out.println("FAKE SERVER EVENT: somebody took a covered component");
-                        controller.setCoveredComponents(--coveredComponentsN);
+                        System.out.println("FAKE SERVER EVENT: you took a covered component");
+                        controller.notifyFaceDownComponentRequest("qwe", 5, --coveredComponentsN);
 
-                        controller.showComponentPositioning("Roborbio", 5, 4, new Point(6, 7));
-                        controller.showComponentPositioning("Roborbio", 6, 4, new Point(5, 7));
+
+                        System.out.println("FAKE SERVER EVENT: you took a face up component");
+                        faceUpComponents.remove(1);
+                        controller.notifyFaceUpComponentRequest("qwe", 6, faceUpComponents);
+
+
+                        System.out.println("FAKE SERVER EVENT: somebody placed a component");
+                        controller.showComponentPositioning("qwe", 5, 4, new Point(6, 7));
+                        controller.showComponentPositioning("qwe", 6, 4, new Point(5, 7));
                         controller.showComponentPositioning("OtherPlayer1", 6, 4, new Point(5, 7));
+
+                        controller.showPlayerToPlaceUpdate(Map.of("qwe", 2, "OtherPlayer1", 4));
                     } catch (InterruptedException | IOException e) {
                         Thread.currentThread().interrupt();
                     }
@@ -80,8 +99,7 @@ class ClientControllerTest {
             @Override
             public void requestRandComponent() throws IOException {
                 System.out.println("FAKE SERVER EVENT: you took a covered component");
-                controller.setCoveredComponents(--coveredComponentsN);
-                controller.setCurrentComponent(new Random().nextInt(30) + 1);
+                controller.notifyFaceDownComponentRequest("qwe", 6, --coveredComponentsN);
             }
 
             @Override
@@ -148,6 +166,7 @@ class ClientControllerTest {
 
     public static void main(String[] args) throws IOException {
         setUp();
+        System.out.println("use this nickname or it breaks: qwe");
         controller.showInterfaceChoice(server);
     }
 }

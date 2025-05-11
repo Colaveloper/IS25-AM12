@@ -52,12 +52,11 @@ public class ComponentBank extends Physical {
         revealedComponents.remove(new Component(0, componentId));
     }
 
-    public void removeStashedComponent(int componentId) throws IOException {
-        stashedComponents.remove(new Component(0, componentId));
-    }
-
-    public void stashComponent(int componentId) throws IOException {
-        stashedComponents.add(new Component(0, componentId));
+    public void setRevealedComponents(List<Integer> components) throws IOException {
+        revealedComponents.clear();
+        for (Integer componentId : components) {
+            revealedComponents.add(new Component(0, componentId));
+        }
     }
 
     public void setCoveredComponentN(int coveredComponentsN) {
@@ -74,7 +73,7 @@ public class ComponentBank extends Physical {
     }
 
     public void clearCurrentComponent() {
-        currentComponent = null;
+        currentComponent.set(new Component(ComponentType.EMPTY_AREA));
     }
 
     public IntegerProperty coveredComponentNProperty() {

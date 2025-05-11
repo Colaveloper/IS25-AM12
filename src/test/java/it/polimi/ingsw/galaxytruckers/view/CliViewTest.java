@@ -45,7 +45,7 @@ class CliViewTest {
         model.setCurrentCard(3);
         model.setProjectile(ProjectileType.BIGFIRE, 1, 7);
         for (int i = 0 ; i < 10 ; i++) {
-            model.addRevealedComponent(i);
+            //model.addRevealedComponent(i);
         }
         model.setStashedComponents(new ArrayList<>(List.of(4, 8)));
         model.setCurrentComponent(3);

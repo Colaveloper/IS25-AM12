@@ -27,6 +27,7 @@ public class CliView implements View, ChangeListener {
             shipboard.setChangeListener(this);
         }
         model.getAllShips().setChangeListener(this);
+        model.getFlightBoard().setChangeListener(this);
     }
 
     @Override

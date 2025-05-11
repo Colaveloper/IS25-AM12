@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ClientModel {
-    private List<String> nicknames;
     private String currentPlayerNickname;
     private String myNickname;
     private final LinkedHashMap<String, Shipboard> playerToShip;        // need order to be always the same
@@ -65,7 +64,9 @@ public class ClientModel {
         flightBoard.setStartingPositionLeft(startingPositions);
     }
 
-    public void setPlayerColor(String nickname, Colors color) {playerToColor.put(nickname, color);}
+    public void setPlayerColor(String nickname, Colors color) {
+        playerToColor.putIfAbsent(nickname, color);
+    }
 
     public void setMyNickname(String myNickname) {
         this.myNickname = myNickname;
@@ -81,12 +82,9 @@ public class ClientModel {
         // SHIP BUILDING PHASE
 
             // COMPONENT BANK
-    public void addRevealedComponent(int componentId) throws IOException {
-        componentBank.addRevealedComponent(componentId);
-    }
 
-    public void removeRevealedComponent(int componentId) throws IOException {
-        componentBank.removeStashedComponent(componentId);
+    public void setRevealedComponent(List<Integer> components) throws IOException {
+        componentBank.setRevealedComponents(components);
     }
 
     public void setStashedComponents(List<Integer> stashedComponentIds) throws IOException {
@@ -138,6 +136,10 @@ public class ClientModel {
 
     public boolean isMyTurn() {
         return currentPlayerNickname != null && currentPlayerNickname.equals(myNickname);
+    }
+
+    public boolean isMyNickname(String nickname) {
+        return myNickname.equals(nickname);
     }
 
     public void setBatteries(String nickname, Point position, int totalBatteries) throws IOException {
@@ -240,16 +242,12 @@ public class ClientModel {
     }
 
     public void addPlayer(String nickname) {
-        playerToShip.put(nickname, new Shipboard());
+        playerToShip.putIfAbsent(nickname, new Shipboard());
         allShips.addPlayer(playerToShip.get(nickname)); // to add the listener
     }
 
     public List<String> getNicknames() {
-        return nicknames;
-    }
-
-    public void setNicknames(List<String> nicknames) {
-        this.nicknames = nicknames;
+        return new ArrayList<>(playerToShip.keySet());
     }
 
     public boolean existsUnwelded() {

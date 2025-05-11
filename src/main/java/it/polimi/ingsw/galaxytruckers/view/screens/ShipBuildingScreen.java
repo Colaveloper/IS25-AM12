@@ -11,6 +11,7 @@ public class ShipBuildingScreen implements ScreenStrategy {
 
     @Override
     public void showCLI(ClientModel model) {
+        model.getFlightBoard().getDescription().forEach(System.out::println);
         model.getComponentBank().getDescription().forEach(System.out::println);
         model.getAllShips().getDescription().forEach(System.out::println);
 

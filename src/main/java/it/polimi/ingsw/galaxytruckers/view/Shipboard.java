@@ -94,9 +94,6 @@ public class Shipboard extends Physical{
     }
 
     public void setComponent(Point position, int direction, int componentId) throws IOException {
-//        ObjectProperty<Component> component = new SimpleObjectProperty<>(new Component(direction, componentId));
-//        super.registerObservables(component);
-//        component.get().setChangeListener(this);
         componentMatrix.get(position.y-upLeft.y).get(position.x-upLeft.x).set(new Component(direction, componentId));
         componentMatrix.get(position.y-upLeft.y).get(position.x-upLeft.x).get().setChangeListener(this);
         lastPosition = position;

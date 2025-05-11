@@ -17,31 +17,23 @@ public interface ClientControllerInterface {
 
     void showGameCreation() throws IOException;
 
-    void showLobbyUpdate(List<String> names) throws IOException;
+    void updateLobbyPlayers(Map<String, Colors> playerToColor) throws IOException;
 
     void showConnectedAndNicknameChoice(String tempNickname) throws IOException;
 
     void setMyNickname(String nickname);
 
-    void setNickname(String nickname);
-
-    void showColorSelection(String nickname, Colors color);
-
-    void setFlightBoard(int loopLength, List<Integer> startingPositions) throws IOException;
-
-    void setCurrentComponent(int componentId) throws IOException;
-
-    void showStashUpdate(List<Integer> stashedComponentIds) throws IOException;
+    void notifyStashComponent(String playerName, List<Integer> stashComponentIds) throws IOException;
 
     void showStartBuilding(int coveredComponentsTot) throws IOException;
 
     void showComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException;
 
-    void showUncoveredUpdate(List<Integer> uncoveredComponentIds, int coveredComponents);
+    void notifyComponentRejection(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException;
 
-    void addReavealedComponent(int componentId) throws IOException;
+    void notifyFaceDownComponentRequest(String playerName, int componentId, int numFaceDown) throws IOException;
 
-    void setCoveredComponents(int coveredComponents) throws IOException;
+    void notifyFaceUpComponentRequest(String playerName, int componentId, List<Integer> faceup) throws IOException;
 
     void showForecast(List<Integer> cardsIds);
 
@@ -65,7 +57,7 @@ public interface ClientControllerInterface {
 
     void updateLostComponent(String nickname, int componentsLost) throws IOException;
 
-    void showNewCard(Integer cardId) throws IOException;
+    void showNewCard(int cardId) throws IOException;
 
     // first time goods are shown on screen
     void showPlaceGoods() throws IOException;

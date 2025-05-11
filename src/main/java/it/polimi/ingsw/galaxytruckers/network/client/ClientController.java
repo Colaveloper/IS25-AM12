@@ -55,8 +55,11 @@ public class ClientController implements ClientControllerInterface {
     }
 
     @Override
-    public void showLobbyUpdate(List<String> names) throws IOException {
-        model.setNicknames(names);
+    public void updateLobbyPlayers(Map<String, Colors> playerToColor) throws IOException {
+        for (Map.Entry<String, Colors> entry : playerToColor.entrySet()) {
+            model.setPlayerColor(entry.getKey(), entry.getValue());
+            model.addPlayer(entry.getKey());
+        }
         view.setScreen(new LobbyScreen());
     }
 
@@ -71,43 +74,24 @@ public class ClientController implements ClientControllerInterface {
         model.setMyNickname(nickname);
     }
 
-    @Override
-    public void setNickname(String nickname) {
-        model.addPlayer(nickname);
-    }
-
-    @Override
-    public void showColorSelection(String nickname, Colors color) {
-    }
-
-    @Override
-    public void setFlightBoard(int loopLength, List<Integer> startingPositions) throws IOException {
-
-    }
-
     // integrate with following method
 //    public void showColorSelection(String nickname, Colors color) {
 //        model.setPlayerColor(nickname, color);
 //        // view.show(ChosenStrategy)
 //    }
 
-    public void setupGame(int loopLength, List<Integer> startingPositions, Set<Point> shipArea) throws IOException {
+    public void setupGame(int loopLength, List<Integer> startingPositions, Set<Point> shipArea, int coveredComponent) throws IOException {
         model.setFlightBoard(loopLength, startingPositions);
         model.setShipArea(shipArea);
+        model.setCoveredComponents(coveredComponent);
         view.setScreen(new ShipBuildingScreen());
     }
 
     // UPDATE FOR SHIP BUILDING
 
     @Override
-    public void setCurrentComponent(int componentId) throws IOException {
-        model.setCurrentComponent(componentId);
-    }
-
-    @Override
-    public void showStashUpdate(List<Integer> stashedComponentIds) throws IOException {
-        model.setStashedComponents(stashedComponentIds);
-        // view.show(ChosenStrategy)
+    public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) throws IOException {
+        model.setStashedComponents(stashComponentIds);//todo: add for other players
     }
 
     @Override
@@ -122,19 +106,29 @@ public class ClientController implements ClientControllerInterface {
     }
 
     @Override
-    public void showUncoveredUpdate(List<Integer> uncoveredComponentIds, int coveredComponents) {
-
+    public void notifyComponentRejection(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException {
+        if (model.isMyNickname(playerName)) {//TODO add for other players
+            model.clearCurrentComponent();
+        }
+        model.setRevealedComponent(faceUpComponentIds);
     }
 
     @Override
-    public void addReavealedComponent(int componentId) throws IOException {
-
+    public void notifyFaceDownComponentRequest(String playerName, int componentId, int numFaceDown) throws IOException {
+        if (model.isMyNickname(playerName)) {//TODO add for other players
+            model.setCurrentComponent(componentId);
+        }
+        model.setCoveredComponents(numFaceDown);
     }
 
     @Override
-    public void setCoveredComponents(int coveredComponentsN) {
-        model.setCoveredComponents(coveredComponentsN);
+    public void notifyFaceUpComponentRequest(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException {
+        if (model.isMyNickname(playerName)) {//TODO add for other players
+            model.setCurrentComponent(componentId);
+        }
+        model.setRevealedComponent(faceUpComponentIds);
     }
+
 
     @Override
     public void showForecast(List<Integer> cardsIds) {
@@ -205,9 +199,9 @@ public class ClientController implements ClientControllerInterface {
     // UPDATE FOR ADVENTURE
 
     @Override
-    public void showNewCard(Integer cardId) throws IOException {
+    public void showNewCard(int cardId) throws IOException {
         model.setCurrentCard(cardId);
-        model.setCurrentPlayerNickname(model.getCurrentLeader()); // TODO: mmm
+        model.setCurrentPlayerNickname(model.getCurrentLeader());
         view.setScreen(new NewCardScreen());
     }
 
