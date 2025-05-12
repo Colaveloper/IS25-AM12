@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.*;
 import it.polimi.ingsw.galaxytruckers.view.screens.*;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;

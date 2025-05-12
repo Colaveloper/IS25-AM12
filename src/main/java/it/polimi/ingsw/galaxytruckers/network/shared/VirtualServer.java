@@ -1,8 +1,6 @@
-package it.polimi.ingsw.galaxytruckers.network.client;
+package it.polimi.ingsw.galaxytruckers.network.shared;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.network.shared.EventListener;
-import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
 
 import java.awt.*;
 import java.io.IOException;

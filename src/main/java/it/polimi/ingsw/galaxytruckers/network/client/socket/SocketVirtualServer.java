@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.network.client.socket;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.shared.ClientRequest;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
-import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 
 import java.awt.*;
 import java.io.IOException;
