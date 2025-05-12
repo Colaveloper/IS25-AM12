@@ -1,6 +1,8 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.gui;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.View;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;
 import javafx.application.Application;
 import javafx.application.Platform;

@@ -1,16 +1,24 @@
 package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliComponentBank;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.scene.layout.Pane;
 
 import java.awt.*;
 import java.io.IOException;
 
 public class ShipBuildingScreen implements ScreenStrategy {
+    CliComponentBank componentBank;
+
+    public ShipBuildingScreen(ClientModel model) {
+        componentBank = new CliComponentBank(model);
+    }
 
     @Override
     public void showCLI(ClientModel model) {
+
+        componentBank.getDescription().forEach(System.out::println);
         model.getFlightBoard().getDescription().forEach(System.out::println);
         model.getComponentBank().getDescription().forEach(System.out::println);
         model.getAllShips().getDescription().forEach(System.out::println);

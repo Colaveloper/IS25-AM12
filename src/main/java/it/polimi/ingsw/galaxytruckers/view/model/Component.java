@@ -1,16 +1,13 @@
-package it.polimi.ingsw.galaxytruckers.view.shipBuildingClient;
+package it.polimi.ingsw.galaxytruckers.view.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import javafx.beans.property.*;
-import javafx.collections.ObservableList;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.AbstractMap;
 import java.util.List;
 
 public class Component {

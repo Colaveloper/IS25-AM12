@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliElement;
 import javafx.collections.FXCollections;
 import javafx.scene.Node;
 

@@ -1,22 +1,12 @@
-package it.polimi.ingsw.galaxytruckers.view.shipBuildingClient;
+package it.polimi.ingsw.galaxytruckers.view.cli;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.CliElement;
+import it.polimi.ingsw.galaxytruckers.view.model.Component;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
-import javafx.animation.RotateTransition;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.util.Duration;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

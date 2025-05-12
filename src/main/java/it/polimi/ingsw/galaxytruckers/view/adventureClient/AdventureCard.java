@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.CliElement;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliElement;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

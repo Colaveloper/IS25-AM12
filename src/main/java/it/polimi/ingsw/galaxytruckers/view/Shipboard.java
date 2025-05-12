@@ -1,7 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.CliComponent;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliComponent;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliElement;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;

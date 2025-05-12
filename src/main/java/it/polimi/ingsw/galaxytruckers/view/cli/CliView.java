@@ -1,6 +1,10 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.cli;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.ChangeListener;
+import it.polimi.ingsw.galaxytruckers.view.Shipboard;
+import it.polimi.ingsw.galaxytruckers.view.View;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;
 
 import java.io.IOException;

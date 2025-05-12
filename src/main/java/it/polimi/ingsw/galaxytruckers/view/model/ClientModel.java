@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.model;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -6,12 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.adventureClient.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.view.CurrentProjectile;
-import it.polimi.ingsw.galaxytruckers.view.adventureClient.GoodsBuffer;
-import it.polimi.ingsw.galaxytruckers.view.adventureClient.Planets;
-import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.CliComponent;
-import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.Component;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import javafx.beans.property.*;
 
@@ -36,7 +31,7 @@ public class ClientModel {
     private final List<Component> revealedComponents;
     private final IntegerProperty coveredComponentN;
     private final Map<Colors, List<Component>> stashedComponents;
-    private final Map<Colors, Component> hands; // (former current component)
+    private final Map<Colors, ObjectProperty<Component>> hands; // (former current component)
     private CliComponent unweldedComponent;
 
     // FLIGHTBOARD
@@ -125,7 +120,7 @@ public class ClientModel {
     }
 
     public void setComponentInHand(String nickname, int componentInHandId) throws IOException {
-        hands.put(playerToColor.get(nickname), new Component(componentInHandId));
+        hands.put(playerToColor.get(nickname), new SimpleObjectProperty<>(new Component(componentInHandId)));
     }
 
     public void clearComponentInHand() {
@@ -212,7 +207,7 @@ public class ClientModel {
     }
 
     public void rotateCurrentComponentLeft() {
-        hands.get(playerToColor.get(myNickname)).rotateLeft();
+        hands.get(playerToColor.get(myNickname)).get().rotateLeft();
     }
 
         // OTHER
@@ -239,5 +234,16 @@ public class ClientModel {
 
     public void addPlayer(String nickname) {
         ships.put(playerToColor.get(nickname), new HashMap<>());
+    }
+
+
+    // GETTERS
+
+    public IntegerProperty coveredComponentNProperty() {
+        return coveredComponentN;
+    }
+
+    public ObjectProperty<Component> currentComponentProperty() {
+        return hands.get(playerToColor.get(myNickname));
     }
 }

@@ -13,7 +13,7 @@
 //
 //public class AdventureCardTestInitializer {
 //    protected CliComponent component;
-//    protected ComponentBank componentBank = new ComponentBank() {
+//    protected CliComponentBank componentBank = new CliComponentBank() {
 //        @Override
 //        public CliComponent getRanComponent() {
 //            return component;

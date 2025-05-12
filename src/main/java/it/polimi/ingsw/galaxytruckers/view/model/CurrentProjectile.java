@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.model;
 
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.CliElement;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliElement;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import javafx.scene.Node;
 

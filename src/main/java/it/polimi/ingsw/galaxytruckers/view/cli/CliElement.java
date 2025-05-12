@@ -1,9 +1,8 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.cli;
 
-import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.ChangeListener;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.beans.Observable;
-import javafx.scene.Node;
-import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,9 +10,14 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class CliElement implements ChangeListener {
+    ClientModel model;
     private final AtomicBoolean dirty = new AtomicBoolean(true);
     protected final List<String> descriptionCache = new ArrayList<>();
     private ChangeListener listener;
+
+    public CliElement(ClientModel model) {
+        this.model = model;
+    }
 
     protected void registerObservables(Observable... observables) {
         for (Observable o : observables) {

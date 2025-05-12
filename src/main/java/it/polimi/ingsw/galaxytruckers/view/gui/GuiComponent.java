@@ -1,7 +1,6 @@
-package it.polimi.ingsw.galaxytruckers.view.shipBuildingClient;
+package it.polimi.ingsw.galaxytruckers.view.gui;
 
-import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.GuiElement;
+import it.polimi.ingsw.galaxytruckers.view.model.Component;
 import javafx.animation.RotateTransition;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -18,7 +17,7 @@ public class GuiComponent extends GuiElement {
     }
 
     @Override
-    public Node getNode(VirtualServer server) {
+    public Node getNode() {
         Image image = new Image(imagePath);
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(50);

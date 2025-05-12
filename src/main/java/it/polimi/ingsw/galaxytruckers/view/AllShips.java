@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliElement;
 import javafx.scene.Node;
 
 import java.util.ArrayList;

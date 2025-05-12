@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.CliElement;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliElement;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
