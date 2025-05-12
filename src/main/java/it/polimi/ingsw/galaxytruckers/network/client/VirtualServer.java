@@ -1,6 +1,7 @@
-package it.polimi.ingsw.galaxytruckers.network.shared;
+package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.network.shared.EventListener;
 
 import java.io.IOException;
 import java.rmi.RemoteException;

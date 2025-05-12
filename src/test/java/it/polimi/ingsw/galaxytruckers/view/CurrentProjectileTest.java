@@ -1,12 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.network.client.rmi.RmiClient;
-import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
