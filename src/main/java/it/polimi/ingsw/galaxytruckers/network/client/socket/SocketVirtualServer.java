@@ -3,11 +3,10 @@ package it.polimi.ingsw.galaxytruckers.network.client.socket;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.shared.ClientRequest;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
-import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.rmi.RemoteException;
 
 public class SocketVirtualServer implements VirtualServer {

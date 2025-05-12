@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Player {
@@ -93,5 +94,16 @@ public class Player {
                 shipToPlayer.put(shipBoard, this);
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Player player)) return false;
+        return Objects.equals(nickname, player.nickname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(nickname);
     }
 }

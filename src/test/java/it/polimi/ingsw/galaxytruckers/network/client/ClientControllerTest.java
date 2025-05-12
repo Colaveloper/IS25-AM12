@@ -2,12 +2,7 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
-import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.GuiView;
-import javafx.application.Application;
-import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 
 import java.io.IOException;
 import java.rmi.RemoteException;

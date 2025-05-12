@@ -1,33 +1,27 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class EventQueue {
-    private static EventQueue instance;
+public class EventQueue implements EventListener {
+    private final BlockingQueue<Event> queue = new LinkedBlockingQueue<>();
 
-    private final Queue<Event> queue;
-
-    public synchronized static EventQueue getInstance() {
-        if (instance == null) {
-            instance = new EventQueue();
+    @Override
+    public void notify(Event event) {
+        if (!enqueue(event)) {
+            throw new IllegalStateException("Queue is full");
         }
-        return instance;
-    }
-
-    private EventQueue() {
-        this.queue = new ArrayDeque<>();
     }
 
     public synchronized boolean isEmpty() {
         return queue.isEmpty();
     }
 
-    public synchronized void enqueue(Event event) {
-        this.queue.add(event);
+    public synchronized boolean enqueue(Event event) {
+        return this.queue.offer(event);
     }
 
-    public synchronized Event dequeue() {
-        return this.queue.poll();
+    public synchronized Event dequeue() throws InterruptedException {
+        return this.queue.take();
     }
 }

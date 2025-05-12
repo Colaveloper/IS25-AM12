@@ -1,12 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
-import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
