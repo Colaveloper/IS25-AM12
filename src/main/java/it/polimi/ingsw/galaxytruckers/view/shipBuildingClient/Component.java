@@ -34,7 +34,7 @@ public class Component {
     private final IntegerProperty stat;
     private final ObjectProperty<List<GoodsType>> cargo;
 
-    Component(int componentId) {
+    public Component(int componentId) {
         this.componentId = componentId;
         isSelectable = new SimpleBooleanProperty(false);
         direction = new SimpleIntegerProperty(0);
@@ -76,6 +76,16 @@ public class Component {
         this.stat.set(stat);
     }
 
+    public void setDirection(int direction) {
+        this.direction.set(direction);
+    }
+
+    public void rotateLeft() {
+        direction.setValue((direction.get()+3)%4);
+    }
+
+    public void setGoods(List<GoodsType> goods) {this.cargo.set(goods);}
+
     public void setCrewType(CrewType crewType) {
         this.crewType.set(crewType);
         switch (crewType) {
@@ -88,7 +98,4 @@ public class Component {
         }
     }
 
-    public void rotateLeft() {
-        direction.setValue((direction.get()+3)%4);
-    }
 }

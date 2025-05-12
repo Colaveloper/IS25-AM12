@@ -58,7 +58,6 @@ public class ClientController implements ClientControllerInterface {
     public void updateLobbyPlayers(Map<String, Colors> playerToColor) throws IOException {
         for (Map.Entry<String, Colors> entry : playerToColor.entrySet()) {
             model.setPlayerColor(entry.getKey(), entry.getValue());
-            model.addPlayer(entry.getKey());    // my nickname already exists and does nothing for me, but adds other players
         }
         view.setScreen(new LobbyScreen());
     }
@@ -206,10 +205,10 @@ public class ClientController implements ClientControllerInterface {
         view.setScreen(new GoodsScreen());
     }
 
-    // planetId is an index and starts from 0, UI listing on screen starts from 1
+    // planetIndex is an index and starts from 0, UI listing on screen starts from 1
     @Override
-    public void choosePlanet(int planetId) throws IOException {
-        model.setPlanetGoodBuffer(planetId);
+    public void choosePlanet(int planetIndex) throws IOException {
+        model.setPlanetGoodBuffer(planetIndex);
     }
 
     // update each time player picks something removing good taken in the buffer by index
