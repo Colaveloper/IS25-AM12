@@ -26,11 +26,20 @@ public abstract class Deck {
     private AdventureCard currentCard;
     protected static String jsonPath = "src/main/resources/cardsReference.json";
 
+    /**
+     * Constructs a new deck by instantiating cards of the correct level.
+     * Loaded cards are shuffled for randomized order.
+     * @param game the game instance from which configuration is used to load the relevant cards
+     * @throws IOException if there is an error loading card data from the JSON file
+     * */
     public Deck(Game game) throws IOException {
         this.relevantCards = loadRelevantCards(game);
         Collections.shuffle(this.relevantCards);
     }
 
+    /**
+     * Returns the current card to be played.
+     * @return the deck's current card*/
     public AdventureCard getCurrentCard() {
         return currentCard;
     }
@@ -61,6 +70,12 @@ public abstract class Deck {
         }
     }
 
+    /**
+     * Loads the cards of the relevant game level from a JSON file into a list.
+     * @param game the game instance from which configuration is used to load the relevant cards
+     * @throws IOException if there is an error loading card data from a JSON file
+     * @return a {@link List} of loaded cards
+     * */
     @VisibleForTesting
     protected static List<AdventureCard> loadRelevantCards(Game game) throws IOException {
         //reading from json file and returning the list of components
@@ -159,6 +174,11 @@ public abstract class Deck {
         return cards;
     }
 
+    /**
+     * Loads projectile information from a JSON file into a list.
+     * @param projectilesNode the JsonNode from which to load the list of projectiles
+     * @return a {@link List} of the loaded projectiles
+     * */
     public static List<Projectile> parseProjectiles(JsonNode projectilesNode) {
         List<Projectile> projectiles = new ArrayList<>();
         int direction = projectilesNode.get(1).asInt();
@@ -181,6 +201,11 @@ public abstract class Deck {
         return projectiles;
     }
 
+    /**
+     * Loads planet information from a JSON file into a list.
+     * @param planetsNode the JsonNode from which to load the list of planets
+     * @return a {@link List} of the loaded planets
+     * */
     public static  List<Map<GoodsType, Integer>> parsePlanets(JsonNode planetsNode) {
         List<Map<GoodsType, Integer>> planets = new ArrayList<>();
         int direction = planetsNode.get(1).asInt();
@@ -194,6 +219,11 @@ public abstract class Deck {
         return planets;
     }
 
+    /**
+     * Loads projectile information from a JSON file into a map.
+     * @param goodsNode the JsonNode from which to load the map of goods
+     * @return a {@link Map} of the loaded goods
+     * */
     public static Map<GoodsType, Integer> parseGoods(JsonNode goodsNode) {
         Map<GoodsType, Integer> goods = new HashMap<>();
         for (GoodsType type : GoodsType.values()) {
