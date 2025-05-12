@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.awt.*;
 import java.util.UUID;
@@ -17,7 +18,7 @@ public interface ServerControllerInterface {
      * @throws IllegalArgumentException if there is already a player
      * with the given nickname
      */
-    void registerNickname(String nickname);
+    Player registerNickname(String nickname);
     /**
      * Creates a new lobby for a game of the chosen level and with
      * the specified number of players, adding the creator to it

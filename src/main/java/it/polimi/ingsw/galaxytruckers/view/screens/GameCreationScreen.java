@@ -67,7 +67,7 @@ public class GameCreationScreen implements ScreenStrategy {
             if (selectedLevel != null && selectedPlayers != null) {
                 try {
                     server.newGame(selectedLevel, selectedPlayers);
-                } catch (IOException ex) {
+                } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
             }

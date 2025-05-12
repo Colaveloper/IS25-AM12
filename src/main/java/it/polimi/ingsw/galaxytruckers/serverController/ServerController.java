@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController;
 
-import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
+import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
@@ -9,18 +9,22 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 
 import java.awt.*;
-import java.rmi.RemoteException;
 import java.util.UUID;
 
 public class ServerController implements ServerControllerInterface {
+    private SessionManager sessionManager;
 
-    public void registerNickname(String nickname) {
-        Player.addPlayer(nickname);
+    public void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
+
+    public Player registerNickname(String nickname) {
+        return Player.addPlayer(nickname);
     }
 
     public UUID newGame(String creatorName, Level level, int numPlayers) {
         Player creator = Player.getPlayer(creatorName);
-        Lobby newLobby = new Lobby(creator, level, numPlayers);
+        Lobby newLobby = new Lobby(creator, level, numPlayers, sessionManager);
         return newLobby.getId();
     }
 

@@ -1,40 +1,25 @@
-//package it.polimi.ingsw.galaxytruckers.network.server;
-//
-//import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;
-//import it.polimi.ingsw.galaxytruckers.network.server.socket.SocketServer;
-//import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
-//import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
-//
-//import java.rmi.RemoteException;
-//
-///**
-// * Questa classe rappresenta la logica del server implementata con tecnologia RMI.
-// */
-//public class ServerMain {
-//    public static void main(String[] args) throws RemoteException {
-//        System.out.println("Congratulations!");
-//        System.out.println("You are now the proud owner of a Galaxy Truckers Server");
-//
-//        // two threads are needed to handle both middlewares
-//
-//        try {
-//
-//            ServerControllerInterface serverController = new ServerController();
-//
-//            Thread rmiThread = new Thread(()-> {
-//                try {
-//                    RmiServer.start(serverController);
-//                } catch (RemoteException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//            Thread socketThread = new Thread(()-> SocketServer.start(serverController));
-//
-//            socketThread.start();
-//            rmiThread.start();
-//
-//        } catch (Exception e) {
-//            System.out.println("The server crashed with the following excuse: " + e.getMessage());
-//        }
-//    }
-//}
+package it.polimi.ingsw.galaxytruckers.network.server;
+
+import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;
+import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
+import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
+
+import java.io.IOException;
+import java.rmi.RemoteException;
+
+public class ServerMain {
+    public static void main(String[] args) {
+        SessionManager sessionManager = new SessionManager();
+        ServerController controller = new ServerController();
+        controller.setSessionManager(sessionManager);
+        RmiServer rmiServer;
+        try {
+            rmiServer = new RmiServer(controller, sessionManager);
+            rmiServer.start("Galaxy-Truckers-Server",1234);
+        } catch (RemoteException e) {
+            System.err.println("Could not start RMI server because of " + e.getMessage());
+        } finally {
+            System.out.println("RMI server has been started...");
+        }
+    }
+}
