@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.shared;
 
 import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
-import it.polimi.ingsw.galaxytruckers.serverController.events.NewCardUpdate;
+import it.polimi.ingsw.galaxytruckers.serverController.events.NewCardEvent;
 
 import java.io.IOException;
 
@@ -13,7 +13,7 @@ public interface EventHandler {
      */
     void handleEvent(Event event); // TODO:
 
-    void handleEvent(NewCardUpdate newCardUpdate) throws IOException;
+    void handleEvent(NewCardEvent newCardEvent) throws IOException;
 
     //TODO : add overloads for all types of events
 }

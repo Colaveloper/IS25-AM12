@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.screens;
 
-import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ClientModel;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;

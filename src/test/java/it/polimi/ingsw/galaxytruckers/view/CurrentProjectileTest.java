@@ -1,7 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
-import it.polimi.ingsw.galaxytruckers.view.adventureClient.CurrentProjectile;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +21,6 @@ class CurrentProjectileTest {
         List<String> expected = List.of(
                 "a big meteor is approaching on row 7 from the left!"
         );
-        assertEquals(expected, currentProjectile.getNewDescription());
+        assertEquals(expected, currentProjectile.getDescription());
     }
 }

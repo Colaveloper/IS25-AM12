@@ -224,7 +224,7 @@ public class AdventureCard extends Physical {
                 crewLost = cardNode.get("crew loss").asInt(0);
                 projectiles = Optional.of(parseProjectiles(cardNode.get("shoots")));
                 actions = Optional.of(new ObjectMapper().convertValue(
-                        cardNode.get("actions"),
+                        cardNode.get("checks"),
                         new TypeReference<List<String>>(){}
                 ));
 

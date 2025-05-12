@@ -1,12 +1,12 @@
-package it.polimi.ingsw.galaxytruckers.network.shared;
+package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.network.shared.EventListener;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
 
 import java.awt.*;
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.UUID;
 
 public interface VirtualServer extends EventListener {
     void reportError(String error) throws RemoteException;
