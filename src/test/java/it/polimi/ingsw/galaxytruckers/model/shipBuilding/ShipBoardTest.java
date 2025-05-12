@@ -51,7 +51,8 @@ class ShipBoardTest {
 
         @Test
         void placeWithIllegalPositionThrowsException() {
-            assertThrows(IllegalStateException.class, () -> shipBoard.placeComponent(new Point(-1,-1),0));
+            shipBoard.offerComponent(componentToAdd);
+            assertThrows(IllegalArgumentException.class, () -> shipBoard.placeComponent(new Point(-1,-1),0));
         }
 
         @Test
@@ -59,6 +60,7 @@ class ShipBoardTest {
             shipBoard.offerComponent(componentToAdd);
             shipBoard.placeComponent(new Point(7,7),0);
             shipBoard.weldLastComponent();
+            shipBoard.offerComponent(componentToAdd);
             assertThrows(IllegalStateException.class, () -> shipBoard.placeComponent(new Point(7,7),0));
         }
 

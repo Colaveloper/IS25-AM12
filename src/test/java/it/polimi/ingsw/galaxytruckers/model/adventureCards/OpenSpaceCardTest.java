@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +82,59 @@ class OpenSpaceCardTest {
         openSpaceCard.initialize();
     }
 
+    void setupShipWithNoEnginePower(){
+        ships = new ArrayList<>();
+        // non-zero engine power required, otherwise the ships are required to give up
+        ShipBoard ship1 = new SecondShipBoard(Colors.RED) {
+            @Override
+            public int getEnginePower(){
+                return 1;
+            }
+        };
+        ShipBoard ship2 = new SecondShipBoard(Colors.BLUE) {
+            @Override
+            public int getEnginePower(){
+                return 0;
+            }
+        };
+        ships.addAll(List.of(ship1, ship2));
+        FlightBoard flightBoardStub = new FlightBoard(null) {
+            @Override
+            public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
+                return false;
+            }
+
+            @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+
+            @Override
+            public void displaceShip(ShipBoard shipBoard, int displacement) {
+
+            }
+
+            @Override
+            public Map<ShipBoard, Integer> getShipToPlace() {
+                return Map.of(ships.get(0),0,ships.get(1),0);
+            }
+
+            @Override
+            public List<ShipBoard> getOrderedShips() {
+                return ships;
+            }
+        };
+
+        game = new Game(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoardStub;
+            }
+        };
+
+        openSpaceCard = new OpenSpaceCard(game, Level.SECOND);
+        openSpaceCard.initialize();
+    }
+
     @Test
     void nextStepWhenThereArePlayersLeftReturnsActivate() {
         GameState testState = openSpaceCard.nextStep();
@@ -99,4 +153,13 @@ class OpenSpaceCardTest {
     }
 
     // TODO: add test for when a ship doesn't have any engine power
+    @Test
+    void shipWithNoEnginePowerIsForcedToGiveUp() throws IOException {
+        setupShipWithNoEnginePower();
+        game.start();
+        openSpaceCard.nextStep();
+        openSpaceCard.nextStep();
+        openSpaceCard.nextStep();
+        assertEquals(Set.of(ships.get(1)), game.getGivenUpShips());
+    }
 }
