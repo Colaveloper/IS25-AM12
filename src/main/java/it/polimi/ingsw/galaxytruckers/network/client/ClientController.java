@@ -91,7 +91,7 @@ public class ClientController implements ClientControllerInterface {
     @Override//Tommy approved
     public void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) throws IOException {
         model.setStashedComponents(stashComponentIds);//todo: add for other players
-        model.setCurrentComponent(componentId);//todo: add for other players
+        model.setComponentInHand(componentId);//todo: add for other players
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ClientController implements ClientControllerInterface {
     @Override//Tommy approved
     public void notifyComponentRejection(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException {
         if (model.isMyNickname(playerName)) {//TODO add for other players
-            model.clearCurrentComponent();
+            model.clearComponentInHand();
         }
         model.setRevealedComponent(faceUpComponentIds);
     }
@@ -110,7 +110,7 @@ public class ClientController implements ClientControllerInterface {
     @Override//Tommy approved
     public void notifyFaceDownComponentRequest(String playerName, int componentId, int numFaceDown) throws IOException {
         if (model.isMyNickname(playerName)) {//TODO add for other players
-            model.setCurrentComponent(componentId);
+            model.setComponentInHand(componentId);
         }
         model.setCoveredComponents(numFaceDown);
     }
@@ -118,7 +118,7 @@ public class ClientController implements ClientControllerInterface {
     @Override//Tommy approved
     public void notifyFaceUpComponentRequest(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException {
         if (model.isMyNickname(playerName)) {//TODO add for other players
-            model.setCurrentComponent(componentId);
+            model.setComponentInHand(componentId);
         }
         model.setRevealedComponent(faceUpComponentIds);
     }
@@ -156,7 +156,7 @@ public class ClientController implements ClientControllerInterface {
 
     @Override//Tommy approved
     public void notifyPlaceShipOnFlightBoard(String nickname, Map<String, Integer> playerToPlace) {
-        model.setPlayerToPlace(playerToPlace);
+        model.setColorToPlace(playerToPlace);
         //todo: show that nickname placed himself on the board
     }
 

@@ -3,15 +3,11 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 
 import java.util.*;
 
-public class FlightBoard extends Physical {
-    private int loopLength;
-    private List<Integer>  startingPositionLeft;
-    private final ObservableMap<Colors, Integer> playerToPlace;
+public class FlightBoard extends CliElement {
 
     public FlightBoard() {
         this.startingPositionLeft = new ArrayList<>();

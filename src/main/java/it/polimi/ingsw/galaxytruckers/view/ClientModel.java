@@ -4,66 +4,90 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.adventureClient.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.adventureClient.CurrentProjectile;
 import it.polimi.ingsw.galaxytruckers.view.adventureClient.GoodsBuffer;
 import it.polimi.ingsw.galaxytruckers.view.adventureClient.Planets;
-import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.ComponentBank;
+import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import javafx.beans.property.*;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ClientModel {
+
+    // META
     private String currentPlayerNickname;
     private String myNickname;
-    private final LinkedHashMap<String, Shipboard> playerToShip;        // need order to be always the same
+    private final Set<Point> shipArea;
+    private final LinkedHashMap<Colors, Map<Point, Integer>> colorToShip;        // need order to be always the same
     private final BiMap<String, Colors> playerToColor;
+    private final List<Point> selectablePoints;
+    private final Map<StatType, Integer> stats;
 
-    private final FlightBoard flightBoard;
-    private List<Point> selectablePoints;
-    private Planets planets;
-    private CurrentProjectile currentProjectile;
-    private GoodsBuffer goodsBuffer;
-    private final ComponentBank componentBank;
-    private final AllShips allShips; //physical to print all ships in a row
-    private boolean existsUnwelded; // update this value
+    // BUILDING
+    private final List<Integer> revealedComponents;
+    private final IntegerProperty coveredComponentN;
+    private final Map<Colors, List<Integer>> stashedComponents;
+    private final Map<Colors, Integer> hands; // (former current component)
+    private CliComponent unweldedComponent;
 
-    private AdventureCard currentCard;
+    // FLIGHTBOARD
+    private int loopLength;
+    private List<Integer>  startingPositionLeft;
+    private final MapProperty<Colors, Integer> colorToPlace;
+
+
+    // FLIGHT
+    private int currentCardId;
+    private int remainingCards;
+
+    // PLANETS
+//    private final List<Optional<String>> landedPlayers;
+//    private Optional<List<Map<GoodsType, Integer>>> planets;
+
+    // PROJECTILES
+    private int currentProjectileRoll;
+    private int currentProjectileDirection;
+    private ProjectileType currentProjectileType;
+
+    // GOODS BUFFER
+    private List<Optional<GoodsType>> goodsBuffer;
 
     public ClientModel() {
-        this.flightBoard = new FlightBoard();
-        this.playerToColor = HashBiMap.create();
-        this.playerToShip = new LinkedHashMap<>();
-        this.selectablePoints = new ArrayList<>();
-        this.componentBank = new ComponentBank();
-        this.allShips = new AllShips(playerToShip);
+        shipArea = new HashSet<>();
+        playerToColor = HashBiMap.create();
+        colorToShip = new LinkedHashMap<>();
+        selectablePoints = new ArrayList<>();
+        coveredComponentN = new SimpleIntegerProperty();
+        revealedComponents = new ArrayList<>();
+        stashedComponents = new HashMap<>();
+        hands = new HashMap<>();
+        colorToPlace = new SimpleMapProperty<>();
+        stats = new SimpleMapProperty<>();
     }
 
-        // SETUP PHASE
+    // SETUP PHASE
 
-    public LinkedHashMap<String, Shipboard> getShipboards() {
-        return playerToShip;
+    public LinkedHashMap<Colors, Map<Point, Integer>> getShipboards() {
+        return colorToShip;
     }
 
     public void setPlayerToPlace(Map<String, Integer> playerToPlace) {
         // translating nicknames to colors
-        flightBoard.setPlayerToPlace(
-                playerToPlace.entrySet().stream()
-                .collect(Collectors.toMap(
-                        e ->
-                                playerToColor.get(e.getKey()), Map.Entry::getValue)
-                )
-        );
+        playerToPlace.forEach((key, value) -> this.colorToPlace.putIfAbsent(
+                playerToColor.get(key), value
+        ));
     }
 
     public void setFlightBoard(int loopLength, List<Integer> startingPositions) {
-        flightBoard.setLoopLength(loopLength);
-        flightBoard.setStartingPositionLeft(startingPositions);
+        this.loopLength = loopLength;
+        this.startingPositionLeft = startingPositions;
     }
 
     public void setPlayerColor(String nickname, Colors color) {
@@ -72,46 +96,46 @@ public class ClientModel {
 
     public void setMyNickname(String myNickname) {
         this.myNickname = myNickname;
-        addPlayer(myNickname);
+        addPlayer(myNickname); // TODO: ??
     }
 
     public void setShipArea(Set<Point> shipArea) {
-        for (Shipboard s : playerToShip.values()) {
-            s.setShipArea(shipArea);
-        }
+        this.shipArea.addAll(shipArea);
     }
 
-        // SHIP BUILDING PHASE
+    // SHIP BUILDING PHASE
 
-            // COMPONENT BANK
+        // COMPONENT BANK
 
-    public void setRevealedComponent(List<Integer> components) throws IOException {
-        componentBank.setRevealedComponents(components);
+    public void addRevealedComponent(int revealedComponent) throws IOException {
+        revealedComponents.addLast(revealedComponent);
     }
 
-    public void setStashedComponents(List<Integer> stashedComponentIds) throws IOException {
-        componentBank.setStashedComponents(stashedComponentIds);
+    public void setStashedComponents(String nickname, List<Integer> stashedComponents) throws IOException {
+        this.stashedComponents.put(playerToColor.get(nickname), stashedComponents);
     }
 
-    public void setCurrentComponent(int componentId) throws IOException {
-        componentBank.setCurrentComponent(componentId);
+    public void setComponentInHand(String nickname, int componentInHand) throws IOException {
+        hands.put(playerToColor.get(nickname), componentInHand);
     }
 
-    public void clearCurrentComponent() {
-        componentBank.clearCurrentComponent();
+    public void clearComponentInHand() {
+        hands.remove(playerToColor.get(myNickname));
     }
 
     public void setCoveredComponents(int coveredComponentsN) {
-        componentBank.setCoveredComponentN(coveredComponentsN);
+        this.coveredComponentN.set(coveredComponentsN);
     }
 
             // SHIPBOARD
+
     public void removeComponent (Point position, String nickname) throws IOException {
-        playerToShip.get(nickname).removeComponent(position);
+        this.colorToShip.get(playerToColor.get(nickname)).remove(position);
     }
 
     public void setComponent(String nickname, int componentId, int direction, Point position) throws IOException {
-        playerToShip.get(nickname).setComponent(position, direction, componentId);
+        this.colorToShip.get(playerToColor.get(nickname)).put(position, CliComponent);
+                .get(nickname).setComponent(position, direction, componentId);
     }
 
     public void setCabinStats(String nickname, Point position, CrewType crewType, int crew) throws IOException {
@@ -119,7 +143,7 @@ public class ClientModel {
         playerToShip.get(nickname).getComponent(position).setStat(crew);
     }
 
-    public Physical getComponentBank() {
+    public CliElement getComponentBank() {
         return componentBank;
     }
 
@@ -165,9 +189,9 @@ public class ClientModel {
         playerToShip.get(nickname).getComponent(position).setGoods(goods);
     }
 
-    public Physical getPlanets(){ return planets; }
+    public CliElement getPlanets(){ return planets; }
 
-    public Physical getGoodsBuffer(){ return goodsBuffer; }
+    public CliElement getGoodsBuffer(){ return goodsBuffer; }
 
     // remove good from the buffer
     public void updateGoodsBuffer(int index) throws IOException {
@@ -188,7 +212,7 @@ public class ClientModel {
         return currentProjectile;
     }
 
-    public Physical getCurrentCard() {
+    public CliElement getCurrentCard() {
         return currentCard;
     }
 
@@ -207,17 +231,13 @@ public class ClientModel {
 
         // OTHER
 
-    public Physical getAllShips() {
-        return allShips;
-    }
-
     public Colors getColorFromNickname(String nickname) {return playerToColor.get(nickname);}
 
-    public Physical getFlightBoard() {
+    public CliElement getFlightBoard() {
         return flightBoard;
     }
 
-    public Physical getMyShipBoard() {
+    public CliElement getMyShipBoard() {
         return playerToShip.get(myNickname);
     }
 
@@ -241,7 +261,6 @@ public class ClientModel {
 
     public void addPlayer(String nickname) {
         playerToShip.putIfAbsent(nickname, new Shipboard());
-        allShips.addPlayer(playerToShip.get(nickname)); // to add the listener
     }
 
     public List<String> getNicknames() {

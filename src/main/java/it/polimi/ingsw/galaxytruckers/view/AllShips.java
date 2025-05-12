@@ -8,11 +8,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AllShips extends Physical {
+public class AllShips extends CliElement {
     private final Map<String, Shipboard> shipsMap;
 
     public AllShips(LinkedHashMap<String, Shipboard> shipsMap) {
-
         this.shipsMap = shipsMap;
         for (Shipboard shipboard : shipsMap.values()) {
             shipboard.setChangeListener(this);
@@ -31,8 +30,8 @@ public class AllShips extends Physical {
         List<String> sequenceDescription = new ArrayList<>();
         StringBuilder row = new StringBuilder();
 
-        for (Physical physical : shipsMap.values()) {
-            descriptions.add(physical.getDescription());
+        for (CliElement cliElement : shipsMap.values()) {
+            descriptions.add(cliElement.getDescription());
         }
         for (int i = 0; i < descriptions.getFirst().size(); i++) {
             for (List<String> shipDescription : descriptions) {

@@ -41,14 +41,14 @@ class CliViewTest {
         model.setGoods("Roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE));
         model.setSelectablePoints(new ArrayList<>(List.of(new Point(8, 8), new Point(9, 7))));
         model.setPlayerColor("Roborbio", Colors.RED);
-        model.setPlayerToPlace(Map.of("Roborbio", 2));
+        model.setColorToPlace(Map.of("Roborbio", 2));
         model.setCurrentCard(3);
         model.setProjectile(ProjectileType.BIGFIRE, 1, 7);
         for (int i = 0 ; i < 10 ; i++) {
             //model.addRevealedComponent(i);
         }
         model.setStashedComponents(new ArrayList<>(List.of(4, 8)));
-        model.setCurrentComponent(3);
+        model.setComponentInHand(3);
     }
 
     @Test

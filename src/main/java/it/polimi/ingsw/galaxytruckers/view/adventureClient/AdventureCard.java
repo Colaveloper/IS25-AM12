@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.Physical;
+import it.polimi.ingsw.galaxytruckers.view.CliElement;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,7 +25,7 @@ import javafx.scene.image.ImageView;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parsePlanets;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parseGoods;
 
-public class AdventureCard extends Physical {
+public class AdventureCard extends CliElement {
     // class attributes
     private List<String> description;
 

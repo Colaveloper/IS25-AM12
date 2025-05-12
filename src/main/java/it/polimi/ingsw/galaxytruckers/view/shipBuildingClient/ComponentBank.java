@@ -1,12 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.view.shipBuildingClient;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.Physical;
+import it.polimi.ingsw.galaxytruckers.view.CliElement;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -21,17 +19,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComponentBank extends Physical {
-    private final List<Component> revealedComponents;
-    private final IntegerProperty coveredComponentN;
-    private ObjectProperty<Component> currentComponent;
-    private final List<Component> stashedComponents;
+public class ComponentBank extends CliElement {
+    private ObjectProperty<CliComponent> currentComponent;
 
     public ComponentBank() {
-        coveredComponentN = new SimpleIntegerProperty();
-        revealedComponents = new ArrayList<>();
         stashedComponents = new ArrayList<>();
-        currentComponent = new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA));
+        currentComponent = new SimpleObjectProperty<>(new CliComponent(ComponentType.EMPTY_AREA));
         currentComponent.get().setChangeListener(this);
         super.registerObservables(currentComponent);
         super.registerObservables(coveredComponentN);
@@ -40,22 +33,22 @@ public class ComponentBank extends Physical {
     public void setStashedComponents(List<Integer> components) throws IOException {
         stashedComponents.clear();
         for (Integer componentId : components) {
-            stashedComponents.add(new Component(0, componentId));
+            stashedComponents.add(new CliComponent(0, componentId));
         }
     }
 
     public void addRevealedComponent(int componentId) throws IOException {
-        revealedComponents.add(new Component(0, componentId));
+        revealedComponents.add(new CliComponent(0, componentId));
     }
 
     public void removeRevealedComponent(int componentId) throws IOException {
-        revealedComponents.remove(new Component(0, componentId));
+        revealedComponents.remove(new CliComponent(0, componentId));
     }
 
     public void setRevealedComponents(List<Integer> components) throws IOException {
         revealedComponents.clear();
         for (Integer componentId : components) {
-            revealedComponents.add(new Component(0, componentId));
+            revealedComponents.add(new CliComponent(0, componentId));
         }
     }
 
@@ -64,7 +57,7 @@ public class ComponentBank extends Physical {
     }
 
     public void setCurrentComponent(int componentId) throws IOException {
-        currentComponent.set(new Component(0, componentId));
+        currentComponent.set(new CliComponent(0, componentId));
         currentComponent.get().setChangeListener(this);
     }
 
@@ -73,7 +66,7 @@ public class ComponentBank extends Physical {
     }
 
     public void clearCurrentComponent() {
-        currentComponent.set(new Component(ComponentType.EMPTY_AREA));
+        currentComponent.set(new CliComponent(ComponentType.EMPTY_AREA));
     }
 
     public IntegerProperty coveredComponentNProperty() {
@@ -94,7 +87,7 @@ public class ComponentBank extends Physical {
 
         description.add("Face up: ");
         for (int i = 0; i < 3; i++) {
-            for (Component component : revealedComponents) {
+            for (CliComponent component : revealedComponents) {
                 row.append(component.getDescription().get(i));
 //                System.out.println("REVEALED");
                 row.append(padding);
@@ -110,7 +103,7 @@ public class ComponentBank extends Physical {
 
         description.add("Stash: " + "\tHand: ");
         for (int i = 0; i < 3; i++) {
-            for (Component component : stashedComponents) {
+            for (CliComponent component : stashedComponents) {
                 row.append(component.getDescription().get(i));
                 System.out.println("STASHED");
                 row.append(padding);
@@ -180,13 +173,13 @@ public class ComponentBank extends Physical {
                 });
                 cardRow.getChildren().add(stack);
             } else if (color.equals(Color.INDIGO)) {
-                cardRow.getChildren().add(new Component(0, 12).getNode(server));
+                cardRow.getChildren().add(new CliComponent(0, 12).getNode(server));
                 currentComponent.addListener((obs, oldVal, newVal) -> {
                     cardRow.getChildren().clear();
                     cardRow.getChildren().add(newVal.getNode(server));
                 });
             } else {
-                cardRow.getChildren().add(new Component(0, 12).getNode(server));
+                cardRow.getChildren().add(new CliComponent(0, 12).getNode(server));
             }
         }
 

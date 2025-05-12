@@ -2,15 +2,14 @@ package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.Physical;
+import it.polimi.ingsw.galaxytruckers.view.CliElement;
 import javafx.scene.Node;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Planets extends Physical {
-    private final List<Optional<String>> landedPlayers;
-    private Optional<List<Map<GoodsType, Integer>>> planets;
+public class Planets extends CliElement {
+
 
     public Planets(AdventureCard currentCard){
         if(currentCard.getCardName().equals("planets")){

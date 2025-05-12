@@ -3,7 +3,7 @@
 //import it.polimi.ingsw.galaxytruckers.FlightBoard;
 //import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
 //import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
-//import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
+//import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CliComponent;
 //import javafx.scene.image.Image;
 //import org.junit.jupiter.api.BeforeEach;
 //
@@ -12,10 +12,10 @@
 //import java.util.List;
 //
 //public class AdventureCardTestInitializer {
-//    protected Component component;
+//    protected CliComponent component;
 //    protected ComponentBank componentBank = new ComponentBank() {
 //        @Override
-//        public Component getRanComponent() {
+//        public CliComponent getRanComponent() {
 //            return component;
 //        }
 //    };

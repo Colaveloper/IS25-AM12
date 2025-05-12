@@ -1,10 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 
@@ -13,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class Physical implements ChangeListener {
-    protected StackPane node = new StackPane();
+public abstract class CliElement implements ChangeListener {
     private final AtomicBoolean dirty = new AtomicBoolean(true);
     protected final List<String> descriptionCache = new ArrayList<>();
     private ChangeListener listener;
@@ -62,6 +58,4 @@ public abstract class Physical implements ChangeListener {
     }
 
     public abstract List<String> getNewDescription();
-
-    public abstract Node getNode(VirtualServer server) throws IOException;
 }

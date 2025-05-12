@@ -117,7 +117,7 @@ public class SecondShipBoard extends ShipBoard {
         return (enginePower > 0 && aliens.contains(CrewType.BROWN)) ? enginePower+2 : enginePower;
     }
 
-    // Component observers
+    // CliComponent observers
 
     @Override
     public Map<Point, LifeSupport> getLifeSupports() {

@@ -1,14 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.Physical;
+import it.polimi.ingsw.galaxytruckers.view.CliElement;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrentProjectile extends Physical {
+public class CurrentProjectile extends CliElement {
     private int projectileRoll;
     private int projectileDirection;
     private ProjectileType projectileType;

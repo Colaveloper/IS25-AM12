@@ -64,7 +64,6 @@ class ClientControllerTest {
                         controller.setupGame(loopLength, startingPositions, shipArea, coveredComponentsN);
 
                         // TODO: SHOW
-                        // TODO: UPDATE COVERED NUMBER
                         Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 took a covered component");
                         controller.notifyFaceDownComponentRequest("qwe", 5, --coveredComponentsN);

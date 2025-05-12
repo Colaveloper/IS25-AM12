@@ -2,14 +2,14 @@ package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.Physical;
+import it.polimi.ingsw.galaxytruckers.view.CliElement;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class GoodsBuffer extends Physical {
+public class GoodsBuffer extends CliElement {
     private List<Optional<GoodsType>> goodsBuffer;
 
     public GoodsBuffer(AdventureCard currentCard){

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.Component;
+import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Shipboard extends Physical{
+public class Shipboard extends CliElement {
 
-    private List<List<ObjectProperty<Component>>> componentMatrix;
+    private List<List<ObjectProperty<CliComponent>>> componentMatrix;
     private Point upLeft;
     private Point lastPosition;
 
@@ -49,27 +49,27 @@ public class Shipboard extends Physical{
         // Save top-left point
         upLeft = new Point(minX, minY);
 
-        List<List<ObjectProperty<Component>>> result = new ArrayList<>();
+        List<List<ObjectProperty<CliComponent>>> result = new ArrayList<>();
 
-        ObjectProperty<Component> component;
+        ObjectProperty<CliComponent> component;
 
         for (int y = minY; y <= maxY; y++) {
-            List<ObjectProperty<Component>> row = new ArrayList<>();
+            List<ObjectProperty<CliComponent>> row = new ArrayList<>();
             for (int x = minX; x <= maxX; x++) {
 
                 if (shipArea.contains(new Point(x, y))) {
-                    component = new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA));
+                    component = new SimpleObjectProperty<>(new CliComponent(ComponentType.EMPTY_AREA));
                 }
                 else {
-                    component = new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_SPACE));
+                    component = new SimpleObjectProperty<>(new CliComponent(ComponentType.EMPTY_SPACE));
                 }
                 row.add(component);
                 super.registerObservables(component);
                 component.get().setChangeListener(this);
 
 //                row.add(shipArea.contains(new Point(x, y))
-//                        ? new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA))
-//                        : new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_SPACE))
+//                        ? new SimpleObjectProperty<>(new CliComponent(ComponentType.EMPTY_AREA))
+//                        : new SimpleObjectProperty<>(new CliComponent(ComponentType.EMPTY_SPACE))
 //                );
             }
             result.add(row);
@@ -94,16 +94,16 @@ public class Shipboard extends Physical{
     }
 
     public void setComponent(Point position, int direction, int componentId) throws IOException {
-        componentMatrix.get(position.y-upLeft.y).get(position.x-upLeft.x).set(new Component(direction, componentId));
+        componentMatrix.get(position.y-upLeft.y).get(position.x-upLeft.x).set(new CliComponent(direction, componentId));
         componentMatrix.get(position.y-upLeft.y).get(position.x-upLeft.x).get().setChangeListener(this);
         lastPosition = position;
     }
 
     public void removeComponent(Point position) throws IOException {
-                componentMatrix.get(position.y-upLeft.y).set(position.x-upLeft.x, new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_SPACE)));
+                componentMatrix.get(position.y-upLeft.y).set(position.x-upLeft.x, new SimpleObjectProperty<>(new CliComponent(ComponentType.EMPTY_SPACE)));
     }
 
-    public Component getComponent(Point point) throws IOException {
+    public CliComponent getComponent(Point point) throws IOException {
         return componentMatrix.get(point.y-upLeft.y).get(point.x-upLeft.x).get();
     }
 
@@ -148,7 +148,7 @@ public class Shipboard extends Physical{
 
                 // component
                 for (int k = 0; k < width; k++) {
-                    ObjectProperty<Component> component = componentMatrix.get(i).get(k);
+                    ObjectProperty<CliComponent> component = componentMatrix.get(i).get(k);
                     List<String> description = component.get().getNewDescription();
                     row.append(description.get(j));
                 }
