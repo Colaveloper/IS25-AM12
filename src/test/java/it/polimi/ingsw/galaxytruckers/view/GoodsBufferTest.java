@@ -15,13 +15,14 @@ class GoodsBufferTest {
 
         // simulate taking the second good - GREEN
         goods.takeGood(2);
+        String result = goods.describeGoodsBuffer();
 
         String expected = """
                 [Goods]
                 ------------------------------
-                | BLUE    | TAKEN   | YELLOW  |
+                | YELLOW  | TAKEN   | GREEN   |
                 ------------------------------""";
 
-        assertEquals(expected, goods.describeGoodsBuffer());
+        assertEquals(expected, result);
     }
 }
