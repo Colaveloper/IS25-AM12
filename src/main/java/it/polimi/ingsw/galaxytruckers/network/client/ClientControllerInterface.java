@@ -35,11 +35,11 @@ public interface ClientControllerInterface {
 
     void notifyFaceUpComponentRequest(String playerName, int componentId, List<Integer> faceup) throws IOException;
 
-    void notifyPeekForecast(String playerName, int deckIndex);
+    void notifyPeekForecast(String playerName, int deckIndex) throws IOException;
 
-    void notifyReleaseForecast(String playerName, int deckIndex);
+    void notifyReleaseForecast(String playerName, int deckIndex) throws IOException;
 
-    void sendForecastDeck(int deckIndex, List<Integer> deckCardIds);
+    void sendForecastDeck(int deckIndex, List<Integer> deckCardIds) throws IOException;
 
     void notifyHourglassFlipped(String playerName, boolean isLast);
 

@@ -30,6 +30,7 @@ public class ClientModel {
     private CurrentProjectile currentProjectile;
     private GoodsBuffer goodsBuffer;
     private final ComponentBank componentBank;
+    private final Forecast forecast;
     private final AllShips allShips; //physical to print all ships in a row
     private boolean existsUnwelded; // update this value
 
@@ -41,6 +42,7 @@ public class ClientModel {
         this.playerToShip = new LinkedHashMap<>();
         this.selectablePoints = new ArrayList<>();
         this.componentBank = new ComponentBank();
+        this.forecast = new Forecast();
         this.allShips = new AllShips(playerToShip);
     }
 
@@ -103,6 +105,24 @@ public class ClientModel {
 
     public void setCoveredComponents(int coveredComponentsN) {
         componentBank.setCoveredComponentN(coveredComponentsN);
+    }
+
+            //FORECAST
+
+    public void setForecast(int deckIndex, List<Integer> deckCardIds) throws IOException {
+        forecast.setMyDeck(deckCardIds);
+    }
+
+    public Forecast getForecast() {
+        return forecast;
+    }
+
+    public void blockForecast(int deckIndex) throws IOException {
+        forecast.blockDeck(deckIndex);
+    }
+
+    public void freeForecast(int deckIndex) throws IOException {
+        forecast.freeDeck(deckIndex);
     }
 
             // SHIPBOARD
