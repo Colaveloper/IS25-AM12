@@ -35,6 +35,7 @@ public abstract class Deck {
     public Deck(Game game) throws IOException {
         this.relevantCards = loadRelevantCards(game);
         Collections.shuffle(this.relevantCards);
+        this.masterDeck = new ArrayList<>();
     }
 
     /**
@@ -66,6 +67,7 @@ public abstract class Deck {
             return false;
         } else {
             currentCard = masterDeck.removeLast();
+            currentCard.initialize();
             return true;
         }
     }
