@@ -55,7 +55,7 @@ public class NicknameChoiceScreen implements ScreenStrategy {
         if (!nickname.isEmpty()) {
             try {
                 server.registerNickname(nickname);
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         }

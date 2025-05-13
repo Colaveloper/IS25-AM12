@@ -5,7 +5,6 @@ import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueueHandler;
 
@@ -18,7 +17,6 @@ public class Lobby {
 
     private final EventQueue eventQueue;
     private final EventQueueHandler eventQueueHandler;
-    private final Map<Player, VirtualClient> playerToClients = new HashMap<>();
 
     private LobbyState state;
 
@@ -96,10 +94,6 @@ public class Lobby {
 
     public EventQueueHandler getEventQueueHandler() {
         return eventQueueHandler;
-    }
-
-    public VirtualClient getPlayerClient(Player player) {
-        return playerToClients.get(player);
     }
 
     public synchronized void addPlayer(Player player) {
