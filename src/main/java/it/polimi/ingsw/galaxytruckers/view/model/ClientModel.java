@@ -10,6 +10,7 @@ import it.polimi.ingsw.galaxytruckers.view.cli.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 
 import java.awt.*;
 import java.io.IOException;
@@ -68,7 +69,7 @@ public class ClientModel {
         coveredComponentN = new SimpleIntegerProperty();
         revealedComponents = new ArrayList<>();
         stashedComponents = new HashMap<>();
-        startingPositionLeft = new SimpleListProperty<>();
+        startingPositionLeft = new SimpleListProperty<>(FXCollections.observableArrayList());
         hands = new HashMap<>();
         colorToPlace = new SimpleMapProperty<>();
         stats = new SimpleMapProperty<>();
@@ -89,7 +90,7 @@ public class ClientModel {
         );
     }
 
-    public void setFlightBoard(int loopLength, Set<Integer> startingPositions) {
+    public void setFlightBoard(int loopLength, List<Integer> startingPositions) {
         this.loopLength = loopLength;
         this.startingPositionLeft.addAll(startingPositions);
     }

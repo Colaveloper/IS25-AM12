@@ -1,6 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class TestConfiguarator extends ConfigFactory {
@@ -36,8 +38,8 @@ public class TestConfiguarator extends ConfigFactory {
     }
 
     @Override
-    public Set<Integer> getStartingPositions() {
-        return Set.of();
+    public List<Integer> getStartingPositions() {
+        return new ArrayList<>();
     }
 
     @Override

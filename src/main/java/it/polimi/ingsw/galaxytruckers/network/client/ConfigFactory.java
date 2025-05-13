@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Set;
 
 public abstract class ConfigFactory {
@@ -10,7 +11,7 @@ public abstract class ConfigFactory {
     abstract boolean isShipPlacementFree();
     abstract boolean isGivingUpAllowed();
     abstract Set<Point> getShipArea();
-    abstract Set<Integer> getStartingPositions();
+    abstract List<Integer> getStartingPositions();
     abstract int getLoopLenght();
     int getComponentsN() {
         return 0;

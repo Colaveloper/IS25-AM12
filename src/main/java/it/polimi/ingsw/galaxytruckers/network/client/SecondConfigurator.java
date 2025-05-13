@@ -1,6 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 public class SecondConfigurator extends ConfigFactory {
@@ -44,12 +47,12 @@ public class SecondConfigurator extends ConfigFactory {
     }
 
     @Override
-    public Set<Integer> getStartingPositions() {
-        return Set.of();
+    public List<Integer> getStartingPositions() {
+        return new ArrayList<>(List.of(6, 3, 1, 0));
     }
 
     @Override
     public int getLoopLenght() {
-        return 0;
+        return 24;
     }
 }
