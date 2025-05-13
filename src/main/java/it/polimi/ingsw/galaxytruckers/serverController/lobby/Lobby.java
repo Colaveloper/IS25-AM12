@@ -5,8 +5,6 @@ import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
-import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueueHandler;
 
@@ -30,7 +28,7 @@ public class Lobby {
     private final List<Player> players;
     private final Set<Colors> chosenColors;
 
-    public Lobby(Player creator, Level level, int numPlayers, SessionManager sessionManager) {
+    public Lobby(Player creator, Level level, int numPlayers) {
         this.level = level;
         this.numPlayers = numPlayers;
         this.id = UUID.randomUUID();
@@ -42,7 +40,7 @@ public class Lobby {
             idToLobby.put(id, this);
         }
         this.eventQueue = new EventQueue();
-        this.eventQueueHandler = new EventQueueHandler(this, sessionManager);
+        this.eventQueueHandler = new EventQueueHandler(this);
     }
 
     public static Lobby getLobby(UUID id) {

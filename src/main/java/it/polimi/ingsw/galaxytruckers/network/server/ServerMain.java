@@ -9,12 +9,10 @@ import java.rmi.RemoteException;
 
 public class ServerMain {
     public static void main(String[] args) {
-        SessionManager sessionManager = new SessionManager();
         ServerController controller = new ServerController();
-        controller.setSessionManager(sessionManager);
         RmiServer rmiServer;
         try {
-            rmiServer = new RmiServer(controller, sessionManager);
+            rmiServer = new RmiServer(controller);
             rmiServer.start("Galaxy-Truckers-Server",1234);
         } catch (RemoteException e) {
             System.err.println("Could not start RMI server because of " + e.getMessage());

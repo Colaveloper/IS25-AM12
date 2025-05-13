@@ -12,12 +12,10 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class RmiServer extends UnicastRemoteObject implements RemoteServer {
     private final ServerControllerInterface controller;
-    private final SessionManager sessionManager;
 
-    public RmiServer(ServerControllerInterface controller, SessionManager sessionManager) throws RemoteException {
+    public RmiServer(ServerControllerInterface controller) throws RemoteException {
         super();
         this.controller = controller;
-        this.sessionManager = sessionManager;
     }
 
     public void start(String name, int port) throws RemoteException {
@@ -30,7 +28,7 @@ public class RmiServer extends UnicastRemoteObject implements RemoteServer {
     public RemoteController registerNickname(RemoteClient client, String nickname) throws RemoteException {
         Player player = controller.registerNickname(nickname);
         RmiClientHandler clientHandler = new RmiClientHandler(client, player, controller);
-        sessionManager.registerClient(player, clientHandler);
+        SessionManager.getInstance().registerClient(player, clientHandler);
         return clientHandler;
     }
 }

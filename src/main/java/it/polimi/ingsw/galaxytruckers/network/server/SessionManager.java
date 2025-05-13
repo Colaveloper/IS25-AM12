@@ -6,9 +6,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SessionManager {
-    private Map<Player, VirtualClient> activeSessions;
+    private static SessionManager instance;
 
-    public SessionManager() {
+    private final Map<Player, VirtualClient> activeSessions;
+
+    public static SessionManager getInstance() {
+        if (instance == null) {
+            instance = new SessionManager();
+        }
+        return instance;
+    }
+
+    private SessionManager() {
         this.activeSessions = new HashMap<>();
     }
 
