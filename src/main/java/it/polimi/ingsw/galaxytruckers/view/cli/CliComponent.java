@@ -30,6 +30,12 @@ public class CliComponent extends CliElement {
     public CliComponent(ClientModel model, Component component) throws IOException {
         super(model);
         this.component = component;
+        listenToInvalidation(component.isSelectableProperty());
+        listenToInvalidation(component.directionProperty());
+        listenToInvalidation(component.cargoProperty());
+        listenToInvalidation(component.crewTypeProperty());
+        listenToInvalidation(component.statProperty());
+
         JsonNode node = component.getNode();
         connectors.addAll(parseConnectors(node.get("connectors")));
         type = ComponentType.valueOf(node.get("type").asText().toUpperCase());

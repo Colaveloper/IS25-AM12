@@ -5,13 +5,20 @@
 //import javafx.scene.layout.Pane;
 //
 //import java.awt.*;
-//import java.io.IOException;
+//import java.rmi.RemoteException;
 //
-//public class ProjectilesScreen implements ScreenStrategy {
+//public class PointSelectionScreenDEPRECATED implements ScreenStrategy {
+//
 //    @Override
 //    public void showCLI(ClientModel model) {
+//
+//        model.getFlightBoard().getNewDescription().forEach(System.out::println);
+//
+//        System.out.println("Please write the coordinates of one of the following points, then press enter.");
+//        System.out.println("For example: 4 2");
+//
 //        model.getMyShipBoard().getNewDescription().forEach(System.out::println);
-//        System.out.println(model.getCurrentProjectile().getNewDescription());
+//
 //    }
 //
 //    @Override
@@ -28,8 +35,8 @@
 //    }
 //
 //    @Override
-//    public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {
-//    // TODO
+//    public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws RemoteException {
+//
 //    }
 //
 //    @Override

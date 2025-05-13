@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.cli.CliElement;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,7 +26,7 @@ import javafx.scene.image.ImageView;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parsePlanets;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parseGoods;
 
-public class AdventureCard extends CliElement {
+public class CliAdventureCard extends CliElement {
     // class attributes
     private List<String> description;
 
@@ -68,7 +69,8 @@ public class AdventureCard extends CliElement {
     * element 4 - credits reward if defeated: 12
     * */
     // constructor
-    public AdventureCard(int id) throws IOException {
+    public CliAdventureCard(ClientModel model, int id) throws IOException {
+        super(model);
         // Reading array of card from JSON file
         String jsonPath = "src/main/resources/cardsReference.json";
         File jsonFile = new File(jsonPath);
@@ -263,6 +265,10 @@ public class AdventureCard extends CliElement {
         }
     }
 
+    public CliAdventureCard(ClientModel model) {
+        super(model);
+    }
+
     // public methods
     @Override
     public List<String> getNewDescription(){return description;}
@@ -353,14 +359,14 @@ public class AdventureCard extends CliElement {
                 .collect(Collectors.joining("\n"));
     }
 
-    @Override
-    public Node getNode(VirtualServer server) {
-        ImageView imageView = new ImageView(new Image("file:"+imagePath));
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(150);
-        imageView.setPreserveRatio(true);
-
-        node.getChildren().add(imageView);
-        return node;
-    }
+//    @Override
+//    public Node getNode() {
+//        ImageView imageView = new ImageView(new Image("file:"+imagePath));
+//        imageView.setFitWidth(100);
+//        imageView.setFitHeight(150);
+//        imageView.setPreserveRatio(true);
+//
+//        node.getChildren().add(imageView);
+//        return node;
+//    }
 }

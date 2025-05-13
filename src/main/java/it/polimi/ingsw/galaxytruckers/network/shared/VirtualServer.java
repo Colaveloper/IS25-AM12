@@ -18,7 +18,7 @@ public interface VirtualServer extends EventListener {
     void requestComponent(int componentID) throws IOException;
     void grabStashedComponent(int componentID);
     void flipHourglass();
-    void placeShipOnFlightBoard(int startingPosition);
+    void placeShipOnFlightBoard(int startingPosition) throws IOException;
 
     void acquireForecast(int deckIndex);
     void rejectComponent();

@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.*;
@@ -26,7 +27,6 @@ public class ClientController implements ClientControllerInterface {
         this.model = new ClientModel();
     }
 
-    @Override
     public void showInterfaceChoice(VirtualServer server) throws IOException {
         // TODO: consider whether to relocate prints and scans
         System.out.println("Enter \"G\" to switch to the Graphical Interface, or press any other key to continue here");
@@ -44,15 +44,9 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    public void setCLIViewManually () {
-        view = new CliView();
-        view.setModel(model);
-    }
-
-
     // UPDATES FROM THE SERVER
 
-    @Override
+//    @Override // TODO: DISCUSS
     public void showGameCreation() throws IOException {
         view.setScreen(new GameCreationScreen());
     }
@@ -66,12 +60,6 @@ public class ClientController implements ClientControllerInterface {
     }
 
     @Override
-    public void showConnectedAndNicknameChoice(String tempNickname) throws IOException {
-        model.setMyNickname(tempNickname);
-        view.setScreen(new NicknameChoiceScreen());
-    }
-
-    @Override
     public void setMyNickname(String nickname) { // gets called only after legal registration
         model.setMyNickname(nickname);
     }
@@ -80,20 +68,20 @@ public class ClientController implements ClientControllerInterface {
         model.setFlightBoard(loopLength, startingPositions);
         model.setShipArea(shipArea);
         model.setCoveredComponents(coveredComponent);
-        view.setScreen(new ShipBuildingScreen());
+        view.setScreen(new ShipBuildingScreen(model));
     }
 
     // UPDATE FOR SHIP BUILDING
 
     @Override//Tommy approved
     public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) throws IOException {
-        model.setStashedComponents(stashComponentIds);//todo: add for other players
+        model.setStashedComponents(playerName, stashComponentIds);//todo: add for other players
     }
 
     @Override//Tommy approved
     public void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) throws IOException {
-        model.setStashedComponents(stashComponentIds);//todo: add for other players
-        model.setComponentInHand(componentId);//todo: add for other players
+        model.setStashedComponents(playerName, stashComponentIds);//todo: add for other players
+        model.setComponentInHand(playerName, componentId);//todo: add for other players
     }
 
     @Override
@@ -101,29 +89,44 @@ public class ClientController implements ClientControllerInterface {
         model.setComponent(nickname, componentId, direction, position);
     }
 
-    @Override//Tommy approved
-    public void notifyComponentRejection(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException {
-        if (model.isMyNickname(playerName)) {//TODO add for other players
-            model.clearComponentInHand();
-        }
-        model.setRevealedComponent(faceUpComponentIds);
+    @Override
+    public void notifyComponentRejection(String playerName, int componentId) throws IOException {
+
     }
 
-    @Override//Tommy approved
-    public void notifyFaceDownComponentRequest(String playerName, int componentId, int numFaceDown) throws IOException {
-        if (model.isMyNickname(playerName)) {//TODO add for other players
-            model.setComponentInHand(componentId);
-        }
-        model.setCoveredComponents(numFaceDown);
+    @Override
+    public void notifyFaceDownComponentRequest(String playerName, int componentId) throws IOException {
+
     }
 
-    @Override//Tommy approved
-    public void notifyFaceUpComponentRequest(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException {
-        if (model.isMyNickname(playerName)) {//TODO add for other players
-            model.setComponentInHand(componentId);
-        }
-        model.setRevealedComponent(faceUpComponentIds);
+    @Override
+    public void notifyFaceUpComponentRequest(String playerName, int componentId) throws IOException {
+
     }
+
+//    @Override//Tommy approved
+//    public void notifyComponentRejection(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException {
+//        if (model.isMyNickname(playerName)) {//TODO add for other players
+//            model.clearComponentInHand();
+//        }
+//        model.setRevealedComponent(faceUpComponentIds);
+//    }
+//
+//    @Override//Tommy approved
+//    public void notifyFaceDownComponentRequest(String playerName, int componentId, int numFaceDown) throws IOException {
+//        if (model.isMyNickname(playerName)) {//TODO add for other players
+//            model.setComponentInHand(componentId);
+//        }
+//        model.setCoveredComponents(numFaceDown);
+//    }
+//
+//    @Override//Tommy approved
+//    public void notifyFaceUpComponentRequest(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException {
+//        if (model.isMyNickname(playerName)) {//TODO add for other players
+//            model.setComponentInHand(componentId);
+//        }
+//        model.setRevealedComponent(faceUpComponentIds);
+//    }
 
     @Override
     public void notifyPeekForecast(String playerName, int deckIndex) {
@@ -136,7 +139,7 @@ public class ClientController implements ClientControllerInterface {
     }
 
     @Override
-    public void sendForecastDeck(int deckIndex, List<Integer> deckCardIds) {
+    public void sendForecastDeck(List<Integer> deckCardIds) {
 
     }
 
@@ -146,25 +149,23 @@ public class ClientController implements ClientControllerInterface {
     }
 
     @Override
-    public void showNewHourglass() {
-        // model.update
-        // view.show(ChosenStrategy)
+    public void notifyHourglassEnd() {
+
+    }
+
+    @Override
+    public void notifyPlayerPosition(String playerName, int position) throws IOException {
+
+    }
+
+    @Override
+    public void notifyComponentRemoval(String nickname, Point positionPoint) throws IOException {
+
     }
 
     @Override//Tommy approved
     public void notifyCabinUpdate(String nickname, Point position, int crew, CrewType crewType) throws IOException {
         model.setCabinStats(nickname, position, crewType, crew);
-    }
-
-    @Override//Tommy approved
-    public void notifyPlaceShipOnFlightBoard(String nickname, Map<String, Integer> playerToPlace) {
-        model.setColorToPlace(playerToPlace);
-        //todo: show that nickname placed himself on the board
-    }
-
-    @Override
-    public void showComponentRemoval(Point position, String nickname) throws IOException {
-        model.removeComponent(position, nickname);
     }
 
     // UPDATE FOR ADVENTURE
@@ -186,27 +187,22 @@ public class ClientController implements ClientControllerInterface {
     }
 
     @Override
-    public void updateCredits(String nickname, int credits) throws IOException {
-        model.setCredits(nickname, credits);
-    }
+    public void notifyShipStatusUpdate(String nickname, StatType statType, int value) throws IOException {
 
-    @Override
-    public void updateLostComponent(String nickname, int componentsLost) throws IOException {
-        model.setLostComponent(nickname, componentsLost);
     }
 
     @Override//Tommy approved
     public void notifyNewCard(int cardId) throws IOException {
         model.setCurrentCard(cardId);
         model.setCurrentPlayerNickname(model.getCurrentLeader());
-        view.setScreen(new NewCardScreen());
+//        view.setScreen(new NewCardScreen()); // TODO: restore
     }
 
     // first time goods are shown on screen
-    @Override
-    public void showPlaceGoods() throws IOException {
-        view.setScreen(new GoodsScreen());
-    }
+//    @Override
+//    public void showPlaceGoods() throws IOException {
+////        view.setScreen(new GoodsScreen()); // TODO: restore
+//    }
 
     // planetIndex is an index and starts from 0, UI listing on screen starts from 1
     @Override
@@ -214,29 +210,22 @@ public class ClientController implements ClientControllerInterface {
         model.setPlanetGoodBuffer(planetIndex);
     }
 
-    // update each time player picks something removing good taken in the buffer by index
     @Override
-    public void updateGoodsBuffer(int index) throws IOException {
-        model.updateGoodsBuffer(index);
+    public void updateGoodsBuffer(GoodsType type) throws IOException {
+        model.updateGoodsBuffer(type);
     }
 
     // set current player for any action that involves a decision
-    @Override
-    public void setCurrentPlayer(String nickname) {
-        model.setCurrentPlayerNickname(nickname);
-    }
+//    @Override // TODO: restore
+//    public void setCurrentPlayer(String nickname) {
+//        model.setCurrentPlayerNickname(nickname);
+//    }
 
     // called for each projectile
     @Override
     public void showProjectile(ProjectileType projectileType, int direction, int roll) throws IOException {
         model.setProjectile(projectileType, direction, roll);
-        view.setScreen(new ProjectilesScreen());
-    }
-
-    @Override
-    public void showStatsUpdate() {
-        // model.update
-        // view.show(ChosenStrategy)
+//        view.setScreen(new ProjectilesScreen()); // TODO: restore
     }
 
     // UPDATE FOR ENDGAME
@@ -252,7 +241,7 @@ public class ClientController implements ClientControllerInterface {
     @Override
     public void showSelectablePoints(List<Point> points) throws IOException {
         model.setSelectablePoints(points);
-        //view.run(new PointSelectionScreen());
+        //view.run(new PointSelectionScreenDEPRECATED());
     }
 
     @Override

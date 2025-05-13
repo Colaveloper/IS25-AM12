@@ -64,11 +64,4 @@ public class GuiView extends Application implements View {
             });
 //        }
     }
-
-    // TODO: delete
-    @Override
-    public void refresh() {
-
-    }
-
 }

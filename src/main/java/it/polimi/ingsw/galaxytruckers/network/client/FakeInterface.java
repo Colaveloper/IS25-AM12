@@ -4,7 +4,6 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.awt.*;
@@ -13,19 +12,22 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
-public interface ClientControllerInterface {
+public interface FakeInterface {
+    //void showInterfaceChoice(VirtualServer server) throws IOException;    //interno
 
+    //void showGameCreation() throws IOException; //interno
 
     void updateLobbyPlayers(Map<String, Colors> playerToColor) throws IOException;
 
-    // REMOVE, USE RETURN VALUE
-    void setMyNickname(String nickname);
+    //void showConnectedAndNicknameChoice(String tempNickname) throws IOException;
+
+    //void setMyNickname(String nickname);//usare exceptino
 
     void notifyStashComponent(String playerName, List<Integer> stashComponentIds) throws IOException;
 
     void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) throws IOException;
 
-    void showComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException;
+    void notifyComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException;
 
     void notifyComponentRejection(String playerName, int componentId) throws IOException;
 
@@ -33,15 +35,17 @@ public interface ClientControllerInterface {
 
     void notifyFaceUpComponentRequest(String playerName, int componentId) throws IOException;
 
-    void notifyPeekForecast(String playerName, int deckIndex);
+    void notifyPeekForecast(String playerName, int deckIndex) throws IOException;
 
-    void notifyReleaseForecast(String playerName, int deckIndex);
+    void notifyReleaseForecast(String playerName, int deckIndex) throws IOException;
 
-    void sendForecastDeck(List<Integer> deckCardIds);
+    void sendForecastDeck(List<Integer> deckCardIds) throws IOException;
 
-    void notifyHourglassFlipped(String playerName, boolean isLast);
+    void notifyHourglassFlipped(String playerName, boolean isLast);//il countdown è lato client
 
     void notifyHourglassEnd();
+
+    //void notifyPlaceShipOnFlightBoard(String nickname, Map<String, Integer> playerToPlace);
 
     void notifyPlayerPosition(String playerName, int position) throws IOException;//tommy approbved
 

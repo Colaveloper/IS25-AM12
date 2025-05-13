@@ -70,13 +70,13 @@ public class GuiComponentBank extends GuiElement {
                 });
                 cardRow.getChildren().add(stack);
             } else if (color.equals(Color.INDIGO)) {
-                cardRow.getChildren().add(new GuiComponent(new Component(1)).getNode());
+                cardRow.getChildren().add(new GuiComponent(model, server, new Component(1)).getNode());
                 model.currentComponentProperty().addListener((obs, oldVal, newVal) -> {
                     cardRow.getChildren().clear();
-                    cardRow.getChildren().add(new GuiComponent(newVal).getNode());
+                    cardRow.getChildren().add(new GuiComponent(model, server, newVal).getNode());
                 });
             } else {
-                cardRow.getChildren().add(new GuiComponent(new Component(1)).getNode());
+                cardRow.getChildren().add(new GuiComponent(model, server, new Component(1)).getNode());
             }
         }
 

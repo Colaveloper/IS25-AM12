@@ -212,8 +212,8 @@ public class ClientModel {
     }
 
     // remove good from the buffer
-    public void updateGoodsBuffer(int index) throws IOException {
-        goodsBuffer.remove(index);
+    public void updateGoodsBuffer(GoodsType type) throws IOException {
+        goodsBuffer.remove(type);
     }
 
     // in case of planets the goodBuffer must be set after the choice, this happens once, other update use updateGoodsBuffer
@@ -271,6 +271,10 @@ public class ClientModel {
 
     // GETTERS (Javafx properties used only for attributes that change over time)
 
+    public Set<String> getNicknames() {
+        return playerToColor.keySet();
+    }
+
     public IntegerProperty coveredComponentNProperty() {
         return coveredComponentN;
     }
@@ -295,5 +299,9 @@ public class ClientModel {
 
     public Point getUpLeft() {
         return upLeft;
+    }
+
+    public boolean existsUnwelded() {
+        return unweldedComponent != null;
     }
 }

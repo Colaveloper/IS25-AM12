@@ -10,8 +10,6 @@ public interface View {
     // this is not an abstract class in order to let GuiView extend Application
     void setModel(ClientModel model);
     void setServer(VirtualServer server);
-
-    public abstract void refresh();
     /**
      * Provides to the user a contract to interact with the game
      * @throws IOException

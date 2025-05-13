@@ -1,16 +1,17 @@
 package it.polimi.ingsw.galaxytruckers.view.cli;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.ChangeListener;
-import it.polimi.ingsw.galaxytruckers.view.CliShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.InvalidationListener;
 import it.polimi.ingsw.galaxytruckers.view.View;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;
+import javafx.beans.Observable;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Scanner;
 
-public class CliView implements View, ChangeListener {
+public class CliView implements View, InvalidationListener {
     Scanner scanner;
     String input;
     static ClientModel model;
@@ -25,12 +26,14 @@ public class CliView implements View, ChangeListener {
     @Override
     public void setModel(ClientModel model) {
         CliView.model = model;
-        model.getComponentBank().setChangeListener(this);
-        for(CliShipBoard shipboard : model.getShipboards().values()) {
-            shipboard.setChangeListener(this);
-        }
-        model.getAllShips().setChangeListener(this);
-        model.getFlightBoard().setChangeListener(this);
+//        model.getComponentBank().setChangeListener(this);
+//        model.getShipboards().entrySet().stream()
+//                .flatMap(e->e.getValue().stream())
+//                .flatMap(Collection::stream)
+//                .forEach(p->p.addListener(this));
+
+//        model.getAllShips().setChangeListener(this);
+//        model.getFlightBoard().setChangeListener(this);
     }
 
     @Override
@@ -76,13 +79,12 @@ public class CliView implements View, ChangeListener {
         }).start();
     }
 
-    // TODO: remove
-    public void refresh() {
-        strategy.showCLI(model);
-    }
-
     @Override
-    public void onChanged() throws IOException { // refreshing
-        this.setScreen(strategy);
+    public void onInvalidate() {
+        try {
+            this.setScreen(strategy);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

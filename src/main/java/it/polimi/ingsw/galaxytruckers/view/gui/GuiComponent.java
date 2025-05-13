@@ -1,5 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.gui;
 
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
 import javafx.animation.RotateTransition;
 import javafx.scene.Node;
@@ -11,7 +13,8 @@ public class GuiComponent extends GuiElement {
     private final Component component;
     private final String imagePath;
 
-    public GuiComponent(Component component) {
+    public GuiComponent(ClientModel model, VirtualServer server, Component component) {
+        super(model, server);
         this.component = component;
         imagePath = component.getNode().get("path").asText();
     }

@@ -1,7 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.CliFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cli.CliComponentBank;
+import it.polimi.ingsw.galaxytruckers.view.gui.GuiComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.scene.layout.Pane;
 
@@ -10,18 +13,21 @@ import java.io.IOException;
 
 public class ShipBuildingScreen implements ScreenStrategy {
     CliComponentBank componentBank;
+    CliFlightBoard flightBoard;
+    CliAllShips allShips;
 
     public ShipBuildingScreen(ClientModel model) {
         componentBank = new CliComponentBank(model);
+        flightBoard = new CliFlightBoard(model);
+        allShips = new CliAllShips(model);
     }
 
     @Override
-    public void showCLI(ClientModel model) {
+    public void showCLI(ClientModel model) throws IOException {
 
         componentBank.getDescription().forEach(System.out::println);
-        model.getFlightBoard().getDescription().forEach(System.out::println);
-        model.getComponentBank().getDescription().forEach(System.out::println);
-        model.getAllShips().getDescription().forEach(System.out::println);
+        flightBoard.getDescription().forEach(System.out::println);
+        allShips.getDescription().forEach(System.out::println);
 
         // always allowed
         System.out.println("C       \tGet New covered component");
@@ -107,6 +113,6 @@ public class ShipBuildingScreen implements ScreenStrategy {
 
     @Override
     public void showGUI(ClientModel model, Pane root, VirtualServer server) throws IOException {
-        root.getChildren().add(model.getComponentBank().getNode(server));
+        root.getChildren().add(new GuiComponentBank(model, server).getNode());
     }
 }
