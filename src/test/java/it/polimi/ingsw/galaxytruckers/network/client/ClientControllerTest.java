@@ -2,8 +2,8 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
 
 import java.awt.*;
 import java.io.IOException;
@@ -39,6 +39,11 @@ class ClientControllerTest {
         coveredComponentsN = 44;
 
         server = new VirtualServer() {
+            @Override
+            public void notify(Event event) {
+
+            }
+
             @Override
             public void registerNickname(String myNickname) throws IOException {
                 System.out.println("FAKE SERVER EVENT: successfully registered nickname " + myNickname);
@@ -151,12 +156,6 @@ class ClientControllerTest {
 
             @Override
             public void reportError(String error) throws RemoteException {}
-
-            @Override
-            public void registerHandler(EventHandler handler) throws RemoteException {}
-
-            @Override
-            public void processEvents() throws IOException {}
         };
 
         // the following anonymous class is used to force GUI
