@@ -15,7 +15,6 @@ import java.util.Map;
 
 public interface ClientControllerInterface {
 
-
     void updateLobbyPlayers(Map<String, Colors> playerToColor) throws IOException;
 
     // REMOVE, USE RETURN VALUE
@@ -33,9 +32,9 @@ public interface ClientControllerInterface {
 
     void notifyFaceUpComponentRequest(String playerName, int componentId) throws IOException;
 
-    void notifyPeekForecast(String playerName, int deckIndex);
+    void notifyPeekForecast(String playerName, int deckIndex) throws IOException;
 
-    void notifyReleaseForecast(String playerName, int deckIndex);
+    void notifyReleaseForecast(String playerName, int deckIndex) throws IOException;
 
     void sendForecastDeck(List<Integer> deckCardIds);
 

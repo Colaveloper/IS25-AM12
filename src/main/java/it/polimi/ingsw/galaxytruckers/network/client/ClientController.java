@@ -128,9 +128,17 @@ public class ClientController implements ClientControllerInterface {
 //        model.setRevealedComponent(faceUpComponentIds);
 //    }
 
-    @Override
-    public void notifyPeekForecast(String playerName, int deckIndex) {
+    @Override//Tommy approved
+    public void notifyPeekForecast(String playerName, int deckIndex) throws IOException {
+        model.blockForecast(deckIndex);
+    }
 
+    @Override//Tommy approved
+    public void notifyReleaseForecast(String playerName, int deckIndex) throws IOException {
+        model.freeForecast(deckIndex);
+        if (model.isMyNickname(playerName)) {
+            view.setScreen(new ShipBuildingScreen());
+        }
     }
 
     @Override
