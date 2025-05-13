@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.awt.*;
 import java.util.UUID;
@@ -17,7 +18,8 @@ public interface ServerControllerInterface {
      * @throws IllegalArgumentException if there is already a player
      * with the given nickname
      */
-    void registerNickname(String nickname);
+    Player registerNickname(String nickname);
+
     /**
      * Creates a new lobby for a game of the chosen level and with
      * the specified number of players, adding the creator to it
@@ -27,7 +29,7 @@ public interface ServerControllerInterface {
      * @return the game ID, as a {@code UUID} object
      * @throws IllegalArgumentException if {@code numPlayers} is < 2
      */
-    UUID newGame(String creatorName, Level level, int numPlayers);
+    void newGame(String creatorName, Level level, int numPlayers);
 
     /**
      * Adds the player with the specified nickname to the lobby
@@ -71,8 +73,6 @@ public interface ServerControllerInterface {
 
     // Game methods
 
-    void saveGame(UUID lobbyID);
-
     // Ship building
     /**
      * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameModelInterface#requestRandComponent(Game, ShipBoard)}
@@ -86,7 +86,7 @@ public interface ServerControllerInterface {
     void requestRandComponent(String nickname);
 
     /**
-     * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameModelInterface#requestComponent(Game, ShipBoard, UUID)}
+     * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameModelInterface#requestComponent(Game, ShipBoard, int)}
      * passing as parameters the game the player is in and their assigned ship board
      * @param nickname the nickname of the player wishing to perform the action
      * @param componentID the id of the component the player wishes to take
@@ -95,24 +95,13 @@ public interface ServerControllerInterface {
      * @throws IllegalStateException if the player has not joined a lobby or if their
      * active lobby is not in game phase
      */
-    void requestComponent(String nickname, UUID componentID);
-
-    /**
-     * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameModelInterface#rotateComponent(Game, ShipBoard)}
-     * passing as parameters the game the player is in and their assigned ship board
-     * @param nickname the nickname of the player wishing to perform the action
-     * @throws IllegalArgumentException if there is no registered player with
-     * the given nickname
-     * @throws IllegalStateException if the player has not joined a lobby or if their
-     * active lobby is not in game phase
-     */
-    void rotateComponent(String nickname);
+    void requestComponent(String nickname, int componentID);
 
     //TODO : add documentation for these game methods
     void rejectComponent(String nickname);
     void stashComponent(String nickname);
-    void grabStashedComponent(String nickname);
-    void placeComponent(String nickname, Point point);
+    void grabStashedComponent(String nickname, int index);
+    void placeComponent(String nickname, Point point, int orientation);
     void flipHourglass(String nickname);
     void placeShipOnFlightBoard(String nickname, int startingPosition);
     void acquireForecast(String nickname, int deckIndex);
@@ -123,15 +112,19 @@ public interface ServerControllerInterface {
     void chooseShipPiece(String nickname, int pieceIndex);
 
     // Ship init
-    void initializeCabin(CrewType crewType);
+    void initializeCabin(String nickname, Point point, CrewType crewType);
 
     // Adventure
+    void drawCard(String nickname);
     void activateComponent(String nickname, Point point);
     void loseCrew(String nickname, Point point);
     void grabReward(String nickname, boolean rewardGrabbed);
     void placeGoods(String nickname, Point point, GoodsType goodsType);
     void removeGoods(String nickname, Point point, GoodsType goodsType);
+    void loseGoods(String nickname, Point point);
     void useBattery(String nickname, Point point);
+    void choosePlanet(String nickname, int choice);
+    void goNext(String nickname);
 
     void giveUp(String nickname);
 }

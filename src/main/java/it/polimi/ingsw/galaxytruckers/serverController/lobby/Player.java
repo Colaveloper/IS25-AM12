@@ -20,14 +20,14 @@ public class Player {
     private ShipBoard shipBoard;
     private final Object shipBoardLock = new Object();
 
-    public static void addPlayer(String nickname) {
+    public static Player addPlayer(String nickname) {
         synchronized (nicknameToPlayer) {
             if (nicknameToPlayer.containsKey(nickname)) {
-                System.out.println("Request refused: nickname \"" + nickname + "\" already taken ⛔");
                 throw new IllegalArgumentException("Nickname already exists");
             }
-            nicknameToPlayer.put(nickname, new Player(nickname));
-            System.out.println("Request accepted: registering " + nickname + " ✅");
+            Player player = new Player(nickname);
+            nicknameToPlayer.put(nickname, player);
+            return player;
         }
     }
 

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController;
 
-import it.polimi.ingsw.galaxytruckers.network.shared.EventHandler;
+import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
@@ -9,30 +9,32 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 
 import java.awt.*;
-import java.rmi.RemoteException;
 import java.util.UUID;
 
 public class ServerController implements ServerControllerInterface {
 
-    public void registerNickname(String nickname) {
-        Player.addPlayer(nickname);
+    @Override
+    public Player registerNickname(String nickname) {
+        return Player.addPlayer(nickname);
     }
 
-    public UUID newGame(String creatorName, Level level, int numPlayers) {
+    @Override
+    public void newGame(String creatorName, Level level, int numPlayers) {
         Player creator = Player.getPlayer(creatorName);
         Lobby newLobby = new Lobby(creator, level, numPlayers);
-        return newLobby.getId();
     }
 
+    @Override
     public void joinLobby(String nickname, UUID lobbyID) {
         Lobby.getLobby(lobbyID).addPlayer(Player.getPlayer(nickname));
     }
 
     @Override
     public void leaveLobby(String nickname) {
-        //TODO : decide whether to implement this methodName
+        //TODO : decide whether to implement this method
     }
 
+    //TODO: make color selection automatic
     @Override
     public void chooseColor(String nickname, Colors color) {
         Player player = Player.getPlayer(nickname);
@@ -41,13 +43,6 @@ public class ServerController implements ServerControllerInterface {
         lobby.chooseColor(player, color);
     }
 
-    @Override
-    public void saveGame(UUID lobbyID) {
-        //TODO: implement saving current game state on disk
-    }
-
-
-
     //TODO: implement these methods (calls to model methods with lobby state check
     @Override
     public void requestRandComponent(String nickname) {
@@ -55,12 +50,7 @@ public class ServerController implements ServerControllerInterface {
     }
 
     @Override
-    public void requestComponent(String nickname, UUID componentID) {
-
-    }
-
-    @Override
-    public void rotateComponent(String nickname) {
+    public void requestComponent(String nickname, int componentID) {
 
     }
 
@@ -75,12 +65,12 @@ public class ServerController implements ServerControllerInterface {
     }
 
     @Override
-    public void grabStashedComponent(String nickname) {
+    public void grabStashedComponent(String nickname, int index) {
 
     }
 
     @Override
-    public void placeComponent(String nickname, Point point) {
+    public void placeComponent(String nickname, Point point, int orientation) {
 
     }
 
@@ -115,7 +105,12 @@ public class ServerController implements ServerControllerInterface {
     }
 
     @Override
-    public void initializeCabin(CrewType crewType) {
+    public void initializeCabin(String nickname, Point point, CrewType crewType) {
+
+    }
+
+    @Override
+    public void drawCard(String nickname) {
 
     }
 
@@ -145,7 +140,22 @@ public class ServerController implements ServerControllerInterface {
     }
 
     @Override
+    public void loseGoods(String nickname, Point point) {
+
+    }
+
+    @Override
     public void useBattery(String nickname, Point point) {
+
+    }
+
+    @Override
+    public void choosePlanet(String nickname, int choice) {
+
+    }
+
+    @Override
+    public void goNext(String nickname) {
 
     }
 
@@ -153,5 +163,4 @@ public class ServerController implements ServerControllerInterface {
     public void giveUp(String nickname) {
 
     }
-
 }
