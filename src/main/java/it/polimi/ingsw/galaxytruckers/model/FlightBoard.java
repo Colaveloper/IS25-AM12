@@ -8,18 +8,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class FlightBoard {
-    protected final Set<ShipBoard> allShips; // contains playing+dead ships
+    //protected final Set<ShipBoard> allShips; // contains playing+dead ships
     protected final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
     protected List<Integer> startingPositionsLeft;
 
     public FlightBoard(Set<ShipBoard> allShips) {
-        this.allShips = allShips;
+        //this.allShips = allShips;
         this.shipToPlace = new HashMap<>();
     }
 
-    public Set<ShipBoard> getAllShips() {
-        return allShips;
-    }
+//    public Set<ShipBoard> getAllShips() {
+//        return allShips;
+//    }
 
     public Map<ShipBoard, Integer> getShipToPlace() {
         return shipToPlace;

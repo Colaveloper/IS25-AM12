@@ -49,8 +49,6 @@ class GameTest {
         assertInstanceOf(ShipBuildingState.class,  game.getCurrentState());
         assertNotNull(game.getFlightBoard());
         assertNotNull(game.getDeck());
-        assertTrue(game.getFlightBoard().getAllShips().containsAll(shipBoards));
-        assertEquals(shipBoards.size(), game.getFlightBoard().getAllShips().size());
     }
 
     @Test

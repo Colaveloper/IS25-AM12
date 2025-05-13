@@ -43,11 +43,6 @@ class FlightBoardTest {
         }
 
         @Test
-        void getAllShipsReturnsAllShips() {
-            assertEquals(Set.of(ship1, ship2, ship3), flightBoard.getAllShips());
-        }
-
-        @Test
         void placeShipOnFlightBoardNeverFailsAndIgnoresStartingPosition() {
             // starting position ignored in test flight
             assertFalse(flightBoard.placeShipOnFlightBoard(ship1, 123));
