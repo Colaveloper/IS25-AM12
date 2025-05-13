@@ -349,7 +349,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
-    public void notifyShipMapUpdate(String playerName, Map<Point, Integer> componentIdMap) throws RemoteException {
+    public void notifyShipMapUpdate(String playerName, int componentId, int rotation, Point position) throws RemoteException {
 
     }
 

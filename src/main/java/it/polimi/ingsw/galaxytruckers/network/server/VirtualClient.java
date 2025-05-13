@@ -85,10 +85,11 @@ public interface VirtualClient {
     /**
      * Signals to the client that the components on a shipboard have changed
      * @param playerName the nickname of the owner of the shipboard that changed
-     * @param componentIdMap a map containing the points and ids of the components
-     *                       currently on the shipboard
+     * @param componentId id of the component added to the ship
+     * @param rotation orientation of the component on the ship
+     * @param position position of the component on the ship
      */
-    void notifyShipMapUpdate(String playerName, Map<Point, Integer> componentIdMap);
+    void notifyShipMapUpdate(String playerName, int componentId, int rotation, Point position);
 
     /**
      * Sends to the client the information about a forecast deck that the

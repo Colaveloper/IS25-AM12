@@ -126,8 +126,8 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     }
 
     @Override
-    public void notifyShipMapUpdate(String playerName, Map<Point, Integer> componentIdMap) {
-        submitUpdateTask(() -> remoteClient.notifyShipMapUpdate(playerName, componentIdMap));
+    public void notifyShipMapUpdate(String playerName, int componentId, int rotation, Point position) {
+        submitUpdateTask(() -> remoteClient.notifyShipMapUpdate(playerName, componentId, rotation, position));
     }
 
     @Override

@@ -114,7 +114,9 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyShipMapUpdate(
                     shipMapUpdateEvent.playerName(),
-                    shipMapUpdateEvent.componentIdMap()
+                    shipMapUpdateEvent.componentId(),
+                    shipMapUpdateEvent.rotation(),
+                    shipMapUpdateEvent.position()
             );
         }
     }
