@@ -97,11 +97,11 @@ public class ClientModel {
 
     public void setPlayerColor(String nickname, Colors color) {
         playerToColor.putIfAbsent(nickname, color);
+        ships.put(playerToColor.get(nickname), new ArrayList<>());
     }
 
     public void setMyNickname(String myNickname) {
         this.myNickname = myNickname;
-        addPlayer(myNickname); // TODO: ??
     }
 
     // call after having added all players
@@ -272,11 +272,6 @@ public class ClientModel {
     public List<Point> getSelectablePoints() {
         return selectablePoints;
     }
-
-    public void addPlayer(String nickname) {
-        ships.put(playerToColor.get(nickname), new ArrayList<>());
-    }
-
 
     // GETTERS (Javafx properties used only for attributes that change over time)
 

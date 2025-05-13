@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class CliAllShips extends CliElement {
 
-    private LinkedHashMap<Colors, CliShipBoard> ships;
+    private final LinkedHashMap<Colors, CliShipBoard> ships;
 
     public CliAllShips(ClientModel model) {
         super(model);

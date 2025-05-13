@@ -61,7 +61,6 @@ public class ClientController implements ClientControllerInterface {
         view.setScreen(new LobbyScreen());
     }
 
-    @Override
     public void setMyNickname(String nickname) { // gets called only after legal registration
         model.setMyNickname(nickname);
     }
