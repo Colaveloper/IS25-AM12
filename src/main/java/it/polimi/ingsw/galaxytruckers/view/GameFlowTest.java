@@ -27,7 +27,7 @@
 //        names.add("Roborbio");
 //        controller.updateLobbyPlayers(names);
 //
-//        List<Point> shipArea = new ArrayList<>(List.of(
+//        List<Point> getShipArea = new ArrayList<>(List.of(
 //                new Point(4, 7), new Point(4, 8), new Point(4, 9),
 //                new Point(5, 6), new Point(5, 7), new Point(5, 8), new Point(5, 9),
 //                new Point(6, 5), new Point(6, 6), new Point(6, 7), new Point(6, 8), new Point(6, 9),
@@ -37,14 +37,14 @@
 //                new Point(10, 7),new Point(10, 8),new Point(10, 9)
 //        ));
 //
-//        controller.setupGame(10, List.of(2, 4, 5), new HashSet<>(shipArea));
+//        controller.setupGame(10, List.of(2, 4, 5), new HashSet<>(getShipArea));
 //
 //        controller.showStartBuilding(50);
 //        //(input)
 //
-//        for (int i=0 ; i<shipArea.size() -25; i++) {
+//        for (int i=0 ; i<getShipArea.size() -25; i++) {
 //            controller.setCoveredComponents(50-i-1);
-//            controller.showComponentPositioning("Roborbio", i*5, i%4, shipArea.get(i));
+//            controller.showComponentPositioning("Roborbio", i*5, i%4, getShipArea.get(i));
 //            //(input)
 //
 //            controller.showStashUpdate(new ArrayList<>(List.of(4, 8)));
@@ -108,6 +108,6 @@
 //    }
 //
 //    ClientModel model;
-//    List<Point> shipArea;
+//    List<Point> getShipArea;
 //
 //}

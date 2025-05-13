@@ -63,9 +63,9 @@
 //        );
 //    }
 //
-//    public void setFlightBoard(int loopLength, List<Integer> startingPositions) {
+//    public void setFlightBoard(int loopLength, List<Integer> getStartingPositions) {
 //        flightBoard.setLoopLength(loopLength);
-//        flightBoard.setStartingPositionLeft(startingPositions);
+//        flightBoard.setStartingPositionLeft(getStartingPositions);
 //    }
 //
 //    public void setPlayerColor(String nickname, Colors color) {
@@ -77,9 +77,9 @@
 //        addPlayer(myNickname);
 //    }
 //
-//    public void setShipArea(Set<Point> shipArea) {
+//    public void setShipArea(Set<Point> getShipArea) {
 //        for (Shipboard s : playerToShip.values()) {
-//            s.setShipArea(shipArea);
+//            s.setShipArea(getShipArea);
 //        }
 //    }
 //

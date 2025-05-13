@@ -24,10 +24,11 @@ public class CliComponentBank extends CliElement {
     IntegerProperty coveredComponentN;
     CliComponent currentComponent;
 
-    public CliComponentBank(ClientModel model) {
+    public CliComponentBank(ClientModel model) throws IOException {
         super(model);
         coveredComponentN = model.coveredComponentNProperty();
         listenToInvalidation(coveredComponentN);
+        currentComponent = new CliComponent(model, model.currentComponentProperty().get());
         listenToInvalidation(currentComponent);
     }
 

@@ -40,11 +40,17 @@ public class Component {
         stat = new SimpleIntegerProperty(0);
         crewType = new SimpleObjectProperty<>(null);
         cargo = new SimpleObjectProperty<>();
-        node = componentId == -1 ? null : rootNode.get(componentId); // consider adding nodes for empty space and area
+        node = rootNode.get(componentId);
     }
 
     public Component(ComponentType type) {
-        this(-1);
+        this(switch (type) {
+            case ComponentType.EMPTY_AREA -> 0;
+            case ComponentType.EMPTY_SPACE -> 1;
+            default -> throw new IllegalArgumentException(
+                    "this constructor is to use only for special components"
+            );
+        });
         this.type = type;
     }
 

@@ -16,13 +16,13 @@
 //class CliViewTest {
 //    View view;
 //    ClientModel model;
-//    List<Point> shipArea;
+//    List<Point> getShipArea;
 //
 //    @BeforeEach
 //    void setUp() throws IOException {
 //        model = new ClientModel();
 //
-//        shipArea = new ArrayList<>(List.of(
+//        getShipArea = new ArrayList<>(List.of(
 //            new Point(4, 7), new Point(4, 8), new Point(4, 9),
 //            new Point(5, 6), new Point(5, 7), new Point(5, 8), new Point(5, 9),
 //            new Point(6, 5), new Point(6, 6), new Point(6, 7), new Point(6, 8), new Point(6, 9),
@@ -33,10 +33,10 @@
 //        ));
 //
 //        model.setMyNickname("Roborbio");
-//        model.setShipArea(new HashSet<>(shipArea));
+//        model.setShipArea(new HashSet<>(getShipArea));
 //        model.setFlightBoard(10, List.of(2, 4, 5));
-//        for (int i=0 ; i<shipArea.size() ; i++) {
-//            model.setComponent("Roborbio", i*5, i%4, shipArea.get(i)); //changing component coeff (<6) gives interesting cases for tests
+//        for (int i=0 ; i<getShipArea.size() ; i++) {
+//            model.setComponent("Roborbio", i*5, i%4, getShipArea.get(i)); //changing component coeff (<6) gives interesting cases for tests
 //        }
 //
 //        model.setGoods("Roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE));

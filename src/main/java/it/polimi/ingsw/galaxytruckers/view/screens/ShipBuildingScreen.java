@@ -16,7 +16,7 @@ public class ShipBuildingScreen implements ScreenStrategy {
     CliFlightBoard flightBoard;
     CliAllShips allShips;
 
-    public ShipBuildingScreen(ClientModel model) {
+    public ShipBuildingScreen(ClientModel model) throws IOException {
         componentBank = new CliComponentBank(model);
         flightBoard = new CliFlightBoard(model);
         allShips = new CliAllShips(model);

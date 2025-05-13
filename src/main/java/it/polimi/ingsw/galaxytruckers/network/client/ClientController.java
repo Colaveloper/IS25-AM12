@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ClientController implements ClientControllerInterface {
     private final ClientModel model;
     private View view;
+    private ConfigFactory config;
 
     public ClientController(VirtualServer server) {
         this.model = new ClientModel();
@@ -64,10 +66,15 @@ public class ClientController implements ClientControllerInterface {
         model.setMyNickname(nickname);
     }
 
-    public void setupGame(int loopLength, List<Integer> startingPositions, Set<Point> shipArea, int coveredComponent) throws IOException {
-        model.setFlightBoard(loopLength, startingPositions);
-        model.setShipArea(shipArea);
-        model.setCoveredComponents(coveredComponent);
+    public void setupGame(Level level) throws IOException {
+        config = switch (level) {
+            case TEST -> new TestConfiguarator();
+            case FIRST -> throw new IllegalArgumentException("First level is not playable");
+            case SECOND -> new SecondConfigurator();
+        };
+        model.setFlightBoard(config.getLoopLenght(), config.getStartingPositions());
+        model.setShipArea(config.getShipArea());
+        model.setCoveredComponents(config.getComponentsN());
         view.setScreen(new ShipBuildingScreen(model));
     }
 

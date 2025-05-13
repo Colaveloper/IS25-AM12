@@ -68,6 +68,7 @@ public class ClientModel {
         coveredComponentN = new SimpleIntegerProperty();
         revealedComponents = new ArrayList<>();
         stashedComponents = new HashMap<>();
+        startingPositionLeft = new SimpleListProperty<>();
         hands = new HashMap<>();
         colorToPlace = new SimpleMapProperty<>();
         stats = new SimpleMapProperty<>();
@@ -83,12 +84,12 @@ public class ClientModel {
 
     public void setPlayerToPlace(Map<String, Integer> playerToPlace) {
         // translating nicknames to colors
-        playerToPlace.forEach((key, value) -> this.colorToPlace.putIfAbsent(
-                playerToColor.get(key), value
-        ));
+        playerToPlace.forEach((key, value) ->
+                this.colorToPlace.putIfAbsent(playerToColor.get(key), value)
+        );
     }
 
-    public void setFlightBoard(int loopLength, List<Integer> startingPositions) {
+    public void setFlightBoard(int loopLength, Set<Integer> startingPositions) {
         this.loopLength = loopLength;
         this.startingPositionLeft.addAll(startingPositions);
     }
@@ -104,6 +105,12 @@ public class ClientModel {
 
     // call after having added all players
     public void setShipArea(Set<Point> shipArea) {
+        playerToColor.forEach((_, c) -> hands.put(c, new SimpleObjectProperty<>(
+                new Component(ComponentType.EMPTY_AREA)
+        )));
+
+        this.shipArea.addAll(shipArea);
+
         int minX = shipArea.stream().mapToInt(p -> p.x).min().orElse(0);
         int maxX = shipArea.stream().mapToInt(p -> p.x).max().orElse(0);
         int minY = shipArea.stream().mapToInt(p -> p.y).min().orElse(0);
@@ -112,7 +119,7 @@ public class ClientModel {
         // Save top-left point
         upLeft = new Point(minX, minY);
 
-        this.ships.forEach((_, s)-> {
+        this.ships.forEach((c, s)-> {
             for (int y = minY; y <= maxY; y++) {
                 List<ObjectProperty<Component>> row = new ArrayList<>();
                 for (int x = minX; x <= maxX; x++) {
@@ -126,6 +133,7 @@ public class ClientModel {
 //                    super.registerObservables(component);
 //                    component.get().setChangeListener(this);
                 }
+                ships.get(c).add(row);
             }
         });
     }
