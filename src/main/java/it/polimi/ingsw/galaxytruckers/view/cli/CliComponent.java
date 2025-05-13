@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
 
@@ -26,7 +27,8 @@ public class CliComponent extends CliElement {
     private String crewColorOpen;
     private String crewColorClose;
 
-    public CliComponent(Component component) throws IOException {
+    public CliComponent(ClientModel model, Component component) throws IOException {
+        super(model);
         this.component = component;
         JsonNode node = component.getNode();
         connectors.addAll(parseConnectors(node.get("connectors")));

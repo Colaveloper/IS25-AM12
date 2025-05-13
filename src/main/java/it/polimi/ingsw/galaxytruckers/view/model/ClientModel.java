@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.cli.CliComponent;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import javafx.beans.property.*;
 
@@ -22,12 +23,13 @@ public class ClientModel {
     private String currentPlayerNickname;
     private String myNickname;
     private final Set<Point> shipArea;
-    private final LinkedHashMap<Colors, Map<Point, Component>> ships;
+    private final LinkedHashMap<Colors, List<List<ObjectProperty<Component>>>> ships;
     private final BiMap<String, Colors> playerToColor;
     private final List<Point> selectablePoints;
     private final Map<Colors, Map<StatType, Integer>> stats;
 
     // BUILDING
+    private Point upLeft; // the upper-left point of the ship-area
     private final List<Component> revealedComponents;
     private final IntegerProperty coveredComponentN;
     private final Map<Colors, List<Component>> stashedComponents;
@@ -36,7 +38,7 @@ public class ClientModel {
 
     // FLIGHTBOARD
     private int loopLength;
-    private List<Integer>  startingPositionLeft;
+    private ListProperty<Integer>  startingPositionLeft;
     private final MapProperty<Colors, Integer> colorToPlace;
 
 
@@ -75,7 +77,7 @@ public class ClientModel {
 
     // SETUP PHASE
 
-    public LinkedHashMap<Colors, Map<Point, Component>> getShipboards() {
+    public LinkedHashMap<Colors, List<List<ObjectProperty<Component>>>> getShipboards() {
         return ships;
     }
 
@@ -88,7 +90,7 @@ public class ClientModel {
 
     public void setFlightBoard(int loopLength, List<Integer> startingPositions) {
         this.loopLength = loopLength;
-        this.startingPositionLeft = startingPositions;
+        this.startingPositionLeft.addAll(startingPositions);
     }
 
     public void setPlayerColor(String nickname, Colors color) {
@@ -100,8 +102,32 @@ public class ClientModel {
         addPlayer(myNickname); // TODO: ??
     }
 
+    // call after having added all players
     public void setShipArea(Set<Point> shipArea) {
-        this.shipArea.addAll(shipArea);
+        int minX = shipArea.stream().mapToInt(p -> p.x).min().orElse(0);
+        int maxX = shipArea.stream().mapToInt(p -> p.x).max().orElse(0);
+        int minY = shipArea.stream().mapToInt(p -> p.y).min().orElse(0);
+        int maxY = shipArea.stream().mapToInt(p -> p.y).max().orElse(0);
+
+        // Save top-left point
+        upLeft = new Point(minX, minY);
+
+        this.ships.forEach((_, s)-> {
+            for (int y = minY; y <= maxY; y++) {
+                List<ObjectProperty<Component>> row = new ArrayList<>();
+                for (int x = minX; x <= maxX; x++) {
+                    ObjectProperty<Component> component = new SimpleObjectProperty<>(
+                        new Component(
+                            shipArea.contains(new Point(x, y))
+                                    ? ComponentType.EMPTY_AREA
+                                    : ComponentType.EMPTY_SPACE
+                        ));
+                    row.add(component);
+//                    super.registerObservables(component);
+//                    component.get().setChangeListener(this);
+                }
+            }
+        });
     }
 
     // SHIP BUILDING PHASE
@@ -133,19 +159,22 @@ public class ClientModel {
 
             // SHIPBOARD
 
-    public void removeComponent (Point position, String nickname) throws IOException {
-        this.ships.get(playerToColor.get(nickname)).remove(position);
+    public void removeComponent (Point p, String nickname) throws IOException {
+        this.ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).set(
+                new Component(ComponentType.EMPTY_AREA)
+        );
     }
 
-    public void setComponent(String nickname, int componentId, int direction, Point position) throws IOException {
+    public void setComponent(String nickname, int componentId, int direction, Point p) throws IOException {
         Component component = new Component(componentId);
         component.setDirection(direction);
-        this.ships.get(playerToColor.get(nickname)).put(position, component);
+        this.ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).set(component);
+//        lastPosition = position;
     }
 
-    public void setCabinStats(String nickname, Point position, CrewType crewType, int crewSize) throws IOException {
-        ships.get(playerToColor.get(nickname)).get(position).setCrewType(crewType);
-        ships.get(playerToColor.get(nickname)).get(position).setStat(crewSize);
+    public void setCabinStats(String nickname, Point p, CrewType crewType, int crewSize) throws IOException {
+        ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setCrewType(crewType);
+        ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(crewSize);
     }
 
         // ADVENTURE PHASE
@@ -165,8 +194,8 @@ public class ClientModel {
         return myNickname.equals(nickname);
     }
 
-    public void setBatteries(String nickname, Point position, int totalBatteries) throws IOException {
-        ships.get(playerToColor.get(nickname)).get(position).setStat(totalBatteries);
+    public void setBatteries(String nickname, Point p, int totalBatteries) throws IOException {
+        ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(totalBatteries);
     }
 
     public void setCredits(String nickname, int credits) {
@@ -178,8 +207,8 @@ public class ClientModel {
     }
 
     // place goods on ship
-    public void setGoods(String nickname, Point position, List<GoodsType> goods) throws IOException {
-        ships.get(playerToColor.get(nickname)).get(position).setGoods(goods);
+    public void setGoods(String nickname, Point p, List<GoodsType> goods) throws IOException {
+        ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setGoods(goods);
     }
 
     // remove good from the buffer
@@ -213,10 +242,13 @@ public class ClientModel {
         // OTHER
 
     public void setSelectablePoints(List<Point> selectablePoints) {
-        for (Map.Entry<Point, Component> e : ships.get(playerToColor.get(myNickname)).entrySet()) {
-            e.getValue().isSelectableProperty().set(
-                    selectablePoints.contains(e.getKey())
-            );
+        List<List<ObjectProperty<Component>>> myShip = ships.get(playerToColor.get(myNickname));
+        for (int i = 0, y = upLeft.y; i < myShip.size(); i++, y++) {
+            for (int j = 0, x = upLeft.x; j<myShip.getFirst().size(); j++, x++) {
+                myShip.get(i).get(j).get().isSelectableProperty().set(
+                        selectablePoints.contains(new Point(x, y))
+                );
+            }
         }
     }
 
@@ -233,11 +265,11 @@ public class ClientModel {
     }
 
     public void addPlayer(String nickname) {
-        ships.put(playerToColor.get(nickname), new HashMap<>());
+        ships.put(playerToColor.get(nickname), new ArrayList<>());
     }
 
 
-    // GETTERS
+    // GETTERS (Javafx properties used only for attributes that change over time)
 
     public IntegerProperty coveredComponentNProperty() {
         return coveredComponentN;
@@ -245,5 +277,23 @@ public class ClientModel {
 
     public ObjectProperty<Component> currentComponentProperty() {
         return hands.get(playerToColor.get(myNickname));
+    }
+
+    public int getLoopLength() {return loopLength;}
+
+    public ListProperty<Integer> startingPositionLeftProperty() {
+        return startingPositionLeft;
+    }
+
+    public MapProperty<Colors, Integer> colorToPlaceProperty() {
+        return colorToPlace;
+    }
+
+    public LinkedHashMap<Colors, List<List<ObjectProperty<Component>>>> getShips() {
+        return ships;
+    }
+
+    public Point getUpLeft() {
+        return upLeft;
     }
 }

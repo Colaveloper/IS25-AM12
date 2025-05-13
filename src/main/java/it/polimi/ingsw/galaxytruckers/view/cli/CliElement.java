@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class CliElement implements ChangeListener {
-    ClientModel model;
+    protected ClientModel model;
     private final AtomicBoolean dirty = new AtomicBoolean(true);
     protected final List<String> descriptionCache = new ArrayList<>();
     private ChangeListener listener;
@@ -61,5 +61,5 @@ public abstract class CliElement implements ChangeListener {
         return descriptionCache;
     }
 
-    public abstract List<String> getNewDescription();
+    public abstract List<String> getNewDescription() throws IOException;
 }

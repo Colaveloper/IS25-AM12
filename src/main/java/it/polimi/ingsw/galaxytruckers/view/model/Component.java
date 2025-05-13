@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
 import javafx.beans.property.*;
 
 import java.io.File;
@@ -30,6 +31,7 @@ public class Component {
     private final ObjectProperty<CrewType> crewType;
     private final IntegerProperty stat;
     private final ObjectProperty<List<GoodsType>> cargo;
+    private ComponentType type;
 
     public Component(int componentId) {
         this.componentId = componentId;
@@ -38,7 +40,12 @@ public class Component {
         stat = new SimpleIntegerProperty(0);
         crewType = new SimpleObjectProperty<>(null);
         cargo = new SimpleObjectProperty<>();
-        node = rootNode.get(componentId);
+        node = componentId == -1 ? null : rootNode.get(componentId); // consider adding nodes for empty space and area
+    }
+
+    public Component(ComponentType type) {
+        this(-1);
+        this.type = type;
     }
 
     public int getComponentId() {
@@ -48,6 +55,8 @@ public class Component {
     public JsonNode getNode() {
         return node;
     }
+
+    public ComponentType getType() {return type;}
 
     public BooleanProperty isSelectableProperty() {
         return isSelectable;

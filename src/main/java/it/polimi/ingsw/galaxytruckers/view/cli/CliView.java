@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.cli;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.ChangeListener;
-import it.polimi.ingsw.galaxytruckers.view.Shipboard;
+import it.polimi.ingsw.galaxytruckers.view.CliShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.View;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;
@@ -26,7 +26,7 @@ public class CliView implements View, ChangeListener {
     public void setModel(ClientModel model) {
         CliView.model = model;
         model.getComponentBank().setChangeListener(this);
-        for(Shipboard shipboard : model.getShipboards().values()) {
+        for(CliShipBoard shipboard : model.getShipboards().values()) {
             shipboard.setChangeListener(this);
         }
         model.getAllShips().setChangeListener(this);
