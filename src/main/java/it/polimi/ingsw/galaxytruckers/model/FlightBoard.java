@@ -13,23 +13,32 @@ public abstract class FlightBoard {
     protected List<Integer> startingPositionsLeft;
 
     public FlightBoard(Set<ShipBoard> allShips) {
-        //this.allShips = allShips;
         this.shipToPlace = new HashMap<>();
     }
 
-//    public Set<ShipBoard> getAllShips() {
-//        return allShips;
-//    }
-
+    /**
+     * @return the map of ships currently playing*/
     public Map<ShipBoard, Integer> getShipToPlace() {
         return shipToPlace;
     }
 
-    // return value to be interpreted as "building phase is finished for everybody"
+    /**
+     * Puts the ship in the shipToPlace map at the specified starting position and
+     * updates the starting positions left. If there are no more starting positions left,
+     * then the building phase has concluded
+     * @param shipBoard the ship to be placed
+     * @param startingPosition the starting position of the ship to place
+     * @return true if there are no more starting positions left, false otherwise
+     * */
     public abstract boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition);
 
+    /**
+     * @return the flightboard's length*/
     protected abstract int getLoopLength();
 
+    /**
+     * @return a {@link List} of shipboards in the order that they appear
+     * on the flightboard*/
     public List<ShipBoard> getOrderedShips() {
         return shipToPlace.entrySet().stream()
                 .sorted(Comparator.<Map.Entry<ShipBoard, Integer>>comparingInt(Map.Entry::getValue).reversed())
@@ -38,6 +47,10 @@ public abstract class FlightBoard {
         // nth .pop() returns the nth player
     }
 
+    /**
+     * Moves the specified shipboard by displacement value on the flightboard
+     * @param shipBoard the shipboard to be moved
+     * @param displacement the amount of spaces to move on the flightboard*/
     public void displaceShip (ShipBoard shipBoard, int displacement) {
         int displacementLeft = displacement;
         int tryMove = displacementLeft>0 ? 1 : -1;
@@ -59,14 +72,23 @@ public abstract class FlightBoard {
         shipToPlace.put(shipBoard, newPosition);
     }
 
+    /**
+     * Removes a set of shipboards from the flightboard
+     * @param shipsToRemove the {@link Set} of ships to remove*/
     public void removeShips (Set<ShipBoard> shipsToRemove) {
         throw new UnsupportedOperationException("Not available for this type of FlightBoard");
     }
 
+    /**
+     * @return a {@link Set} of shipboards that have been lapped on
+     * the flightboard*/
     public Set<ShipBoard> getLappedShips() {
         throw new UnsupportedOperationException("Not available for this type of FlightBoard");
     }
 
+    /**
+     * @return a {@link List} of the remaining starting positions
+     * on the flightboard*/
     @VisibleForTesting
     public List<Integer> getStartingPositionsLeft() {
         return new ArrayList<>(startingPositionsLeft);
