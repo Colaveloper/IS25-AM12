@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.Map;
 
-public class AddGoodsState extends GameState {
+public class AddGoodsState extends AdventureState {
     Map<GoodsType, Integer> goodsBuffer;
     ShipBoard shipBoard;
 

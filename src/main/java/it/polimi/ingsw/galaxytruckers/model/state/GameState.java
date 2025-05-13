@@ -115,7 +115,7 @@ public abstract class GameState {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void giveUp(ShipBoard shipBoard, boolean giveUp){
+    public void giveUp(ShipBoard shipBoard){
         throw new IllegalStateException("This action is unsupported in this state");
     }
 

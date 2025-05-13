@@ -102,6 +102,11 @@ public class Game {
         return level;
     }
 
+    /**
+     * Adds ships that have no crew or that have been lapped
+     * to the set of given up ships and removes them from the
+     * flightboard
+     * */
     public void forceShipsToGiveUp(){
         if(level != Level.TEST){
             // if ship has no crew -> force give up
@@ -117,24 +122,39 @@ public class Game {
         }
     }
 
+    /**
+     * Adds a shipboard to the set of given up ships and
+     * removes that ship from the flightboard
+     * @param ship the ship to place in the set of given up ships
+     * */
     public void forceShipToGiveUp(ShipBoard ship){
         givenUpShips.add(ship);
         flightBoard.removeShips(Set.of(ship));
     }
 
+    /**
+     * @return the game's set of given up ships*/
     public Set<ShipBoard> getGivenUpShips(){return givenUpShips;}
 
+    /**
+     * Assigns ship rewards to be used in the final score and
+     * changes game state to the end game state*/
     public void endGame(){
         assignShipRewards();
         setCurrentState(new EndGameState(finalScores));
     }
 
+    /**
+     * Sets game state to the end game state if there are no
+     * more ships playing*/
     public void endGameIfAllShipsHaveGivenUp(){
         if(givenUpShips.size() == shipBoards.size()){
             endGame();
         }
     }
 
+    /**
+     * @return the game's final score*/
     public Map<ShipBoard, Integer> getFinalScores(){
         return finalScores;
     }

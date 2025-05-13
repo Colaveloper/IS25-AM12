@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
-public class GrabRewardState extends GameState {
+public class GrabRewardState extends AdventureState {
     Runnable rewardMethod;
     ShipBoard shipBoard;
 

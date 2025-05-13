@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.util.Set;
 
-public class DrawCardState extends GameState {
+public class DrawCardState extends AdventureState {
     ShipBoard shipBoard;
 
     @Override

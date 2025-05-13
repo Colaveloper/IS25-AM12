@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.Set;
 
-public abstract class ActivateState extends GameState{
+public abstract class ActivateState extends AdventureState{
     Set<Point> availablePositions;
     ShipBoard shipBoard;
     int batteriesToSpend;

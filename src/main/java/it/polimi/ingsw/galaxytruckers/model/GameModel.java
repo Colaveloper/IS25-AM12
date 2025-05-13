@@ -124,7 +124,7 @@ public class GameModel implements GameModelInterface {
 
     @Override
     public void giveUp(Game game, ShipBoard shipBoard) {
-        game.getCurrentState().giveUp(shipBoard, true);
+        game.getCurrentState().giveUp(shipBoard);
     }
 
     @Override

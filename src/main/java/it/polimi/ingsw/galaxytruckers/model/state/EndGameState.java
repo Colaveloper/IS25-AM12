@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.util.Map;
 
-public class EndGameState extends GameState {
+public class EndGameState extends AdventureState {
     Map<ShipBoard, Integer> finalScores;
 
     public EndGameState(Map<ShipBoard, Integer> finalScores){
