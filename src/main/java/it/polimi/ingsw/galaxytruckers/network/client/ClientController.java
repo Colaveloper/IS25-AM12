@@ -46,7 +46,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    // UPDATES FROM THE SERVER
+    //-----------------------------UPDATES FROM THE SERVER----------------------------------
 
 //    @Override // TODO: DISCUSS
     public void showGameCreation() throws IOException {
@@ -77,7 +77,8 @@ public class ClientController implements ClientControllerInterface {
         view.setScreen(new ShipBuildingScreen(model));
     }
 
-    // UPDATE FOR SHIP BUILDING
+
+    //-----------------------------BUILDING PHASE----------------------------------
 
     @Override//Tommy approved
     public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) throws IOException {
@@ -90,25 +91,25 @@ public class ClientController implements ClientControllerInterface {
         model.setComponentInHand(playerName, componentId);//todo: add for other players
     }
 
-    @Override
-    public void showComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException {
+    @Override//Tommy approved
+    public void notifyComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException {
         model.setComponent(nickname, componentId, direction, position);
         model.clearComponentInHand(nickname);
     }
 
-    @Override
+    @Override//Tommy approved
     public void notifyComponentRejection(String playerName, int componentId) throws IOException {
         model.addRevealedComponent(componentId);
         model.clearComponentInHand(playerName);
     }
 
-    @Override
+    @Override//Tommy approved
     public void notifyFaceDownComponentRequest(String playerName, int componentId) throws IOException {
         model.setComponentInHand(playerName, componentId);
         model.setCoveredComponents(model.coveredComponentNProperty().get()-1);
     }
 
-    @Override
+    @Override//Tommy approved
     public void notifyFaceUpComponentRequest(String playerName, int componentId) throws IOException {
         model.setComponentInHand(playerName, componentId);
         model.removeRevealedComponent(componentId);
@@ -166,6 +167,14 @@ public class ClientController implements ClientControllerInterface {
 
     }
 
+    @Override//Tommy approved
+    public void notifyCabinUpdate(String nickname, Point position, int crew, CrewType crewType) throws IOException {
+        model.setCabinStats(nickname, position, crewType, crew);
+    }
+
+
+    //-----------------------------BOTH BUILDING AND ADVENTURE----------------------------------
+
     @Override
     public void notifyPlayerPosition(String playerName, int position) throws IOException {
         model.setPlayerToPlace(playerName, position);
@@ -176,16 +185,28 @@ public class ClientController implements ClientControllerInterface {
 
     }
 
-    @Override//Tommy approved
-    public void notifyCabinUpdate(String nickname, Point position, int crew, CrewType crewType) throws IOException {
-        model.setCabinStats(nickname, position, crewType, crew);
+    @Override
+    public void notifyShipPieceRemoval(String nickname, List<Point> positionPoints) throws IOException {
+
     }
 
-    // UPDATE FOR ADVENTURE
+    @Override
+    public void notifyShipStatusUpdate(String nickname, StatType statType, int value) throws IOException {
+
+    }
+
+
+    //-----------------------------ADVENTURE PHASE----------------------------------
 
     @Override//Tommy approved
-    public void notifyBatteryUpdate(String nickname, Point position, int batteries) throws IOException {
-        model.setBatteries(nickname, position, batteries);
+    public void notifyNewCard(int cardId) throws IOException {
+        model.setCurrentCard(cardId);
+        model.setCurrentPlayerNickname(model.getCurrentLeader());
+//        view.setScreen(new NewCardScreen()); // TODO: restore
+    }
+
+    public void notifySelection(String nickname, List<Point> cannonsPositions) throws IOException {
+
     }
 
     @Override//Tommy approved
@@ -199,17 +220,6 @@ public class ClientController implements ClientControllerInterface {
         model.setGoods(nickname, position, list);
     }
 
-    @Override
-    public void notifyShipStatusUpdate(String nickname, StatType statType, int value) throws IOException {
-
-    }
-
-    @Override//Tommy approved
-    public void notifyNewCard(int cardId) throws IOException {
-        model.setCurrentCard(cardId);
-        model.setCurrentPlayerNickname(model.getCurrentLeader());
-//        view.setScreen(new NewCardScreen()); // TODO: restore
-    }
 
     // first time goods are shown on screen
 //    @Override
@@ -219,8 +229,8 @@ public class ClientController implements ClientControllerInterface {
 
     // planetIndex is an index and starts from 0, UI listing on screen starts from 1
     @Override
-    public void choosePlanet(int planetIndex) throws IOException {
-        model.setPlanetGoodBuffer(planetIndex);
+    public void choosePlanet(int planetId, List<Point> cargoPositions) throws IOException {
+        model.setPlanetGoodBuffer(planetId);
     }
 
     @Override
@@ -236,7 +246,7 @@ public class ClientController implements ClientControllerInterface {
 
     // called for each projectile
     @Override
-    public void showProjectile(ProjectileType projectileType, int direction, int roll) throws IOException {
+    public void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws IOException {
         model.setProjectile(projectileType, direction, roll);
 //        view.setScreen(new ProjectilesScreen()); // TODO: restore
     }
@@ -249,22 +259,10 @@ public class ClientController implements ClientControllerInterface {
         // view.show(ChosenStrategy)
     }
 
-    // other updates
-
-    @Override
-    public void showSelectablePoints(List<Point> points) throws IOException {
-        model.setSelectablePoints(points);
-        //view.run(new PointSelectionScreenDEPRECATED());
-    }
-
     @Override
     public void reportError(String details) throws RemoteException {
         // model.update
         // view.show(ChosenStrategy)
     }
-
-
-
-
 
 }

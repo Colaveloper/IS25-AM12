@@ -74,7 +74,7 @@ class ClientControllerTest {
 
                         Thread.sleep(2000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1's current component was successfully positioned where requested");
-                        controller.showComponentPositioning("OtherPlayer1", 10, 0, new Point(5, 7));
+                        controller.notifyComponentPositioning("OtherPlayer1", 10, 0, new Point(5, 7));
 
 
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1's ship was successfully positioned where requested");
@@ -102,7 +102,7 @@ class ClientControllerTest {
             @Override
             public void placeComponent(Point point) throws IOException {
                 System.out.println("FAKE SERVER EVENT: the current component was successfully positioned where requested");
-                controller.showComponentPositioning("qwe", 5, 4, point);
+                controller.notifyComponentPositioning("qwe", 5, 4, point);
             }
 
             @Override
