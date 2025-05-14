@@ -25,7 +25,7 @@ public class ClientModel {
     private String currentPlayerNickname;
     private String myNickname;
     private final Set<Point> shipArea;
-    private final MapProperty<Colors, List<List<ObjectProperty<Component>>>> ships;
+    private final Map<Colors, List<List<ObjectProperty<Component>>>> ships;
     private final BiMap<String, Colors> playerToColor;
     private final ObservableList<Point> selectablePoints;
     private final ObservableMap<Colors, Map<StatType, Integer>> stats;
@@ -79,10 +79,6 @@ public class ClientModel {
     }
 
     // SETUP PHASE
-
-    public ObservableMap<Colors, List<List<ObjectProperty<Component>>>> getShipboards() {
-        return ships;
-    }
 
     public void setPlayerToPlace(String nickname, int position) {
         // translating nicknames to colors
@@ -160,11 +156,11 @@ public class ClientModel {
     }
 
     public void setComponentInHand(String nickname, int componentInHandId) throws IOException {
-        hands.put(playerToColor.get(nickname), new SimpleObjectProperty<>(new Component(componentInHandId)));
+        hands.get(playerToColor.get(nickname)).set(new Component(componentInHandId));
     }
 
-    public void clearComponentInHand() {
-        hands.remove(playerToColor.get(myNickname));
+    public void clearComponentInHand(String nickname) {
+        hands.get(playerToColor.get(nickname)).set(new Component(ComponentType.EMPTY_AREA));
     }
 
     public void setCoveredComponents(int coveredComponentsN) {
@@ -183,6 +179,7 @@ public class ClientModel {
         Component component = new Component(componentId);
         component.setDirection(direction);
         this.ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).set(component);
+        clearComponentInHand(nickname);
 //        lastPosition = position;
     }
 
@@ -302,7 +299,7 @@ public class ClientModel {
         return colorToPlace;
     }
 
-    public MapProperty<Colors, List<List<ObjectProperty<Component>>>> getShipsProperty() {
+    public Map<Colors, List<List<ObjectProperty<Component>>>> getShips() {
         return ships;
     }
 
@@ -314,7 +311,7 @@ public class ClientModel {
         return unweldedComponent != null;
     }
 
-    public ObservableMap<Colors, ObjectProperty<Component>> getHandProperty() {
+    public Map<Colors, ObjectProperty<Component>> getHand() {
         return hands;
     }
 

@@ -93,12 +93,13 @@ public class ClientController implements ClientControllerInterface {
     @Override
     public void showComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException {
         model.setComponent(nickname, componentId, direction, position);
+        model.clearComponentInHand(nickname);
     }
 
     @Override
     public void notifyComponentRejection(String playerName, int componentId) throws IOException {
         model.addRevealedComponent(componentId);
-        // TODO: remove current component
+        model.clearComponentInHand(playerName);
     }
 
     @Override

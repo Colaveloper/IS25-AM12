@@ -1,21 +1,25 @@
 package it.polimi.ingsw.galaxytruckers.view.cli;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import javafx.beans.InvalidationListener;
+import it.polimi.ingsw.galaxytruckers.view.model.Component;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleMapProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 
 import java.io.IOException;
 import java.util.*;
 
 public class CliAllShips extends CliElement {
 
-    private final Map<Colors, CliShipBoard> cliShipBoards = new HashMap<>();
+    private final Map<Colors, CliShipBoard> cliShipBoards; // ALL FINAL
+    private Map<Colors, CliComponent> hands; // UPDATE WHEN HANDS CHANGES
 
     public CliAllShips(ClientModel model) {
         super(model);
-        model.getShipsProperty().addListener(this);
-        model.getShipsProperty().forEach((color, ship) -> {
+        cliShipBoards = new HashMap<>();
+        model.getShips().forEach((color, ship) -> {
             try {
                 CliShipBoard cliShipBoard = new CliShipBoard(model, color);
                 cliShipBoards.put(color, cliShipBoard);
@@ -24,7 +28,17 @@ public class CliAllShips extends CliElement {
                 throw new RuntimeException(e);
             }
         });
-        model.getHandProperty().addListener(this); // TODO didn't check yet
+
+        hands = new SimpleMapProperty<>(FXCollections.observableHashMap());
+        model.getHand().forEach((color, componentProperty) -> {
+            try {
+                CliComponent hand = new CliComponent(model, componentProperty);
+                hands.put(color, hand);
+                hand.addListener(this);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
@@ -36,12 +50,10 @@ public class CliAllShips extends CliElement {
         for (Colors c : model.getPlayerToColor().values()) {
             List<String> shipDescription = new ArrayList<>();
 
-            CliShipBoard newShip = new CliShipBoard(model, c);
-            newShip.addListener(this);
-            shipDescription.addAll(newShip.getDescription());
+            shipDescription.addAll(cliShipBoards.get(c).getDescription());
 
-            CliComponent newHand = new CliComponent(model, model.getHandProperty().get(c));
-            shipDescription.addAll(newHand.getDescription());
+
+            shipDescription.addAll(hands.get(c).getDescription());
 
             descriptions.add(shipDescription);
         }

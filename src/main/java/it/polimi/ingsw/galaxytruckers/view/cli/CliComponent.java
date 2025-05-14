@@ -20,59 +20,48 @@ public class CliComponent extends CliElement {
     private static final String colorYellow = "\u001b[33m";
     private static final String colorReset = "\u001B[0m";
 
-    private final ObjectProperty<Component> component;
-    private final ComponentType type;
-    private final boolean isSpecial;
+    private final ObjectProperty<Component> componentProperty;
+    private ComponentType type;
+    private boolean isSpecial;
     private final List<Connector> connectors = new ArrayList<>();
 
     private String crewColorOpen;
     private String crewColorClose;
 
-    public CliComponent(ClientModel model, ObjectProperty<Component> component) throws IOException {
+    public CliComponent(ClientModel model, ObjectProperty<Component> componentProperty) throws IOException {
         super(model);
-        this.component = component;
-        component.addListener(this);
-        component.get().isSelectableProperty().addListener(this);
-        component.get().directionProperty().addListener(this);
-        component.get().cargoProperty().addListener(this);
-        component.get().crewTypeProperty().addListener(this);
-        component.get().statProperty().addListener(this);
-
-        JsonNode node = component.get().getNode();
-        connectors.addAll(parseConnectors(node.get("connectors")));
-        type = ComponentType.valueOf(node.get("type").asText().toUpperCase());
-        if (type == ComponentType.BATTERY) {
-            component.get().statProperty().set(node.get("batteries").asInt());
-        }
-        if (type == ComponentType.CARGO_HOLD) {
-            component.get().statProperty().set(node.get("size").asInt());
-            isSpecial = node.get("special").asBoolean();
-        } else {
-            isSpecial = false;
-        }
+        this.componentProperty = componentProperty;
+        componentProperty.addListener(this);
+        componentProperty.addListener((observable, oldValue, newValue) -> {
+            newValue.isSelectableProperty().addListener(this);
+            newValue.directionProperty().addListener(this);
+            newValue.cargoProperty().addListener(this);
+            newValue.crewTypeProperty().addListener(this);
+            newValue.statProperty().addListener(this);
+        });
     }
 
     public String getConnector(int connectorDirection) {
         return switch (connectorDirection) {
-            case 0 -> switch (connectors.get(component.get().directionProperty().get() % 4)) {
+            case 0 -> switch (connectors.get(componentProperty.get().directionProperty().get() % 4)) {
                 case Connector.NONE -> "─";
                 case Connector.SINGLE -> "┴";
                 case Connector.DOUBLE -> "╨";
                 case Connector.UNIVERSAL -> "╩";
             };
-            case 1 -> switch (connectors.get((1 + component.get().directionProperty().get()) % 4)) {
+            case 1 -> switch (connectors.get((1 + componentProperty.get().directionProperty().get()) % 4)) {
                 case Connector.NONE -> "│";
                 case Connector.SINGLE -> "├";
                 case Connector.DOUBLE -> "╞";
                 case Connector.UNIVERSAL -> "╠";
             };
-            case 2 -> switch (connectors.get((2 + component.get().directionProperty().get()) % 4)) {
+            case 2 -> switch (connectors.get((2 + componentProperty.get().directionProperty().get()) % 4)) {
                 case Connector.NONE -> "─";
                 case Connector.SINGLE -> "┬";
                 case Connector.DOUBLE -> "╥";
                 case Connector.UNIVERSAL -> "╦";
             };
-            case 3 -> switch (connectors.get((3 + component.get().directionProperty().get()) % 4)) {
+            case 3 -> switch (connectors.get((3 + componentProperty.get().directionProperty().get()) % 4)) {
                 case Connector.NONE -> "│";
                 case Connector.SINGLE -> "┤";
                 case Connector.DOUBLE -> "╡";
@@ -84,11 +73,25 @@ public class CliComponent extends CliElement {
 
     @Override
     public List<String> getNewDescription() {
-        String open = component.get().isSelectableProperty().get() ? colorGreen : "";
-        String close = component.get().isSelectableProperty().get() ? colorReset : "";
+        JsonNode node = componentProperty.get().getNode();
+        connectors.clear();
+        connectors.addAll(parseConnectors(node.get("connectors")));
+        type = ComponentType.valueOf(node.get("type").asText().toUpperCase());
+        if (type == ComponentType.BATTERY) {
+            componentProperty.get().statProperty().set(node.get("batteries").asInt());
+        }
+        if (type == ComponentType.CARGO_HOLD) {
+            componentProperty.get().statProperty().set(node.get("size").asInt());
+            isSpecial = node.get("special").asBoolean();
+        } else {
+            isSpecial = false;
+        }
+
+        String open = componentProperty.get().isSelectableProperty().get() ? colorGreen : "";
+        String close = componentProperty.get().isSelectableProperty().get() ? colorReset : "";
 
         if (type == ComponentType.CABIN) {
-            crewColorOpen = switch(component.get().crewTypeProperty().get()) {
+            crewColorOpen = switch(componentProperty.get().crewTypeProperty().get()) {
                 case CrewType.HUMAN -> "\u001B[32m";
                 case CrewType.PURPLE -> "\u001B[33m";
                 case CrewType.BROWN -> "\u001B[32m"; // TODO: test they're all correct
@@ -109,10 +112,10 @@ public class CliComponent extends CliElement {
             lines.add(0, open+"╭─" + getConnector(0) + "─╮"+close);
 
             if (type == ComponentType.BATTERY) {
-                lines.add(1, open + getConnector(3) + " " + type.getSymbol(component.get().directionProperty().get()) + component.get().statProperty().get() + getConnector(1)+close);
+                lines.add(1, open + getConnector(3) + " " + type.getSymbol(componentProperty.get().directionProperty().get()) + componentProperty.get().statProperty().get() + getConnector(1)+close);
             }
             else if (type == ComponentType.CABIN) {
-                lines.add(1, open + getConnector(3) + " " + crewColorOpen + type.getSymbol(component.get().directionProperty().get()) + colorReset + component.get().statProperty().get() + getConnector(1)+close);
+                lines.add(1, open + getConnector(3) + " " + crewColorOpen + type.getSymbol(componentProperty.get().directionProperty().get()) + colorReset + componentProperty.get().statProperty().get() + getConnector(1)+close);
             }
             else if (type == ComponentType.CARGO_HOLD){
                 StringBuilder cargoPrint = new StringBuilder();
@@ -121,7 +124,7 @@ public class CliComponent extends CliElement {
                 String full = isSpecial ? "●" : "■";
                 cargoPrint.append(open).append(getConnector(3)).append(close);
 
-                for (GoodsType i : component.get().cargoProperty().get()) {
+                for (GoodsType i : componentProperty.get().cargoProperty().get()) {
                     switch (i) {
                         case RED:
                             cargoPrint.append(colorRed).append(full).append(colorReset);
@@ -138,8 +141,8 @@ public class CliComponent extends CliElement {
                     }
                 }
 
-                cargoPrint.append(empty.repeat(component.get().statProperty().get() - component.get().cargoProperty().get().size()));
-                cargoPrint.append( " ".repeat(3 - component.get().statProperty().get()));
+                cargoPrint.append(empty.repeat(componentProperty.get().statProperty().get() - componentProperty.get().cargoProperty().get().size()));
+                cargoPrint.append( " ".repeat(3 - componentProperty.get().statProperty().get()));
 
                 cargoPrint.append(open).append(getConnector(1)).append(close);
                 lines.add(1, cargoPrint.toString());
@@ -147,7 +150,7 @@ public class CliComponent extends CliElement {
 
             }
             else {//default
-                lines.add(1, open + getConnector(3) + " " + type.getSymbol(component.get().directionProperty().get()) + " " + getConnector(1)+close);
+                lines.add(1, open + getConnector(3) + " " + type.getSymbol(componentProperty.get().directionProperty().get()) + " " + getConnector(1)+close);
             }
 
             lines.add(2, open+"╰─" + getConnector(2) + "─╯"+close);
@@ -167,7 +170,7 @@ public class CliComponent extends CliElement {
 
 
     public void setGoods(List<GoodsType> goods) {
-         component.get().cargoProperty().set(goods);
+         componentProperty.get().cargoProperty().set(goods);
     }
 
     public void setCrewType(CrewType crewType) {
@@ -175,6 +178,6 @@ public class CliComponent extends CliElement {
     }
 
     public void setSelectable() {
-        component.get().isSelectableProperty().set(true);
+        componentProperty.get().isSelectableProperty().set(true);
     }
 }

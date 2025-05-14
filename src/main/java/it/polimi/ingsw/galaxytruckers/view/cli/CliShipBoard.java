@@ -19,7 +19,7 @@ public class CliShipBoard extends CliElement {
         super(model);
 
         upLeft = model.getUpLeft();
-        componentMatrix = model.getShipsProperty().get(color).stream()
+        componentMatrix = model.getShips().get(color).stream()
                 .map(innerList -> innerList.stream()
                         .map(componentProperty -> {
                             try {

@@ -53,33 +53,32 @@ class ClientControllerTest {
                         System.out.println("FAKE SERVER EVENT: successfully created lvl "+level+" game for "+playerN+" players");
                         controller.updateLobbyPlayers(nicknames);
 
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                         System.out.println("FAKE SERVER EVENT: another player joined, lobby is complete");
                         nicknames.put("OtherPlayer1", Colors.BLUE);
                         controller.updateLobbyPlayers(nicknames);
                         controller.setupGame(Level.SECOND);
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 took a covered component");
-                        controller.notifyFaceDownComponentRequest("qwe", 5);
+                        controller.notifyFaceDownComponentRequest("OtherPlayer1", 10);
 
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 rejected component");
-                        faceUpComponents.add(5);
-                        controller.notifyComponentRejection("OtherPlayer1",5);
+                        faceUpComponents.add(10);
+                        controller.notifyComponentRejection("OtherPlayer1",10);
 
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 took the component back");
-                        faceUpComponents.add(5);
-                        controller.notifyFaceUpComponentRequest("OtherPlayer1",5);
-//
-////                      TODO: REMOVE COMPONENT IN HAND
-//                        Thread.sleep(1000);
-//                        System.out.println("FAKE SERVER EVENT: OtherPlayer1's current component was successfully positioned where requested");
-//                        controller.showComponentPositioning("OtherPlayer1", 6, 4, new Point(5, 7));
+                        faceUpComponents.add(10);
+                        controller.notifyFaceUpComponentRequest("OtherPlayer1",10);
 
-//
-//                        System.out.println("FAKE SERVER EVENT: OtherPlayer1's ship was successfully positioned where requested");
-//                        controller.notifyPlayerPosition("OtherPlayer1", 1);
+                        Thread.sleep(2000);
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1's current component was successfully positioned where requested");
+                        controller.showComponentPositioning("OtherPlayer1", 10, 0, new Point(5, 7));
+
+
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1's ship was successfully positioned where requested");
+                        controller.notifyPlayerPosition("OtherPlayer1", 1);
 
                     } catch (InterruptedException | IOException e) {
                         Thread.currentThread().interrupt();
@@ -90,7 +89,7 @@ class ClientControllerTest {
             @Override
             public void requestRandComponent() throws IOException {
                 System.out.println("FAKE SERVER EVENT: you took a covered component");
-                controller.notifyFaceDownComponentRequest("qwe", 6);
+                controller.notifyFaceDownComponentRequest("qwe", (int) (Math.random()*50));
             }
 
             @Override
