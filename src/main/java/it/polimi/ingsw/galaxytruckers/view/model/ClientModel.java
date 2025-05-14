@@ -32,7 +32,7 @@ public class ClientModel {
 
     // BUILDING
     private Point upLeft; // the upper-left point of the ship-area
-    private final ObservableList<Component> revealedComponents;
+    private final ListProperty<Component> revealedComponents;
     private final IntegerProperty coveredComponentN;
     private final ObservableMap<Colors, List<Component>> stashedComponents;
     private final ObservableMap<Colors, ObjectProperty<Component>> hands; // (former current component)
@@ -68,7 +68,7 @@ public class ClientModel {
         ships = new SimpleMapProperty<>(FXCollections.observableMap(new HashMap<>()));
         selectablePoints = FXCollections.observableArrayList();
         coveredComponentN = new SimpleIntegerProperty();
-        revealedComponents = FXCollections.observableArrayList();
+        revealedComponents = new SimpleListProperty<>(FXCollections.observableArrayList());
         stashedComponents = FXCollections.observableHashMap();
         startingPositionLeft = FXCollections.observableArrayList();
         hands = FXCollections.observableHashMap();
@@ -145,6 +145,11 @@ public class ClientModel {
 
     public void addRevealedComponent(int revealedComponentId) throws IOException {
         revealedComponents.addLast(new Component(revealedComponentId));
+    }
+
+    public void removeRevealedComponent(int componentId) {
+        revealedComponents.removeIf(c -> c.getComponentId() == componentId);
+
     }
 
     public void setStashedComponents(String nickname, List<Integer> stashedComponents) throws IOException {
@@ -313,7 +318,7 @@ public class ClientModel {
         return hands;
     }
 
-    public ObservableList<Component> revealedComponentsProperty() {
+    public ListProperty<Component> revealedComponentsProperty() {
         return revealedComponents;
     }
 

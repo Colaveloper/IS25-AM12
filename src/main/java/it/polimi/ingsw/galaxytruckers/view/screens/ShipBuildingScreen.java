@@ -17,30 +17,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShipBuildingScreen extends ScreenStrategy {
-//    CliComponentBank componentBank;
+    CliComponentBank componentBank;
 //    CliFlightBoard flightBoard;
-    CliAllShips allShips;
+//    CliAllShips allShips;
 
     public ShipBuildingScreen(ClientModel model) throws IOException {
         super(model);
 
-//        componentBank = new CliComponentBank(model);
-//        componentBank.addListener(this);
+        componentBank = new CliComponentBank(model);
+        componentBank.addListener(this);
 //
 //        flightBoard = new CliFlightBoard(model);
 //        flightBoard.addListener(this);
 
-        allShips = new CliAllShips(model);
-        allShips.addListener(this);
+//        allShips = new CliAllShips(model);
+//        allShips.addListener(this);
     }
 
     @Override
     public List<String> getNewDescription() throws IOException {
         List<String> output = new ArrayList<>();
 
-//        output.addAll(componentBank.getDescription());
+        output.addAll(componentBank.getDescription());
 //        output.addAll(flightBoard.getDescription());
-        output.addAll(allShips.getDescription());
+//        output.addAll(allShips.getDescription());
 
         output.add("C       \tGet New covered component");
         output.add("U [i]   \tGet i-th uncovered component");

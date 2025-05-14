@@ -109,7 +109,8 @@ public class ClientController implements ClientControllerInterface {
 
     @Override
     public void notifyFaceUpComponentRequest(String playerName, int componentId) throws IOException {
-
+        model.setComponentInHand(playerName, componentId);
+        model.removeRevealedComponent(componentId);
     }
 
 //    @Override//Tommy approved
