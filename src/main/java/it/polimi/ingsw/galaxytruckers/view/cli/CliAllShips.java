@@ -1,28 +1,30 @@
 package it.polimi.ingsw.galaxytruckers.view.cli;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
-import it.polimi.ingsw.galaxytruckers.view.CliShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import javafx.beans.InvalidationListener;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class CliAllShips extends CliElement {
 
-    private final LinkedHashMap<Colors, CliShipBoard> ships;
+    private final Map<Colors, CliShipBoard> cliShipBoards = new HashMap<>();
 
     public CliAllShips(ClientModel model) {
         super(model);
-        this.ships = new LinkedHashMap<>();
-        model.getShips().entrySet().forEach(
-                e ->
-                ships.put(e.getKey(), new CliShipBoard(model, e.getKey()))
-        );
+        model.getShipsProperty().addListener(this);
+        model.getShipsProperty().forEach((color, ship) -> {
+            try {
+                CliShipBoard cliShipBoard = new CliShipBoard(model, color);
+                cliShipBoards.put(color, cliShipBoard);
+                cliShipBoard.addListener(this);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        model.getHandProperty().addListener(this); // TODO didn't check yet
     }
 
     @Override
@@ -31,8 +33,17 @@ public class CliAllShips extends CliElement {
         List<String> sequenceDescription = new ArrayList<>();
         StringBuilder row = new StringBuilder();
 
-        for (CliElement e : ships.values()) {
-            descriptions.add(e.getDescription());
+        for (Colors c : model.getPlayerToColor().values()) {
+            List<String> shipDescription = new ArrayList<>();
+
+            CliShipBoard newShip = new CliShipBoard(model, c);
+            newShip.addListener(this);
+            shipDescription.addAll(newShip.getDescription());
+
+            CliComponent newHand = new CliComponent(model, model.getHandProperty().get(c));
+            shipDescription.addAll(newHand.getDescription());
+
+            descriptions.add(shipDescription);
         }
         for (int i = 0; i < descriptions.getFirst().size(); i++) {
             for (List<String> shipDescription : descriptions) {

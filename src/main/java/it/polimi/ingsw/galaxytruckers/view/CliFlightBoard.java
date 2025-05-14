@@ -13,6 +13,7 @@ public class CliFlightBoard extends CliElement {
 
     public CliFlightBoard(ClientModel model) {
         super(model);
+        model.startingPositionLeftProperty().addListener(this);
     }
 
     @Override

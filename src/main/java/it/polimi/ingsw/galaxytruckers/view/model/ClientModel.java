@@ -6,11 +6,12 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.cli.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 import java.awt.*;
 import java.io.IOException;
@@ -24,23 +25,23 @@ public class ClientModel {
     private String currentPlayerNickname;
     private String myNickname;
     private final Set<Point> shipArea;
-    private final LinkedHashMap<Colors, List<List<ObjectProperty<Component>>>> ships;
+    private final MapProperty<Colors, List<List<ObjectProperty<Component>>>> ships;
     private final BiMap<String, Colors> playerToColor;
-    private final List<Point> selectablePoints;
-    private final Map<Colors, Map<StatType, Integer>> stats;
+    private final ObservableList<Point> selectablePoints;
+    private final ObservableMap<Colors, Map<StatType, Integer>> stats;
 
     // BUILDING
     private Point upLeft; // the upper-left point of the ship-area
-    private final List<Component> revealedComponents;
+    private final ObservableList<Component> revealedComponents;
     private final IntegerProperty coveredComponentN;
-    private final Map<Colors, List<Component>> stashedComponents;
-    private final Map<Colors, ObjectProperty<Component>> hands; // (former current component)
-    private CliComponent unweldedComponent;
+    private final ObservableMap<Colors, List<Component>> stashedComponents;
+    private final ObservableMap<Colors, ObjectProperty<Component>> hands; // (former current component)
+    private Component unweldedComponent;
 
     // FLIGHTBOARD
     private int loopLength;
-    private ListProperty<Integer>  startingPositionLeft;
-    private final MapProperty<Colors, Integer> colorToPlace;
+    private final ObservableList<Integer> startingPositionLeft;
+    private final ObservableMap<Colors, Integer> colorToPlace;
 
 
     // FLIGHT
@@ -64,30 +65,29 @@ public class ClientModel {
     public ClientModel() {
         shipArea = new HashSet<>();
         playerToColor = HashBiMap.create();
-        ships = new LinkedHashMap<>();
-        selectablePoints = new ArrayList<>();
+        ships = new SimpleMapProperty<>(FXCollections.observableMap(new HashMap<>()));
+        selectablePoints = FXCollections.observableArrayList();
         coveredComponentN = new SimpleIntegerProperty();
-        revealedComponents = new ArrayList<>();
-        stashedComponents = new HashMap<>();
-        startingPositionLeft = new SimpleListProperty<>(FXCollections.observableArrayList());
-        hands = new HashMap<>();
-        colorToPlace = new SimpleMapProperty<>();
-        stats = new SimpleMapProperty<>();
-        planets = new ArrayList<>();
-        goods = new ArrayList<>();
+        revealedComponents = FXCollections.observableArrayList();
+        stashedComponents = FXCollections.observableHashMap();
+        startingPositionLeft = FXCollections.observableArrayList();
+        hands = FXCollections.observableHashMap();
+        colorToPlace = FXCollections.observableHashMap();
+        stats = FXCollections.observableHashMap();
+        planets = FXCollections.observableArrayList();
+        goods = FXCollections.observableArrayList();
     }
 
     // SETUP PHASE
 
-    public LinkedHashMap<Colors, List<List<ObjectProperty<Component>>>> getShipboards() {
+    public ObservableMap<Colors, List<List<ObjectProperty<Component>>>> getShipboards() {
         return ships;
     }
 
-    public void setPlayerToPlace(Map<String, Integer> playerToPlace) {
+    public void setPlayerToPlace(String nickname, int position) {
         // translating nicknames to colors
-        playerToPlace.forEach((key, value) ->
-                this.colorToPlace.putIfAbsent(playerToColor.get(key), value)
-        );
+        this.colorToPlace.putIfAbsent(playerToColor.get(nickname), position);
+        this.startingPositionLeft.remove((Integer) position);
     }
 
     public void setFlightBoard(int loopLength, List<Integer> startingPositions) {
@@ -289,15 +289,15 @@ public class ClientModel {
 
     public int getLoopLength() {return loopLength;}
 
-    public ListProperty<Integer> startingPositionLeftProperty() {
+    public ObservableList<Integer> startingPositionLeftProperty() {
         return startingPositionLeft;
     }
 
-    public MapProperty<Colors, Integer> colorToPlaceProperty() {
+    public ObservableMap<Colors, Integer> colorToPlaceProperty() {
         return colorToPlace;
     }
 
-    public LinkedHashMap<Colors, List<List<ObjectProperty<Component>>>> getShips() {
+    public MapProperty<Colors, List<List<ObjectProperty<Component>>>> getShipsProperty() {
         return ships;
     }
 
@@ -307,5 +307,17 @@ public class ClientModel {
 
     public boolean existsUnwelded() {
         return unweldedComponent != null;
+    }
+
+    public ObservableMap<Colors, ObjectProperty<Component>> getHandProperty() {
+        return hands;
+    }
+
+    public ObservableList<Component> revealedComponentsProperty() {
+        return revealedComponents;
+    }
+
+    public BiMap<String, Colors> getPlayerToColor() {
+        return playerToColor;
     }
 }

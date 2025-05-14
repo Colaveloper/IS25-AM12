@@ -36,13 +36,13 @@ public class ClientController implements ClientControllerInterface {
             view = new GuiView();
             view.setServer(server);
             view.setModel(model);
-            GuiView.strategy = new NicknameChoiceScreen();
+            GuiView.strategy = new NicknameChoiceScreen(model);
             Application.launch(GuiView.class); // calls view.setScreen(...)
         } else {
             view = new CliView();
             view.setServer(server);
             view.setModel(model);
-            view.setScreen(new NicknameChoiceScreen());
+            view.setScreen(new NicknameChoiceScreen(model));
         }
     }
 
@@ -50,7 +50,7 @@ public class ClientController implements ClientControllerInterface {
 
 //    @Override // TODO: DISCUSS
     public void showGameCreation() throws IOException {
-        view.setScreen(new GameCreationScreen());
+        view.setScreen(new GameCreationScreen(model));
     }
 
     @Override // Tommy approved
@@ -58,7 +58,7 @@ public class ClientController implements ClientControllerInterface {
         for (Map.Entry<String, Colors> entry : playerToColor.entrySet()) {
             model.setPlayerColor(entry.getKey(), entry.getValue());
         }
-        view.setScreen(new LobbyScreen());
+        view.setScreen(new LobbyScreen(model));
     }
 
     public void setMyNickname(String nickname) { // gets called only after legal registration
@@ -97,12 +97,14 @@ public class ClientController implements ClientControllerInterface {
 
     @Override
     public void notifyComponentRejection(String playerName, int componentId) throws IOException {
-
+        model.addRevealedComponent(componentId);
+        // TODO: remove current component
     }
 
     @Override
     public void notifyFaceDownComponentRequest(String playerName, int componentId) throws IOException {
-
+        model.setComponentInHand(playerName, componentId);
+        model.setCoveredComponents(model.coveredComponentNProperty().get()-1);
     }
 
     @Override
@@ -164,7 +166,7 @@ public class ClientController implements ClientControllerInterface {
 
     @Override
     public void notifyPlayerPosition(String playerName, int position) throws IOException {
-
+        model.setPlayerToPlace(playerName, position);
     }
 
     @Override

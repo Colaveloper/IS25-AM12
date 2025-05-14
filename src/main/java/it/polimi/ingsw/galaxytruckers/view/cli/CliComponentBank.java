@@ -22,14 +22,15 @@ import java.util.List;
 public class CliComponentBank extends CliElement {
 
     IntegerProperty coveredComponentN;
-    CliComponent currentComponent;
+    List<CliComponent> revealedComponents;
 
     public CliComponentBank(ClientModel model) throws IOException {
         super(model);
+
         coveredComponentN = model.coveredComponentNProperty();
-        listenToInvalidation(coveredComponentN);
-        currentComponent = new CliComponent(model, model.currentComponentProperty().get());
-        listenToInvalidation(currentComponent);
+        coveredComponentN.addListener(this);
+
+        model.revealedComponentsProperty().addListener(this);
     }
 
     @Override
@@ -41,39 +42,21 @@ public class CliComponentBank extends CliElement {
         description.add("Face down: " + coveredComponentN.get());
 
         description.add("Face up: ");
-//        for (int i = 0; i < 3; i++) {
-//            for (CliComponent component : revealedComponents) {
-//                row.append(component.getDescription().get(i));
-////                System.out.println("REVEALED");
-//                row.append(padding);
-//            }
-//            description.add(row.toString());
-//            row.setLength(0);
-//        }
-//        for (int n = 1; n <= revealedComponents.size(); n++) {
-//            row.append("  ").append(n).append("  ").append(padding);
-//        }
-//        description.add(row.toString());
-//        row.setLength(0);
-//
-//        description.add("Stash: " + "\tHand: ");
-//        for (int i = 0; i < 3; i++) {
-//            for (CliComponent component : stashedComponents) {
-//                row.append(component.getDescription().get(i));
-//                System.out.println("STASHED");
-//                row.append(padding);
-//            }
-//            for (int n = 0; n < 2 - stashedComponents.size(); n++) {
-//                row.append("     ").append(padding);
-//            }
-//            row.append("\t\t\t");
-//            row.append(currentComponent.get().getDescription().get(i));
-//            description.add(row.toString());
-//            row.setLength(0);
-//        }
-//        for (int n = 0; n < stashedComponents.size(); n++) {
-//            row.append("  ").append((char) ('A' + n)).append("  ").append(padding);
-//        }
+        for (int i = 0; i < 3; i++) {
+            for (Component component : model.revealedComponentsProperty()) {
+                // TODO optimize to minimize redrawing // TODO: restore
+//                row.append(new CliComponent(model, component).getDescription().get(i));
+//                System.out.println("REVEALED");
+                row.append(padding);
+            }
+            description.add(row.toString());
+            row.setLength(0);
+        }
+        for (int n = 1; n <= model.revealedComponentsProperty().size(); n++) {
+            row.append("  ").append(n).append("  ").append(padding);
+        }
+        description.add(row.toString());
+        row.setLength(0);
         description.add(row.toString());
 
         return description;

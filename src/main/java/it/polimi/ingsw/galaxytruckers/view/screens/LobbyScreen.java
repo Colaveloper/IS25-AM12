@@ -11,12 +11,12 @@ import javafx.scene.paint.Color;
 import javafx.geometry.Pos;
 
 import java.io.IOException;
+import java.util.List;
 
-public class LobbyScreen implements ScreenStrategy {
+public class LobbyScreen extends ScreenStrategy {
 
-    @Override
-    public void showCLI(ClientModel model) {
-        System.out.print("Currently in lobby: "+model.getNicknames());
+    public LobbyScreen(ClientModel model) {
+        super(model);
     }
 
     @Override
@@ -54,5 +54,10 @@ public class LobbyScreen implements ScreenStrategy {
         StackPane box = new StackPane(background, nameLabel);
         box.setAlignment(Pos.CENTER);
         return box;
+    }
+
+    @Override
+    public List<String> getNewDescription() throws IOException {
+        return List.of("Currently in lobby: "+model.getNicknames());
     }
 }

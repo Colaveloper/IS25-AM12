@@ -1,41 +1,37 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.cli;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
-import it.polimi.ingsw.galaxytruckers.view.cli.CliComponent;
-import it.polimi.ingsw.galaxytruckers.view.cli.CliElement;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CliShipBoard extends CliElement {
 
-    private final List<List<CliComponent>> componentMatrix;
+    private final List<List<CliComponent>> componentMatrix; // ALL FINAL
     Point upLeft;
-//    private Point lastPosition;
 
-    public CliShipBoard(ClientModel model, Colors color) {
+    public CliShipBoard(ClientModel model, Colors color) throws IOException {
         super(model);
-        componentMatrix = model.getShips().get(color).stream()
+
+        upLeft = model.getUpLeft();
+        componentMatrix = model.getShipsProperty().get(color).stream()
                 .map(innerList -> innerList.stream()
-                        .map(op -> {
+                        .map(componentProperty -> {
                             try {
-                                return new CliComponent(model, op.get());
+                                CliComponent cliComponent = new CliComponent(model, componentProperty);
+                                cliComponent.addListener(this);
+                                return cliComponent;
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
                         })
                         .collect(Collectors.toList()))
                 .collect(Collectors.toList());
-        upLeft = model.getUpLeft();
     }
 
     @Override
@@ -45,8 +41,8 @@ public class CliShipBoard extends CliElement {
 
         int height = componentMatrix.size();
         int width = componentMatrix.getFirst().size();
-        int componentHeight = new CliComponent(model, new Component(0)).getDescription().size();
-        int componentWidth = new CliComponent(model, new Component(0)).getDescription().getFirst().length();
+        int componentHeight = 3; // TODO: remove magic number
+        int componentWidth = 5; // TODO: remove magic number
 
         int yIndex = upLeft.y;
         int yIndexPadding = 2;

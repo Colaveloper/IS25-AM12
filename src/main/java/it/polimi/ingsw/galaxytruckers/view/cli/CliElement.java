@@ -18,8 +18,14 @@ public abstract class CliElement implements InvalidationListener, Observable {
         this.model = model;
     }
 
-    public void listenToInvalidation(Observable p) {
-        p.addListener(this);
+    @Override
+    public void invalidated(Observable o) {
+        dirty = true;
+        System.out.println("PHYSICAL DIRTY "+toString());
+        if (parent != null) {
+            System.out.println("PROPAGATING FROM "+getClass().getSimpleName());
+            parent.invalidated(this);  // Propagate invalidation to parent
+        }
     }
 
     @Override
@@ -32,35 +38,18 @@ public abstract class CliElement implements InvalidationListener, Observable {
         this.parent = null;
     }
 
-    @Override
-    public void invalidated(Observable o) {
-        try {
-            invalidate();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void invalidate() throws IOException {
-        dirty = true;
-//        System.out.println("PHYSICAL DIRTY "+getClass().getSimpleName());
-        if (parent != null) {
-            parent.invalidated(this);  // Propagate invalidation to parent
-        }
-    }
-
     public List<String> getDescription() throws IOException {
         if (dirty) {
-//            System.out.println("REDESCRIBE "+getClass().getSimpleName());
+            System.out.println("REDESCRIBE "+toString());
             descriptionCache.clear();
             descriptionCache.addAll(getNewDescription());
             dirty = false;
         }
-//        else {
-//            System.out.println("USE CACHED DESCRIPTION "+getClass().getSimpleName());
-//        }
+        else {
+            System.out.println("USE CACHED DESCRIPTION "+toString());
+        }
         return descriptionCache;
     }
 
-    public abstract List<String> getNewDescription() throws IOException;
+    protected abstract List<String> getNewDescription() throws IOException;
 }

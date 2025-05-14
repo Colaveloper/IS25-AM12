@@ -1,10 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.view.cli;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.InvalidationListener;
 import it.polimi.ingsw.galaxytruckers.view.View;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;
+import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 
 import java.io.IOException;
@@ -26,14 +26,6 @@ public class CliView implements View, InvalidationListener {
     @Override
     public void setModel(ClientModel model) {
         CliView.model = model;
-//        model.getComponentBank().setChangeListener(this);
-//        model.getShipboards().entrySet().stream()
-//                .flatMap(e->e.getValue().stream())
-//                .flatMap(Collection::stream)
-//                .forEach(p->p.addListener(this));
-
-//        model.getAllShips().setChangeListener(this);
-//        model.getFlightBoard().setChangeListener(this);
     }
 
     @Override
@@ -45,6 +37,8 @@ public class CliView implements View, InvalidationListener {
     public void setScreen(ScreenStrategy newStrategy) throws IOException {
 //        if (!newStrategy.equals(strategy)) {
             strategy = newStrategy;
+            strategy.addListener(this);
+
 
             // clearing the console (not supported in intellij, use Windows terminal)
             System.out.print("\033[H\033[2J");
@@ -53,7 +47,7 @@ public class CliView implements View, InvalidationListener {
 
             // showing the visualization
             System.out.println("█".repeat(150));
-            strategy.showCLI(model);
+            strategy.getDescription().forEach(System.out::println);
             System.out.flush();
 //        }
     }
@@ -80,7 +74,7 @@ public class CliView implements View, InvalidationListener {
     }
 
     @Override
-    public void onInvalidate() {
+    public void invalidated(Observable observable) {
         try {
             this.setScreen(strategy);
         } catch (IOException e) {

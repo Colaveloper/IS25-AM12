@@ -265,10 +265,6 @@ public class CliAdventureCard extends CliElement {
         }
     }
 
-    public CliAdventureCard(ClientModel model) {
-        super(model);
-    }
-
     // public methods
     @Override
     public List<String> getNewDescription(){return description;}

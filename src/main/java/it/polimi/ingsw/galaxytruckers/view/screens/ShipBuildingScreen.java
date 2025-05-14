@@ -4,48 +4,59 @@ import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cli.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cli.CliComponentBank;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliElement;
 import it.polimi.ingsw.galaxytruckers.view.gui.GuiComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.scene.layout.Pane;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ShipBuildingScreen implements ScreenStrategy {
-    CliComponentBank componentBank;
-    CliFlightBoard flightBoard;
+public class ShipBuildingScreen extends ScreenStrategy {
+//    CliComponentBank componentBank;
+//    CliFlightBoard flightBoard;
     CliAllShips allShips;
 
     public ShipBuildingScreen(ClientModel model) throws IOException {
-        componentBank = new CliComponentBank(model);
-        flightBoard = new CliFlightBoard(model);
+        super(model);
+
+//        componentBank = new CliComponentBank(model);
+//        componentBank.addListener(this);
+//
+//        flightBoard = new CliFlightBoard(model);
+//        flightBoard.addListener(this);
+
         allShips = new CliAllShips(model);
+        allShips.addListener(this);
     }
 
     @Override
-    public void showCLI(ClientModel model) throws IOException {
+    public List<String> getNewDescription() throws IOException {
+        List<String> output = new ArrayList<>();
 
-        componentBank.getDescription().forEach(System.out::println);
-        flightBoard.getDescription().forEach(System.out::println);
-        allShips.getDescription().forEach(System.out::println);
+//        output.addAll(componentBank.getDescription());
+//        output.addAll(flightBoard.getDescription());
+        output.addAll(allShips.getDescription());
 
-        // always allowed
-        System.out.println("C       \tGet New covered component");
-        System.out.println("U [i]   \tGet i-th uncovered component");
-        System.out.println("S [i]   \tGet i-th stashed component");         // NOT IN Levels.TEST
-        System.out.println("F [i]   \tGet i-th forecast deck");             // NOT IN Levels.TEST
+        output.add("C       \tGet New covered component");
+        output.add("U [i]   \tGet i-th uncovered component");
+        output.add("S [i]   \tGet i-th stashed component");         // NOT IN Levels.TEST
+        output.add("F [i]   \tGet i-th forecast deck");             // NOT IN Levels.TEST
 
-        // allowed if existsUnwelded
         if (model.existsUnwelded()) {
-            System.out.println("R       \tReject current component");
-            System.out.println("P [x] [y] \tPlace current component in position x, y");
-            System.out.println("S       \tStash current component");        // NOT IN Levels.TEST
-            System.out.println("L       \tRotate current component left");
+            output.add("R       \tReject current component");
+            output.add("P [x] [y] \tPlace current component in position x, y");
+            output.add("S       \tStash current component");        // NOT IN Levels.TEST
+            output.add("L       \tRotate current component left");
         }
 
-        // allowed if hourglassTime==0 and flipsLeft>1
-        // (or flipsLeft==1 and building is over, see FinishBuildingScreen)
-        System.out.println("H       \tFlip hourglass");                     // NOT IN Levels.TEST
+        output.add("H       \tFlip hourglass");                     // NOT IN Levels.TEST
+
+        return output;
     }
 
     @Override
