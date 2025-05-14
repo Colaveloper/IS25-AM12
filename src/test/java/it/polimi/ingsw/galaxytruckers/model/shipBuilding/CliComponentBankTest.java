@@ -50,8 +50,8 @@ class CliComponentBankTest {
         assertEquals("CargoHold", components.get(86).getClass().getSimpleName());
         assertEquals("CargoHold", components.get(94).getClass().getSimpleName());
 
-        assertEquals("CliComponent", components.get(95).getClass().getSimpleName());
-        assertEquals("CliComponent", components.get(102).getClass().getSimpleName());
+        assertEquals("Component", components.get(95).getClass().getSimpleName());
+        assertEquals("Component", components.get(102).getClass().getSimpleName());
 
         //normal cargo hold
         assertEquals("CargoHold", components.get(103).getClass().getSimpleName());
