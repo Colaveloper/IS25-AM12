@@ -37,7 +37,7 @@ public interface ClientControllerInterface {
      * sets current his component in stashed, clears his current component
      *
      * @param playerName         the name of the player
-     * @param stashComponentIds  list of component IDs currently in the stash
+     * @param stashComponentIds  list of component IDs currently in the stash, always 2 components, no component has index = 0
      * @throws IOException if a communication error occurs
      */
     void notifyStashComponent(String playerName, List<Integer> stashComponentIds) throws IOException;

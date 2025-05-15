@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cli;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
@@ -26,8 +27,38 @@ public class CliComponentBank extends CliElement {
     IntegerProperty coveredComponentN;
     MapProperty<Component, CliComponent> revealedComponents;
 
+    private Map<Colors, CliComponent> hands; // UPDATE WHEN HANDS CHANGES
+    private Map<Colors, List<CliComponent>> stashedComponentsMap;
+
     public CliComponentBank(ClientModel model) throws IOException {
         super(model);
+
+        hands = new SimpleMapProperty<>(FXCollections.observableHashMap());
+        model.getHand().forEach((color, componentProperty) -> {
+            try {
+                CliComponent hand = new CliComponent(model, componentProperty);
+                hands.put(color, hand);
+                hand.addListener(this);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        stashedComponentsMap = new SimpleMapProperty<>(FXCollections.observableHashMap());
+        model.getStashed().forEach((color, propertyList) -> {
+            try {
+                List<CliComponent> stashedComponents = new ArrayList<>();
+                for(ObjectProperty<Component> property : propertyList) {
+                    CliComponent stashed = new CliComponent(model, property);
+                    stashed.addListener(this);
+                    stashedComponents.add(stashed);
+                }
+                stashedComponentsMap.put(color, stashedComponents);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         coveredComponentN = model.coveredComponentNProperty();
         coveredComponentN.addListener(this);
@@ -80,7 +111,48 @@ public class CliComponentBank extends CliElement {
         }
         description.add(row.toString());
         row.setLength(0);
-        description.add(row.toString());
+
+
+
+        //STASHED AND HAND IN COMPONENTBANK
+//        List<List<String>> allShipsHandsStashed = new ArrayList<>();
+//
+//        for(Colors c : model.getPlayerToColor().values()) {
+//            List<String> handStashedDescription = new ArrayList<>();
+//            List<List<String>> stashedDescription = new ArrayList<>();
+//            List<String> handDescription = new ArrayList<>();
+//
+//            handStashedDescription.add("hand:\t\tstashed:\t\t\t");
+//
+//            handDescription.addAll(hands.get(c).getDescription());
+//            for(CliComponent component : stashedComponentsMap.get(c)) {
+//                stashedDescription.add(component.getDescription());
+//            }
+//
+//
+//            for (int i = 0; i < handDescription.size(); i++) {
+//                row.append(handDescription.get(i));
+//                row.append("\t\t");
+//                for(List<String> stashed : stashedDescription) {
+//                    row.append(stashed.get(i));
+//                }
+//                row.append("\t\t\t");
+//                handStashedDescription.add(row.toString());
+//                row.setLength(0);
+//            }
+//
+//            allShipsHandsStashed.add(handStashedDescription);
+//        }
+//
+//        for(int index = 0; index < allShipsHandsStashed.getFirst().size(); index++) {
+//            for(List<String> stashed : allShipsHandsStashed) {
+//                row.append(stashed.get(index));
+//            }
+//            description.add(row.toString());
+//            row.setLength(0);
+//        }
+//
+//        description.add(row.toString());
 
         return description;
     }

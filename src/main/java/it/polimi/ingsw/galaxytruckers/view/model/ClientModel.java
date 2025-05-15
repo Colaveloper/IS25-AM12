@@ -34,7 +34,7 @@ public class ClientModel {
     private Point upLeft; // the upper-left point of the ship-area
     private final ListProperty<Component> revealedComponents;
     private final IntegerProperty coveredComponentN;
-    private final ObservableMap<Colors, List<Component>> stashedComponents;
+    private final ObservableMap<Colors, List<ObjectProperty<Component>>> stashedComponents;
     private final ObservableMap<Colors, ObjectProperty<Component>> hands; // (former current component)
     private Component unweldedComponent;
 
@@ -102,9 +102,19 @@ public class ClientModel {
 
     // call after having added all players
     public void setShipArea(Set<Point> shipArea) {
+
+        // fill hands with empty components
         playerToColor.forEach((_, c) -> hands.put(c, new SimpleObjectProperty<>(
                 new Component(ComponentType.EMPTY_AREA)
         )));
+
+        for(Colors c : playerToColor.values()) {
+            hands.put(c, new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA)));
+            stashedComponents.put(c, List.of(
+                    new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA)),
+                    new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA))
+            ));
+        }
 
         this.shipArea.addAll(shipArea);
 
@@ -149,10 +159,10 @@ public class ClientModel {
     }
 
     public void setStashedComponents(String nickname, List<Integer> stashedComponents) throws IOException {
-        this.stashedComponents.put(
-                playerToColor.get(nickname),
-                stashedComponents.stream().map(Component::new).collect(Collectors.toList())
-        );
+        for(Integer i : stashedComponents) {
+            this.stashedComponents.get(playerToColor.get(nickname)).get(stashedComponents.indexOf(i)).set(new Component(i));
+        }
+                //stashedComponents.stream().map(Component::new).collect(Collectors.toList())
     }
 
     public void setComponentInHand(String nickname, int componentInHandId) throws IOException {
@@ -313,6 +323,10 @@ public class ClientModel {
 
     public Map<Colors, ObjectProperty<Component>> getHand() {
         return hands;
+    }
+
+    public Map<Colors, List<ObjectProperty<Component>>> getStashed() {
+        return stashedComponents;
     }
 
     public ListProperty<Component> revealedComponentsProperty() {

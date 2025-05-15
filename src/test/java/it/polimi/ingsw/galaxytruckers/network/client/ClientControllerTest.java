@@ -76,6 +76,9 @@ class ClientControllerTest {
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1's current component was successfully positioned where requested");
                         controller.notifyComponentPositioning("OtherPlayer1", 10, 0, new Point(5, 7));
 
+                        Thread.sleep(2000);
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1 stashed component");
+                        controller.notifyStashComponent("OtherPlayer1", List.of(5, 0));
 
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1's ship was successfully positioned where requested");
                         controller.notifyPlayerPosition("OtherPlayer1", 1);

@@ -15,6 +15,7 @@ public class CliAllShips extends CliElement {
 
     private final Map<Colors, CliShipBoard> cliShipBoards; // ALL FINAL
     private Map<Colors, CliComponent> hands; // UPDATE WHEN HANDS CHANGES
+    private Map<Colors, List<CliComponent>> stashedComponentsMap;
 
     public CliAllShips(ClientModel model) {
         super(model);
@@ -39,6 +40,22 @@ public class CliAllShips extends CliElement {
                 throw new RuntimeException(e);
             }
         });
+
+        stashedComponentsMap = new SimpleMapProperty<>(FXCollections.observableHashMap());
+        model.getStashed().forEach((color, propertyList) -> {
+            try {
+                List<CliComponent> stashedComponents = new ArrayList<>();
+                for(ObjectProperty<Component> property : propertyList) {
+                    CliComponent stashed = new CliComponent(model, property);
+                    stashed.addListener(this);
+                    stashedComponents.add(stashed);
+                }
+                stashedComponentsMap.put(color, stashedComponents);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
@@ -53,7 +70,26 @@ public class CliAllShips extends CliElement {
             shipDescription.addAll(cliShipBoards.get(c).getDescription());
 
 
-            shipDescription.addAll(hands.get(c).getDescription());
+            List<String> handDescription = new ArrayList<>();
+            handDescription.addAll(hands.get(c).getDescription());
+
+            List<List<String>> stashedDescription = new ArrayList<>();
+            for(CliComponent component : stashedComponentsMap.get(c)) {
+                stashedDescription.add(component.getDescription());
+            }
+
+
+            shipDescription.add(" hand:\t\tstashed" + " ".repeat(23));
+            for (int i = 0; i < handDescription.size(); i++) {
+                row.append(handDescription.get(i));
+                row.append("\t\t");
+                for(List<String> stashed : stashedDescription) {
+                    row.append(stashed.get(i));
+                }
+                row.append(" ".repeat(21));
+                shipDescription.add(row.toString());
+                row.setLength(0);
+            }
 
             descriptions.add(shipDescription);
         }
