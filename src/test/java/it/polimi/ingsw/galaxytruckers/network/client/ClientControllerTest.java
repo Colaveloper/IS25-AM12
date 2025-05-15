@@ -53,33 +53,54 @@ class ClientControllerTest {
                         System.out.println("FAKE SERVER EVENT: successfully created lvl "+level+" game for "+playerN+" players");
                         controller.updateLobbyPlayers(nicknames);
 
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: another player joined, lobby is complete");
                         nicknames.put("OtherPlayer1", Colors.BLUE);
                         controller.updateLobbyPlayers(nicknames);
                         controller.setupGame(Level.SECOND);
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 took a covered component");
                         controller.notifyFaceDownComponentRequest("OtherPlayer1", 10);
 
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 rejected component");
                         faceUpComponents.add(10);
                         controller.notifyComponentRejection("OtherPlayer1",10);
 
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 took the component back");
                         faceUpComponents.add(10);
                         controller.notifyFaceUpComponentRequest("OtherPlayer1",10);
 
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1's current component was successfully positioned where requested");
                         controller.notifyComponentPositioning("OtherPlayer1", 10, 0, new Point(5, 7));
 
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 stashed component");
                         controller.notifyStashComponent("OtherPlayer1", List.of(5, 0));
 
+                        Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1 grabbed from stashed component");
+                        controller.notifyGrabFromStash("OtherPlayer1", 5, List.of(0, 0));
+
+                        Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1 is watching forecast");
+                        controller.notifyPeekForecast("OtherPlayer1", 2);
+
+                        Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1 stopped watching forecast");
+                        controller.notifyReleaseForecast("OtherPlayer1", 2);
+
+                        Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: you picked up forecast");
+                        controller.sendForecastDeck(List.of(2, 4, 5));
+
+                        Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: you picked up forecast");
+                        controller.notifyReleaseForecast("qwe", 2);
+
+                        Thread.sleep(2000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1's ship was successfully positioned where requested");
                         controller.notifyPlayerPosition("OtherPlayer1", 1);
 

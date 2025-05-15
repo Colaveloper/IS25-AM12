@@ -30,8 +30,15 @@ public class CliComponentBank extends CliElement {
     private Map<Colors, CliComponent> hands; // UPDATE WHEN HANDS CHANGES
     private Map<Colors, List<CliComponent>> stashedComponentsMap;
 
+    private List<BooleanProperty> forecastDeck;
+
     public CliComponentBank(ClientModel model) throws IOException {
         super(model);
+
+        forecastDeck = model.getForecastDeckAvailablility();
+        for(BooleanProperty forecast : forecastDeck) {
+            forecast.addListener(this);
+        }
 
         hands = new SimpleMapProperty<>(FXCollections.observableHashMap());
         model.getHand().forEach((color, componentProperty) -> {
@@ -112,6 +119,11 @@ public class CliComponentBank extends CliElement {
         description.add(row.toString());
         row.setLength(0);
 
+        row.append("Forecast decks:" +
+                "\t\tdeck 1 :" + forecastDeck.get(0).get() +
+                "\t\tdeck 2: " + forecastDeck.get(1).get() +
+                "\t\tdeck 3: " + forecastDeck.get(2).get());
+        description.add(row.toString());
 
 
         //STASHED AND HAND IN COMPONENTBANK

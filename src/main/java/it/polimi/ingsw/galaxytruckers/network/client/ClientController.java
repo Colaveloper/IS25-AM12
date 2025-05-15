@@ -141,20 +141,21 @@ public class ClientController implements ClientControllerInterface {
 
     @Override//Tommy approved
     public void notifyPeekForecast(String playerName, int deckIndex) throws IOException {
-//        model.blockForecast(deckIndex); // TODO: restore
+        model.blockForecast(deckIndex);
     }
 
     @Override//Tommy approved
     public void notifyReleaseForecast(String playerName, int deckIndex) throws IOException {
-//        model.freeForecast(deckIndex); // TODO: restore
-//        if (model.isMyNickname(playerName)) {
-//            view.setScreen(new ShipBuildingScreen());
-//        }
+        model.freeForecast(deckIndex);
+        if (model.isMyNickname(playerName)) {
+            view.setScreen(new ShipBuildingScreen(model));
+        }
     }
 
     @Override
-    public void sendForecastDeck(List<Integer> deckCardIds) {
-
+    public void sendForecastDeck(List<Integer> deckCardIds) throws IOException {
+        model.setForecast(deckCardIds);
+        view.setScreen(new ForecastScreen(model));
     }
 
     @Override

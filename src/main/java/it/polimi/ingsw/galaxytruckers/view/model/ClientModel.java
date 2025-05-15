@@ -36,6 +36,8 @@ public class ClientModel {
     private final IntegerProperty coveredComponentN;
     private final ObservableMap<Colors, List<ObjectProperty<Component>>> stashedComponents;
     private final ObservableMap<Colors, ObjectProperty<Component>> hands; // (former current component)
+    private final ListProperty<Integer> forecastDeck;
+    private final List<BooleanProperty> forecastAvailability;
     private Component unweldedComponent;
 
     // FLIGHTBOARD
@@ -69,6 +71,13 @@ public class ClientModel {
         selectablePoints = FXCollections.observableArrayList();
         coveredComponentN = new SimpleIntegerProperty();
         revealedComponents = new SimpleListProperty<>(FXCollections.observableArrayList());
+        forecastDeck = new SimpleListProperty<>(FXCollections.observableArrayList(null, null, null));
+        forecastAvailability = new SimpleListProperty<>(FXCollections.observableArrayList(
+                new SimpleBooleanProperty(true),
+                new SimpleBooleanProperty(true),
+                new SimpleBooleanProperty(true)
+        ));
+
         stashedComponents = FXCollections.observableHashMap();
         startingPositionLeft = FXCollections.observableArrayList();
         hands = FXCollections.observableHashMap();
@@ -76,6 +85,7 @@ public class ClientModel {
         stats = FXCollections.observableHashMap();
         planets = FXCollections.observableArrayList();
         goods = FXCollections.observableArrayList();
+
     }
 
     // SETUP PHASE
@@ -196,6 +206,31 @@ public class ClientModel {
     public void setCabinStats(String nickname, Point p, CrewType crewType, int crewSize) throws IOException {
         ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setCrewType(crewType);
         ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(crewSize);
+    }
+
+        //  FORECAST
+
+    public void freeForecast(int deckIndex) throws IOException {
+        //forecastAvailability.set(deckIndex, true);
+        forecastAvailability.get(deckIndex).set(true);
+    }
+
+    public void blockForecast(int deckIndex) throws IOException {
+        forecastAvailability.get(deckIndex).set(false);
+    }
+
+    public void setForecast(List<Integer> cardIds) {
+        for(int i = 0; i < forecastDeck.size(); i++) {
+            forecastDeck.set(i, cardIds.get(i));
+        }
+    }
+
+    public ListProperty<Integer> getForecastDeck() {
+        return forecastDeck;
+    }
+
+    public List<BooleanProperty> getForecastDeckAvailablility() {
+        return forecastAvailability;
     }
 
         // ADVENTURE PHASE
