@@ -82,13 +82,13 @@ public class ClientController implements ClientControllerInterface {
 
     @Override//Tommy approved
     public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) throws IOException {
-        model.setStashedComponents(playerName, stashComponentIds);//todo: add for other players
+        model.setStashedComponents(playerName, stashComponentIds);
     }
 
     @Override//Tommy approved
     public void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) throws IOException {
-        model.setStashedComponents(playerName, stashComponentIds);//todo: add for other players
-        model.setComponentInHand(playerName, componentId);//todo: add for other players
+        model.setStashedComponents(playerName, stashComponentIds);
+        model.setComponentInHand(playerName, componentId);
     }
 
     @Override//Tommy approved
@@ -114,30 +114,6 @@ public class ClientController implements ClientControllerInterface {
         model.setComponentInHand(playerName, componentId);
         model.removeRevealedComponent(componentId);
     }
-
-//    @Override//Tommy approved
-//    public void notifyComponentRejection(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException {
-//        if (model.isMyNickname(playerName)) {//TODO add for other players
-//            model.clearComponentInHand();
-//        }
-//        model.setRevealedComponent(faceUpComponentIds);
-//    }
-//
-//    @Override//Tommy approved
-//    public void notifyFaceDownComponentRequest(String playerName, int componentId, int numFaceDown) throws IOException {
-//        if (model.isMyNickname(playerName)) {//TODO add for other players
-//            model.setComponentInHand(componentId);
-//        }
-//        model.setCoveredComponents(numFaceDown);
-//    }
-//
-//    @Override//Tommy approved
-//    public void notifyFaceUpComponentRequest(String playerName, int componentId, List<Integer> faceUpComponentIds) throws IOException {
-//        if (model.isMyNickname(playerName)) {//TODO add for other players
-//            model.setComponentInHand(componentId);
-//        }
-//        model.setRevealedComponent(faceUpComponentIds);
-//    }
 
     @Override//Tommy approved
     public void notifyPeekForecast(String playerName, int deckIndex) throws IOException {
@@ -182,18 +158,28 @@ public class ClientController implements ClientControllerInterface {
     }
 
     @Override
-    public void notifyComponentRemoval(String nickname, Point positionPoint) throws IOException {
-
+    public void notifyComponentsRemoval(String nickname, List<Point> positionPoints) throws IOException {
+        for (Point p : positionPoints) {
+            model.removeComponent(p, nickname);
+        }
     }
 
     @Override
-    public void notifyShipPieceRemoval(String nickname, List<Point> positionPoints) throws IOException {
+    public void showShipPieces(String nickname, List<Set<Point>> shipPieces) throws IOException {
+        model.setSelectableShipPieces(shipPieces);
+        model.setIsValid(!model.isMyNickname(nickname));
+        view.setScreen(new ShipPieceChoiceScreen(model));
+    }
 
+    @Override
+    public void notifyInvalidShipsUpdate(List<String> invalidPlayers) throws IOException {
+        model.setIsValid(!invalidPlayers.contains(model.getMyNickname()));
+        view.setScreen(new ValidationScreen(model));
     }
 
     @Override
     public void notifyShipStatusUpdate(String nickname, StatType statType, int value) throws IOException {
-
+        model.setStat(nickname, statType, value);
     }
 
 

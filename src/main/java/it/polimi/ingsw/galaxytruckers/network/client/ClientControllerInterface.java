@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Interface for client-side controller used to receive updates from the server
@@ -163,28 +164,33 @@ public interface ClientControllerInterface {
     void notifyPlayerPosition(String playerName, int position) throws IOException;
 
     /**
-     * Notifies that a component has been removed from a ship.
-     *
-     * @param nickname      the player's nickname
-     * @param positionPoint the position of the removed component
-     * @throws IOException  if a communication error occurs
-     */
-    void notifyComponentRemoval(String nickname, Point positionPoint) throws IOException;
-
-    /**
      * Notifies that a multiple components of a ship have been removed because it was disconnected.
-     * //todo ask how it is in server, could be redundant with notifyComponentRemoval
      *
      * @param nickname          the player's nickname
      * @param positionPoints    the position of the removed components
      * @throws IOException      if a communication error occurs
      */
-    void notifyShipPieceRemoval(String nickname, List<Point> positionPoints) throws IOException;
+    void notifyComponentsRemoval(String nickname, List<Point> positionPoints) throws IOException;
+
+    /**
+     * Signals to the client that their ship is not connected and that they should
+     * choose one of the given pieces to keep
+     * @param nickname who has the ship in pieces
+     * @param shipPieces a list containing the ship's connected subsets
+     * @throws IOException      if a communication error occurs
+     */
+    void showShipPieces(String nickname, List<Set<Point>> shipPieces) throws IOException;
+
+    /**
+     * Signals to the client that the list of valid ships has changed
+     * @param invalidPlayers a list containing the nicknames of players whose
+     *                       ships are not valid
+     */
+    void notifyInvalidShipsUpdate(List<String> invalidPlayers) throws IOException;
 
     /**
      * Notifies a change in any stat of a ship
      * used for: possibly all cards and end of building state
-     * //todo if we show stats during all building state this is called more then once
      *
      * @param nickname  the player's nickname
      * @param statType  the type of stat being updated FIREPOWER,ENGINEPOWER,CREWSIZE,BATTERIES,CREDITS,LOSSES

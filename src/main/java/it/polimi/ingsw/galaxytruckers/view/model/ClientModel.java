@@ -17,7 +17,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ClientModel {
 
@@ -38,6 +37,7 @@ public class ClientModel {
     private final ObservableMap<Colors, ObjectProperty<Component>> hands; // (former current component)
     private final ListProperty<Integer> forecastDeck;
     private final List<BooleanProperty> forecastAvailability;
+    private boolean isValid;
     private Component unweldedComponent;
 
     // FLIGHTBOARD
@@ -108,6 +108,10 @@ public class ClientModel {
 
     public void setMyNickname(String myNickname) {
         this.myNickname = myNickname;
+    }
+
+    public String getMyNickname() {
+        return myNickname;
     }
 
     // call after having added all players
@@ -189,6 +193,14 @@ public class ClientModel {
 
             // SHIPBOARD
 
+    public void setIsValid(boolean isValid) {
+        this.isValid = isValid;
+    }
+
+    public boolean shipIsValid() {
+        return isValid;
+    }
+
     public void removeComponent (Point p, String nickname) throws IOException {
         this.ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).set(
                 new Component(ComponentType.EMPTY_AREA)
@@ -250,16 +262,12 @@ public class ClientModel {
         return myNickname.equals(nickname);
     }
 
-    public void setBatteries(String nickname, Point p, int totalBatteries) throws IOException {
+    public void setBatteriesOnComponent(String nickname, Point p, int totalBatteries) throws IOException {
         ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(totalBatteries);
     }
 
-    public void setCredits(String nickname, int credits) {
-        stats.get(playerToColor.get(nickname)).put(StatType.CREDITS, credits);
-    }
-
-    public void setLostComponent(String nickname, int losses) {
-        stats.get(playerToColor.get(nickname)).put(StatType.LOSSES, losses);
+    public void setStat(String nickname, StatType statType, int value) {
+        stats.get(playerToColor.get(nickname)).put(statType, value);
     }
 
     // place goods on ship
@@ -306,6 +314,10 @@ public class ClientModel {
                 );
             }
         }
+    }
+
+    public void setSelectableShipPieces(List<Set<Point>> selectableShipPieces) {
+        //todo highlight with different colors
     }
 
     public String getCurrentLeader() {

@@ -93,16 +93,31 @@ class ClientControllerTest {
                         controller.notifyReleaseForecast("OtherPlayer1", 2);
 
                         Thread.sleep(1000);
-                        System.out.println("FAKE SERVER EVENT: you picked up forecast");
+                        System.out.println("FAKE SERVER EVENT: you picked up a forecast deck");
                         controller.sendForecastDeck(List.of(2, 4, 5));
 
                         Thread.sleep(1000);
-                        System.out.println("FAKE SERVER EVENT: you picked up forecast");
+                        System.out.println("FAKE SERVER EVENT: you released the forecast deck");
                         controller.notifyReleaseForecast("qwe", 2);
 
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1's ship was successfully positioned where requested");
                         controller.notifyPlayerPosition("OtherPlayer1", 1);
+
+                        Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: yours and OtherPlayer1's ships are invalid");
+                        controller.notifyInvalidShipsUpdate(List.of("OtherPlayer1", "qwe"));
+
+                        Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1's ship is invalid");
+                        controller.notifyInvalidShipsUpdate(List.of("OtherPlayer1"));
+
+                        Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1 ship is not connected");
+                        controller.showShipPieces("OtherPlayer1", List.of(
+                                Set.of(new Point(5, 7), new Point(5, 8)),
+                                Set.of(new Point(6, 7), new Point(6, 8))
+                        ));
 
                     } catch (InterruptedException | IOException e) {
                         Thread.currentThread().interrupt();
