@@ -4,12 +4,11 @@ import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.BigMeteor;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.SmallMeteor;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,13 +31,13 @@ class MeteorSwarmCardTest {
 
     @BeforeEach
     void setUp() {
-        ship1 = new SecondShipBoard(Colors.RED) {
+        ship1 = new SecondShipBoard(FourColors.RED) {
             @Override
             public List<Set<Point>> getConnectedSets() {
                 return List.of(Set.of(), Set.of()); // breaking
             }
         };
-        ship2 = new SecondShipBoard(Colors.BLUE) {
+        ship2 = new SecondShipBoard(FourColors.BLUE) {
             @Override
             public List<Set<Point>> getConnectedSets() {
                 return List.of(Set.of()); // not breaking

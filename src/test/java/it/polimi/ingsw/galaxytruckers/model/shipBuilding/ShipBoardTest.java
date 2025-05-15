@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import org.junit.jupiter.api.*;
 
@@ -21,7 +21,7 @@ class ShipBoardTest {
 
         @BeforeEach
         void setup() {
-            shipBoard = new SecondShipBoard(Colors.BLUE);
+            shipBoard = new SecondShipBoard(FourColors.BLUE);
             componentToAdd = new Component(Arrays.asList(Connector.UNIVERSAL, Connector.SINGLE, Connector.DOUBLE, Connector.NONE));
         }
 
@@ -131,7 +131,7 @@ class ShipBoardTest {
 
         @BeforeEach
         void setup() {
-            shipBoard = new SecondShipBoard(Colors.BLUE);
+            shipBoard = new SecondShipBoard(FourColors.BLUE);
         }
 
         @Nested
@@ -819,7 +819,7 @@ class ShipBoardTest {
         @BeforeEach
         void setUp() {
             component = new Component(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
-            shipBoard = new SecondShipBoard(Colors.BLUE);
+            shipBoard = new SecondShipBoard(FourColors.BLUE);
             for (int i = 5; i <= 9; i++) {
                 shipBoard.offerComponent(component);
                 shipBoard.placeComponent(new Point(i,7),0);

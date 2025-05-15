@@ -2,13 +2,13 @@
   {
   "type": "empty_area",
   "connectors": ["none","none","none","none"],
-  "path": "file:src/main/resources/textures/tiles/addMe.jpg",
+  "path": "file:src/main/resources/textures/tiles/empty_area.png",
   "id": 0
   },
   {
     "type": "empty_space",
     "connectors": ["none","none","none","none"],
-    "path": "file:src/main/resources/textures/tiles/addMe.jpg",
+    "path": "file:src/main/resources/textures/tiles/empty_space.png",
     "id": 1
   },
   {

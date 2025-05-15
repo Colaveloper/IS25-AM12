@@ -2,13 +2,11 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +33,7 @@ class PiratesCardTest {
         shipPieces.add(new HashSet<>());
         removePiece = false;
         lastShipPower = firePowerThreshold+1;
-        ships.add(new SecondShipBoard(Colors.BLUE) {
+        ships.add(new SecondShipBoard(FourColors.BLUE) {
             @Override
             public int getFirePower() {
                 return firePowerThreshold-1;
@@ -46,13 +44,13 @@ class PiratesCardTest {
                 return shipPieces;
             }
         });
-        ships.add(new SecondShipBoard(Colors.RED) {
+        ships.add(new SecondShipBoard(FourColors.RED) {
             @Override
             public int getFirePower() {
                 return firePowerThreshold;
             }
         });
-        ships.add(new SecondShipBoard(Colors.RED) {
+        ships.add(new SecondShipBoard(FourColors.RED) {
             @Override
             public int getFirePower() {
                 return lastShipPower;

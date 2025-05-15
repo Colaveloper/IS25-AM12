@@ -1,6 +1,6 @@
 //package it.polimi.ingsw.galaxytruckers.network.client.socket;
 //
-//import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+//import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 //import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 //import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 //import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -74,7 +74,7 @@
 //    }
 //
 //    @Override
-//    public void showColorSelection(String nickname, Colors color) throws Exception {
+//    public void showColorSelection(String nickname, FourColors color) throws Exception {
 //
 //    }
 //

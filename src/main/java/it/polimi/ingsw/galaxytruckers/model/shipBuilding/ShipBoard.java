@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 
 import java.awt.*;
 import java.util.*;
@@ -12,7 +12,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     protected final Map<Point, Component> componentMap;
     protected Component lastComponent;  // can be null
     protected Point lastPosition;  // can be null
-    protected final Colors color;
+    protected final FourColors color;
 
     protected int firePower;
     protected int enginePower;
@@ -33,7 +33,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     protected final Map<Point, Cabin> cabins;
     protected final Map<Point, Activatable> activatables;
 
-    public ShipBoard(Colors color) { // (, Color color)
+    public ShipBoard(FourColors color) { // (, Color color)
         this.componentMap = new HashMap<>();
         this.lastComponent = null;
         this.lastPosition = null;

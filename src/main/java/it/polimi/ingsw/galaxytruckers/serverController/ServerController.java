@@ -1,9 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.serverController;
 
-import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -36,7 +35,7 @@ public class ServerController implements ServerControllerInterface {
 
     //TODO: make color selection automatic
     @Override
-    public void chooseColor(String nickname, Colors color) {
+    public void chooseColor(String nickname, FourColors color) {
         Player player = Player.getPlayer(nickname);
         Lobby lobby = player.getLobby()
                 .orElseThrow(() -> new IllegalArgumentException("You are not in a lobby"));

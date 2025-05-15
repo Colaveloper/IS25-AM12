@@ -1,15 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.CliFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cli.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cli.CliComponentBank;
-import it.polimi.ingsw.galaxytruckers.view.cli.CliElement;
+import it.polimi.ingsw.galaxytruckers.view.gui.GuiAllShips;
 import it.polimi.ingsw.galaxytruckers.view.gui.GuiComponentBank;
+import it.polimi.ingsw.galaxytruckers.view.gui.GuiFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Line;
 
 import java.awt.*;
 import java.io.IOException;
@@ -125,5 +125,7 @@ public class ShipBuildingScreen extends ScreenStrategy {
     @Override
     public void showGUI(ClientModel model, Pane root, VirtualServer server) throws IOException {
         root.getChildren().add(new GuiComponentBank(model, server).getNode());
+        root.getChildren().add(new GuiFlightBoard(model, server).getNode());
+        root.getChildren().add(new GuiAllShips(model, server).getNode());
     }
 }

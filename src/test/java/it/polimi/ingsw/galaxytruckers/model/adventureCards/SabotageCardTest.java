@@ -1,13 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +47,7 @@ class SabotageCardTest {
         ships = new ArrayList<>();
         largerShips = new ArrayList<>();
 
-        ship1 = new SecondShipBoard(Colors.BLUE) {
+        ship1 = new SecondShipBoard(FourColors.BLUE) {
             @Override
             public int getCrewSize() {
                 return 2;
@@ -60,7 +59,7 @@ class SabotageCardTest {
             }
         };
 
-        ship2 = new SecondShipBoard(Colors.RED) {
+        ship2 = new SecondShipBoard(FourColors.RED) {
             @Override
             public int getCrewSize() {
                 return 3;
@@ -72,7 +71,7 @@ class SabotageCardTest {
             }
         };
 
-        ship3 = new SecondShipBoard(Colors.GREEN) {
+        ship3 = new SecondShipBoard(FourColors.GREEN) {
             @Override
             public int getCrewSize() {
                 return 1;

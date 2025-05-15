@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
@@ -16,7 +16,7 @@ class ClientControllerTest {
     static VirtualServer server;
     static ClientController controller;
 
-    static Map<String, Colors> nicknames;
+    static Map<String, FourColors> nicknames;
     static int loopLength;
     static List<Integer> startingPositions;
     static Set<Point> shipArea;
@@ -39,7 +39,7 @@ class ClientControllerTest {
             @Override
             public void registerNickname(String myNickname) throws IOException {
                 System.out.println("FAKE SERVER EVENT: successfully registered nickname " + myNickname);
-                nicknames.put("qwe", Colors.RED);
+                nicknames.put("qwe", FourColors.RED);
                 controller.setMyNickname("qwe");
 
                 controller.showGameCreation(); // granting the rights to create a new game
@@ -55,7 +55,7 @@ class ClientControllerTest {
 
                         Thread.sleep(2000);
                         System.out.println("FAKE SERVER EVENT: another player joined, lobby is complete");
-                        nicknames.put("OtherPlayer1", Colors.BLUE);
+                        nicknames.put("OtherPlayer1", FourColors.BLUE);
                         controller.updateLobbyPlayers(nicknames);
                         controller.setupGame(Level.SECOND);
                         Thread.sleep(2000);

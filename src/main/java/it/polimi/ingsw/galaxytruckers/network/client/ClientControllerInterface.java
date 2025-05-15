@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -27,7 +27,7 @@ public interface ClientControllerInterface {
      * @param playerToColor a map linking player nicknames to their chosen colors
      * @throws IOException if a communication error occurs
      */
-    void updateLobbyPlayers(Map<String, Colors> playerToColor) throws IOException;
+    void updateLobbyPlayers(Map<String, FourColors> playerToColor) throws IOException;
 
 
     //-----------------------------BUILDING PHASE----------------------------------

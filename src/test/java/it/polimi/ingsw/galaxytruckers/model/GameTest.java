@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.factory.SecondFactory;
 import it.polimi.ingsw.galaxytruckers.model.factory.TestFactory;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +22,8 @@ class GameTest {
     void setUp() {
         game = new Game(Level.SECOND);
         shipBoards = new ArrayList<>();
-        shipBoards.add(game.addShipBoard(Colors.BLUE));
-        shipBoards.add(game.addShipBoard(Colors.GREEN));
+        shipBoards.add(game.addShipBoard(FourColors.BLUE));
+        shipBoards.add(game.addShipBoard(FourColors.GREEN));
     }
 
     @Test

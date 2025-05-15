@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
@@ -26,7 +26,7 @@ public class Lobby {
     private Game game;
     private final Object gameLock = new Object();
     private final List<Player> players;
-    private final Set<Colors> chosenColors;
+    private final Set<FourColors> chosenColors;
 
     public Lobby(Player creator, Level level, int numPlayers) {
         this.level = level;
@@ -82,7 +82,7 @@ public class Lobby {
         }
     }
 
-    public Set<Colors> getChosenColors() {
+    public Set<FourColors> getChosenColors() {
         synchronized (chosenColors) {
             return chosenColors;
         }
@@ -118,7 +118,7 @@ public class Lobby {
         }
     }
 
-    public synchronized void chooseColor(Player player, Colors color) {
+    public synchronized void chooseColor(Player player, FourColors color) {
         if (state != LobbyState.PREPARATION) {
             throw new IllegalStateException("The lobby is not in preparation");
         }

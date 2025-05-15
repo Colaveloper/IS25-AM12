@@ -4,7 +4,7 @@
 //import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.BigMeteor;
 //import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 //import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.SmallMeteor;
-//import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+//import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 //import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 //import it.polimi.ingsw.galaxytruckers.model.state.*;
 //import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -62,7 +62,7 @@
 //        position2 = 10;
 //        doesBreak = true;
 //
-//        ship1 = new SecondShipBoard(Colors.RED) {
+//        ship1 = new SecondShipBoard(FourColors.RED) {
 //            @Override
 //            public int getCrewSize() {
 //                return crewSize1;
@@ -80,7 +80,7 @@
 //                return List.of(Set.of());
 //            }
 //        };
-//        ship2 = new SecondShipBoard(Colors.BLUE) {
+//        ship2 = new SecondShipBoard(FourColors.BLUE) {
 //            @Override
 //            public int getCrewSize() {
 //                return crewSize2;

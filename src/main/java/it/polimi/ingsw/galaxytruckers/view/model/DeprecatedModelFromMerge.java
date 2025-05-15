@@ -2,7 +2,7 @@
 //
 //import com.google.common.collect.BiMap;
 //import com.google.common.collect.HashBiMap;
-//import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+//import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 //import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 //import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 //import it.polimi.ingsw.galaxytruckers.view.adventureClient.AdventureCard;
@@ -22,7 +22,7 @@
 //    private String currentPlayerNickname;
 //    private String myNickname;
 //    private final LinkedHashMap<String, Shipboard> playerToShip;        // need order to be always the same
-//    private final BiMap<String, Colors> playerToColor;
+//    private final BiMap<String, FourColors> playerToColor;
 //
 //    private final FlightBoard flightBoard;
 //    private List<Point> selectablePoints;
@@ -68,7 +68,7 @@
 //        flightBoard.setStartingPositionLeft(getStartingPositions);
 //    }
 //
-//    public void setPlayerColor(String nickname, Colors color) {
+//    public void setPlayerColor(String nickname, FourColors color) {
 //        playerToColor.putIfAbsent(nickname, color);
 //    }
 //
@@ -231,7 +231,7 @@
 //        return allShips;
 //    }
 //
-//    public Colors getColorFromNickname(String nickname) {return playerToColor.get(nickname);}
+//    public FourColors getColorFromNickname(String nickname) {return playerToColor.get(nickname);}
 //
 //    public Physical getFlightBoard() {
 //        return flightBoard;

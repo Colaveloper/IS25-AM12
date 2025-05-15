@@ -1,12 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -57,7 +56,7 @@ class EpidemicCardTest {
 
         plaguedCabins = new HashSet<>();
 
-        ShipBoard shipBoardA = new SecondShipBoard(Colors.GREEN) {
+        ShipBoard shipBoardA = new SecondShipBoard(FourColors.GREEN) {
             @Override
             public Map<Point, Cabin> getCabins() {
                 return testCabins;
@@ -69,7 +68,7 @@ class EpidemicCardTest {
             }
         };
 
-        ShipBoard shipBoardB = new SecondShipBoard(Colors.GREEN) {
+        ShipBoard shipBoardB = new SecondShipBoard(FourColors.GREEN) {
             @Override
             public Map<Point, Cabin> getCabins() {
                 return testCabins;

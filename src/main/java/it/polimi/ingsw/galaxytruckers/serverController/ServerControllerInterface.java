@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.serverController;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -69,7 +69,7 @@ public interface ServerControllerInterface {
      * @throws IllegalStateException if the player has not joined
      * a lobby yet or if the lobby is not in preparation phase
      */
-    void chooseColor(String nickname, Colors color);
+    void chooseColor(String nickname, FourColors color);
 
     // Game methods
 

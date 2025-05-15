@@ -1,14 +1,13 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.ActivateState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,8 +25,8 @@ class OpenSpaceCardTest {
     @BeforeEach
     void setUp() {
         ships = new ArrayList<>();
-        ships.add(new SecondShipBoard(Colors.BLUE));
-        ships.add(new SecondShipBoard(Colors.RED));
+        ships.add(new SecondShipBoard(FourColors.BLUE));
+        ships.add(new SecondShipBoard(FourColors.RED));
         FlightBoard flightBoardStub = new FlightBoard(null) {
             @Override
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {

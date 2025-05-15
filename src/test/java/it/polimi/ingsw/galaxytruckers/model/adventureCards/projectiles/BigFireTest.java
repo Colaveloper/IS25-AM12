@@ -1,15 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.IntSupplier;
 
@@ -22,7 +18,7 @@ class BigFireTest {
 
     @BeforeEach
     void setUp() {
-        shipBoard = new ShipBoard(Colors.BLUE) {
+        shipBoard = new ShipBoard(FourColors.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
