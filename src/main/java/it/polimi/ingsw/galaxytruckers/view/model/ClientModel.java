@@ -37,6 +37,7 @@ public class ClientModel {
     private final ObservableMap<Colors, ObjectProperty<Component>> hands; // (former current component)
     private final ListProperty<Integer> forecastDeck;
     private final List<BooleanProperty> forecastAvailability;
+    private List<Set<Point>> shipPieces;
     private boolean isValid;
     private Component unweldedComponent;
 
@@ -67,6 +68,7 @@ public class ClientModel {
     public ClientModel() {
         shipArea = new HashSet<>();
         playerToColor = HashBiMap.create();
+        shipPieces = new ArrayList<>();
         ships = new SimpleMapProperty<>(FXCollections.observableMap(new HashMap<>()));
         selectablePoints = FXCollections.observableArrayList();
         coveredComponentN = new SimpleIntegerProperty();
@@ -215,6 +217,10 @@ public class ClientModel {
 //        lastPosition = position;
     }
 
+    public Component getComponent(String nickname, Point p) {
+        return ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get();
+    }
+
     public void setCabinStats(String nickname, Point p, CrewType crewType, int crewSize) throws IOException {
         ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setCrewType(crewType);
         ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(crewSize);
@@ -317,7 +323,12 @@ public class ClientModel {
     }
 
     public void setSelectableShipPieces(List<Set<Point>> selectableShipPieces) {
+        this.shipPieces = selectableShipPieces;
         //todo highlight with different colors
+    }
+
+    public List<Set<Point>> getSelectableShipPieces() {
+        return shipPieces;
     }
 
     public String getCurrentLeader() {

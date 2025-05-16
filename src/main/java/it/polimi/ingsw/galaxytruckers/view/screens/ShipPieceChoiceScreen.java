@@ -27,7 +27,8 @@ public class ShipPieceChoiceScreen extends ScreenStrategy{
 
     @Override
     public boolean isLegalInput(ClientModel model, String input) {
-        return false;
+        return Integer.parseInt(input) <= model.getSelectableShipPieces().size() &&
+                Integer.parseInt(input) > 0;
     }
 
     @Override

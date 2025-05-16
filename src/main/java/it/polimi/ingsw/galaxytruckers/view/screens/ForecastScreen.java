@@ -43,10 +43,14 @@ public class ForecastScreen extends ScreenStrategy {
     @Override
     protected List<String> getNewDescription() throws IOException {
         List<String> description = new ArrayList<>();
+        List<String> cardDescription = new ArrayList<>();
 
         description.add("This cards will appear in the upcoming adventure\n\n");
         for(CliAdventureCard adventureCard : forecastDeck){
-            description.addAll(adventureCard.getDescription());
+            cardDescription = adventureCard.getDescription();
+            cardDescription.set(0, adventureCard.getCardName());
+            cardDescription.add("\n");
+            description.addAll(cardDescription);
         }
         return description;
     }
