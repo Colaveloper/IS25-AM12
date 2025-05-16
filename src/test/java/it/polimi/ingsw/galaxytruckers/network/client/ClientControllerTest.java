@@ -53,7 +53,7 @@ class ClientControllerTest {
                         System.out.println("FAKE SERVER EVENT: successfully created lvl "+level+" game for "+playerN+" players");
                         controller.updateLobbyPlayers(nicknames);
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: another player joined, lobby is complete");
                         nicknames.put("OtherPlayer1", Colors.BLUE);
                         controller.updateLobbyPlayers(nicknames);
@@ -62,62 +62,86 @@ class ClientControllerTest {
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 took a covered component");
                         controller.notifyFaceDownComponentRequest("OtherPlayer1", 10);
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 rejected component");
                         faceUpComponents.add(10);
                         controller.notifyComponentRejection("OtherPlayer1",10);
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 took the component back");
                         faceUpComponents.add(10);
                         controller.notifyFaceUpComponentRequest("OtherPlayer1",10);
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1's current component was successfully positioned where requested");
                         controller.notifyComponentPositioning("OtherPlayer1", 10, 0, new Point(5, 7));
+                        controller.notifyComponentPositioning("OtherPlayer1", 10, 0, new Point(5, 8));
+                        controller.notifyComponentPositioning("OtherPlayer1", 10, 0, new Point(6, 7));
+                        controller.notifyComponentPositioning("OtherPlayer1", 10, 0, new Point(6, 8));
+                        controller.notifyComponentPositioning("OtherPlayer1", 120, 0, new Point(6, 9));
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: your current component was successfully positioned where requested");
+                        controller.notifyComponentPositioning("qwe", 10, 0, new Point(5, 7));
+                        controller.notifyComponentPositioning("qwe", 10, 0, new Point(5, 8));
+                        controller.notifyComponentPositioning("qwe", 10, 0, new Point(6, 7));
+                        controller.notifyComponentPositioning("qwe", 10, 0, new Point(6, 8));
+                        controller.notifyComponentPositioning("qwe", 120, 0, new Point(6, 9));
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 stashed component");
                         controller.notifyStashComponent("OtherPlayer1", List.of(5, 0));
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 grabbed from stashed component");
                         controller.notifyGrabFromStash("OtherPlayer1", 5, List.of(0, 0));
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 is watching forecast");
                         controller.notifyPeekForecast("OtherPlayer1", 2);
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 stopped watching forecast");
                         controller.notifyReleaseForecast("OtherPlayer1", 2);
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: you picked up a forecast deck");
                         controller.sendForecastDeck(List.of(2, 4, 5));
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: you released the forecast deck");
                         controller.notifyReleaseForecast("qwe", 2);
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1's ship was successfully positioned where requested");
                         controller.notifyPlayerPosition("OtherPlayer1", 1);
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: yours and OtherPlayer1's ships are invalid");
                         controller.notifyInvalidShipsUpdate(List.of("OtherPlayer1", "qwe"));
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1's ship is invalid");
                         controller.notifyInvalidShipsUpdate(List.of("OtherPlayer1"));
 
-                        Thread.sleep(1000);
+                        //Thread.sleep(1000);
                         System.out.println("FAKE SERVER EVENT: OtherPlayer1 ship is not connected");
                         controller.showShipPieces("OtherPlayer1", List.of(
                                 Set.of(new Point(5, 7), new Point(5, 8)),
-                                Set.of(new Point(6, 7), new Point(6, 8))
+                                Set.of(new Point(6, 7), new Point(6, 8), new Point(6, 9))
                         ));
+
+                        //Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: OtherPlayer1's spent a battery");
+                        controller.changeBatteriesOnComponent("OtherPlayer1", new Point(6, 9), 1);
+
+                        //Thread.sleep(1000);
+                        System.out.println("FAKE SERVER EVENT: your ship is not connected");
+                        controller.showShipPieces("qwe", List.of(
+                                Set.of(new Point(5, 7), new Point(5, 8)),
+                                Set.of(new Point(6, 7), new Point(6, 8), new Point(6, 9))
+                        ));
+
+                        Thread.sleep(1000);
 
                     } catch (InterruptedException | IOException e) {
                         Thread.currentThread().interrupt();

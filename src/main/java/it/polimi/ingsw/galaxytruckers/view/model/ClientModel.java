@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -268,9 +269,6 @@ public class ClientModel {
         return myNickname.equals(nickname);
     }
 
-    public void setBatteriesOnComponent(String nickname, Point p, int totalBatteries) throws IOException {
-        ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(totalBatteries);
-    }
 
     public void setStat(String nickname, StatType statType, int value) {
         stats.get(playerToColor.get(nickname)).put(statType, value);
@@ -322,11 +320,21 @@ public class ClientModel {
         }
     }
 
-    public void setSelectableShipPieces(List<Set<Point>> selectableShipPieces) {
-        this.shipPieces = selectableShipPieces;
-        //todo highlight with different colors
+    public void setBatteriesOnComponent(String nickname, Point p, int totalBatteries) throws IOException {
+        ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(totalBatteries);
     }
 
+    public void setSelectableShipPieces(String nickname, List<Set<Point>> selectableShipPieces) {
+        if(isMyNickname(nickname)) {
+            shipPieces = selectableShipPieces;
+        }
+        List<List<ObjectProperty<Component>>> myShip = ships.get(playerToColor.get(nickname));
+        for(int i = 0; i < selectableShipPieces.size(); i++) {
+            for(Point p : selectableShipPieces.get(i)) {
+                myShip.get(p.y - upLeft.y).get(p.x - upLeft.x).get().setShipPart(i + 1);
+            }
+        }
+    }
     public List<Set<Point>> getSelectableShipPieces() {
         return shipPieces;
     }

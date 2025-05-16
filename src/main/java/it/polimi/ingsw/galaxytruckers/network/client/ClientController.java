@@ -166,7 +166,7 @@ public class ClientController implements ClientControllerInterface {
 
     @Override
     public void showShipPieces(String nickname, List<Set<Point>> shipPieces) throws IOException {
-        model.setSelectableShipPieces(shipPieces);
+        model.setSelectableShipPieces(nickname, shipPieces);
         model.setIsValid(!model.isMyNickname(nickname));
         view.setScreen(new ShipPieceChoiceScreen(model));
     }
@@ -194,6 +194,11 @@ public class ClientController implements ClientControllerInterface {
 
     public void notifySelection(String nickname, List<Point> cannonsPositions) throws IOException {
 
+    }
+
+    //todo added recently
+    public void changeBatteriesOnComponent(String nickname, Point batteryComponent, int batteries) throws IOException {
+        model.setBatteriesOnComponent(nickname, batteryComponent, batteries);
     }
 
     @Override//Tommy approved

@@ -27,6 +27,10 @@ public class Component {
     private final int componentId;
     private final JsonNode node;
     private final BooleanProperty isSelectable;
+
+    //represents the index of a block of components disconnected from the rest
+    //other components in the same block have the same value
+    protected int disconnectedShipPart;
     private final IntegerProperty direction;
     private final ObjectProperty<CrewType> crewType;
     private final IntegerProperty stat;
@@ -35,6 +39,7 @@ public class Component {
 
     public Component(int componentId) {
         this.componentId = componentId;
+        disconnectedShipPart = 0;
         isSelectable = new SimpleBooleanProperty(false);
         direction = new SimpleIntegerProperty(0);
         stat = new SimpleIntegerProperty(0);
@@ -66,6 +71,14 @@ public class Component {
 
     public BooleanProperty isSelectableProperty() {
         return isSelectable;
+    }
+
+    public void setShipPart(int shipPart) {
+        this.disconnectedShipPart = shipPart;
+    }
+
+    public int getDisconnectedShipIndex() {
+        return disconnectedShipPart;
     }
 
     public IntegerProperty directionProperty() {
