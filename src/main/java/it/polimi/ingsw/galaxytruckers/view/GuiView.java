@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.GuiScreen;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.ScreenFactory;
+import it.polimi.ingsw.galaxytruckers.view.screens.ScreenFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.application.Application;
 import javafx.application.Platform;

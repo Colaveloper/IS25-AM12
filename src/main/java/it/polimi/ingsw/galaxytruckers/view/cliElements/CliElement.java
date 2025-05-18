@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
+import it.polimi.ingsw.galaxytruckers.view.UiElement;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -8,14 +9,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CliElement implements InvalidationListener, Observable {
-    protected ClientModel model;
+public abstract class CliElement extends UiElement implements InvalidationListener, Observable {
     private boolean dirty = true;
     protected final List<String> descriptionCache = new ArrayList<>();
     private InvalidationListener parent;
 
     public CliElement(ClientModel model) {
-        this.model = model;
+        super(model);
     }
 
     @Override

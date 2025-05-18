@@ -6,7 +6,7 @@
 //import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 //import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 //import it.polimi.ingsw.galaxytruckers.view.adventureClient.AdventureCard;
-//import it.polimi.ingsw.galaxytruckers.view.adventureClient.CurrentProjectile;
+//import it.polimi.ingsw.galaxytruckers.view.adventureClient.ProjectileRecord;
 //import it.polimi.ingsw.galaxytruckers.view.adventureClient.GoodsBuffer;
 //import it.polimi.ingsw.galaxytruckers.view.adventureClient.Planets;
 //import it.polimi.ingsw.galaxytruckers.view.shipBuildingClient.ComponentBank;
@@ -27,7 +27,7 @@
 //    private final FlightBoard flightBoard;
 //    private List<Point> selectablePoints;
 //    private Planets planets;
-//    private CurrentProjectile currentProjectile;
+//    private ProjectileRecord currentProjectile;
 //    private GoodsBuffer goodsBuffer;
 //    private final ComponentBank componentBank;
 //    private final Forecast forecast;
@@ -201,10 +201,10 @@
 //    }
 //
 //    public void setProjectile(ProjectileType projectileType, int direction, int roll) {
-//        currentProjectile = new CurrentProjectile (projectileType, direction, roll);
+//        currentProjectile = new ProjectileRecord (projectileType, direction, roll);
 //    }
 //
-//    public CurrentProjectile getCurrentProjectile() {
+//    public ProjectileRecord getCurrentProjectile() {
 //        return currentProjectile;
 //    }
 //

@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.ScreenFactory;
+import it.polimi.ingsw.galaxytruckers.view.screens.ScreenFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -64,7 +64,7 @@ public class CliView implements View, InvalidationListener {
         System.out.flush();
     }
 
-    public void startInputLoop() {
+    private void startInputLoop() {
         new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             while (true) {

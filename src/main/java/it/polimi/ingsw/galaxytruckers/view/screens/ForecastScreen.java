@@ -3,7 +3,6 @@ package it.polimi.ingsw.galaxytruckers.view.screens;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.*;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiForecastScreen;
-import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiGameCreationScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.io.IOException;

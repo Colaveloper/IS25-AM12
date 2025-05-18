@@ -4,7 +4,6 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliGameCreationScreen;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.GuiScreen;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.ScreenFactory;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiGameCreationScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 

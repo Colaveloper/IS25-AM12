@@ -1,6 +1,6 @@
 //package it.polimi.ingsw.galaxytruckers.view;
 //
-//import it.polimi.ingsw.galaxytruckers.view.adventureClient.CurrentProjectile;
+//import it.polimi.ingsw.galaxytruckers.view.adventureClient.ProjectileRecord;
 //import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
@@ -11,11 +11,11 @@
 //
 //class CurrentProjectileTest {
 //
-//    CurrentProjectile currentProjectile;
+//    ProjectileRecord currentProjectile;
 //
 //    @BeforeEach
 //    void setUp() {
-//        currentProjectile = new CurrentProjectile(ProjectileType.BIGMETEOR, 1, 7);
+//        currentProjectile = new ProjectileRecord(ProjectileType.BIGMETEOR, 1, 7);
 //    }
 //
 //    @Test

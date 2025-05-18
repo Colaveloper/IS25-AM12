@@ -8,14 +8,14 @@
 //import java.util.ArrayList;
 //import java.util.List;
 //
-//public class CurrentProjectile extends CliElement {
+//public class ProjectileRecord extends CliElement {
 //    private int projectileRoll;
 //    private int projectileDirection;
 //    private ProjectileType projectileType;
 //
 //    private StringBuilder description;
 //
-//    public CurrentProjectile(ProjectileType projectileType, int projectileDirection, int projectileRoll ) {
+//    public ProjectileRecord(ProjectileType projectileType, int projectileDirection, int projectileRoll ) {
 //        this.projectileRoll = projectileRoll;
 //        this.projectileDirection = projectileDirection;
 //        this.projectileType = projectileType;

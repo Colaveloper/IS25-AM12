@@ -7,7 +7,6 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -18,7 +17,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ClientModel {
 
@@ -61,7 +59,7 @@ public class ClientModel {
     private final List<GoodsType> goods;
 
     // PROJECTILES
-    private CurrentProjectile currentProjectile;
+    private ProjectileRecord currentProjectile;
 
     // GOODS BUFFER
 //    private List<Optional<GoodsType>> goodsBuffer;
@@ -292,10 +290,10 @@ public class ClientModel {
     }
 
     public void setProjectile(ProjectileType projectileType, int direction, int roll) {
-        currentProjectile = new CurrentProjectile (roll, direction, projectileType);
+        currentProjectile = new ProjectileRecord(roll, direction, projectileType);
     }
 
-    public CurrentProjectile getCurrentProjectile() {
+    public ProjectileRecord getCurrentProjectile() {
         return currentProjectile;
     }
 
