@@ -9,9 +9,9 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public record CargoHoldUpdate(String playerName, Point point, Map<GoodsType, Integer> cargo) implements Event {
-    public static CargoHoldUpdate from(ShipBoard shipBoard, Point point, CargoHold cargoHold) {
-        return new  CargoHoldUpdate(
+public record CargoHoldUpdateEvent(String playerName, Point point, Map<GoodsType, Integer> cargo) implements Event {
+    public static CargoHoldUpdateEvent from(ShipBoard shipBoard, Point point, CargoHold cargoHold) {
+        return new CargoHoldUpdateEvent(
                 Player.getPlayer(shipBoard).getNickname(),
                 point,
                 new HashMap<>(cargoHold.getGoods())

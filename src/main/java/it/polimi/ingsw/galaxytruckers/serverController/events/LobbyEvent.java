@@ -33,7 +33,4 @@ public record LobbyEvent(String playerName, Map<String, Colors> playerColors) im
     public void accept(EventVisitor visitor) {
         visitor.visit(this);
     }
-
-    //TODO: add ColorChoiceEvent if we decide to leave choice to the player,
-    // otherwise it can be derived from this event
 }

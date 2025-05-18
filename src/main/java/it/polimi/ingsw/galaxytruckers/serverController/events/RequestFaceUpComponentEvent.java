@@ -12,15 +12,13 @@ import java.util.Set;
  * Event signaling a player has requested a component from the bank
  * @param playerName the nickname of the player who performed the request
  * @param componentId the requested component's id
- * @param faceUpComponentIds the ids of face up components in the bank
  */
-public record RequestFaceUpComponentEvent(String playerName, int componentId, Set<Integer> faceUpComponentIds) implements Event {
+public record RequestFaceUpComponentEvent(String playerName, int componentId) implements Event {
 
-    public static RequestFaceUpComponentEvent from(ShipBoard shipBoard, Component component, ComponentBank componentBank) {
+    public static RequestFaceUpComponentEvent from(ShipBoard shipBoard, Component component) {
         return new RequestFaceUpComponentEvent(
                 Player.getPlayer(shipBoard).getNickname(),
-                component.getId(),
-                new HashSet<>(componentBank.getUncoveredComponents().keySet())
+                component.getId()
         );
     }
 

@@ -1,19 +1,18 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.awt.*;
 
-public record RejectComponentEvent(String playerName, int componentId) implements Event {
-
-    public static RejectComponentEvent from(ShipBoard shipBoard, Component component) {
-        return new RejectComponentEvent(
+public record PlaceComponentEvent(String playerName, int componentId, int rotation, Point position) implements Event {
+    public static PlaceComponentEvent from(ShipBoard shipBoard, Component component, Point position) {
+        return new PlaceComponentEvent(
                 Player.getPlayer(shipBoard).getNickname(),
-                component.getId()
+                component.getId(),
+                component.getOrientation(),
+                position
         );
     }
 
