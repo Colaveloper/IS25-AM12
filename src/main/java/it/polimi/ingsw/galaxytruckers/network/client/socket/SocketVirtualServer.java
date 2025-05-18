@@ -22,7 +22,7 @@
 //    }
 //
 //    @Override
-//    public void newGame(Level level, int playerN) throws IOException {
+//    public void notifyNewGame(Level level, int playerN) throws IOException {
 //
 //    }
 //

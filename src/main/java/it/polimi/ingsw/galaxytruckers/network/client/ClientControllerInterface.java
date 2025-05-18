@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
@@ -289,4 +290,24 @@ public interface ClientControllerInterface {
      * @throws RemoteException if a remote communication error occurs
      */
     void reportError(String details) throws RemoteException;
+
+    void notifyNewGame(Level level, int i);
+
+    void registerNickname(String input);
+
+    void flipHourglass();
+
+    void requestRandComponent();
+
+    void requestComponent(int index);
+
+    void stashComponent();
+
+    void grabStashedComponent(int index);
+
+    void acquireForecast(int index);
+
+    void rejectComponent();
+
+    void placeComponent(Point point);
 }

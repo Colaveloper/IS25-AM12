@@ -60,6 +60,6 @@
 //        System.out.println("_______________________________________________________________");
 ////        new ProjectilesScreen().showCLI(model);
 //        System.out.println("_______________________________________________________________");
-//        new ShipBuildingScreen(model).showCLI(model);
+//        new CliShipBuildingScreen(model).showCLI(model);
 //    }
 //}

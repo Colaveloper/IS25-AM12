@@ -58,7 +58,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
-    public void newGame(Level level, int playerN) {
+    public void requestNewGame(Level level, int playerN) {
         try {
             controller.newGame(level, playerN);
         } catch (RemoteException e) {
@@ -94,7 +94,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
-    public void requestRandComponent(String nickname) {
+    public void requestRandComponent() {
         try {
             controller.requestRandComponent();
         } catch (RemoteException e) {
@@ -112,7 +112,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
-    public void rejectComponent(String nickname) {
+    public void rejectComponent() {
         try {
             controller.rejectComponent();
         } catch (RemoteException e) {
@@ -121,7 +121,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
-    public void stashComponent(String nickname) {
+    public void stashComponent() {
         try {
             controller.stashComponent();
         } catch (RemoteException e) {
@@ -148,7 +148,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
-    public void flipHourglass(String nickname) {
+    public void flipHourglass() {
         try {
             controller.flipHourglass();
         } catch (RemoteException e) {
@@ -175,7 +175,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
-    public void releaseForecast(String nickname) {
+    public void releaseForecast() {
         try {
             controller.releaseForecast();
         } catch (RemoteException e) {

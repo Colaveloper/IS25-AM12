@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface VirtualServer {
     void registerNickname(String myNickname);
-    void newGame(Level level, int playerN);
+    void requestNewGame(Level level, int playerN);
     void drawCard();
     void joinLobby(UUID lobbyID);
     void leaveLobby(String nickname);
@@ -17,16 +17,16 @@ public interface VirtualServer {
     // Game methods
 
     // Ship building
-    void requestRandComponent(String nickname);
+    void requestRandComponent();
     void requestComponent(int componentID);
-    void rejectComponent(String nickname);
-    void stashComponent(String nickname);
+    void rejectComponent();
+    void stashComponent();
     void grabStashedComponent(int index);
     void placeComponent(Point point, int orientation);
-    void flipHourglass(String nickname);
+    void flipHourglass();
     void placeShipOnFlightBoard(int startingPosition);
     void acquireForecast(int deckIndex);
-    void releaseForecast(String nickname);
+    void releaseForecast();
 
     // Ship validity check
     void removeComponent(Point point);

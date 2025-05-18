@@ -1,63 +1,21 @@
 package it.polimi.ingsw.galaxytruckers.view.screens;
 
-import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliLobbyScreen;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.GuiScreen;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.ScreenFactory;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiLobbyScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.paint.Color;
-import javafx.geometry.Pos;
 
-import java.io.IOException;
-import java.util.List;
-
-public class LobbyScreen extends ScreenStrategy {
-
-    public LobbyScreen(ClientModel model) {
-        super(model);
+public class LobbyScreen extends ScreenFactory {
+    @Override
+    public GuiScreen getGuiScreen(ClientModel model, ClientController controller) {
+        return new GuiLobbyScreen(model, controller);
     }
 
     @Override
-    public boolean isLegalInput(ClientModel model, String input) {
-        return true;
-    }
-
-    @Override
-    public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {}
-
-    @Override
-    public void showGUI(ClientModel model, Pane root, VirtualServer server) {
-        FlowPane lobbyPane = new FlowPane();
-        lobbyPane.setAlignment(Pos.CENTER);
-        lobbyPane.setHgap(20);
-        lobbyPane.setVgap(20);
-        lobbyPane.setPrefWrapLength(600);
-
-        for (String nickname : model.getNicknames()) {
-            StackPane playerBox = createPlayerBox(nickname);
-            lobbyPane.getChildren().add(playerBox);
-        }
-
-        root.getChildren().add(lobbyPane);
-    }
-
-    private StackPane createPlayerBox(String nickname) {
-        Rectangle background = new Rectangle(150, 100);
-        background.setArcWidth(20);
-        background.setArcHeight(20);
-        background.setFill(Color.LIGHTGRAY);
-
-        Label nameLabel = new Label(nickname);
-
-        StackPane box = new StackPane(background, nameLabel);
-        box.setAlignment(Pos.CENTER);
-        return box;
-    }
-
-    @Override
-    public List<String> getNewDescription() throws IOException {
-        return List.of("Currently in lobby: "+model.getNicknames());
+    public CliScreen getCliScreen(ClientModel model, ClientController controller) {
+        return new CliLobbyScreen(model, controller);
     }
 }
