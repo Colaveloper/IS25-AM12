@@ -1,8 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.ClientModel;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -12,22 +12,21 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class GameCreationScreen implements ScreenStrategy {
-    @Override
-    public void showCLI(ClientModel model) {
-        System.out.println("No one is currently creating a new game, so... it's up to you!");
-        System.out.println("Choose a Level and the number of players");
-        System.out.print("Available levels: ");
-        System.out.println(String.join(", ", Arrays.stream(Level.values())
-                .map(Enum::name)
-                .toArray(String[]::new)));
-        System.out.println("The game is available for 2, 3, or 4 players");
+public class GameCreationScreen extends ScreenStrategy {
+
+    public GameCreationScreen(ClientModel model) {
+        super(model);
     }
 
     @Override
     public boolean isLegalInput(ClientModel model, String input) {
+        if (input.trim().isEmpty()) {
+            return true;
+        }
         for (Level level : Level.values()) {
             if (input.matches("^" + level.name() + "\\s[2-4]$")) {
                 return true;
@@ -38,6 +37,9 @@ public class GameCreationScreen implements ScreenStrategy {
 
     @Override
     public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {
+        if (input.trim().isEmpty()) {
+            input = "SECOND 4";
+        }
         String[] parts = input.split("\\s");
         server.newGame(Level.valueOf(parts[0].toUpperCase()), Integer.parseInt(parts[1]));
     }
@@ -75,5 +77,21 @@ public class GameCreationScreen implements ScreenStrategy {
 
         layout.getChildren().addAll(instructionLabel, levelComboBox, playersComboBox, createButton);
         root.getChildren().add(layout);
+    }
+
+    @Override
+    public List<String> getNewDescription() throws IOException {
+        List<String> output = new ArrayList<>();
+
+        output.add("No one is currently creating a new game, so... it's up to you!");
+        output.add("Choose a Level and the number of players");
+        output.add("Available levels: " + String.join(", ",
+                Arrays.stream(Level.values())
+                        .map(Enum::name)
+                        .toArray(String[]::new)));
+        output.add("The game is available for 2, 3, or 4 players");
+        output.add("Default: SECOND 4");
+
+        return output;
     }
 }

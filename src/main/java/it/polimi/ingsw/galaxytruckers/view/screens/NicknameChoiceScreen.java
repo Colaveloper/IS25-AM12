@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.screens;
 
-import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.ClientModel;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,12 +11,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class NicknameChoiceScreen implements ScreenStrategy {
-    @Override
-    public void showCLI(ClientModel model) {
-        System.out.println("Successfully bound to the server ✅");
-        System.out.println("Please choose a unique nickname in order to proceed: ");
+public class NicknameChoiceScreen extends ScreenStrategy {
+
+    public NicknameChoiceScreen(ClientModel model) {
+        super(model);
     }
 
     @Override
@@ -59,5 +60,15 @@ public class NicknameChoiceScreen implements ScreenStrategy {
                 throw new RuntimeException(ex);
             }
         }
+    }
+
+    @Override
+    public List<String> getNewDescription() throws IOException {
+        List<String> output = new ArrayList<>();
+
+        output.add("Successfully bound to the server ✅");
+        output.add("Please choose a unique nickname in order to proceed: ");
+
+        return output;
     }
 }

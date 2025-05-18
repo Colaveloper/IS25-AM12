@@ -79,12 +79,12 @@
 //    }
 //
 //    @Override
-//    public void setFlightBoard(int loopLength, List<Integer> startingPositions) throws Exception {
+//    public void setFlightBoard(int loopLength, List<Integer> getStartingPositions) throws Exception {
 //
 //    }
 //
 //    @Override
-//    public void setShipBoard(Set<Point> shipArea) throws Exception {
+//    public void setShipBoard(Set<Point> getShipArea) throws Exception {
 //
 //    }
 //

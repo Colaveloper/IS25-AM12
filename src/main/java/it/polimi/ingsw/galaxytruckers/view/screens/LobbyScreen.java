@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.screens;
 
-import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.ClientModel;
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.Label;
@@ -11,12 +11,12 @@ import javafx.scene.paint.Color;
 import javafx.geometry.Pos;
 
 import java.io.IOException;
+import java.util.List;
 
-public class LobbyScreen implements ScreenStrategy {
+public class LobbyScreen extends ScreenStrategy {
 
-    @Override
-    public void showCLI(ClientModel model) {
-        System.out.print("Currently in lobby: "+model.getNicknames());
+    public LobbyScreen(ClientModel model) {
+        super(model);
     }
 
     @Override
@@ -29,8 +29,6 @@ public class LobbyScreen implements ScreenStrategy {
 
     @Override
     public void showGUI(ClientModel model, Pane root, VirtualServer server) {
-        root.getChildren().clear();
-
         FlowPane lobbyPane = new FlowPane();
         lobbyPane.setAlignment(Pos.CENTER);
         lobbyPane.setHgap(20);
@@ -56,5 +54,10 @@ public class LobbyScreen implements ScreenStrategy {
         StackPane box = new StackPane(background, nameLabel);
         box.setAlignment(Pos.CENTER);
         return box;
+    }
+
+    @Override
+    public List<String> getNewDescription() throws IOException {
+        return List.of("Currently in lobby: "+model.getNicknames());
     }
 }

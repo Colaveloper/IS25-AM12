@@ -64,15 +64,15 @@ public abstract class FlightBoard {
     }
 
     public void removeShips (Set<ShipBoard> shipsToRemove) {
-        throw new UnsupportedOperationException("Not available for this type of FlightBoard");
+        throw new UnsupportedOperationException("Not available for this type of CliFlightBoard");
     }
 
     public void giveUp(ShipBoard shipBoard) {
-        throw new UnsupportedOperationException("Not available for this type of FlightBoard");
+        throw new UnsupportedOperationException("Not available for this type of CliFlightBoard");
     }
 
     public Set<ShipBoard> getAndRemoveLappedShips() {
-        throw new UnsupportedOperationException("Not available for this type of FlightBoard");
+        throw new UnsupportedOperationException("Not available for this type of CliFlightBoard");
     }
 
     public Map<ShipBoard, Integer> getFinalScores() {

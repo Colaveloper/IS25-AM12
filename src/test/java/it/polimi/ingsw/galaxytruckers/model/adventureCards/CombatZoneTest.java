@@ -1,6 +1,6 @@
 //package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 //
-//import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+//import it.polimi.ingsw.galaxytruckers.model.CliFlightBoard;
 //import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.BigMeteor;
 //import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 //import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.SmallMeteor;
@@ -23,7 +23,7 @@
 //public class CombatZoneTest {
 //    CombatZoneCard combatZoneCard;
 //    Map<ShipBoard, Integer> shipPlaces;
-//    FlightBoard flightBoard;
+//    CliFlightBoard flightBoard;
 //    ShipBoard ship1;
 //    ShipBoard ship2;
 //    ShipBoard testShip;
@@ -105,7 +105,7 @@
 //        shipPlaces.put(ship1, position1);
 //        shipPlaces.put(ship2, position2);
 //
-//        flightBoard = new FlightBoard(null) {
+//        flightBoard = new CliFlightBoard(null) {
 //
 //            @Override
 //            public Map<ShipBoard, Integer> getShipToPlace() {

@@ -63,7 +63,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         this.credits += credits;
     }
 
-    //ComponentBank interaction methods
+    //CliComponentBank interaction methods
 
     public void offerComponent(Component component) {
         weldLastComponent();

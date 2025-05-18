@@ -1,15 +1,11 @@
-package it.polimi.ingsw.galaxytruckers.view;
+package it.polimi.ingsw.galaxytruckers.view.adventureClient;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.galaxytruckers.model.adventureCards.*;
-import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import java.awt.*;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -20,16 +16,17 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.cli.CliElement;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
 
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parsePlanets;
-import static it.polimi.ingsw.galaxytruckers.model.Deck.parseProjectiles;
 import static it.polimi.ingsw.galaxytruckers.model.Deck.parseGoods;
 
-public class AdventureCard extends Physical {
+public class CliAdventureCard extends CliElement {
     // class attributes
     private List<String> description;
 
@@ -72,7 +69,8 @@ public class AdventureCard extends Physical {
     * element 4 - credits reward if defeated: 12
     * */
     // constructor
-    public AdventureCard(int id) throws IOException {
+    public CliAdventureCard(ClientModel model, int id) throws IOException {
+        super(model);
         // Reading array of card from JSON file
         String jsonPath = "src/main/resources/cardsReference.json";
         File jsonFile = new File(jsonPath);
@@ -269,7 +267,7 @@ public class AdventureCard extends Physical {
 
     // public methods
     @Override
-    public List<String> getDescription(){return description;}
+    public List<String> getNewDescription(){return description;}
 
     public String getCardName() {
         return type;
@@ -357,14 +355,14 @@ public class AdventureCard extends Physical {
                 .collect(Collectors.joining("\n"));
     }
 
-    @Override
-    public StackPane getNode() {
-        ImageView imageView = new ImageView(new Image("file:"+imagePath));
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(150);
-        imageView.setPreserveRatio(true);
-
-        node.getChildren().add(imageView);
-        return node;
-    }
+//    @Override
+//    public Node getNode() {
+//        ImageView imageView = new ImageView(new Image("file:"+imagePath));
+//        imageView.setFitWidth(100);
+//        imageView.setFitHeight(150);
+//        imageView.setPreserveRatio(true);
+//
+//        node.getChildren().add(imageView);
+//        return node;
+//    }
 }
