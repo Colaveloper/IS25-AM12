@@ -1,6 +1,6 @@
 //package it.polimi.ingsw.galaxytruckers.view;
 //
-//import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+//import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 //import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 //import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 //import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
@@ -52,7 +52,7 @@
 //        }
 //
 //
-//        controller.showColorSelection("Roborbio", Colors.RED);
+//        controller.showColorSelection("Roborbio", FourColors.RED);
 //        controller.showPlayerToPlaceUpdate(Map.of("Roborbio", 2));
 //
 //            //TEST

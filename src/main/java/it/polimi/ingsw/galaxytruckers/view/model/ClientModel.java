@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.model;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -18,6 +18,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ClientModel {
 
@@ -25,17 +26,17 @@ public class ClientModel {
     private String currentPlayerNickname;
     private String myNickname;
     private final Set<Point> shipArea;
-    private final Map<Colors, List<List<ObjectProperty<Component>>>> ships;
-    private final BiMap<String, Colors> playerToColor;
+    private final Map<FourColors, List<List<ObjectProperty<Component>>>> ships;
+    private final BiMap<String, FourColors> playerToColor;
     private final ObservableList<Point> selectablePoints;
-    private final ObservableMap<Colors, Map<StatType, Integer>> stats;
+    private final ObservableMap<FourColors, Map<StatType, Integer>> stats;
 
     // BUILDING
     private Point upLeft; // the upper-left point of the ship-area
     private final ListProperty<Component> revealedComponents;
     private final IntegerProperty coveredComponentN;
-    private final ObservableMap<Colors, List<ObjectProperty<Component>>> stashedComponents;
-    private final ObservableMap<Colors, ObjectProperty<Component>> hands; // (former current component)
+    private final Map<FourColors, List<ObjectProperty<Component>>> stashedComponents;
+    private final Map<FourColors, ObjectProperty<Component>> hands; // (former current component)
     private final ListProperty<Integer> forecastDeck;
     private final List<BooleanProperty> forecastAvailability;
     private List<Set<Point>> shipPieces;
@@ -45,7 +46,7 @@ public class ClientModel {
     // FLIGHTBOARD
     private int loopLength;
     private final ObservableList<Integer> startingPositionLeft;
-    private final ObservableMap<Colors, Integer> colorToPlace;
+    private final ObservableMap<FourColors, Integer> colorToPlace;
 
 
     // FLIGHT
@@ -81,9 +82,9 @@ public class ClientModel {
                 new SimpleBooleanProperty(true)
         ));
 
-        stashedComponents = FXCollections.observableHashMap();
+        stashedComponents = new HashMap<>();
         startingPositionLeft = FXCollections.observableArrayList();
-        hands = FXCollections.observableHashMap();
+        hands = new HashMap<>();
         colorToPlace = FXCollections.observableHashMap();
         stats = FXCollections.observableHashMap();
         planets = FXCollections.observableArrayList();
@@ -104,7 +105,7 @@ public class ClientModel {
         this.startingPositionLeft.addAll(startingPositions);
     }
 
-    public void setPlayerColor(String nickname, Colors color) {
+    public void setPlayerColor(String nickname, FourColors color) {
         playerToColor.putIfAbsent(nickname, color);
         ships.put(playerToColor.get(nickname), new ArrayList<>());
     }
@@ -125,7 +126,7 @@ public class ClientModel {
                 new Component(ComponentType.EMPTY_AREA)
         )));
 
-        for(Colors c : playerToColor.values()) {
+        for(FourColors c : playerToColor.values()) {
             hands.put(c, new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA)));
             stashedComponents.put(c, List.of(
                     new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA)),
@@ -371,11 +372,11 @@ public class ClientModel {
         return startingPositionLeft;
     }
 
-    public ObservableMap<Colors, Integer> colorToPlaceProperty() {
+    public ObservableMap<FourColors, Integer> colorToPlaceProperty() {
         return colorToPlace;
     }
 
-    public Map<Colors, List<List<ObjectProperty<Component>>>> getShips() {
+    public Map<FourColors, List<List<ObjectProperty<Component>>>> getShips() {
         return ships;
     }
 
@@ -387,11 +388,11 @@ public class ClientModel {
         return unweldedComponent != null;
     }
 
-    public Map<Colors, ObjectProperty<Component>> getHand() {
+    public Map<FourColors, ObjectProperty<Component>> getHand() {
         return hands;
     }
 
-    public Map<Colors, List<ObjectProperty<Component>>> getStashed() {
+    public Map<FourColors, List<ObjectProperty<Component>>> getStashed() {
         return stashedComponents;
     }
 
@@ -399,7 +400,7 @@ public class ClientModel {
         return revealedComponents;
     }
 
-    public BiMap<String, Colors> getPlayerToColor() {
+    public BiMap<String, FourColors> getPlayerToColor() {
         return playerToColor;
     }
 }

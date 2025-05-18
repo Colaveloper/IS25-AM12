@@ -1,13 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +48,7 @@ class SmugglersCardTest {
 
         goodsWon = new HashMap<>();
 
-        ship1 = new SecondShipBoard(Colors.RED) {
+        ship1 = new SecondShipBoard(FourColors.RED) {
             @Override
             public int getFirePower() {
                 return 0;
@@ -57,7 +56,7 @@ class SmugglersCardTest {
 
         };
 
-        ship2 = new SecondShipBoard(Colors.RED) {
+        ship2 = new SecondShipBoard(FourColors.RED) {
             @Override
             public int getFirePower() {
                 return 2;
@@ -65,7 +64,7 @@ class SmugglersCardTest {
 
         };
 
-        ship3 = new SecondShipBoard(Colors.RED) {
+        ship3 = new SecondShipBoard(FourColors.RED) {
             @Override
             public int getFirePower() {
                 return 1;

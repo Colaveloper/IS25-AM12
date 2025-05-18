@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cli;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
 import javafx.beans.property.ObjectProperty;
@@ -13,9 +13,9 @@ import java.util.*;
 
 public class CliAllShips extends CliElement {
 
-    private final Map<Colors, CliShipBoard> cliShipBoards; // ALL FINAL
-    private Map<Colors, CliComponent> hands; // UPDATE WHEN HANDS CHANGES
-    private Map<Colors, List<CliComponent>> stashedComponentsMap;
+    private final Map<FourColors, CliShipBoard> cliShipBoards; // ALL FINAL
+    private final Map<FourColors, List<CliComponent>> stashedComponentsMap;
+    private final Map<FourColors, CliComponent> hands; // UPDATE WHEN HANDS CHANGES
 
     public CliAllShips(ClientModel model) {
         super(model);
@@ -64,7 +64,7 @@ public class CliAllShips extends CliElement {
         List<String> sequenceDescription = new ArrayList<>();
         StringBuilder row = new StringBuilder();
 
-        for (Colors c : model.getPlayerToColor().values()) {
+        for (FourColors c : model.getPlayerToColor().values()) {
             List<String> shipDescription = new ArrayList<>();
 
             shipDescription.addAll(cliShipBoards.get(c).getDescription());

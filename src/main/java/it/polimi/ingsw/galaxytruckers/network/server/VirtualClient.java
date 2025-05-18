@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.server;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -19,14 +19,14 @@ public interface VirtualClient {
      * @param playerColors map containing all players' nicknames and
      *                     their corresponding color
      */
-    void setupLobby(UUID lobbyId, Map<String,Colors> playerColors);
+    void setupLobby(UUID lobbyId, Map<String, FourColors> playerColors);
 
     /**
      * Signals to the client that the players in their lobby have changed
      * @param playerColors map containing all players' nicknames and
      *                     their corresponding color
      */
-    void updateLobbyPlayers(Map<String, Colors> playerColors);
+    void updateLobbyPlayers(Map<String, FourColors> playerColors);
 
     /**
      * Signals to the client that the ship building phase has started

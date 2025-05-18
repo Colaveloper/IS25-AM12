@@ -4,15 +4,23 @@ import it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.cli.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 public class GuiComponentBank extends GuiElement {
@@ -23,64 +31,50 @@ public class GuiComponentBank extends GuiElement {
 
     @Override
     public Node getNode() throws IOException {
-        VBox covered = createHorizontalPile(server,"Covered:", 1, Color.DODGERBLUE);
-        VBox uncovered = createHorizontalPile( server, "Uncovered:", 7, Color.LIMEGREEN);
-        VBox stash = createHorizontalPile(server, "Stash", 2, Color.TRANSPARENT);
-        VBox hand = createHorizontalPile(server, "Hand", 1, Color.INDIGO);
+        HBox box = new HBox(5);
+        box.setAlignment(Pos.CENTER);
+        ObservableList<Node> squares = box.getChildren();
+        squares.add(covered());
 
-        HBox row = new HBox(20, hand, stash, covered, uncovered);
-        row.setStyle("-fx-padding: 20; -fx-background-color: white;");
-        return row;
-    }
-
-    private Rectangle card(Color color) {
-        Rectangle r = new Rectangle(50,50);
-        r.setArcWidth(10);
-        r.setArcHeight(10);
-        r.setFill(color);
-        r.setStroke(Color.BLACK);
-        return r;
-    }
-
-    private VBox createHorizontalPile(VirtualServer server, String title, int count, Color color) throws IOException {
-        VBox box = new VBox(5);
-        box.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-padding: 10;");
-        box.getChildren().add(new Label(title));
-
-        HBox cardRow = new HBox(5);
-        for (int i = 0; i < count; i++) {
-            // Create the card
-            Rectangle r = card(color);
-
-            // If it's the "Covered" pile, add a number in the center
-            if (color.equals(Color.DODGERBLUE)) {
-                Text numberText = new Text();
-                numberText.setFill(Color.WHITE);
-                numberText.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
-                numberText.textProperty().bind(model.coveredComponentNProperty().asString());
-
-                StackPane stack = new StackPane(r, numberText);
-                stack.setPrefSize(50, 50);
-                stack.setOnMouseClicked(e -> {
-                    try {
-                        server.requestRandComponent();
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
+        model.revealedComponentsProperty().addListener((ListChangeListener<Component>) change -> {
+            while (change.next()) {
+                Platform.runLater(() -> {
+                    if (change.wasRemoved()) {
+                        squares.remove(change.getFrom(), change.getFrom() + change.getRemovedSize());
+                    }
+                    if (change.wasAdded()) {
+                        int index = change.getFrom();
+                        for (Component component : change.getAddedSubList()) {
+                            squares.add(index++, new GuiComponent(model, server, component).getNode());
+                        }
                     }
                 });
-                cardRow.getChildren().add(stack);
-            } else if (color.equals(Color.INDIGO)) {
-                cardRow.getChildren().add(new GuiComponent(model, server, new Component(1)).getNode());
-                model.currentComponentProperty().addListener((obs, oldVal, newVal) -> {
-                    cardRow.getChildren().clear();
-                    cardRow.getChildren().add(new GuiComponent(model, server, newVal).getNode());
-                });
-            } else {
-                cardRow.getChildren().add(new GuiComponent(model, server, new Component(1)).getNode());
             }
-        }
+        });
 
-        box.getChildren().add(cardRow);
         return box;
+    }
+
+    private Node covered() {
+        StackPane square = new StackPane();
+        square.setPrefSize(50, 50);
+        square.setStyle("-fx-background-color: lightgray; -fx-border-color: black;");
+
+        Label label = new Label();
+        model.coveredComponentNProperty().addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(() -> label.textProperty().set(newValue.toString()));
+        });
+
+        square.getChildren().add(label);
+
+        square.setOnMouseClicked(event -> {
+            try {
+                server.requestRandComponent();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        return square;
     }
 }

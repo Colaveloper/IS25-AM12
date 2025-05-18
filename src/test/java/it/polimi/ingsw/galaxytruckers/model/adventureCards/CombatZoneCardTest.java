@@ -9,7 +9,7 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.FirePowerCheck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.penalty.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.BigFire;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
@@ -41,7 +41,7 @@ class CombatZoneCardTest {
                 new CrewLoss(1),
                 new GoodsLoss(1),
                 new ProjectileThreat(new ArrayList<>(projectiles)));
-        ShipBoard shipBoard1 = new ShipBoard(Colors.BLUE) {
+        ShipBoard shipBoard1 = new ShipBoard(FourColors.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
@@ -62,7 +62,7 @@ class CombatZoneCardTest {
                 return 1;
             }
         };
-        ShipBoard shipBoard2 = new ShipBoard(Colors.RED) {
+        ShipBoard shipBoard2 = new ShipBoard(FourColors.RED) {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
@@ -83,7 +83,7 @@ class CombatZoneCardTest {
                 return 2;
             }
         };
-        ShipBoard shipBoard3 = new ShipBoard(Colors.GREEN) {
+        ShipBoard shipBoard3 = new ShipBoard(FourColors.GREEN) {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;

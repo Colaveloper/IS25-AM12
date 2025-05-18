@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -10,7 +10,6 @@ import it.polimi.ingsw.galaxytruckers.model.state.AddGoodsState;
 import it.polimi.ingsw.galaxytruckers.model.state.GrabRewardState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +47,7 @@ class AbandonedStationCardTest {
         ships = new ArrayList<>();
         loserShips = new ArrayList<>();
 
-        ship1 = new SecondShipBoard(Colors.RED) {
+        ship1 = new SecondShipBoard(FourColors.RED) {
 
             @Override
             public int getCrewSize() {
@@ -56,21 +55,21 @@ class AbandonedStationCardTest {
             }
         };
 
-        ship2 = new SecondShipBoard(Colors.GREEN) {
+        ship2 = new SecondShipBoard(FourColors.GREEN) {
             @Override
             public int getCrewSize() {
                 return 3;
             }
         };
 
-        ship3 = new SecondShipBoard(Colors.BLUE) {
+        ship3 = new SecondShipBoard(FourColors.BLUE) {
             @Override
             public int getCrewSize() {
                 return 1;
             }
         };
 
-        ship4 = new SecondShipBoard(Colors.BLUE) {
+        ship4 = new SecondShipBoard(FourColors.BLUE) {
             @Override
             public int getCrewSize() {
                 return 5;

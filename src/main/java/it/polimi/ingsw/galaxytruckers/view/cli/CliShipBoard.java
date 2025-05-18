@@ -1,8 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cli;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.Component;
 
 import java.awt.*;
 import java.io.IOException;
@@ -15,7 +14,7 @@ public class CliShipBoard extends CliElement {
     private final List<List<CliComponent>> componentMatrix; // ALL FINAL
     Point upLeft;
 
-    public CliShipBoard(ClientModel model, Colors color) throws IOException {
+    public CliShipBoard(ClientModel model, FourColors color) throws IOException {
         super(model);
 
         upLeft = model.getUpLeft();

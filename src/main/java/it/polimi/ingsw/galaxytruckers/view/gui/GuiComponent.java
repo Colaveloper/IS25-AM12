@@ -21,6 +21,12 @@ public class GuiComponent extends GuiElement {
 
     @Override
     public Node getNode() {
+
+//            Region square = new Region();
+//            square.setPrefSize(20, 20);
+//            square.setStyle("-fx-background-color: gray; -fx-border-color: black;");
+//            return square;
+
         Image image = new Image(imagePath);
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(50);

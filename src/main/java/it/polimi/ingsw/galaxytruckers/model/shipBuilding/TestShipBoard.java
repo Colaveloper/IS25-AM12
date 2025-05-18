@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -28,7 +28,7 @@ public class TestShipBoard extends ShipBoard {
             new Point(9, 8),
             new Point(9, 9)));
 
-    public TestShipBoard(Colors color) {
+    public TestShipBoard(FourColors color) {
         super(color);
     }
 
