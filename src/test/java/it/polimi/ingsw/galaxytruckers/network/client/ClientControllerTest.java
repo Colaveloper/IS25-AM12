@@ -59,9 +59,9 @@ class ClientControllerTest {
 
 
             @Override
-            public void grabStashedComponent(int componentID) {
+            public void grabStashedComponent(int stashIndex) {
                 System.out.println("FAKE SERVER EVENT: grab stashed component");
-                controller.notifyGrabFromStash("qwe", componentID, List.of(0, 5));
+                controller.notifyGrabFromStash("qwe", 5, List.of(0, 0));
             }
 
             @Override

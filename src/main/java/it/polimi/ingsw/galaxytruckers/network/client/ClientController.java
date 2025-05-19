@@ -111,6 +111,9 @@ public class ClientController implements ClientControllerInterface {
     @Override//Tommy approved
     public void notifyComponentRejection(String playerName, int componentId) {
         runAndInterceptIOE(()->model.addRevealedComponent(componentId));
+        if(model.isMyNickname(playerName)) {
+            model.setUnwelded(false);
+        }
         model.clearComponentInHand(playerName);
     }
 
@@ -142,6 +145,7 @@ public class ClientController implements ClientControllerInterface {
     @Override
     public void sendForecastDeck(List<Integer> deckCardIds) {
         model.setForecast(deckCardIds);
+        model.setUnwelded(false); //quote:  picking up a pile welds your most recent component to your ship
         view.setScreen(new ForecastScreen());
     }
 
