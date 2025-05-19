@@ -14,7 +14,7 @@ public interface EventVisitor {
 
     void visit(RejectComponentEvent rejectComponentEvent);
 
-    void visit(ShipMapUpdateEvent shipMapUpdateEvent);
+    void visit(PlaceComponentEvent placeComponentEvent);
 
     void visit(PeekForecastEvent peekForecastEvent);
 
@@ -24,17 +24,31 @@ public interface EventVisitor {
 
     void visit(StashComponentEvent stashComponentEvent);
 
-    void visit(PlaceShipOnFlightBoardEvent placeShipOnFlightBoardEvent);
+    void visit(FlightBoardUpdateEvent flightBoardUpdateEvent);
 
     void visit(NewCardEvent newCardEvent);
 
     void visit(SurrenderEvent surrenderEvent);
 
-    void visit(CargoHoldUpdate cargoHoldUpdate);
+    void visit(CargoHoldUpdateEvent cargoHoldUpdateEvent);
 
-    void visit(BatteryUpdate batteryUpdate);
+    void visit(BatteryUpdateEvent batteryUpdateEvent);
 
-    void visit(CabinUpdate cabinUpdate);
+    void visit(CabinUpdateEvent cabinUpdateEvent);
 
     void visit(ShipStatUpdateEvent shipStatUpdateEvent);
+
+    void visit(HourglassEndEvent hourglassEndEvent);
+
+    void visit(ShipPieceRemoveEvent shipPieceRemoveEvent);
+
+    void visit(SelectionPointsEvent selectionPointsEvent);
+
+    void visit(PlanetChoiceEvent planetChoiceEvent);
+
+    void visit(GoodsBufferUpdateEvent goodsBufferUpdateEvent);
+
+    void visit(ProjectileEvent projectileEvent);
+
+    void visit(GameEndEvent gameEndEvent);
 }

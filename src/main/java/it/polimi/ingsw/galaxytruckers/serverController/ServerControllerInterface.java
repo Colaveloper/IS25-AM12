@@ -26,7 +26,6 @@ public interface ServerControllerInterface {
      * @param creatorName nickname of the lobby creator
      * @param level level of the game
      * @param numPlayers number of players in the game
-     * @return the game ID, as a {@code UUID} object
      * @throws IllegalArgumentException if {@code numPlayers} is < 2
      */
     void newGame(String creatorName, Level level, int numPlayers);

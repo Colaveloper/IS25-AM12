@@ -5,13 +5,12 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
-public record RequestFaceDownComponentEvent(String playerName, int componentId, int numFaceDown) implements Event {
+public record RequestFaceDownComponentEvent(String playerName, int componentId) implements Event {
 
-    public static RequestFaceDownComponentEvent from(ShipBoard shipBoard, Component component, ComponentBank componentBank) {
+    public static RequestFaceDownComponentEvent from(ShipBoard shipBoard, Component component) {
         return new RequestFaceDownComponentEvent(
                 Player.getPlayer(shipBoard).getNickname(),
-                component.getId(),
-                componentBank.getCoveredComponents().size()
+                component.getId()
         );
     }
 
