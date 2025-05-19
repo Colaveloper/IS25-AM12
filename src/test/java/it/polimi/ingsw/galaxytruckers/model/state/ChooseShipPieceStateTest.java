@@ -1,0 +1,75 @@
+package it.polimi.ingsw.galaxytruckers.model.state;
+
+import it.polimi.ingsw.galaxytruckers.model.Deck;
+import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ChooseShipPieceStateTest {
+    ShipBoard ship1;
+    ShipBoard ship2;
+    ChooseShipPieceState testChooseShipPieceState;
+    List<Set<Point>> shipPieces;
+    Game game;
+    AdventureCard adventureCard;
+    Deck deck;
+
+    @BeforeEach
+    void setup(){
+        ship1 = new SecondShipBoard(FourColors.BLUE){
+            @Override
+            public void discardComponent(Point p){
+                // mock
+            }
+        };
+        ship2 = new SecondShipBoard(FourColors.RED);
+        shipPieces = new ArrayList<>();
+        shipPieces.add(Set.of(new Point(7,7)));
+        testChooseShipPieceState = new ChooseShipPieceState(shipPieces, ship1);
+    }
+
+    @Test
+    void chooseShipPieceThrowsExceptionWhenOutOfTurn(){
+        assertThrows(IllegalStateException.class, () -> testChooseShipPieceState.chooseShipPiece(ship2, 2));
+    }
+
+    @Test
+    void chooseShipPieceRemovesPieceAndChangesGameState() throws IOException {
+        game = new Game(Level.SECOND){
+            @Override
+            public Deck getDeck(){
+                return deck;
+            }
+        };
+        adventureCard = new AdventureCard(game, Level.SECOND) {
+            @Override
+            public GameState nextStep() {
+                return new AdventureState();
+            }
+        };
+        deck = new SecondDeck(game){
+            @Override
+            public AdventureCard getCurrentCard(){
+                return adventureCard;
+            }
+        };
+        testChooseShipPieceState.setGame(game);
+        testChooseShipPieceState.chooseShipPiece(ship1, 0);
+        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+    }
+
+}

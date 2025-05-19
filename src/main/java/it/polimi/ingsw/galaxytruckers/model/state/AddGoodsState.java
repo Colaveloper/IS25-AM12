@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
@@ -49,4 +50,8 @@ public class AddGoodsState extends AdventureState {
         game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
     }
 
+    @VisibleForTesting
+    public Map<GoodsType, Integer> getGoodsBuffer(){
+        return goodsBuffer;
+    }
 }
