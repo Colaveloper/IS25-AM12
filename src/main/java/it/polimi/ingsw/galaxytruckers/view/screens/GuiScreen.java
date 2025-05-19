@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.view.cliScreens;
+package it.polimi.ingsw.galaxytruckers.view.screens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;

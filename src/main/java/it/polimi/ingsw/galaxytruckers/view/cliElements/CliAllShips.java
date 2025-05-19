@@ -19,7 +19,7 @@ public class CliAllShips extends CliElement {
     public CliAllShips(ClientModel model) {
         super(model);
         cliShipBoards = new HashMap<>();
-        model.getShips().forEach((color, ship) -> {
+        model.getShips().forEach((color, _) -> {
             try {
                 CliShipBoard cliShipBoard = new CliShipBoard(model, color);
                 cliShipBoards.put(color, cliShipBoard);
@@ -29,7 +29,7 @@ public class CliAllShips extends CliElement {
             }
         });
 
-        hands = new SimpleMapProperty<>(FXCollections.observableHashMap());
+        hands = new HashMap<>();
         model.getHand().forEach((color, componentProperty) -> {
             try {
                 CliComponent hand = new CliComponent(model, componentProperty);
@@ -40,7 +40,7 @@ public class CliAllShips extends CliElement {
             }
         });
 
-        stashedComponentsMap = new SimpleMapProperty<>(FXCollections.observableHashMap());
+        stashedComponentsMap = new HashMap<>();
         model.getStashed().forEach((color, propertyList) -> {
             try {
                 List<CliComponent> stashedComponents = new ArrayList<>();
@@ -64,13 +64,10 @@ public class CliAllShips extends CliElement {
         StringBuilder row = new StringBuilder();
 
         for (FourColors c : model.getPlayerToColor().values()) {
-            List<String> shipDescription = new ArrayList<>();
 
-            shipDescription.addAll(cliShipBoards.get(c).getDescription());
+            List<String> shipDescription = new ArrayList<>(cliShipBoards.get(c).getDescription());
 
-
-            List<String> handDescription = new ArrayList<>();
-            handDescription.addAll(hands.get(c).getDescription());
+            List<String> handDescription = new ArrayList<>(hands.get(c).getDescription());
 
             List<List<String>> stashedDescription = new ArrayList<>();
             for(CliComponent component : stashedComponentsMap.get(c)) {

@@ -14,13 +14,10 @@ import java.util.Map;
 
 public class CliComponentBank extends CliElement {
 
-    IntegerProperty coveredComponentN;
-    MapProperty<Component, CliComponent> revealedComponents;
+    private final IntegerProperty coveredComponentN;
+    private final MapProperty<Component, CliComponent> revealedComponents;
 
-    private Map<FourColors, CliComponent> hands; // UPDATE WHEN HANDS CHANGES
-    private Map<FourColors, List<CliComponent>> stashedComponentsMap;
-
-    private List<BooleanProperty> forecastDeck;
+    private final List<BooleanProperty> forecastDeck;
 
     public CliComponentBank(ClientModel model) throws IOException {
         super(model);
@@ -29,33 +26,6 @@ public class CliComponentBank extends CliElement {
         for(BooleanProperty forecast : forecastDeck) {
             forecast.addListener(this);
         }
-
-        hands = new SimpleMapProperty<>(FXCollections.observableHashMap());
-        model.getHand().forEach((color, componentProperty) -> {
-            try {
-                CliComponent hand = new CliComponent(model, componentProperty);
-                hands.put(color, hand);
-                hand.addListener(this);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        stashedComponentsMap = new SimpleMapProperty<>(FXCollections.observableHashMap());
-        model.getStashed().forEach((color, propertyList) -> {
-            try {
-                List<CliComponent> stashedComponents = new ArrayList<>();
-                for(ObjectProperty<Component> property : propertyList) {
-                    CliComponent stashed = new CliComponent(model, property);
-                    stashed.addListener(this);
-                    stashedComponents.add(stashed);
-                }
-                stashedComponentsMap.put(color, stashedComponents);
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
 
         coveredComponentN = model.coveredComponentNProperty();
         coveredComponentN.addListener(this);
@@ -69,7 +39,7 @@ public class CliComponentBank extends CliElement {
                         try {
                             revealedComponents.put(
                                     added,
-                                    new CliComponent(model, new SimpleObjectProperty<Component>(added))
+                                    new CliComponent(model, new SimpleObjectProperty<>(added))
                             );
                             System.out.println("ADDED");
                         } catch (IOException e) {
@@ -109,10 +79,14 @@ public class CliComponentBank extends CliElement {
         description.add(row.toString());
         row.setLength(0);
 
-        row.append("Forecast decks:" +
-                "\t\tdeck 1 :" + forecastDeck.get(0).get() +
-                "\t\tdeck 2: " + forecastDeck.get(1).get() +
-                "\t\tdeck 3: " + forecastDeck.get(2).get());
+        row
+                .append("Forecast decks:" + "\t\tdeck 1 :")
+                .append(forecastDeck.get(0).get())
+                .append("\t\tdeck 2: ")
+                .append(forecastDeck.get(1).get())
+                .append("\t\tdeck 3: ")
+                .append(forecastDeck.get(2).get());
+
         description.add(row.toString());
 
 
