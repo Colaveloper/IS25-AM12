@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -31,8 +31,8 @@ class PlanetsCardTest {
     @BeforeEach
     void setUp() {
         ships = new ArrayList<>();
-        ships.add(new SecondShipBoard(Colors.BLUE));
-        ships.add(new SecondShipBoard(Colors.RED));
+        ships.add(new SecondShipBoard(FourColors.BLUE));
+        ships.add(new SecondShipBoard(FourColors.RED));
         shipPlaces = new HashMap<>();
         for (int i = 0; i < ships.size(); i++) {
             shipPlaces.put(ships.get(i), 10-i);

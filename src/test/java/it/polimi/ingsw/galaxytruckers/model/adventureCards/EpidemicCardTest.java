@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
@@ -59,7 +59,7 @@ class EpidemicCardTest {
 
         plaguedCabins = new HashSet<>();
 
-        ShipBoard shipBoardA = new SecondShipBoard(Colors.GREEN) {
+        ShipBoard shipBoardA = new SecondShipBoard(FourColors.GREEN) {
             @Override
             public Map<Point, Cabin> getCabins() {
                 return testCabins;
@@ -71,7 +71,7 @@ class EpidemicCardTest {
             }
         };
 
-        ShipBoard shipBoardB = new SecondShipBoard(Colors.GREEN) {
+        ShipBoard shipBoardB = new SecondShipBoard(FourColors.GREEN) {
             @Override
             public Map<Point, Cabin> getCabins() {
                 return testCabins;

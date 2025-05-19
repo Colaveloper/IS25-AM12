@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
@@ -41,14 +41,14 @@ class StarDustCardTest {
 
         ships = new ArrayList<>();
 
-        ship1 = new SecondShipBoard(Colors.BLUE) {
+        ship1 = new SecondShipBoard(FourColors.BLUE) {
             @Override
             public int getExposedConnectorsNumber() {
                 return 0;
             }
         };
 
-        ship2 = new SecondShipBoard(Colors.RED) {
+        ship2 = new SecondShipBoard(FourColors.RED) {
             @Override
             public int getExposedConnectorsNumber() {
                 return 2;

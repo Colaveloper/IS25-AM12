@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -82,13 +82,13 @@ class AbandonedShipCardTest {
     @Test
     void nextStepReturnChoiceStateIfAtLeastOneShipHasEnoughCrew(){
         // ship 1 does not have enough crew
-        ShipBoard ship1 = new SecondShipBoard(Colors.BLUE){
+        ShipBoard ship1 = new SecondShipBoard(FourColors.BLUE){
             @Override
             public int getCrewSize() {return requiredCrew - 1;}
         };
 
         // ship 2 does have enough crew
-        ShipBoard ship2 = new SecondShipBoard(Colors.RED){
+        ShipBoard ship2 = new SecondShipBoard(FourColors.RED){
             @Override
             public int getCrewSize() {return requiredCrew;}
         };
@@ -99,13 +99,13 @@ class AbandonedShipCardTest {
     @Test
     void nextStepReturnsDrawCardStateIfNoPlayersHasEnoughCrew(){
         // ship 1 does not have enough crew
-        ShipBoard ship1 = new SecondShipBoard(Colors.BLUE){
+        ShipBoard ship1 = new SecondShipBoard(FourColors.BLUE){
             @Override
             public int getCrewSize() {return requiredCrew - 1;}
         };
 
         // ship 2 does not have enough crew
-        ShipBoard ship2 = new SecondShipBoard(Colors.RED){
+        ShipBoard ship2 = new SecondShipBoard(FourColors.RED){
             @Override
             public int getCrewSize() {return requiredCrew - 1;}
         };
@@ -116,13 +116,13 @@ class AbandonedShipCardTest {
     @Test
     void nextStepReturnsRemoveCrewStateIfShipAcceptsCard(){
         // ship 1 does have enough crew
-        ShipBoard ship1 = new SecondShipBoard(Colors.BLUE){
+        ShipBoard ship1 = new SecondShipBoard(FourColors.BLUE){
             @Override
             public int getCrewSize() {return requiredCrew;}
         };
 
         // ship 2 also has enough crew
-        ShipBoard ship2 = new SecondShipBoard(Colors.RED){
+        ShipBoard ship2 = new SecondShipBoard(FourColors.RED){
             @Override
             public int getCrewSize() {return requiredCrew;}
         };

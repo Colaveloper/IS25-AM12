@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -25,8 +25,8 @@ class ActivateStateTest {
 
     @Test
     void activateComponentWithOutOfTurnShipboardThrowsException() {
-        ShipBoard ship1 = new SecondShipBoard(Colors.RED);
-        ShipBoard ship2 = new SecondShipBoard(Colors.BLUE);
+        ShipBoard ship1 = new SecondShipBoard(FourColors.RED);
+        ShipBoard ship2 = new SecondShipBoard(FourColors.BLUE);
         ActivateState activateState = new ActivateState(ship1) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
