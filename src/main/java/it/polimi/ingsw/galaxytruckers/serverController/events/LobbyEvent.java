@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Event signaling a player has either joined or left a lobby
+ * ModelEvent signaling a player has either joined or left a lobby
  * @param playerName the nickname of the player who left/joined
  * @param playerColors a map containing the nicknames of all players in the lobby
  *                     and their assigned colors

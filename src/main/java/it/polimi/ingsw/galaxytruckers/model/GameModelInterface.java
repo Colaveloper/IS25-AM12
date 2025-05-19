@@ -5,12 +5,14 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.serverController.events.EventListener;
 
 import java.awt.*;
 
 public interface GameModelInterface {
     Game createGame(Level level);
     ShipBoard addShip(Game game, FourColors color);
+    void setEventListener(Game game, EventListener listener);
 
     //Ship building
     void requestRandComponent(Game game, ShipBoard shipBoard);
@@ -29,7 +31,7 @@ public interface GameModelInterface {
     void chooseShipPiece(Game game, ShipBoard shipBoard, int pieceIndex);
 
     // Ship init
-    void initializeCabin(Game game, ShipBoard shipBoard, CrewType crewType);
+    void initializeCabin(Game game, ShipBoard shipBoard, Point point, CrewType crewType);
 
     // Adventure
     void drawCard(Game game, ShipBoard shipBoard);

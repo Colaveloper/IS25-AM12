@@ -4,17 +4,15 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
-/**
- * ModelEvent signaling one or more players have surrendered
- * @param playerNames list of nicknames of the players that surrendered
- */
-public record SurrenderEvent(List<String> playerNames) implements Event {
-    public static SurrenderEvent from(List<ShipBoard> ships) {
-        return new SurrenderEvent(ships.stream()
+public record InvalidShipsUpdateEvent(List<String> invalidPlayers) implements Event{
+    public static InvalidShipsUpdateEvent from(Set<ShipBoard> invalidShips) {
+        return new InvalidShipsUpdateEvent(
+                invalidShips.stream()
                         .map(s -> Player.getPlayer(s).getNickname())
-                        .toList());
+                        .toList()
+        );
     }
 
     @Override

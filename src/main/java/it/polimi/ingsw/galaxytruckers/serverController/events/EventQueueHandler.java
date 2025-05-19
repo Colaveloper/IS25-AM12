@@ -16,7 +16,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
     }
 
     public void start() {
-        this.thread = new Thread(this::processQueue, "Event-handler-thread");
+        this.thread = new Thread(this::processQueue, "ModelEvent-handler-thread");
     }
 
     public void stop() {
@@ -318,5 +318,22 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
                     gameEndEvent.playerToScore()
             );
         }
+    }
+
+    @Override
+    public void visit(InvalidShipsUpdateEvent invalidShipsUpdateEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.notifyInvalidShipsUpdate(
+                    invalidShipsUpdateEvent.invalidPlayers()
+            );
+        }
+    }
+
+    @Override
+    public void visit(ShipNotConnectedEvent shipNotConnectedEvent) {
+        Player player = Player.getPlayer(shipNotConnectedEvent.playerName());
+        VirtualClient client = SessionManager.getInstance().getClient(player);
+        client.showShipPieces(shipNotConnectedEvent.shipPieces());
     }
 }

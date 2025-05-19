@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Event signaling a player has requested a component from the bank
+ * ModelEvent signaling a player has requested a component from the bank
  * @param playerName the nickname of the player who performed the request
  * @param componentId the requested component's id
  */

@@ -2,6 +2,9 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.serverController.events.InvalidShipsUpdateEvent;
+import it.polimi.ingsw.galaxytruckers.serverController.events.ShipNotConnectedEvent;
+import it.polimi.ingsw.galaxytruckers.serverController.events.ShipPieceRemoveEvent;
 
 import java.awt.*;
 import java.util.*;
@@ -22,21 +25,35 @@ public abstract class ShipCorrectionState extends GameState {
     public void setGame(Game game) {
         super.setGame(game);
         for (ShipBoard shipBoard : game.getShipBoards()) {
-            validateShipBoard(shipBoard);
+            checkShipValidity(shipBoard);
         }
         tryStateTransition();
+        Set<ShipBoard> invalidShips = getInvalidShips();
+        if (!invalidShips.isEmpty()) {
+            game.getEventListener().notifyInvalidShipsUpdateEvent(invalidShips);
+        }
+        for (ShipBoard shipBoard : shipPieces.keySet()) {
+            game.getEventListener().notifyShipNotConnectedEvent(shipBoard, shipPieces.get(shipBoard));
+        }
     }
 
     protected abstract void tryStateTransition();
 
-    private void validateShipBoard(ShipBoard shipBoard) {
+    private boolean checkShipValidity(ShipBoard shipBoard) {
         if (shipBoard.checkValidity()) {
             validShipBoards.add(shipBoard);
-            List<Set<Point>> currentShipPieces = shipBoard.getConnectedSets();
-            if (currentShipPieces.size() > 1) {
-                shipPieces.put(shipBoard, currentShipPieces);
-            }
+            return true;
         }
+        return false;
+    }
+    
+    private boolean checkShipConnection(ShipBoard shipBoard) {
+        List<Set<Point>> currentShipPieces = shipBoard.getConnectedSets();
+        if (currentShipPieces.size() > 1) {
+            shipPieces.put(shipBoard, currentShipPieces);
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -45,8 +62,18 @@ public abstract class ShipCorrectionState extends GameState {
             throw new IllegalStateException("Ship Board is already valid");
         }
         removeAt(shipBoard, point);
-        validateShipBoard(shipBoard);
-        tryStateTransition();
+        boolean canTransition = true;
+        if (checkShipValidity(shipBoard)) {
+            if (!getInvalidShips().isEmpty()) {
+                game.getEventListener().notifyInvalidShipsUpdateEvent(getInvalidShips());
+                canTransition = false;
+            }
+            if (!checkShipConnection(shipBoard)) {
+                canTransition = false;
+                game.getEventListener().notifyShipNotConnectedEvent(shipBoard, shipPieces.get(shipBoard));
+            }
+        }
+        if (canTransition) tryStateTransition();
     }
 
     @Override
@@ -63,6 +90,7 @@ public abstract class ShipCorrectionState extends GameState {
             removeAt(shipBoard, point);
         }
         shipPieces.remove(shipBoard);
+        game.getEventListener().notifyShipPieceRemoveEvent(shipBoard,componentsToRemove.stream().toList());
         tryStateTransition();
     }
 
@@ -72,5 +100,11 @@ public abstract class ShipCorrectionState extends GameState {
 
     public Map<ShipBoard, List<Set<Point>>> getShipPieces() {
         return new HashMap<>(shipPieces);
+    }
+    
+    public Set<ShipBoard> getInvalidShips() {
+        Set<ShipBoard> invalidShips = new HashSet<>(game.getShipBoards());
+        invalidShips.removeAll(validShipBoards);
+        return invalidShips;
     }
 }
