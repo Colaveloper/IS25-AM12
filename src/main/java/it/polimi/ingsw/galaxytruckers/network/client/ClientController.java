@@ -93,6 +93,7 @@ public class ClientController implements ClientControllerInterface {
     @Override//Tommy approved
     public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) {
         runAndInterceptIOE(()->model.setStashedComponents(playerName, stashComponentIds));
+        runAndInterceptIOE(()->model.setComponentInHand(playerName, 0));
     }
 
     @Override//Tommy approved
@@ -261,12 +262,16 @@ public class ClientController implements ClientControllerInterface {
         // view.show(ChosenStrategy)
     }
 
+
+
+
+
     @Override
     public void reportError(String details) {
         // view.show(ChosenStrategy)
     }
 
-    @Override
+    //@Override
     public void registerNickname(String nickname) {
         try {
             server.registerNickname(nickname);
@@ -275,44 +280,84 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    @Override
+    //@Override
     public void flipHourglass() {
-
+        try {
+            server.flipHourglass();
+        } catch (IllegalArgumentException e) {
+            reportError("cannot flip hourglass");
+        }
     }
 
-    @Override
+    //@Override
     public void requestRandComponent() {
-
+        try {
+            server.requestRandComponent();
+        } catch (IllegalArgumentException e) {
+            reportError("random component not available");
+        }
     }
 
-    @Override
+    //@Override
     public void requestComponent(int index) {
-
+        try {
+            server.requestComponent(index);
+        } catch (IllegalArgumentException e) {
+            reportError("component of index " + index + " not available");
+        }
     }
 
-    @Override
+    //@Override
     public void stashComponent() {
-
+        try {
+            server.stashComponent();
+        } catch (IllegalArgumentException e) {
+            reportError("cannot stash component");
+        }
     }
 
-    @Override
+    //@Override
     public void grabStashedComponent(int index) {
-
+        try {
+            server.grabStashedComponent(index);
+        } catch (IllegalArgumentException e) {
+            reportError("cannot grab stashed component");
+        }
     }
 
-    @Override
+    //@Override
     public void acquireForecast(int index) {
-
+        try {
+            server.acquireForecast(index);
+        } catch (IllegalArgumentException e) {
+            reportError("cannot acquire forecast");
+        }
     }
 
-    @Override
+    public void releaseForecast() {
+        try {
+            server.releaseForecast();
+        } catch (IllegalArgumentException e) {
+            reportError("cannot release forecast");
+        }
+    }
+
+    //@Override
     public void rejectComponent() {
-
+        try {
+            server.rejectComponent();
+        } catch (IllegalArgumentException e) {
+            reportError("cannot reject component");
+        }
     }
 
-    @Override
-    public void placeComponent(Point point) {
-
+    //@Override
+    public void placeComponent(Point point, int orientation) {
+        try {
+            server.placeComponent(point, orientation);
+        } catch (IllegalArgumentException e) {
+            reportError("cannot place component");
+        }
     }
 
     private void runAndInterceptIOE(RunnableWithIOE action) {

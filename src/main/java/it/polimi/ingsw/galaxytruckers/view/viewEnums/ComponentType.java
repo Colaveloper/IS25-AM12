@@ -23,9 +23,9 @@ public enum ComponentType {
             List.of("⭍")),
     CABIN(
             List.of("⌂")),
-    EMPTY_AREA(
+    EMPTY_AREA(                 //yet to be placed
             List.of("")),
-    EMPTY_SPACE(
+    EMPTY_SPACE(                //not of the ship
             List.of(""));
 
     private final List<String> symbols;

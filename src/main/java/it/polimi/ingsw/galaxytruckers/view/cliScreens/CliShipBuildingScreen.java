@@ -37,14 +37,14 @@ public class CliShipBuildingScreen extends CliScreen {
         output.addAll(flightBoard.getDescription());
         output.addAll(allShips.getDescription());
 
-        output.add("C       \tGet New covered component");
-        output.add("U [i]   \tGet i-th uncovered component");
-        output.add("S [i]   \tGet i-th stashed component");         // NOT IN Levels.TEST
-        output.add("F [i]   \tGet i-th forecast deck");             // NOT IN Levels.TEST
+        output.add("C       \tGet New covered component" + "\t\t\tU [i]   \tGet i-th uncovered component");
+        //output.add("U [i]   \tGet i-th uncovered component");
+        output.add("S [i]   \tGet i-th stashed component" + "\t\t\tF [i]   \tGet i-th forecast deck");         // NOT IN Levels.TEST
+        //output.add("F [i]   \tGet i-th forecast deck");             // NOT IN Levels.TEST
 
         if (model.existsUnwelded()) {
-            output.add("R       \tReject current component");
-            output.add("P [x] [y] \tPlace current component in position x, y");
+            //output.add("R       \tReject current component");
+            output.add("P [x] [y] \tPlace current component in x, y" + "\t\t\tR       \tReject current component");
             output.add("S       \tStash current component");        // NOT IN Levels.TEST
             output.add("L       \tRotate current component left");
         }
@@ -98,7 +98,7 @@ public class CliShipBuildingScreen extends CliScreen {
                 if (parts.length == 3) {
                     int x = Integer.parseInt(parts[1]);
                     int y = Integer.parseInt(parts[2]);
-                    controller.placeComponent(new Point(x, y));
+                    controller.placeComponent(new Point(x, y), 0);//todo add orientation
                 }
                 break;
 

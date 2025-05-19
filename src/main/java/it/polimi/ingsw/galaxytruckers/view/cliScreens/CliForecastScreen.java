@@ -31,7 +31,7 @@ public class CliForecastScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        //todo
+        controller.releaseForecast();
     }
 
     @Override

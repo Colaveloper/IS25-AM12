@@ -292,22 +292,22 @@ public interface ClientControllerInterface {
     void reportError(String details) throws RemoteException;
 
     void notifyNewGame(Level level, int i);
-
-    void registerNickname(String input);
-
-    void flipHourglass();
-
-    void requestRandComponent();
-
-    void requestComponent(int index);
-
-    void stashComponent();
-
-    void grabStashedComponent(int index);
-
-    void acquireForecast(int index);
-
-    void rejectComponent();
-
-    void placeComponent(Point point);
+//
+//    void registerNickname(String input);
+//
+//    void flipHourglass();
+//
+//    void requestRandComponent();
+//
+//    void requestComponent(int index);
+//
+//    void stashComponent();
+//
+//    void grabStashedComponent(int index);
+//
+//    void acquireForecast(int index);
+//
+//    void rejectComponent();
+//
+//    void placeComponent(Point point, int orientation);
 }

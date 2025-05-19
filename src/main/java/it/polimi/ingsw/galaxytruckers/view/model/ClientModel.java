@@ -334,6 +334,7 @@ public class ClientModel {
             }
         }
     }
+
     public List<Set<Point>> getSelectableShipPieces() {
         return shipPieces;
     }
@@ -383,7 +384,8 @@ public class ClientModel {
     }
 
     public boolean existsUnwelded() {
-        return unweldedComponent != null;
+        return hands.get(playerToColor.get(myNickname)).get().getType() != ComponentType.EMPTY_AREA;
+        //return unweldedComponent != null;
     }
 
     public Map<FourColors, ObjectProperty<Component>> getHand() {
