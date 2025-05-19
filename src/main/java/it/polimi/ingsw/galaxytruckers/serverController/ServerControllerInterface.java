@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.awt.*;
@@ -23,25 +24,29 @@ public interface ServerControllerInterface {
     /**
      * Creates a new lobby for a game of the chosen level and with
      * the specified number of players, adding the creator to it
-     * @param creatorName nickname of the lobby creator
-     * @param level level of the game
+     *
+     * @param creator    nickname of the lobby creator
+     * @param level      level of the game
      * @param numPlayers number of players in the game
+     * @return
      * @throws IllegalArgumentException if {@code numPlayers} is < 2
      */
-    void newGame(String creatorName, Level level, int numPlayers);
+    LobbyInterface newGame(Player creator, Level level, int numPlayers);
 
     /**
      * Adds the player with the specified nickname to the lobby
      * with the given lobby ID
-     * @param nickname the nickname of the player joining a lobby
+     *
+     * @param player  the nickname of the player joining a lobby
      * @param lobbyID the ID of the lobby the player wants to join
+     * @return
      * @throws IllegalArgumentException if there is no registered
-     * player with the given nickname or if there is no lobby with
-     * the given ID
-     * @throws IllegalStateException if the specified lobby is not
-     * in preparation phase
+     *                                  player with the given nickname or if there is no lobby with
+     *                                  the given ID
+     * @throws IllegalStateException    if the specified lobby is not
+     *                                  in preparation phase
      */
-    void joinLobby(String nickname, UUID lobbyID);
+    LobbyInterface joinLobby(Player player, UUID lobbyID);
 
     /**
      * Removes the player with the given nickname from the lobby
