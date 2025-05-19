@@ -51,10 +51,10 @@ class ClientControllerTest {
             }
 
             @Override
-            public void requestComponent(int componentID) { // TODO: MAKE THIS METHOD CALLABLE
+            public void requestComponent(int componentIndex) { // TODO: MAKE THIS METHOD CALLABLE
                 faceUpComponents.remove(1);
                 System.out.println("FAKE SERVER EVENT: the requested face up component was successfully taken");
-                controller.notifyFaceUpComponentRequest("qwe", componentID);
+                controller.notifyFaceUpComponentRequest("qwe", 5);
             }
 
 
