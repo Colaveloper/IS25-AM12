@@ -1,11 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -15,7 +13,7 @@ import java.util.stream.Collectors;
  * @param playerColors a map containing the nicknames of all players in the lobby
  *                     and their assigned colors
  */
-public record LobbyEvent(String playerName, Map<String, Colors> playerColors) implements Event {
+public record LobbyEvent(String playerName, Map<String, FourColors> playerColors) implements Event {
 
     public static LobbyEvent from(Player player, Lobby lobby) {
         return new LobbyEvent(

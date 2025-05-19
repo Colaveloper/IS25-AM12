@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
-import javafx.scene.image.Image;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 
 import java.awt.*;
 import java.util.*;
@@ -46,7 +45,7 @@ public class SecondShipBoard extends ShipBoard {
 
     private final Map<Point, LifeSupport> lifeSupports;
 
-    public SecondShipBoard(Colors color) {
+    public SecondShipBoard(FourColors color) {
         super(color);
         this.lifeSupports = new HashMap<>();
         this.stashedComponents = new ArrayList<>();
@@ -117,7 +116,7 @@ public class SecondShipBoard extends ShipBoard {
         return (enginePower > 0 && aliens.contains(CrewType.BROWN)) ? enginePower+2 : enginePower;
     }
 
-    // Component observers
+    // CliComponent observers
 
     @Override
     public Map<Point, LifeSupport> getLifeSupports() {

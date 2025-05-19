@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
@@ -34,8 +34,8 @@ class ShipBuildingStateTest {
         @BeforeEach
         void setUp() {
             game = new Game(Level.SECOND);
-            shipBoards.add(game.addShipBoard(Colors.BLUE));
-            shipBoards.add(game.addShipBoard(Colors.RED));
+            shipBoards.add(game.addShipBoard(FourColors.BLUE));
+            shipBoards.add(game.addShipBoard(FourColors.RED));
 
             // Make the first ship invalid so that it does not automatically change state
             ShipBoard invalidShip = shipBoards.getFirst();
@@ -264,8 +264,8 @@ class ShipBuildingStateTest {
         @BeforeEach
         void setUp() {
             game = new Game(Level.TEST);
-            shipBoards.add(game.addShipBoard(Colors.BLUE));
-            shipBoards.add(game.addShipBoard(Colors.RED));
+            shipBoards.add(game.addShipBoard(FourColors.BLUE));
+            shipBoards.add(game.addShipBoard(FourColors.RED));
 
             // Make the first ship invalid so that it does not automatically change state
             ShipBoard invalidShip = shipBoards.getFirst();

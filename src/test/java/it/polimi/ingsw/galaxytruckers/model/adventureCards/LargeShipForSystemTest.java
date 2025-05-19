@@ -1,9 +1,9 @@
 //package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 //
-//import it.polimi.ingsw.galaxytruckers.FlightBoard;
-//import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
+//import it.polimi.ingsw.galaxytruckers.CliFlightBoard;
+//import it.polimi.ingsw.galaxytruckers.enumTypes.FourColors;
 //import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
-//import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
+//import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CliComponent;
 //import javafx.scene.image.Image;
 //import org.junit.jupiter.api.BeforeEach;
 //
@@ -12,10 +12,10 @@
 //import java.util.List;
 //
 //public class AdventureCardTestInitializer {
-//    protected Component component;
-//    protected ComponentBank componentBank = new ComponentBank() {
+//    protected CliComponent component;
+//    protected CliComponentBank componentBank = new CliComponentBank() {
 //        @Override
-//        public Component getRanComponent() {
+//        public CliComponent getRanComponent() {
 //            return component;
 //        }
 //    };
@@ -23,17 +23,17 @@
 //    protected Map<ShipBoard, Integer> shipPlaces;
 //    protected ShipBoard testShip;
 //    protected int testDisplacement;
-//    protected FlightBoard flightBoard;
+//    protected CliFlightBoard flightBoard;
 //
 //    void setUp() {
 //        ships = new ArrayList<>();
-//        ships.add(new SecondShipBoard(Colors.BLUE));
-//        ships.add(new SecondShipBoard(Colors.RED));
+//        ships.add(new SecondShipBoard(FourColors.BLUE));
+//        ships.add(new SecondShipBoard(FourColors.RED));
 //        shipPlaces = new HashMap<>();
 //        for (int i = 0; i < ships.size(); i++) {
 //            shipPlaces.put(ships.get(i), 10-i);
 //        }
-//        flightBoard = new FlightBoard(null) {
+//        flightBoard = new CliFlightBoard(null) {
 //            @Override
 //            public Map<ShipBoard, Integer> getShipToPlace() {
 //                return shipPlaces;

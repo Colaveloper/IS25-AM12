@@ -1,6 +1,6 @@
 //package it.polimi.ingsw.galaxytruckers.network.client.socket;
 //
-//import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+//import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 //import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 //import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 //import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -74,17 +74,17 @@
 //    }
 //
 //    @Override
-//    public void showColorSelection(String nickname, Colors color) throws Exception {
+//    public void showColorSelection(String nickname, FourColors color) throws Exception {
 //
 //    }
 //
 //    @Override
-//    public void setFlightBoard(int loopLength, List<Integer> startingPositions) throws Exception {
+//    public void setFlightBoard(int loopLength, List<Integer> getStartingPositions) throws Exception {
 //
 //    }
 //
 //    @Override
-//    public void setShipBoard(Set<Point> shipArea) throws Exception {
+//    public void setShipBoard(Set<Point> getShipArea) throws Exception {
 //
 //    }
 //

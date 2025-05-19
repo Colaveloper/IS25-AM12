@@ -101,6 +101,8 @@ public class ComponentBank {
                 case "cabin":
                     component = new Cabin(connectors, id);
                     break;
+                case "empty_area", "empty_space":
+                    continue; // USED IN CLIENT ONLY
                 default:
                     throw new IllegalArgumentException("Unknown component type: " + type);
             }

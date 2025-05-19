@@ -1,10 +1,10 @@
 //package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 //
-//import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
+//import it.polimi.ingsw.galaxytruckers.model.CliFlightBoard;
 //import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.BigMeteor;
 //import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 //import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.SmallMeteor;
-//import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+//import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 //import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 //import it.polimi.ingsw.galaxytruckers.model.state.*;
 //import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -23,7 +23,7 @@
 //public class CombatZoneTest {
 //    CombatZoneCard combatZoneCard;
 //    Map<ShipBoard, Integer> shipPlaces;
-//    FlightBoard flightBoard;
+//    CliFlightBoard flightBoard;
 //    ShipBoard ship1;
 //    ShipBoard ship2;
 //    ShipBoard testShip;
@@ -62,7 +62,7 @@
 //        position2 = 10;
 //        doesBreak = true;
 //
-//        ship1 = new SecondShipBoard(Colors.RED) {
+//        ship1 = new SecondShipBoard(FourColors.RED) {
 //            @Override
 //            public int getCrewSize() {
 //                return crewSize1;
@@ -80,7 +80,7 @@
 //                return List.of(Set.of());
 //            }
 //        };
-//        ship2 = new SecondShipBoard(Colors.BLUE) {
+//        ship2 = new SecondShipBoard(FourColors.BLUE) {
 //            @Override
 //            public int getCrewSize() {
 //                return crewSize2;
@@ -105,7 +105,7 @@
 //        shipPlaces.put(ship1, position1);
 //        shipPlaces.put(ship2, position2);
 //
-//        flightBoard = new FlightBoard(null) {
+//        flightBoard = new CliFlightBoard(null) {
 //
 //            @Override
 //            public Map<ShipBoard, Integer> getShipToPlace() {

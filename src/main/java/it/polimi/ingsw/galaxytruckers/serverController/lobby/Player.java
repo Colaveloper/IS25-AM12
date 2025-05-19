@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.util.HashMap;
@@ -13,21 +13,21 @@ public class Player {
     private final static Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
 
     private final String nickname;
-    private Colors color;
+    private FourColors color;
     private final Object colorLock = new Object();
     private Lobby lobby;
     private final Object lobbyLock = new Object();
     private ShipBoard shipBoard;
     private final Object shipBoardLock = new Object();
 
-    public static void addPlayer(String nickname) {
+    public static Player addPlayer(String nickname) {
         synchronized (nicknameToPlayer) {
             if (nicknameToPlayer.containsKey(nickname)) {
-                System.out.println("Request refused: nickname \"" + nickname + "\" already taken ⛔");
                 throw new IllegalArgumentException("Nickname already exists");
             }
-            nicknameToPlayer.put(nickname, new Player(nickname));
-            System.out.println("Request accepted: registering " + nickname + " ✅");
+            Player player = new Player(nickname);
+            nicknameToPlayer.put(nickname, player);
+            return player;
         }
     }
 
@@ -69,7 +69,7 @@ public class Player {
         }
     }
 
-    public Optional<Colors> getColor() {
+    public Optional<FourColors> getColor() {
         synchronized (colorLock) {
             return Optional.ofNullable(color);
         }
@@ -81,7 +81,7 @@ public class Player {
         }
     }
 
-    protected void setColor(Colors color) {
+    protected void setColor(FourColors color) {
         synchronized (colorLock) {
             this.color = color;
         }

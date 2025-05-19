@@ -1,34 +1,20 @@
 package it.polimi.ingsw.galaxytruckers.view.screens;
 
-import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.ClientModel;
-import javafx.scene.layout.Pane;
+import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.*;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipBuildingScreen;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.io.IOException;
 
-public class ShipBuildingScreen implements ScreenStrategy {
-
+public class ShipBuildingScreen extends ScreenFactory {
     @Override
-    public void showCLI(ClientModel model) {
-        model.getComponentBank().getDescription().forEach(System.out::println);
-        //model.getMyShipBoard().getDescription().forEach(System.out::println);
-        model.getAllShips().getDescription().forEach(System.out::println);
-        System.out.println("N) to pick new piece");
-        System.out.println("select one piece on the board by number or from stashed by letter");
+    public GuiScreen getGuiScreen(ClientModel model, ClientController controller) {
+        return new GuiShipBuildingScreen(model, controller);
     }
 
     @Override
-    public boolean isLegalInput(ClientModel model, String input) {
-        return false;
-    }
-
-    @Override
-    public void parseAndInvoke(ClientModel model, String input, VirtualServer server) throws IOException {
-
-    }
-
-    @Override
-    public void showGUI(ClientModel model, Pane root, VirtualServer server) {
-
+    public CliScreen getCliScreen(ClientModel model, ClientController controller) throws IOException {
+        return new CliShipBuildingScreen(model, controller);
     }
 }

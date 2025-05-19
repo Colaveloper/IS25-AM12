@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -33,7 +33,7 @@ public class Game {
      * @param color the color of the added shipboard
      * @return the added shipboard
      */
-    public ShipBoard addShipBoard(Colors color) {
+    public ShipBoard addShipBoard(FourColors color) {
         ShipBoard shipBoard = gameFactory.createShipBoard(color);
         shipBoards.add(shipBoard);
         return shipBoard;

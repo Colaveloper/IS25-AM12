@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model;
 
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -35,9 +35,9 @@ class FlightBoardTest {
     class TestFlightTests {
         @BeforeEach
         void setUp() {
-            ship1 = new TestShipBoard(Colors.BLUE);
-            ship2 = new TestShipBoard(Colors.RED);
-            ship3 = new TestShipBoard(Colors.GREEN);
+            ship1 = new TestShipBoard(FourColors.BLUE);
+            ship2 = new TestShipBoard(FourColors.RED);
+            ship3 = new TestShipBoard(FourColors.GREEN);
             allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
             flightBoard = new TestFlightBoard(Set.of(ship1, ship2, ship3));
         }
@@ -75,9 +75,9 @@ class FlightBoardTest {
     class SecondFlightTests {
         @BeforeEach
         void setUp() {
-            ship1 = new SecondShipBoard(Colors.BLUE);
-            ship2 = new SecondShipBoard(Colors.RED);
-            ship3 = new SecondShipBoard(Colors.GREEN);
+            ship1 = new SecondShipBoard(FourColors.BLUE);
+            ship2 = new SecondShipBoard(FourColors.RED);
+            ship3 = new SecondShipBoard(FourColors.GREEN);
             allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
             flightBoard = new SecondFlightBoard(Set.of(ship1, ship2, ship3));
             legalStartingPositions = new ArrayList<>(SecondFlightBoard.startingPositions
