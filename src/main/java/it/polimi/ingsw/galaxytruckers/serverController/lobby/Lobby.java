@@ -9,6 +9,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueueHandler;
+import it.polimi.ingsw.galaxytruckers.serverController.events.StartBuildingEvent;
 import org.checkerframework.checker.units.qual.A;
 
 import java.awt.*;
@@ -88,8 +89,15 @@ public class Lobby implements LobbyInterface {
         if (this.state.get() != LobbyState.PREPARATION) {
             throw new IllegalStateException("The lobby is not in preparation");
         }
+        FourColors chosenColor = Arrays.stream(FourColors.values())
+                        .filter(c -> !chosenColors.contains(c))
+                                .findAny().orElseThrow();
+        player.setColor(chosenColor);
         players.add(player);
         player.setLobby(this);
+        if (players.size() == numPlayers) {
+            startGame();
+        }
     }
 
     public void setState(LobbyState state) {
@@ -98,23 +106,6 @@ public class Lobby implements LobbyInterface {
 
     public void setGame(Game game) {
         this.game.set(game);
-    }
-
-    public synchronized void chooseColor(Player player, FourColors color) {
-        if (state.get() != LobbyState.PREPARATION) {
-            throw new IllegalStateException("The lobby is not in preparation");
-        }
-        if (player.getColor().isPresent()) {
-            throw new IllegalStateException("You have already chosen a color");
-        }
-        if (chosenColors.contains(color)) {
-            throw new IllegalArgumentException("This color is not available");
-        }
-        chosenColors.add(color);
-        player.setColor(color);
-        if (chosenColors.size() == numPlayers) {
-            startGame();
-        }
     }
 
     private synchronized void startGame() {
@@ -126,12 +117,8 @@ public class Lobby implements LobbyInterface {
             player.setShipBoard(ship);
         }
         setState(LobbyState.INGAME);
+        eventQueue.notifyEvent(new StartBuildingEvent());
         setGame(game);
-    }
-
-    @Override
-    public void leaveLobby(Player player) {
-        //TODO: implement logic for this method
     }
 
     @Override

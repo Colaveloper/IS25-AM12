@@ -8,10 +8,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 
 public interface LobbyInterface {
-    /**
-     * Removes the given player from the lobby
-     */
-    void leaveLobby(Player player);
 
     // Game methods
 

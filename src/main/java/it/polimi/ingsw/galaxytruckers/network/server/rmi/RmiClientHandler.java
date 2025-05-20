@@ -254,7 +254,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     @Override
     public void leaveLobby() throws RemoteException {
         checkLobby();
-        lobby.leaveLobby(player);
+        controller.leaveLobby(player.getNickname());
     }
 
     @Override
