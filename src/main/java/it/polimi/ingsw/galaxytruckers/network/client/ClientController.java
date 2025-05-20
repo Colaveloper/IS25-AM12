@@ -211,7 +211,7 @@ public class ClientController implements ClientControllerInterface {
 
     }
 
-    //todo added recently
+    @Override
     public void changeBatteriesOnComponent(String nickname, Point batteryComponent, int batteries) {
         runAndInterceptIOE(()->model.setBatteriesOnComponent(nickname, batteryComponent, batteries));
     }
@@ -277,7 +277,7 @@ public class ClientController implements ClientControllerInterface {
     }
 
     //@Override
-    public void registerNickname(String nickname) {
+    public void registerNickname(String nickname) throws IllegalArgumentException {
         server.registerNickname(nickname);
     }
 

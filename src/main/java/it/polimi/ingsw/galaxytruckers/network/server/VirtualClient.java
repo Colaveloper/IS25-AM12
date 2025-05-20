@@ -181,9 +181,10 @@ public interface VirtualClient {
      * Signals to the client that their ship is not connected and that they should
      * choose one of the given pieces to keep
      *
+     * @param playerName
      * @param shipPieces a list containing the ship's connected subsets
      */
-    void showShipPieces(List<Set<Point>> shipPieces);
+    void showShipPieces(String playerName, List<Set<Point>> shipPieces);
 
     //TODO: missing method on the client
     /**

@@ -87,7 +87,11 @@ public class SecondShipBoard extends ShipBoard {
 
     public void grabStashedComponent(int index) {
         weldLastComponent();
-        lastComponent = stashedComponents.remove(index);
+        try {
+            lastComponent = stashedComponents.remove(index);
+        } catch (IndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("The stashed component index is out of bounds");
+        }
         isStashed = true;
     }
 

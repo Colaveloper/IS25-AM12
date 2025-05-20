@@ -151,12 +151,12 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
 
     @Override
     public void notifyPlayerPosition(String playerName, int position) {
-        submitUpdateTask(() -> remoteClient.notifyPlaceShipOnFlightBoard(playerName));
+        submitUpdateTask(() -> remoteClient.notifyPlaceShipOnFlightBoard(playerName, position));
     }
 
     @Override
-    public void showShipPieces(List<Set<Point>> shipPieces) {
-        submitUpdateTask(() -> remoteClient.showShipPieces(shipPieces));
+    public void showShipPieces(String playerName, List<Set<Point>> shipPieces) {
+        submitUpdateTask(() -> remoteClient.showShipPieces(playerName, shipPieces));
     }
 
     @Override

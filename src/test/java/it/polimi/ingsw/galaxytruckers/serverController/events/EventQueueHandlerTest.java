@@ -27,6 +27,8 @@ class EventQueueHandlerTest {
     VirtualClientStub client1;
     VirtualClientStub client2;
 
+    Object queueLock;
+
     @BeforeEach
     void setup() {
         client1 = new VirtualClientStub();
@@ -37,12 +39,18 @@ class EventQueueHandlerTest {
         SessionManager.getInstance().registerClient(p2,client2);
         lobby = new Lobby(new GameModel(), p1, Level.SECOND,2);
         lobby.addPlayer(p2);
+        eventQueue = lobby.getEventQueue();
         eventQueueHandler = lobby.getEventQueueHandler();
     }
 
     @Test
-    void setupLobbyIsCalled() {
-        if (lobby.getEventQueue().isEmpty()) eventQueueHandler.stop();
+    void setupLobbyIsCalled() throws InterruptedException {
+        long time = 0;
+        while(!eventQueue.isEmpty() && time < 1000) {
+            Thread.sleep(100);
+            time += 100;
+        }
+        eventQueueHandler.stop();
         assertEquals("setupLobby", client1.methods.getFirst());
     }
 }
@@ -141,7 +149,7 @@ class VirtualClientStub implements VirtualClient {
     }
 
     @Override
-    public void showShipPieces(List<Set<Point>> shipPieces) {
+    public void showShipPieces(String playerName, List<Set<Point>> shipPieces) {
 
     }
 
