@@ -303,11 +303,11 @@ public class ClientController implements ClientControllerInterface {
     }
 
     //@Override
-    public void requestComponent(int index) {
+    public void requestComponent(int componentId) {
         try {
-            server.requestComponent(index);
+            server.requestComponent(componentId);
         } catch (IllegalArgumentException e) {
-            reportError("component of index " + index + " not available");
+            reportError("component of id " + componentId + " not available");
         }
     }
 

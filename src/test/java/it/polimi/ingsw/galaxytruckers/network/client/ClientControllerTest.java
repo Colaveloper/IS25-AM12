@@ -3,7 +3,6 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 
 import java.awt.*;
@@ -21,6 +20,7 @@ class ClientControllerTest {
     static Set<Point> shipArea;
     static int coveredComponentsN;
     static List<Integer> faceUpComponents;
+    static int userHandComponentId;
 
     static void setUp() {
         nicknames = new HashMap<>();
@@ -46,15 +46,17 @@ class ClientControllerTest {
 
             @Override
             public void requestRandComponent() {
+                userHandComponentId = (int) (Math.random()*33);
                 System.out.println("FAKE SERVER EVENT: you took a covered component");
-                controller.notifyFaceDownComponentRequest("qwe", 7);
+                controller.notifyFaceDownComponentRequest("qwe", userHandComponentId);
             }
 
             @Override
-            public void requestComponent(int componentIndex) { // TODO: MAKE THIS METHOD CALLABLE
-                faceUpComponents.remove(1);
+            public void requestComponent(int componentId) {
+//                faceUpComponents.removeIf(c -> c.getId() == componentId); // can't be properly mocked up here
+                userHandComponentId = componentId;
                 System.out.println("FAKE SERVER EVENT: the requested face up component was successfully taken");
-                controller.notifyFaceUpComponentRequest("qwe", 5);
+                controller.notifyFaceUpComponentRequest("qwe", componentId);
             }
 
 
@@ -90,7 +92,7 @@ class ClientControllerTest {
             @Override
             public void rejectComponent() {
                 System.out.println("FAKE SERVER EVENT: rejected component");
-                controller.notifyComponentRejection("qwe", 5);
+                controller.notifyComponentRejection("qwe", userHandComponentId);
             }
 
             @Override
@@ -189,7 +191,6 @@ class ClientControllerTest {
             }
         };
 
-        // the following anonymous class is used to force GUI
         controller = new ClientController(server);
     }
 

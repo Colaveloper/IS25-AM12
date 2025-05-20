@@ -20,7 +20,7 @@ public class CliShipBuildingScreen extends CliScreen {
     public CliShipBuildingScreen(ClientModel model, ClientController controller) throws IOException {
         super(model, controller);
 
-        componentBank = new CliComponentBank(model);
+        componentBank = CliComponentBank.getInstance(model);
         componentBank.addListener(this);
 
         flightBoard = new CliFlightBoard(model);
@@ -76,8 +76,9 @@ public class CliShipBuildingScreen extends CliScreen {
 
             case "U":
                 if (parts.length == 2) {
-                    int index = Integer.parseInt(parts[1]);
-                    controller.requestComponent(index);
+                    int index = Integer.parseInt(parts[1])-1;
+                    int componentId = model.revealedComponentsProperty().get(index).getComponentId();
+                    controller.requestComponent(componentId);
                 }
                 break;
 

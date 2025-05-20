@@ -19,7 +19,7 @@ public class CliComponentBank extends CliElement {
 
     private final List<BooleanProperty> forecastDeck;
 
-    public CliComponentBank(ClientModel model) throws IOException {
+    private CliComponentBank(ClientModel model) throws IOException {
         super(model);
 
         forecastDeck = model.getForecastDeckAvailablility();
@@ -32,6 +32,7 @@ public class CliComponentBank extends CliElement {
 
         revealedComponents = new SimpleMapProperty<>(FXCollections.observableHashMap());
         revealedComponents.addListener(this);
+
         model.revealedComponentsProperty().addListener((ListChangeListener<Component>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
@@ -73,7 +74,7 @@ public class CliComponentBank extends CliElement {
             description.add(row.toString());
             row.setLength(0);
         }
-        for (int n = 1; n <= model.revealedComponentsProperty().size(); n++) {
+        for (int n = 1; n <= revealedComponents.size(); n++) {
             row.append("  ").append(n).append("  ").append(padding);
         }
         description.add(row.toString());
@@ -89,47 +90,25 @@ public class CliComponentBank extends CliElement {
 
         description.add(row.toString());
 
-
-        //STASHED AND HAND IN COMPONENTBANK
-//        List<List<String>> allShipsHandsStashed = new ArrayList<>();
-//
-//        for(Colors c : model.getPlayerToColor().values()) {
-//            List<String> handStashedDescription = new ArrayList<>();
-//            List<List<String>> stashedDescription = new ArrayList<>();
-//            List<String> handDescription = new ArrayList<>();
-//
-//            handStashedDescription.add("hand:\t\tstashed:\t\t\t");
-//
-//            handDescription.addAll(hands.get(c).getDescription());
-//            for(CliComponent component : stashedComponentsMap.get(c)) {
-//                stashedDescription.add(component.getDescription());
-//            }
-//
-//
-//            for (int i = 0; i < handDescription.size(); i++) {
-//                row.append(handDescription.get(i));
-//                row.append("\t\t");
-//                for(List<String> stashed : stashedDescription) {
-//                    row.append(stashed.get(i));
-//                }
-//                row.append("\t\t\t");
-//                handStashedDescription.add(row.toString());
-//                row.setLength(0);
-//            }
-//
-//            allShipsHandsStashed.add(handStashedDescription);
-//        }
-//
-//        for(int index = 0; index < allShipsHandsStashed.getFirst().size(); index++) {
-//            for(List<String> stashed : allShipsHandsStashed) {
-//                row.append(stashed.get(index));
-//            }
-//            description.add(row.toString());
-//            row.setLength(0);
-//        }
-//
-//        description.add(row.toString());
-
         return description;
+    }
+
+
+    /////////////////////////////////////////// SINGLETON LOGIC ///////////////////////////////////////
+    private static CliComponentBank instance;
+
+    public static synchronized CliComponentBank getInstance(ClientModel model) throws IOException {
+        if (instance == null) {
+            instance = new CliComponentBank(model);
+        }
+        return instance;
+    }
+
+    // Optional: a version without parameters once initialized
+    public static CliComponentBank getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("CliComponentBank not initialized. Call getInstance(model) first.");
+        }
+        return instance;
     }
 }

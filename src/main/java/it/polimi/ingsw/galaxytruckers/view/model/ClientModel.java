@@ -172,7 +172,6 @@ public class ClientModel {
 
     public void removeRevealedComponent(int componentId) {
         revealedComponents.removeIf(c -> c.getComponentId() == componentId);
-
     }
 
     public void setStashedComponents(String nickname, List<Integer> stashedComponents) throws IOException {
