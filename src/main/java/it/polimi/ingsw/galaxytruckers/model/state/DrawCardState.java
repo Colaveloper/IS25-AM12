@@ -14,6 +14,7 @@ public class DrawCardState extends AdventureState {
         this.shipBoard = game.getFlightBoard().getOrderedShips().getFirst();
         game.forceShipsToGiveUp();
         game.endGameIfAllShipsHaveGivenUp();
+        game.getFlightBoard().removeShips(game.getGivenUpShips());
     }
 
     @Override
