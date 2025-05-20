@@ -98,7 +98,7 @@ class StarDustCardTest {
             }
         };
 
-        starDustCard = new StarDustCard(game, Level.SECOND);
+        starDustCard = new StarDustCard(game, Level.SECOND,1);
         starDustCard.initialize();
     }
 

@@ -82,7 +82,7 @@ class OpenSpaceCardTest {
             }
         };
 
-        openSpaceCard = new OpenSpaceCard(game, Level.SECOND);
+        openSpaceCard = new OpenSpaceCard(game, Level.SECOND, 1);
         openSpaceCard.initialize();
     }
 
@@ -139,7 +139,7 @@ class OpenSpaceCardTest {
             }
         };
 
-        openSpaceCard = new OpenSpaceCard(game, Level.SECOND);
+        openSpaceCard = new OpenSpaceCard(game, Level.SECOND, 1);
         openSpaceCard.initialize();
     }
 

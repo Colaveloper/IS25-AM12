@@ -18,8 +18,8 @@ public class AbandonedStationCard extends AdventureCard {
     private boolean accepted;
     private boolean acquired;
 
-    public AbandonedStationCard (Game game, Level level, Map<GoodsType, Integer> goodsPrize, int requiredCrew, int flightDaysLoss) {
-        super(game, level);
+    public AbandonedStationCard (Game game, Level level, Map<GoodsType, Integer> goodsPrize, int requiredCrew, int flightDaysLoss, int id) {
+        super(game, level, id);
         this.flightDaysLoss = flightDaysLoss;
         this.goodsPrize = goodsPrize;
         this.requiredCrew = requiredCrew;

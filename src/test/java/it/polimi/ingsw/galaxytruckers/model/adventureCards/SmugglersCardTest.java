@@ -150,7 +150,7 @@ class SmugglersCardTest {
             }
         };
 
-        smugglersCard = new SmugglersCard(game, Level.SECOND, 1, 1, goodsWon, 1);
+        smugglersCard = new SmugglersCard(game, Level.SECOND, 1, 1, goodsWon, 1,1);
         smugglersCard.initialize();
     }
 
@@ -201,7 +201,7 @@ class SmugglersCardTest {
                 return flightBoardOfLosers;
             }
         };
-        smugglersCard = new SmugglersCard(game, Level.SECOND, 1, 1, goodsWon, 1);
+        smugglersCard = new SmugglersCard(game, Level.SECOND, 1, 1, goodsWon, 1,1);
         smugglersCard.initialize();
         smugglersCard.nextStep();//activate (but doesn't lose)
         smugglersCard.nextStep();//activate

@@ -151,7 +151,7 @@ class SlaversCardTest {
             }
         };
 
-        slaversCard = new SlaversCard(game, Level.SECOND, 1, 1, 1, 1);
+        slaversCard = new SlaversCard(game, Level.SECOND, 1, 1, 1, 1,1);
         slaversCard.initialize();
     }
 
@@ -198,7 +198,7 @@ class SlaversCardTest {
                 return flightBoardOfLosers;
             }
         };
-        slaversCard = new SlaversCard(game, Level.SECOND, 1, 1, 1, 1);
+        slaversCard = new SlaversCard(game, Level.SECOND, 1, 1, 1, 1,1);
         slaversCard.initialize();
         slaversCard.nextStep();
         slaversCard.nextStep();

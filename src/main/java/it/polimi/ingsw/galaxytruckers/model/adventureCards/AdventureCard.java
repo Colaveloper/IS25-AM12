@@ -12,11 +12,13 @@ public abstract class AdventureCard {
     protected FlightBoard flightBoard;
     protected final Level cardLevel;
     protected final Game game;
+    protected final int id;
 
 
-    protected AdventureCard(Game game, Level cardLevel) {
+    protected AdventureCard(Game game, Level cardLevel, int id) {
         this.game = game;
         this.cardLevel = cardLevel;
+        this.id = id;
     }
 
     public void initialize() {

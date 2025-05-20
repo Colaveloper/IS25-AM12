@@ -14,8 +14,8 @@ public class SlaversCard extends AdventureCard {
     private final int crewLoss;
     private boolean defeated;
 
-    public SlaversCard(Game game, Level level, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss) {
-        super(game, level);
+    public SlaversCard(Game game, Level level, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss, int id) {
+        super(game, level, id);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;

@@ -124,7 +124,7 @@ class EpidemicCardTest {
             }
         };
 
-        epidemicCard = new EpidemicCard(game, Level.SECOND);
+        epidemicCard = new EpidemicCard(game, Level.SECOND, 1);
         epidemicCard.initialize();
 
     }

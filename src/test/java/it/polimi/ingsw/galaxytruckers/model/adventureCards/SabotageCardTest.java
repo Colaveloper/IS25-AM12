@@ -156,7 +156,7 @@ class SabotageCardTest {
                 return flightBoard;
             }
         };
-        sabotageCard = new SabotageCard (game, Level.SECOND);
+        sabotageCard = new SabotageCard (game, Level.SECOND, 1);
         sabotageCard.initialize();
     }
 
@@ -177,7 +177,7 @@ class SabotageCardTest {
                 return largerFlightBoard;
             }
         };
-        sabotageCard = new SabotageCard(game, Level.SECOND);
+        sabotageCard = new SabotageCard(game, Level.SECOND,1);
         sabotageCard.initialize();
         testState = sabotageCard.nextStep();
         assertInstanceOf(DrawCardState.class, testState);

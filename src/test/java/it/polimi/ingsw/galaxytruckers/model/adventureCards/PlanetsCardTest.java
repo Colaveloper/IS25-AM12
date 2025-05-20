@@ -80,7 +80,7 @@ class PlanetsCardTest {
         goodsMap = new HashMap<>();
         goodsMap.put(GoodsType.BLUE, 4);
         planets.add(goodsMap);
-        planetsCard = new PlanetsCard(game, Level.SECOND,  planets, 1);
+        planetsCard = new PlanetsCard(game, Level.SECOND,  planets, 1, 1);
         planetsCard.initialize();
     }
 

@@ -114,7 +114,7 @@ class PiratesCardTest {
             }
         };
         piratesCard = new PiratesCard(game,
-                Level.SECOND, firePowerThreshold,creditPrize,flightDaysLost,new ArrayList<>(projectiles));
+                Level.SECOND, firePowerThreshold,creditPrize,flightDaysLost,new ArrayList<>(projectiles), 1);
         piratesCard.initialize();
     }
 

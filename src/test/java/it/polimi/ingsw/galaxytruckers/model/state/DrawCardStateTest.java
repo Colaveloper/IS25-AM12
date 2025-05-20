@@ -60,7 +60,7 @@ class DrawCardStateTest {
 
     @Test
     void drawCardDrawsCardAndChangesState() throws IOException{
-        adventureCard = new AdventureCard(game, Level.SECOND) {
+        adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public void initialize(){
                 // mock

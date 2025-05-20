@@ -118,7 +118,7 @@ class HandleProjectileStateTest {
                 return deck;
             }
         };
-        adventureCard = new AdventureCard(game, Level.SECOND) {
+        adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public GameState nextStep() {
                 return new AdventureState();
@@ -150,7 +150,7 @@ class HandleProjectileStateTest {
                 return deck;
             }
         };
-        adventureCard = new AdventureCard(game, Level.SECOND) {
+        adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public GameState nextStep() {
                 return new AdventureState();

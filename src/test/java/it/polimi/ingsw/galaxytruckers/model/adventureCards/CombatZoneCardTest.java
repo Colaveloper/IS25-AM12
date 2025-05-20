@@ -118,7 +118,7 @@ class CombatZoneCardTest {
             }
         };
 
-        card = new CombatZoneCard(game, Level.SECOND, checks, penalties);
+        card = new CombatZoneCard(game, Level.SECOND, checks, penalties, 1);
         card.initialize();
     }
 

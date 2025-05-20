@@ -82,7 +82,7 @@ class MeteorSwarmCardTest {
             }
         };
 
-        meteorSwarmCard = new MeteorSwarmCard(game,  Level.SECOND, safeProjectiles);
+        meteorSwarmCard = new MeteorSwarmCard(game,  Level.SECOND, safeProjectiles, 1);
         meteorSwarmCard.initialize();
     }
 

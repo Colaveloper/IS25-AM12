@@ -75,7 +75,7 @@ class AbandonedShipCardTest {
         };
 
         // creating card
-        card = new AbandonedShipCard(game, Level.SECOND, creditPrize,requiredCrew,flightDaysLost);
+        card = new AbandonedShipCard(game, Level.SECOND, creditPrize,requiredCrew,flightDaysLost, 1);
         card.initialize();
     }
 

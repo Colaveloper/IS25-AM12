@@ -18,8 +18,8 @@ public class CombatZoneCard extends AdventureCard {
     private int checkIndex;
     ShipBoard penalizedShipBoard;
 
-    public CombatZoneCard(Game game, Level level, List<CombatZoneCheck> checks, List<Penalty> penalties) {
-        super(game, level);
+    public CombatZoneCard(Game game, Level level, List<CombatZoneCheck> checks, List<Penalty> penalties, int id) {
+        super(game, level, id);
         this.checks = checks;
         this.penalties = penalties;
     }

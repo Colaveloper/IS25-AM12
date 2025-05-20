@@ -25,6 +25,5 @@ public class RemoveCrewState extends AdventureState{
         if (crewSacrifice <= 0 || shipBoard.getCrewSize() <= 0) {
             game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
         }
-
     }
 }

@@ -13,8 +13,8 @@ public class StarDustCard extends AdventureCard {
 
     List<ShipBoard> invertedShips;
 
-    public StarDustCard(Game game, Level level) {
-        super(game, level);
+    public StarDustCard(Game game, Level level, int id) {
+        super(game, level, id);
     }
 
     @Override
