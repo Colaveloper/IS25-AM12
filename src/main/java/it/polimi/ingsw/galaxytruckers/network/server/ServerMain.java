@@ -17,8 +17,8 @@ public class ServerMain {
             rmiServer.start("Galaxy-Truckers-Server",1234);
         } catch (RemoteException e) {
             System.err.println("Could not start RMI server because of " + e.getMessage());
-        } finally {
-            System.out.println("RMI server has been started...");
+            return;
         }
+        System.out.println("RMI server has been started...");
     }
 }

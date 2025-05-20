@@ -13,15 +13,16 @@ public class EventQueue implements EventListener {
         }
     }
 
-    public synchronized boolean isEmpty() {
+    public boolean isEmpty() {
         return queue.isEmpty();
     }
 
-    public synchronized boolean enqueue(Event event) {
-        return this.queue.offer(event);
+    public boolean enqueue(Event event) {
+        boolean res = this.queue.offer(event);
+        return res;
     }
 
-    public synchronized Event dequeue() throws InterruptedException {
+    public Event dequeue() throws InterruptedException {
         return this.queue.take();
     }
 }

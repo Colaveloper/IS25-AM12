@@ -58,6 +58,9 @@ public abstract class ShipBuildingState extends GameState {
             throw new IllegalStateException("Ship Board already completed");
         }
         Component component = shipBoard.rejectComponent();
+        if (component == null) {
+            throw new IllegalStateException("You don't have any component to reject");
+        }
         componentBank.addToUncoveredComponents(component);
         game.getEventListener().notifyRejectComponentEvent(shipBoard,component);
     }

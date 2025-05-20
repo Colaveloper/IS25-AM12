@@ -13,10 +13,11 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
     public EventQueueHandler(Lobby lobby) {
         this.lobby = lobby;
         this.eventQueue = lobby.getEventQueue();
+        this.thread = new Thread(this::processQueue, "ModelEvent-handler-thread");
     }
 
     public void start() {
-        this.thread = new Thread(this::processQueue, "ModelEvent-handler-thread");
+        this.thread.start();
     }
 
     public void stop() {
@@ -33,6 +34,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
                 handleEvent(event);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                return;
             }
         }
     }
@@ -58,7 +60,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
     public void visit(StartBuildingEvent startBuildingEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
-            client.notifyStartBuilding();
+            client.notifyStartBuilding(lobby.getLevel(), lobby.getNumPlayers());
         }
     }
 

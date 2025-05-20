@@ -268,16 +268,13 @@ public class ClientController implements ClientControllerInterface {
 
     @Override
     public void reportError(String details) {
+        System.out.println("Error: " + details);
         // view.show(ChosenStrategy)
     }
 
     //@Override
     public void registerNickname(String nickname) {
-        try {
-            server.registerNickname(nickname);
-        } catch (IllegalArgumentException e) {
-            reportError("Nickname "+nickname+" is unavailable");
-        }
+        server.registerNickname(nickname);
     }
 
     //@Override

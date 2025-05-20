@@ -29,6 +29,7 @@ public class CliNicknameChoiceScreen extends CliScreen {
     public void parseAndInvoke(String input) {
         try {
             controller.registerNickname(input);
+            controller.setMyNickname(input);
         } catch (IllegalArgumentException e) {
             controller.reportError("Nickname " +input+ " is not available");
         }

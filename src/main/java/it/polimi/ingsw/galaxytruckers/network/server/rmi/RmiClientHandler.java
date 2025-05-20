@@ -39,6 +39,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
         this.controller = controller;
         this.updateThread = new Thread(this::runUpdateThread);
         this.updateTasks = new LinkedBlockingQueue<>();
+        start();
     }
 
     public void start() {
@@ -94,8 +95,8 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     }
 
     @Override
-    public void notifyStartBuilding() {
-        submitUpdateTask(remoteClient::notifyStartBuilding);
+    public void notifyStartBuilding(Level level, int playersN) {
+        submitUpdateTask(() -> remoteClient.notifyStartBuilding(level, playersN));
     }
 
     @Override

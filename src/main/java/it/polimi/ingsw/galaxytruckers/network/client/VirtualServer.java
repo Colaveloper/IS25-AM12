@@ -8,6 +8,7 @@ import java.awt.*;
 import java.util.UUID;
 
 public interface VirtualServer {
+
     void registerNickname(String myNickname);
     void requestNewGame(Level level, int playerN);
     void drawCard();
