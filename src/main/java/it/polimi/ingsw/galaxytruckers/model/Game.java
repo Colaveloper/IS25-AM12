@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.factory.GameFactory;
@@ -189,5 +190,15 @@ public class Game {
                 finalScores.merge(s, (s.getGoodsValue()+1)/2, Integer::sum);
             }
         });
+    }
+
+    @VisibleForTesting
+    public void setFlightBoard(FlightBoard flightBoard){
+        this.flightBoard = flightBoard;
+    }
+
+    @VisibleForTesting
+    public void setDeck(Deck deck){
+        this.deck = deck;
     }
 }

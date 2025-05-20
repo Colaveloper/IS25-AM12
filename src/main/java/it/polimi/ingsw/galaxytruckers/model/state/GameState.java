@@ -121,5 +121,5 @@ public abstract class GameState {
 
     public void endGame(){
         throw new IllegalStateException("Game is not over");
-    }
+    } // TODO: properly override this
 }

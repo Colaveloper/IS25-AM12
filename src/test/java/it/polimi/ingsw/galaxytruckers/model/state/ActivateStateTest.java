@@ -74,7 +74,7 @@ class ActivateStateTest {
             }
         };
         testActivateState.activateComponent(ship2, new Point(7,7));
-        assertEquals(1, testActivateState.getBatteriesToSpend());
+        assertEquals(1, testActivateState.batteriesToSpend);
     }
 
     @Test
@@ -87,7 +87,7 @@ class ActivateStateTest {
             }
         };
         testActivateState.activateComponent(ship2, new Point(7,7));
-        assertEquals(0, testActivateState.getBatteriesToSpend());
+        assertEquals(0, testActivateState.batteriesToSpend);
     }
 
     @Test
@@ -115,7 +115,7 @@ class ActivateStateTest {
             }
         };
         testActivateState.activateComponent(ship2, new Point(7,7));
-        assertEquals(0, testActivateState.getBatteriesToSpend());
+        assertEquals(0, testActivateState.batteriesToSpend);
     }
 
     @Test
@@ -140,7 +140,7 @@ class ActivateStateTest {
         };
         testActivateState.activateComponent(ship2, new Point(7,7));
         testActivateState.spendBatteries(ship2, new Point(7,7), 1);
-        assertEquals(0, testActivateState.getBatteriesToSpend());
+        assertEquals(0, testActivateState.batteriesToSpend);
     }
 
     @Test

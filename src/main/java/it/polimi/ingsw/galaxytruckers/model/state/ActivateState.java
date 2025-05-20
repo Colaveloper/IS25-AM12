@@ -53,9 +53,4 @@ public abstract class ActivateState extends AdventureState{
         }
         game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
     }
-
-    @VisibleForTesting
-    public int getBatteriesToSpend(){
-        return batteriesToSpend;
-    }
 }

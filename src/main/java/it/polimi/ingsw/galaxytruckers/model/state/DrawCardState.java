@@ -24,6 +24,7 @@ public class DrawCardState extends AdventureState {
         if(game.getDeck().tryDrawCard()) {
             game.getDeck().getCurrentCard().initialize();
             GameState nextState = game.getDeck().getCurrentCard().nextStep();
+            game.setCurrentState(nextState);
         } else {
             game.endGame();
         }

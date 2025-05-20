@@ -27,6 +27,9 @@ public class HandleProjectileState extends ActivateState{
 
     @Override
     public void goNext(ShipBoard shipBoard) {
+        if(this.shipBoard != shipBoard){
+            throw new IllegalStateException("It's not your turn");
+        }
         if (batteriesToSpend > 0) {
             throw new IllegalStateException("You still have batteries to spend");
         }
