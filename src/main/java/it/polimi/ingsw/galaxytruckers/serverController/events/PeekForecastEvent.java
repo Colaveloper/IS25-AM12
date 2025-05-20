@@ -12,9 +12,7 @@ public record PeekForecastEvent(String playerName, int deckIndex, List<Integer> 
         return new PeekForecastEvent(
                 Player.getPlayer(shipBoard).getNickname(),
                 deckIndex,
-                new ArrayList<>()
-                //TODO: add ids to adventure cards
-                // forecastDeck.stream().map(AdventureCard::getId).toList()
+                forecastDeck.stream().map(AdventureCard::getId).toList()
         );
     }
 

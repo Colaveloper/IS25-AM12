@@ -32,4 +32,8 @@ public abstract class AdventureCard {
     }
 
     public abstract GameState nextStep();
+
+    public int getId() {
+        return id;
+    }
 }
