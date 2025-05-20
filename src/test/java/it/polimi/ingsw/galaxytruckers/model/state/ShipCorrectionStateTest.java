@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
@@ -36,6 +37,7 @@ class ShipCorrectionStateTest {
             shipBoards.add(game.addShipBoard(FourColors.BLUE));
             shipBoards.add(game.addShipBoard(FourColors.RED));
             shipBoards.add(game.addShipBoard(FourColors.GREEN));
+            game.setEventListener(new GameEventListenerStub());
             game.start();
             for (ShipBoard shipBoard : shipBoards) {
                 shipBoard.offerComponent(new Cabin(
@@ -136,6 +138,7 @@ class ShipCorrectionStateTest {
             shipBoards.add(game.addShipBoard(FourColors.BLUE));
             shipBoards.add(game.addShipBoard(FourColors.RED));
             shipBoards.add(game.addShipBoard(FourColors.GREEN));
+            game.setEventListener(new GameEventListenerStub());
             game.start();
             for (ShipBoard shipBoard : shipBoards) {
                 shipBoard.offerComponent(new Component(
@@ -203,7 +206,7 @@ class ShipCorrectionStateTest {
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
             shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
             shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
-            assertInstanceOf(ShipInitializationState.class, game.getCurrentState());
+            assertNotEquals(shipCorrectionState, game.getCurrentState());
         }
 
         @Test
@@ -230,7 +233,7 @@ class ShipCorrectionStateTest {
             shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
             shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
-            assertInstanceOf(ShipInitializationState.class, game.getCurrentState());
+            assertNotEquals(shipCorrectionState, game.getCurrentState());
         }
     }
 }

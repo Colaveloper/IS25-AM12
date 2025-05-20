@@ -2,8 +2,10 @@ package it.polimi.ingsw.galaxytruckers.network.client.rmi;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.awt.*;
 import java.rmi.Remote;
@@ -33,33 +35,34 @@ public interface RemoteClient extends Remote {
     /**
      * Signals to the client that the ship building phase has started
      */
-    void notifyStartBuilding() throws RemoteException;
+    void notifyStartBuilding(Level level, int playersN) throws RemoteException;
 
     /**
      * Signals to the client that a player has successfully requested
      * a face-down component from the bank
-     * @param playerName the nickname of the player who has requested the component
+     *
+     * @param playerName  the nickname of the player who has requested the component
      * @param componentId the requested component identifier
-     * @param numFaceDown the number of face down components in the bank
      */
-    void notifyFaceDownComponentRequest(String playerName, int componentId, int numFaceDown) throws RemoteException;
+    void notifyFaceDownComponentRequest(String playerName, int componentId) throws RemoteException;
 
     /**
      * Signals to the client that a player has successfully requested
      * a face-up component from the bank
-     * @param playerName the nickname of the player who has requested the component
+     *
+     * @param playerName  the nickname of the player who has requested the component
      * @param componentId the requested component identifier
-     * @param faceUpComponentIds a set containing the ids of all face up components in the bank
      */
-    void notifyFaceUpComponentRequest(String playerName, int componentId, Set<Integer> faceUpComponentIds) throws RemoteException;
+    void notifyFaceUpComponentRequest(String playerName, int componentId) throws RemoteException;
 
     /**
      * Signals to the client that a player has successfully rejected
      * a component
-     * @param playerName the nickname of the player who has rejected the component
+     *
+     * @param playerName  the nickname of the player who has rejected the component
      * @param componentId the rejected component identifier
      */
-    void notifyComponentRejection(String playerName, int componentId, Set<Integer> faceUpComponentIds) throws RemoteException;
+    void notifyComponentRejection(String playerName, int componentId) throws RemoteException;
 
     /**
      * Signals to the client that a player has successfully stashed
@@ -87,19 +90,20 @@ public interface RemoteClient extends Remote {
     /**
      * Signals to the client that the components on a shipboard have changed
      * @param playerName the nickname of the owner of the shipboard that changed
-     * @param componentIdMap a map containing the points and ids of the components
-     *                       currently on the shipboard
+     * @param componentId id of the component added to the ship
+     * @param rotation orientation of the component on the ship
+     * @param position position of the component on the ship
      */
-    void notifyShipMapUpdate(String playerName, Map<Point, Integer> componentIdMap) throws RemoteException;
+    void notifyShipMapUpdate(String playerName, int componentId, int rotation, Point position) throws RemoteException;
 
     /**
      * Sends to the client the information about a forecast deck that the
      * player has decided to peek at
-     * @param deckIndex the index of the forecast deck that is being sent
+     *
      * @param deckCardIds a list containing the ids of cards included in
      *                    the peeked forecast deck
      */
-    void sendForecastDeck(int deckIndex, List<Integer> deckCardIds) throws RemoteException;
+    void sendForecastDeck(List<Integer> deckCardIds) throws RemoteException;
 
     /**
      * Signals to the client that a player has successfully peeked at a
@@ -122,11 +126,10 @@ public interface RemoteClient extends Remote {
     /**
      * Signals to the client that a player has finished building and has successfully
      * placed his ship on the flight-board
+     *
      * @param playerName the nickname of the player who finished building
-     * @param playerToPlace a map containing all players on the flightBoard and their
-     *                      positions
      */
-    void notifyPlaceShipOnFlightBoard(String playerName, Map<String, Integer> playerToPlace) throws RemoteException;
+    void notifyPlaceShipOnFlightBoard(String playerName) throws RemoteException;
 
     /**
      * Signals to the client that their ship is not connected and that they should
@@ -189,4 +192,20 @@ public interface RemoteClient extends Remote {
      * @param playerNames the nicknames of the players who have surrendered
      */
     void notifySurrender(List<String> playerNames) throws RemoteException;
+
+    void notifyHourglassEnd() throws RemoteException;
+
+    void notifyComponentRemoval(String playerName, Point position) throws RemoteException;
+
+    void notifyShipPieceRemoval(String playerName, List<Point> positions) throws RemoteException;
+
+    void notifySelection(String playerName, List<Point> selectablePoints) throws RemoteException;
+
+    void notifyPlanetChoice(String playerName, int planetId, List<Point> cargoPositions) throws RemoteException;
+
+    void updateGoodsBuffer(GoodsType type) throws RemoteException;
+
+    void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws RemoteException;
+
+    void showFinalScores(Map<String, Integer> playerToScore) throws RemoteException;
 }

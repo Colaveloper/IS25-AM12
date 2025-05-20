@@ -2,15 +2,13 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.GuiScreen;
+import it.polimi.ingsw.galaxytruckers.view.screens.GuiScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class GuiGameCreationScreen extends GuiScreen {

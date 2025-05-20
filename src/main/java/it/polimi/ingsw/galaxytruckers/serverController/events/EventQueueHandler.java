@@ -13,10 +13,11 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
     public EventQueueHandler(Lobby lobby) {
         this.lobby = lobby;
         this.eventQueue = lobby.getEventQueue();
+        this.thread = new Thread(this::processQueue, "ModelEvent-handler-thread");
     }
 
     public void start() {
-        this.thread = new Thread(this::processQueue, "Event-handler-thread");
+        this.thread.start();
     }
 
     public void stop() {
@@ -33,6 +34,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
                 handleEvent(event);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                return;
             }
         }
     }
@@ -58,7 +60,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
     public void visit(StartBuildingEvent startBuildingEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
-            client.notifyStartBuilding();
+            client.notifyStartBuilding(lobby.getLevel(), lobby.getNumPlayers());
         }
     }
 
@@ -68,8 +70,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
             VirtualClient client = SessionManager.getInstance().getClient(p);
             client.notifyFaceUpComponentRequest(
                     requestFaceUpComponentEvent.playerName(),
-                    requestFaceUpComponentEvent.componentId(),
-                    requestFaceUpComponentEvent.faceUpComponentIds());
+                    requestFaceUpComponentEvent.componentId());
         }
     }
 
@@ -79,8 +80,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyFaceDownComponentRequest(
                     requestFaceDownComponentEvent.playerName(),
-                    requestFaceDownComponentEvent.componentId(),
-                    requestFaceDownComponentEvent.numFaceDown()
+                    requestFaceDownComponentEvent.componentId()
             );
         }
     }
@@ -91,8 +91,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyComponentRejection(
                     rejectComponentEvent.playerName(),
-                    rejectComponentEvent.componentId(),
-                    rejectComponentEvent.faceUpComponentIds()
+                    rejectComponentEvent.componentId()
             );
         }
     }
@@ -109,12 +108,14 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
     }
 
     @Override
-    public void visit(ShipMapUpdateEvent shipMapUpdateEvent) {
+    public void visit(PlaceComponentEvent placeComponentEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
-            client.notifyShipMapUpdate(
-                    shipMapUpdateEvent.playerName(),
-                    shipMapUpdateEvent.componentIdMap()
+            client.notifyComponentPositioning(
+                    placeComponentEvent.playerName(),
+                    placeComponentEvent.componentId(),
+                    placeComponentEvent.rotation(),
+                    placeComponentEvent.position()
             );
         }
     }
@@ -125,7 +126,6 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             if (peekForecastEvent.playerName().equals(player.getNickname())) {
                 client.sendForecastDeck(
-                        peekForecastEvent.deckIndex(),
                         peekForecastEvent.forecastDeckIds()
                 );
             } else {
@@ -172,49 +172,49 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
     }
 
     @Override
-    public void visit(PlaceShipOnFlightBoardEvent placeShipOnFlightBoardEvent) {
+    public void visit(FlightBoardUpdateEvent flightBoardUpdateEvent) {
         for  (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
-            client.notifyPlaceShipOnFlightBoard(
-                    placeShipOnFlightBoardEvent.playerName(),
-                    placeShipOnFlightBoardEvent.playerToPlace()
+            client.notifyPlayerPosition(
+                    flightBoardUpdateEvent.playerName(),
+                    flightBoardUpdateEvent.position()
             );
         }
     }
 
     @Override
-    public void visit(CabinUpdate cabinUpdate) {
+    public void visit(CabinUpdateEvent cabinUpdateEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyCabinUpdate(
-                    cabinUpdate.playerName(),
-                    cabinUpdate.point(),
-                    cabinUpdate.numResidents(),
-                    cabinUpdate.crewType()
+                    cabinUpdateEvent.playerName(),
+                    cabinUpdateEvent.point(),
+                    cabinUpdateEvent.numResidents(),
+                    cabinUpdateEvent.crewType()
             );
         }
     }
 
     @Override
-    public void visit(BatteryUpdate batteryUpdate) {
+    public void visit(BatteryUpdateEvent batteryUpdateEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyBatteryUpdate(
-                    batteryUpdate.playerName(),
-                    batteryUpdate.point(),
-                    batteryUpdate.numBatteries()
+                    batteryUpdateEvent.playerName(),
+                    batteryUpdateEvent.point(),
+                    batteryUpdateEvent.numBatteries()
             );
         }
     }
 
     @Override
-    public void visit(CargoHoldUpdate cargoHoldUpdate) {
+    public void visit(CargoHoldUpdateEvent cargoHoldUpdateEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyCargoHoldUpdate(
-                    cargoHoldUpdate.playerName(),
-                    cargoHoldUpdate.point(),
-                    cargoHoldUpdate.cargo()
+                    cargoHoldUpdateEvent.playerName(),
+                    cargoHoldUpdateEvent.point(),
+                    cargoHoldUpdateEvent.cargo()
             );
         }
     }
@@ -245,5 +245,97 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifySurrender(surrenderEvent.playerNames());
         }
+    }
+
+    @Override
+    public void visit(HourglassEndEvent hourglassEndEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.notifyHourglassEnd();
+        }
+    }
+
+    @Override
+    public void visit(ShipPieceRemoveEvent shipPieceRemoveEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.notifyShipPieceRemoval(
+                    shipPieceRemoveEvent.playerName(),
+                    shipPieceRemoveEvent.positions()
+            );
+        }
+    }
+
+    @Override
+    public void visit(SelectionPointsEvent selectionPointsEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.notifySelection(
+                    selectionPointsEvent.playerName(),
+                    selectionPointsEvent.points()
+            );
+        }
+    }
+
+    @Override
+    public void visit(PlanetChoiceEvent planetChoiceEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.notifyPlanetChoice(
+                    planetChoiceEvent.playerName(),
+                    planetChoiceEvent.planetId(),
+                    planetChoiceEvent.cargoPoints());
+        }
+    }
+
+    @Override
+    public void visit(GoodsBufferUpdateEvent goodsBufferUpdateEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.updateGoodsBuffer(
+                    goodsBufferUpdateEvent.goodsType()
+            );
+        }
+    }
+
+    @Override
+    public void visit(ProjectileEvent projectileEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.showProjectile(
+                    projectileEvent.projectileType(),
+                    projectileEvent.direction(),
+                    projectileEvent.roll(),
+                    projectileEvent.selectablePoints(),
+                    projectileEvent.batteries()
+            );
+        }
+    }
+
+    @Override
+    public void visit(GameEndEvent gameEndEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.showFinalScores(
+                    gameEndEvent.playerToScore()
+            );
+        }
+    }
+
+    @Override
+    public void visit(InvalidShipsUpdateEvent invalidShipsUpdateEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.notifyInvalidShipsUpdate(
+                    invalidShipsUpdateEvent.invalidPlayers()
+            );
+        }
+    }
+
+    @Override
+    public void visit(ShipNotConnectedEvent shipNotConnectedEvent) {
+        Player player = Player.getPlayer(shipNotConnectedEvent.playerName());
+        VirtualClient client = SessionManager.getInstance().getClient(player);
+        client.showShipPieces(shipNotConnectedEvent.shipPieces());
     }
 }

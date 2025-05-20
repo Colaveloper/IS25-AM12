@@ -2,15 +2,14 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.Hourglass;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public abstract class ShipBuildingState extends GameState {
@@ -28,11 +27,19 @@ public abstract class ShipBuildingState extends GameState {
     }
 
     @Override
+    public void setGame(Game game) {
+        super.setGame(game);
+        game.getEventListener().notifyStartBuildingEvent();
+    }
+
+    @Override
     public void requestRandComponent(ShipBoard shipBoard) {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        shipBoard.offerComponent(componentBank.drawRandComponent());
+        Component component = componentBank.drawRandComponent();
+        shipBoard.offerComponent(component);
+        game.getEventListener().notifyRequestFaceDownComponentEvent(shipBoard,component);
     }
 
     @Override
@@ -40,7 +47,9 @@ public abstract class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        shipBoard.offerComponent(componentBank.removeUncoveredComponent(componentId));
+        Component component = componentBank.removeUncoveredComponent(componentId);
+        shipBoard.offerComponent(component);
+        game.getEventListener().notifyRequestFaceUpComponentEvent(shipBoard,component);
     }
 
     @Override
@@ -48,7 +57,12 @@ public abstract class ShipBuildingState extends GameState {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        componentBank.addToUncoveredComponents(shipBoard.rejectComponent());
+        Component component = shipBoard.rejectComponent();
+        if (component == null) {
+            throw new IllegalStateException("You don't have any component to reject");
+        }
+        componentBank.addToUncoveredComponents(component);
+        game.getEventListener().notifyRejectComponentEvent(shipBoard,component);
     }
 
     @Override
@@ -67,6 +81,8 @@ public abstract class ShipBuildingState extends GameState {
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.placeComponent(point, orientation);
+        Component component = shipBoard.getLastComponent().orElseThrow();
+        game.getEventListener().notifyPlaceComponentEvent(shipBoard,component,point);
     }
 
     @Override
@@ -91,6 +107,7 @@ public abstract class ShipBuildingState extends GameState {
         if (game.getFlightBoard().placeShipOnFlightBoard(shipBoard, position)) {
             endBuilding();
         }
+        game.getEventListener().notifyFlightBoardUpdateEvent(shipBoard,position);
     }
 
     @Override

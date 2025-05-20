@@ -8,8 +8,10 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.serverController.events.EventListener;
 
 import java.awt.*;
+import java.io.IOException;
 
 public class GameModel implements GameModelInterface {
     @Override
@@ -20,6 +22,22 @@ public class GameModel implements GameModelInterface {
     @Override
     public ShipBoard addShip(Game game, FourColors color) {
         return game.addShipBoard(color);
+    }
+
+    @Override
+    public void setEventListener(Game game, EventListener listener) {
+        GameEventListener gameEventListener = new GameEventListener();
+        gameEventListener.setControllerListener(listener);
+        game.setEventListener(gameEventListener);
+    }
+
+    @Override
+    public void startGame(Game game) {
+        try {
+            game.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -83,8 +101,8 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public void initializeCabin(Game game, ShipBoard shipBoard, CrewType crewType) {
-        game.getCurrentState().initializeCabin(shipBoard, crewType);
+    public void initializeCabin(Game game, ShipBoard shipBoard, Point point, CrewType crewType) {
+        game.getCurrentState().initializeCabin(shipBoard, point, crewType);
     }
 
     @Override

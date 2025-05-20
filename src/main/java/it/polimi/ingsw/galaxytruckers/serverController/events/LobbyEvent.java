@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Event signaling a player has either joined or left a lobby
+ * ModelEvent signaling a player has either joined or left a lobby
  * @param playerName the nickname of the player who left/joined
  * @param playerColors a map containing the nicknames of all players in the lobby
  *                     and their assigned colors
@@ -31,7 +31,4 @@ public record LobbyEvent(String playerName, Map<String, FourColors> playerColors
     public void accept(EventVisitor visitor) {
         visitor.visit(this);
     }
-
-    //TODO: add ColorChoiceEvent if we decide to leave choice to the player,
-    // otherwise it can be derived from this event
 }

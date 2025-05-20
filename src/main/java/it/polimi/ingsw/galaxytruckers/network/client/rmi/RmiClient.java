@@ -5,11 +5,14 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteServer;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteController;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.awt.*;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -22,7 +25,8 @@ import java.util.UUID;
 
 public class RmiClient extends UnicastRemoteObject implements RemoteClient, VirtualServer {
     private RemoteServer server;
-    private RemoteController controller;
+    private RemoteController remoteController;
+    private ClientControllerInterface clientController;
 
     public RmiClient() throws RemoteException {
         super();
@@ -41,6 +45,10 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
         }
     }
 
+    public void setClientController(ClientControllerInterface clientController) {
+        this.clientController =  clientController;
+    }
+
     private void handleNetworkError(RemoteException e) {
         //TODO: define a way to handle network errors
         throw new RuntimeException("Failed to handle network exception", e);
@@ -51,7 +59,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void registerNickname(String myNickname) {
         try {
-            this.controller = server.registerNickname(this, myNickname);
+            this.remoteController = server.registerNickname(this, myNickname);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -60,7 +68,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void requestNewGame(Level level, int playerN) {
         try {
-            controller.newGame(level, playerN);
+            remoteController.newGame(level, playerN);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -69,7 +77,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void drawCard() {
         try {
-            controller.drawCard();
+            remoteController.drawCard();
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -78,7 +86,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void joinLobby(UUID lobbyID) {
         try {
-            controller.joinLobby(lobbyID);
+            remoteController.joinLobby(lobbyID);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -87,7 +95,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void leaveLobby(String nickname) {
         try {
-            controller.leaveLobby();
+            remoteController.leaveLobby();
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -96,7 +104,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void requestRandComponent() {
         try {
-            controller.requestRandComponent();
+            remoteController.requestRandComponent();
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -105,7 +113,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void requestComponent(int componentID) {
         try {
-            controller.requestComponent(componentID);
+            remoteController.requestComponent(componentID);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -114,7 +122,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void rejectComponent() {
         try {
-            controller.rejectComponent();
+            remoteController.rejectComponent();
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -123,7 +131,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void stashComponent() {
         try {
-            controller.stashComponent();
+            remoteController.stashComponent();
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -132,7 +140,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void grabStashedComponent(int index) {
         try {
-            controller.grabStashedComponent(index);
+            remoteController.grabStashedComponent(index);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -141,7 +149,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void placeComponent(Point point, int orientation) {
         try {
-            controller.placeComponent(point, orientation);
+            remoteController.placeComponent(point, orientation);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -150,7 +158,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void flipHourglass() {
         try {
-            controller.flipHourglass();
+            remoteController.flipHourglass();
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -159,7 +167,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void placeShipOnFlightBoard(int startingPosition) {
         try {
-            controller.placeShipOnFlightBoard(startingPosition);
+            remoteController.placeShipOnFlightBoard(startingPosition);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -168,7 +176,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void acquireForecast(int deckIndex) {
         try {
-            controller.acquireForecast(deckIndex);
+            remoteController.acquireForecast(deckIndex);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -177,7 +185,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void releaseForecast() {
         try {
-            controller.releaseForecast();
+            remoteController.releaseForecast();
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -186,7 +194,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void removeComponent(Point point) {
         try {
-            controller.removeComponent(point);
+            remoteController.removeComponent(point);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -195,7 +203,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void chooseShipPiece(int pieceIndex) {
         try {
-            controller.chooseShipPiece(pieceIndex);
+            remoteController.chooseShipPiece(pieceIndex);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -204,7 +212,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void initializeCabin(Point point, CrewType crewType) {
         try {
-            controller.initializeCabin(point, crewType);
+            remoteController.initializeCabin(point, crewType);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -213,7 +221,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void activateComponent(Point point) {
         try {
-            controller.activateComponent(point);
+            remoteController.activateComponent(point);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -222,7 +230,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void loseCrew(Point point) {
         try {
-            controller.loseCrew(point);
+            remoteController.loseCrew(point);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -231,7 +239,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void grabReward(boolean rewardGrabbed) {
         try {
-            controller.grabReward(rewardGrabbed);
+            remoteController.grabReward(rewardGrabbed);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -240,7 +248,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void placeGoods(Point point, GoodsType goodsType) {
         try {
-            controller.placeGoods(point, goodsType);
+            remoteController.placeGoods(point, goodsType);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -249,7 +257,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void removeGoods(Point point, GoodsType goodsType) {
         try {
-            controller.removeGoods(point, goodsType);
+            remoteController.removeGoods(point, goodsType);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -258,7 +266,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void loseGoods(Point point) {
         try {
-            controller.loseGoods(point);
+            remoteController.loseGoods(point);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -267,7 +275,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void useBattery(Point point) {
         try {
-            controller.useBattery(point);
+            remoteController.useBattery(point);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -276,7 +284,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void choosePlanet(int choice) {
         try {
-            controller.choosePlanet(choice);
+            remoteController.choosePlanet(choice);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -285,7 +293,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void goNext(String nickname) {
         try {
-            controller.goNext();
+            remoteController.goNext();
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -294,7 +302,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void giveUp(String nickname) {
         try {
-            controller.giveUp();
+            remoteController.giveUp();
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -305,42 +313,42 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
 
     @Override
     public void setupLobby(UUID lobbyId, Map<String, FourColors> playerColors) throws RemoteException {
-
+        clientController.updateLobbyPlayers(playerColors);
     }
 
     @Override
     public void updateLobbyPlayers(Map<String, FourColors> playerColors) throws RemoteException {
-
+        clientController.updateLobbyPlayers(playerColors);
     }
 
     @Override
-    public void notifyStartBuilding() throws RemoteException {
-
+    public void notifyStartBuilding(Level level, int playersN) throws RemoteException {
+        clientController.notifyNewGame(level, playersN);
     }
 
     @Override
-    public void notifyFaceDownComponentRequest(String playerName, int componentId, int numFaceDown) throws RemoteException {
-
+    public void notifyFaceDownComponentRequest(String playerName, int componentId) throws RemoteException {
+        clientController.notifyFaceDownComponentRequest(playerName,componentId);
     }
 
     @Override
-    public void notifyFaceUpComponentRequest(String playerName, int componentId, Set<Integer> faceUpComponentIds) throws RemoteException {
-
+    public void notifyFaceUpComponentRequest(String playerName, int componentId) throws RemoteException {
+        clientController.notifyFaceUpComponentRequest(playerName,componentId);
     }
 
     @Override
-    public void notifyComponentRejection(String playerName, int componentId, Set<Integer> faceUpComponentIds) throws RemoteException {
-
+    public void notifyComponentRejection(String playerName, int componentId) throws RemoteException {
+        clientController.notifyComponentRejection(playerName,componentId);
     }
 
     @Override
     public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) throws RemoteException {
-
+        clientController.notifyStashComponent(playerName,stashComponentIds);
     }
 
     @Override
     public void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) throws RemoteException {
-
+        clientController.notifyGrabFromStash(playerName,componentId,stashComponentIds);
     }
 
     @Override
@@ -349,12 +357,12 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
-    public void notifyShipMapUpdate(String playerName, Map<Point, Integer> componentIdMap) throws RemoteException {
+    public void notifyShipMapUpdate(String playerName, int componentId, int rotation, Point position) throws RemoteException {
 
     }
 
     @Override
-    public void sendForecastDeck(int deckIndex, List<Integer> deckCardIds) throws RemoteException {
+    public void sendForecastDeck(List<Integer> deckCardIds) throws RemoteException {
 
     }
 
@@ -369,7 +377,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
-    public void notifyPlaceShipOnFlightBoard(String playerName, Map<String, Integer> playerToPlace) throws RemoteException {
+    public void notifyPlaceShipOnFlightBoard(String playerName) throws RemoteException {
 
     }
 
@@ -410,6 +418,46 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
 
     @Override
     public void notifySurrender(List<String> playerNames) throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyHourglassEnd() throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyComponentRemoval(String playerName, Point position) throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyShipPieceRemoval(String playerName, List<Point> positions) throws RemoteException {
+
+    }
+
+    @Override
+    public void notifySelection(String playerName, List<Point> selectablePoints) throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyPlanetChoice(String playerName, int planetId, List<Point> cargoPositions) throws RemoteException {
+
+    }
+
+    @Override
+    public void updateGoodsBuffer(GoodsType type) throws RemoteException {
+
+    }
+
+    @Override
+    public void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws RemoteException {
+
+    }
+
+    @Override
+    public void showFinalScores(Map<String, Integer> playerToScore) throws RemoteException {
 
     }
 }

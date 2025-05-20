@@ -1,19 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.GuiScreen;
+import it.polimi.ingsw.galaxytruckers.view.screens.GuiScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
-import java.io.IOException;
 
 public class GuiLobbyScreen extends GuiScreen {
 

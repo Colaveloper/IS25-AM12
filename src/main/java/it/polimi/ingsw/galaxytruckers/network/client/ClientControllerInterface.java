@@ -8,8 +8,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.awt.*;
-import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,9 +25,8 @@ public interface ClientControllerInterface {
      * Color assignment is automatic for now
      *
      * @param playerToColor a map linking player nicknames to their chosen colors
-     * @throws IOException if a communication error occurs
      */
-    void updateLobbyPlayers(Map<String, FourColors> playerToColor) throws IOException;
+    void updateLobbyPlayers(Map<String, FourColors> playerToColor);
 
 
     //-----------------------------BUILDING PHASE----------------------------------
@@ -40,9 +37,8 @@ public interface ClientControllerInterface {
      *
      * @param playerName         the name of the player
      * @param stashComponentIds  list of component IDs currently in the stash, always 2 components, no component has index = 0
-     * @throws IOException if a communication error occurs
      */
-    void notifyStashComponent(String playerName, List<Integer> stashComponentIds) throws IOException;
+    void notifyStashComponent(String playerName, List<Integer> stashComponentIds);
 
     /**
      * Notifies that a player has taken a component from the stash, called when anyone picks from stashed.
@@ -51,9 +47,8 @@ public interface ClientControllerInterface {
      * @param playerName         the name of the player
      * @param componentId        the ID of the grabbed component
      * @param stashComponentIds  updated list of all components in the stash
-     * @throws IOException if a communication error occurs
      */
-    void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) throws IOException;
+    void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds);
 
     /**
      * Notifies that a player has positioned a component on their ship.
@@ -62,9 +57,8 @@ public interface ClientControllerInterface {
      * @param componentId  the ID of the placed component
      * @param direction    the rotation of the component
      * @param position     the grid position where the component was placed
-     * @throws IOException if a communication error occurs
      */
-    void notifyComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException;
+    void notifyComponentPositioning(String nickname, int componentId, int direction, Point position);
 
     /**
      * Notifies that a component has been rejected by a player.
@@ -72,9 +66,8 @@ public interface ClientControllerInterface {
      *
      * @param playerName   the name of the player
      * @param componentId  the ID of the rejected component
-     * @throws IOException if a communication error occurs
      */
-    void notifyComponentRejection(String playerName, int componentId) throws IOException;
+    void notifyComponentRejection(String playerName, int componentId);
 
     /**
      * Notifies that a player has requested a face-down component
@@ -82,9 +75,8 @@ public interface ClientControllerInterface {
      *
      * @param playerName   the name of the player
      * @param componentId  the ID of the requested component
-     * @throws IOException if a communication error occurs
      */
-    void notifyFaceDownComponentRequest(String playerName, int componentId) throws IOException;
+    void notifyFaceDownComponentRequest(String playerName, int componentId);
 
     /**
      * Notifies that a player has requested a face-up component.
@@ -92,18 +84,16 @@ public interface ClientControllerInterface {
      *
      * @param playerName   the name of the player
      * @param componentId  the ID of the requested component
-     * @throws IOException if a communication error occurs
      */
-    void notifyFaceUpComponentRequest(String playerName, int componentId) throws IOException;
+    void notifyFaceUpComponentRequest(String playerName, int componentId);
 
     /**
      * Notifies that another player is peeking at a forecast deck and locks it until released.
      *
      * @param playerName  the name of the player
      * @param deckIndex   the index of the forecast deck
-     * @throws IOException if a communication error occurs
      */
-    void notifyPeekForecast(String playerName, int deckIndex) throws IOException;
+    void notifyPeekForecast(String playerName, int deckIndex);
 
     /**
      * Notifies that anyone has released a forecast deck and sets it as free
@@ -111,9 +101,8 @@ public interface ClientControllerInterface {
      *
      * @param playerName  the name of the player
      * @param deckIndex   the index of the forecast deck
-     * @throws IOException if a communication error occurs
      */
-    void notifyReleaseForecast(String playerName, int deckIndex) throws IOException;
+    void notifyReleaseForecast(String playerName, int deckIndex);
 
     /**
      * Sends the forecast deck to one client.
@@ -121,9 +110,8 @@ public interface ClientControllerInterface {
      * other clients get notifyPeekForecast to lock that deck instead
      *
      * @param deckCardIds list of card IDs in the forecast deck
-     * @throws IOException if a communication error occurs
      */
-    void sendForecastDeck(List<Integer> deckCardIds) throws IOException;
+    void sendForecastDeck(List<Integer> deckCardIds);
 
     /**
      * Notifies that a player has flipped the hourglass.
@@ -147,9 +135,8 @@ public interface ClientControllerInterface {
      * @param position  the position of the cabin
      * @param crew      number of crew members
      * @param crewType  type of crew
-     * @throws IOException if a communication error occurs
      */
-    void notifyCabinUpdate(String nickname, Point position, int crew, CrewType crewType) throws IOException;
+    void notifyCabinUpdate(String nickname, Point position, int crew, CrewType crewType);
 
 
     //-----------------------------BOTH BUILDING AND ADVENTURE----------------------------------
@@ -160,34 +147,31 @@ public interface ClientControllerInterface {
      *
      * @param playerName the name of the player
      * @param position   the new position on the flight board
-     * @throws IOException if a communication error occurs
      */
-    void notifyPlayerPosition(String playerName, int position) throws IOException;
+    void notifyPlayerPosition(String playerName, int position);
 
     /**
      * Notifies that a multiple components of a ship have been removed because it was disconnected.
      *
      * @param nickname          the player's nickname
      * @param positionPoints    the position of the removed components
-     * @throws IOException      if a communication error occurs
      */
-    void notifyComponentsRemoval(String nickname, List<Point> positionPoints) throws IOException;
+    void notifyComponentsRemoval(String nickname, List<Point> positionPoints);
 
     /**
      * Signals to the client that their ship is not connected and that they should
      * choose one of the given pieces to keep
      * @param nickname who has the ship in pieces
      * @param shipPieces a list containing the ship's connected subsets
-     * @throws IOException      if a communication error occurs
      */
-    void showShipPieces(String nickname, List<Set<Point>> shipPieces) throws IOException;
+    void showShipPieces(String nickname, List<Set<Point>> shipPieces);
 
     /**
      * Signals to the client that the list of valid ships has changed
      * @param invalidPlayers a list containing the nicknames of players whose
      *                       ships are not valid
      */
-    void notifyInvalidShipsUpdate(List<String> invalidPlayers) throws IOException;
+    void notifyInvalidShipsUpdate(List<String> invalidPlayers);
 
     /**
      * Notifies a change in any stat of a ship
@@ -196,9 +180,8 @@ public interface ClientControllerInterface {
      * @param nickname  the player's nickname
      * @param statType  the type of stat being updated FIREPOWER,ENGINEPOWER,CREWSIZE,BATTERIES,CREDITS,LOSSES
      * @param value     the new stat value
-     * @throws IOException if a communication error occurs
      */
-    void notifyShipStatusUpdate(String nickname, StatType statType, int value) throws IOException;
+    void notifyShipStatusUpdate(String nickname, StatType statType, int value);
 
 
     //-----------------------------ADVENTURE PHASE----------------------------------
@@ -207,9 +190,8 @@ public interface ClientControllerInterface {
      * Notifies that a new card has been drawn.
      *
      * @param cardId the ID of the new card
-     * @throws IOException if a communication error occurs
      */
-    void notifyNewCard(int cardId) throws IOException;
+    void notifyNewCard(int cardId);
 
     /**
      * Notifies the current player that he can interact with some component
@@ -223,9 +205,8 @@ public interface ClientControllerInterface {
      *
      * @param nickname          the player's nickname
      * @param cannonsPositions  selectable cannon points
-     * @throws IOException      if a communication error occurs
      */
-    void notifySelection(String nickname, List<Point> cannonsPositions) throws IOException;
+    void notifySelection(String nickname, List<Point> cannonsPositions);
 
     /**
      * Notifies that placed OR REMOVED a good in a cargo hold.
@@ -235,9 +216,8 @@ public interface ClientControllerInterface {
      * @param nickname  the player's nickname
      * @param position  the position of the cargo hold
      * @param goods     map of goods and their quantities
-     * @throws IOException if a communication error occurs
      */
-    void notifyCargoHoldUpdate(String nickname, Point position, Map<GoodsType, Integer> goods) throws IOException;
+    void notifyCargoHoldUpdate(String nickname, Point position, Map<GoodsType, Integer> goods);
 
     /**
      * Informs everyone of the chosen planet, then the client loads the goods from the card
@@ -246,17 +226,15 @@ public interface ClientControllerInterface {
      *
      * @param planetId          the index of the planet chosen
      * @param cargoPositions    positions of cargo hold component for highlights
-     * @throws IOException      if a communication error occurs
      */
-    void choosePlanet(int planetId, List<Point> cargoPositions) throws IOException;
+    void choosePlanet(int planetId, List<Point> cargoPositions);
 
     /**
      * Updates the available goods buffer after a good is picked.
      *
      * @param type the type of good picked
-     * @throws IOException if a communication error occurs
      */
-    void updateGoodsBuffer(GoodsType type) throws IOException;
+    void updateGoodsBuffer(GoodsType type);
 
     /**
      * Displays a projectile being fired, consuming batteries happens in the same screen.
@@ -269,9 +247,8 @@ public interface ClientControllerInterface {
      * @param roll              the result of the dice roll
      * @param selectablePoints  list of component position that can be activated
      * @param batteries         position of batteries components
-     * @throws IOException if a communication error occurs
      */
-    void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws IOException;
+    void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries);
 
 
     //-----------------------------ENDGAME PHASE----------------------------------
@@ -287,27 +264,26 @@ public interface ClientControllerInterface {
      * //todo i don t know how exceptions are used for the connection but this had to be removed(?)
      *
      * @param details a message describing the error
-     * @throws RemoteException if a remote communication error occurs
      */
-    void reportError(String details) throws RemoteException;
+    void reportError(String details);
 
     void notifyNewGame(Level level, int i);
-
-    void registerNickname(String input);
-
-    void flipHourglass();
-
-    void requestRandComponent();
-
-    void requestComponent(int index);
-
-    void stashComponent();
-
-    void grabStashedComponent(int index);
-
-    void acquireForecast(int index);
-
-    void rejectComponent();
-
-    void placeComponent(Point point);
+//
+//    void registerNickname(String input);
+//
+//    void flipHourglass();
+//
+//    void requestRandComponent();
+//
+//    void requestComponent(int index);
+//
+//    void stashComponent();
+//
+//    void grabStashedComponent(int index);
+//
+//    void acquireForecast(int index);
+//
+//    void rejectComponent();
+//
+//    void placeComponent(Point point, int orientation);
 }

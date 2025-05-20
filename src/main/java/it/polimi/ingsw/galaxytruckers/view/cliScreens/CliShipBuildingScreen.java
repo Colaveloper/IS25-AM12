@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
 
 import java.awt.*;
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class CliShipBuildingScreen extends CliScreen {
     public CliShipBuildingScreen(ClientModel model, ClientController controller) throws IOException {
         super(model, controller);
 
-        componentBank = new CliComponentBank(model);
+        componentBank = CliComponentBank.getInstance(model);
         componentBank.addListener(this);
 
         flightBoard = new CliFlightBoard(model);
@@ -37,14 +38,20 @@ public class CliShipBuildingScreen extends CliScreen {
         output.addAll(flightBoard.getDescription());
         output.addAll(allShips.getDescription());
 
-        output.add("C       \tGet New covered component");
-        output.add("U [i]   \tGet i-th uncovered component");
-        output.add("S [i]   \tGet i-th stashed component");         // NOT IN Levels.TEST
-        output.add("F [i]   \tGet i-th forecast deck");             // NOT IN Levels.TEST
+        output.add("C       \tGet New covered component" + "\t\t\tU [i]   \tGet i-th uncovered component");
+        //output.add("U [i]   \tGet i-th uncovered component");
+        output.add("S [i]   \tGet i-th stashed component" + "\t\t\tF [i]   \tGet i-th forecast deck");         // NOT IN Levels.TEST
+        //output.add("F [i]   \tGet i-th forecast deck");             // NOT IN Levels.TEST
 
         if (model.existsUnwelded()) {
-            output.add("R       \tReject current component");
-            output.add("P [x] [y] \tPlace current component in position x, y");
+            //output.add("R       \tReject current component");
+            output.add("P [x] [y] \tPlace last component in x, y" + "\t\t\tR       \tReject last component");
+            output.add("S       \tStash last component");        // NOT IN Levels.TEST
+            output.add("L       \tRotate last component left");
+        }
+        else if (model.currentComponentProperty().get().getType() != ComponentType.EMPTY_AREA) {
+            //output.add("R       \tReject current component");
+            output.add("P [x] [y] \tPlace current component in x, y" + "\t\t\tR       \tReject current component");
             output.add("S       \tStash current component");        // NOT IN Levels.TEST
             output.add("L       \tRotate current component left");
         }
@@ -69,8 +76,9 @@ public class CliShipBuildingScreen extends CliScreen {
 
             case "U":
                 if (parts.length == 2) {
-                    int index = Integer.parseInt(parts[1]);
-                    controller.requestComponent(index);
+                    int index = Integer.parseInt(parts[1])-1;
+                    int componentId = model.revealedComponentsProperty().get(index).getComponentId();
+                    controller.requestComponent(componentId);
                 }
                 break;
 
@@ -98,7 +106,7 @@ public class CliShipBuildingScreen extends CliScreen {
                 if (parts.length == 3) {
                     int x = Integer.parseInt(parts[1]);
                     int y = Integer.parseInt(parts[2]);
-                    controller.placeComponent(new Point(x, y));
+                    controller.placeComponent(new Point(x, y), 0);//todo add orientation
                 }
                 break;
 

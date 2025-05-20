@@ -20,6 +20,7 @@ class ClientControllerTest {
     static Set<Point> shipArea;
     static int coveredComponentsN;
     static List<Integer> faceUpComponents;
+    static int userHandComponentId;
 
     static void setUp() {
         nicknames = new HashMap<>();
@@ -45,21 +46,30 @@ class ClientControllerTest {
 
             @Override
             public void requestRandComponent() {
+                userHandComponentId = (int) (Math.random()*33);
                 System.out.println("FAKE SERVER EVENT: you took a covered component");
-                controller.notifyFaceDownComponentRequest("qwe", (int) (Math.random()*50));
+                controller.notifyFaceDownComponentRequest("qwe", userHandComponentId);
             }
 
             @Override
-            public void requestComponent(int componentID) { // TODO: MAKE THIS METHOD CALLABLE
-                faceUpComponents.remove(1);
+            public void requestComponent(int componentId) {
+//                faceUpComponents.removeIf(c -> c.getId() == componentId); // can't be properly mocked up here
+                userHandComponentId = componentId;
                 System.out.println("FAKE SERVER EVENT: the requested face up component was successfully taken");
-                controller.notifyFaceUpComponentRequest("qwe", componentID);
+                controller.notifyFaceUpComponentRequest("qwe", componentId);
             }
 
 
             @Override
-            public void grabStashedComponent(int componentID) {
+            public void grabStashedComponent(int stashIndex) {
+                System.out.println("FAKE SERVER EVENT: grab stashed component");
+                controller.notifyGrabFromStash("qwe", 5, List.of(0, 0));
+            }
 
+            @Override
+            public void stashComponent() {
+                System.out.println("FAKE SERVER EVENT: stashed component");
+                controller.notifyStashComponent("qwe", List.of(4, 0));
             }
 
             @Override
@@ -80,33 +90,33 @@ class ClientControllerTest {
             }
 
             @Override
-            public void acquireForecast(int deckIndex) {
-
-            }
-
-            @Override
             public void rejectComponent() {
-
-            }
-
-            @Override
-            public void stashComponent() {
-
+                System.out.println("FAKE SERVER EVENT: rejected component");
+                controller.notifyComponentRejection("qwe", userHandComponentId);
             }
 
             @Override
             public void releaseForecast() {
+                System.out.println("FAKE SERVER EVENT: forecast unlocked");
+                controller.notifyReleaseForecast("qwe", 2);
+            }
 
+            @Override
+            public void acquireForecast(int deckIndex) {
+                System.out.println("FAKE SERVER EVENT: forecast acquired");
+                controller.sendForecastDeck(List.of(3, 4, 5));
             }
 
             @Override
             public void removeComponent(Point point) {
-
+                System.out.println("FAKE SERVER EVENT: single component removed");
+                controller.notifyComponentsRemoval("qwe", List.of(point));
             }
 
             @Override
             public void chooseShipPiece(int pieceIndex) {
-
+                System.out.println("FAKE SERVER EVENT: one ship piece kept, others removed");
+                controller.notifyComponentsRemoval("qwe", List.of(new Point(6, 7), new Point(6, 8)));
             }
 
             @Override
@@ -146,7 +156,7 @@ class ClientControllerTest {
 
             @Override
             public void useBattery(Point point) {
-
+                controller.changeBatteriesOnComponent("qwe", point, 2);//todo add num batteries?
             }
 
             @Override
@@ -165,7 +175,9 @@ class ClientControllerTest {
             }
 
             @Override
-            public void drawCard() {}
+            public void drawCard() {
+                controller.notifyNewCard(7);
+            }
 
             @Override
             public void joinLobby(UUID lobbyID) {
@@ -179,7 +191,6 @@ class ClientControllerTest {
             }
         };
 
-        // the following anonymous class is used to force GUI
         controller = new ClientController(server);
     }
 
@@ -242,42 +253,38 @@ class ClientControllerTest {
                 controller.notifyReleaseForecast("OtherPlayer1", 2);
 
                 //Thread.sleep(1000);
-                System.out.println("FAKE SERVER EVENT: you picked up a forecast deck");
-                controller.sendForecastDeck(List.of(2, 4, 5));
+//                System.out.println("FAKE SERVER EVENT: you picked up a forecast deck");
+//                controller.sendForecastDeck(List.of(2, 4, 5));
 
                 //Thread.sleep(1000);
-                System.out.println("FAKE SERVER EVENT: you released the forecast deck");
-                controller.notifyReleaseForecast("qwe", 2);
+//                System.out.println("FAKE SERVER EVENT: yours and OtherPlayer1's ships are invalid");
+//                controller.notifyInvalidShipsUpdate(List.of("OtherPlayer1", "qwe"));
+
+                //Thread.sleep(1000);
+//                System.out.println("FAKE SERVER EVENT: OtherPlayer1's ship is invalid");
+//                controller.notifyInvalidShipsUpdate(List.of("OtherPlayer1"));
+
+                //Thread.sleep(1000);
+//                System.out.println("FAKE SERVER EVENT: OtherPlayer1 ship is not connected");
+//                controller.showShipPieces("OtherPlayer1", List.of(
+//                        Set.of(new Point(5, 7), new Point(5, 8)),
+//                        Set.of(new Point(6, 7), new Point(6, 8), new Point(6, 9))
+//                ));
 
                 //Thread.sleep(1000);
                 System.out.println("FAKE SERVER EVENT: OtherPlayer1's ship was successfully positioned where requested");
                 controller.notifyPlayerPosition("OtherPlayer1", 1);
 
                 //Thread.sleep(1000);
-                System.out.println("FAKE SERVER EVENT: yours and OtherPlayer1's ships are invalid");
-                controller.notifyInvalidShipsUpdate(List.of("OtherPlayer1", "qwe"));
-
-                //Thread.sleep(1000);
-                System.out.println("FAKE SERVER EVENT: OtherPlayer1's ship is invalid");
-                controller.notifyInvalidShipsUpdate(List.of("OtherPlayer1"));
-
-                //Thread.sleep(1000);
-                System.out.println("FAKE SERVER EVENT: OtherPlayer1 ship is not connected");
-                controller.showShipPieces("OtherPlayer1", List.of(
-                        Set.of(new Point(5, 7), new Point(5, 8)),
-                        Set.of(new Point(6, 7), new Point(6, 8), new Point(6, 9))
-                ));
-
-                //Thread.sleep(1000);
                 System.out.println("FAKE SERVER EVENT: OtherPlayer1's spent a battery");
                 controller.changeBatteriesOnComponent("OtherPlayer1", new Point(6, 9), 1);
 
                 //Thread.sleep(1000);
-                System.out.println("FAKE SERVER EVENT: your ship is not connected");
-                controller.showShipPieces("qwe", List.of(
-                        Set.of(new Point(5, 7), new Point(5, 8)),
-                        Set.of(new Point(6, 7), new Point(6, 8), new Point(6, 9))
-                ));
+//                System.out.println("FAKE SERVER EVENT: your ship is not connected");
+//                controller.showShipPieces("qwe", List.of(
+//                        Set.of(new Point(5, 7), new Point(5, 8)),
+//                        Set.of(new Point(6, 7), new Point(6, 8), new Point(6, 9))
+//                ));
 
                 Thread.sleep(1000);
 

@@ -39,8 +39,8 @@ public class ClientModel {
     private final List<BooleanProperty> forecastAvailability;
     private List<Set<Point>> shipPieces;
     private boolean isValid;
-    private Component unweldedComponent;
 
+    private boolean unweldedComponent;
     // FLIGHTBOARD
     private int loopLength;
     private final ObservableList<Integer> startingPositionLeft;
@@ -83,6 +83,7 @@ public class ClientModel {
         stashedComponents = new HashMap<>();
         startingPositionLeft = FXCollections.observableArrayList();
         hands = new HashMap<>();
+        unweldedComponent = false;
         colorToPlace = FXCollections.observableHashMap();
         stats = FXCollections.observableHashMap();
         planets = FXCollections.observableArrayList();
@@ -171,7 +172,6 @@ public class ClientModel {
 
     public void removeRevealedComponent(int componentId) {
         revealedComponents.removeIf(c -> c.getComponentId() == componentId);
-
     }
 
     public void setStashedComponents(String nickname, List<Integer> stashedComponents) throws IOException {
@@ -182,7 +182,8 @@ public class ClientModel {
     }
 
     public void setComponentInHand(String nickname, int componentInHandId) throws IOException {
-        hands.get(playerToColor.get(nickname)).set(new Component(componentInHandId));
+        Component component = new Component(componentInHandId);
+        hands.get(playerToColor.get(nickname)).set(component);
     }
 
     public void clearComponentInHand(String nickname) {
@@ -213,6 +214,9 @@ public class ClientModel {
         Component component = new Component(componentId);
         component.setDirection(direction);
         this.ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).set(component);
+        if(nickname.equals(myNickname)) {
+            setUnwelded(true);
+        }
         clearComponentInHand(nickname);
 //        lastPosition = position;
     }
@@ -334,6 +338,7 @@ public class ClientModel {
             }
         }
     }
+
     public List<Set<Point>> getSelectableShipPieces() {
         return shipPieces;
     }
@@ -383,7 +388,12 @@ public class ClientModel {
     }
 
     public boolean existsUnwelded() {
-        return unweldedComponent != null;
+        //return hands.get(playerToColor.get(myNickname)).get().getType() != ComponentType.EMPTY_AREA;
+        return unweldedComponent;
+    }
+
+    public void setUnwelded(boolean unwelded) {
+        unweldedComponent = unwelded;
     }
 
     public Map<FourColors, ObjectProperty<Component>> getHand() {

@@ -93,6 +93,7 @@ public class ClientController implements ClientControllerInterface {
     @Override//Tommy approved
     public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) {
         runAndInterceptIOE(()->model.setStashedComponents(playerName, stashComponentIds));
+        runAndInterceptIOE(()->model.setComponentInHand(playerName, 0));
     }
 
     @Override//Tommy approved
@@ -110,6 +111,9 @@ public class ClientController implements ClientControllerInterface {
     @Override//Tommy approved
     public void notifyComponentRejection(String playerName, int componentId) {
         runAndInterceptIOE(()->model.addRevealedComponent(componentId));
+        if(model.isMyNickname(playerName)) {
+            model.setUnwelded(false);
+        }
         model.clearComponentInHand(playerName);
     }
 
@@ -141,6 +145,7 @@ public class ClientController implements ClientControllerInterface {
     @Override
     public void sendForecastDeck(List<Integer> deckCardIds) {
         model.setForecast(deckCardIds);
+        model.setUnwelded(false); //quote:  picking up a pile welds your most recent component to your ship
         view.setScreen(new ForecastScreen());
     }
 
@@ -261,58 +266,99 @@ public class ClientController implements ClientControllerInterface {
         // view.show(ChosenStrategy)
     }
 
+
+
+
+
     @Override
     public void reportError(String details) {
+        System.out.println("Error: " + details);
         // view.show(ChosenStrategy)
     }
 
-    @Override
+    //@Override
     public void registerNickname(String nickname) {
+        server.registerNickname(nickname);
+    }
+
+    //@Override
+    public void flipHourglass() {
         try {
-            server.registerNickname(nickname);
+            server.flipHourglass();
         } catch (IllegalArgumentException e) {
-            reportError("Nickname "+nickname+" is unavailable");
+            reportError("cannot flip hourglass");
         }
     }
 
-    @Override
-    public void flipHourglass() {
-
-    }
-
-    @Override
+    //@Override
     public void requestRandComponent() {
-
+        try {
+            server.requestRandComponent();
+        } catch (IllegalArgumentException e) {
+            reportError("random component not available");
+        }
     }
 
-    @Override
-    public void requestComponent(int index) {
-
+    //@Override
+    public void requestComponent(int componentId) {
+        try {
+            server.requestComponent(componentId);
+        } catch (IllegalArgumentException e) {
+            reportError("component of id " + componentId + " not available");
+        }
     }
 
-    @Override
+    //@Override
     public void stashComponent() {
-
+        try {
+            server.stashComponent();
+        } catch (IllegalArgumentException e) {
+            reportError("cannot stash component");
+        }
     }
 
-    @Override
+    //@Override
     public void grabStashedComponent(int index) {
-
+        try {
+            server.grabStashedComponent(index);
+        } catch (IllegalArgumentException e) {
+            reportError("cannot grab stashed component");
+        }
     }
 
-    @Override
+    //@Override
     public void acquireForecast(int index) {
-
+        try {
+            server.acquireForecast(index);
+        } catch (IllegalArgumentException e) {
+            reportError("cannot acquire forecast");
+        }
     }
 
-    @Override
+    public void releaseForecast() {
+        try {
+            server.releaseForecast();
+        } catch (IllegalArgumentException e) {
+            reportError("cannot release forecast");
+        }
+    }
+
+    //@Override
     public void rejectComponent() {
-
+        try {
+            server.rejectComponent();
+        } catch (IllegalArgumentException e) {
+            reportError("cannot reject component");
+        }
     }
 
-    @Override
-    public void placeComponent(Point point) {
-
+    //@Override
+    public void placeComponent(Point point, int orientation) {
+        try {
+            server.placeComponent(point, orientation);
+        } catch (IllegalArgumentException e) {
+            reportError("cannot place component");
+        }
     }
 
     private void runAndInterceptIOE(RunnableWithIOE action) {

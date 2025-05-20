@@ -1,18 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.GuiScreen;
+import it.polimi.ingsw.galaxytruckers.view.screens.GuiScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-
-import java.io.IOException;
 
 public class GuiNicknameChoiceScreen extends GuiScreen {
     public GuiNicknameChoiceScreen(ClientModel model, ClientController controller) {

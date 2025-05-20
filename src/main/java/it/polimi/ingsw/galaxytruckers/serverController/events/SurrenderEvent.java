@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Event signaling one or more players have surrendered
+ * ModelEvent signaling one or more players have surrendered
  * @param playerNames list of nicknames of the players that surrendered
  */
 public record SurrenderEvent(List<String> playerNames) implements Event {

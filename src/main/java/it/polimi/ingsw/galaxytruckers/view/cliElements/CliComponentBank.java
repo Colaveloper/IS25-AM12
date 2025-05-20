@@ -14,15 +14,12 @@ import java.util.Map;
 
 public class CliComponentBank extends CliElement {
 
-    IntegerProperty coveredComponentN;
-    MapProperty<Component, CliComponent> revealedComponents;
+    private final IntegerProperty coveredComponentN;
+    private final MapProperty<Component, CliComponent> revealedComponents;
 
-    private Map<FourColors, CliComponent> hands; // UPDATE WHEN HANDS CHANGES
-    private Map<FourColors, List<CliComponent>> stashedComponentsMap;
+    private final List<BooleanProperty> forecastDeck;
 
-    private List<BooleanProperty> forecastDeck;
-
-    public CliComponentBank(ClientModel model) throws IOException {
+    private CliComponentBank(ClientModel model) throws IOException {
         super(model);
 
         forecastDeck = model.getForecastDeckAvailablility();
@@ -30,38 +27,12 @@ public class CliComponentBank extends CliElement {
             forecast.addListener(this);
         }
 
-        hands = new SimpleMapProperty<>(FXCollections.observableHashMap());
-        model.getHand().forEach((color, componentProperty) -> {
-            try {
-                CliComponent hand = new CliComponent(model, componentProperty);
-                hands.put(color, hand);
-                hand.addListener(this);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        stashedComponentsMap = new SimpleMapProperty<>(FXCollections.observableHashMap());
-        model.getStashed().forEach((color, propertyList) -> {
-            try {
-                List<CliComponent> stashedComponents = new ArrayList<>();
-                for(ObjectProperty<Component> property : propertyList) {
-                    CliComponent stashed = new CliComponent(model, property);
-                    stashed.addListener(this);
-                    stashedComponents.add(stashed);
-                }
-                stashedComponentsMap.put(color, stashedComponents);
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
         coveredComponentN = model.coveredComponentNProperty();
         coveredComponentN.addListener(this);
 
         revealedComponents = new SimpleMapProperty<>(FXCollections.observableHashMap());
         revealedComponents.addListener(this);
+
         model.revealedComponentsProperty().addListener((ListChangeListener<Component>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
@@ -69,7 +40,7 @@ public class CliComponentBank extends CliElement {
                         try {
                             revealedComponents.put(
                                     added,
-                                    new CliComponent(model, new SimpleObjectProperty<Component>(added))
+                                    new CliComponent(model, new SimpleObjectProperty<>(added))
                             );
                             System.out.println("ADDED");
                         } catch (IOException e) {
@@ -103,59 +74,41 @@ public class CliComponentBank extends CliElement {
             description.add(row.toString());
             row.setLength(0);
         }
-        for (int n = 1; n <= model.revealedComponentsProperty().size(); n++) {
+        for (int n = 1; n <= revealedComponents.size(); n++) {
             row.append("  ").append(n).append("  ").append(padding);
         }
         description.add(row.toString());
         row.setLength(0);
 
-        row.append("Forecast decks:" +
-                "\t\tdeck 1 :" + forecastDeck.get(0).get() +
-                "\t\tdeck 2: " + forecastDeck.get(1).get() +
-                "\t\tdeck 3: " + forecastDeck.get(2).get());
+        row
+                .append("Forecast decks:" + "\t\tdeck 1 :")
+                .append(forecastDeck.get(0).get())
+                .append("\t\tdeck 2: ")
+                .append(forecastDeck.get(1).get())
+                .append("\t\tdeck 3: ")
+                .append(forecastDeck.get(2).get());
+
         description.add(row.toString());
 
-
-        //STASHED AND HAND IN COMPONENTBANK
-//        List<List<String>> allShipsHandsStashed = new ArrayList<>();
-//
-//        for(Colors c : model.getPlayerToColor().values()) {
-//            List<String> handStashedDescription = new ArrayList<>();
-//            List<List<String>> stashedDescription = new ArrayList<>();
-//            List<String> handDescription = new ArrayList<>();
-//
-//            handStashedDescription.add("hand:\t\tstashed:\t\t\t");
-//
-//            handDescription.addAll(hands.get(c).getDescription());
-//            for(CliComponent component : stashedComponentsMap.get(c)) {
-//                stashedDescription.add(component.getDescription());
-//            }
-//
-//
-//            for (int i = 0; i < handDescription.size(); i++) {
-//                row.append(handDescription.get(i));
-//                row.append("\t\t");
-//                for(List<String> stashed : stashedDescription) {
-//                    row.append(stashed.get(i));
-//                }
-//                row.append("\t\t\t");
-//                handStashedDescription.add(row.toString());
-//                row.setLength(0);
-//            }
-//
-//            allShipsHandsStashed.add(handStashedDescription);
-//        }
-//
-//        for(int index = 0; index < allShipsHandsStashed.getFirst().size(); index++) {
-//            for(List<String> stashed : allShipsHandsStashed) {
-//                row.append(stashed.get(index));
-//            }
-//            description.add(row.toString());
-//            row.setLength(0);
-//        }
-//
-//        description.add(row.toString());
-
         return description;
+    }
+
+
+    /////////////////////////////////////////// SINGLETON LOGIC ///////////////////////////////////////
+    private static CliComponentBank instance;
+
+    public static synchronized CliComponentBank getInstance(ClientModel model) throws IOException {
+        if (instance == null) {
+            instance = new CliComponentBank(model);
+        }
+        return instance;
+    }
+
+    // Optional: a version without parameters once initialized
+    public static CliComponentBank getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("CliComponentBank not initialized. Call getInstance(model) first.");
+        }
+        return instance;
     }
 }

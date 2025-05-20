@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
 /**
- * Event signaling that the ship building phase has started
+ * ModelEvent signaling that the ship building phase has started
  */
 public record StartBuildingEvent() implements Event {
 

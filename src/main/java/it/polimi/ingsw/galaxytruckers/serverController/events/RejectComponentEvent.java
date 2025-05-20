@@ -8,13 +8,12 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import java.util.HashSet;
 import java.util.Set;
 
-public record RejectComponentEvent(String playerName, int componentId, Set<Integer> faceUpComponentIds) implements Event {
+public record RejectComponentEvent(String playerName, int componentId) implements Event {
 
-    public static RejectComponentEvent from(ShipBoard shipBoard, Component component, ComponentBank componentBank) {
+    public static RejectComponentEvent from(ShipBoard shipBoard, Component component) {
         return new RejectComponentEvent(
                 Player.getPlayer(shipBoard).getNickname(),
-                component.getId(),
-                new HashSet<>(componentBank.getUncoveredComponents().keySet())
+                component.getId()
         );
     }
 

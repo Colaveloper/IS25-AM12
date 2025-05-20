@@ -24,6 +24,8 @@ public class Game {
     private Map<ShipBoard, Integer> finalScores;
     Level level;
 
+    private GameEventListener eventListener;
+
     public Game(Level level) {
         this.level = level;
         this.gameFactory = GameFactory.getFactory(level);
@@ -197,8 +199,11 @@ public class Game {
         this.flightBoard = flightBoard;
     }
 
-    @VisibleForTesting
-    public void setDeck(Deck deck){
-        this.deck = deck;
+    public void setEventListener(GameEventListener eventListener) {
+        this.eventListener = eventListener;
+    }
+
+    public GameEventListener getEventListener() {
+        return eventListener;
     }
 }

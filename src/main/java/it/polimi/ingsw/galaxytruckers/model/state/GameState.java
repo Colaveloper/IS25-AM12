@@ -6,11 +6,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public abstract class GameState {
     protected Game game;
@@ -111,7 +106,7 @@ public abstract class GameState {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void initializeCabin(ShipBoard shipBoard, CrewType crewType) {
+    public void initializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
