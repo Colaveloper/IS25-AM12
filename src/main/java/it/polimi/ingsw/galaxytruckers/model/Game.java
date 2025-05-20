@@ -198,6 +198,10 @@ public class Game {
     public void setFlightBoard(FlightBoard flightBoard){
         this.flightBoard = flightBoard;
     }
+    @VisibleForTesting
+    public void setDeck(Deck deck){
+        this.deck = deck;
+    }
 
     public void setEventListener(GameEventListener eventListener) {
         this.eventListener = eventListener;

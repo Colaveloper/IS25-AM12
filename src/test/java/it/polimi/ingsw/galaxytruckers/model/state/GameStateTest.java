@@ -180,7 +180,7 @@ class GameStateTest {
 
         @Test
         void initializeCabinThrowsExceptionWhenUsingInvalidState() {
-            assertThrows(IllegalStateException.class, () -> testState.initializeCabin(ship1, CrewType.HUMAN));
+            assertThrows(IllegalStateException.class, () -> testState.initializeCabin(ship1, new Point(7,7),CrewType.HUMAN));
         }
     }
 }

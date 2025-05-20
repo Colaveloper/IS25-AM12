@@ -20,6 +20,7 @@ class AdventureStateTest {
     AdventureState testAdventureState;
     Game game;
     ShipBoard ship1;
+    FlightBoard flightBoard;
 
     @BeforeEach
     void setup(){
@@ -49,7 +50,9 @@ class AdventureStateTest {
     @Test
     void giveUpAddsShipToGivenUpShips() throws IOException {
         game = new Game(Level.SECOND);
-        game.start();
+        flightBoard = new SecondFlightBoard(Set.of(ship1));
+        game.setFlightBoard(flightBoard);
+        //game.start();
         testAdventureState.setGame(game);
         testAdventureState.giveUp(ship1);
         assertEquals(Set.of(ship1), game.getGivenUpShips());
