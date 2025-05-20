@@ -51,4 +51,8 @@ public interface EventVisitor {
     void visit(ProjectileEvent projectileEvent);
 
     void visit(GameEndEvent gameEndEvent);
+
+    void visit(InvalidShipsUpdateEvent invalidShipsUpdateEvent);
+
+    void visit(ShipNotConnectedEvent shipNotConnectedEvent);
 }

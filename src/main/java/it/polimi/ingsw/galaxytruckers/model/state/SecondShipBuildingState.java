@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,7 +21,8 @@ public class SecondShipBuildingState extends ShipBuildingState {
 
     @Override
     public void flipHourglass(ShipBoard shipBoard) {
-        if (hourglass.isLastFlip()) {
+        boolean isLast = hourglass.isLastFlip();
+        if (isLast) {
             if (!completedShipBoards.contains(shipBoard)) {
                 throw new IllegalStateException("Ship must be completed before the last flip");
             }
@@ -28,6 +30,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
         } else {
             hourglass.flip(this::notifyHourglassEnd);
         }
+        game.getEventListener().notifyFlipHourglassEvent(shipBoard,isLast);
     }
 
     @Override
@@ -36,6 +39,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.stashComponent();
+        game.getEventListener().notifyStashComponentEvent(shipBoard);
     }
 
     @Override
@@ -44,6 +48,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.grabStashedComponent(index);
+        game.getEventListener().notifyGrabStashedComponentEvent(shipBoard, shipBoard.getLastComponent().orElseThrow());
     }
 
     @Override
@@ -54,6 +59,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
         releaseForecast(shipBoard);
         game.getFlightBoard().placeShipOnFlightBoard(shipBoard, startingPosition);
         completedShipBoards.add(shipBoard);
+        game.getEventListener().notifyFlightBoardUpdateEvent(shipBoard, startingPosition);
     }
 
     @Override
@@ -64,9 +70,9 @@ public class SecondShipBuildingState extends ShipBuildingState {
         if (blockedForecasts.contains(deckIndex)) {
             throw new IllegalArgumentException("Deck is unavailable");
         }
-        game.getDeck().getForecastDeck(deckIndex);
         blockedForecasts.add(deckIndex);
         shipToForecasts.put(shipBoard, deckIndex);
+        game.getEventListener().notifyPeekForecastEvent(shipBoard,deckIndex,game.getDeck().getForecastDeck(deckIndex));
     }
 
     @Override
@@ -74,6 +80,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
         if (shipToForecasts.containsKey(shipBoard)) {
             int index = shipToForecasts.remove(shipBoard);
             blockedForecasts.remove(index);
+            game.getEventListener().notifyReleaseForecastEvent(shipBoard,index);
         }
     }
 
@@ -84,13 +91,14 @@ public class SecondShipBuildingState extends ShipBuildingState {
         for (ShipBoard shipBoard : unfinishedShipBoards) {
             releaseForecast(shipBoard);
             shipBoard.finishBuilding();
+            placeShipOnFlightBoard(shipBoard);
         }
         game.setCurrentState(new SecondShipCorrectionState());
     }
 
     protected void notifyHourglassEnd() {
         System.out.println("Hourglass has finished");
-        //TODO : implement notify with events
+        game.getEventListener().notifyHourglassEndEvent();
     }
 
     @VisibleForTesting

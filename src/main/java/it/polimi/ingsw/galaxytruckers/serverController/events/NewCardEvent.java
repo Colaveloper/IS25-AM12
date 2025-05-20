@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.serverController.events;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 
 /**
- * Event signaling that a new card has been drawn
+ * ModelEvent signaling that a new card has been drawn
  * @param cardId the id of the current card
  */
 public record NewCardEvent(int cardId) implements Event {

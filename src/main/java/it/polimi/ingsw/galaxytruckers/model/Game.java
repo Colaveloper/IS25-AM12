@@ -18,6 +18,8 @@ public class Game {
     private GameState currentState;
     Level level;
 
+    private GameEventListener eventListener;
+
     public Game(Level level) {
         this.level = level;
         this.gameFactory = GameFactory.getFactory(level);
@@ -95,5 +97,13 @@ public class Game {
      */
     public Level getLevel() {
         return level;
+    }
+
+    public void setEventListener(GameEventListener eventListener) {
+        this.eventListener = eventListener;
+    }
+
+    public GameEventListener getEventListener() {
+        return eventListener;
     }
 }
