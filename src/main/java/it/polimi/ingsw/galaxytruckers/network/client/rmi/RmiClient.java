@@ -12,6 +12,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.awt.*;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -45,7 +46,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     public void setClientController(ClientControllerInterface clientController) {
-
+        this.clientController =  clientController;
     }
 
     private void handleNetworkError(RemoteException e) {
@@ -312,42 +313,42 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
 
     @Override
     public void setupLobby(UUID lobbyId, Map<String, FourColors> playerColors) throws RemoteException {
-
+        clientController.updateLobbyPlayers(playerColors);
     }
 
     @Override
     public void updateLobbyPlayers(Map<String, FourColors> playerColors) throws RemoteException {
-
+        clientController.updateLobbyPlayers(playerColors);
     }
 
     @Override
-    public void notifyStartBuilding() throws RemoteException {
-
+    public void notifyStartBuilding(Level level, int playersN) throws RemoteException {
+        clientController.notifyNewGame(level, playersN);
     }
 
     @Override
     public void notifyFaceDownComponentRequest(String playerName, int componentId) throws RemoteException {
-
+        clientController.notifyFaceDownComponentRequest(playerName,componentId);
     }
 
     @Override
     public void notifyFaceUpComponentRequest(String playerName, int componentId) throws RemoteException {
-
+        clientController.notifyFaceUpComponentRequest(playerName,componentId);
     }
 
     @Override
     public void notifyComponentRejection(String playerName, int componentId) throws RemoteException {
-
+        clientController.notifyComponentRejection(playerName,componentId);
     }
 
     @Override
     public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) throws RemoteException {
-
+        clientController.notifyStashComponent(playerName,stashComponentIds);
     }
 
     @Override
     public void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) throws RemoteException {
-
+        clientController.notifyGrabFromStash(playerName,componentId,stashComponentIds);
     }
 
     @Override

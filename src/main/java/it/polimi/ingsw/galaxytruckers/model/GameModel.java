@@ -11,6 +11,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventListener;
 
 import java.awt.*;
+import java.io.IOException;
 
 public class GameModel implements GameModelInterface {
     @Override
@@ -28,6 +29,15 @@ public class GameModel implements GameModelInterface {
         GameEventListener gameEventListener = new GameEventListener();
         gameEventListener.setControllerListener(listener);
         game.setEventListener(gameEventListener);
+    }
+
+    @Override
+    public void startGame(Game game) {
+        try {
+            game.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

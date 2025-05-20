@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.network.server;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
@@ -135,7 +136,7 @@ public interface VirtualClient {
     /**
      * Signals to the client that the building phase has started
      */
-    void notifyStartBuilding();
+    void notifyStartBuilding(Level level, int playersN);
 
 
     /**

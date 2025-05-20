@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.network.client.rmi;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
@@ -34,7 +35,7 @@ public interface RemoteClient extends Remote {
     /**
      * Signals to the client that the ship building phase has started
      */
-    void notifyStartBuilding() throws RemoteException;
+    void notifyStartBuilding(Level level, int playersN) throws RemoteException;
 
     /**
      * Signals to the client that a player has successfully requested

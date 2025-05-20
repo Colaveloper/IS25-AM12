@@ -13,6 +13,7 @@ public interface GameModelInterface {
     Game createGame(Level level);
     ShipBoard addShip(Game game, FourColors color);
     void setEventListener(Game game, EventListener listener);
+    void startGame(Game game);
 
     //Ship building
     void requestRandComponent(Game game, ShipBoard shipBoard);

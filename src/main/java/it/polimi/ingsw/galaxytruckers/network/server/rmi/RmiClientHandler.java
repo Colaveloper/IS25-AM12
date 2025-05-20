@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
@@ -24,6 +25,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class RmiClientHandler extends UnicastRemoteObject implements VirtualClient, RemoteController {
     private final RemoteClient remoteClient;
     private final ServerControllerInterface controller;
+    private LobbyInterface lobby;
 
     private final Thread updateThread;
     private final BlockingQueue<HandlerTask> updateTasks;
@@ -37,6 +39,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
         this.controller = controller;
         this.updateThread = new Thread(this::runUpdateThread);
         this.updateTasks = new LinkedBlockingQueue<>();
+        start();
     }
 
     public void start() {
@@ -92,8 +95,8 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     }
 
     @Override
-    public void notifyStartBuilding() {
-        submitUpdateTask(remoteClient::notifyStartBuilding);
+    public void notifyStartBuilding(Level level, int playersN) {
+        submitUpdateTask(() -> remoteClient.notifyStartBuilding(level, playersN));
     }
 
     @Override
@@ -233,139 +236,170 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
 
     // RemoteController
 
+    private void checkLobby() {
+        if (lobby == null) {
+            throw new IllegalStateException("You are not in a lobby yet");
+        }
+    }
+
     @Override
     public void newGame(Level level, int numPlayers) throws RemoteException {
-        controller.newGame(player.getNickname(), level, numPlayers);
+        this.lobby = controller.newGame(player, level, numPlayers);
     }
 
     @Override
     public void joinLobby(UUID lobbyID) throws RemoteException {
-        controller.joinLobby(player.getNickname(), lobbyID);
+        this.lobby = controller.joinLobby(player, lobbyID);
     }
 
     @Override
     public void leaveLobby() throws RemoteException {
+        checkLobby();
         controller.leaveLobby(player.getNickname());
     }
 
     @Override
     public void requestRandComponent() throws RemoteException {
-        controller.requestRandComponent(player.getNickname());
+        checkLobby();
+        lobby.requestRandComponent(player);
     }
 
     @Override
     public void requestComponent(int componentID) throws RemoteException {
-        controller.requestComponent(player.getNickname(), componentID);
+        checkLobby();
+        lobby.requestComponent(player, componentID);
     }
 
     @Override
     public void rejectComponent() throws RemoteException {
-        controller.rejectComponent(player.getNickname());
+        checkLobby();
+        lobby.rejectComponent(player);
     }
 
     @Override
     public void stashComponent() throws RemoteException {
-        controller.stashComponent(player.getNickname());
+        checkLobby();
+        lobby.stashComponent(player);
     }
 
     @Override
     public void grabStashedComponent(int index) throws RemoteException {
-        controller.grabStashedComponent(player.getNickname(), index);
+        checkLobby();
+        lobby.grabStashedComponent(player, index);
     }
 
     @Override
     public void placeComponent(Point point, int orientation) throws RemoteException {
-        controller.placeComponent(player.getNickname(), point, orientation);
+        checkLobby();
+        lobby.placeComponent(player, point, orientation);
     }
 
     @Override
     public void flipHourglass() throws RemoteException {
-        controller.flipHourglass(player.getNickname());
+        checkLobby();
+        lobby.flipHourglass(player);
     }
 
     @Override
     public void placeShipOnFlightBoard(int startingPosition) throws RemoteException {
-        controller.placeShipOnFlightBoard(player.getNickname(), startingPosition);
+        checkLobby();
+        lobby.placeShipOnFlightBoard(player, startingPosition);
     }
 
     @Override
     public void acquireForecast(int deckIndex) throws RemoteException {
-        controller.acquireForecast(player.getNickname(), deckIndex);
+        checkLobby();
+        lobby.acquireForecast(player, deckIndex);
     }
 
     @Override
     public void releaseForecast() throws RemoteException {
-        controller.releaseForecast(player.getNickname());
+        checkLobby();
+        lobby.releaseForecast(player);
     }
 
     @Override
     public void removeComponent(Point point) throws RemoteException {
-        controller.removeComponent(player.getNickname(), point);
+        checkLobby();
+        lobby.removeComponent(player, point);
     }
 
     @Override
     public void chooseShipPiece(int pieceIndex) throws RemoteException {
-        controller.chooseShipPiece(player.getNickname(), pieceIndex);
+        checkLobby();
+        lobby.chooseShipPiece(player, pieceIndex);
     }
 
     @Override
     public void initializeCabin(Point point, CrewType crewType) throws RemoteException {
-        controller.initializeCabin(player.getNickname(), point, crewType);
+        checkLobby();
+        lobby.initializeCabin(player, point, crewType);
     }
 
     @Override
     public void drawCard() throws RemoteException {
-        controller.drawCard(player.getNickname());
+        checkLobby();
+        lobby.drawCard(player);
     }
 
     @Override
     public void activateComponent(Point point) throws RemoteException {
-        controller.activateComponent(player.getNickname(), point);
+        checkLobby();
+        lobby.activateComponent(player, point);
     }
 
     @Override
     public void loseCrew(Point point) throws RemoteException {
-        controller.loseCrew(player.getNickname(), point);
+        checkLobby();
+        lobby.loseCrew(player, point);
     }
 
     @Override
     public void grabReward(boolean rewardGrabbed) throws RemoteException {
-        controller.grabReward(player.getNickname(), rewardGrabbed);
+        checkLobby();
+        lobby.grabReward(player, rewardGrabbed);
     }
 
     @Override
     public void placeGoods(Point point, GoodsType goodsType) throws RemoteException {
-        controller.placeGoods(player.getNickname(), point, goodsType);
+        checkLobby();
+        lobby.placeGoods(player, point, goodsType);
     }
 
     @Override
     public void removeGoods(Point point, GoodsType goodsType) throws RemoteException {
-        controller.removeGoods(player.getNickname(), point, goodsType);
+        checkLobby();
+        lobby.removeGoods(player, point, goodsType);
     }
 
     @Override
     public void loseGoods(Point point) throws RemoteException {
-        controller.loseGoods(player.getNickname(), point);
+        checkLobby();
+        lobby.loseGoods(player, point);
     }
 
     @Override
     public void useBattery(Point point) throws RemoteException {
-        controller.useBattery(player.getNickname(), point);
+        checkLobby();
+        lobby.useBattery(player, point);
     }
 
     @Override
     public void choosePlanet(int choice) throws RemoteException {
-        controller.choosePlanet(player.getNickname(), choice);
+        checkLobby();
+        lobby.choosePlanet(player, choice);
     }
 
     @Override
     public void goNext() throws RemoteException {
-        controller.goNext(player.getNickname());
+        checkLobby();
+        lobby.goNext(player);
     }
 
     @Override
     public void giveUp() throws RemoteException {
-        controller.giveUp(player.getNickname());
+        checkLobby();
+        lobby.giveUp(player);
     }
 }
 
