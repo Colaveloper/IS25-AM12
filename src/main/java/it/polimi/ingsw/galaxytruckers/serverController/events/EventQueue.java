@@ -18,8 +18,7 @@ public class EventQueue implements EventListener {
     }
 
     public boolean enqueue(Event event) {
-        boolean res = this.queue.offer(event);
-        return res;
+        return this.queue.offer(event);
     }
 
     public Event dequeue() throws InterruptedException {

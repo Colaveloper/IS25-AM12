@@ -175,8 +175,12 @@ public class ClientModel {
     }
 
     public void setStashedComponents(String nickname, List<Integer> stashedComponents) throws IOException {
-        for(Integer i : stashedComponents) {
-            this.stashedComponents.get(playerToColor.get(nickname)).get(stashedComponents.indexOf(i)).set(new Component(i));
+        for(int i = 0; i < this.stashedComponents.size(); i++) {
+            if (i < stashedComponents.size()) {
+                this.stashedComponents.get(playerToColor.get(nickname)).get(i).set(new Component(stashedComponents.get(i)));
+            } else {
+                this.stashedComponents.get(playerToColor.get(nickname)).get(i).set(new Component(ComponentType.EMPTY_AREA));
+            }
         }
                 //stashedComponents.stream().map(Component::new).collect(Collectors.toList())
     }

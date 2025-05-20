@@ -128,15 +128,18 @@ public interface RemoteClient extends Remote {
      * placed his ship on the flight-board
      *
      * @param playerName the nickname of the player who finished building
+     * @param position
      */
-    void notifyPlaceShipOnFlightBoard(String playerName) throws RemoteException;
+    void notifyPlaceShipOnFlightBoard(String playerName, int position) throws RemoteException;
 
     /**
      * Signals to the client that their ship is not connected and that they should
      * choose one of the given pieces to keep
+     *
+     * @param playerName
      * @param shipPieces a list containing the ship's connected subsets
      */
-    void showShipPieces(List<Set<Point>> shipPieces) throws RemoteException;
+    void showShipPieces(String playerName, List<Set<Point>> shipPieces) throws RemoteException;
 
     /**
      * Signals to the client that the list of valid ships has changed

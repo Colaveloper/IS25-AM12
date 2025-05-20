@@ -208,6 +208,8 @@ public interface ClientControllerInterface {
      */
     void notifySelection(String nickname, List<Point> cannonsPositions);
 
+    void changeBatteriesOnComponent(String nickname, Point batteryComponent, int batteries);
+
     /**
      * Notifies that placed OR REMOVED a good in a cargo hold.
      * NB: a player can remove from a position and place in another on the ship, and from ship to buffer and vice versa, so it is always 2 calls

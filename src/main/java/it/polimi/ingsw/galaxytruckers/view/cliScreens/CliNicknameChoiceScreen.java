@@ -31,8 +31,9 @@ public class CliNicknameChoiceScreen extends CliScreen {
             controller.registerNickname(input);
             controller.setMyNickname(input);
         } catch (IllegalArgumentException e) {
-            controller.reportError("Nickname " +input+ " is not available");
+            controller.reportError(e.getMessage());
         }
+
     }
 
     @Override
