@@ -211,4 +211,7 @@ public interface RemoteClient extends Remote {
     void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws RemoteException;
 
     void showFinalScores(Map<String, Integer> playerToScore) throws RemoteException;
+
+    void notifyPlayerDisconnection(String playerName);
+
 }

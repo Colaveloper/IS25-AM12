@@ -461,4 +461,9 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
         //TODO: fix controller methods
         clientController.showFinalStats();
     }
+
+    @Override
+    public void notifyPlayerDisconnection(String playerName) {
+        //TODO: add method in controller that notifies and goes back to create or join lobby screen
+    }
 }

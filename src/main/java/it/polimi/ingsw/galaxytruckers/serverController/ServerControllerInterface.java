@@ -1,15 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.serverController;
 
-import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
-import java.awt.*;
 import java.util.UUID;
 
 public interface ServerControllerInterface {
@@ -28,7 +22,7 @@ public interface ServerControllerInterface {
      * @param creator    nickname of the lobby creator
      * @param level      level of the game
      * @param numPlayers number of players in the game
-     * @return
+     * @return the {@link LobbyInterface} of the created lobby
      * @throws IllegalArgumentException if {@code numPlayers} is < 2
      */
     LobbyInterface newGame(Player creator, Level level, int numPlayers);
@@ -39,7 +33,7 @@ public interface ServerControllerInterface {
      *
      * @param player  the nickname of the player joining a lobby
      * @param lobbyID the ID of the lobby the player wants to join
-     * @return
+     * @return the {@link LobbyInterface} of the lobby the player has just entered
      * @throws IllegalArgumentException if there is no registered
      *                                  player with the given nickname or if there is no lobby with
      *                                  the given ID
@@ -49,14 +43,17 @@ public interface ServerControllerInterface {
     LobbyInterface joinLobby(Player player, UUID lobbyID);
 
     /**
-     * Removes the player with the given nickname from the lobby
-     * they are currently in
-     * @param nickname the nickname of the player wishing to leave
-     *                 the lobby
-     * @throws IllegalArgumentException if there is no registered
-     * player with the given nickname
-     * @throws IllegalStateException if the player has not joined
-     * a lobby yet
+     * Removes the given player from the active players in the server and, if
+     * the player was in a lobby, notifies other players in the lobby of the
+     * disconnection and interrupts the game
+     * @param player the player who has disconnected
      */
-    void leaveLobby(String nickname);
+    void handlePlayerDisconnection(Player player);
+
+    /**
+     * Notifies other players in the lobby of the player's exit and interrupts
+     * the game
+     * @param player the player who left
+     */
+    void leaveLobby(Player player);
 }
