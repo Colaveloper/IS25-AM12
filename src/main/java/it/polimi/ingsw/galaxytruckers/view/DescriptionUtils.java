@@ -56,13 +56,17 @@ public class DescriptionUtils {
         int titleStart = Math.max(0, (totalWidth - 2 - titleDisplayWidth) / 2);
 
         StringBuilder topBorder = new StringBuilder("╭");
-        for (int i = 0; i < totalWidth - 2; i++) {
-            if (i >= titleStart && i < titleStart + titleWithSpace.length()) {
-                topBorder.append(titleWithSpace.charAt(i - titleStart));
-            } else {
-                topBorder.append('─');
-            }
+        int i = 0;
+        while (i < titleStart) {
+            topBorder.append('─');
+            i++;
         }
+        topBorder.append(titleWithSpace);
+        while (i < totalWidth - 2 - titleDisplayWidth) {
+            topBorder.append('─');
+            i++;
+        }
+
         topBorder.append('╮');
 
         String bottomBorder = "╰" + "─".repeat(totalWidth - 2) +

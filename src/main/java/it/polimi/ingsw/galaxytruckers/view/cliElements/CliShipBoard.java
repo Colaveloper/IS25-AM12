@@ -14,10 +14,11 @@ public class CliShipBoard extends CliElement {
 
     private final List<List<CliComponent>> componentMatrix; // ALL FINAL
     Point upLeft;
+    private final FourColors color;
 
     public CliShipBoard(ClientModel model, FourColors color) throws IOException {
         super(model);
-
+        this.color = color;
         upLeft = model.getUpLeft();
         componentMatrix = model.getShips().get(color).stream()
                 .map(innerList -> innerList.stream()
@@ -45,7 +46,7 @@ public class CliShipBoard extends CliElement {
             rowDescription.clear();
             rowDescription.addAll(List.of("",String.valueOf(yIndex),""));
             for (CliComponent cliComponent : row) {
-                rowDescription = DescriptionUtils.sideBySide(rowDescription, cliComponent.getDescription());
+                DescriptionUtils.sideBySide(rowDescription, cliComponent.getDescription());
             }
             result.addAll(rowDescription);
             yIndex ++;
@@ -59,7 +60,10 @@ public class CliShipBoard extends CliElement {
         }
         result.add(xIndexes.toString());
 
-        result = DescriptionUtils.borderAndTitle(result, "bob");
+        DescriptionUtils.borderAndTitle(
+                result,
+                color.getDescription()+" "+model.getPlayerToColor().inverse().get(color)
+        );
         return result;
     }
 }
