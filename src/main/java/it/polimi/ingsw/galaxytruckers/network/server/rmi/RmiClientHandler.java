@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
+import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
@@ -19,16 +20,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class RmiClientHandler extends UnicastRemoteObject implements VirtualClient, RemoteController {
     private final RemoteClient remoteClient;
     private final ServerControllerInterface controller;
     private LobbyInterface lobby;
 
-    private final Thread updateThread;
-    private final BlockingQueue<HandlerTask> updateTasks;
+    private Thread updateThread;
+    private boolean running = false;
+    private final BlockingDeque<HandlerTask> updateTasks;
 
     private final Player player;
 
@@ -37,28 +39,33 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
         this.remoteClient = remoteClient;
         this.player = player;
         this.controller = controller;
-        this.updateThread = new Thread(this::runUpdateThread);
-        this.updateTasks = new LinkedBlockingQueue<>();
-        start();
+        this.updateThread = null;
+        this.updateTasks = new LinkedBlockingDeque<>();
+        startUpdateThread();
     }
 
-    public void start() {
+    public void startUpdateThread() {
+        running = true;
+        updateThread = new Thread(this::runUpdateThread,"UpdateThread");
         updateThread.start();
     }
 
-    public void stop() {
-        updateThread.interrupt();
+    public void stopUpdateThread() {
+        running = false;
+        this.updateThread = null;
     }
 
     private void handleNetworkError(RemoteException e) {
-        //TODO: define a way to handle exceptions
-        throw new RuntimeException(e);
+        System.out.println("WARNING: Failed to contact player " + player.getNickname() + "\n" +
+                "A remote exception was thrown: " +  e.getMessage());
+        controller.handlePlayerDisconnection(player);
+        stopUpdateThread();
     }
 
     private void handleInternalError() {
-        //TODO: define a way to handle errors related to BlockingQueue
-        throw new RuntimeException("The update queue for " + player.getNickname() +
+        System.err.println("ERROR: The update queue for " + player.getNickname() +
                 " has failed to handle all updates");
+        stopUpdateThread();
     }
 
     private void submitUpdateTask(HandlerTask action) {
@@ -69,18 +76,24 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     }
 
     private void runUpdateThread() {
-        while (true) {
+        HandlerTask task = null;
+        while (running) {
             try {
-                updateTasks.take().execute();
+                task = updateTasks.takeFirst();
+                task.execute();
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-                //TODO : handle shutting down connection
+                Thread.currentThread().interrupt();
             } catch (RemoteException e) {
+                updateTasks.offerFirst(task);
                 handleNetworkError(e);
             }
         }
     }
 
+    @Override
+    public void ping() throws RemoteException {
+        SessionManager.getInstance().ping(player);
+    }
 
     // VirtualClient
 
@@ -234,6 +247,12 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
         submitUpdateTask(() -> remoteClient.showFinalScores(playerToScore));
     }
 
+    @Override
+    public void notifyPlayerDisconnection(String playerName) {
+        submitUpdateTask(() -> remoteClient.notifyPlayerDisconnection(playerName));
+        this.lobby = null;
+    }
+
     // RemoteController
 
     private void checkLobby() {
@@ -255,7 +274,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     @Override
     public void leaveLobby() throws RemoteException {
         checkLobby();
-        controller.leaveLobby(player.getNickname());
+        controller.leaveLobby(player);
     }
 
     @Override
@@ -405,5 +424,5 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
 
 @FunctionalInterface
 interface HandlerTask {
-    public void execute() throws RemoteException;
+    void execute() throws RemoteException;
 }

@@ -12,6 +12,7 @@ public class Server {
 
     public void start() {
         ServerController controller = new ServerController(new GameModel());
+        SessionManager.getInstance().setServerController(controller);
         try {
             RmiServer rmiServer = new RmiServer(controller);
             rmiServer.start(name, port);

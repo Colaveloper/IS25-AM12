@@ -8,7 +8,9 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
+import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +39,7 @@ class EventQueueHandlerTest {
         Player p2 = Player.addPlayer("p2");
         SessionManager.getInstance().registerClient(p1,client1);
         SessionManager.getInstance().registerClient(p2,client2);
-        lobby = new Lobby(new GameModel(), p1, Level.SECOND,2);
+        lobby = new Lobby(new GameModel(), new ServerControllerStub(), p1, Level.SECOND,2);
         lobby.addPlayer(p2);
         eventQueue = lobby.getEventQueue();
         eventQueueHandler = lobby.getEventQueueHandler();
@@ -207,4 +209,31 @@ class VirtualClientStub implements VirtualClient {
     public void notifySurrender(List<String> playerNames) {
 
     }
+
+    @Override
+    public void notifyPlayerDisconnection(String playerName) {
+
+    }
+}
+
+class ServerControllerStub extends ServerController {
+    public ServerControllerStub() {
+        super(null);
+    }
+
+    @Override
+    public Player registerNickname(String nickname) {
+        return null;
+    }
+
+    @Override
+    public LobbyInterface newGame(Player creator, Level level, int numPlayers) {
+        return null;
+    }
+
+    @Override
+    public LobbyInterface joinLobby(Player player, UUID lobbyID) {
+        return null;
+    }
+
 }

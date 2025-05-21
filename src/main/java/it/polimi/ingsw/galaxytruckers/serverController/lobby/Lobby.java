@@ -7,21 +7,19 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
+import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
-import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueueHandler;
-import it.polimi.ingsw.galaxytruckers.serverController.events.LobbyEvent;
-import it.polimi.ingsw.galaxytruckers.serverController.events.StartBuildingEvent;
-import org.checkerframework.checker.units.qual.A;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Lobby implements LobbyInterface {
     private final GameModelInterface model;
+    private final ServerController controller;
+
     private final UUID id;
     private final Level level;
     private final int numPlayers;
@@ -35,8 +33,9 @@ public class Lobby implements LobbyInterface {
     private final EventQueue eventQueue;
     private final EventQueueHandler eventQueueHandler;
 
-    public Lobby(GameModelInterface model, Player creator, Level level, int numPlayers) {
+    public Lobby(GameModelInterface model, ServerController serverController, Player creator, Level level, int numPlayers) {
         this.model = model;
+        this.controller = serverController;
         this.id = UUID.randomUUID();
         this.level = level;
         this.numPlayers = numPlayers;
@@ -121,6 +120,14 @@ public class Lobby implements LobbyInterface {
         if (players.size() == numPlayers) {
             startGame();
         }
+    }
+
+    public void notifyPlayerDisconnection(Player player) {
+        eventQueue.notifyEvent(new PlayerDisconnectionEvent(player.getNickname()));
+    }
+
+    public void notifyPlayerExit(Player player) {
+
     }
 
     private void checkLobbyState(LobbyState lobbyState) {

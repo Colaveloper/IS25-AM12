@@ -285,4 +285,6 @@ public interface VirtualClient {
      * @param playerNames the nicknames of the players who have surrendered
      */
     void notifySurrender(List<String> playerNames);
+
+    void notifyPlayerDisconnection(String playerName);
 }
