@@ -216,7 +216,16 @@ public interface ClientControllerInterface {
 
     void changeBatteriesOnComponent(String nickname, Point batteryComponent, int batteries);
 
-    void notifyAddGoods(String nickname, Map<GoodsType, Integer> goods, List<Point> cargoPositions);
+
+    /**
+     * called once at the start of placeGoods state
+     *
+     *
+     * @param nickname  the player's nickname
+     * @param cargoPositions  the position of the cargo holds possible
+     * @param goods     map of goods and their quantities
+     */
+    void notifyGrabGoodsState(String nickname, Map<GoodsType, Integer> goods, List<Point> cargoPositions);
 
     void notifyCrewInitialization(Map<String, Map<Point, List<CrewType>>> playerToCabin);
 

@@ -31,6 +31,7 @@ public class ClientModel {
     private List<Point> selectableBatteries;
     private final ObservableMap<FourColors, Map<StatType, Integer>> stats;
 
+
     // BUILDING
     private Point upLeft; // the upper-left point of the ship-area
     private final ListProperty<Component> revealedComponents;

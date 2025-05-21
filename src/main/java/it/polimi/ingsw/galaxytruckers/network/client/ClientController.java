@@ -169,6 +169,11 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         runAndInterceptIOE(()->model.setCabinStats(nickname, position, crewType, crew));
     }
 
+    @Override//called once at the start of the phase
+    public void notifyCrewInitialization(Map<String, Map<Point, List<CrewType>>> playerToCabin) {
+        //todo
+    }
+
 
     //-----------------------------BOTH BUILDING AND ADVENTURE----------------------------------
 
@@ -256,29 +261,18 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         runAndInterceptIOE(()->model.setGoods(nickname, position, list));
     }
 
-
-    // first time goods are shown on screen
-//    @Override
-//    public void showPlaceGoods() {
-////        view.setScreen(new GoodsScreen()); // TODO: restore
-//    }
-
     // planetIndex is an index and starts from 0, UI listing on screen starts from 1
     @Override
     public void notifyLandOnPlanet(String nickname, int planetId) {
         //todo block planet with that id
     }
 
+    //first call in place goods phase
     @Override
-    public void notifyAddGoods(String nickname, Map<GoodsType, Integer> goods, List<Point> cargoPositions){
+    public void notifyGrabGoodsState(String nickname, Map<GoodsType, Integer> goods, List<Point> cargoPositions){
         //todo setup goodsbuffer
         model.setSelectablePoints(nickname, cargoPositions);
         view.setScreen(new GoodsScreen());
-    }
-
-    @Override
-    public void notifyCrewInitialization(Map<String, Map<Point, List<CrewType>>> playerToCabin) {
-        //todo
     }
 
     @Override
@@ -309,7 +303,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     }
 
 
-
+//--------------------------------------------SERVER CALLS-------------------------------------------------------------------
 
 
     @Override
