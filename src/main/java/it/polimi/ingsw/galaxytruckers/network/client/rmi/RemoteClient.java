@@ -212,6 +212,6 @@ public interface RemoteClient extends Remote {
 
     void showFinalScores(Map<String, Integer> playerToScore) throws RemoteException;
 
-    void notifyPlayerDisconnection(String playerName);
+    void notifyPlayerDisconnection(String playerName) throws RemoteException;
 
 }

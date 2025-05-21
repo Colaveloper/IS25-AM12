@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
+import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
@@ -55,7 +56,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     }
 
     private void handleNetworkError(RemoteException e) {
-        System.out.println("WARNING: Player " + player.getNickname() + " has disconnected \n" +
+        System.out.println("WARNING: Failed to contact player " + player.getNickname() + "\n" +
                 "A remote exception was thrown: " +  e.getMessage());
         controller.handlePlayerDisconnection(player);
         stopUpdateThread();
@@ -89,6 +90,10 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
         }
     }
 
+    @Override
+    public void ping() throws RemoteException {
+        SessionManager.getInstance().ping(player);
+    }
 
     // VirtualClient
 

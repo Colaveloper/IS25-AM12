@@ -10,6 +10,8 @@ import java.rmi.RemoteException;
 import java.util.UUID;
 
 public interface RemoteController extends Remote {
+    void ping() throws RemoteException;
+
     void newGame(Level level, int numPlayers) throws RemoteException;
     void joinLobby(UUID lobbyID) throws RemoteException;
     void leaveLobby() throws RemoteException;

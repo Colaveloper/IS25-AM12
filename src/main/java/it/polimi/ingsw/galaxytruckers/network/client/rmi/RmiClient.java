@@ -21,11 +21,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RmiClient extends UnicastRemoteObject implements RemoteClient, VirtualServer {
     private RemoteServer server;
     private RemoteController remoteController;
     private ClientControllerInterface clientController;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public RmiClient() throws RemoteException {
         super();
@@ -53,12 +57,21 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
         throw new RuntimeException("Failed to handle network exception", e);
     }
 
+    private void ping() {
+        try {
+            remoteController.ping();
+        } catch (RemoteException e) {
+            handleNetworkError(e);
+        }
+    }
+
     // VirtualServer
 
     @Override
     public void registerNickname(String myNickname) {
         try {
             this.remoteController = server.registerNickname(this, myNickname);
+            this.scheduler.scheduleAtFixedRate(this::ping,5,5, TimeUnit.SECONDS);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }

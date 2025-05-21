@@ -236,7 +236,4 @@ class ServerControllerStub extends ServerController {
         return null;
     }
 
-    @Override
-    public void removeLobby(UUID lobbyID) {
-    }
 }

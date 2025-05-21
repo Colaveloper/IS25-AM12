@@ -47,19 +47,23 @@ public class ServerController implements ServerControllerInterface {
 
     @Override
     public void handlePlayerDisconnection(Player player) {
+        System.out.println("Player " + player.getNickname() + " has disconnected");
         player.getLobby().ifPresentOrElse(
                 lobby -> {
                     lobby.notifyPlayerDisconnection(player);
                     idToLobby.remove(lobby.getId());
+                    System.out.println("The lobby " + lobby.getId() + " has been removed");
                 },
                 () -> {
                     SessionManager.getInstance().unregisterClient(player);
                     Player.removePlayer(player.getNickname());
+                    System.out.println("The player " + player.getNickname() + " has been removed");
                 });
     }
 
     @Override
     public void leaveLobby(Player player) {
+        System.out.println("Player " + player.getNickname() + " has left the lobby");
         player.getLobby().ifPresent(lobby -> {
             lobby.notifyPlayerExit(player);
             idToLobby.remove(lobby.getId());
