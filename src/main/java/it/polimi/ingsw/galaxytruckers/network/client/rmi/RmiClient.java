@@ -9,7 +9,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteServer;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteController;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 
 import java.awt.*;
 import java.rmi.NotBoundException;

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponentBank;
@@ -12,12 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CliShipBuildingScreen extends CliScreen {
+    ConfigFactory config;
     CliComponentBank componentBank;
     CliFlightBoard flightBoard;
     CliAllShips allShips;
 
-    public CliShipBuildingScreen(ClientModel model, ClientController controller) throws IOException {
+    public CliShipBuildingScreen(ClientModel model, ClientController controller, ConfigFactory config) throws IOException {
         super(model, controller);
+        this.config = config;
 
         componentBank = CliComponentBank.getInstance(model);
         componentBank.addListener(this);
@@ -25,7 +29,7 @@ public class CliShipBuildingScreen extends CliScreen {
         flightBoard = new CliFlightBoard(model);
         flightBoard.addListener(this);
 
-        allShips = new CliAllShips(model);
+        allShips = new CliAllShips(model, config);
         allShips.addListener(this);
     }
 
@@ -38,15 +42,16 @@ public class CliShipBuildingScreen extends CliScreen {
         output.addAll(allShips.getDescription());
 
         output.add("C       \tGet New covered component" + "\t\t\tU [i]   \tGet i-th uncovered component");
-        output.add("S [i]   \tGet i-th stashed component" + "\t\t\tF [i]   \tGet i-th forecast deck");         // NOT IN Levels.TEST
+        output.add(config.isStashingAllowed() ? "S [i]   \tGet i-th stashed component" : "");
+        output.add(config.isForecastPresent() ? "F [i]   \tGet i-th forecast deck" : "");
 
         if (model.getExistsUnweldedComponent()) {
             output.add("P [x] [y] \tPlace unwelded component in x, y" + "\t\t\tR       \tReject unwelded component");
-            output.add("S       \tStash unwelded component");        // NOT IN Levels.TEST
+            output.add(config.isStashingAllowed() ? "S       \tStash unwelded component" : "");
             output.add("L       \tRotate unwelded component left");
         }
 
-        output.add("H       \tFlip hourglass");                     // NOT IN Levels.TEST
+        output.add(config.isHourglassPresent() ? "H       \tFlip hourglass" : "");
 
         return output;
     }
