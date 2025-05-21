@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class ClientController implements ClientControllerInterface {
+public class ClientController implements ClientControllerInterface, ControllerToServer{
     private final ClientModel model;
     private final VirtualServer server;
     private View view;
@@ -48,7 +48,7 @@ public class ClientController implements ClientControllerInterface {
 
     //-----------------------------UPDATES FROM THE SERVER----------------------------------
 
-//    @Override // TODO: DISCUSS
+    @Override // TODO: DISCUSS
     public void showGameCreation() {
         view.setScreen(new GameCreationScreen());
     }
@@ -61,15 +61,19 @@ public class ClientController implements ClientControllerInterface {
         view.setScreen(new LobbyScreen());
     }
 
+    @Override
     public void setMyNickname(String nickname) { // gets called only after legal registration
         model.setMyNickname(nickname);
         view.setScreen(new JoinOrCreateScreen());
     }
 
+    @Override
     public void joinLobby(UUID lobbyID) {
         server.joinLobby(lobbyID);
     }
 
+
+    @Override
     public void requestNewGame(Level level, int playersN) {
         server.requestNewGame(level, playersN);
     }
@@ -276,12 +280,12 @@ public class ClientController implements ClientControllerInterface {
         // view.show(ChosenStrategy)
     }
 
-    //@Override
+    @Override
     public void registerNickname(String nickname) throws IllegalArgumentException {
         server.registerNickname(nickname);
     }
 
-    //@Override
+    @Override
     public void flipHourglass() {
         try {
             server.flipHourglass();
@@ -290,7 +294,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void requestRandComponent() {
         try {
             server.requestRandComponent();
@@ -299,7 +303,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void requestComponent(int componentId) {
         try {
             server.requestComponent(componentId);
@@ -308,7 +312,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void stashComponent() {
         try {
             server.stashComponent();
@@ -317,7 +321,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void grabStashedComponent(int index) {
         try {
             server.grabStashedComponent(index);
@@ -326,7 +330,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void acquireForecast(int index) {
         try {
             server.acquireForecast(index);
@@ -335,6 +339,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
+    @Override
     public void releaseForecast() {
         try {
             server.releaseForecast();
@@ -343,7 +348,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void rejectComponent() {
         try {
             server.rejectComponent();
@@ -352,7 +357,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void placeComponent(Point point, int orientation) {
         try {
             server.placeComponent(point, orientation);

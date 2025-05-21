@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class CliGameCreationScreen extends CliScreen {
 
-    public CliGameCreationScreen(ClientModel model, ClientController controller) {
+    public CliGameCreationScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
     }
 
