@@ -156,7 +156,11 @@ public interface ClientControllerInterface {
      * @param nickname          the player's nickname
      * @param positionPoints    the position of the removed components
      */
-    void notifyComponentsRemoval(String nickname, List<Point> positionPoints);
+    void notifyShipPieceRemoval(String nickname, List<Point> positionPoints);
+
+
+
+    void notifyComponentRemoval(String playerName, Point position);
 
     /**
      * Signals to the client that their ship is not connected and that they should
@@ -206,9 +210,16 @@ public interface ClientControllerInterface {
      * @param nickname          the player's nickname
      * @param cannonsPositions  selectable cannon points
      */
-    void notifySelection(String nickname, List<Point> cannonsPositions);
+    void notifySelection(String nickname, List<Point> cannonsPositions, List<Point> batteryPositions);
+
+    void notifyComponentActivation(String playerName, Point position);
 
     void changeBatteriesOnComponent(String nickname, Point batteryComponent, int batteries);
+
+    void notifyAddGoods(String nickname, Map<GoodsType, Integer> goods, List<Point> cargoPositions);
+
+    void notifyCrewInitialization(Map<String, Map<Point, List<CrewType>>> playerToCabin);
+
 
     /**
      * Notifies that placed OR REMOVED a good in a cargo hold.
@@ -227,16 +238,17 @@ public interface ClientControllerInterface {
      * used for: planets
      *
      * @param planetId          the index of the planet chosen
-     * @param cargoPositions    positions of cargo hold component for highlights
+     * @param nickname    name of player who landed
      */
-    void choosePlanet(int planetId, List<Point> cargoPositions);
+    void notifyLandOnPlanet(String nickname, int planetId);
 
     /**
      * Updates the available goods buffer after a good is picked.
      *
      * @param type the type of good picked
+     * @param adding true: goods in - false: goods out
      */
-    void updateGoodsBuffer(GoodsType type);
+    void updateGoodsBuffer(boolean adding, GoodsType type);
 
     /**
      * Displays a projectile being fired, consuming batteries happens in the same screen.
@@ -250,7 +262,7 @@ public interface ClientControllerInterface {
      * @param selectablePoints  list of component position that can be activated
      * @param batteries         position of batteries components
      */
-    void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries);
+    void showProjectile(String nickname, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries);
 
 
     //-----------------------------ENDGAME PHASE----------------------------------

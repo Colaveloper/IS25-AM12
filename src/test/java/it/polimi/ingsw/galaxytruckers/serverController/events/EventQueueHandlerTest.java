@@ -169,7 +169,7 @@ class VirtualClientStub implements VirtualClient {
     }
 
     @Override
-    public void notifySelection(String playerName, List<Point> selectablePoints) {
+    public void notifySelection(String playerName, List<Point> selectablePoints, List<Point> batteries) {
 
     }
 
@@ -189,12 +189,12 @@ class VirtualClientStub implements VirtualClient {
     }
 
     @Override
-    public void updateGoodsBuffer(GoodsType type) {
+    public void updateGoodsBuffer(boolean adding, GoodsType type) {
 
     }
 
     @Override
-    public void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) {
+    public void showProjectile(String playerName, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) {
 
     }
 
@@ -205,6 +205,16 @@ class VirtualClientStub implements VirtualClient {
 
     @Override
     public void notifySurrender(List<String> playerNames) {
+
+    }
+
+    @Override
+    public void notifyComponentActivation(String playername, Point point) {
+
+    }
+
+    @Override
+    public void notifyAddGoods(String playerName, Map<GoodsType, Integer> goods, List<Point> cargos) {
 
     }
 }

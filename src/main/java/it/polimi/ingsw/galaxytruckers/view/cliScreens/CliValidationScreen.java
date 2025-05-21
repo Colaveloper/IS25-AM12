@@ -47,7 +47,11 @@ public class CliValidationScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input)  {
-
+        String[] parts = input.split(" ");
+        int x = Integer.parseInt(parts[0]);
+        int y = Integer.parseInt(parts[1]);
+        Point inputPoint = new Point(x, y);
+        controller.removeComponent(inputPoint);
     }
 
     @Override

@@ -202,13 +202,17 @@ public interface RemoteClient extends Remote {
 
     void notifyShipPieceRemoval(String playerName, List<Point> positions) throws RemoteException;
 
-    void notifySelection(String playerName, List<Point> selectablePoints) throws RemoteException;
+    void notifySelection(String playerName, List<Point> selectablePoints, List<Point> batteries) throws RemoteException;
 
-    void notifyPlanetChoice(String playerName, int planetId, List<Point> cargoPositions) throws RemoteException;
+    void notifyLandOnPlanet(String playerName, int planetId) throws RemoteException;
 
-    void updateGoodsBuffer(GoodsType type) throws RemoteException;
+    void updateGoodsBuffer(boolean adding, GoodsType type) throws RemoteException;
 
-    void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws RemoteException;
+    void showProjectile(String nickname, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws RemoteException;
 
     void showFinalScores(Map<String, Integer> playerToScore) throws RemoteException;
+
+    void notifyComponentActivation(String playerName, Point point) throws RemoteException;
+
+    public void notifyAddGoods(String playerName, Map<GoodsType, Integer> goods, List<Point> cargos);
 }

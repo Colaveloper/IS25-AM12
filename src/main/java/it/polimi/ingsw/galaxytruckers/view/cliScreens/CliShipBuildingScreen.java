@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponentBank;
@@ -17,7 +17,7 @@ public class CliShipBuildingScreen extends CliScreen {
     CliFlightBoard flightBoard;
     CliAllShips allShips;
 
-    public CliShipBuildingScreen(ClientModel model, ClientController controller) throws IOException {
+    public CliShipBuildingScreen(ClientModel model, ControllerToServer controller) throws IOException {
         super(model, controller);
 
         componentBank = CliComponentBank.getInstance(model);

@@ -426,39 +426,48 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
 
     @Override
     public void notifyComponentRemoval(String playerName, Point position) throws RemoteException {
-        // clientController.notifyComponentsRemoval(playerName,);
+        clientController.notifyComponentRemoval(playerName, position);
     }
 
     @Override
     public void notifyShipPieceRemoval(String playerName, List<Point> positions) throws RemoteException {
-        clientController.notifyComponentsRemoval(playerName,positions);
+        clientController.notifyShipPieceRemoval(playerName,positions);
     }
 
     @Override
-    public void notifySelection(String playerName, List<Point> selectablePoints) throws RemoteException {
-        clientController.notifySelection(playerName,selectablePoints);
-    }
-
-    //TODO: consider renaming (and/or signature -> split in notifyGoodsBufferUpdate, notifyPlanetChoice)
-    @Override
-    public void notifyPlanetChoice(String playerName, int planetId, List<Point> cargoPositions) throws RemoteException {
-        clientController.choosePlanet(planetId,cargoPositions);
-    }
-
-    //TODO: fix signature
-    @Override
-    public void updateGoodsBuffer(GoodsType type) throws RemoteException {
-        clientController.updateGoodsBuffer(type);
+    public void notifySelection(String playerName, List<Point> selectablePoints, List<Point> batteries) throws RemoteException {
+        clientController.notifySelection(playerName,selectablePoints,batteries);
     }
 
     @Override
-    public void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws RemoteException {
-        clientController.showProjectile(projectileType,direction,roll,selectablePoints,batteries);
+    public void notifyLandOnPlanet(String playerName, int planetId) throws RemoteException {
+        clientController.notifyLandOnPlanet(playerName, planetId);
+    }
+
+    @Override
+    public void updateGoodsBuffer(boolean adding, GoodsType type) throws RemoteException {
+        clientController.updateGoodsBuffer(adding, type);
+    }
+
+    //todo add nickname and split [notify selection for cannon and engines] (open space, slavers, smugglers, pirates first part) and [show projectile] (meteors, warzone, pirates second part)
+    @Override
+    public void showProjectile(String nickname, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws RemoteException {
+        clientController.showProjectile(nickname, projectileType,direction,roll,selectablePoints,batteries);
     }
 
     @Override
     public void showFinalScores(Map<String, Integer> playerToScore) throws RemoteException {
         //TODO: fix controller methods
         clientController.showFinalStats();
+    }
+
+    @Override
+    public void notifyComponentActivation(String playerName, Point point) throws RemoteException {
+        clientController.notifyComponentActivation(playerName,point);
+    }
+
+    @Override
+    public void notifyAddGoods(String playerName, Map<GoodsType, Integer> goods, List<Point> cargos) {
+
     }
 }

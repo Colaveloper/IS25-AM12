@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,6 +71,21 @@ class ProjectileTest {
             protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
                 return Optional.empty();
             }
+
+            @Override
+            public ProjectileType getProjectileType() {
+                return null;
+            }
+
+            @Override
+            public int getDiceRoll() {
+                return super.getDiceRoll();
+            }
+
+            @Override
+            public int getDirection() {
+                return super.getDirection();
+            }
         }
         assertEquals(Optional.of(upp), new TransparentProjectile(()->0, 0).getFirstFoundComponentPosition(myShipBoard));
         assertEquals(Optional.of(rightp), new TransparentProjectile(()->0, 1).getFirstFoundComponentPosition(myShipBoard));
@@ -102,6 +118,21 @@ class ProjectileTest {
             @Override
             protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
                 return Optional.of(targetComponentPosition);
+            }
+
+            @Override
+            public int getDirection() {
+                return super.getDirection();
+            }
+
+            @Override
+            public ProjectileType getProjectileType() {
+                return null;
+            }
+
+            @Override
+            public int getDiceRoll() {
+                return super.getDiceRoll();
             }
         }
 

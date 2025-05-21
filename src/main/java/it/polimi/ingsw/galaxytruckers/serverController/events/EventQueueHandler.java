@@ -272,7 +272,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifySelection(
                     selectionPointsEvent.playerName(),
-                    selectionPointsEvent.points()
+                    selectionPointsEvent.points(),
+                    selectionPointsEvent.batteries()
             );
         }
     }
@@ -292,7 +293,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
     public void visit(GoodsBufferUpdateEvent goodsBufferUpdateEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
-            client.updateGoodsBuffer(
+            client.updateGoodsBuffer(goodsBufferUpdateEvent.adding(),
                     goodsBufferUpdateEvent.goodsType()
             );
         }
@@ -303,6 +304,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.showProjectile(
+                    projectileEvent.playerName(),
                     projectileEvent.projectileType(),
                     projectileEvent.direction(),
                     projectileEvent.roll(),
@@ -337,5 +339,28 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         Player player = Player.getPlayer(shipNotConnectedEvent.playerName());
         VirtualClient client = SessionManager.getInstance().getClient(player);
         client.showShipPieces(shipNotConnectedEvent.playerName(), shipNotConnectedEvent.shipPieces());
+    }
+
+    @Override
+    public void visit(ActivateComponentEvent activateComponentEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.notifyComponentActivation(
+                    activateComponentEvent.playerName(),
+                    activateComponentEvent.point()
+            );
+        }
+    }
+
+    @Override
+    public void visit(AddGoodsEvent addGoodsEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.notifyAddGoods(
+                    addGoodsEvent.playerName(),
+                    addGoodsEvent.goods(),
+                    addGoodsEvent.cargos()
+            );
+        }
     }
 }
