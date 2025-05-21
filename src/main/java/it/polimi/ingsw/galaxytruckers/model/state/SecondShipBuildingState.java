@@ -34,7 +34,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
     }
 
     @Override
-    public void stashComponent(ShipBoard shipBoard) {
+    public void stashComponent(ShipBoard shipBoard) throws IllegalStateException {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
@@ -43,7 +43,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
     }
 
     @Override
-    public void grabStashedComponent(ShipBoard shipBoard, int index) {
+    public void grabStashedComponent(ShipBoard shipBoard, int index) throws IllegalStateException {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }

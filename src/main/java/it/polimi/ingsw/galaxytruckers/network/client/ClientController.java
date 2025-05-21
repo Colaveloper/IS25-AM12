@@ -96,29 +96,24 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 
     @Override//Tommy approved
     public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) {
-        runAndInterceptIOE(()->model.setStashedComponents(playerName, stashComponentIds));
-        runAndInterceptIOE(()->model.setComponentInHand(playerName, 0));
+        runAndInterceptIOE(()->model.stashComponents(playerName, stashComponentIds));
     }
 
     @Override//Tommy approved
     public void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) {
-        runAndInterceptIOE(()->model.setStashedComponents(playerName, stashComponentIds));
+        runAndInterceptIOE(()->model.unstashComponents(playerName, stashComponentIds));
         runAndInterceptIOE(()->model.setComponentInHand(playerName, componentId));
     }
 
     @Override//Tommy approved
     public void notifyComponentPositioning(String nickname, int componentId, int direction, Point position) {
         runAndInterceptIOE(()->model.setComponent(nickname, componentId, direction, position));
-        model.clearComponentInHand(nickname);
     }
 
     @Override//Tommy approved
     public void notifyComponentRejection(String playerName, int componentId) {
         runAndInterceptIOE(()->model.addRevealedComponent(componentId));
-        if(model.isMyNickname(playerName)) {
-            model.setUnwelded(false);
-        }
-        model.clearComponentInHand(playerName);
+        model.clearUnwelded(playerName);
     }
 
     @Override//Tommy approved
@@ -149,7 +144,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     @Override
     public void sendForecastDeck(List<Integer> deckCardIds) {
         model.setForecast(deckCardIds);
-        model.setUnwelded(false); //quote:  picking up a pile welds your most recent component to your ship
+        model.setExistsUnweldedComponent(model.getMyNickname(), false); //quote:  picking up a pile welds your most recent component to your ship
         view.setScreen(new ForecastScreen());
     }
 
