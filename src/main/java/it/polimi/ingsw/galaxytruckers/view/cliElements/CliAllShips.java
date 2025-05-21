@@ -100,16 +100,16 @@ public class CliAllShips extends CliElement {
                     singleStashedDescription.clear();
                     singleStashedDescription.addAll(component.getDescription());
                     singleStashedDescription.add("  "+i);
-                    stashed = DescriptionUtils.sideBySide(stashed, singleStashedDescription);
+                    DescriptionUtils.sideBySide(stashed, singleStashedDescription);
                     i++;
                 }
-                handAndStashDescription = DescriptionUtils.sideBySide(
+                DescriptionUtils.sideBySide(
                         handAndStashDescription,
                         DescriptionUtils.borderAndTitle(stashed, "stash")
                 );
             }
             singleShipDescription.addAll(handAndStashDescription);
-            description = DescriptionUtils.sideBySide(description, singleShipDescription);
+            DescriptionUtils.sideBySide(description, singleShipDescription);
         }
 
         return description;

@@ -12,8 +12,8 @@ public abstract class ConfigFactory {
     public abstract boolean isGivingUpAllowed();
     public abstract Set<Point> getShipArea();
     public abstract List<Integer> getStartingPositions();
-    public abstract int getLoopLenght();
+    public abstract int getLoopLength();
     public int getComponentsN() {
-        return 0;
+        return 156;
     };
 }

@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class DescriptionUtils {
     private static final Pattern ANSI_ESCAPE = Pattern.compile("\u001B\\[[;\\d]*m");
 
-    public static List<String> sideBySide(List<String> a, List<String> b) {
+    public static void sideBySide(List<String> a, List<String> b) {
         // Find max length among a strings (treat empty strings normally)
         int leftWidth = 1;
         for (String s : a) {
@@ -38,7 +38,6 @@ public class DescriptionUtils {
             a.set(i, line.toString());
         }
 
-        return a;
     }
 
     public static List<String> borderAndTitle(List<String> original, String title) {

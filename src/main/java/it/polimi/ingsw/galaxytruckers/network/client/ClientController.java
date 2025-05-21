@@ -85,7 +85,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
             case FIRST -> throw new IllegalArgumentException("First level is not playable");
             case SECOND -> new SecondConfigurator();
         };
-        model.setFlightBoard(config.getLoopLenght(), config.getStartingPositions());
+        model.setFlightBoard(config.getLoopLength(), config.getStartingPositions());
         model.setShipArea(config.getShipArea());
         model.setCoveredComponents(config.getComponentsN());
         view.setScreen(new ShipBuildingScreen(config));

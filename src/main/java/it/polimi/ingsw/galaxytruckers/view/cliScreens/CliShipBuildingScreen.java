@@ -23,7 +23,7 @@ public class CliShipBuildingScreen extends CliScreen {
         super(model, controller);
         this.config = config;
 
-        componentBank = CliComponentBank.getInstance(model);
+        componentBank = CliComponentBank.getInstance(model, config);
         componentBank.addListener(this);
 
         flightBoard = new CliFlightBoard(model);

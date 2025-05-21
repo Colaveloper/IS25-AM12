@@ -53,9 +53,9 @@ public class CliShipBoard extends CliElement {
         }
 
         int xIndex = upLeft.x;
-        StringBuilder xIndexes = new StringBuilder();
+        StringBuilder xIndexes = new StringBuilder(" ");
         for (int i = 0; i < componentMatrix.getFirst().size(); i++) {
-            xIndexes.append("  ").append(xIndex).append("  ");
+            xIndexes.append("   ").append(xIndex).append("  ");
             xIndex++;
         }
         result.add(xIndexes.toString());
