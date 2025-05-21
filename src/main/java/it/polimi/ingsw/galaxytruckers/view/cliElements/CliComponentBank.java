@@ -1,6 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
+import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
 import javafx.beans.property.*;
@@ -19,12 +21,16 @@ public class CliComponentBank extends CliElement {
 
     private final List<BooleanProperty> forecastDeck;
 
-    private CliComponentBank(ClientModel model) throws IOException {
+    private CliComponentBank(ClientModel model, ConfigFactory config) throws IOException {
         super(model);
 
-        forecastDeck = model.getForecastDeckAvailablility();
-        for(BooleanProperty forecast : forecastDeck) {
-            forecast.addListener(this);
+        if (config.isForecastPresent()) {
+            forecastDeck = model.getForecastDeckAvailablility();
+            for(BooleanProperty forecast : forecastDeck) {
+                forecast.addListener(this);
+            }
+        } else {
+            forecastDeck = null;
         }
 
         coveredComponentN = model.coveredComponentNProperty();
@@ -78,17 +84,17 @@ public class CliComponentBank extends CliElement {
             row.append("  ").append(n).append("  ").append(padding);
         }
         description.add(row.toString());
-        row.setLength(0);
 
-        row
-                .append("Forecast decks:" + "\t\tdeck 1 :")
-                .append(forecastDeck.get(0).get())
-                .append("\t\tdeck 2: ")
-                .append(forecastDeck.get(1).get())
-                .append("\t\tdeck 3: ")
-                .append(forecastDeck.get(2).get());
-
-        description.add(row.toString());
+        if (forecastDeck != null) {
+            List<String> forecast = new ArrayList<>();
+            forecast.add("  deck 1    deck 2    deck 3  ");
+            forecast.add(
+                    (forecastDeck.get(0).get() ? "available " : "  taken   ") +
+                    (forecastDeck.get(1).get() ? "available " : "  taken   ") +
+                    (forecastDeck.get(2).get() ? "available " : "  taken   ")
+            );
+            description.addAll(DescriptionUtils.borderAndTitle(forecast, "forecast decks"));
+        }
 
         return description;
     }
@@ -97,9 +103,9 @@ public class CliComponentBank extends CliElement {
     /////////////////////////////////////////// SINGLETON LOGIC ///////////////////////////////////////
     private static CliComponentBank instance;
 
-    public static synchronized CliComponentBank getInstance(ClientModel model) throws IOException {
+    public static synchronized CliComponentBank getInstance(ClientModel model, ConfigFactory config) throws IOException {
         if (instance == null) {
-            instance = new CliComponentBank(model);
+            instance = new CliComponentBank(model, config);
         }
         return instance;
     }

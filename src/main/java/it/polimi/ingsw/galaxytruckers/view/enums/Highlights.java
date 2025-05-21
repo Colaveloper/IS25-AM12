@@ -1,8 +1,7 @@
-package it.polimi.ingsw.galaxytruckers.view.viewEnums;
+package it.polimi.ingsw.galaxytruckers.view.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public enum Highlights {
 

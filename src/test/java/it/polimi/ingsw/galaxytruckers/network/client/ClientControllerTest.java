@@ -203,7 +203,7 @@ class ClientControllerTest {
         nicknames.put("OtherPlayer1", FourColors.BLUE);
         controller.updateLobbyPlayers(nicknames);
 
-        controller.notifyNewGame(Level.SECOND, 2);
+        controller.notifyNewGame(Level.TEST, 2);
     }
 
     public static void buildingSequence() {

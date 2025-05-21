@@ -12,7 +12,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -4,8 +4,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
-import javafx.scene.layout.Pane;
+import it.polimi.ingsw.galaxytruckers.view.enums.ComponentType;
 
 import java.awt.*;
 import java.io.IOException;

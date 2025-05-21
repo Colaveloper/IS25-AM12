@@ -11,7 +11,7 @@ import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 
 import java.awt.*;
 import java.rmi.RemoteException;

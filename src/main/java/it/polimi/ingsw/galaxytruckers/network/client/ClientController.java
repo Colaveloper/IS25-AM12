@@ -10,7 +10,7 @@ import it.polimi.ingsw.galaxytruckers.view.CliView;
 import it.polimi.ingsw.galaxytruckers.view.GuiView;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.screens.*;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import javafx.application.Application;
 
 import java.awt.*;
@@ -85,10 +85,10 @@ public class ClientController implements ClientControllerInterface, ControllerTo
             case FIRST -> throw new IllegalArgumentException("First level is not playable");
             case SECOND -> new SecondConfigurator();
         };
-        model.setFlightBoard(config.getLoopLenght(), config.getStartingPositions());
+        model.setFlightBoard(config.getLoopLength(), config.getStartingPositions());
         model.setShipArea(config.getShipArea());
         model.setCoveredComponents(config.getComponentsN());
-        view.setScreen(new ShipBuildingScreen());
+        view.setScreen(new ShipBuildingScreen(config));
     }
 
 
@@ -137,7 +137,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void notifyReleaseForecast(String playerName, int deckIndex) {
         runAndInterceptIOE(()->model.freeForecast(deckIndex));
         if (model.isMyNickname(playerName)) {
-            view.setScreen(new ShipBuildingScreen());
+            view.setScreen(new ShipBuildingScreen(config));
         }
     }
 
