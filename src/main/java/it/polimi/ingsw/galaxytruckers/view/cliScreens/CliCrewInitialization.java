@@ -36,18 +36,26 @@ public class CliCrewInitialization extends CliScreen {
         output.addAll(allShips.getDescription());
 
         CrewType crewType = model.getUnplacedCrewType();
-
-        output.add("choose position for" + crewType + "in one of the highlighted cabins");
-        model.setSelectablePoints(model.getMyNickname(), model.getUnplacedCrewPoints(crewType));
-
+        if(!model.shipIsValid() && !crewType.equals(CrewType.HUMAN)) {
+            output.add("choose position for" + crewType + "in one of the highlighted cabins");
+            output.add("or C to continue");
+            model.setSelectablePoints(model.getMyNickname(), model.getUnplacedCrew().get(crewType));
+        }
+        else {
+            output.add("empty cabins will be filled with humans, waiting for other players to finish");
+        }
         return output;
     }
 
     @Override
     public boolean isLegalInput(String input) {
+
         // Validate format using regex
         if (!input.matches("\\d+ \\d+")) {
             return false;
+        }
+        if(input.matches("C")) {
+            return true;
         }
 
         // Split input and parse numbers
@@ -62,7 +70,21 @@ public class CliCrewInitialization extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-
+        if(!model.shipIsValid()) {
+            if(input.matches("C")) {
+                for(CrewType crewType : model.getUnplacedCrew().keySet()) {
+                    for(Point point : model.getUnplacedCrew().get(crewType)) {
+                        controller.initializeCabin(point, CrewType.HUMAN);
+                    }
+                }
+            }
+            else{
+                String[] parts = input.split("\\s+");
+                int x = Integer.parseInt(parts[1]);
+                int y = Integer.parseInt(parts[2]);
+                controller.initializeCabin(new Point(x, y), model.getUnplacedCrewType());
+            }
+        }
     }
 
 

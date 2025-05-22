@@ -52,13 +52,14 @@ public class CliShipBuildingScreen extends CliScreen {
         }
 
         output.add(config.isHourglassPresent() ? "H       \tFlip hourglass" : "");
+        output.add("E [i]   \tend and place on flightboard");
 
         return output;
     }
 
     @Override
     public boolean isLegalInput(String input) {
-        return input.matches("^(C|U \\d+|S(?: \\d+)?|F \\d+|R|P \\d+ \\d+|L|H)$");
+        return input.matches("^(C|U \\d+|S(?: \\d+)?|F \\d+|R|P \\d+ \\d+|L|H|E \\d+)$");
     }
 
     @Override
@@ -111,6 +112,13 @@ public class CliShipBuildingScreen extends CliScreen {
 
             case "H":
                 controller.flipHourglass();
+                break;
+
+            case "E":
+                if (parts.length == 2) {
+                    int index = Integer.parseInt(parts[1]);
+                    controller.placeShipOnFlightboard(index);
+                }
                 break;
 
             default:

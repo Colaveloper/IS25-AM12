@@ -278,28 +278,36 @@ public class ClientModel {
     }
 
     public void setCabinStats(String nickname, Point p, CrewType crewType, int crewSize) throws IOException {
-        if(nickname.equals(myNickname)) {
-            unplacedCrew.remove(crewType);
-            resetAllSelections(myNickname);
-        }
         ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setCrewType(crewType);
         ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(crewSize);
+    }
+
+    //happens only in building phase, removes the alien from the available to be placed
+    public void placeAliens(CrewType crewType, Point position) throws IOException {
+        resetAllSelections(myNickname);
+        unplacedCrew.remove(crewType);
+        ships.get(playerToColor.get(myNickname)).get(position.y-upLeft.y).get(position.x- upLeft.x).get().setCrewType(crewType);
+        ships.get(playerToColor.get(myNickname)).get(position.y-upLeft.y).get(position.x- upLeft.x).get().setStat(1);
     }
 
     public void setUnplacedCrew(Map<CrewType, List<Point>> unplacedCrew) {
         this.unplacedCrew = unplacedCrew;
     }
 
-    public List<Point> getUnplacedCrewPoints(CrewType crewType) {
-        return unplacedCrew.get(crewType);
+    public Map<CrewType, List<Point>> getUnplacedCrew() {
+        return unplacedCrew;
     }
+
     public CrewType getUnplacedCrewType() {
         if(unplacedCrew.containsKey(CrewType.PURPLE)){
             return CrewType.PURPLE;
         } else if (unplacedCrew.containsKey(CrewType.BROWN)) {
             return CrewType.BROWN;
         }
-        else return CrewType.HUMAN;
+        else {
+            setIsValid(true);// no humans mean game lost anyway
+            return CrewType.HUMAN;
+        }
     }
 
         //  FORECAST

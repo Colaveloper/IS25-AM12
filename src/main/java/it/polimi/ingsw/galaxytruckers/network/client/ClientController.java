@@ -160,6 +160,9 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 
     @Override//Tommy approved
     public void notifyCabinUpdate(String nickname, Point position, int crew, CrewType crewType) {
+        if(nickname.equals(model.getMyNickname()) && crewType!= CrewType.HUMAN) {
+            runAndInterceptIOE(()->model.placeAliens(crewType, position));//happens only in building
+        }
         runAndInterceptIOE(()->model.setCabinStats(nickname, position, crewType, crew));
     }
 
@@ -358,6 +361,24 @@ public class ClientController implements ClientControllerInterface, ControllerTo
             server.useBattery(point);
         } catch (IllegalArgumentException e) {
             reportError("couldn't spend battery");
+        }
+    }
+
+    @Override
+    public void initializeCabin(Point point, CrewType crewType) {
+        try {
+            server.initializeCabin(point, crewType);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't initialize cabin");
+        }
+    }
+
+    @Override
+    public void placeShipOnFlightboard(int startingPosition) {
+        try {
+            server.placeShipOnFlightBoard(startingPosition);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't place on flightboard");
         }
     }
 
