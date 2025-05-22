@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -35,5 +36,10 @@ public class SmallMeteor extends Projectile {
         }
         return getFirstFoundComponentPosition(shipBoard)
                 .filter(c -> shipBoard.getComponentMap().get(c).getConnectors().get((direction + 2) % 4) != Connector.NONE);
+    }
+
+    @Override
+    public ProjectileType getProjectileType() {
+        return ProjectileType.SMALLMETEOR;
     }
 }

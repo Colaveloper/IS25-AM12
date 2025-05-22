@@ -1,15 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
-public record GoodsBufferUpdateEvent(String playerName, boolean adding, GoodsType goodsType) implements Event {
-    public static GoodsBufferUpdateEvent from(ShipBoard shipBoard, boolean adding, GoodsType goodsType) {
-        return new GoodsBufferUpdateEvent(
+import java.awt.*;
+
+public record ActivateComponentEvent(String playerName, Point point) implements Event{
+    public static ActivateComponentEvent from(ShipBoard shipBoard, Point point) {
+        return new ActivateComponentEvent(
                 Player.getPlayer(shipBoard).getNickname(),
-                adding,
-                goodsType
+                point
         );
     }
 

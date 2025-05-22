@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
 import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
@@ -34,7 +35,13 @@ public class SecondShipBuildingState extends ShipBuildingState {
     }
 
     @Override
-    public void stashComponent(ShipBoard shipBoard) throws IllegalStateException {
+    public void setGame(Game game) {
+        super.setGame(game);
+        hourglass.flip(this::notifyHourglassEnd);
+    }
+
+    @Override
+    public void stashComponent(ShipBoard shipBoard) {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
@@ -43,7 +50,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
     }
 
     @Override
-    public void grabStashedComponent(ShipBoard shipBoard, int index) throws IllegalStateException {
+    public void grabStashedComponent(ShipBoard shipBoard, int index) {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }

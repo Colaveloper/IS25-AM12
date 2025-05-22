@@ -36,7 +36,9 @@ public class CliShipPieceChoiceScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-
+        if(!model.shipIsValid()) {
+            controller.chooseShipPiece(Integer.parseInt(input));
+        }
     }
 
     @Override

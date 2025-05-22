@@ -36,4 +36,14 @@ public interface ControllerToServer {
     void placeComponent(Point point, int orientation);
 
     void reportError(String details);
+
+    void goNext();
+
+    void chooseShipPiece(int choice);
+
+    void activateComponent(Point point);
+
+    void removeComponent(Point point);
+
+    void useBattery(Point point);
 }

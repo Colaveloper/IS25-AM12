@@ -6,11 +6,12 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import java.awt.*;
 import java.util.List;
 
-public record SelectionPointsEvent(String playerName, List<Point> points) implements Event {
-    public static SelectionPointsEvent from(ShipBoard shipBoard, List<Point> points) {
+public record SelectionPointsEvent(String playerName, List<Point> points, List<Point> batteries) implements Event {
+    public static SelectionPointsEvent from(ShipBoard shipBoard, List<Point> points, List<Point> batteries) {
         return new SelectionPointsEvent(
                 Player.getPlayer(shipBoard).getNickname(),
-                points
+                points,
+                batteries
         );
     }
 

@@ -10,10 +10,12 @@ public abstract class ActivateState extends AdventureState{
     Set<Point> availablePositions;
     ShipBoard shipBoard;
     int batteriesToSpend;
+    int activatedComponents;
 
     ActivateState(ShipBoard shipBoard) {
         this.shipBoard = shipBoard;
         this.batteriesToSpend = 0;
+        this.activatedComponents = 0;
     }
 
     @Override
