@@ -8,7 +8,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.*;
 import it.polimi.ingsw.galaxytruckers.view.CliView;
 import it.polimi.ingsw.galaxytruckers.view.GuiView;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliPointSelectionScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.screens.*;
 import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
@@ -170,8 +169,12 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     }
 
     @Override//called once at the start of the phase
-    public void notifyCrewInitialization(Map<String, Map<Point, List<CrewType>>> playerToCabin) {
-        //todo
+    public void notifyCrewInitialization(Map<String, Map<CrewType, List<Point>>> playerToCabin) {
+        if(playerToCabin.containsKey(model.getMyNickname())){
+            model.setIsValid(false);
+            model.setUnplacedCrew(playerToCabin.get(model.getMyNickname()));
+        }
+        view.setScreen(new CrewInitialization());
     }
 
 
@@ -199,9 +202,13 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     }
 
     @Override
-    public void showShipPieces(String nickname, List<Set<Point>> shipPieces) {
-        model.setSelectableShipPieces(nickname, shipPieces);
-        model.setIsValid(!model.isMyNickname(nickname));
+    public void showShipPieces(Map<String, List<Set<Point>>> brokenShips) {
+        for(String nickname : brokenShips.keySet()) {
+            model.setSelectableShipPieces(nickname, brokenShips.get(nickname));
+            if(model.isMyNickname(nickname)) {
+                model.setIsValid(false);
+            }
+        }
         view.setScreen(new ShipPieceChoiceScreen());
     }
 

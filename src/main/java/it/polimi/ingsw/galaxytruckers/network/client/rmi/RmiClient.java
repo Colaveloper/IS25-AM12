@@ -380,8 +380,8 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
-    public void showShipPieces(String playerName, List<Set<Point>> shipPieces) throws RemoteException {
-        clientController.showShipPieces(playerName, shipPieces);
+    public void showShipPieces(Map<String, List<Set<Point>>> brokenShips) throws RemoteException {
+        clientController.showShipPieces(brokenShips);
     }
 
     @Override

@@ -136,10 +136,9 @@ public interface RemoteClient extends Remote {
      * Signals to the client that their ship is not connected and that they should
      * choose one of the given pieces to keep
      *
-     * @param playerName
-     * @param shipPieces a list containing the ship's connected subsets
+     * @param
      */
-    void showShipPieces(String playerName, List<Set<Point>> shipPieces) throws RemoteException;
+    void showShipPieces(Map<String, List<Set<Point>>> brokenShips) throws RemoteException;
 
     /**
      * Signals to the client that the list of valid ships has changed

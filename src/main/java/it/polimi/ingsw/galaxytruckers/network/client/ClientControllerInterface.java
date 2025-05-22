@@ -163,12 +163,11 @@ public interface ClientControllerInterface {
     void notifyComponentRemoval(String playerName, Point position);
 
     /**
-     * Signals to the client that their ship is not connected and that they should
+     * Signals to the client that a list of ships are not connected and that they should
      * choose one of the given pieces to keep
-     * @param nickname who has the ship in pieces
-     * @param shipPieces a list containing the ship's connected subsets
+     * @param brokenShips map player to list of unconnected ship pieces
      */
-    void showShipPieces(String nickname, List<Set<Point>> shipPieces);
+    void showShipPieces(Map<String, List<Set<Point>>> brokenShips);
 
     /**
      * Signals to the client that the list of valid ships has changed
@@ -227,7 +226,7 @@ public interface ClientControllerInterface {
      */
     void notifyGrabGoodsState(String nickname, Map<GoodsType, Integer> goods, List<Point> cargoPositions);
 
-    void notifyCrewInitialization(Map<String, Map<Point, List<CrewType>>> playerToCabin);
+    void notifyCrewInitialization(Map<String, Map<CrewType, List<Point>>> playerToCabin);
 
 
     /**

@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers.view.model;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
@@ -42,6 +41,7 @@ public class ClientModel {
     private final List<BooleanProperty> forecastAvailability;
     private List<Set<Point>> shipPieces;
     private boolean isValid;
+    private Map<CrewType, List<Point>> unplacedCrew;
 
     private boolean unweldedComponent;
     // FLIGHTBOARD
@@ -170,6 +170,8 @@ public class ClientModel {
 
         // COMPONENT BANK
 
+
+
     public void addRevealedComponent(int revealedComponentId) throws IOException {
         revealedComponents.addLast(new Component(revealedComponentId));
     }
@@ -234,8 +236,28 @@ public class ClientModel {
     }
 
     public void setCabinStats(String nickname, Point p, CrewType crewType, int crewSize) throws IOException {
+        if(nickname.equals(myNickname)) {
+            unplacedCrew.remove(crewType);
+            resetAllSelections(myNickname);
+        }
         ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setCrewType(crewType);
         ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(crewSize);
+    }
+
+    public void setUnplacedCrew(Map<CrewType, List<Point>> unplacedCrew) {
+        this.unplacedCrew = unplacedCrew;
+    }
+
+    public List<Point> getUnplacedCrewPoints(CrewType crewType) {
+        return unplacedCrew.get(crewType);
+    }
+    public CrewType getUnplacedCrewType() {
+        if(unplacedCrew.containsKey(CrewType.PURPLE)){
+            return CrewType.PURPLE;
+        } else if (unplacedCrew.containsKey(CrewType.BROWN)) {
+            return CrewType.BROWN;
+        }
+        else return CrewType.HUMAN;
     }
 
         //  FORECAST
