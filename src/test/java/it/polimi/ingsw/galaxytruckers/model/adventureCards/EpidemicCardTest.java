@@ -7,7 +7,6 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -90,7 +89,7 @@ class EpidemicCardTest {
             shipPlaces.put(ships.get(i), 10-i);
         }
 
-        FlightBoard flightBoard = new FlightBoard(null) {
+        FlightBoard flightBoard = new FlightBoard() {
             @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return shipPlaces;

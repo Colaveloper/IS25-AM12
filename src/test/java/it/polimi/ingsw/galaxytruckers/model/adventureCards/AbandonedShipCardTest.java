@@ -9,7 +9,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.GrabRewardState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.RemoveCrewState;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -39,7 +38,7 @@ class AbandonedShipCardTest {
         for (int i = 0; i < ships.size(); i++) {
             shipPlaces.put(ships.get(i), 10-i);
         }
-        FlightBoard flightBoard = new FlightBoard(null) {
+        FlightBoard flightBoard = new FlightBoard() {
             @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return shipPlaces;

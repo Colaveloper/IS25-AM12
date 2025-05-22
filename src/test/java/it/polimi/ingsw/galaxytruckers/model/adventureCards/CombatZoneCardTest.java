@@ -107,7 +107,7 @@ class CombatZoneCardTest {
             }
         };
         shipBoards = List.of(shipBoard1, shipBoard2, shipBoard3);
-        FlightBoard flightBoard = new SecondFlightBoard(Set.of(shipBoard1, shipBoard2, shipBoard3));
+        FlightBoard flightBoard = new SecondFlightBoard(3);
         flightBoard.placeShipOnFlightBoard(shipBoard1,1);
         flightBoard.placeShipOnFlightBoard(shipBoard2,3);
         flightBoard.placeShipOnFlightBoard(shipBoard3,6);

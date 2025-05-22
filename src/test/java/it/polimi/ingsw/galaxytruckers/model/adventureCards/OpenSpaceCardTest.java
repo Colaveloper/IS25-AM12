@@ -10,16 +10,12 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.ActivateState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,7 +45,7 @@ class OpenSpaceCardTest {
             }
         };
         ships.addAll(List.of(ship1, ship2));
-        FlightBoard flightBoardStub = new FlightBoard(null) {
+        FlightBoard flightBoardStub = new FlightBoard() {
             @Override
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return false;
@@ -102,7 +98,7 @@ class OpenSpaceCardTest {
             }
         };
         ships.addAll(List.of(ship1, ship2));
-        FlightBoard flightBoardStub = new FlightBoard(null) {
+        FlightBoard flightBoardStub = new FlightBoard() {
             @Override
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return false;

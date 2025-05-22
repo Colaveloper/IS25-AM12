@@ -12,25 +12,42 @@ public abstract class FlightBoard {
     protected final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
     protected List<Integer> startingPositionsLeft;
 
-    public FlightBoard(Set<ShipBoard> allShips) {
+    public FlightBoard() {
         this.shipToPlace = new HashMap<>();
     }
 
     /**
-     * @return the map of ships currently playing*/
+     * @return a map containing for each ship still in play their position
+     * on the flightBoard
+     * */
     public Map<ShipBoard, Integer> getShipToPlace() {
         return shipToPlace;
     }
 
     /**
-     * Puts the ship in the shipToPlace map at the specified starting position and
-     * updates the starting positions left. If there are no more starting positions left,
-     * then the building phase has concluded
+     * Puts the given ship in the given starting position, if available, and makes that
+     * position unavailable for future calls.
+     *
      * @param shipBoard the ship to be placed
      * @param startingPosition the starting position of the ship to place
      * @return true if there are no more starting positions left, false otherwise
      * */
-    public abstract boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition);
+    public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
+        return placeShipOnFlightBoard(shipBoard);
+    }
+
+    /**
+     * Puts the given ship in the first available starting position and makes that
+     * position unavailable for future calls.
+     *
+     * @param shipBoard the ship to be placed
+     * @return true if there are no more starting positions left, false otherwise
+     * */
+    public boolean placeShipOnFlightBoard(ShipBoard shipBoard) {
+        shipToPlace.put(shipBoard, startingPositionsLeft.removeFirst());
+        // to be interpreted as "building phase is finished for everybody"
+        return startingPositionsLeft.isEmpty();
+    }
 
     /**
      * @return the flightboard's length*/

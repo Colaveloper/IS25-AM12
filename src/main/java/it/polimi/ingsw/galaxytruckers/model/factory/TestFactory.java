@@ -8,7 +8,6 @@ import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.model.state.TestShipBuildingState;
 
 import java.io.IOException;
-import java.util.Set;
 
 public class TestFactory extends GameFactory{
     @Override
@@ -17,8 +16,8 @@ public class TestFactory extends GameFactory{
     }
 
     @Override
-    public FlightBoard createFlightBoard(Set<ShipBoard> allShips) {
-         return new TestFlightBoard(allShips);
+    public FlightBoard createFlightBoard(int shipsN) {
+         return new TestFlightBoard(shipsN);
     }
 
     @Override

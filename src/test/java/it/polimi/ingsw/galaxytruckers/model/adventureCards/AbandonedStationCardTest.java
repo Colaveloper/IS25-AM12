@@ -11,7 +11,6 @@ import it.polimi.ingsw.galaxytruckers.model.state.AddGoodsState;
 import it.polimi.ingsw.galaxytruckers.model.state.GrabRewardState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -96,7 +95,7 @@ class AbandonedStationCardTest {
             loserShipPlaces.put(loserShips.get(i), 10-i);
         }
 
-        flightBoard = new FlightBoard(null) {
+        flightBoard = new FlightBoard() {
             @Override
             protected int getLoopLength() {
                 return 0;
@@ -123,7 +122,7 @@ class AbandonedStationCardTest {
             }
         };
 
-        flightBoardOfLosers = new FlightBoard(null) {
+        flightBoardOfLosers = new FlightBoard() {
             @Override
             protected int getLoopLength() {
                 return 0;
