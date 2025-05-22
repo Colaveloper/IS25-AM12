@@ -3,7 +3,9 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.enums.ComponentType;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.Component;
 
 import java.awt.*;
 import java.io.IOException;
@@ -53,8 +55,9 @@ public class CliProjectilesScreen extends CliScreen {
         output.add("a" + model.getCurrentProjectile().type().name() +
                 "is approaching from" + direction + model.getCurrentProjectile().roll());
         if (!model.getSelectablePoints().isEmpty()) {
-            output.add("choose what to activate AND a battery to use");
+            output.add("choose what to activate OR a battery to use");
         }
+        output.add("S to submit end activations");
         return output;
     }
 
@@ -62,17 +65,14 @@ public class CliProjectilesScreen extends CliScreen {
     @Override
     public boolean isLegalInput(String input) {
         // check if input = number + space + number
-        if (!input.matches("\\d+ \\d+ \\d+ \\d+")) return false;
+        if (!input.matches("\\d+ \\d+") || !input.matches("C")) return false;
 
         // check if the point made from those numbers is selectable
         String[] parts = input.split(" ");
         int x = Integer.parseInt(parts[0]);
         int y = Integer.parseInt(parts[1]);
         Point p = new Point(x, y);
-        x = Integer.parseInt(parts[2]);
-        y = Integer.parseInt(parts[3]);
-        Point battery = new Point(x, y);
-        return model.getSelectablePoints().contains(p) && model.getSelectableBatteries().contains(battery);
+        return model.getSelectablePoints().contains(p) && model.getSelectableBatteries().contains(p);
     }
 
     @Override
@@ -81,12 +81,12 @@ public class CliProjectilesScreen extends CliScreen {
         int x = Integer.parseInt(parts[0]);
         int y = Integer.parseInt(parts[1]);
         Point p = new Point(x, y);
-        controller.activateComponent(p);
-
-        //todo: battery è attivabile?
-        x = Integer.parseInt(parts[2]);
-        y = Integer.parseInt(parts[3]);
-        Point battery = new Point(x, y);
-        controller.useBattery(battery);
+        Component component = model.getComponent(model.getMyNickname(), p);
+        if(component.getType() == ComponentType.BATTERY){
+            controller.useBattery(p);
+        }
+        else{
+            controller.activateComponent(p);
+        }
     }
 }

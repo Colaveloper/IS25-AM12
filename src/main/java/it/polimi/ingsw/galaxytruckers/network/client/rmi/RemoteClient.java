@@ -213,7 +213,7 @@ public interface RemoteClient extends Remote {
 
     void notifyComponentActivation(String playerName, Point point) throws RemoteException;
 
-    public void notifyAddGoods(String playerName, Map<GoodsType, Integer> goods, List<Point> cargos);
+    void notifyAddGoods(String playerName, Map<GoodsType, Integer> goods, List<Point> cargos) throws RemoteException;
 
     void notifyPlayerDisconnection(String playerName) throws RemoteException;
 
