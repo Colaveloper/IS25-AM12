@@ -33,6 +33,7 @@ public class ClientModel {
 
     // BUILDING
     private Point upLeft; // the upper-left point of the ship-area
+    private Point bottomRight;
     private final ListProperty<Component> revealedComponents;
     private final IntegerProperty coveredComponentN;
     private final Map<FourColors, List<ObjectProperty<Component>>> stashedComponents;
@@ -132,6 +133,7 @@ public class ClientModel {
 
         // Save top-left point
         upLeft = new Point(minX, minY);
+        bottomRight = new Point(maxX, maxY);
 
         playerToColor.forEach((_, c) -> {
 
@@ -507,8 +509,16 @@ public class ClientModel {
         return ships;
     }
 
+    public List<List<ObjectProperty<Component>>> getMyShip() {
+        return ships.get(playerToColor.get(myNickname));
+    }
+
     public Point getUpLeft() {
         return upLeft;
+    }
+
+    public Point getBottomRight() {
+        return bottomRight;
     }
 
     public boolean isHandEmpty() {

@@ -54,10 +54,15 @@ public class CliProjectilesScreen extends CliScreen {
 
         output.add("a" + model.getCurrentProjectile().type().name() +
                 "is approaching from" + direction + model.getCurrentProjectile().roll());
-        if (!model.getSelectablePoints().isEmpty()) {
-            output.add("choose what to activate OR a battery to use");
+        if(model.isMyTurn()) {
+            if (!model.getSelectablePoints().isEmpty()) {
+                output.add("choose what to activate OR a battery to use");
+            }
+            output.add("S to submit end activations");
         }
-        output.add("S to submit end activations");
+        else {
+            output.add("it's not your turn");
+        }
         return output;
     }
 
@@ -77,16 +82,17 @@ public class CliProjectilesScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        String[] parts = input.split(" ");
-        int x = Integer.parseInt(parts[0]);
-        int y = Integer.parseInt(parts[1]);
-        Point p = new Point(x, y);
-        Component component = model.getComponent(model.getMyNickname(), p);
-        if(component.getType() == ComponentType.BATTERY){
-            controller.useBattery(p);
-        }
-        else{
-            controller.activateComponent(p);
+        if(model.isMyTurn()) {
+            String[] parts = input.split(" ");
+            int x = Integer.parseInt(parts[0]);
+            int y = Integer.parseInt(parts[1]);
+            Point p = new Point(x, y);
+            Component component = model.getComponent(model.getMyNickname(), p);
+            if (component.getType() == ComponentType.BATTERY) {
+                controller.useBattery(p);
+            } else {
+                controller.activateComponent(p);
+            }
         }
     }
 }

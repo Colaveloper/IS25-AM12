@@ -33,7 +33,12 @@ public class CliPointSelectionScreen extends CliScreen {
         List<String> output = new ArrayList<>();
         output.addAll(flightBoard.getDescription());
         output.addAll(allShips.getDescription());
-        output.add("select component to activate");
+        if(model.isMyTurn()) {
+            output.add("select component to activate");
+        }
+        else {
+            output.add("it's not your turn");
+        }
 
         return output;
     }
@@ -55,11 +60,13 @@ public class CliPointSelectionScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        String[] parts = input.split(" ");
-        int x = Integer.parseInt(parts[0]);
-        int y = Integer.parseInt(parts[1]);
-        Point p = new Point(x, y);
-        controller.activateComponent(p);
+        if(model.isMyTurn()) {
+            String[] parts = input.split(" ");
+            int x = Integer.parseInt(parts[0]);
+            int y = Integer.parseInt(parts[1]);
+            Point p = new Point(x, y);
+            controller.activateComponent(p);
+        }
     }
 
 
