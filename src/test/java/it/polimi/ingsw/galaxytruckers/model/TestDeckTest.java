@@ -15,7 +15,7 @@ class TestDeckTest {
 
     @Test
     void masterDeckHasTheEightTestCards() throws IOException {
-        flightBoard = new SecondFlightBoard(Set.of());
+        flightBoard = new SecondFlightBoard(0);
         testDeck = new TestDeck(game);
         assertEquals(8, testDeck.getMasterDeck().size());
     }

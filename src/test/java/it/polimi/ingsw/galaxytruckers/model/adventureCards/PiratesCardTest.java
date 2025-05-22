@@ -58,7 +58,7 @@ class PiratesCardTest {
                 return lastShipPower;
             }
         });
-        FlightBoard flightBoardStub = new FlightBoard(null) {
+        FlightBoard flightBoardStub = new FlightBoard() {
             @Override
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return false;

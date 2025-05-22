@@ -8,7 +8,6 @@ import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -64,7 +63,7 @@ class StarDustCardTest {
         }
 
 
-        flightBoard = new FlightBoard(null) {
+        flightBoard = new FlightBoard() {
             @Override
             protected int getLoopLength() {
                 return 0;

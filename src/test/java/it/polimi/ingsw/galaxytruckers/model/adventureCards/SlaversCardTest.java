@@ -7,7 +7,6 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -92,7 +91,7 @@ class SlaversCardTest {
             loserShipPlaces.put(loserShips.get(i), 10-i);
         }
 
-        flightBoard = new FlightBoard(null) {
+        flightBoard = new FlightBoard() {
             @Override
             protected int getLoopLength() {
                 return 0;
@@ -119,7 +118,7 @@ class SlaversCardTest {
             }
         };
 
-        flightBoardOfLosers = new FlightBoard(null) {
+        flightBoardOfLosers = new FlightBoard() {
             @Override
             protected int getLoopLength() {
                 return 0;
