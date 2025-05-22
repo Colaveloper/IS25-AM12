@@ -151,7 +151,7 @@ class VirtualClientStub implements VirtualClient {
     }
 
     @Override
-    public void showShipPieces(String playerName, List<Set<Point>> shipPieces) {
+    public void showShipPieces(Map<String, List<Set<Point>>> shipPieces) {
 
     }
 

@@ -112,13 +112,13 @@ class ClientControllerTest {
             @Override
             public void removeComponent(Point point) {
                 System.out.println("FAKE SERVER EVENT: single component removed");
-                controller.notifyComponentsRemoval(myNickname, List.of(point));
+                controller.notifyComponentRemoval(myNickname, point);
             }
 
             @Override
             public void chooseShipPiece(int pieceIndex) {
                 System.out.println("FAKE SERVER EVENT: one ship piece kept, others removed");
-                controller.notifyComponentsRemoval(myNickname, List.of(new Point(6, 7), new Point(6, 8)));
+                controller.notifyShipPieceRemoval(myNickname, List.of(new Point(6, 7), new Point(6, 8)));
             }
 
             @Override

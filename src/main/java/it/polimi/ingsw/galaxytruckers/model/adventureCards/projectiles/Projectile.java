@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 import it.polimi.ingsw.galaxytruckers.model.Dice;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 
 import java.awt.*;
 import java.util.Comparator;

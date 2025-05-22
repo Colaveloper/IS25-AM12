@@ -340,7 +340,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
     public void visit(ShipNotConnectedEvent shipNotConnectedEvent) {
         Player player = Player.getPlayer(shipNotConnectedEvent.playerName());
         VirtualClient client = SessionManager.getInstance().getClient(player);
-        client.showShipPieces(shipNotConnectedEvent.playerName(), shipNotConnectedEvent.shipPieces());
+        //client.showShipPieces(shipNotConnectedEvent.playerName(), shipNotConnectedEvent.shipPieces());//todo: now it s a map
     }
 
     @Override
