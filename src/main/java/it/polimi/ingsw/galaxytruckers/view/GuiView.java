@@ -8,7 +8,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,7 +20,6 @@ public class GuiView extends Application implements View {
     // TODO: privatize and create setter in View
     public static GuiScreen screen;
     static VBox root;  // will be passed to screen strategies
-
 
     public GuiView() {
         super();
@@ -35,6 +35,16 @@ public class GuiView extends Application implements View {
         stage.setTitle("Galaxy Trucker");
         refreshScreen();
         stage.show();
+
+        root.setBackground(new Background(new BackgroundImage(
+                new Image("file:src/main/resources/textures/background.png"),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(
+                        BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true
+                )
+        )));
     }
 
     @Override

@@ -213,10 +213,15 @@ class ClientControllerTest {
 //                System.out.println("FAKE SERVER EVENT: OtherPlayer1 took a covered component");
 //                controller.notifyFaceDownComponentRequest("OtherPlayer1", 10);
 //
-//                //Thread.sleep(1000);
-//                System.out.println("FAKE SERVER EVENT: OtherPlayer1 rejected component");
-//                faceUpComponents.add(10);
-//                controller.notifyComponentRejection("OtherPlayer1",10);
+                Thread.sleep(1000);
+                System.out.println("FAKE SERVER EVENT: OtherPlayer1 rejected component");
+                faceUpComponents.add(10);
+                controller.notifyComponentRejection("OtherPlayer1",10);
+
+                Thread.sleep(1000);
+                System.out.println("FAKE SERVER EVENT: OtherPlayer1 rejected component");
+                faceUpComponents.add(11);
+                controller.notifyComponentRejection("OtherPlayer1",11);
 //
 //                //Thread.sleep(1000);
 //                System.out.println("FAKE SERVER EVENT: OtherPlayer1 took the component back");
