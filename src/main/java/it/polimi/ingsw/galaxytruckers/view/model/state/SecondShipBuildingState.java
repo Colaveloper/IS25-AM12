@@ -1,6 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
-import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.view.model.Hourglass;
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.*;
 
@@ -11,8 +13,10 @@ public class SecondShipBuildingState extends ShipBuildingState {
             StateActions.FLIP_HOURGLASS,
             StateActions.ACQUIRE_FORECAST,
             StateActions.RELEASE_FORECAST);
+
     private List<AdventureCard> forecastDeck;
-    private final Set<Integer> blockedForecasts = new HashSet<>();
+    private final ShipBoard[] blockedForecasts = new ShipBoard[]{null, null, null};
+    private Hourglass hourglass = new Hourglass(3);
 
     public SecondShipBuildingState() {
         super();
@@ -24,5 +28,45 @@ public class SecondShipBuildingState extends ShipBuildingState {
         actions.addAll(availableActions);
         //TODO: implement conditional available action if needed
         return actions;
+    }
+
+    @Override
+    public void notifyStashComponent(ShipBoard shipBoard) {
+        shipBoard.stashComponent();
+    }
+
+    @Override
+    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index) {
+        shipBoard.grabStashedComponent(index);
+    }
+
+    @Override
+    public void notifyFlipHourglass(ShipBoard shipBoard) {
+        hourglass.flip();
+    }
+
+    @Override
+    public void notifyHourglassEnd() {
+        hourglass.end();
+    }
+
+    @Override
+    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
+        blockedForecasts[deckIndex] = shipBoard;
+    }
+
+    @Override
+    public void setForecastDeck(List<AdventureCard> adventureCards) {
+        this.forecastDeck = adventureCards;
+    }
+
+    @Override
+    public void notifyReleaseForecast(ShipBoard shipBoard) {
+        for (int i = 0; i < this.blockedForecasts.length; i++) {
+            if (blockedForecasts[i].equals(shipBoard)) {
+                blockedForecasts[i] = null;
+                return;
+            }
+        }
     }
 }

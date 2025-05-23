@@ -31,8 +31,8 @@ public class ComponentBank {
         return uncoveredComponents;
     }
 
-    public void setCoveredComponentsN(int coveredComponentsN) {
-        this.coveredComponentsN = coveredComponentsN;
+    public void removeCoveredComponent() {
+        this.coveredComponentsN--;
     }
 
     public int getCoveredComponentsN() {

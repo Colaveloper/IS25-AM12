@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class ChoosePlanetState extends AdventureState {
-    private static List<StateActions> availableActions = List.of(
+    private static final List<StateActions> availableActions = List.of(
             StateActions.CHOOSE_PLANET,
             StateActions.GO_NEXT
     );
@@ -26,5 +26,13 @@ public class ChoosePlanetState extends AdventureState {
         List<StateActions> actions = new ArrayList<>(availableActions);
         actions.addAll(super.getAvailableActions());
         return actions;
+    }
+
+    public ShipBoard getShipBoard() {
+        return shipBoard;
+    }
+
+    public Set<Integer> getOptions() {
+        return options;
     }
 }

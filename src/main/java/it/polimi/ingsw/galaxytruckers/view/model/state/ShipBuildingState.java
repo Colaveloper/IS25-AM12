@@ -1,9 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
 import it.polimi.ingsw.galaxytruckers.view.model.ComponentRegistry;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -30,5 +32,28 @@ public abstract class ShipBuildingState extends GameState {
         actions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
         //TODO: implement conditional available actions if needed
         return actions;
+    }
+
+    @Override
+    public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
+        shipBoard.offerComponent(component);
+        componentBank.removeCoveredComponent();
+    }
+
+    @Override
+    public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
+        shipBoard.offerComponent(component);
+        componentBank.removeCoveredComponent();
+    }
+
+    @Override
+    public void notifyRejectComponent(ShipBoard shipBoard) {
+        Component component = shipBoard.rejectComponent();
+        componentBank.addUncoveredComponent(component);
+    }
+
+    @Override
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
+        shipBoard.placeComponent(point, orientation);
     }
 }

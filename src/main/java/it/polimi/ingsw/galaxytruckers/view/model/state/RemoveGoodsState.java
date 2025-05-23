@@ -24,4 +24,24 @@ public class RemoveGoodsState extends AdventureState {
         actions.add(StateActions.LOSE_GOOD);
         return actions;
     }
+
+    @Override
+    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+        shipBoard.removeGoods(point, goodsType);
+        goodsToLose--;
+    }
+
+    @Override
+    public void notifyUseBattery(ShipBoard shipBoard, Point point) {
+        shipBoard.useBattery(point);
+        goodsToLose--;
+    }
+
+    public int getGoodsToLose() {
+        return goodsToLose;
+    }
+
+    public ShipBoard getShipBoard() {
+        return shipBoard;
+    }
 }

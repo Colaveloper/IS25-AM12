@@ -19,16 +19,21 @@ public final class Cabin extends Component {
         return crewType;
     }
 
-    public void setCrewType(CrewType crewType) {
-        this.crewType = crewType;
-    }
-
     public int getNumResidents() {
         return numResidents;
     }
 
-    public void setNumResidents(int numResidents) {
-        this.numResidents = numResidents;
+    public void initialize(CrewType crewType) {
+        this.crewType = crewType;
+        this.numResidents = switch (crewType) {
+            case HUMAN -> 2;
+            case PURPLE, BROWN -> 1;
+            case null -> throw new IllegalArgumentException("CrewType is null");
+        };
+    }
+
+    public void loseCrew() {
+        this.numResidents--;
     }
 
 }

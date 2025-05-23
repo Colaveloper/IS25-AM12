@@ -7,11 +7,19 @@ import java.awt.*;
 import java.util.Set;
 
 public class HandleProjectileState extends ActivateState {
-    Projectile projectile;
+    private final Projectile projectile;
 
     public HandleProjectileState(ShipBoard shipBoard, Projectile projectile, Set<Point> availablePositions) {
-        super(shipBoard);
+        super(shipBoard, availablePositions);
         this.projectile = projectile;
-        this.availablePositions = availablePositions;
+    }
+
+    @Override
+    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
+        shipBoard.removeComponent(point);
+    }
+
+    public Projectile getProjectile() {
+        return projectile;
     }
 }

@@ -23,4 +23,8 @@ public class GrabRewardState extends AdventureState {
         actions.addAll(super.getAvailableActions());
         return actions;
     }
+
+    public ShipBoard getShipBoard() {
+        return shipBoard;
+    }
 }

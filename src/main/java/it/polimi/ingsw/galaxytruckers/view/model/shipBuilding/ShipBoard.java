@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public abstract class ShipBoard {
 
@@ -58,54 +59,145 @@ public abstract class ShipBoard {
 
     //CliComponentBank interaction methods
 
-    public void setLastComponent(Component component) {
+    protected void setLastComponent(Component component) {
         lastComponent = component;
     }
 
-    public void resetLastComponent() {
+    protected void resetLastComponent() {
         this.lastComponent = null;
         this.lastPosition = null;
     }
 
     //Ship building methods
 
+    //CliComponentBank interaction methods
 
-    public void setLastPosition(Point lastPosition) {
-        if (lastPosition != null) {
-            componentMap.remove(lastPosition);
-        }
-        componentMap.put(lastPosition, lastComponent);
-        this.lastPosition = lastPosition;
+    public void offerComponent(Component component) {
+        weldLastComponent();
+        lastComponent = component;
+    }
+
+    public Component rejectComponent() {
+        Component rejectedComponent = lastComponent;
+        lastComponent = null;
+        lastPosition = null;
+        return rejectedComponent;
+    }
+
+    //Ship building methods
+
+    public void placeComponent(Point newPosition, int orientation) {
+        lastPosition = newPosition;
+        lastComponent.setOrientation(orientation);
     }
 
     public void stashComponent() {}
 
     public void grabStashedComponent(int index) {}
 
+    public void weldLastComponent() {
+        componentMap.put(lastPosition, lastComponent);
+        switch (lastComponent) {
+            case Battery c -> batteries.put(lastPosition, c);
+            case Cabin c -> cabins.put(lastPosition, c);
+            case DoubleCannon c -> {
+                cannons.put(lastPosition,c);
+                activatables.put(lastPosition,c);
+            }
+            case Cannon c -> cannons.put(lastPosition,c);
+            case DoubleEngine c -> {
+                engines.put(lastPosition,c);
+                activatables.put(lastPosition,c);
+            }
+            case Engine c -> {
+                engines.put(lastPosition,c);
+            }
+            case CargoHold c -> {
+                cargoHolds.put(lastPosition,c);
+            }
+            case Shield c -> {
+                shields.put(lastPosition,c);
+            }
+            case Component c -> {}
+        }
+        lastComponent = null;
+        lastPosition = null;
+    }
+
     public void removeComponent(Point position) {
         Component removedComponent = componentMap.remove(lastPosition);
         switch (removedComponent) {
-            case Battery c -> batteries.remove(position);
-            case Cabin c -> cabins.remove(position);
-            case DoubleCannon c -> {
+            case Battery _ -> batteries.remove(position);
+            case Cabin _ -> cabins.remove(position);
+            case DoubleCannon _ -> {
                 cannons.remove(position);
                 activatables.remove(position);
             }
-            case Cannon c -> cannons.remove(position);
-            case DoubleEngine c -> {
+            case Cannon _ -> cannons.remove(position);
+            case DoubleEngine _ -> {
                 engines.remove(position);
                 activatables.remove(position);
             }
-            case Engine c -> {
+            case Engine _ -> {
                 engines.remove(position);
             }
-            case CargoHold c -> {
+            case CargoHold _ -> {
                 cargoHolds.remove(position);
             }
-            case Shield c -> {
+            case Shield _ -> {
                 shields.remove(position);
             }
-            case Component c -> {}
+            case Component _ -> {}
+        }
+    }
+
+    public void removeShipPiece(List<Set<Point>> shipPieces, int pieceIndex) {
+        IntStream.range(0, shipPieces.size())
+                .filter(i -> i != pieceIndex)
+                .boxed()
+                .flatMap(i -> shipPieces.get(i).stream())
+                .forEach(this::removeComponent);
+    }
+
+    public void placeGoods(Point position, GoodsType goods) {
+        cargoHolds.get(position).addGoods(goods);
+    }
+
+    public void removeGoods(Point position, GoodsType goods) {
+        cargoHolds.get(position).removeGoods(goods);
+    }
+
+    //Batteries methods
+
+    public void useBattery(Point position) {
+        batteries.get(position).removeBattery();
+    }
+
+    //Cabin (and LifeSupport) methods
+
+    public void initializeCabin(Point position, CrewType crewType) {
+        cabins.get(position).initialize(crewType);
+    }
+
+    public void loseCrew(Point position) {
+        cabins.get(position).loseCrew();
+    }
+
+    // Activatables methods
+
+    public void activateComponent(Point position) {
+        activatables.get(position).setActive(true);
+    }
+
+    public void deactivateComponent(Point position) {
+        activatables.get(position).setActive(false);
+    }
+
+    public void deactivateAll() {
+        for (Point p : activatables.keySet()) {
+            if (activatables.get(p).isActive()) {
+                deactivateComponent(p);
+            }
         }
     }
 
@@ -177,44 +269,5 @@ public abstract class ShipBoard {
 
     public List<Component> getStashedComponents() {
         return null;
-    }
-
-    //Specific component methods
-
-    public void placeGoods(Point position, GoodsType goods) {
-        cargoHolds.get(position).addGoods(goods);
-    }
-
-    public void removeGoods(Point position, GoodsType goods) {
-        cargoHolds.get(position).removeGoods(goods);
-    }
-
-    public void setBatteries(Point position, int amount) {
-        batteries.get(position).setNumBatteries(amount);
-    }
-
-    public void setNumResidents(Point point, int numResidents) {
-        cabins.get(point).setNumResidents(numResidents);
-    }
-
-    public void setCrewType(Point point, CrewType crewType) {
-        cabins.get(point).setCrewType(crewType);
-    }
-
-    // Activatables methods
-
-    public void setActivate(Point position, boolean activate) {
-        Activatable activatable = activatables.get(position);
-        if (activatable.isActive() != activate) {
-            activatables.get(position).setActive(activate);
-        }
-    }
-
-    public void deactivateAll() {
-        for (Point p : activatables.keySet()) {
-            if (activatables.get(p).isActive()) {
-                setActivate(p, false);
-            }
-        }
     }
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.model.state;
 
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
@@ -28,5 +29,31 @@ public class AddGoodsState extends AdventureState {
         actions.add(StateActions.GO_NEXT);
         actions.addAll(super.getAvailableActions());
         return actions;
+    }
+
+    @Override
+    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+        shipBoard.placeGoods(point, goodsType);
+        removeFromBuffer(goodsType);
+    }
+
+    @Override
+    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+        shipBoard.removeGoods(point, goodsType);
+        addToBuffer(goodsType);
+    }
+
+    private void addToBuffer(GoodsType goodsType) {
+        if (!goodsBuffer.containsKey(goodsType)) {
+            goodsBuffer.put(goodsType, 0);
+        }
+        goodsBuffer.put(goodsType, goodsBuffer.get(goodsType) + 1);
+    }
+
+    private void removeFromBuffer(GoodsType goodsType) {
+        goodsBuffer.put(goodsType, goodsBuffer.get(goodsType) - 1);
+        if (goodsBuffer.get(goodsType) == 0) {
+            goodsBuffer.remove(goodsType);
+        }
     }
 }

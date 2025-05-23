@@ -14,18 +14,43 @@ public abstract class ActivateState extends AdventureState {
             StateActions.GO_NEXT
     );
 
-    Set<Point> availablePositions;
-    ShipBoard shipBoard;
-    int batteriesToSpend;
+    protected final Set<Point> availablePositions;
+    protected final ShipBoard shipBoard;
+    protected int batteriesToSpend;
 
-    ActivateState(ShipBoard shipBoard) {
+    ActivateState(ShipBoard shipBoard, Set<Point> availablePositions) {
         this.shipBoard = shipBoard;
         this.batteriesToSpend = 0;
+        this.availablePositions = availablePositions;
     }
 
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>(availableActions);
         actions.addAll(super.getAvailableActions());
         return actions;
+    }
+
+    @Override
+    public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
+        shipBoard.activateComponent(point);
+        batteriesToSpend++;
+    }
+
+    @Override
+    public void notifyUseBattery(ShipBoard shipBoard, Point point) {
+        shipBoard.useBattery(point);
+        batteriesToSpend--;
+    }
+
+    public Set<Point> getAvailablePositions() {
+        return availablePositions;
+    }
+
+    public ShipBoard getShipBoard() {
+        return shipBoard;
+    }
+
+    public int getBatteriesToSpend() {
+        return batteriesToSpend;
     }
 }

@@ -27,4 +27,9 @@ public class ChooseShipPieceState extends AdventureState {
         actions.addAll(super.getAvailableActions());
         return actions;
     }
+
+    @Override
+    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
+        shipBoard.removeShipPiece(shipPieces, pieceIndex);
+    }
 }

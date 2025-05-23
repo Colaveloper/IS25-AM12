@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.ArrayList;
@@ -20,5 +21,10 @@ public class DrawCardState extends AdventureState {
         List<StateActions> actions = new ArrayList<>(availableActions);
         actions.addAll(super.getAvailableActions());
         return actions;
+    }
+
+    @Override
+    public void notifyDrawCard(ShipBoard shipBoard, AdventureCard adventureCard) {
+        game.setCurrentAdventureCard(adventureCard);
     }
 }

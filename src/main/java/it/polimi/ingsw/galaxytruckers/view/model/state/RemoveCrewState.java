@@ -21,4 +21,9 @@ public class RemoveCrewState extends AdventureState {
         actions.add(StateActions.LOSE_CREW);
         return actions;
     }
+
+    @Override
+    public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
+        shipBoard.loseCrew(point);
+    }
 }

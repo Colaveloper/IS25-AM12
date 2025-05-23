@@ -16,7 +16,7 @@ public final class Battery extends Component {
         return numBatteries;
     }
 
-    public void setNumBatteries(int numBatteries) {
-        this.numBatteries = numBatteries;
+    public void removeBattery() {
+        this.numBatteries--;
     }
 }

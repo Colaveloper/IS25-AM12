@@ -4,14 +4,10 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 import java.util.HashSet;
+import java.util.Set;
 
 public class DeclareFirePowerState extends ActivateState {
-    int currentFirePower;
-
-    public DeclareFirePowerState(ShipBoard shipBoard) {
-        super(shipBoard);
-        this.availablePositions = new HashSet<>(shipBoard.getActivatables().keySet());
-        this.availablePositions.retainAll(shipBoard.getCannons().keySet());
-        this.currentFirePower = shipBoard.getFirePower();
+    public DeclareFirePowerState(ShipBoard shipBoard, Set<Point> availablePositions) {
+        super(shipBoard, availablePositions);
     }
 }

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
@@ -17,11 +19,19 @@ public class Game {
     private final FlightBoard flightBoard;
     private GameState currentState;
 
+    private AdventureCard currentAdventureCard;
+
     public Game(Level level, int playersNumber) {
         this.level = level;
         this.playersNumber = playersNumber;
         this.gameFactory = GameFactory.getFactory(level);
         this.flightBoard = this.gameFactory.createFlightBoard();
+    }
+
+    public ShipBoard addShipBoard(FourColors color) {
+        ShipBoard shipBoard = gameFactory.createShipBoard(color);
+        shipBoards.add(shipBoard);
+        return shipBoard;
     }
 
     /**
@@ -67,5 +77,13 @@ public class Game {
 
     public GameFactory getGameFactory() {
         return gameFactory;
+    }
+
+    public AdventureCard getCurrentAdventureCard() {
+        return currentAdventureCard;
+    }
+
+    public void setCurrentAdventureCard(AdventureCard currentAdventureCard) {
+        this.currentAdventureCard = currentAdventureCard;
     }
 }

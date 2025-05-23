@@ -24,4 +24,16 @@ public class ShipCorrectionState extends GameState {
                 StateActions.CHOOSE_SHIP_PIECE
         );
     }
+
+    @Override
+    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
+        shipBoard.removeComponent(point);
+    }
+
+    @Override
+    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
+        shipBoard.removeShipPiece(shipPieces.get(shipBoard), pieceIndex);
+    }
+
+    //TODO: notify ship is valid, notify shipPieces
 }
