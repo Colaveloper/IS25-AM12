@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 
 import java.util.List;
 
-public class CombatZoneCard extends AdventureCard {
+public final class CombatZoneCard extends AdventureCard {
 
     private final List<CombatZoneCheck> checks;
     private final List<Penalty> penalties;

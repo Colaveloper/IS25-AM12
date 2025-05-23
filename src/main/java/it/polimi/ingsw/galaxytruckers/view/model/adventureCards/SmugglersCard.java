@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 
 import java.util.Map;
 
-public class SmugglersCard extends AdventureCard {
+public final class SmugglersCard extends AdventureCard {
     private final int firePowerThreshold;
     private final Map<GoodsType, Integer> goodsPrize;
     private final int flightDaysLoss;

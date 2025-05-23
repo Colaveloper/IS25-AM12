@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 
 import java.util.*;
 
-public class PlanetsCard extends AdventureCard {
+public final class PlanetsCard extends AdventureCard {
     private final List<Map<GoodsType, Integer>> planets;
     private final int flightDaysLoss;
 

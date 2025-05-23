@@ -1,16 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.view.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.view.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 
-public class SlaversCard extends AdventureCard {
+public final class SlaversCard extends AdventureCard {
 
     private final int firePowerThreshold;
     private final int creditPrize;
     private final int flightDaysLoss;
     private final int crewLoss;
 
-    public SlaversCard(Game game, Level level, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss, int id) {
+    public SlaversCard(Level level, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss, int id) {
         super(level, id);
         this.firePowerThreshold = firePowerThreshold;
         this.creditPrize = creditPrize;
