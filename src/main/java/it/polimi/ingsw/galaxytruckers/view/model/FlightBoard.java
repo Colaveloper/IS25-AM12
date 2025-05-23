@@ -10,27 +10,10 @@ public class FlightBoard {
     private final int loopLength;
     private final List<Integer> startingPositions;
 
-    public FlightBoard(Level level) {
+    public FlightBoard(List<Integer> startingPositions, int loopLength) {
         this.shipToPlace = new HashMap<>();
-        switch (level) {
-            case TEST -> {
-                this.startingPositions = Arrays.asList(4, 2, 1, 0);
-                this.loopLength = 18;
-            }
-            case SECOND -> {
-                this.startingPositions = Arrays.asList(6, 3, 1, 0);
-                this.loopLength = 24;
-            }
-            case FIRST -> {
-                throw new IllegalArgumentException("You are trying to create a flightboard for" +
-                        "level " + level.toString() + ", but that is not implemented yet.");
-            }
-            case null, default -> {
-                throw new IllegalArgumentException("You have provided an invalid level argument" +
-                        " to the FlightBoard constructor");
-            }
-        }
-
+        this.startingPositions = startingPositions;
+        this.loopLength = loopLength;
     }
 
     /**
