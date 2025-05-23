@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
-import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 
 import java.util.List;

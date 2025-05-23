@@ -11,8 +11,6 @@ public sealed class Component permits
         Cabin,
         Cannon,
         CargoHold,
-        DoubleCannon,
-        DoubleEngine,
         Engine,
         LifeSupport,
         Shield
