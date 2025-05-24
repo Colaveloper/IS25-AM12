@@ -4,16 +4,20 @@ import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -97,6 +101,11 @@ class ShipBuildingStateTest {
             assertEquals(1, shipBuildingState.getComponentBank().getUncoveredComponents().size());
             assertTrue(shipBuildingState.getComponentBank().getUncoveredComponents().containsValue(rejectedComponent));
             assertTrue(shipBoards.getFirst().getLastComponent().isEmpty());
+        }
+
+        @Test
+        void rejectComponentThrowsExceptionWhenNoComponentPresent() {
+            assertThrows(IllegalStateException.class, () -> shipBuildingState.rejectComponent(new SecondShipBoard(FourColors.RED)));
         }
 
         @Test
@@ -419,4 +428,26 @@ class ShipBuildingStateTest {
             }
         }
     }
+
+    /* The IOException path in the default constructor is exercised indirectly via
+    * a test-only constructor; we accept this 1-line coverage gap*/
+    @Test
+    void constructorCatchesIOExceptionFromInitialize() {
+        ComponentBank brokenBank = new ComponentBank() {
+            @Override
+            public void initialize() throws IOException {
+                throw new IOException("Simulated failure");
+            }
+        };
+
+        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            new ShipBuildingState(brokenBank) {
+                @Override
+                protected void endBuilding() {}
+            };
+        });
+
+        assertEquals("java.io.IOException: Simulated failure", thrown.getMessage());
+    }
+
 }

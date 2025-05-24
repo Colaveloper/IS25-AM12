@@ -131,4 +131,15 @@ public abstract class ShipBuildingState extends GameState {
     public Set<ShipBoard> getCompletedShipBoards() {
         return new HashSet<>(completedShipBoards);
     }
+
+    @VisibleForTesting
+    protected ShipBuildingState(ComponentBank testBank) {
+        this.completedShipBoards = new HashSet<>();
+        this.componentBank = testBank;
+        try {
+            componentBank.initialize();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
