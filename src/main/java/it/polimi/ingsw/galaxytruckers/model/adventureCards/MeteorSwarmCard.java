@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -29,7 +28,7 @@ public class MeteorSwarmCard extends AdventureCard {
     }
 
     @Override
-    public GameState nextStep() {
+    public AdventureState getNextState() {
         // Letting the currentPlayer activate double cannons
         if (currentShipBoard != null) {
             currentShipBoard.deactivateAll();
@@ -46,7 +45,7 @@ public class MeteorSwarmCard extends AdventureCard {
                 currentProjectile = projectiles.removeLast();
                 currentShipBoard = null;
                 currentPlayerIndex = 0;
-                return nextStep();
+                return getNextState();
             }
         }
     }

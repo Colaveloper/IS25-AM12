@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
@@ -17,9 +17,9 @@ import java.awt.*;
 import java.util.List;
 
 public class GuiShipBoard extends GuiElement {
-    FourColors color;
+    GameColor color;
 
-    GuiShipBoard(ClientModel model, ClientController controller, FourColors color) {
+    GuiShipBoard(ClientModel model, ClientController controller, GameColor color) {
         super(model, controller);
         this.color = color;
     }

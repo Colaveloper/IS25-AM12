@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.enumTypes;
 
 import javafx.scene.paint.Color;
 
-public enum FourColors {
+public enum GameColor {
     RED("\u001B[31m●\u001B[0m", Color.RED),
     BLUE("\u001B[34m●\u001B[0m", Color.BLUE),
     YELLOW("\u001B[33m●\u001B[0m", Color.YELLOW),
@@ -11,7 +11,7 @@ public enum FourColors {
     private final String emoji;
     private final Color jfxColor;
 
-    FourColors(String emoji, Color color) {
+    GameColor(String emoji, Color color) {
         this.emoji = emoji;
         this.jfxColor = color;
     }

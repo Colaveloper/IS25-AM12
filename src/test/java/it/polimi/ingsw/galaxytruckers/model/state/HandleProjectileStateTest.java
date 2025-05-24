@@ -7,7 +7,7 @@ import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.SmallMeteor;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -18,9 +18,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.IntSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,7 +35,7 @@ class HandleProjectileStateTest {
 
     @BeforeEach
     void setup(){
-        ship1 = new SecondShipBoard(FourColors.RED){
+        ship1 = new SecondShipBoard(GameColor.RED){
             @Override
             public int getNumBatteries() {
                 return 2;
@@ -97,7 +95,7 @@ class HandleProjectileStateTest {
     }
 
     @Test
-    void goNextChangesGameStateToChooseShipPieceState(){
+    void goNextChangesAdventureStateToChooseShipPieceState(){
         game = new Game(Level.SECOND);
         testState.setGame(game);
         testState.goNext(ship1);
@@ -105,7 +103,7 @@ class HandleProjectileStateTest {
     }
 
     @Test
-    void goNextChangesGameStateWithNextStep() throws IOException {
+    void goNextChangesAdventureStateWithNextStep() throws IOException {
         projectile = new SmallMeteor(dice, 1){
             @Override
             public boolean fireAt(ShipBoard ship){
@@ -120,7 +118,7 @@ class HandleProjectileStateTest {
         };
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
-            public GameState nextStep() {
+            public AdventureState getNextState() {
                 return new AdventureState();
             }
         };
@@ -137,8 +135,8 @@ class HandleProjectileStateTest {
     }
 
     @Test
-    void goNextDoesNotSetGameStateToChooseShipPieceWithInsufficientShipPieces() throws IOException{
-        ship1 = new SecondShipBoard(FourColors.RED){
+    void goNextDoesNotSetAdventureStateToChooseShipPieceWithInsufficientShipPieces() throws IOException{
+        ship1 = new SecondShipBoard(GameColor.RED){
             @Override
             public List<Set<Point>> getConnectedSets(){
                 return List.of(Set.of(new Point(7,7)));
@@ -152,7 +150,7 @@ class HandleProjectileStateTest {
         };
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
-            public GameState nextStep() {
+            public AdventureState getNextState() {
                 return new AdventureState();
             }
         };

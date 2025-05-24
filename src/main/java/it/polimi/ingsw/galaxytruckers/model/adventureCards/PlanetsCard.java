@@ -1,15 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.model.state.AddGoodsState;
-import it.polimi.ingsw.galaxytruckers.model.state.ChoosePlanetState;
-import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
-import it.polimi.ingsw.galaxytruckers.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.model.state.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,13 +38,13 @@ public class PlanetsCard extends AdventureCard {
     }
 
     @Override
-    public GameState nextStep() {
+    public AdventureState getNextState() {
         if (planetChoiceAllowed) {
             if (currentPlayerIndex >= flightBoard.getShipToPlace().size()) {
                 planetChoiceAllowed = false;
                 currentPlayerIndex = 0;
                 currentShipBoard = null;
-                return nextStep();
+                return getNextState();
             }
             currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
             currentPlayerIndex++;

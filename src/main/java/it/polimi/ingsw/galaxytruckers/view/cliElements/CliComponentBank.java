@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
@@ -12,7 +11,6 @@ import javafx.collections.ListChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class CliComponentBank extends CliElement {
 

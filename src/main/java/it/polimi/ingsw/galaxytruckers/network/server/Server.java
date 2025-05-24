@@ -11,7 +11,7 @@ public class Server {
     public static final int port = 12345;
 
     public void start() {
-        ServerController controller = new ServerController(new GameModel());
+        ServerController controller = new ServerController(new GameModel()); // TODO: consider making ServerControllerInterface
         SessionManager.getInstance().setServerController(controller);
         try {
             RmiServer rmiServer = new RmiServer(controller);

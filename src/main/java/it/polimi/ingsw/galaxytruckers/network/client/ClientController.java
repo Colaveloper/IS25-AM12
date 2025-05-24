@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
@@ -54,8 +54,8 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     }
 
     @Override // Tommy approved
-    public void updateLobbyPlayers(Map<String, FourColors> playerToColor) {
-        for (Map.Entry<String, FourColors> entry : playerToColor.entrySet()) {
+    public void updateLobbyPlayers(Map<String, GameColor> playerToColor) {
+        for (Map.Entry<String, GameColor> entry : playerToColor.entrySet()) {
             model.setPlayerColor(entry.getKey(), entry.getValue());
         }
         view.setScreen(new LobbyScreen());

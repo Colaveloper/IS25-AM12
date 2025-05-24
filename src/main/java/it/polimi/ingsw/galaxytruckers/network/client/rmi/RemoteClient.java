@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.client.rmi;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
@@ -23,14 +23,14 @@ public interface RemoteClient extends Remote {
      * @param playerColors map containing all players' nicknames and
      *                     their corresponding color
      */
-    void setupLobby(UUID lobbyId, Map<String, FourColors> playerColors) throws RemoteException;
+    void setupLobby(UUID lobbyId, Map<String, GameColor> playerColors) throws RemoteException;
 
     /**
      * Signals to the client that the players in their lobby have changed
      * @param playerColors map containing all players' nicknames and
      *                     their corresponding color
      */
-    void updateLobbyPlayers(Map<String, FourColors> playerColors) throws RemoteException;
+    void updateLobbyPlayers(Map<String, GameColor> playerColors) throws RemoteException;
 
     /**
      * Signals to the client that the ship building phase has started

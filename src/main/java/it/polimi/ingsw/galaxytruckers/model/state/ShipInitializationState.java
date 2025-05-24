@@ -63,10 +63,9 @@ public class ShipInitializationState extends GameState {
         game.getEventListener().notifySelectionPointEvent(shipBoard,new ArrayList<>());
     }
 
-    public void tryStateTransition() {
+    private void tryStateTransition() {
         if (shipRelevantCabins.isEmpty()) {
             game.setCurrentState(new DrawCardState());
         }
     }
-
 }

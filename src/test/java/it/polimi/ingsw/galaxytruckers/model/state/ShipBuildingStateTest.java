@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
@@ -35,8 +35,8 @@ class ShipBuildingStateTest {
         @BeforeEach
         void setUp() {
             game = new Game(Level.SECOND);
-            shipBoards.add(game.addShipBoard(FourColors.BLUE));
-            shipBoards.add(game.addShipBoard(FourColors.RED));
+            shipBoards.add(game.addShipBoard(GameColor.BLUE));
+            shipBoards.add(game.addShipBoard(GameColor.RED));
             game.setEventListener(new GameEventListenerStub());
 
             // Make the first ship invalid so that it does not automatically change state
@@ -266,8 +266,8 @@ class ShipBuildingStateTest {
         @BeforeEach
         void setUp() {
             game = new Game(Level.TEST);
-            shipBoards.add(game.addShipBoard(FourColors.BLUE));
-            shipBoards.add(game.addShipBoard(FourColors.RED));
+            shipBoards.add(game.addShipBoard(GameColor.BLUE));
+            shipBoards.add(game.addShipBoard(GameColor.RED));
             game.setEventListener(new GameEventListenerStub());
 
             // Make the first ship invalid so that it does not automatically change state

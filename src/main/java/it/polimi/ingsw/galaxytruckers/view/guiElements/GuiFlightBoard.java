@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.application.Platform;
@@ -41,7 +41,7 @@ public class GuiFlightBoard extends GuiElement {
 
         Runnable update = () -> {
             Set<Integer> starting = new HashSet<>(model.startingPositionLeftProperty());
-            Map<FourColors, Integer> colorMap = new HashMap<>(model.colorToPlaceProperty());
+            Map<GameColor, Integer> colorMap = new HashMap<>(model.colorToPlaceProperty());
 
             Platform.runLater(() -> {
                 for (int i = 0; i < loopLength; i++) {
@@ -49,7 +49,7 @@ public class GuiFlightBoard extends GuiElement {
                     StackPane slot = slots.get(i);
                     slot.getChildren().clear();
 
-                    Optional<FourColors> colorHere = colorMap.entrySet().stream()
+                    Optional<GameColor> colorHere = colorMap.entrySet().stream()
                             .filter(e -> e.getValue() == finalI)
                             .map(Map.Entry::getKey)
                             .findFirst();

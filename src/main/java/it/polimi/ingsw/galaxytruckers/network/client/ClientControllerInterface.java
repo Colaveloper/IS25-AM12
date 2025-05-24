@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
@@ -26,7 +26,7 @@ public interface ClientControllerInterface {
      *
      * @param playerToColor a map linking player nicknames to their chosen colors
      */
-    void updateLobbyPlayers(Map<String, FourColors> playerToColor);
+    void updateLobbyPlayers(Map<String, GameColor> playerToColor);
 
 
     //-----------------------------BUILDING PHASE----------------------------------

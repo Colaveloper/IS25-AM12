@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -11,7 +11,6 @@ import it.polimi.ingsw.galaxytruckers.model.state.AddGoodsState;
 import it.polimi.ingsw.galaxytruckers.model.state.ChoosePlanetState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,8 +30,8 @@ class PlanetsCardTest {
     @BeforeEach
     void setUp() {
         ships = new ArrayList<>();
-        ships.add(new SecondShipBoard(FourColors.BLUE));
-        ships.add(new SecondShipBoard(FourColors.RED));
+        ships.add(new SecondShipBoard(GameColor.BLUE));
+        ships.add(new SecondShipBoard(GameColor.RED));
         shipPlaces = new HashMap<>();
         for (int i = 0; i < ships.size(); i++) {
             shipPlaces.put(ships.get(i), 10-i);
@@ -87,7 +86,7 @@ class PlanetsCardTest {
 
     @Test
     void choosePlanetUpdatesPlanetChoicesRelatedAttributes() {
-        planetsCard.nextStep();
+        planetsCard.getNextState();
         ShipBoard expCurrentShipBoard = planetsCard.getCurrentShipBoard();
 
         List<Map<GoodsType, Integer>> expPlanets = new ArrayList<>(planetsCard.getPlanets());
@@ -111,10 +110,10 @@ class PlanetsCardTest {
     }
 
     @Test
-    void nextStepReturnsChoiceStateWhenPlanetsCanBeChosen() {
+    void getNextStateReturnsChoiceStateWhenPlanetsCanBeChosen() {
         for (ShipBoard ship : ships) {
             Set<Integer> expRemainingChoices = new HashSet<>(planetsCard.getRemainingChoices());
-            GameState testState = planetsCard.nextStep();
+            GameState testState = planetsCard.getNextState();
             assertInstanceOf(ChoosePlanetState.class, testState);
             assertTrue(planetsCard.isPlanetChoiceAllowed());
             assertEquals(ship, planetsCard.getCurrentShipBoard());
@@ -125,11 +124,11 @@ class PlanetsCardTest {
     }
 
     @Test
-    void nextStepWhenNoOneLandedReturnsDrawState() {
+    void getNextStateWhenNoOneLandedReturnsDrawState() {
         for (int i = 0; i < ships.size(); i++) {
-            planetsCard.nextStep();
+            planetsCard.getNextState();
         }
-        GameState testState = planetsCard.nextStep();
+        GameState testState = planetsCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
         assertFalse(planetsCard.isPlanetChoiceAllowed());
         // Once drawState is returned, the card internal state
@@ -137,14 +136,14 @@ class PlanetsCardTest {
     }
 
     @Test
-    void nextStepWhenSomeoneLandedReturnsGoodsState() {
+    void getNextStateWhenSomeoneLandedReturnsGoodsState() {
         for (int i = 0; i < ships.size(); i++) {
-            planetsCard.nextStep();
+            planetsCard.getNextState();
         }
         planetsCard.choosePlanet(0);
         ShipBoard expCurrentShipBoard = planetsCard.getCurrentShipBoard();
         Set<Integer> expRemainingChoices = new HashSet<>(planetsCard.getRemainingChoices());
-        GameState testState = planetsCard.nextStep();
+        GameState testState = planetsCard.getNextState();
         assertInstanceOf(AddGoodsState.class, testState);
         assertFalse(planetsCard.isPlanetChoiceAllowed());
         assertEquals(expCurrentShipBoard, planetsCard.getCurrentShipBoard());
@@ -154,16 +153,16 @@ class PlanetsCardTest {
     }
 
     @Test
-    void nextStepUpdatesLandedShipPositions() {
+    void getNextStateUpdatesLandedShipPositions() {
         for (int i = 0; i < ships.size(); i++) {
-            planetsCard.nextStep();
+            planetsCard.getNextState();
         }
         planetsCard.choosePlanet(0);
-        planetsCard.nextStep();
+        planetsCard.getNextState();
         testDisplacement = 0;
         testShip = null;
         ShipBoard expShipBoard =  planetsCard.getCurrentShipBoard();
-        planetsCard.nextStep();
+        planetsCard.getNextState();
         assertEquals(-planetsCard.getFlightDaysLoss(), testDisplacement);
         assertEquals(expShipBoard, testShip);
     }

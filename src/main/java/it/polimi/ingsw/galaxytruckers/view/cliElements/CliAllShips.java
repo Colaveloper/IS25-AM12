@@ -1,20 +1,19 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
 import javafx.beans.property.ObjectProperty;
-import jdk.jshell.execution.Util;
 
 import java.io.IOException;
 import java.util.*;
 
 public class CliAllShips extends CliElement {
-    private final Map<FourColors, CliShipBoard> cliShipBoards; // ALL FINAL
-    private final Map<FourColors, CliComponent> handsMap; // UPDATE WHEN HANDS CHANGES
-    private final Map<FourColors, List<CliComponent>> stashedComponentsMap;
+    private final Map<GameColor, CliShipBoard> cliShipBoards; // ALL FINAL
+    private final Map<GameColor, CliComponent> handsMap; // UPDATE WHEN HANDS CHANGES
+    private final Map<GameColor, List<CliComponent>> stashedComponentsMap;
 
     // CONSTRUCTOR TO USE AFTER BUILDING PHASE
     public CliAllShips(ClientModel model) {
@@ -81,7 +80,7 @@ public class CliAllShips extends CliElement {
     public List<String> getNewDescription() throws IOException {
         List<String> description = new ArrayList<>();
 
-        for (FourColors c : model.getPlayerToColor().values()) {
+        for (GameColor c : model.getPlayerToColor().values()) {
 
             List<String> singleShipDescription = new ArrayList<>(cliShipBoards.get(c).getDescription());
             List<String> handAndStashDescription = new ArrayList<>();

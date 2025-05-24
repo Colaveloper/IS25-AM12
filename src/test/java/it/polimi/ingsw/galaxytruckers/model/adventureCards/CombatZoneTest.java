@@ -4,7 +4,7 @@
 //import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.BigMeteor;
 //import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 //import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.SmallMeteor;
-//import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+//import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 //import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 //import it.polimi.ingsw.galaxytruckers.model.state.*;
 //import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -62,7 +62,7 @@
 //        position2 = 10;
 //        doesBreak = true;
 //
-//        ship1 = new SecondShipBoard(FourColors.RED) {
+//        ship1 = new SecondShipBoard(GameColor.RED) {
 //            @Override
 //            public int getCrewSize() {
 //                return crewSize1;
@@ -80,7 +80,7 @@
 //                return List.of(Set.of());
 //            }
 //        };
-//        ship2 = new SecondShipBoard(FourColors.BLUE) {
+//        ship2 = new SecondShipBoard(GameColor.BLUE) {
 //            @Override
 //            public int getCrewSize() {
 //                return crewSize2;
@@ -181,7 +181,7 @@
 //
 //        @Test
 //        void shipWithSmallestCrewLosesFlightDaysThenActivateState() {
-//            GameState testState = combatZoneCard.nextStep();
+//            GameState testState = combatZoneCard.setNextState();
 //
 //            assertEquals(Math.min(crewSize1, crewSize2), combatZoneCard.getMinCrewSize());
 //            assertEquals(testShip, ship2);
@@ -198,7 +198,7 @@
 //        @Test
 //        void nextStepReturnsActivateStateForEngines() {
 //            for (ShipBoard ship : ships) {
-//                GameState testState = combatZoneCard.nextStep();
+//                GameState testState = combatZoneCard.setNextState();
 //                assertInstanceOf(ActivateState.class, testState);
 //                assertEquals(ship, combatZoneCard.getCurrentShipBoard());
 //
@@ -208,15 +208,15 @@
 //                assertEquals(crewSize2, ship2.getCrewSize());
 //                assertEquals(shipPlaces, flightBoard.getShipToPlace());
 //            }
-//            GameState testState = combatZoneCard.nextStep();
+//            GameState testState = combatZoneCard.setNextState();
 //        }
 //
 //        @Test
 //        void nextStepReturnsLoseCrewStateAfterCannonActivation() {
 //            for (ShipBoard ship : ships) {
-//                combatZoneCard.nextStep();
+//                combatZoneCard.setNextState();
 //            }
-//            assertInstanceOf(ChooseCrewToLoseState.class, combatZoneCard.nextStep());
+//            assertInstanceOf(ChooseCrewToLoseState.class, combatZoneCard.setNextState());
 //        }
 //
 //        @Test
@@ -231,23 +231,23 @@
 //        @Test
 //        void minEnginePowerGetsCalculated() {
 //            for (ShipBoard ship : ships) { // none activated cannons
-//                combatZoneCard.nextStep();
+//                combatZoneCard.setNextState();
 //            }
-//            combatZoneCard.nextStep();
+//            combatZoneCard.setNextState();
 //            assertEquals(Math.min(enginePower1, enginePower2), combatZoneCard.getMinEnginePower());
 //        }
 //
 //        @Test
 //        void nextStepReturnsActivateStateForCannons() {
 //            for (ShipBoard ship : ships) { // engine activation
-//                combatZoneCard.nextStep();
+//                combatZoneCard.setNextState();
 //            }
-//            combatZoneCard.nextStep();
+//            combatZoneCard.setNextState();
 //            for (int i = crewLoss; i > 0; i-- ) {
 //                combatZoneCard.loseCrew();
 //            }
 //            for (ShipBoard ship : ships) {
-//                GameState testState = combatZoneCard.nextStep();
+//                GameState testState = combatZoneCard.setNextState();
 //                assertInstanceOf(ActivateState.class, testState);
 //                assertEquals(ship, combatZoneCard.getCurrentShipBoard());
 //            }
@@ -256,16 +256,16 @@
 //        @Test
 //        void minFirePowerGetsCalculated() {
 //            for (ShipBoard ship : ships) { // engine activation
-//                combatZoneCard.nextStep();
+//                combatZoneCard.setNextState();
 //            }
-//            combatZoneCard.nextStep();
+//            combatZoneCard.setNextState();
 //            for (int i = crewLoss; i > 0; i-- ) { // losing crew
 //                combatZoneCard.loseCrew();
 //            }
 //            for (ShipBoard ship : ships) { // cannon activation
-//                combatZoneCard.nextStep();
+//                combatZoneCard.setNextState();
 //            }
-//            combatZoneCard.nextStep();
+//            combatZoneCard.setNextState();
 //            assertEquals(Math.min(firePower1, firePower2), combatZoneCard.getMinFirePower());
 //            assertEquals(Math.min(firePower1, firePower2), combatZoneCard.getCurrentShipBoard().getFirePower());
 //        }
@@ -273,17 +273,17 @@
 //        @Test
 //        void nextStepReturnsActivateStateForEachProjectile() {
 //            for (ShipBoard ship : ships) { // engine activation
-//                combatZoneCard.nextStep();
+//                combatZoneCard.setNextState();
 //            }
-//            combatZoneCard.nextStep();
+//            combatZoneCard.setNextState();
 //            for (int i = crewLoss; i > 0; i-- ) { // losing crew
 //                combatZoneCard.loseCrew();
 //            }
 //            for (ShipBoard ship : ships) { // cannon activation
-//                combatZoneCard.nextStep();
+//                combatZoneCard.setNextState();
 //            }
 //            for (Projectile projectile : projectiles) {
-//                GameState testState = combatZoneCard.nextStep();
+//                GameState testState = combatZoneCard.setNextState();
 //                assertInstanceOf(ActivateState.class, testState);
 //                assertEquals(projectile, combatZoneCard.getCurrentProjectile());
 //            }
@@ -292,19 +292,19 @@
 //        @Test
 //        void nextStepReturnsDrawCardStateAfterProjectiles() {
 //            for (ShipBoard ship : ships) { // engine activation
-//                combatZoneCard.nextStep();
+//                combatZoneCard.setNextState();
 //            }
-//            combatZoneCard.nextStep();
+//            combatZoneCard.setNextState();
 //            for (int i = crewLoss; i > 0; i-- ) { // losing crew
 //                combatZoneCard.loseCrew();
 //            }
 //            for (ShipBoard ship : ships) { // cannon activation
-//                combatZoneCard.nextStep();
+//                combatZoneCard.setNextState();
 //            }
 //            for (Projectile projectile : projectiles) {
-//                combatZoneCard.nextStep();
+//                combatZoneCard.setNextState();
 //            }
-//            GameState testState = combatZoneCard.nextStep();
+//            GameState testState = combatZoneCard.setNextState();
 //            assertInstanceOf(DrawCardState.class, testState);
 //        }
 //
@@ -317,20 +317,20 @@
 ////            combatZoneCard = new CombatZoneCard(Level.SECOND, flightBoard, flightDaysLoss, crewLoss,goodLoss, projectiles, actions);
 ////
 ////            for (ShipBoard ship : ships) { // engine activation
-////                combatZoneCard.nextStep();
+////                combatZoneCard.setNextState();
 ////            }
-////            combatZoneCard.nextStep();
+////            combatZoneCard.setNextState();
 ////            for (int i = crewLoss; i > 0; i-- ) { // losing crew
 ////                combatZoneCard.loseCrew();
 ////            }
 ////            for (ShipBoard ship : ships) { // cannon activation
-////                combatZoneCard.nextStep();
+////                combatZoneCard.setNextState();
 ////            }
-////            combatZoneCard.nextStep(); // shield activation
-////            GameState testState = combatZoneCard.nextStep();
+////            combatZoneCard.setNextState(); // shield activation
+////            GameState testState = combatZoneCard.setNextState();
 ////            assertInstanceOf(ChooseShipPieceState.class, testState);
-////            combatZoneCard.nextStep(); // useless activation
-////            testState = combatZoneCard.nextStep(); // ship did not broke, all meteor finished
+////            combatZoneCard.setNextState(); // useless activation
+////            testState = combatZoneCard.setNextState(); // ship did not broke, all meteor finished
 ////            assertInstanceOf(DrawCardState.class, testState);
 ////        }
 //    }
@@ -353,9 +353,9 @@
 //        @Test
 //        void nextStepReturnsLoseGoodStateAfterEngineActivation() {
 //            for (ShipBoard ship : ships) { // activating all engines
-//                combatZoneCard.nextStep();
+//                combatZoneCard.setNextState();
 //            }
-//            GameState testState = combatZoneCard.nextStep();
+//            GameState testState = combatZoneCard.setNextState();
 //            assertInstanceOf(ChooseGoodToLoseState.class, testState);
 //        }
 //
@@ -371,12 +371,12 @@
 //        @Test
 //        void nextStepReturnsDrawCardStateAfterLosingCrew() {
 //            for (ShipBoard ship : ships) { // activating all engines
-//                combatZoneCard.nextStep();
+//                combatZoneCard.setNextState();
 //            }
 //            for (int i = goodLoss; i > 0; i-- ) { // losing all goods
 //                combatZoneCard.loseGoods();
 //            }
-//            GameState testState = combatZoneCard.nextStep();
+//            GameState testState = combatZoneCard.setNextState();
 //            assertInstanceOf(DrawCardState.class, testState);
 //        }
 //    }

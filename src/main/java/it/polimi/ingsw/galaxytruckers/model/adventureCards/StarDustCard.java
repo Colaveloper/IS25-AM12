@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
@@ -23,7 +24,7 @@ public class StarDustCard extends AdventureCard {
         this.invertedShips = flightBoard.getOrderedShips().reversed();
     }
 
-    public GameState nextStep() {
+    public AdventureState getNextState() {
         for (ShipBoard shipBoard : invertedShips) { // ships go back on the board in inverted flight order
             flightBoard.displaceShip(shipBoard, -shipBoard.getExposedConnectorsNumber());
         }

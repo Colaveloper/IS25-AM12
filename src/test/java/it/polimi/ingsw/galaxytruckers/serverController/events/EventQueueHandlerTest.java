@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
 import it.polimi.ingsw.galaxytruckers.model.GameModel;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
@@ -39,7 +39,7 @@ class EventQueueHandlerTest {
         Player p2 = Player.addPlayer("p2");
         SessionManager.getInstance().registerClient(p1,client1);
         SessionManager.getInstance().registerClient(p2,client2);
-        lobby = new Lobby(new GameModel(), new ServerControllerStub(), p1, Level.SECOND,2);
+        lobby = new Lobby(new GameModel(), p1, Level.SECOND,2);
         lobby.addPlayer(p2);
         eventQueue = lobby.getEventQueue();
         eventQueueHandler = lobby.getEventQueueHandler();
@@ -61,12 +61,12 @@ class VirtualClientStub implements VirtualClient {
     List<String> methods = new ArrayList<>();
 
     @Override
-    public void setupLobby(UUID lobbyId, Map<String, FourColors> playerColors) {
+    public void setupLobby(UUID lobbyId, Map<String, GameColor> playerColors) {
         methods.add("setupLobby");
     }
 
     @Override
-    public void updateLobbyPlayers(Map<String, FourColors> playerColors) {
+    public void updateLobbyPlayers(Map<String, GameColor> playerColors) {
         methods.add("updateLobbyPlayers");
     }
 

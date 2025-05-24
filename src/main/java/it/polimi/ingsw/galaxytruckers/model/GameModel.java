@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.model;
 // the main logical component that provides all the methods to the controller
 // to access and modify the state of the game
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -20,7 +20,7 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public ShipBoard addShip(Game game, FourColors color) {
+    public ShipBoard addShip(Game game, GameColor color) {
         return game.addShipBoard(color);
     }
 

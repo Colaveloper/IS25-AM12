@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
@@ -98,12 +98,12 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     // VirtualClient
 
     @Override
-    public void setupLobby(UUID lobbyId, Map<String, FourColors> playerColors) {
+    public void setupLobby(UUID lobbyId, Map<String, GameColor> playerColors) {
         submitUpdateTask(() -> remoteClient.setupLobby(lobbyId, playerColors));
     }
 
     @Override
-    public void updateLobbyPlayers(Map<String, FourColors> playerColors) {
+    public void updateLobbyPlayers(Map<String, GameColor> playerColors) {
         submitUpdateTask(() -> remoteClient.updateLobbyPlayers(playerColors));
     }
 

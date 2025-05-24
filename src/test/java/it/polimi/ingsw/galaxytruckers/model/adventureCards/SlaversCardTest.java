@@ -2,12 +2,11 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -44,7 +43,7 @@ class SlaversCardTest {
         ships = new ArrayList<>();
         loserShips = new ArrayList<>();
 
-        ship1 = new SecondShipBoard(FourColors.RED) {
+        ship1 = new SecondShipBoard(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return 0;
@@ -56,7 +55,7 @@ class SlaversCardTest {
             }
         };
 
-        ship2 = new SecondShipBoard(FourColors.RED) {
+        ship2 = new SecondShipBoard(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return 2;
@@ -68,7 +67,7 @@ class SlaversCardTest {
             }
         };
 
-        ship3 = new SecondShipBoard(FourColors.RED) {
+        ship3 = new SecondShipBoard(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return 1;
@@ -158,36 +157,36 @@ class SlaversCardTest {
 
     @Test
     void secondPlayerWinsSoChooseState() {
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        testState = slaversCard.nextStep();
+        slaversCard.getNextState();
+        slaversCard.getNextState();
+        slaversCard.getNextState();
+        testState = slaversCard.getNextState();
         assertInstanceOf(GrabRewardState.class, testState);
     }
 
     @Test
     void firstPlayerLoses() {
-        slaversCard.nextStep();
-        testState = slaversCard.nextStep();
+        slaversCard.getNextState();
+        testState = slaversCard.getNextState();
         assertInstanceOf(RemoveCrewState.class, testState);
     }
 
     @Test
     void eachPlayerHasDeclareFirePowerState() {
-        testState = slaversCard.nextStep();
+        testState = slaversCard.getNextState();
         assertInstanceOf(DeclareFirePowerState.class, testState);
-        slaversCard.nextStep();//removeGoodsState
-        testState = slaversCard.nextStep();
+        slaversCard.getNextState();//removeGoodsState
+        testState = slaversCard.getNextState();
         assertInstanceOf(DeclareFirePowerState.class, testState);
     }
 
     @Test
-    void nextStepIsDrawState() {
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        testState = slaversCard.nextStep();
+    void getNextStateIsDrawState() {
+        slaversCard.getNextState();
+        slaversCard.getNextState();
+        slaversCard.getNextState();
+        slaversCard.getNextState();
+        testState = slaversCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
     }
 
@@ -200,10 +199,10 @@ class SlaversCardTest {
         };
         slaversCard = new SlaversCard(game, Level.SECOND, 1, 1, 1, 1,1);
         slaversCard.initialize();
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        slaversCard.nextStep();
-        testState = slaversCard.nextStep();
+        slaversCard.getNextState();
+        slaversCard.getNextState();
+        slaversCard.getNextState();
+        testState = slaversCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
         assertFalse(displacedShips.contains(ship1));
         assertFalse(displacedShips.contains(ship2));
@@ -215,10 +214,10 @@ class SlaversCardTest {
 
     @Test
     void chooseToGetCredits() {
-        slaversCard.nextStep();//activate
-        slaversCard.nextStep();//lose crew
-        slaversCard.nextStep();//activate
-        testState = slaversCard.nextStep();//choose
+        slaversCard.getNextState();//activate
+        slaversCard.getNextState();//lose crew
+        slaversCard.getNextState();//activate
+        testState = slaversCard.getNextState();//choose
         assertInstanceOf(GrabRewardState.class, testState);
 
         slaversCard.getReward();

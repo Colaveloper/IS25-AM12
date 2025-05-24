@@ -4,19 +4,16 @@ import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,8 +27,8 @@ class ActivateStateTest {
 
     @BeforeEach
     void setup() {
-        ship1 = new SecondShipBoard(FourColors.RED);
-        ship2 = new SecondShipBoard(FourColors.BLUE){
+        ship1 = new SecondShipBoard(GameColor.RED);
+        ship2 = new SecondShipBoard(GameColor.BLUE){
             @Override
             public int getNumBatteries() {
                 return 2;
@@ -92,7 +89,7 @@ class ActivateStateTest {
 
     @Test
     void activateComponentDoesNotIncrementBatteriesToSpendWhenShipBoardDoesNotActivateComponent(){
-        ship2 = new SecondShipBoard(FourColors.BLUE){
+        ship2 = new SecondShipBoard(GameColor.BLUE){
             @Override
             public int getNumBatteries() {
                 return 2;
@@ -172,7 +169,7 @@ class ActivateStateTest {
         };
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
-            public GameState nextStep() {
+            public AdventureState getNextState() {
                 return new AdventureState();
             }
         };

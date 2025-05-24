@@ -1,13 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.state.GrabRewardState;
-import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
-import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import it.polimi.ingsw.galaxytruckers.model.state.RemoveCrewState;
+import it.polimi.ingsw.galaxytruckers.model.state.*;
 
 public class AbandonedShipCard extends AdventureCard {
     private final int flightDaysLoss;
@@ -31,7 +27,7 @@ public class AbandonedShipCard extends AdventureCard {
     }
 
     @Override
-    public GameState nextStep() {
+    public AdventureState getNextState() {
         if(!accepted) {
             if (currentPlayerIndex < flightBoard.getShipToPlace().size()) { // There are other players to evaluate
                 currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
@@ -44,7 +40,7 @@ public class AbandonedShipCard extends AdventureCard {
                 return new GrabRewardState(currentShipBoard, this::getReward);
             }
             else {
-                return nextStep();
+                return getNextState();
             }
         }
         else if(!acquired){

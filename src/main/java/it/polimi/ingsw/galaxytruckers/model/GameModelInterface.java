@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -11,7 +11,7 @@ import java.awt.*;
 
 public interface GameModelInterface {
     Game createGame(Level level);
-    ShipBoard addShip(Game game, FourColors color);
+    ShipBoard addShip(Game game, GameColor color);
     void setEventListener(Game game, EventListener listener);
     void startGame(Game game);
 

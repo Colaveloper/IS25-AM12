@@ -2,13 +2,12 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +50,7 @@ class SmugglersCardTest {
 
         goodsWon = new HashMap<>();
 
-        ship1 = new SecondShipBoard(FourColors.RED) {
+        ship1 = new SecondShipBoard(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return 0;
@@ -59,7 +58,7 @@ class SmugglersCardTest {
 
         };
 
-        ship2 = new SecondShipBoard(FourColors.RED) {
+        ship2 = new SecondShipBoard(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return 2;
@@ -67,7 +66,7 @@ class SmugglersCardTest {
 
         };
 
-        ship3 = new SecondShipBoard(FourColors.RED) {
+        ship3 = new SecondShipBoard(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return 1;
@@ -159,38 +158,38 @@ class SmugglersCardTest {
 
     @Test
     void secondPlayerHasChooseState() {
-        smugglersCard.nextStep();
-        smugglersCard.nextStep();
-        smugglersCard.nextStep();
-        testState = smugglersCard.nextStep();
+        smugglersCard.getNextState();
+        smugglersCard.getNextState();
+        smugglersCard.getNextState();
+        testState = smugglersCard.getNextState();
         assertInstanceOf(GrabRewardState.class, testState);
     }
 
     @Test
-    void nextStepIsRemoveGoodsState() {
-        smugglersCard.nextStep();
-        testState = smugglersCard.nextStep();
+    void getNextStateIsRemoveGoodsState() {
+        smugglersCard.getNextState();
+        testState = smugglersCard.getNextState();
         assertInstanceOf(RemoveGoodsState.class, testState);
     }
 
     @Test
     void eachPlayerHasDeclareFirePowerState() {
-        testState = smugglersCard.nextStep();
+        testState = smugglersCard.getNextState();
         assertInstanceOf(DeclareFirePowerState.class, testState);
-        smugglersCard.nextStep();//removeGoodsState
-        testState = smugglersCard.nextStep();
+        smugglersCard.getNextState();//removeGoodsState
+        testState = smugglersCard.getNextState();
         assertInstanceOf(DeclareFirePowerState.class, testState);
     }
 
     @Test
     void winnerAddsGoodsAndCardEnds() {
-        smugglersCard.nextStep();//activate
-        smugglersCard.nextStep();//lose goods
-        smugglersCard.nextStep();//activate
-        smugglersCard.nextStep();//choose to get goods = true
-        testState = smugglersCard.nextStep();//add goods
+        smugglersCard.getNextState();//activate
+        smugglersCard.getNextState();//lose goods
+        smugglersCard.getNextState();//activate
+        smugglersCard.getNextState();//choose to get goods = true
+        testState = smugglersCard.getNextState();//add goods
         assertInstanceOf(AddGoodsState.class, testState);
-        testState = smugglersCard.nextStep();
+        testState = smugglersCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
     }
 
@@ -203,19 +202,19 @@ class SmugglersCardTest {
         };
         smugglersCard = new SmugglersCard(game, Level.SECOND, 1, 1, goodsWon, 1,1);
         smugglersCard.initialize();
-        smugglersCard.nextStep();//activate (but doesn't lose)
-        smugglersCard.nextStep();//activate
-        smugglersCard.nextStep();//lose goods
-        testState = smugglersCard.nextStep();
+        smugglersCard.getNextState();//activate (but doesn't lose)
+        smugglersCard.getNextState();//activate
+        smugglersCard.getNextState();//lose goods
+        testState = smugglersCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
     }
 
     @Test
     void chooseToGetGoods() {
-        smugglersCard.nextStep();//when state is GrabRewardState
-        smugglersCard.nextStep();
-        smugglersCard.nextStep();
-        testState = smugglersCard.nextStep();
+        smugglersCard.getNextState();//when state is GrabRewardState
+        smugglersCard.getNextState();
+        smugglersCard.getNextState();
+        testState = smugglersCard.getNextState();
         assertInstanceOf(GrabRewardState.class, testState);
 
         smugglersCard.getReward();

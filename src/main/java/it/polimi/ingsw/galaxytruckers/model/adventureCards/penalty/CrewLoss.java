@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards.penalty;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.model.state.RemoveCrewState;
 
@@ -15,7 +16,7 @@ public class CrewLoss implements  Penalty {
     }
 
     @Override
-    public Optional<GameState> givePenalty(ShipBoard shipBoard, FlightBoard flightBoard) {
+    public Optional<AdventureState> givePenalty(ShipBoard shipBoard, FlightBoard flightBoard) {
         if (crew == 0) {
             return Optional.empty();
         } else {

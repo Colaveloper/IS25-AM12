@@ -1,12 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 import java.util.Set;
 
-public abstract class ActivateState extends AdventureState{
+public abstract class ActivateState extends AdventureState {
     Set<Point> availablePositions;
     ShipBoard shipBoard;
     int batteriesToSpend;
@@ -51,6 +50,6 @@ public abstract class ActivateState extends AdventureState{
         if (batteriesToSpend > 0) {
             throw new IllegalStateException("You still have batteries to spend");
         }
-        game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
+        game.setCurrentState(super.getNextState());
     }
 }

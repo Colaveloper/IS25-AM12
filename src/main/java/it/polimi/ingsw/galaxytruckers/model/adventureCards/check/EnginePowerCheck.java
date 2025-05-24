@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards.check;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.model.state.DeclareEnginePowerState;
 import it.polimi.ingsw.galaxytruckers.model.state.DeclareFirePowerState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
@@ -31,7 +32,7 @@ public class EnginePowerCheck implements CombatZoneCheck {
     }
 
     @Override
-    public Optional<GameState> getAvailableAction(ShipBoard shipBoard) {
+    public Optional<AdventureState> getAvailableAction(ShipBoard shipBoard) {
         return Optional.of(new DeclareEnginePowerState(shipBoard));
     }
 }

@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.BigMeteor;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.SmallMeteor;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -33,13 +33,13 @@ class MeteorSwarmCardTest {
 
     @BeforeEach
     void setUp() {
-        ship1 = new SecondShipBoard(FourColors.RED) {
+        ship1 = new SecondShipBoard(GameColor.RED) {
             @Override
             public List<Set<Point>> getConnectedSets() {
                 return List.of(Set.of(), Set.of()); // breaking
             }
         };
-        ship2 = new SecondShipBoard(FourColors.BLUE) {
+        ship2 = new SecondShipBoard(GameColor.BLUE) {
             @Override
             public List<Set<Point>> getConnectedSets() {
                 return List.of(Set.of()); // not breaking
@@ -87,15 +87,15 @@ class MeteorSwarmCardTest {
     }
 
     @Test
-    void nextStepReturnsActivateThenDrawCardIfNoBreaking() {
+    void getNextStateReturnsActivateThenDrawCardIfNoBreaking() {
         for (Projectile projectile : safeProjectiles) {
             for (ShipBoard shipBoard : ships) {
-                testState = meteorSwarmCard.nextStep();
+                testState = meteorSwarmCard.getNextState();
                 assertEquals(meteorSwarmCard.getCurrentShipBoard(), shipBoard);
                 assertInstanceOf(HandleProjectileState.class, testState);
             }
         }
-        testState = meteorSwarmCard.nextStep();
+        testState = meteorSwarmCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
     }
 }

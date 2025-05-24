@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.model;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -24,27 +24,27 @@ public class ClientModel {
     private String currentPlayerNickname;
     private String myNickname;
     private final Set<Point> shipArea;
-    private final Map<FourColors, List<List<ObjectProperty<Component>>>> ships;
-    private final BiMap<String, FourColors> playerToColor;
+    private final Map<GameColor, List<List<ObjectProperty<Component>>>> ships;
+    private final BiMap<String, GameColor> playerToColor;
     private final ObservableList<Point> selectablePoints;
-    private final ObservableMap<FourColors, Map<StatType, Integer>> stats;
+    private final ObservableMap<GameColor, Map<StatType, Integer>> stats;
 
     // BUILDING
     private Point upLeft; // the upper-left point of the ship-area
     private final ListProperty<Component> revealedComponents;
     private final IntegerProperty coveredComponentN;
-    private final Map<FourColors, List<ObjectProperty<Component>>> stashedComponents;
-    private final Map<FourColors, ObjectProperty<Component>> hands; // (former current component)
+    private final Map<GameColor, List<ObjectProperty<Component>>> stashedComponents;
+    private final Map<GameColor, ObjectProperty<Component>> hands; // (former current component)
     private final ListProperty<Integer> forecastDeck;
     private final List<BooleanProperty> forecastAvailability;
     private List<Set<Point>> shipPieces;
     private boolean isValid;
 
-    private final Map<FourColors, UnweldedComponent> unweldedComponent;
+    private final Map<GameColor, UnweldedComponent> unweldedComponent;
     // FLIGHTBOARD
     private int loopLength;
     private final ObservableList<Integer> startingPositionLeft;
-    private final ObservableMap<FourColors, Integer> colorToPlace;
+    private final ObservableMap<GameColor, Integer> colorToPlace;
 
 
     // FLIGHT
@@ -103,7 +103,7 @@ public class ClientModel {
         this.startingPositionLeft.addAll(startingPositions);
     }
 
-    public void setPlayerColor(String nickname, FourColors color) {
+    public void setPlayerColor(String nickname, GameColor color) {
         playerToColor.putIfAbsent(nickname, color);
         ships.put(playerToColor.get(nickname), new ArrayList<>());
     }
@@ -424,11 +424,11 @@ public class ClientModel {
         return startingPositionLeft;
     }
 
-    public ObservableMap<FourColors, Integer> colorToPlaceProperty() {
+    public ObservableMap<GameColor, Integer> colorToPlaceProperty() {
         return colorToPlace;
     }
 
-    public Map<FourColors, List<List<ObjectProperty<Component>>>> getShips() {
+    public Map<GameColor, List<List<ObjectProperty<Component>>>> getShips() {
         return ships;
     }
 
@@ -440,11 +440,11 @@ public class ClientModel {
         return hands.get(playerToColor.get(myNickname)).get().getType() != ComponentType.EMPTY_AREA;
     }
 
-    public Map<FourColors, ObjectProperty<Component>> getHand() {
+    public Map<GameColor, ObjectProperty<Component>> getHand() {
         return hands;
     }
 
-    public Map<FourColors, List<ObjectProperty<Component>>> getStashed() {
+    public Map<GameColor, List<ObjectProperty<Component>>> getStashed() {
         return stashedComponents;
     }
 
@@ -452,7 +452,7 @@ public class ClientModel {
         return revealedComponents;
     }
 
-    public BiMap<String, FourColors> getPlayerToColor() {
+    public BiMap<String, GameColor> getPlayerToColor() {
         return playerToColor;
     }
 }

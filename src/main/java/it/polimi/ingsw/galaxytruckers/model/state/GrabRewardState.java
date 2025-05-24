@@ -17,7 +17,7 @@ public class GrabRewardState extends AdventureState {
             throw new IllegalStateException("It's not your turn");
         }
         rewardMethod.run();
-        game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
+        game.setCurrentState(super.getNextState());
     }
 
     @Override
@@ -25,6 +25,6 @@ public class GrabRewardState extends AdventureState {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
-        game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
+        game.setCurrentState(super.getNextState());
     }
 }

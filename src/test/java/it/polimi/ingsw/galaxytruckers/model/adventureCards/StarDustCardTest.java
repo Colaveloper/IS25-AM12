@@ -2,13 +2,12 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -41,14 +40,14 @@ class StarDustCardTest {
 
         ships = new ArrayList<>();
 
-        ship1 = new SecondShipBoard(FourColors.BLUE) {
+        ship1 = new SecondShipBoard(GameColor.BLUE) {
             @Override
             public int getExposedConnectorsNumber() {
                 return 0;
             }
         };
 
-        ship2 = new SecondShipBoard(FourColors.RED) {
+        ship2 = new SecondShipBoard(GameColor.RED) {
             @Override
             public int getExposedConnectorsNumber() {
                 return 2;
@@ -105,9 +104,9 @@ class StarDustCardTest {
 
 
     @Test
-    void nextStepIsDrawStateAndDisplaceShips() {
+    void getNextStateIsDrawStateAndDisplaceShips() {
 
-        testState = starDustCard.nextStep();
+        testState = starDustCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
         assertTrue(displacedShips.contains(ship2));
     }

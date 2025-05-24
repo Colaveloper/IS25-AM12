@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -42,7 +41,7 @@ public class PiratesCard extends AdventureCard {
     }
 
     @Override
-    public GameState nextStep() {
+    public AdventureState getNextState() {
         if (!defeated) { // Establishing winner and defeated players, if any
             // Evaluating previous player firepower, after double cannons activation
             if (currentShipBoard != null) {  // There is a previous player who needs their firepower evaluated
@@ -67,7 +66,7 @@ public class PiratesCard extends AdventureCard {
                 defeated = true;
                 currentPlayerIndex = 0;
                 currentShipBoard = null;
-                return nextStep();
+                return getNextState();
             }
         } else { // Firing at defeated players
             if (currentShipBoard != null) {
@@ -84,7 +83,7 @@ public class PiratesCard extends AdventureCard {
                     currentPlayerIndex = 0;
                     currentShipBoard = null;
                     currentProjectile = projectiles.removeLast();
-                    return nextStep();
+                    return getNextState();
                 }
             }
         }

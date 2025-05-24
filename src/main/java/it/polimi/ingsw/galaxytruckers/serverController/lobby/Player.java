@@ -1,9 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
-import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -15,7 +14,7 @@ public class Player {
     private final static Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
 
     private final String nickname;
-    private final AtomicReference<FourColors> color = new AtomicReference<>();
+    private final AtomicReference<GameColor> color = new AtomicReference<>();
     private final AtomicReference<Lobby> lobby = new AtomicReference<>();
     private final AtomicReference<ShipBoard> shipBoard = new AtomicReference<>();
 
@@ -70,7 +69,7 @@ public class Player {
         return Optional.ofNullable(this.shipBoard.get());
     }
 
-    public Optional<FourColors> getColor() {
+    public Optional<GameColor> getColor() {
         return Optional.ofNullable(this.color.get());
     }
 
@@ -78,7 +77,7 @@ public class Player {
         this.lobby.set(lobby);
     }
 
-    protected void setColor(FourColors color) {
+    protected void setColor(GameColor color) {
         this.color.set(color);
     }
 

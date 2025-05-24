@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.server;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
@@ -23,7 +23,7 @@ public interface VirtualClient {
      * @param playerColors map containing all players' nicknames and
      *                     their corresponding color
      */
-    void setupLobby(UUID lobbyId, Map<String, FourColors> playerColors);
+    void setupLobby(UUID lobbyId, Map<String, GameColor> playerColors);
 
     /**
      * Signals to the client that the players in their lobby have changed
@@ -31,7 +31,7 @@ public interface VirtualClient {
      * @param playerColors map containing all players' nicknames and
      *                     their corresponding color
      */
-    void updateLobbyPlayers(Map<String, FourColors> playerColors);
+    void updateLobbyPlayers(Map<String, GameColor> playerColors);
 
     /**
      * Signals to the client that a player has successfully stashed

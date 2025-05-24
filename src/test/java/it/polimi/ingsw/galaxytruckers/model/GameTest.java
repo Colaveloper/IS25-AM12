@@ -1,13 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.model;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.factory.SecondFactory;
 import it.polimi.ingsw.galaxytruckers.model.factory.TestFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.ShipBuildingState;
-import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
-import it.polimi.ingsw.galaxytruckers.serverController.events.EventListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,8 +22,8 @@ class GameTest {
     void setUp() {
         game = new Game(Level.SECOND);
         shipBoards = new ArrayList<>();
-        shipBoards.add(game.addShipBoard(FourColors.BLUE));
-        shipBoards.add(game.addShipBoard(FourColors.GREEN));
+        shipBoards.add(game.addShipBoard(GameColor.BLUE));
+        shipBoards.add(game.addShipBoard(GameColor.GREEN));
         game.setEventListener(new GameEventListenerStub());
     }
 

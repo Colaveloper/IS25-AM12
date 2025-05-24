@@ -33,7 +33,7 @@ public class SmugglersCard extends AdventureCard {
     }
 
     @Override
-    public GameState nextStep() {
+    public AdventureState getNextState() {
         // Evaluating previous player firepower, after double cannons activation
         if (!defeated) {
             if (currentShipBoard != null) {  // There is a previous player who needs their firepower evaluated

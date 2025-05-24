@@ -48,7 +48,7 @@ public class RemoveGoodsState extends AdventureState {
 
     private void tryStateTransition() {
         if (goodsToLose == 0 || (shipBoard.getGoodsValue() == 0 && shipBoard.getNumBatteries() == 0)) {
-            game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
+            game.setCurrentState(super.getNextState());
         }
     }
 }

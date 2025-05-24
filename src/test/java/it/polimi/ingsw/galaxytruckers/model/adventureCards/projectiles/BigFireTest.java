@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ class BigFireTest {
 
     @BeforeEach
     void setUp() {
-        shipBoard = new ShipBoard(FourColors.BLUE) {
+        shipBoard = new ShipBoard(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;

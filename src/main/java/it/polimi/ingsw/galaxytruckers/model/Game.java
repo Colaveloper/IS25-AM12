@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model;
 
 import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -36,7 +36,7 @@ public class Game {
      * @param color the color of the added shipboard
      * @return the added shipboard
      */
-    public ShipBoard addShipBoard(FourColors color) {
+    public ShipBoard addShipBoard(GameColor color) {
         ShipBoard shipBoard = gameFactory.createShipBoard(color);
         shipBoards.add(shipBoard);
         return shipBoard;
@@ -57,6 +57,7 @@ public class Game {
     /**
      * @return the game's factory
      */
+    @VisibleForTesting
     public GameFactory getGameFactory() {
         return gameFactory;
     }
@@ -111,7 +112,7 @@ public class Game {
      * flightboard
      * */
     public void forceShipsToGiveUp(){
-        if(level != Level.TEST){
+        if(level != Level.TEST){ // TODO: avoid predicating directly on the instances of Level
             // if ship has no crew -> force give up
             givenUpShips.addAll(
                     shipBoards.stream()
@@ -132,7 +133,6 @@ public class Game {
      * */
     public void forceShipToGiveUp(ShipBoard ship){
         givenUpShips.add(ship);
-
     }
 
     /**

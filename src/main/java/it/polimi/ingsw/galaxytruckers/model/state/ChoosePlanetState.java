@@ -25,7 +25,7 @@ public class ChoosePlanetState extends AdventureState {
             throw new IllegalArgumentException("Invalid choice: " + choice);
         }
         choosePlanetMethod.accept(choice);
-        game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
+        game.setCurrentState(super.getNextState());
     }
 
     @Override
@@ -33,6 +33,6 @@ public class ChoosePlanetState extends AdventureState {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
-        game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
+        game.setCurrentState(super.getNextState());
     }
 }
