@@ -10,16 +10,21 @@ import java.util.Scanner;
 
 public class CliView extends View {
 
+    String input;
+    Scanner scanner;
     CliScreen currentScreen;
 
     public CliView(ControllerToServer controller, ClientModel model) {
         super(controller, model);
+        startInputLoop();
+        scanner = new Scanner(System.in);
     }
 
     @Override
     public void setScreen(GameState gameState) {
         currentScreen = screenFactory.createCliScreen(model, gameState, controller);
     }
+
 
     private void startInputLoop() {
         new Thread(() -> {
@@ -28,7 +33,7 @@ public class CliView extends View {
                 input = scanner.nextLine();
 
                 // letting the user correct format errors
-                while (!screen.isLegalInput(input)) {
+                while (!currentScreen.isLegalInput(input)) {
                     //todo: this is called also when it s not your turn where u don t have to check invalid input format
                     //todo: ask the screen what to print, screens then prints either not your turn or a specific message
                     //screen.invalidInput();
@@ -36,7 +41,7 @@ public class CliView extends View {
                     input = scanner.nextLine();
                 };
 
-                screen.parseAndInvoke(input);
+                currentScreen.parseAndInvoke(input);
             }
         }).start();
     }

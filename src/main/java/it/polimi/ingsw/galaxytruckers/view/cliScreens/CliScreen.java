@@ -21,7 +21,7 @@ public abstract class CliScreen {
     public abstract void render();
     public abstract void parseAndInvoke(String input) ;
     // public abstract boolean isLegalInput(String input);
-    private boolean isLegalInput(String input) {
+    public boolean isLegalInput(String input) {
         List<StateActions> availableActions = gameState.getAvailableActions();
         for(StateActions action : availableActions){
             switch(action){
