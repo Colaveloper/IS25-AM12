@@ -105,7 +105,7 @@ class ShipBuildingStateTest {
 
         @Test
         void rejectComponentThrowsExceptionWhenNoComponentPresent() {
-            assertThrows(IllegalStateException.class, () -> shipBuildingState.rejectComponent(new SecondShipBoard(FourColors.RED)));
+            assertThrows(IllegalStateException.class, () -> shipBuildingState.rejectComponent(new SecondShipBoard(GameColor.RED)));
         }
 
         @Test
