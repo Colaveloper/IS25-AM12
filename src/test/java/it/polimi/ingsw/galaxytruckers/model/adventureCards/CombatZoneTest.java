@@ -186,7 +186,7 @@
 //            assertEquals(Math.min(crewSize1, crewSize2), combatZoneCard.getMinCrewSize());
 //            assertEquals(testShip, ship2);
 //            assertEquals(testDisplacement, -flightDaysLoss);
-//            assertInstanceOf(ActivateState.class, testState);
+//            assertInstanceOf(SimpleStateDTO.class, testState);
 //
 //            // rest unchanged
 //            assertEquals(projectiles, combatZoneCard.getProjectiles());
@@ -199,7 +199,7 @@
 //        void nextStepReturnsActivateStateForEngines() {
 //            for (ShipBoard ship : ships) {
 //                GameState testState = combatZoneCard.nextStep();
-//                assertInstanceOf(ActivateState.class, testState);
+//                assertInstanceOf(SimpleStateDTO.class, testState);
 //                assertEquals(ship, combatZoneCard.getCurrentShipBoard());
 //
 //                // rest unchanged
@@ -248,7 +248,7 @@
 //            }
 //            for (ShipBoard ship : ships) {
 //                GameState testState = combatZoneCard.nextStep();
-//                assertInstanceOf(ActivateState.class, testState);
+//                assertInstanceOf(SimpleStateDTO.class, testState);
 //                assertEquals(ship, combatZoneCard.getCurrentShipBoard());
 //            }
 //        }
@@ -284,7 +284,7 @@
 //            }
 //            for (Projectile projectile : projectiles) {
 //                GameState testState = combatZoneCard.nextStep();
-//                assertInstanceOf(ActivateState.class, testState);
+//                assertInstanceOf(SimpleStateDTO.class, testState);
 //                assertEquals(projectile, combatZoneCard.getCurrentProjectile());
 //            }
 //        }

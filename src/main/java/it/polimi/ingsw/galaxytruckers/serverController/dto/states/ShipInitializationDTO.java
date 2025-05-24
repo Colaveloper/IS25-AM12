@@ -7,5 +7,5 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-public record ShipInitializationState(Map<Player, Map<CrewType, List<Point>>> crewTypeToCabins) {
+public record ShipInitializationDTO(Map<Player, Map<CrewType, List<Point>>> crewTypeToCabins) implements StateDTO{
 }

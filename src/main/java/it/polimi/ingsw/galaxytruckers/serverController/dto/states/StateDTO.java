@@ -1,4 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.serverController.dto.states;
 
-public sealed interface StateDTO permits ShipCorrectionState {
+import java.io.Serializable;
+
+public sealed interface StateDTO extends Serializable permits AddGoodsDTO, ChoosePlanetDTO, ChooseShipPieceDTO,
+                                                              HandleProjectileDTO, RemoveCrewDTO, RemoveGoodsDTO,
+                                                              ShipCorrectionDTO, ShipInitializationDTO, SimpleStateDTO {
 }
