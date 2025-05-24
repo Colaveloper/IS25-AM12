@@ -9,10 +9,9 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteServer;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteController;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 
 import java.awt.*;
-import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -22,11 +21,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RmiClient extends UnicastRemoteObject implements RemoteClient, VirtualServer {
     private RemoteServer server;
     private RemoteController remoteController;
     private ClientControllerInterface clientController;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public RmiClient() throws RemoteException {
         super();
@@ -54,12 +57,21 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
         throw new RuntimeException("Failed to handle network exception", e);
     }
 
+    private void ping() {
+        try {
+            remoteController.ping();
+        } catch (RemoteException e) {
+            handleNetworkError(e);
+        }
+    }
+
     // VirtualServer
 
     @Override
     public void registerNickname(String myNickname) {
         try {
             this.remoteController = server.registerNickname(this, myNickname);
+            this.scheduler.scheduleAtFixedRate(this::ping,5,5, TimeUnit.SECONDS);
         } catch (RemoteException e) {
             handleNetworkError(e);
         }
@@ -308,8 +320,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
         }
     }
 
-    // RemoteClient
-    //TODO: implement update methods (ref to ClientController)
+    // --- RemoteClient ---
 
     @Override
     public void setupLobby(UUID lobbyId, Map<String, FourColors> playerColors) throws RemoteException {
@@ -353,111 +364,128 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
 
     @Override
     public void notifyHourglassFlipped(String playerName, boolean isLast) throws RemoteException {
-
+        clientController.notifyHourglassFlipped(playerName,isLast);
     }
 
     @Override
     public void notifyShipMapUpdate(String playerName, int componentId, int rotation, Point position) throws RemoteException {
-
+        clientController.notifyComponentPositioning(playerName,componentId,rotation,position);
     }
 
     @Override
     public void sendForecastDeck(List<Integer> deckCardIds) throws RemoteException {
-
+        clientController.sendForecastDeck(deckCardIds);
     }
 
     @Override
     public void notifyPeekForecast(String playerName, int deckIndex) throws RemoteException {
-
+        clientController.notifyPeekForecast(playerName,deckIndex);
     }
 
     @Override
     public void notifyReleaseForecast(String playerName, int deckIndex) throws RemoteException {
-
+        clientController.notifyReleaseForecast(playerName,deckIndex);
     }
 
     @Override
-    public void notifyPlaceShipOnFlightBoard(String playerName) throws RemoteException {
-
+    public void notifyPlaceShipOnFlightBoard(String playerName, int position) throws RemoteException {
+        clientController.notifyPlayerPosition(playerName, position);
     }
 
     @Override
-    public void showShipPieces(List<Set<Point>> shipPieces) throws RemoteException {
-
+    public void showShipPieces(Map<String, List<Set<Point>>> brokenShips) throws RemoteException {
+        clientController.showShipPieces(brokenShips);
     }
 
     @Override
     public void notifyInvalidShipsUpdate(List<String> invalidPlayers) throws RemoteException {
-
+        clientController.notifyInvalidShipsUpdate(invalidPlayers);
     }
 
     @Override
     public void notifyCabinUpdate(String playerName, Point point, int numResidents, CrewType crewType) throws RemoteException {
-
+        clientController.notifyCabinUpdate(playerName, point, numResidents, crewType);
     }
 
     @Override
     public void notifyBatteryUpdate(String playerName, Point point, int numBatteries) throws RemoteException {
-
+        clientController.changeBatteriesOnComponent(playerName,point,numBatteries);
     }
 
     @Override
     public void notifyCargoHoldUpdate(String playerName, Point point, Map<GoodsType, Integer> cargo) throws RemoteException {
-
+        clientController.notifyCargoHoldUpdate(playerName,point,cargo);
     }
 
     @Override
     public void notifyShipStatUpdate(String playerName, StatType statType, int value) throws RemoteException {
-
+        clientController.notifyShipStatusUpdate(playerName,statType,value);
     }
 
     @Override
     public void notifyNewCard(int cardId) throws RemoteException {
-
+        clientController.notifyNewCard(cardId);
     }
 
     @Override
     public void notifySurrender(List<String> playerNames) throws RemoteException {
-
+        //TODO : notify surrender
     }
 
     @Override
     public void notifyHourglassEnd() throws RemoteException {
-
+        clientController.notifyHourglassEnd();
     }
 
     @Override
     public void notifyComponentRemoval(String playerName, Point position) throws RemoteException {
-
+        clientController.notifyComponentRemoval(playerName, position);
     }
 
     @Override
     public void notifyShipPieceRemoval(String playerName, List<Point> positions) throws RemoteException {
-
+        clientController.notifyShipPieceRemoval(playerName,positions);
     }
 
     @Override
-    public void notifySelection(String playerName, List<Point> selectablePoints) throws RemoteException {
-
+    public void notifySelection(String playerName, List<Point> selectablePoints, List<Point> batteries) throws RemoteException {
+        clientController.notifySelection(playerName,selectablePoints,batteries);
     }
 
     @Override
-    public void notifyPlanetChoice(String playerName, int planetId, List<Point> cargoPositions) throws RemoteException {
-
+    public void notifyLandOnPlanet(String playerName, int planetId) throws RemoteException {
+        clientController.notifyLandOnPlanet(playerName, planetId);
     }
 
     @Override
-    public void updateGoodsBuffer(GoodsType type) throws RemoteException {
-
+    public void updateGoodsBuffer(boolean adding, GoodsType type) throws RemoteException {
+        clientController.updateGoodsBuffer(adding, type);
     }
 
+    //todo add nickname and split [notify selection for cannon and engines] (open space, slavers, smugglers, pirates first part) and [show projectile] (meteors, warzone, pirates second part)
     @Override
-    public void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws RemoteException {
-
+    public void showProjectile(String nickname, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws RemoteException {
+        clientController.showProjectile(nickname, projectileType,direction,roll,selectablePoints,batteries);
     }
 
     @Override
     public void showFinalScores(Map<String, Integer> playerToScore) throws RemoteException {
+        //TODO: fix controller methods
+        clientController.showFinalStats();
+    }
 
+    @Override
+    public void notifyComponentActivation(String playerName, Point point) throws RemoteException {
+        clientController.notifyComponentActivation(playerName,point);
+    }
+
+    @Override
+    public void notifyAddGoods(String playerName, Map<GoodsType, Integer> goods, List<Point> cargos) {
+
+    }
+
+    @Override
+    public void notifyPlayerDisconnection(String playerName) {
+        //TODO: add method in controller that notifies and goes back to create or join lobby screen
     }
 }

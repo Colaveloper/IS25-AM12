@@ -39,7 +39,7 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifySelectionPointEvent(ShipBoard shipBoard, List<Point> points) {
+    public void notifySelectionPointEvent(ShipBoard shipBoard, List<Point> points, List<Point> batteries) {
     }
 
     @Override
@@ -95,7 +95,7 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifyGoodsBufferUpdateEvent(ShipBoard shipBoard, GoodsType goodsType) {
+    public void notifyGoodsBufferUpdateEvent(ShipBoard shipBoard, boolean adding, GoodsType goodsType) {
     }
 
     @Override

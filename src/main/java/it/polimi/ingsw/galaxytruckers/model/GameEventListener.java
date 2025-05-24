@@ -47,8 +47,8 @@ public class GameEventListener {
         controllerListener.notifyEvent(GameEndEvent.from(finalScores));
     }
 
-    public void notifyGoodsBufferUpdateEvent(ShipBoard shipBoard, GoodsType goodsType) {
-        controllerListener.notifyEvent(GoodsBufferUpdateEvent.from(shipBoard,goodsType));
+    public void notifyGoodsBufferUpdateEvent(ShipBoard shipBoard, boolean adding, GoodsType goodsType) {
+        controllerListener.notifyEvent(GoodsBufferUpdateEvent.from(shipBoard,adding,goodsType));
     }
 
     public void notifyGrabStashedComponentEvent(ShipBoard shipBoard, Component component) {
@@ -103,8 +103,8 @@ public class GameEventListener {
         controllerListener.notifyEvent(RequestFaceUpComponentEvent.from(shipBoard,component));
     }
 
-    public void notifySelectionPointEvent(ShipBoard shipBoard, List<Point> points) {
-        controllerListener.notifyEvent(SelectionPointsEvent.from(shipBoard, points));
+    public void notifySelectionPointEvent(ShipBoard shipBoard, List<Point> points, List<Point> batteries) {
+        controllerListener.notifyEvent(SelectionPointsEvent.from(shipBoard, points, batteries));
     }
 
     public void notifyShipNotConnectedEvent(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
@@ -129,5 +129,9 @@ public class GameEventListener {
 
     public void notifySurrenderEvent(List<ShipBoard> ships) {
         controllerListener.notifyEvent(SurrenderEvent.from(ships));
+    }
+
+    public void notifyActivateComponentEvent(ShipBoard shipBoard, Point point) {
+        controllerListener.notifyEvent(ActivateComponentEvent.from(shipBoard, point));
     }
 }

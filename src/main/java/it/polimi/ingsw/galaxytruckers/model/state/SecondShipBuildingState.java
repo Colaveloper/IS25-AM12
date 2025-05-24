@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
 import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
@@ -31,6 +32,12 @@ public class SecondShipBuildingState extends ShipBuildingState {
             hourglass.flip(this::notifyHourglassEnd);
         }
         game.getEventListener().notifyFlipHourglassEvent(shipBoard,isLast);
+    }
+
+    @Override
+    public void setGame(Game game) {
+        super.setGame(game);
+        hourglass.flip(this::notifyHourglassEnd);
     }
 
     @Override

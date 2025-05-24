@@ -1,11 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
 
 import java.awt.*;
 import java.io.IOException;
@@ -13,20 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CliShipBuildingScreen extends CliScreen {
+    ConfigFactory config;
     CliComponentBank componentBank;
     CliFlightBoard flightBoard;
     CliAllShips allShips;
 
-    public CliShipBuildingScreen(ClientModel model, ClientController controller) throws IOException {
+    public CliShipBuildingScreen(ClientModel model, ClientController controller, ConfigFactory config) throws IOException {
         super(model, controller);
+        this.config = config;
 
-        componentBank = CliComponentBank.getInstance(model);
+        componentBank = CliComponentBank.getInstance(model, config);
         componentBank.addListener(this);
 
         flightBoard = new CliFlightBoard(model);
         flightBoard.addListener(this);
 
-        allShips = new CliAllShips(model);
+        allShips = new CliAllShips(model, config);
         allShips.addListener(this);
     }
 
@@ -39,31 +42,24 @@ public class CliShipBuildingScreen extends CliScreen {
         output.addAll(allShips.getDescription());
 
         output.add("C       \tGet New covered component" + "\t\t\tU [i]   \tGet i-th uncovered component");
-        //output.add("U [i]   \tGet i-th uncovered component");
-        output.add("S [i]   \tGet i-th stashed component" + "\t\t\tF [i]   \tGet i-th forecast deck");         // NOT IN Levels.TEST
-        //output.add("F [i]   \tGet i-th forecast deck");             // NOT IN Levels.TEST
+        output.add(config.isStashingAllowed() ? "S [i]   \tGet i-th stashed component" : "");
+        output.add(config.isForecastPresent() ? "F [i]   \tGet i-th forecast deck" : "");
 
-        if (model.existsUnwelded()) {
-            //output.add("R       \tReject current component");
-            output.add("P [x] [y] \tPlace last component in x, y" + "\t\t\tR       \tReject last component");
-            output.add("S       \tStash last component");        // NOT IN Levels.TEST
-            output.add("L       \tRotate last component left");
-        }
-        else if (model.currentComponentProperty().get().getType() != ComponentType.EMPTY_AREA) {
-            //output.add("R       \tReject current component");
-            output.add("P [x] [y] \tPlace current component in x, y" + "\t\t\tR       \tReject current component");
-            output.add("S       \tStash current component");        // NOT IN Levels.TEST
-            output.add("L       \tRotate current component left");
+        if (model.getExistsUnweldedComponent()) {
+            output.add("P [x] [y] \tPlace unwelded component in x, y" + "\t\t\tR       \tReject unwelded component");
+            output.add(config.isStashingAllowed() ? "S       \tStash unwelded component" : "");
+            output.add("L       \tRotate unwelded component left");
         }
 
-        output.add("H       \tFlip hourglass");                     // NOT IN Levels.TEST
+        output.add(config.isHourglassPresent() ? "H       \tFlip hourglass" : "");
+        output.add("E [i]   \tend and place on flightboard");
 
         return output;
     }
 
     @Override
     public boolean isLegalInput(String input) {
-        return input.matches("^(C|U \\d+|S(?: \\d+)?|F \\d+|R|P \\d+ \\d+|L|H)$");
+        return input.matches("^(C|U \\d+|S(?: \\d+)?|F \\d+|R|P \\d+ \\d+|L|H|E \\d+)$");
     }
 
     @Override
@@ -116,6 +112,13 @@ public class CliShipBuildingScreen extends CliScreen {
 
             case "H":
                 controller.flipHourglass();
+                break;
+
+            case "E":
+                if (parts.length == 2) {
+                    int index = Integer.parseInt(parts[1]);
+                    controller.placeShipOnFlightboard(index);
+                }
                 break;
 
             default:

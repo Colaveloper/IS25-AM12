@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 
 import java.awt.*;
 import java.io.IOException;

@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 
 import java.awt.*;
 import java.util.List;
@@ -156,15 +156,18 @@ public interface ClientControllerInterface {
      * @param nickname          the player's nickname
      * @param positionPoints    the position of the removed components
      */
-    void notifyComponentsRemoval(String nickname, List<Point> positionPoints);
+    void notifyShipPieceRemoval(String nickname, List<Point> positionPoints);
+
+
+
+    void notifyComponentRemoval(String playerName, Point position);
 
     /**
-     * Signals to the client that their ship is not connected and that they should
+     * Signals to the client that a list of ships are not connected and that they should
      * choose one of the given pieces to keep
-     * @param nickname who has the ship in pieces
-     * @param shipPieces a list containing the ship's connected subsets
+     * @param brokenShips map player to list of unconnected ship pieces
      */
-    void showShipPieces(String nickname, List<Set<Point>> shipPieces);
+    void showShipPieces(Map<String, List<Set<Point>>> brokenShips);
 
     /**
      * Signals to the client that the list of valid ships has changed
@@ -206,7 +209,25 @@ public interface ClientControllerInterface {
      * @param nickname          the player's nickname
      * @param cannonsPositions  selectable cannon points
      */
-    void notifySelection(String nickname, List<Point> cannonsPositions);
+    void notifySelection(String nickname, List<Point> cannonsPositions, List<Point> batteryPositions);
+
+    void notifyComponentActivation(String playerName, Point position);
+
+    void changeBatteriesOnComponent(String nickname, Point batteryComponent, int batteries);
+
+
+    /**
+     * called once at the start of placeGoods state
+     *
+     *
+     * @param nickname  the player's nickname
+     * @param cargoPositions  the position of the cargo holds possible
+     * @param goods     map of goods and their quantities
+     */
+    void notifyGrabGoodsState(String nickname, Map<GoodsType, Integer> goods, List<Point> cargoPositions);
+
+    void notifyCrewInitialization(Map<String, Map<CrewType, List<Point>>> playerToCabin);
+
 
     /**
      * Notifies that placed OR REMOVED a good in a cargo hold.
@@ -225,16 +246,17 @@ public interface ClientControllerInterface {
      * used for: planets
      *
      * @param planetId          the index of the planet chosen
-     * @param cargoPositions    positions of cargo hold component for highlights
+     * @param nickname    name of player who landed
      */
-    void choosePlanet(int planetId, List<Point> cargoPositions);
+    void notifyLandOnPlanet(String nickname, int planetId);
 
     /**
      * Updates the available goods buffer after a good is picked.
      *
      * @param type the type of good picked
+     * @param adding true: goods in - false: goods out
      */
-    void updateGoodsBuffer(GoodsType type);
+    void updateGoodsBuffer(boolean adding, GoodsType type);
 
     /**
      * Displays a projectile being fired, consuming batteries happens in the same screen.
@@ -248,7 +270,7 @@ public interface ClientControllerInterface {
      * @param selectablePoints  list of component position that can be activated
      * @param batteries         position of batteries components
      */
-    void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries);
+    void showProjectile(String nickname, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries);
 
 
     //-----------------------------ENDGAME PHASE----------------------------------
@@ -268,22 +290,5 @@ public interface ClientControllerInterface {
     void reportError(String details);
 
     void notifyNewGame(Level level, int i);
-//
-//    void registerNickname(String input);
-//
-//    void flipHourglass();
-//
-//    void requestRandComponent();
-//
-//    void requestComponent(int index);
-//
-//    void stashComponent();
-//
-//    void grabStashedComponent(int index);
-//
-//    void acquireForecast(int index);
-//
-//    void rejectComponent();
-//
-//    void placeComponent(Point point, int orientation);
+
 }

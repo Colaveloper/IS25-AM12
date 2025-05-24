@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Cannon;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 
 import java.awt.*;
 import java.util.Map;
@@ -53,5 +54,10 @@ public class BigMeteor extends Projectile {
             case 2 ->  Math.abs(e.getKey().x - diceRoll) < 2;
             default -> throw new IllegalArgumentException("Nonexistent direction");
         };
+    }
+
+    @Override
+    public ProjectileType getProjectileType() {
+        return ProjectileType.BIGMETEOR;
     }
 }

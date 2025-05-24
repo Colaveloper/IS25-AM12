@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.io.IOException;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class CliJoinOrCreateScreen extends CliScreen {
-    public CliJoinOrCreateScreen(ClientModel model, ClientController controller) {
+    public CliJoinOrCreateScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
     }
 

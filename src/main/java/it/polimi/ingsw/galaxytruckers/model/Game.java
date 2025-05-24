@@ -132,7 +132,7 @@ public class Game {
      * */
     public void forceShipToGiveUp(ShipBoard ship){
         givenUpShips.add(ship);
-        flightBoard.removeShips(Set.of(ship));
+
     }
 
     /**

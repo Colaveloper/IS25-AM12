@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 
 import java.awt.*;
 import java.util.List;
@@ -181,9 +181,9 @@ public interface VirtualClient {
      * Signals to the client that their ship is not connected and that they should
      * choose one of the given pieces to keep
      *
-     * @param shipPieces a list containing the ship's connected subsets
+     * @param
      */
-    void showShipPieces(List<Set<Point>> shipPieces);
+    void showShipPieces(Map<String, List<Set<Point>>> brokenShips);
 
     //TODO: missing method on the client
     /**
@@ -214,10 +214,11 @@ public interface VirtualClient {
      * Signals to the client that the given player can select the given
      * points for their next action
      *
-     * @param playerName the name of the player
+     * @param playerName       the name of the player
      * @param selectablePoints a list containing all selectable points
+     * @param batteries
      */
-    void notifySelection(String playerName, List<Point> selectablePoints);
+    void notifySelection(String playerName, List<Point> selectablePoints, List<Point> batteries);
 
     /**
      * Signals to the client that the contents of a cargo hold component on a
@@ -257,7 +258,7 @@ public interface VirtualClient {
      *
      * @param type the type of the grabbed good
      */
-    void updateGoodsBuffer(GoodsType type);
+    void updateGoodsBuffer(boolean adding, GoodsType type);
 
     /**
      * Signals to the client that there is a projectile that needs to be handled
@@ -268,7 +269,7 @@ public interface VirtualClient {
      * @param selectablePoints  list of component position that can be activated
      * @param batteries         position of batteries components
      */
-    void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries);
+    void showProjectile(String playerName, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries);
 
     /**
      * Signals to the client that the game has ended and sends the
@@ -284,4 +285,10 @@ public interface VirtualClient {
      * @param playerNames the nicknames of the players who have surrendered
      */
     void notifySurrender(List<String> playerNames);
+
+    void notifyComponentActivation(String playerName, Point point);
+
+    void notifyAddGoods(String playerName, Map<GoodsType, Integer> goods, List<Point> cargos);
+
+    void notifyPlayerDisconnection(String playerName);
 }

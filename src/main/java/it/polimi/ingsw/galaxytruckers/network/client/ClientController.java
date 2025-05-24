@@ -10,7 +10,7 @@ import it.polimi.ingsw.galaxytruckers.view.CliView;
 import it.polimi.ingsw.galaxytruckers.view.GuiView;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.screens.*;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import javafx.application.Application;
 
 import java.awt.*;
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class ClientController implements ClientControllerInterface {
+public class ClientController implements ClientControllerInterface, ControllerToServer{
     private final ClientModel model;
     private final VirtualServer server;
     private View view;
@@ -48,7 +48,7 @@ public class ClientController implements ClientControllerInterface {
 
     //-----------------------------UPDATES FROM THE SERVER----------------------------------
 
-//    @Override // TODO: DISCUSS
+    @Override // TODO: DISCUSS
     public void showGameCreation() {
         view.setScreen(new GameCreationScreen());
     }
@@ -61,15 +61,19 @@ public class ClientController implements ClientControllerInterface {
         view.setScreen(new LobbyScreen());
     }
 
+    @Override
     public void setMyNickname(String nickname) { // gets called only after legal registration
         model.setMyNickname(nickname);
         view.setScreen(new JoinOrCreateScreen());
     }
 
+    @Override
     public void joinLobby(UUID lobbyID) {
         server.joinLobby(lobbyID);
     }
 
+
+    @Override
     public void requestNewGame(Level level, int playersN) {
         server.requestNewGame(level, playersN);
     }
@@ -81,10 +85,10 @@ public class ClientController implements ClientControllerInterface {
             case FIRST -> throw new IllegalArgumentException("First level is not playable");
             case SECOND -> new SecondConfigurator();
         };
-        model.setFlightBoard(config.getLoopLenght(), config.getStartingPositions());
+        model.setFlightBoard(config.getLoopLength(), config.getStartingPositions());
         model.setShipArea(config.getShipArea());
         model.setCoveredComponents(config.getComponentsN());
-        view.setScreen(new ShipBuildingScreen());
+        view.setScreen(new ShipBuildingScreen(config));
     }
 
 
@@ -92,29 +96,24 @@ public class ClientController implements ClientControllerInterface {
 
     @Override//Tommy approved
     public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) {
-        runAndInterceptIOE(()->model.setStashedComponents(playerName, stashComponentIds));
-        runAndInterceptIOE(()->model.setComponentInHand(playerName, 0));
+        runAndInterceptIOE(()->model.stashComponents(playerName, stashComponentIds));
     }
 
     @Override//Tommy approved
     public void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) {
-        runAndInterceptIOE(()->model.setStashedComponents(playerName, stashComponentIds));
+        runAndInterceptIOE(()->model.unstashComponents(playerName, stashComponentIds));
         runAndInterceptIOE(()->model.setComponentInHand(playerName, componentId));
     }
 
     @Override//Tommy approved
     public void notifyComponentPositioning(String nickname, int componentId, int direction, Point position) {
         runAndInterceptIOE(()->model.setComponent(nickname, componentId, direction, position));
-        model.clearComponentInHand(nickname);
     }
 
     @Override//Tommy approved
     public void notifyComponentRejection(String playerName, int componentId) {
         runAndInterceptIOE(()->model.addRevealedComponent(componentId));
-        if(model.isMyNickname(playerName)) {
-            model.setUnwelded(false);
-        }
-        model.clearComponentInHand(playerName);
+        model.clearUnwelded(playerName);
     }
 
     @Override//Tommy approved
@@ -138,14 +137,14 @@ public class ClientController implements ClientControllerInterface {
     public void notifyReleaseForecast(String playerName, int deckIndex) {
         runAndInterceptIOE(()->model.freeForecast(deckIndex));
         if (model.isMyNickname(playerName)) {
-            view.setScreen(new ShipBuildingScreen());
+            view.setScreen(new ShipBuildingScreen(config));
         }
     }
 
     @Override
     public void sendForecastDeck(List<Integer> deckCardIds) {
         model.setForecast(deckCardIds);
-        model.setUnwelded(false); //quote:  picking up a pile welds your most recent component to your ship
+        model.setExistsUnweldedComponent(model.getMyNickname(), false); //quote:  picking up a pile welds your most recent component to your ship
         view.setScreen(new ForecastScreen());
     }
 
@@ -161,7 +160,19 @@ public class ClientController implements ClientControllerInterface {
 
     @Override//Tommy approved
     public void notifyCabinUpdate(String nickname, Point position, int crew, CrewType crewType) {
+        if(nickname.equals(model.getMyNickname()) && crewType!= CrewType.HUMAN) {
+            runAndInterceptIOE(()->model.placeAliens(crewType, position));//happens only in building
+        }
         runAndInterceptIOE(()->model.setCabinStats(nickname, position, crewType, crew));
+    }
+
+    @Override//called once at the start of the phase
+    public void notifyCrewInitialization(Map<String, Map<CrewType, List<Point>>> playerToCabin) {
+        if(playerToCabin.containsKey(model.getMyNickname())){
+            model.setIsValid(false);
+            model.setUnplacedCrew(playerToCabin.get(model.getMyNickname()));
+        }
+        view.setScreen(new CrewInitialization());
     }
 
 
@@ -173,22 +184,40 @@ public class ClientController implements ClientControllerInterface {
     }
 
     @Override
-    public void notifyComponentsRemoval(String nickname, List<Point> positionPoints) {
+    public void notifyComponentRemoval(String playerName, Point position) {
+        runAndInterceptIOE(()->model.removeComponent(position, playerName));
+    }
+
+    @Override
+    public void notifyShipPieceRemoval(String nickname, List<Point> positionPoints) {//use ONLY for disconnected ship
+        if(model.isMyNickname(nickname)) {
+            model.setIsValid(true);
+        }
+        model.resetAllSelections(nickname);
         for (Point p : positionPoints) {
             runAndInterceptIOE(()->model.removeComponent(p, nickname));
         }
     }
 
     @Override
-    public void showShipPieces(String nickname, List<Set<Point>> shipPieces) {
-        model.setSelectableShipPieces(nickname, shipPieces);
-        model.setIsValid(!model.isMyNickname(nickname));
+    public void showShipPieces(Map<String, List<Set<Point>>> brokenShips) {
+        for(String nickname : brokenShips.keySet()) {
+            model.setSelectableShipPieces(nickname, brokenShips.get(nickname));
+            if(model.isMyNickname(nickname)) {
+                model.setIsValid(false);
+            }
+        }
         view.setScreen(new ShipPieceChoiceScreen());
     }
 
     @Override
     public void notifyInvalidShipsUpdate(List<String> invalidPlayers) {
         model.setIsValid(!invalidPlayers.contains(model.getMyNickname()));
+        for(String playerName : model.getNicknames()) {
+            if(!invalidPlayers.contains(playerName)) {
+                model.resetAllSelections(playerName);
+            }
+        }
         view.setScreen(new ValidationScreen());
     }
 
@@ -204,14 +233,24 @@ public class ClientController implements ClientControllerInterface {
     public void notifyNewCard(int cardId) {
         runAndInterceptIOE(()->model.setCurrentCard(cardId));
         model.setCurrentPlayerNickname(model.getCurrentLeader());
-//        view.setScreen(new NewCardScreen()); // TODO: restore
+        view.setScreen(new NewCardScreen());
     }
 
-    public void notifySelection(String nickname, List<Point> cannonsPositions) {
+    @Override
+    public void notifyComponentActivation(String playerName, Point position){
+        runAndInterceptIOE(()->model.activateComponent(playerName, position));
 
     }
 
-    //todo added recently
+    @Override
+    public void notifySelection(String nickname, List<Point> cannonsPositions, List<Point> batteryPositions) {//todo add batteries list
+        model.setCurrentPlayerNickname(nickname);
+        model.setSelectablePoints(nickname, cannonsPositions);
+        model.setSelectableBatteries(nickname, batteryPositions);
+        view.setScreen(new PointSelectionScreen());
+    }
+
+    @Override
     public void changeBatteriesOnComponent(String nickname, Point batteryComponent, int batteries) {
         runAndInterceptIOE(()->model.setBatteriesOnComponent(nickname, batteryComponent, batteries));
     }
@@ -227,22 +266,23 @@ public class ClientController implements ClientControllerInterface {
         runAndInterceptIOE(()->model.setGoods(nickname, position, list));
     }
 
-
-    // first time goods are shown on screen
-//    @Override
-//    public void showPlaceGoods() {
-////        view.setScreen(new GoodsScreen()); // TODO: restore
-//    }
-
     // planetIndex is an index and starts from 0, UI listing on screen starts from 1
     @Override
-    public void choosePlanet(int planetId, List<Point> cargoPositions) {
-        model.setPlanetGoodBuffer(planetId);
+    public void notifyLandOnPlanet(String nickname, int planetId) {
+        //todo block planet with that id
+    }
+
+    //first call in place goods phase
+    @Override
+    public void notifyGrabGoodsState(String nickname, Map<GoodsType, Integer> goods, List<Point> cargoPositions){
+        //todo setup goodsbuffer
+        model.setSelectablePoints(nickname, cargoPositions);
+        view.setScreen(new GoodsScreen());
     }
 
     @Override
-    public void updateGoodsBuffer(GoodsType type) {
-        runAndInterceptIOE(()->model.updateGoodsBuffer(type));
+    public void updateGoodsBuffer(boolean adding, GoodsType type) {
+        runAndInterceptIOE(()->model.updateGoodsBuffer(adding, type));
     }
 
     // set current player for any action that involves a decision
@@ -253,9 +293,10 @@ public class ClientController implements ClientControllerInterface {
 
     // called for each projectile
     @Override
-    public void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) {
+    public void showProjectile(String nickname, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) {
         model.setProjectile(projectileType, direction, roll);
-//        view.setScreen(new ProjectilesScreen()); // TODO: restore
+        model.setCurrentPlayerNickname(nickname);
+        view.setScreen(new ProjectileScreen());
     }
 
     // UPDATE FOR ENDGAME
@@ -267,7 +308,7 @@ public class ClientController implements ClientControllerInterface {
     }
 
 
-
+//--------------------------------------------SERVER CALLS-------------------------------------------------------------------
 
 
     @Override
@@ -276,12 +317,77 @@ public class ClientController implements ClientControllerInterface {
         // view.show(ChosenStrategy)
     }
 
-    //@Override
-    public void registerNickname(String nickname) {
+    @Override
+    public void goNext() {
+        try {
+            server.goNext(model.getMyNickname());
+        } catch (IllegalArgumentException e) {
+            reportError("could not go on with card");
+        }
+    }
+
+    @Override
+    public void chooseShipPiece(int choice) {
+        try {
+            server.chooseShipPiece(choice);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't choose ship piece");
+        }
+    }
+
+    @Override
+    public void activateComponent(Point point) {
+        try {
+            server.activateComponent(point);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't activate component");
+        }
+    }
+
+
+
+    @Override
+    public void removeComponent(Point point) {
+        try {
+            server.removeComponent(point);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't remove ship piece");
+        }
+    }
+
+    @Override
+    public void useBattery(Point point) {
+        try {
+            server.useBattery(point);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't spend battery");
+        }
+    }
+
+    @Override
+    public void initializeCabin(Point point, CrewType crewType) {
+        try {
+            server.initializeCabin(point, crewType);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't initialize cabin");
+        }
+    }
+
+    @Override
+    public void placeShipOnFlightboard(int startingPosition) {
+        try {
+            server.placeShipOnFlightBoard(startingPosition);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't place on flightboard");
+        }
+    }
+
+    @Override
+    public void registerNickname(String nickname) throws IllegalArgumentException {
         server.registerNickname(nickname);
     }
 
-    //@Override
+    @Override
     public void flipHourglass() {
         try {
             server.flipHourglass();
@@ -290,7 +396,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void requestRandComponent() {
         try {
             server.requestRandComponent();
@@ -299,7 +405,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void requestComponent(int componentId) {
         try {
             server.requestComponent(componentId);
@@ -308,7 +414,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void stashComponent() {
         try {
             server.stashComponent();
@@ -317,7 +423,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void grabStashedComponent(int index) {
         try {
             server.grabStashedComponent(index);
@@ -326,7 +432,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void acquireForecast(int index) {
         try {
             server.acquireForecast(index);
@@ -335,6 +441,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
+    @Override
     public void releaseForecast() {
         try {
             server.releaseForecast();
@@ -343,7 +450,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void rejectComponent() {
         try {
             server.rejectComponent();
@@ -352,7 +459,7 @@ public class ClientController implements ClientControllerInterface {
         }
     }
 
-    //@Override
+    @Override
     public void placeComponent(Point point, int orientation) {
         try {
             server.placeComponent(point, orientation);

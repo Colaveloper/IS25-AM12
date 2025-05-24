@@ -111,7 +111,7 @@ class ShipBoardTest {
         void grabStashedComponentOutOfBoundsThrowsException() {
             shipBoard.offerComponent(componentToAdd);
             shipBoard.stashComponent();
-            assertThrows(IndexOutOfBoundsException.class, () -> shipBoard.grabStashedComponent(1));
+            assertThrows(IllegalArgumentException.class, () -> shipBoard.grabStashedComponent(1));
         }
     }
 

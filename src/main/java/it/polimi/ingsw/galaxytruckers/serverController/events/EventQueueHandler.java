@@ -5,6 +5,8 @@ import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
+import java.util.List;
+
 public class EventQueueHandler implements EventHandler, EventVisitor {
     private final Lobby lobby;
     private final EventQueue eventQueue;
@@ -272,7 +274,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifySelection(
                     selectionPointsEvent.playerName(),
-                    selectionPointsEvent.points()
+                    selectionPointsEvent.points(),
+                    selectionPointsEvent.batteries()
             );
         }
     }
@@ -292,7 +295,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
     public void visit(GoodsBufferUpdateEvent goodsBufferUpdateEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
-            client.updateGoodsBuffer(
+            client.updateGoodsBuffer(goodsBufferUpdateEvent.adding(),
                     goodsBufferUpdateEvent.goodsType()
             );
         }
@@ -303,6 +306,7 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.showProjectile(
+                    projectileEvent.playerName(),
                     projectileEvent.projectileType(),
                     projectileEvent.direction(),
                     projectileEvent.roll(),
@@ -336,6 +340,50 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
     public void visit(ShipNotConnectedEvent shipNotConnectedEvent) {
         Player player = Player.getPlayer(shipNotConnectedEvent.playerName());
         VirtualClient client = SessionManager.getInstance().getClient(player);
-        client.showShipPieces(shipNotConnectedEvent.shipPieces());
+        //client.showShipPieces(shipNotConnectedEvent.playerName(), shipNotConnectedEvent.shipPieces());//todo: now it s a map
+    }
+
+    @Override
+    public void visit(ActivateComponentEvent activateComponentEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.notifyComponentActivation(
+                    activateComponentEvent.playerName(),
+                    activateComponentEvent.point()
+            );
+        }
+    }
+
+    @Override
+    public void visit(AddGoodsEvent addGoodsEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            client.notifyAddGoods(
+                    addGoodsEvent.playerName(),
+                    addGoodsEvent.goods(),
+                    addGoodsEvent.cargos()
+            );
+        }
+    }
+
+    @Override
+    public void visit(PlayerDisconnectionEvent playerDisconnectionEvent) {
+        Player disconnectedPlayer = Player.getPlayer(playerDisconnectionEvent.playerName());
+        for (Player player : lobby.getPlayers()) {
+            if (!player.equals(disconnectedPlayer)) {
+                VirtualClient client = SessionManager.getInstance().getClient(player);
+                client.notifyPlayerDisconnection(playerDisconnectionEvent.playerName());
+            }
+        }
+        stop();
+    }
+
+    @Override
+    public void visit(PlayerExitEvent playerExitEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            //TODO: notify player exit to clients
+        }
+        stop();
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
+import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.util.*;
@@ -13,15 +14,18 @@ public class CliFlightBoard extends CliElement {
 
     @Override
     public List<String> getNewDescription() {
-        String[] result = new String[model.getLoopLength()];
-        Arrays.fill(result, "_");
+        String[] asArray = new String[model.getLoopLength()];
+        Arrays.fill(asArray, "_");
 
         // Place '□' at the starting positions
-        model.startingPositionLeftProperty().forEach(pos -> result[pos] = "□");
+        model.startingPositionLeftProperty().forEach(pos -> asArray[pos] = "□");
 
         // Place emojis from colorToPlace
-        model.colorToPlaceProperty().forEach((color, pos) -> result[pos] = color.getDescription());
+        model.colorToPlaceProperty().forEach((color, pos) -> asArray[pos] = color.getDescription());
 
-        return List.of(String.join("", result));
+        List<String> result = new ArrayList<>(List.of(String.join("", asArray)));
+        DescriptionUtils.borderAndTitle(result, "flight board");
+
+        return result;
     }
 }

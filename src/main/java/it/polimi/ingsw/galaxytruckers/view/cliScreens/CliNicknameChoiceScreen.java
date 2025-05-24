@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class CliNicknameChoiceScreen extends CliScreen {
 
-    public CliNicknameChoiceScreen(ClientModel model, ClientController controller) {
+    public CliNicknameChoiceScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
     }
 
@@ -31,8 +32,9 @@ public class CliNicknameChoiceScreen extends CliScreen {
             controller.registerNickname(input);
             controller.setMyNickname(input);
         } catch (IllegalArgumentException e) {
-            controller.reportError("Nickname " +input+ " is not available");
+            controller.reportError(e.getMessage());
         }
+
     }
 
     @Override

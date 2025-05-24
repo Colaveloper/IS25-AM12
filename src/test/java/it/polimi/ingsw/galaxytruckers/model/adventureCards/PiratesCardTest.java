@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -105,6 +106,21 @@ class PiratesCardTest {
                 @Override
                 public boolean fireAt(ShipBoard shipBoard) {
                     return removePiece;
+                }
+
+                @Override
+                public ProjectileType getProjectileType() {
+                    return null;
+                }
+
+                @Override
+                public int getDiceRoll() {
+                    return super.getDiceRoll();
+                }
+
+                @Override
+                public int getDirection() {
+                    return super.getDirection();
                 }
             });
         }

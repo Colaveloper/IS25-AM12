@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ComponentType;
 import javafx.beans.property.ObjectProperty;
 
 import java.io.IOException;

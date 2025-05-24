@@ -3,22 +3,21 @@ package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
+import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Player {
     private final static Map<String, Player> nicknameToPlayer = new HashMap<>();
     private final static Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
 
     private final String nickname;
-    private FourColors color;
-    private final Object colorLock = new Object();
-    private Lobby lobby;
-    private final Object lobbyLock = new Object();
-    private ShipBoard shipBoard;
-    private final Object shipBoardLock = new Object();
+    private final AtomicReference<FourColors> color = new AtomicReference<>();
+    private final AtomicReference<Lobby> lobby = new AtomicReference<>();
+    private final AtomicReference<ShipBoard> shipBoard = new AtomicReference<>();
 
     public static Player addPlayer(String nickname) {
         synchronized (nicknameToPlayer) {
@@ -28,6 +27,12 @@ public class Player {
             Player player = new Player(nickname);
             nicknameToPlayer.put(nickname, player);
             return player;
+        }
+    }
+
+    public static void removePlayer(String nickname) {
+        synchronized (nicknameToPlayer) {
+            nicknameToPlayer.remove(nickname);
         }
     }
 
@@ -58,41 +63,29 @@ public class Player {
     }
 
     public Optional<Lobby> getLobby() {
-        synchronized (lobbyLock) {
-            return Optional.ofNullable(lobby);
-        }
+        return Optional.ofNullable(this.lobby.get());
     }
 
     public Optional<ShipBoard> getShipBoard() {
-        synchronized (shipBoardLock) {
-            return Optional.ofNullable(shipBoard);
-        }
+        return Optional.ofNullable(this.shipBoard.get());
     }
 
     public Optional<FourColors> getColor() {
-        synchronized (colorLock) {
-            return Optional.ofNullable(color);
-        }
+        return Optional.ofNullable(this.color.get());
     }
 
     protected void setLobby(Lobby lobby) {
-        synchronized (lobbyLock) {
-            this.lobby = lobby;
-        }
+        this.lobby.set(lobby);
     }
 
     protected void setColor(FourColors color) {
-        synchronized (colorLock) {
-            this.color = color;
-        }
+        this.color.set(color);
     }
 
     protected void setShipBoard(ShipBoard shipBoard) {
-        synchronized (shipBoardLock) {
-            this.shipBoard = shipBoard;
-            synchronized (shipToPlayer) {
-                shipToPlayer.put(shipBoard, this);
-            }
+        this.shipBoard.set(shipBoard);
+        synchronized (shipToPlayer) {
+            shipToPlayer.put(shipBoard, this);
         }
     }
 
@@ -105,5 +98,11 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hashCode(nickname);
+    }
+
+    public void leaveLobby() {
+        this.lobby.set(null);
+        this.shipBoard.set(null);
+        this.color.set(null);
     }
 }

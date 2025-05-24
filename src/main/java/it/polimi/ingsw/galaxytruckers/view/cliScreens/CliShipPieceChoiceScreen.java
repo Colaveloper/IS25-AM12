@@ -4,8 +4,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.Highlights;
-import javafx.scene.layout.Pane;
+import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +36,9 @@ public class CliShipPieceChoiceScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-
+        if(!model.shipIsValid()) {
+            controller.chooseShipPiece(Integer.parseInt(input));
+        }
     }
 
     @Override

@@ -4,8 +4,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
-import javafx.scene.layout.Pane;
+import it.polimi.ingsw.galaxytruckers.view.enums.ComponentType;
 
 import java.awt.*;
 import java.io.IOException;
@@ -39,6 +38,11 @@ public class CliValidationScreen extends CliScreen {
         int x = Integer.parseInt(parts[0]);
         int y = Integer.parseInt(parts[1]);
 
+        if( x < model.getUpLeft().x || y < model.getUpLeft().y ||
+        x > model.getBottomRight().x || y > model.getBottomRight().y) {
+            return false;
+        }
+
         // Create point and check list
         Point inputPoint = new Point(x, y);
         ComponentType type = model.getComponent(model.getMyNickname(), inputPoint).getType();
@@ -47,7 +51,13 @@ public class CliValidationScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input)  {
-
+        if(!model.shipIsValid()) {
+            String[] parts = input.split(" ");
+            int x = Integer.parseInt(parts[0]);
+            int y = Integer.parseInt(parts[1]);
+            Point inputPoint = new Point(x, y);
+            controller.removeComponent(inputPoint);
+        }
     }
 
     @Override

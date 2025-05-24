@@ -6,8 +6,8 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ComponentType;
-import it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ComponentType;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,11 +26,14 @@ public class ClientModel {
     private final Set<Point> shipArea;
     private final Map<FourColors, List<List<ObjectProperty<Component>>>> ships;
     private final BiMap<String, FourColors> playerToColor;
-    private final ObservableList<Point> selectablePoints;
+    private List<Point> selectablePoints;
+    private List<Point> selectableBatteries;
     private final ObservableMap<FourColors, Map<StatType, Integer>> stats;
+
 
     // BUILDING
     private Point upLeft; // the upper-left point of the ship-area
+    private Point bottomRight;
     private final ListProperty<Component> revealedComponents;
     private final IntegerProperty coveredComponentN;
     private final Map<FourColors, List<ObjectProperty<Component>>> stashedComponents;
@@ -39,8 +42,9 @@ public class ClientModel {
     private final List<BooleanProperty> forecastAvailability;
     private List<Set<Point>> shipPieces;
     private boolean isValid;
+    private Map<CrewType, List<Point>> unplacedCrew;
 
-    private boolean unweldedComponent;
+    private final Map<FourColors, UnweldedComponent> unweldedComponent;
     // FLIGHTBOARD
     private int loopLength;
     private final ObservableList<Integer> startingPositionLeft;
@@ -50,6 +54,7 @@ public class ClientModel {
     // FLIGHT
     private int currentCardId;
     private int remainingCards;
+    private int batteryBalance;
 
     // PLANETS
 //    private final List<Optional<String>> landedPlayers;
@@ -70,25 +75,24 @@ public class ClientModel {
         playerToColor = HashBiMap.create();
         shipPieces = new ArrayList<>();
         ships = new SimpleMapProperty<>(FXCollections.observableMap(new HashMap<>()));
-        selectablePoints = FXCollections.observableArrayList();
         coveredComponentN = new SimpleIntegerProperty();
         revealedComponents = new SimpleListProperty<>(FXCollections.observableArrayList());
+        selectablePoints = new ArrayList<>();
         forecastDeck = new SimpleListProperty<>(FXCollections.observableArrayList(null, null, null));
         forecastAvailability = new SimpleListProperty<>(FXCollections.observableArrayList(
                 new SimpleBooleanProperty(true),
                 new SimpleBooleanProperty(true),
                 new SimpleBooleanProperty(true)
         ));
-
+        unweldedComponent = new HashMap<>();
         stashedComponents = new HashMap<>();
         startingPositionLeft = FXCollections.observableArrayList();
         hands = new HashMap<>();
-        unweldedComponent = false;
         colorToPlace = FXCollections.observableHashMap();
         stats = FXCollections.observableHashMap();
         planets = FXCollections.observableArrayList();
         goods = FXCollections.observableArrayList();
-
+        batteryBalance = 0;
     }
 
     // SETUP PHASE
@@ -117,21 +121,8 @@ public class ClientModel {
         return myNickname;
     }
 
-    // call after having added all players
+    // TODO: rename
     public void setShipArea(Set<Point> shipArea) {
-
-        // fill hands with empty components
-        playerToColor.forEach((_, c) -> hands.put(c, new SimpleObjectProperty<>(
-                new Component(ComponentType.EMPTY_AREA)
-        )));
-
-        for(FourColors c : playerToColor.values()) {
-            hands.put(c, new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA)));
-            stashedComponents.put(c, List.of(
-                    new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA)),
-                    new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA))
-            ));
-        }
 
         this.shipArea.addAll(shipArea);
 
@@ -142,20 +133,29 @@ public class ClientModel {
 
         // Save top-left point
         upLeft = new Point(minX, minY);
+        bottomRight = new Point(maxX, maxY);
 
-        this.ships.forEach((c, s)-> {
+        playerToColor.forEach((_, c) -> {
+
+            hands.put(c, new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA)));
+
+            unweldedComponent.put(c, new UnweldedComponent(false, false, null));
+
+            stashedComponents.put(c, List.of(
+                    new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA)),
+                    new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA))
+            ));
+
             for (int y = minY; y <= maxY; y++) {
                 List<ObjectProperty<Component>> row = new ArrayList<>();
                 for (int x = minX; x <= maxX; x++) {
                     ObjectProperty<Component> component = new SimpleObjectProperty<>(
-                        new Component(
-                            shipArea.contains(new Point(x, y))
-                                    ? ComponentType.EMPTY_AREA
-                                    : ComponentType.EMPTY_SPACE
-                        ));
+                            new Component(
+                                    shipArea.contains(new Point(x, y))
+                                            ? ComponentType.EMPTY_AREA
+                                            : ComponentType.EMPTY_SPACE
+                            ));
                     row.add(component);
-//                    super.registerObservables(component);
-//                    component.get().setChangeListener(this);
                 }
                 ships.get(c).add(row);
             }
@@ -166,6 +166,8 @@ public class ClientModel {
 
         // COMPONENT BANK
 
+
+
     public void addRevealedComponent(int revealedComponentId) throws IOException {
         revealedComponents.addLast(new Component(revealedComponentId));
     }
@@ -174,24 +176,64 @@ public class ClientModel {
         revealedComponents.removeIf(c -> c.getComponentId() == componentId);
     }
 
-    public void setStashedComponents(String nickname, List<Integer> stashedComponents) throws IOException {
-        for(Integer i : stashedComponents) {
-            this.stashedComponents.get(playerToColor.get(nickname)).get(stashedComponents.indexOf(i)).set(new Component(i));
+    public void stashComponents(String nickname, List<Integer> stashedComponents) throws IOException {
+        setStashedComponents(nickname, stashedComponents);
+        if (unweldedComponent.get(playerToColor.get(nickname)).getIsHand()) {
+            hands.get(playerToColor.get(nickname)).set(new Component(ComponentType.EMPTY_AREA));
+        } else {
+            Point q = new Point(unweldedComponent.get(playerToColor.get(nickname)).getPosition());
+            ships.get(playerToColor.get(nickname)).get(q.y-upLeft.y).get(q.x-upLeft.x).set(new Component(ComponentType.EMPTY_AREA));
         }
-                //stashedComponents.stream().map(Component::new).collect(Collectors.toList())
+
     }
 
+    public void unstashComponents(String nickname, List<Integer> stashedComponents) throws IOException {
+        setStashedComponents(nickname, stashedComponents);
+    }
+
+    private void setStashedComponents(String nickname, List<Integer> stashedComponents) {
+        for(int i = 0; i < this.stashedComponents.size(); i++) {
+            if (i < stashedComponents.size()) {
+                this.stashedComponents.get(playerToColor.get(nickname)).get(i).set(new Component(stashedComponents.get(i)));
+            } else {
+                this.stashedComponents.get(playerToColor.get(nickname)).get(i).set(new Component(ComponentType.EMPTY_AREA));
+            }
+        }
+    }
+
+
+    // used to set the component in hand to a non-empty value
     public void setComponentInHand(String nickname, int componentInHandId) throws IOException {
         Component component = new Component(componentInHandId);
         hands.get(playerToColor.get(nickname)).set(component);
-    }
-
-    public void clearComponentInHand(String nickname) {
-        hands.get(playerToColor.get(nickname)).set(new Component(ComponentType.EMPTY_AREA));
+        unweldedComponent.get(playerToColor.get(nickname)).setExists(true);
+        unweldedComponent.get(playerToColor.get(nickname)).setIsHand(true);
     }
 
     public void setCoveredComponents(int coveredComponentsN) {
         this.coveredComponentN.set(coveredComponentsN);
+    }
+
+        // CURRENT COMPONENT
+
+    public boolean getExistsUnweldedComponent() {
+        return unweldedComponent.get(playerToColor.get(myNickname)).getExists();
+    }
+
+    public void setExistsUnweldedComponent(String nickname, boolean existsUnweldedComponent) {
+        unweldedComponent.get(playerToColor.get(nickname)).setExists(existsUnweldedComponent);
+    }
+
+    public void clearUnwelded(String nickname) {
+        if (unweldedComponent.get(playerToColor.get(nickname)).getIsHand()) {
+            hands.get(playerToColor.get(nickname)).set(new Component(ComponentType.EMPTY_AREA));
+        } else {
+            Point q = unweldedComponent.get(playerToColor.get(nickname)).getPosition();
+            this.ships.get(playerToColor.get(nickname)).get(q.y-upLeft.y).get(q.x-upLeft.x).set(new Component(ComponentType.EMPTY_AREA));
+            if(nickname.equals(myNickname)) {
+                selectablePoints.clear();
+            }
+        }
     }
 
             // SHIPBOARD
@@ -210,15 +252,25 @@ public class ClientModel {
         );
     }
 
+    // placing a component on any ship
     public void setComponent(String nickname, int componentId, int direction, Point p) throws IOException {
         Component component = new Component(componentId);
         component.setDirection(direction);
-        this.ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).set(component);
-        if(nickname.equals(myNickname)) {
-            setUnwelded(true);
+        this.ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x-upLeft.x).set(component);
+        // clearing previous position
+        // unwelded component surely exists
+        if (unweldedComponent.get(playerToColor.get(nickname)).getIsHand()) {
+            hands.get(playerToColor.get(nickname)).set(new Component(ComponentType.EMPTY_AREA));
+            unweldedComponent.get(playerToColor.get(nickname)).setIsHand(false);
+        } else {
+            Point q = unweldedComponent.get(playerToColor.get(nickname)).getPosition();
+            this.ships.get(playerToColor.get(nickname)).get(q.y-upLeft.y).get(q.x-upLeft.x).set(new Component(ComponentType.EMPTY_AREA));
+            if(nickname.equals(myNickname)) {
+                selectablePoints.clear();
+                selectablePoints.add(p);
+            }
         }
-        clearComponentInHand(nickname);
-//        lastPosition = position;
+        unweldedComponent.get(playerToColor.get(nickname)).setPosition(p);
     }
 
     public Component getComponent(String nickname, Point p) {
@@ -228,6 +280,34 @@ public class ClientModel {
     public void setCabinStats(String nickname, Point p, CrewType crewType, int crewSize) throws IOException {
         ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setCrewType(crewType);
         ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(crewSize);
+    }
+
+    //happens only in building phase, removes the alien from the available to be placed
+    public void placeAliens(CrewType crewType, Point position) throws IOException {
+        resetAllSelections(myNickname);
+        unplacedCrew.remove(crewType);
+        ships.get(playerToColor.get(myNickname)).get(position.y-upLeft.y).get(position.x- upLeft.x).get().setCrewType(crewType);
+        ships.get(playerToColor.get(myNickname)).get(position.y-upLeft.y).get(position.x- upLeft.x).get().setStat(1);
+    }
+
+    public void setUnplacedCrew(Map<CrewType, List<Point>> unplacedCrew) {
+        this.unplacedCrew = unplacedCrew;
+    }
+
+    public Map<CrewType, List<Point>> getUnplacedCrew() {
+        return unplacedCrew;
+    }
+
+    public CrewType getUnplacedCrewType() {
+        if(unplacedCrew.containsKey(CrewType.PURPLE)){
+            return CrewType.PURPLE;
+        } else if (unplacedCrew.containsKey(CrewType.BROWN)) {
+            return CrewType.BROWN;
+        }
+        else {
+            setIsValid(true);// no humans mean game lost anyway
+            return CrewType.HUMAN;
+        }
     }
 
         //  FORECAST
@@ -283,7 +363,7 @@ public class ClientModel {
     }
 
     // remove good from the buffer
-    public void updateGoodsBuffer(GoodsType type) throws IOException {
+    public void updateGoodsBuffer(boolean adding, GoodsType type) throws IOException {
         goodsBuffer.remove(type);
     }
 
@@ -306,19 +386,77 @@ public class ClientModel {
 //        goodsBuffer = new GoodsBuffer(currentCard); // TODO: RESTORE
     }
 
+    public int getCurrentCard() {
+        return currentCardId;
+    }
+
     public void rotateCurrentComponentLeft() {
-        hands.get(playerToColor.get(myNickname)).get().rotateLeft();
+        if (unweldedComponent.get(playerToColor.get(myNickname)).getIsHand()) {
+            hands.get(playerToColor.get(myNickname)).get().rotateLeft();
+        } else {
+            Point p = new Point(unweldedComponent.get(playerToColor.get(myNickname)).getPosition());
+            ships.get(playerToColor.get(myNickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().rotateLeft();
+        }
     }
 
         // OTHER
 
-    public void setSelectablePoints(List<Point> selectablePoints) {
-        List<List<ObjectProperty<Component>>> myShip = ships.get(playerToColor.get(myNickname));
-        for (int i = 0, y = upLeft.y; i < myShip.size(); i++, y++) {
-            for (int j = 0, x = upLeft.x; j<myShip.getFirst().size(); j++, x++) {
-                myShip.get(i).get(j).get().isSelectableProperty().set(
-                        selectablePoints.contains(new Point(x, y))
-                );
+    public void setSelectablePoints(String nickname, List<Point> selectablePoints) {
+        this.selectablePoints = selectablePoints;
+        for (Point p : selectablePoints) {
+            getComponent(nickname, p).setShipPart(1);
+        }
+
+//        List<List<ObjectProperty<Component>>> myShip = ships.get(playerToColor.get(myNickname));
+//        for (int i = 0, y = upLeft.y; i < myShip.size(); i++, y++) {
+//            for (int j = 0, x = upLeft.x; j<myShip.getFirst().size(); j++, x++) {
+//                myShip.get(i).get(j).get().isSelectableProperty().set(
+//                        selectablePoints.contains(new Point(x, y))
+//                );
+//            }
+//        }
+    }
+
+    public void activateComponent(String nickname, Point p) throws IOException {
+        getComponent(nickname, p).setShipPart(3);
+        if(isMyNickname(nickname)) {
+            if (getComponent(nickname, p).getType() == ComponentType.BATTERY) {
+                batteryBalance += 1;
+            }
+            else{
+                batteryBalance -= 1;
+            }
+        }
+    }
+
+    public int getBatteryBalance() {
+        return batteryBalance;
+    }
+
+
+    public List<Point> getSelectablePoints() {
+        return selectablePoints;
+    }
+
+    public void setSelectableBatteries(String nickname, List<Point> selectableBatteries) {
+        if (nickname.equals(myNickname)) {
+            this.selectableBatteries = selectableBatteries;
+        }
+        for (Point p : selectablePoints) {
+            getComponent(nickname, p).setShipPart(2);
+        }
+    }
+
+    public List<Point> getSelectableBatteries() {
+        return selectableBatteries;
+    }
+
+    public void resetAllSelections(String nickname) {
+        selectablePoints.clear();
+        isValid = true;
+        for (List<ObjectProperty<Component>> list : ships.get(playerToColor.get(nickname))){
+            for(ObjectProperty<Component> p : list){
+                p.get().setShipPart(0);
             }
         }
     }
@@ -351,10 +489,6 @@ public class ClientModel {
                 .orElse(null);
     }
 
-    public List<Point> getSelectablePoints() {
-        return selectablePoints;
-    }
-
     // GETTERS (Javafx properties used only for attributes that change over time)
 
     public Set<String> getNicknames() {
@@ -383,17 +517,20 @@ public class ClientModel {
         return ships;
     }
 
+    public List<List<ObjectProperty<Component>>> getMyShip() {
+        return ships.get(playerToColor.get(myNickname));
+    }
+
     public Point getUpLeft() {
         return upLeft;
     }
 
-    public boolean existsUnwelded() {
-        //return hands.get(playerToColor.get(myNickname)).get().getType() != ComponentType.EMPTY_AREA;
-        return unweldedComponent;
+    public Point getBottomRight() {
+        return bottomRight;
     }
 
-    public void setUnwelded(boolean unwelded) {
-        unweldedComponent = unwelded;
+    public boolean isHandEmpty() {
+        return hands.get(playerToColor.get(myNickname)).get().getType() != ComponentType.EMPTY_AREA;
     }
 
     public Map<FourColors, ObjectProperty<Component>> getHand() {

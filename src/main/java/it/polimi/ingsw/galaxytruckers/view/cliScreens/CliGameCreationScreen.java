@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class CliGameCreationScreen extends CliScreen {
 
-    public CliGameCreationScreen(ClientModel model, ClientController controller) {
+    public CliGameCreationScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
     }
 
@@ -38,7 +39,7 @@ public class CliGameCreationScreen extends CliScreen {
     @Override
     public void parseAndInvoke(String input) {
         if (input.trim().isEmpty()) {
-            input = "SECOND 4";
+            input = "SECOND 2";
         }
         String[] parts = input.split("\\s");
         controller.requestNewGame(Level.valueOf(parts[0].toUpperCase()), Integer.parseInt(parts[1]));
@@ -55,7 +56,7 @@ public class CliGameCreationScreen extends CliScreen {
                         .map(Enum::name)
                         .toArray(String[]::new)));
         output.add("The game is available for 2, 3, or 4 players");
-        output.add("Default: SECOND 4");
+        output.add("Default: SECOND 2");
 
         return output;
     }

@@ -52,7 +52,7 @@ public class SecondConfigurator extends ConfigFactory {
     }
 
     @Override
-    public int getLoopLenght() {
+    public int getLoopLength() {
         return 24;
     }
 }

@@ -9,9 +9,7 @@ import java.awt.*;
 
 public interface LobbyInterface {
 
-    // Game methods
-
-    // Ship building
+    //region Shipbuilding
     /**
      * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameModelInterface#requestRandComponent(Game, ShipBoard)}
      * on the lobby game and the player's shipBoard
@@ -37,14 +35,18 @@ public interface LobbyInterface {
     void acquireForecast(Player player, int deckIndex);
     void releaseForecast(Player player);
 
-    // Ship validity check
+    //endregion
+
+    //region Ship validity check
     void removeComponent(Player player, Point point);
     void chooseShipPiece(Player player, int pieceIndex);
+    //endregion
 
-    // Ship init
+    //region Ship init
     void initializeCabin(Player player, Point point, CrewType crewType);
+    //endregion
 
-    // Adventure
+    //region Adventure
     void drawCard(Player player);
     void activateComponent(Player player, Point point);
     void loseCrew(Player player, Point point);
@@ -57,4 +59,5 @@ public interface LobbyInterface {
     void goNext(Player player);
 
     void giveUp(Player player);
+    //endregion
 }

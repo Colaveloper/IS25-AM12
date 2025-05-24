@@ -32,7 +32,7 @@
 //    private final ComponentBank componentBank;
 //    private final Forecast forecast;
 //    private final AllShips allShips; //physical to print all ships in a row
-//    private boolean existsUnwelded; // update this value
+//    private boolean getExistsUnwelded; // update this value
 //
 //    private AdventureCard currentCard;
 //
@@ -268,7 +268,7 @@
 //        return new ArrayList<>(playerToShip.keySet());
 //    }
 //
-//    public boolean existsUnwelded() {
-//        return existsUnwelded;
+//    public boolean getExistsUnwelded() {
+//        return getExistsUnwelded;
 //    }
 //}

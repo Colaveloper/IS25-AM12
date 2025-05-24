@@ -55,4 +55,12 @@ public interface EventVisitor {
     void visit(InvalidShipsUpdateEvent invalidShipsUpdateEvent);
 
     void visit(ShipNotConnectedEvent shipNotConnectedEvent);
+
+    void visit(PlayerDisconnectionEvent playerDisconnectionEvent);
+
+    void visit(PlayerExitEvent playerExitEvent);
+
+    void visit(ActivateComponentEvent activateComponentEvent);
+
+    void visit(AddGoodsEvent addGoodsEvent);
 }
