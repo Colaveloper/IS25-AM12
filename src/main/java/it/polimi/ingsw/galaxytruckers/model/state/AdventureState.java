@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
-public abstract class AdventureState extends GameState {
+public class AdventureState extends GameState {
     @Override
     public void giveUp(ShipBoard shipBoard) {
         if(game.getLevel() != Level.SECOND) {
