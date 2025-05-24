@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
+import it.polimi.ingsw.galaxytruckers.view.Observer;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
@@ -13,7 +14,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class ClientModel {
+public class ClientModel implements ModelObservable{
 
     private final Map<UUID, Lobby> activeLobbies = new HashMap<>();
 
@@ -21,6 +22,8 @@ public class ClientModel {
     private Game game = null;
     private final Set<Player> players = new HashSet<>();
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
+
+    private List<Observer> observers = new ArrayList<>();
 
     private Map<Player, Integer> finalScores;
 
@@ -173,4 +176,20 @@ public class ClientModel {
         this.finalScores = finalScores;
     }
     //endregion
+
+    private void notifyObservers() {
+        for (Observer o : observers) {
+            o.notifyObserver();
+        }
+    }
+
+    @Override
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
+        observers.remove(o);
+    }
 }
