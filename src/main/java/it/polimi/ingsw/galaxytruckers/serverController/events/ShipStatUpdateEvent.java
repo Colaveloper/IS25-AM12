@@ -13,8 +13,4 @@ public record ShipStatUpdateEvent(String playerName, StatType statType, int valu
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

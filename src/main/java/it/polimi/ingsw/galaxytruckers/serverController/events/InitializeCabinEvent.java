@@ -7,18 +7,13 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.awt.*;
 
-public record CabinUpdateEvent(String playerName, Point point, int numResidents, CrewType crewType) implements Event{
-    public static CabinUpdateEvent from(ShipBoard shipBoard, Point point, Cabin cabin) {
-        return new CabinUpdateEvent(
+public record InitializeCabinEvent(String playerName, Point point, CrewType crewType) implements Event {
+    public static InitializeCabinEvent from(ShipBoard shipBoard, Point point, Cabin cabin) {
+        return new InitializeCabinEvent(
                 Player.getPlayer(shipBoard).getNickname(),
                 point,
-                cabin.getNumResidents(),
                 cabin.getCrewType()
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

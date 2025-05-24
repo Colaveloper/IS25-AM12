@@ -6,15 +6,11 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import java.awt.*;
 import java.util.List;
 
-public record ShipPieceRemoveEvent(String playerName, List<Point> positions) implements Event {
-    public static ShipPieceRemoveEvent from(ShipBoard shipBoard, List<Point> positions) {
-        return new ShipPieceRemoveEvent(
+public record ShipPieceRemoveEvent(String playerName, int index) implements Event {
+    public static ShipPieceRemoveEvent from(ShipBoard shipBoard, int index) {
+        return new ShipPieceRemoveEvent (
                 Player.getPlayer(shipBoard).getNickname(),
-                positions
+                index
         );
-    }
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
     }
 }

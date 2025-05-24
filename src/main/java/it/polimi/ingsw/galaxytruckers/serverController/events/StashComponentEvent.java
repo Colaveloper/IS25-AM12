@@ -6,16 +6,11 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.util.List;
 
-public record StashComponentEvent(String playerName, List<Integer> stashedComponentIds) implements Event {
+public record StashComponentEvent(String playerName) implements Event {
     public static StashComponentEvent from(ShipBoard shipBoard) {
         return new StashComponentEvent(
-                Player.getPlayer(shipBoard).getNickname(),
-                shipBoard.getStashedComponents().stream().map(Component::getId).toList()
+                Player.getPlayer(shipBoard).getNickname()
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

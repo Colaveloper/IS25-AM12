@@ -5,16 +5,12 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.awt.*;
 
-public record ActivateComponentEvent(String playerName, Point point) implements Event{
-    public static ActivateComponentEvent from(ShipBoard shipBoard, Point point) {
+public record ActivateComponentEvent(String playerName, Point point, boolean active) implements Event{
+    public static ActivateComponentEvent from(ShipBoard shipBoard, Point point, boolean active) {
         return new ActivateComponentEvent(
                 Player.getPlayer(shipBoard).getNickname(),
-                point
+                point,
+                active
         );
-    }
-
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
     }
 }
