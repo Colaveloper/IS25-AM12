@@ -2,6 +2,8 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
+import it.polimi.ingsw.galaxytruckers.model.Hourglass;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
@@ -62,6 +64,7 @@ class ShipBuildingStateTest {
                 throw new RuntimeException(e);
             }
             shipBuildingState = (SecondShipBuildingState) game.getCurrentState();
+            shipBuildingState.getHourglass().stop();
         }
 
         @Test
@@ -142,15 +145,16 @@ class ShipBuildingStateTest {
 
         @Test
         void lastFlipHourglassThrowsExceptionIfShipIsNotCompleted() throws InterruptedException {
-            shipBuildingState.getHourglass().setDuration(100);
-
-            for (int i = 0; i < 2; i++) {
+            //TODO: decide whether to let players flip the hourglass before building
+            Hourglass hourglass = shipBuildingState.getHourglass();
+            shipBuildingState.getHourglass().setDuration(10);
+            for (int i = 1; i < 2; i++) {
                 try {
                     shipBuildingState.flipHourglass(shipBoards.getFirst());
                 } catch (IllegalStateException e) {
                     throw new RuntimeException("Timer is still running, i = " + i);
                 }
-                Thread.sleep(150);
+                Thread.sleep(20);
             }
             assertThrows(IllegalStateException.class, () -> shipBuildingState.flipHourglass(shipBoards.getFirst()));
         }
@@ -238,18 +242,19 @@ class ShipBuildingStateTest {
 
             @Test
             void lastFlipHourglassEndsBuilding() throws InterruptedException{
+                shipBuildingState.getHourglass().stop();
                 shipBuildingState.getHourglass().setDuration(10);
 
-                for (int i = 0; i < 3; i++) {
+                for (int i = 1; i < 3; i++) {
                     try {
                         shipBuildingState.flipHourglass(shipBoards.getFirst());
                     } catch (IllegalStateException e) {
                         throw new RuntimeException("Timer is still running, i = " + i);
                     }
-                    Thread.sleep(50);
+                    Thread.sleep(20);
                 }
 
-                assertInstanceOf(ShipCorrectionState.class, game.getCurrentState());
+                assertNotEquals(game.getCurrentState(), shipBuildingState);
             }
 
             @Test

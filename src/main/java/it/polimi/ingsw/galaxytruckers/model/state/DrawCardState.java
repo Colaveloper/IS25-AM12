@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 public class DrawCardState extends AdventureState {
@@ -10,9 +11,11 @@ public class DrawCardState extends AdventureState {
     public void setGame(Game game) {
         super.setGame(game);
         this.leaderShipBoard = game.getFlightBoard().getOrderedShips().getFirst();
-        game.forceShipsToGiveUp();
-        game.endGameIfAllShipsHaveGivenUp();
-        game.getFlightBoard().removeShips(game.getGivenUpShips());
+        if (game.getLevel() == Level.SECOND) { // TODO: do not predicate directly on the type
+            game.forceShipsToGiveUp();
+            game.endGameIfAllShipsHaveGivenUp();
+            game.getFlightBoard().removeShips(game.getGivenUpShips());
+        }
     }
 
     @Override
