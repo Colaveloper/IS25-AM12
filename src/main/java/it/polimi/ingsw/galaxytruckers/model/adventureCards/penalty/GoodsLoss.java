@@ -16,7 +16,7 @@ public class GoodsLoss implements Penalty {
     }
 
     @Override
-    public Optional<AdventureState> givePenalty(ShipBoard shipBoard, FlightBoard flightBoard) {
+    public Optional<AdventureState> inflictPenalty(ShipBoard shipBoard, FlightBoard flightBoard) {
         if (goodsToLose != 0) {
             int goodsToLose = this.goodsToLose;
             this.goodsToLose = 0;

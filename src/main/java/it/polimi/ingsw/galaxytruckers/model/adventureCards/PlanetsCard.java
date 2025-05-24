@@ -62,7 +62,7 @@ public class PlanetsCard extends AdventureCard {
         }
     }
 
-    public void choosePlanet(int index) {
+    private void choosePlanet(int index) {
         planetChoices.put(currentShipBoard, index);
         landedShips.add(currentShipBoard);
         remainingChoices.remove(index);

@@ -8,15 +8,15 @@ import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import java.util.Optional;
 
 public class FlightDaysLoss implements Penalty {
-    int flightDays;
+    int flightDaysToLose;
 
-    public FlightDaysLoss(int flightDays) {
-        this.flightDays = flightDays;
+    public FlightDaysLoss(int flightDaysToLose) {
+        this.flightDaysToLose = flightDaysToLose;
     }
 
     @Override
-    public Optional<AdventureState> givePenalty(ShipBoard shipBoard, FlightBoard flightBoard) {
-        flightBoard.displaceShip(shipBoard, -flightDays);
+    public Optional<AdventureState> inflictPenalty(ShipBoard shipBoard, FlightBoard flightBoard) {
+        flightBoard.displaceShip(shipBoard, -flightDaysToLose);
         return Optional.empty();
     }
 }

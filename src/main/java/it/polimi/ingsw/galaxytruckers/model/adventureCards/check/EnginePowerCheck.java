@@ -4,8 +4,6 @@ import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.model.state.DeclareEnginePowerState;
-import it.polimi.ingsw.galaxytruckers.model.state.DeclareFirePowerState;
-import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
 import java.util.Comparator;
 import java.util.Optional;

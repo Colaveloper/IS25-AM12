@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class FlightBoard {
-    //protected final Set<ShipBoard> allShips; // contains playing+dead ships
     protected final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
     protected List<Integer> startingPositionsLeft;
 

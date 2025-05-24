@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Optional;
 
 public class ProjectileThreat implements Penalty {
-    private List<Projectile> projectiles;
+    private final List<Projectile> projectiles;
 
     public ProjectileThreat(List<Projectile> projectiles) {
         this.projectiles = projectiles.reversed();
     }
 
     @Override
-    public Optional<AdventureState> givePenalty(ShipBoard shipBoard, FlightBoard flightBoard) {
+    public Optional<AdventureState> inflictPenalty(ShipBoard shipBoard, FlightBoard flightBoard) {
         if (projectiles.isEmpty()) {
             return Optional.empty();
         } else {

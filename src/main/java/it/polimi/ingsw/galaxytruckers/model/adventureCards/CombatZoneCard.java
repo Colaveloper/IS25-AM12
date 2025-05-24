@@ -58,7 +58,7 @@ public class CombatZoneCard extends AdventureCard {
                 return getNextState();
             }
         } else {
-            Optional<AdventureState> penaltyAction = penalties.get(checkIndex).givePenalty(penalizedShipBoard, flightBoard);
+            Optional<AdventureState> penaltyAction = penalties.get(checkIndex).inflictPenalty(penalizedShipBoard, flightBoard);
             if (penaltyAction.isPresent()) {
                 return penaltyAction.get();
             } else {
