@@ -50,11 +50,11 @@ public class Client {
 
     public static void main(String[] args) {
         Client client = new Client();
-        if (args.length == 0) {
+        if (args.length != 3) {
             System.out.println("Please enter the address of the server");
             return;
         }
-        client.start(Server.name, args[0], Server.port);
+        client.start(args[0], args[1], Integer.parseInt(args[2]));
         System.out.println("Successfully connected to the server");
         client.clientController.showInterfaceChoice();
     }

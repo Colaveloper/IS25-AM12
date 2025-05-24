@@ -25,7 +25,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
 
     private Thread updateThread;
     private boolean running = false;
-    private final BlockingDeque<HandlerTask> updateTasks;
+    private final BlockingDeque<Event> events;
 
     private final Player player;
 
@@ -35,7 +35,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
         this.player = player;
         this.controller = controller;
         this.updateThread = null;
-        this.updateTasks = new LinkedBlockingDeque<>();
+        this.events = new LinkedBlockingDeque<>();
         startUpdateThread();
     }
 
@@ -63,23 +63,16 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
         stopUpdateThread();
     }
 
-    private void submitUpdateTask(HandlerTask action) {
-        boolean success = updateTasks.offer(action);
-        if (!success) {
-            handleInternalError();
-        }
-    }
-
     private void runUpdateThread() {
-        HandlerTask task = null;
+        Event event = null;
         while (running) {
             try {
-                task = updateTasks.takeFirst();
-                task.execute();
+                event = events.takeFirst();
+                remoteClient.notifyEvent(event);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             } catch (RemoteException e) {
-                updateTasks.offerFirst(task);
+                events.offerFirst(event);
                 handleNetworkError(e);
             }
         }
@@ -94,7 +87,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
 
     @Override
     public void notifyEvent(Event event) {
-        //TODO: implement this method
+        events.offer(event);
     }
 
     // RemoteController
@@ -266,7 +259,3 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     }
 }
 
-@FunctionalInterface
-interface HandlerTask {
-    void execute() throws RemoteException;
-}
