@@ -17,8 +17,4 @@ public record SurrenderEvent(List<String> playerNames) implements Event {
                         .toList());
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

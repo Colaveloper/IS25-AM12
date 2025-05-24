@@ -22,8 +22,4 @@ public record RequestFaceUpComponentEvent(String playerName, int componentId) im
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

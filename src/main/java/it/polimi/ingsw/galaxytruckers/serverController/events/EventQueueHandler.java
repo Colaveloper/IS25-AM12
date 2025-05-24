@@ -5,9 +5,7 @@ import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
-import java.util.List;
-
-public class EventQueueHandler implements EventHandler, EventVisitor {
+public class EventQueueHandler implements EventHandler {
     private final Lobby lobby;
     private final EventQueue eventQueue;
     private Thread thread;
@@ -43,31 +41,132 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
 
     @Override
     public void handleEvent(Event event) {
-        event.accept(this);
-    }
-
-    @Override
-    public void visit(LobbyEvent lobbyEvent) {
-        for (Player player : lobby.getPlayers()) {
-            VirtualClient client = SessionManager.getInstance().getClient(player);
-            if (lobbyEvent.playerName().equals(player.getNickname())) {
-                client.setupLobby(lobby.getId(),lobbyEvent.playerColors());
-            } else {
-                client.updateLobbyPlayers(lobbyEvent.playerColors());
+        switch (event) {
+            case ActivateComponentEvent activateComponentEvent -> {
+                handle(activateComponentEvent);
+            }
+            case GoodsUpdateEvent goodsUpdateEvent -> {
+                handle(goodsUpdateEvent);
+            }
+            case UseBatteryEvent useBatteryEvent -> {
+                handle(useBatteryEvent);
+            }
+            case InitializeCabinEvent initializeCabinEvent -> {
+                handle(initializeCabinEvent);
+            }
+            case CargoHoldUpdateEvent cargoHoldUpdateEvent -> {
+                handle(cargoHoldUpdateEvent);
+            }
+            case FlightBoardUpdateEvent flightBoardUpdateEvent -> {
+                handle(flightBoardUpdateEvent);
+            }
+            case FlipHourglassEvent flipHourglassEvent -> {
+                handle(flipHourglassEvent);
+            }
+            case GameEndEvent gameEndEvent -> {
+                handle(gameEndEvent);
+            }
+            case GoodsBufferUpdateEvent goodsBufferUpdateEvent -> {
+                handle(goodsBufferUpdateEvent);
+            }
+            case GrabStashedComponentEvent grabStashedComponentEvent -> {
+                handle(grabStashedComponentEvent);
+            }
+            case HourglassEndEvent hourglassEndEvent -> {
+                handle(hourglassEndEvent);
+            }
+            case ValidateShipEvent validateShipEvent -> {
+                handle(validateShipEvent);
+            }
+            case JoinLobbyEvent joinLobbyEvent -> {
+                handle(joinLobbyEvent);
+            }
+            case NewCardEvent newCardEvent -> {
+                handle(newCardEvent);
+            }
+            case ForecastDetailsEvent forecastDetailsEvent -> {
+                handle(forecastDetailsEvent);
+            }
+            case PlaceComponentEvent placeComponentEvent -> {
+                handle(placeComponentEvent);
+            }
+            case PlanetChoiceEvent planetChoiceEvent -> {
+                handle(planetChoiceEvent);
+            }
+            case PlayerDisconnectionEvent playerDisconnectionEvent -> {
+                handle(playerDisconnectionEvent);
+            }
+            case PlayerExitEvent playerExitEvent -> {
+                handle(playerExitEvent);
+            }
+            case ProjectileEvent projectileEvent -> {
+                handle(projectileEvent);
+            }
+            case RejectComponentEvent rejectComponentEvent -> {
+                handle(rejectComponentEvent);
+            }
+            case ReleaseForecastEvent releaseForecastEvent -> {
+                handle(releaseForecastEvent);
+            }
+            case RemoveComponentEvent removeComponentEvent -> {
+                handle(removeComponentEvent);
+            }
+            case RequestFaceDownComponentEvent requestFaceDownComponentEvent -> {
+                handle(requestFaceDownComponentEvent);
+            }
+            case RequestFaceUpComponentEvent requestFaceUpComponentEvent -> {
+                handle(requestFaceUpComponentEvent);
+            }
+            case SelectionPointsEvent selectionPointsEvent -> {
+                handle(selectionPointsEvent);
+            }
+            case ShipNotConnectedEvent shipNotConnectedEvent -> {
+                handle(shipNotConnectedEvent);
+            }
+            case ShipPieceRemoveEvent shipPieceRemoveEvent -> {
+                handle(shipPieceRemoveEvent);
+            }
+            case ShipStatUpdateEvent shipStatUpdateEvent -> {
+                handle(shipStatUpdateEvent);
+            }
+            case StartBuildingEvent startBuildingEvent -> {
+                handle(startBuildingEvent);
+            }
+            case StashComponentEvent stashComponentEvent -> {
+                handle(stashComponentEvent);
+            }
+            case SurrenderEvent surrenderEvent -> {
+                handle(surrenderEvent);
             }
         }
     }
 
-    @Override
-    public void visit(StartBuildingEvent startBuildingEvent) {
+    private void handle(RemoveComponentEvent removeComponentEvent) {
+        //TODO: define method
+    }
+
+
+    private void handle(JoinLobbyEvent joinLobbyEvent) {
+        for (Player player : lobby.getPlayers()) {
+            VirtualClient client = SessionManager.getInstance().getClient(player);
+            if (joinLobbyEvent.playerName().equals(player.getNickname())) {
+                client.setupLobby(lobby.getId(), joinLobbyEvent.playerColors());
+            } else {
+                client.updateLobbyPlayers(joinLobbyEvent.playerColors());
+            }
+        }
+    }
+
+    
+    private void handle(StartBuildingEvent startBuildingEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyStartBuilding(lobby.getLevel(), lobby.getNumPlayers());
         }
     }
 
-    @Override
-    public void visit(RequestFaceUpComponentEvent requestFaceUpComponentEvent) {
+    
+    private void handle(RequestFaceUpComponentEvent requestFaceUpComponentEvent) {
         for (Player p : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(p);
             client.notifyFaceUpComponentRequest(
@@ -76,8 +175,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(RequestFaceDownComponentEvent requestFaceDownComponentEvent) {
+    
+    private void handle(RequestFaceDownComponentEvent requestFaceDownComponentEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyFaceDownComponentRequest(
@@ -87,8 +186,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(RejectComponentEvent rejectComponentEvent) {
+    
+    private void handle(RejectComponentEvent rejectComponentEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyComponentRejection(
@@ -98,8 +197,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(FlipHourglassEvent flipHourglassEvent) {
+    
+    private void handle(FlipHourglassEvent flipHourglassEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyHourglassFlipped(
@@ -109,8 +208,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(PlaceComponentEvent placeComponentEvent) {
+    
+    private void handle(PlaceComponentEvent placeComponentEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyComponentPositioning(
@@ -122,25 +221,25 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(PeekForecastEvent peekForecastEvent) {
+    
+    private void handle(ForecastDetailsEvent forecastDetailsEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
-            if (peekForecastEvent.playerName().equals(player.getNickname())) {
+            if (forecastDetailsEvent.playerName().equals(player.getNickname())) {
                 client.sendForecastDeck(
-                        peekForecastEvent.forecastDeckIds()
+                        forecastDetailsEvent.forecastDeckIds()
                 );
             } else {
                 client.notifyPeekForecast(
-                        peekForecastEvent.playerName(),
-                        peekForecastEvent.deckIndex()
+                        forecastDetailsEvent.playerName(),
+                        forecastDetailsEvent.deckIndex()
                 );
             }
         }
     }
 
-    @Override
-    public void visit(ReleaseForecastEvent releaseForecastEvent) {
+    
+    private void handle(ReleaseForecastEvent releaseForecastEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyReleaseForecast(
@@ -150,8 +249,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(GrabStashedComponentEvent grabStashedComponentEvent) {
+    
+    private void handle(GrabStashedComponentEvent grabStashedComponentEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyGrabFromStash(
@@ -162,8 +261,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(StashComponentEvent stashComponentEvent) {
+    
+    private void handle(StashComponentEvent stashComponentEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyStashComponent(
@@ -173,8 +272,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(FlightBoardUpdateEvent flightBoardUpdateEvent) {
+    
+    private void handle(FlightBoardUpdateEvent flightBoardUpdateEvent) {
         for  (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyPlayerPosition(
@@ -184,33 +283,33 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(CabinUpdateEvent cabinUpdateEvent) {
+    
+    private void handle(InitializeCabinEvent initializeCabinEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyCabinUpdate(
-                    cabinUpdateEvent.playerName(),
-                    cabinUpdateEvent.point(),
-                    cabinUpdateEvent.numResidents(),
-                    cabinUpdateEvent.crewType()
+                    initializeCabinEvent.playerName(),
+                    initializeCabinEvent.point(),
+                    initializeCabinEvent.numResidents(),
+                    initializeCabinEvent.crewType()
             );
         }
     }
 
-    @Override
-    public void visit(BatteryUpdateEvent batteryUpdateEvent) {
+    
+    private void handle(UseBatteryEvent useBatteryEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyBatteryUpdate(
-                    batteryUpdateEvent.playerName(),
-                    batteryUpdateEvent.point(),
-                    batteryUpdateEvent.numBatteries()
+                    useBatteryEvent.playerName(),
+                    useBatteryEvent.point(),
+                    useBatteryEvent.numBatteries()
             );
         }
     }
 
-    @Override
-    public void visit(CargoHoldUpdateEvent cargoHoldUpdateEvent) {
+    
+    private void handle(CargoHoldUpdateEvent cargoHoldUpdateEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyCargoHoldUpdate(
@@ -221,8 +320,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(ShipStatUpdateEvent shipStatUpdateEvent) {
+    
+    private void handle(ShipStatUpdateEvent shipStatUpdateEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyShipStatUpdate(
@@ -233,32 +332,32 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(NewCardEvent newCardEvent) {
+    
+    private void handle(NewCardEvent newCardEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyNewCard(newCardEvent.cardId());
         }
     }
 
-    @Override
-    public void visit(SurrenderEvent surrenderEvent) {
+    
+    private void handle(SurrenderEvent surrenderEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifySurrender(surrenderEvent.playerNames());
         }
     }
 
-    @Override
-    public void visit(HourglassEndEvent hourglassEndEvent) {
+    
+    private void handle(HourglassEndEvent hourglassEndEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyHourglassEnd();
         }
     }
 
-    @Override
-    public void visit(ShipPieceRemoveEvent shipPieceRemoveEvent) {
+    
+    private void handle(ShipPieceRemoveEvent shipPieceRemoveEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyShipPieceRemoval(
@@ -268,8 +367,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(SelectionPointsEvent selectionPointsEvent) {
+    
+    private void handle(SelectionPointsEvent selectionPointsEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifySelection(
@@ -280,8 +379,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(PlanetChoiceEvent planetChoiceEvent) {
+    
+    private void handle(PlanetChoiceEvent planetChoiceEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyPlanetChoice(
@@ -291,8 +390,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(GoodsBufferUpdateEvent goodsBufferUpdateEvent) {
+    
+    private void handle(GoodsBufferUpdateEvent goodsBufferUpdateEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.updateGoodsBuffer(goodsBufferUpdateEvent.adding(),
@@ -301,8 +400,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(ProjectileEvent projectileEvent) {
+    
+    private void handle(ProjectileEvent projectileEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.showProjectile(
@@ -316,8 +415,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(GameEndEvent gameEndEvent) {
+    
+    private void handle(GameEndEvent gameEndEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.showFinalScores(
@@ -326,25 +425,25 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(InvalidShipsUpdateEvent invalidShipsUpdateEvent) {
+    
+    private void handle(ValidateShipEvent validateShipEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyInvalidShipsUpdate(
-                    invalidShipsUpdateEvent.invalidPlayers()
+                    validateShipEvent.playerName()
             );
         }
     }
 
-    @Override
-    public void visit(ShipNotConnectedEvent shipNotConnectedEvent) {
+    
+    private void handle(ShipNotConnectedEvent shipNotConnectedEvent) {
         Player player = Player.getPlayer(shipNotConnectedEvent.playerName());
         VirtualClient client = SessionManager.getInstance().getClient(player);
         //client.showShipPieces(shipNotConnectedEvent.playerName(), shipNotConnectedEvent.shipPieces());//todo: now it s a map
     }
 
-    @Override
-    public void visit(ActivateComponentEvent activateComponentEvent) {
+    
+    private void handle(ActivateComponentEvent activateComponentEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyComponentActivation(
@@ -354,20 +453,20 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         }
     }
 
-    @Override
-    public void visit(AddGoodsEvent addGoodsEvent) {
+    
+    private void handle(GoodsUpdateEvent goodsUpdateEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             client.notifyAddGoods(
-                    addGoodsEvent.playerName(),
-                    addGoodsEvent.goods(),
-                    addGoodsEvent.cargos()
+                    goodsUpdateEvent.playerName(),
+                    goodsUpdateEvent.goods(),
+                    goodsUpdateEvent.cargos()
             );
         }
     }
 
-    @Override
-    public void visit(PlayerDisconnectionEvent playerDisconnectionEvent) {
+    
+    private void handle(PlayerDisconnectionEvent playerDisconnectionEvent) {
         Player disconnectedPlayer = Player.getPlayer(playerDisconnectionEvent.playerName());
         for (Player player : lobby.getPlayers()) {
             if (!player.equals(disconnectedPlayer)) {
@@ -378,8 +477,8 @@ public class EventQueueHandler implements EventHandler, EventVisitor {
         stop();
     }
 
-    @Override
-    public void visit(PlayerExitEvent playerExitEvent) {
+    
+    private void handle(PlayerExitEvent playerExitEvent) {
         for (Player player : lobby.getPlayers()) {
             VirtualClient client = SessionManager.getInstance().getClient(player);
             //TODO: notify player exit to clients

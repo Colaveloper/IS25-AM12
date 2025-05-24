@@ -11,8 +11,4 @@ public record ReleaseForecastEvent(String playerName, int deckIndex) implements 
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

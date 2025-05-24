@@ -15,8 +15,4 @@ public record ShipNotConnectedEvent(String playerName, List<Set<Point>> shipPiec
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

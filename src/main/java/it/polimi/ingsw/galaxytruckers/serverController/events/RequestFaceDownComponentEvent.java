@@ -14,8 +14,4 @@ public record RequestFaceDownComponentEvent(String playerName, int componentId) 
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

@@ -16,8 +16,4 @@ public record GameEndEvent(Map<String, Integer> playerToScore) implements Event 
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

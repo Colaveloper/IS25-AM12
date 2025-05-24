@@ -20,8 +20,4 @@ public record ProjectileEvent(String playerName, ProjectileType projectileType, 
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

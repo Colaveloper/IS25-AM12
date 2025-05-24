@@ -24,11 +24,11 @@ public class GameEventListener {
     }
 
     public void notifyBatteryUpdateEvent(ShipBoard shipBoard, Point point, Battery battery) {
-        controllerListener.notifyEvent(BatteryUpdateEvent.from(shipBoard, point, battery));
+        controllerListener.notifyEvent(UseBatteryEvent.from(shipBoard, point, battery));
     }
 
     public void notifyCabinUpdateEvent(ShipBoard shipBoard, Point point, Cabin cabin) {
-        controllerListener.notifyEvent(CabinUpdateEvent.from(shipBoard, point, cabin));
+        controllerListener.notifyEvent(InitializeCabinEvent.from(shipBoard, point, cabin));
     }
 
     public void notifyCargoHoldUpdateEvent(ShipBoard shipBoard, Point point, CargoHold cargoHold) {
@@ -60,7 +60,7 @@ public class GameEventListener {
     }
 
     public void notifyInvalidShipsUpdateEvent(Set<ShipBoard> invalidShips) {
-        controllerListener.notifyEvent(InvalidShipsUpdateEvent.from(invalidShips));
+        controllerListener.notifyEvent(ValidateShipEvent.from(invalidShips));
     }
 
     public void notifyNewCardEvent(AdventureCard adventureCard) {
@@ -68,7 +68,7 @@ public class GameEventListener {
     }
 
     public void notifyPeekForecastEvent(ShipBoard shipBoard, int deckIndex, java.util.List<AdventureCard> forecastDeck) {
-        controllerListener.notifyEvent(PeekForecastEvent.from(shipBoard, deckIndex, forecastDeck));
+        controllerListener.notifyEvent(ForecastDetailsEvent.from(shipBoard, deckIndex, forecastDeck));
     }
 
     public void notifyPlaceComponentEvent(ShipBoard shipBoard, Component component, Point position) {

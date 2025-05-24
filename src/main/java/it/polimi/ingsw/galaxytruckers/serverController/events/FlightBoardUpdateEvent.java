@@ -11,17 +11,4 @@ public record FlightBoardUpdateEvent(String playerName, int position) implements
                 position
         );
     }
-
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
-
-    @Override
-    public String toString() {
-        return "FlightBoardUpdateModelEvent[" +
-                "playerName=" + playerName + ", " +
-                "position=" + position + ']';
-    }
-
 }
