@@ -1,551 +1,195 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import it.polimi.ingsw.galaxytruckers.view.Observer;
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.enums.ComponentType;
-import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class ClientModel {
+public class ClientModel implements ModelObservable{
 
-    // META
-    private String currentPlayerNickname;
-    private String myNickname;
-    private final Set<Point> shipArea;
-    private final Map<FourColors, List<List<ObjectProperty<Component>>>> ships;
-    private final BiMap<String, FourColors> playerToColor;
-    private List<Point> selectablePoints;
-    private List<Point> selectableBatteries;
-    private final ObservableMap<FourColors, Map<StatType, Integer>> stats;
+    private final Map<UUID, Lobby> activeLobbies = new HashMap<>();
 
+    private Player clientPlayer = null;
+    private Game game = null;
+    private final Set<Player> players = new HashSet<>();
+    private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
 
-    // BUILDING
-    private Point upLeft; // the upper-left point of the ship-area
-    private Point bottomRight;
-    private final ListProperty<Component> revealedComponents;
-    private final IntegerProperty coveredComponentN;
-    private final Map<FourColors, List<ObjectProperty<Component>>> stashedComponents;
-    private final Map<FourColors, ObjectProperty<Component>> hands; // (former current component)
-    private final ListProperty<Integer> forecastDeck;
-    private final List<BooleanProperty> forecastAvailability;
-    private List<Set<Point>> shipPieces;
-    private boolean isValid;
-    private Map<CrewType, List<Point>> unplacedCrew;
+    private List<Observer> observers = new ArrayList<>();
 
-    private final Map<FourColors, UnweldedComponent> unweldedComponent;
-    // FLIGHTBOARD
-    private int loopLength;
-    private final ObservableList<Integer> startingPositionLeft;
-    private final ObservableMap<FourColors, Integer> colorToPlace;
+    private Map<Player, Integer> finalScores;
 
+    //region Setup methods
 
-    // FLIGHT
-    private int currentCardId;
-    private int remainingCards;
-    private int batteryBalance;
-
-    // PLANETS
-//    private final List<Optional<String>> landedPlayers;
-//    private Optional<List<Map<GoodsType, Integer>>> planets;
-    private final List<List<GoodsType>> planets;
-    private int chosenPlanetIndex;
-    private final List<GoodsType> goods;
-
-    // PROJECTILES
-    private ProjectileRecord currentProjectile;
-
-    // GOODS BUFFER
-//    private List<Optional<GoodsType>> goodsBuffer;
-    private List<GoodsType> goodsBuffer;
-
-    public ClientModel() {
-        shipArea = new HashSet<>();
-        playerToColor = HashBiMap.create();
-        shipPieces = new ArrayList<>();
-        ships = new SimpleMapProperty<>(FXCollections.observableMap(new HashMap<>()));
-        coveredComponentN = new SimpleIntegerProperty();
-        revealedComponents = new SimpleListProperty<>(FXCollections.observableArrayList());
-        selectablePoints = new ArrayList<>();
-        forecastDeck = new SimpleListProperty<>(FXCollections.observableArrayList(null, null, null));
-        forecastAvailability = new SimpleListProperty<>(FXCollections.observableArrayList(
-                new SimpleBooleanProperty(true),
-                new SimpleBooleanProperty(true),
-                new SimpleBooleanProperty(true)
-        ));
-        unweldedComponent = new HashMap<>();
-        stashedComponents = new HashMap<>();
-        startingPositionLeft = FXCollections.observableArrayList();
-        hands = new HashMap<>();
-        colorToPlace = FXCollections.observableHashMap();
-        stats = FXCollections.observableHashMap();
-        planets = FXCollections.observableArrayList();
-        goods = FXCollections.observableArrayList();
-        batteryBalance = 0;
+    public void setPlayer(Player player) {
+        this.clientPlayer = player;
     }
 
-    // SETUP PHASE
-
-    public void setPlayerToPlace(String nickname, int position) {
-        // translating nicknames to colors
-        this.colorToPlace.putIfAbsent(playerToColor.get(nickname), position);
-        this.startingPositionLeft.remove((Integer) position);
+    public void createGame(Level level, int playersN) {
+        game = new Game(level, playersN);
     }
 
-    public void setFlightBoard(int loopLength, List<Integer> startingPositions) {
-        this.loopLength = loopLength;
-        this.startingPositionLeft.addAll(startingPositions);
+    public void addPlayer(Player player, FourColors color) {
+        players.add(player);
+        player.setShipBoard(game.addShipBoard(color));
+        shipToPlayer.put(player.getShipBoard(), player);
     }
 
-    public void setPlayerColor(String nickname, FourColors color) {
-        playerToColor.putIfAbsent(nickname, color);
-        ships.put(playerToColor.get(nickname), new ArrayList<>());
+    //endregion
+
+    //region Getters
+    public Map<UUID, Lobby> getActiveLobbies() {
+        return activeLobbies;
     }
 
-    public void setMyNickname(String myNickname) {
-        this.myNickname = myNickname;
+    public Player getClientPlayer() {
+        return clientPlayer;
     }
 
-    public String getMyNickname() {
-        return myNickname;
+    public Game getGame() {
+        return game;
     }
 
-    // TODO: rename
-    public void setShipArea(Set<Point> shipArea) {
-
-        this.shipArea.addAll(shipArea);
-
-        int minX = shipArea.stream().mapToInt(p -> p.x).min().orElse(0);
-        int maxX = shipArea.stream().mapToInt(p -> p.x).max().orElse(0);
-        int minY = shipArea.stream().mapToInt(p -> p.y).min().orElse(0);
-        int maxY = shipArea.stream().mapToInt(p -> p.y).max().orElse(0);
-
-        // Save top-left point
-        upLeft = new Point(minX, minY);
-        bottomRight = new Point(maxX, maxY);
-
-        playerToColor.forEach((_, c) -> {
-
-            hands.put(c, new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA)));
-
-            unweldedComponent.put(c, new UnweldedComponent(false, false, null));
-
-            stashedComponents.put(c, List.of(
-                    new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA)),
-                    new SimpleObjectProperty<>(new Component(ComponentType.EMPTY_AREA))
-            ));
-
-            for (int y = minY; y <= maxY; y++) {
-                List<ObjectProperty<Component>> row = new ArrayList<>();
-                for (int x = minX; x <= maxX; x++) {
-                    ObjectProperty<Component> component = new SimpleObjectProperty<>(
-                            new Component(
-                                    shipArea.contains(new Point(x, y))
-                                            ? ComponentType.EMPTY_AREA
-                                            : ComponentType.EMPTY_SPACE
-                            ));
-                    row.add(component);
-                }
-                ships.get(c).add(row);
-            }
-        });
+    public Set<Player> getPlayers() {
+        return players;
     }
 
-    // SHIP BUILDING PHASE
-
-        // COMPONENT BANK
-
-
-
-    public void addRevealedComponent(int revealedComponentId) throws IOException {
-        revealedComponents.addLast(new Component(revealedComponentId));
+    public Player getPlayerByShip(ShipBoard shipBoard) {
+        return shipToPlayer.get(shipBoard);
     }
 
-    public void removeRevealedComponent(int componentId) {
-        revealedComponents.removeIf(c -> c.getComponentId() == componentId);
+    public Map<Player, Integer> getFinalScores() {
+        return finalScores;
+    }
+    //endregion
+
+    //region Event update methods
+    public void notifyCurrentState(GameState gameState) {
+        game.setCurrentState(gameState);
     }
 
-    public void stashComponents(String nickname, List<Integer> stashedComponents) throws IOException {
-        setStashedComponents(nickname, stashedComponents);
-        if (unweldedComponent.get(playerToColor.get(nickname)).getIsHand()) {
-            hands.get(playerToColor.get(nickname)).set(new Component(ComponentType.EMPTY_AREA));
-        } else {
-            Point q = new Point(unweldedComponent.get(playerToColor.get(nickname)).getPosition());
-            ships.get(playerToColor.get(nickname)).get(q.y-upLeft.y).get(q.x-upLeft.x).set(new Component(ComponentType.EMPTY_AREA));
-        }
-
+    public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
+        game.getCurrentState().notifyRequestRandComponent(shipBoard, component);
     }
 
-    public void unstashComponents(String nickname, List<Integer> stashedComponents) throws IOException {
-        setStashedComponents(nickname, stashedComponents);
+    public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
+        game.getCurrentState().notifyRequestComponent(shipBoard, component);
     }
 
-    private void setStashedComponents(String nickname, List<Integer> stashedComponents) {
-        for(int i = 0; i < this.stashedComponents.size(); i++) {
-            if (i < stashedComponents.size()) {
-                this.stashedComponents.get(playerToColor.get(nickname)).get(i).set(new Component(stashedComponents.get(i)));
-            } else {
-                this.stashedComponents.get(playerToColor.get(nickname)).get(i).set(new Component(ComponentType.EMPTY_AREA));
-            }
+    public void notifyRejectComponent(ShipBoard shipBoard) {
+        game.getCurrentState().notifyRejectComponent(shipBoard);
+    }
+
+    public void notifyStashComponent(ShipBoard shipBoard) {
+        game.getCurrentState().notifyStashComponent(shipBoard);
+    }
+
+    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index) {
+        game.getCurrentState().notifyGrabStashedComponent(shipBoard, index);
+    }
+
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
+        game.getCurrentState().notifyPlaceComponent(shipBoard, point, orientation);
+    }
+
+    public void notifyFlipHourglass(ShipBoard shipBoard) {
+        game.getCurrentState().notifyFlipHourglass(shipBoard);
+    }
+
+    public void notifyHourglassEnd() {
+        game.getCurrentState().notifyHourglassEnd();
+    }
+
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+        game.getCurrentState().notifyFlightBoardPosition(shipBoard, position);
+    }
+
+    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
+        game.getCurrentState().notifyPeekForecast(shipBoard, deckIndex);
+    }
+
+    public void setForecastDeck(List<AdventureCard> adventureCards) {
+        game.getCurrentState().setForecastDeck(adventureCards);
+    }
+
+    public void notifyReleaseForecast(ShipBoard shipBoard) {
+        game.getCurrentState().notifyReleaseForecast(shipBoard);
+    }
+
+    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
+        game.getCurrentState().notifyRemoveComponent(shipBoard, point);
+    }
+
+    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
+        game.getCurrentState().notifyChooseShipPiece(shipBoard, pieceIndex);
+    }
+
+    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
+        game.getCurrentState().notifyInitializeCabin(shipBoard, point, crewType);
+    }
+
+    public void notifyDrawCard(ShipBoard shipBoard, AdventureCard adventureCard) {
+        game.getCurrentState().notifyDrawCard(shipBoard, adventureCard);
+    }
+
+    public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
+        game.getCurrentState().notifyActivateComponent(shipBoard, point);
+    }
+
+    public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
+        game.getCurrentState().notifyLoseCrew(shipBoard, point);
+    }
+
+    public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed) {
+        game.getCurrentState().notifyGrabReward(shipBoard, rewardGrabbed);
+    }
+
+    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+        game.getCurrentState().notifyPlaceGoods(shipBoard, point, goodsType);
+    }
+
+    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+        game.getCurrentState().notifyRemoveGoods(shipBoard, point, goodsType);
+    }
+
+    public void notifyUseBattery(ShipBoard shipBoard, Point point) {
+        game.getCurrentState().notifyUseBattery(shipBoard,point);
+    }
+
+    public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
+        game.getCurrentState().notifyChoosePlanet(shipBoard, choice);
+    }
+
+    public void notifyGiveUp(ShipBoard shipBoard) {
+        game.getCurrentState().notifyGiveUp(shipBoard);
+    }
+
+    public void setFinalScores(Map<Player, Integer> finalScores) {
+        this.finalScores = finalScores;
+    }
+    //endregion
+
+    private void notifyObservers() {
+        for (Observer o : observers) {
+            o.notifyObserver();
         }
     }
 
-
-    // used to set the component in hand to a non-empty value
-    public void setComponentInHand(String nickname, int componentInHandId) throws IOException {
-        Component component = new Component(componentInHandId);
-        hands.get(playerToColor.get(nickname)).set(component);
-        unweldedComponent.get(playerToColor.get(nickname)).setExists(true);
-        unweldedComponent.get(playerToColor.get(nickname)).setIsHand(true);
+    @Override
+    public void addObserver(Observer o) {
+        observers.add(o);
     }
 
-    public void setCoveredComponents(int coveredComponentsN) {
-        this.coveredComponentN.set(coveredComponentsN);
-    }
-
-        // CURRENT COMPONENT
-
-    public boolean getExistsUnweldedComponent() {
-        return unweldedComponent.get(playerToColor.get(myNickname)).getExists();
-    }
-
-    public void setExistsUnweldedComponent(String nickname, boolean existsUnweldedComponent) {
-        unweldedComponent.get(playerToColor.get(nickname)).setExists(existsUnweldedComponent);
-    }
-
-    public void clearUnwelded(String nickname) {
-        if (unweldedComponent.get(playerToColor.get(nickname)).getIsHand()) {
-            hands.get(playerToColor.get(nickname)).set(new Component(ComponentType.EMPTY_AREA));
-        } else {
-            Point q = unweldedComponent.get(playerToColor.get(nickname)).getPosition();
-            this.ships.get(playerToColor.get(nickname)).get(q.y-upLeft.y).get(q.x-upLeft.x).set(new Component(ComponentType.EMPTY_AREA));
-            if(nickname.equals(myNickname)) {
-                selectablePoints.clear();
-            }
-        }
-    }
-
-            // SHIPBOARD
-
-    public void setIsValid(boolean isValid) {
-        this.isValid = isValid;
-    }
-
-    public boolean shipIsValid() {
-        return isValid;
-    }
-
-    public void removeComponent (Point p, String nickname) throws IOException {
-        this.ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).set(
-                new Component(ComponentType.EMPTY_AREA)
-        );
-    }
-
-    // placing a component on any ship
-    public void setComponent(String nickname, int componentId, int direction, Point p) throws IOException {
-        Component component = new Component(componentId);
-        component.setDirection(direction);
-        this.ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x-upLeft.x).set(component);
-        // clearing previous position
-        // unwelded component surely exists
-        if (unweldedComponent.get(playerToColor.get(nickname)).getIsHand()) {
-            hands.get(playerToColor.get(nickname)).set(new Component(ComponentType.EMPTY_AREA));
-            unweldedComponent.get(playerToColor.get(nickname)).setIsHand(false);
-        } else {
-            Point q = unweldedComponent.get(playerToColor.get(nickname)).getPosition();
-            this.ships.get(playerToColor.get(nickname)).get(q.y-upLeft.y).get(q.x-upLeft.x).set(new Component(ComponentType.EMPTY_AREA));
-            if(nickname.equals(myNickname)) {
-                selectablePoints.clear();
-                selectablePoints.add(p);
-            }
-        }
-        unweldedComponent.get(playerToColor.get(nickname)).setPosition(p);
-    }
-
-    public Component getComponent(String nickname, Point p) {
-        return ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get();
-    }
-
-    public void setCabinStats(String nickname, Point p, CrewType crewType, int crewSize) throws IOException {
-        ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setCrewType(crewType);
-        ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(crewSize);
-    }
-
-    //happens only in building phase, removes the alien from the available to be placed
-    public void placeAliens(CrewType crewType, Point position) throws IOException {
-        resetAllSelections(myNickname);
-        unplacedCrew.remove(crewType);
-        ships.get(playerToColor.get(myNickname)).get(position.y-upLeft.y).get(position.x- upLeft.x).get().setCrewType(crewType);
-        ships.get(playerToColor.get(myNickname)).get(position.y-upLeft.y).get(position.x- upLeft.x).get().setStat(1);
-    }
-
-    public void setUnplacedCrew(Map<CrewType, List<Point>> unplacedCrew) {
-        this.unplacedCrew = unplacedCrew;
-    }
-
-    public Map<CrewType, List<Point>> getUnplacedCrew() {
-        return unplacedCrew;
-    }
-
-    public CrewType getUnplacedCrewType() {
-        if(unplacedCrew.containsKey(CrewType.PURPLE)){
-            return CrewType.PURPLE;
-        } else if (unplacedCrew.containsKey(CrewType.BROWN)) {
-            return CrewType.BROWN;
-        }
-        else {
-            setIsValid(true);// no humans mean game lost anyway
-            return CrewType.HUMAN;
-        }
-    }
-
-        //  FORECAST
-
-    public void freeForecast(int deckIndex) throws IOException {
-        //forecastAvailability.set(deckIndex, true);
-        forecastAvailability.get(deckIndex).set(true);
-    }
-
-    public void blockForecast(int deckIndex) throws IOException {
-        forecastAvailability.get(deckIndex).set(false);
-    }
-
-    public void setForecast(List<Integer> cardIds) {
-        for(int i = 0; i < forecastDeck.size(); i++) {
-            forecastDeck.set(i, cardIds.get(i));
-        }
-    }
-
-    public ListProperty<Integer> getForecastDeck() {
-        return forecastDeck;
-    }
-
-    public List<BooleanProperty> getForecastDeckAvailablility() {
-        return forecastAvailability;
-    }
-
-        // ADVENTURE PHASE
-    public void setCurrentPlayerNickname(String currentPlayerNickname) {
-        this.currentPlayerNickname = currentPlayerNickname;
-    }
-
-    public String getCurrentPlayerNickname() {
-        return currentPlayerNickname;
-    }
-
-    public boolean isMyTurn() {
-        return currentPlayerNickname != null && currentPlayerNickname.equals(myNickname);
-    }
-
-    public boolean isMyNickname(String nickname) {
-        return myNickname.equals(nickname);
-    }
-
-
-    public void setStat(String nickname, StatType statType, int value) {
-        stats.get(playerToColor.get(nickname)).put(statType, value);
-    }
-
-    // place goods on ship
-    public void setGoods(String nickname, Point p, List<GoodsType> goods) throws IOException {
-        ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setGoods(goods);
-    }
-
-    // remove good from the buffer
-    public void updateGoodsBuffer(boolean adding, GoodsType type) throws IOException {
-        goodsBuffer.remove(type);
-    }
-
-    // in case of planets the goodBuffer must be set after the choice, this happens once, other update use updateGoodsBuffer
-    public void setPlanetGoodBuffer(int planetIndex) {
-        chosenPlanetIndex = planetIndex;
-//        goodsBuffer = new GoodsBuffer(planets, planetId); // TODO: RESTORE
-    }
-
-    public void setProjectile(ProjectileType projectileType, int direction, int roll) {
-        currentProjectile = new ProjectileRecord(roll, direction, projectileType);
-    }
-
-    public ProjectileRecord getCurrentProjectile() {
-        return currentProjectile;
-    }
-
-    public void setCurrentCard(int cardId) throws IOException {
-        currentCardId = cardId;
-//        goodsBuffer = new GoodsBuffer(currentCard); // TODO: RESTORE
-    }
-
-    public int getCurrentCard() {
-        return currentCardId;
-    }
-
-    public void rotateCurrentComponentLeft() {
-        if (unweldedComponent.get(playerToColor.get(myNickname)).getIsHand()) {
-            hands.get(playerToColor.get(myNickname)).get().rotateLeft();
-        } else {
-            Point p = new Point(unweldedComponent.get(playerToColor.get(myNickname)).getPosition());
-            ships.get(playerToColor.get(myNickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().rotateLeft();
-        }
-    }
-
-        // OTHER
-
-    public void setSelectablePoints(String nickname, List<Point> selectablePoints) {
-        this.selectablePoints = selectablePoints;
-        for (Point p : selectablePoints) {
-            getComponent(nickname, p).setShipPart(1);
-        }
-
-//        List<List<ObjectProperty<Component>>> myShip = ships.get(playerToColor.get(myNickname));
-//        for (int i = 0, y = upLeft.y; i < myShip.size(); i++, y++) {
-//            for (int j = 0, x = upLeft.x; j<myShip.getFirst().size(); j++, x++) {
-//                myShip.get(i).get(j).get().isSelectableProperty().set(
-//                        selectablePoints.contains(new Point(x, y))
-//                );
-//            }
-//        }
-    }
-
-    public void activateComponent(String nickname, Point p) throws IOException {
-        getComponent(nickname, p).setShipPart(3);
-        if(isMyNickname(nickname)) {
-            if (getComponent(nickname, p).getType() == ComponentType.BATTERY) {
-                batteryBalance += 1;
-            }
-            else{
-                batteryBalance -= 1;
-            }
-        }
-    }
-
-    public int getBatteryBalance() {
-        return batteryBalance;
-    }
-
-
-    public List<Point> getSelectablePoints() {
-        return selectablePoints;
-    }
-
-    public void setSelectableBatteries(String nickname, List<Point> selectableBatteries) {
-        if (nickname.equals(myNickname)) {
-            this.selectableBatteries = selectableBatteries;
-        }
-        for (Point p : selectablePoints) {
-            getComponent(nickname, p).setShipPart(2);
-        }
-    }
-
-    public List<Point> getSelectableBatteries() {
-        return selectableBatteries;
-    }
-
-    public void resetAllSelections(String nickname) {
-        selectablePoints.clear();
-        isValid = true;
-        for (List<ObjectProperty<Component>> list : ships.get(playerToColor.get(nickname))){
-            for(ObjectProperty<Component> p : list){
-                p.get().setShipPart(0);
-            }
-        }
-    }
-
-    public void setBatteriesOnComponent(String nickname, Point p, int totalBatteries) throws IOException {
-        ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(totalBatteries);
-    }
-
-    public void setSelectableShipPieces(String nickname, List<Set<Point>> selectableShipPieces) {
-        if(isMyNickname(nickname)) {
-            shipPieces = selectableShipPieces;
-        }
-        List<List<ObjectProperty<Component>>> myShip = ships.get(playerToColor.get(nickname));
-        for(int i = 0; i < selectableShipPieces.size(); i++) {
-            for(Point p : selectableShipPieces.get(i)) {
-                myShip.get(p.y - upLeft.y).get(p.x - upLeft.x).get().setShipPart(i + 1);
-            }
-        }
-    }
-
-    public List<Set<Point>> getSelectableShipPieces() {
-        return shipPieces;
-    }
-
-    public String getCurrentLeader() {
-        return colorToPlace.entrySet().stream()
-                .max(Comparator.comparingInt(Map.Entry::getValue))
-                .map(Map.Entry::getKey)
-                .map(playerToColor.inverse()::get)
-                .orElse(null);
-    }
-
-    // GETTERS (Javafx properties used only for attributes that change over time)
-
-    public Set<String> getNicknames() {
-        return playerToColor.keySet();
-    }
-
-    public IntegerProperty coveredComponentNProperty() {
-        return coveredComponentN;
-    }
-
-    public ObjectProperty<Component> currentComponentProperty() {
-        return hands.get(playerToColor.get(myNickname));
-    }
-
-    public int getLoopLength() {return loopLength;}
-
-    public ObservableList<Integer> startingPositionLeftProperty() {
-        return startingPositionLeft;
-    }
-
-    public ObservableMap<FourColors, Integer> colorToPlaceProperty() {
-        return colorToPlace;
-    }
-
-    public Map<FourColors, List<List<ObjectProperty<Component>>>> getShips() {
-        return ships;
-    }
-
-    public List<List<ObjectProperty<Component>>> getMyShip() {
-        return ships.get(playerToColor.get(myNickname));
-    }
-
-    public Point getUpLeft() {
-        return upLeft;
-    }
-
-    public Point getBottomRight() {
-        return bottomRight;
-    }
-
-    public boolean isHandEmpty() {
-        return hands.get(playerToColor.get(myNickname)).get().getType() != ComponentType.EMPTY_AREA;
-    }
-
-    public Map<FourColors, ObjectProperty<Component>> getHand() {
-        return hands;
-    }
-
-    public Map<FourColors, List<ObjectProperty<Component>>> getStashed() {
-        return stashedComponents;
-    }
-
-    public ListProperty<Component> revealedComponentsProperty() {
-        return revealedComponents;
-    }
-
-    public BiMap<String, FourColors> getPlayerToColor() {
-        return playerToColor;
+    @Override
+    public void removeObserver(Observer o) {
+        observers.remove(o);
     }
 }
