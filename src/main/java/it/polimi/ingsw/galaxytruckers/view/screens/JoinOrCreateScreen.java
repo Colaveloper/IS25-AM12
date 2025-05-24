@@ -7,7 +7,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.io.IOException;
 
-public class JoinOrCreateScreen extends ScreenFactory {
+public class JoinOrCreateScreen implements ScreenFactory {
     @Override
     public GuiScreen getGuiScreen(ClientModel model, ClientController controller) {
         return null;

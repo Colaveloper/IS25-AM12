@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiLobbyScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
-public class LobbyScreen extends ScreenFactory {
+public class LobbyScreen implements ScreenFactory {
     @Override
     public GuiScreen getGuiScreen(ClientModel model, ClientController controller) {
         return new GuiLobbyScreen(model, controller);

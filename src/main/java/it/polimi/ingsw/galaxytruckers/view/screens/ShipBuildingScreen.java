@@ -8,7 +8,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.io.IOException;
 
-public class ShipBuildingScreen extends ScreenFactory {
+public class ShipBuildingScreen implements ScreenFactory {
     private final ConfigFactory config;
 
     public ShipBuildingScreen(ConfigFactory config) {

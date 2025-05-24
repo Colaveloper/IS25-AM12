@@ -7,7 +7,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.io.IOException;
 
-public class PointSelectionScreen extends ScreenFactory{
+public class PointSelectionScreen implements ScreenFactory{
     @Override
     public GuiScreen getGuiScreen(ClientModel model, ClientController controller) {
         return null;

@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliValidationScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiValidationScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
-public class ValidationScreen extends ScreenFactory {
+public class ValidationScreen implements ScreenFactory {
 
     @Override
     public GuiScreen getGuiScreen(ClientModel model, ClientController controller) {

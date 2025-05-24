@@ -7,7 +7,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.io.IOException;
 
-public class ForecastScreen extends ScreenFactory {
+public class ForecastScreen implements ScreenFactory {
     @Override
     public GuiScreen getGuiScreen(ClientModel model, ClientController controller) {
         return new GuiForecastScreen(model, controller);
