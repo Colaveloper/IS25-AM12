@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.view.model;
+package it.polimi.ingsw.galaxytruckers.view.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;

@@ -5,7 +5,8 @@
             "credits": 3,
             "flight day loss": 1,
             "people": 2,
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0117.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0117.jpg",
+            "id": 0
       },
       {
             "type": "abandonedShip",
@@ -13,7 +14,8 @@
             "credits": 4,
             "flight day loss": 1,
             "people": 3,
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0118.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0118.jpg",
+            "id": 1
       },
       {
             "type": "abandonedShip",
@@ -21,7 +23,8 @@
             "credits": 6,
             "flight day loss": 1,
             "people": 4,
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0117.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0117.jpg",
+            "id": 2
       },
       {
             "type": "abandonedShip",
@@ -29,7 +32,8 @@
             "credits": 8,
             "flight day loss": 2,
             "people": 5,
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg",
+            "id": 3
       },
       {
             "type": "abandonedStation",
@@ -43,7 +47,8 @@
             },
             "flight day loss": 1,
             "people": 5,
-            "path": "src/main/resources/textures/cardsonedStation/GT-cards_I_IT_0119.jpg"
+            "path": "src/main/resources/textures/cardsonedStation/GT-cards_I_IT_0119.jpg",
+            "id": 4
       },
       {
             "type": "abandonedStation",
@@ -57,7 +62,8 @@
             },
             "flight day loss": 1,
             "people": 6,
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg",
+            "id": 5
       },
       {
             "type": "abandonedStation",
@@ -71,7 +77,8 @@
             },
             "flight day loss": 1,
             "people": 7,
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg",
+            "id": 6
       },
       {
             "type": "abandonedStation",
@@ -85,7 +92,8 @@
             },
             "flight day loss": 2,
             "people": 8,
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg",
+            "id": 7
       },
       {
             "type": "meteors",
@@ -95,7 +103,8 @@
                   ["small meteor",3],
                   ["small meteor",1]
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_019.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_019.jpg",
+            "id": 8
       },
       {
             "type": "meteors",
@@ -107,7 +116,8 @@
                   ["small meteor",1],
                   ["small meteor",2]
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0110.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0110.jpg",
+            "id": 9
       },
       {
             "type": "meteors",
@@ -117,7 +127,8 @@
                   ["small meteor",0],
                   ["big meteor",0]
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0111.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0111.jpg",
+            "id": 10
       },
       {
             "type": "meteors",
@@ -129,7 +140,8 @@
                   ["small meteor",3],
                   ["small meteor",3]
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_019.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_019.jpg",
+            "id": 11
       },
       {
             "type": "meteors",
@@ -140,7 +152,8 @@
                   ["small meteor",2],
                   ["small meteor",2]
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_110.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_110.jpg",
+            "id": 12
       },
       {
             "type": "meteors",
@@ -152,7 +165,8 @@
                   ["small meteor",1],
                   ["small meteor",1]
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0111.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0111.jpg",
+            "id": 13
       },
       {
             "type": "pirates",
@@ -165,7 +179,8 @@
             ],
             "flight day loss": 1,
             "credits": 4,
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_013.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_013.jpg",
+            "id": 14
       },
       {
             "type": "pirates",
@@ -178,7 +193,8 @@
             ],
             "flight day loss": 2,
             "credits": 7,
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_013.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_013.jpg",
+            "id": 15
       },
       {
             "type": "planets",
@@ -204,7 +220,8 @@
                         "red": 1
                   }
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0112.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0112.jpg",
+            "id": 16
       },
       {
             "type": "planets",
@@ -230,7 +247,8 @@
                         "red": 2
                   }
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0113.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0113.jpg",
+            "id": 17
       },
       {
             "type": "planets",
@@ -250,7 +268,8 @@
                         "red": 1
                   }
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0114.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0114.jpg",
+            "id": 18
       },
       {
             "type": "planets",
@@ -276,7 +295,8 @@
                         "red": 0
                   }
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0115.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0115.jpg",
+            "id": 19
       },
       {
             "type": "planets",
@@ -302,7 +322,8 @@
                         "red": 3
                   }
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0115.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0115.jpg",
+            "id": 20
       },
       {
             "type": "planets",
@@ -328,7 +349,8 @@
                         "red": 3
                   }
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0112.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0112.jpg",
+            "id": 21
       },
       {
             "type": "planets",
@@ -348,7 +370,8 @@
                         "red": 2
                   }
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0113.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0113.jpg",
+            "id": 22
       },
       {
             "type": "planets",
@@ -380,7 +403,8 @@
                         "red": 0
                   }
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+            "id": 23
       },
       {
             "type": "planets",
@@ -406,42 +430,50 @@
                         "red": 0
                   }
             ],
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0115.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0115.jpg",
+            "id": 24
       },
       {
             "type": "open space",
             "level": "TEST",
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
+            "id": 25
       },
       {
             "type": "open space",
             "level": "FIRST",
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
+            "id": 26
       },
       {
             "type": "open space",
             "level": "FIRST",
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
+            "id": 27
       },
       {
             "type": "open space",
             "level": "SECOND",
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
+            "id": 28
       },
       {
             "type": "open space",
             "level": "SECOND",
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
+            "id": 29
       },
       {
             "type": "open space",
             "level": "SECOND",
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
+            "id": 30
       },
       {
             "type": "epidemic",
             "level": "SECOND",
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_015.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_015.jpg",
+            "id": 31
       },
       {
             "type": "smugglers",
@@ -456,7 +488,8 @@
                   },
             "cannons": 4,
             "penalty": 2,
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_012.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_012.jpg",
+            "id": 32
       },
       {
             "type": "smugglers",
@@ -471,7 +504,8 @@
                   },
             "cannons": 8,
             "penalty": 3,
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+            "id": 33
       },
       {
             "type": "slavers",
@@ -480,7 +514,8 @@
             "cannons": 6,
             "penalty": 3,
             "credits": 5,
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_01.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_01.jpg",
+            "id": 34
       },
       {
             "type": "slavers",
@@ -489,12 +524,14 @@
             "cannons": 7,
             "penalty": 4,
             "credits": 8,
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_01.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_01.jpg",
+            "id": 35
       },
       {
             "type": "stardust",
             "level": "TEST",
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_014.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_014.jpg",
+            "id": 36
       },
       {
             "type": "warzone",
@@ -515,7 +552,8 @@
             "crew loss": 2,
             "flight day loss": 3,
             "level": "TEST",
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0116.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0116.jpg",
+            "id": 37
       },
       {
             "type": "warzone",
@@ -538,7 +576,8 @@
                   ["big fire",2]
             ],
             "level": "SECOND",
-            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0116.jpg"
+            "path": "src/main/resources/textures/cards/GT-cards_II_IT_0116.jpg",
+            "id": 38
       }
 
 ]
