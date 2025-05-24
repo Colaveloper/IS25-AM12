@@ -1,12 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
-import it.polimi.ingsw.galaxytruckers.view.Observer;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObservableProperty<T> implements ModelObservable {
-    private final List<Observer> observers = new ArrayList<>();
+public class ObservableProperty<T> {
+    private final List<ModelObserver<T>> observers = new ArrayList<>();
 
     private T value;
 
@@ -24,18 +22,16 @@ public class ObservableProperty<T> implements ModelObservable {
     }
 
     private void notifyObservers() {
-        for (Observer observer : observers) {
-            observer.notifyObserver();
+        for (ModelObserver<T> observer : observers) {
+            observer.notifyObservers(value);
         }
     }
 
-    @Override
-    public void addObserver(Observer o) {
+    public void addObserver(ModelObserver<T> o) {
         observers.add(o);
     }
 
-    @Override
-    public void removeObserver(Observer o) {
+    public void removeObserver(ModelObserver<T> o) {
         observers.remove(o);
     }
 }
