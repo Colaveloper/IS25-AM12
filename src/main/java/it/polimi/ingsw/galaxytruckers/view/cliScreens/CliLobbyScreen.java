@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.Label;
@@ -15,20 +16,15 @@ import java.util.List;
 
 public class CliLobbyScreen extends CliScreen {
 
-    public CliLobbyScreen(ClientModel model, ClientController controller) {
-        super(model, controller);
-    }
-
-    @Override
-    public boolean isLegalInput(String input) {
-        return true;
+    public CliLobbyScreen(ClientModel model, ClientController controller, GameState gameState) {
+        super(model, controller, gameState);
     }
 
     @Override
     public void parseAndInvoke(String input) {}
 
     @Override
-    public List<String> getNewDescription() throws IOException {
-        return List.of("Currently in lobby: "+model.getNicknames());
+    public void render() {
+        System.out.println("Currently in lobby: " + model.getNicknames());
     }
 }

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.view.screens.GuiScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

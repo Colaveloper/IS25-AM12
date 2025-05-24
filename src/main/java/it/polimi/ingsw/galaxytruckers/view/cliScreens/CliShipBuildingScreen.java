@@ -3,10 +3,12 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 import java.awt.*;
 import java.io.IOException;
@@ -14,53 +16,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CliShipBuildingScreen extends CliScreen {
-    ConfigFactory config;
+    //ConfigFactory config;
     CliComponentBank componentBank;
     CliFlightBoard flightBoard;
     CliAllShips allShips;
 
-    public CliShipBuildingScreen(ClientModel model, ClientController controller, ConfigFactory config) throws IOException {
-        super(model, controller);
-        this.config = config;
+    public CliShipBuildingScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+        super(model, controller, gameState);
+        //this.config = config;
 
-        componentBank = CliComponentBank.getInstance(model, config);
-        componentBank.addListener(this);
-
+        componentBank = new CliComponentBank(model);
         flightBoard = new CliFlightBoard(model);
-        flightBoard.addListener(this);
-
-        allShips = new CliAllShips(model, config);
-        allShips.addListener(this);
+        allShips = new CliAllShips(model);
     }
 
     @Override
-    public List<String> getNewDescription() throws IOException {
+    public void render() {
         List<String> output = new ArrayList<>();
 
-        output.addAll(componentBank.getDescription());
-        output.addAll(flightBoard.getDescription());
-        output.addAll(allShips.getDescription());
+        System.out.println(componentBank.getNewDescription());
+        System.out.println(flightBoard.getNewDescription());
+        System.out.println(allShips.getNewDescription());
 
-        output.add("C       \tGet New covered component" + "\t\t\tU [i]   \tGet i-th uncovered component");
-        output.add(config.isStashingAllowed() ? "S [i]   \tGet i-th stashed component" : "");
-        output.add(config.isForecastPresent() ? "F [i]   \tGet i-th forecast deck" : "");
+        System.out.println("C       \tGet New covered component" + "\t\t\tU [i]   \tGet i-th uncovered component");
+        System.out.println(config.isStashingAllowed() ? "S [i]   \tGet i-th stashed component" : "");
+        System.out.println(config.isForecastPresent() ? "F [i]   \tGet i-th forecast deck" : "");
 
         if (model.getExistsUnweldedComponent()) {
-            output.add("P [x] [y] \tPlace unwelded component in x, y" + "\t\t\tR       \tReject unwelded component");
-            output.add(config.isStashingAllowed() ? "S       \tStash unwelded component" : "");
-            output.add("L       \tRotate unwelded component left");
+            System.out.println("P [x] [y] \tPlace unwelded component in x, y" + "\t\t\tR       \tReject unwelded component");
+            System.out.println(config.isStashingAllowed() ? "S       \tStash unwelded component" : "");
+            System.out.println("L       \tRotate unwelded component left");
         }
 
-        output.add(config.isHourglassPresent() ? "H       \tFlip hourglass" : "");
-        output.add("E [i]   \tend and place on flightboard");
-
-        return output;
+        System.out.println(config.isHourglassPresent() ? "H       \tFlip hourglass" : "");
+        System.out.println("E [i]   \tend and place on flightboard");
     }
 
-    @Override
-    public boolean isLegalInput(String input) {
-        return input.matches("^(C|U \\d+|S(?: \\d+)?|F \\d+|R|P \\d+ \\d+|L|H|E \\d+)$");
-    }
+//    @Override
+//    public boolean isLegalInput(String input) {
+//        return input.matches("^(C|U \\d+|S(?: \\d+)?|F \\d+|R|P \\d+ \\d+|L|H|E \\d+)$");
+//    }
 
     @Override
     public void parseAndInvoke(String input) {

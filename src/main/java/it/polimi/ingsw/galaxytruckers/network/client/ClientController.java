@@ -1,23 +1,16 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.*;
 import it.polimi.ingsw.galaxytruckers.view.CliView;
-import it.polimi.ingsw.galaxytruckers.view.GuiView;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.GuiView;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
-import it.polimi.ingsw.galaxytruckers.view.screens.*;
-import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
-import javafx.application.Application;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.List;
 
 public class ClientController implements
         //ClientControllerInterface,
@@ -36,25 +29,26 @@ public class ClientController implements
         // TODO: consider whether to relocate prints and scans
         System.out.println("Enter \"G\" to switch to the Graphical Interface, or press any other key to continue here");
         if (new Scanner(System.in).nextLine().trim().equalsIgnoreCase("G")) {
-            view = new GuiView();
-            view.setController(this);
-            view.setModel(model);
-            GuiView.screen = new NicknameChoiceScreen().getGuiScreen(model, this);
-            Application.launch(GuiView.class); // calls view.setScreen(...)
+            view = new GuiView(this, model);
+//            view.setController(this);
+//            view.setModel(model);
+//            GuiView.screen = new NicknameChoiceScreen().getGuiScreen(model, this);
+//            Application.launch(GuiView.class); // calls view.setScreen(...)
         } else {
-            view = new CliView();
-            view.setController(this);
-            view.setModel(model);
-            view.setScreen(new NicknameChoiceScreen());
+            view = new CliView(this, model);
+//            view = new CliView();
+//            view.setController(this);
+//            view.setModel(model);
+//            view.setScreen(new NicknameChoiceScreen());
         }
     }
 
 //    //-----------------------------UPDATES FROM THE SERVER----------------------------------
 //
-//    @Override // TODO: DISCUSS
-//    public void showGameCreation() {
-//        view.setScreen(new GameCreationScreen());
-//    }
+    @Override // TODO: DISCUSS
+    public void showGameCreation() {
+        view.setScreen(model.getGame().getCurrentState());
+    }
 //
 //    @Override // Tommy approved
 //    public void updateLobbyPlayers(Map<String, FourColors> playerToColor) {
@@ -67,20 +61,20 @@ public class ClientController implements
     @Override
     public void setMyNickname(String nickname) { // gets called only after legal registration
         model.setPlayer(new Player(nickname));
-        view.setScreen(new JoinOrCreateScreen());
+        view.setScreen(model.getGame().getCurrentState());
     }
-//
-//    @Override
-//    public void joinLobby(UUID lobbyID) {
-//        server.joinLobby(lobbyID);
-//    }
-//
-//
-//    @Override
-//    public void requestNewGame(Level level, int playersN) {
-//        server.requestNewGame(level, playersN);
-//    }
-//
+
+    @Override
+    public void joinLobby(UUID lobbyID) {
+        server.joinLobby(lobbyID);
+    }
+
+
+    @Override
+    public void requestNewGame(Level level, int playersN) {
+        server.requestNewGame(level, playersN);
+    }
+
 //    @Override
 //    public void notifyNewGame(Level level, int playersN) {
 //        config = switch (level) {

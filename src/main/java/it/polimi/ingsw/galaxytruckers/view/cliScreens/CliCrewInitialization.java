@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.enums.ComponentType;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 import java.awt.*;
 import java.io.IOException;
@@ -17,56 +18,49 @@ public class CliCrewInitialization extends CliScreen {
     CliFlightBoard flightBoard;
     CliAllShips allShips;
 
-    public CliCrewInitialization(ClientModel model, ControllerToServer controller) {
-        super(model, controller);
+    public CliCrewInitialization(ClientModel model, ControllerToServer controller, GameState gameState) {
+        super(model, controller, gameState);
 
         flightBoard = new CliFlightBoard(model);
-        flightBoard.addListener(this);
-
         allShips = new CliAllShips(model);
-        allShips.addListener(this);
-
     }
 
     @Override
-    protected List<String> getNewDescription() throws IOException {
-        List<String> output = new ArrayList<>();
-
-        output.addAll(flightBoard.getDescription());
-        output.addAll(allShips.getDescription());
+    public void render() {
+        System.out.println(flightBoard.getNewDescription());
+        System.out.println(allShips.getNewDescription());
 
         CrewType crewType = model.getUnplacedCrewType();
         if(!model.shipIsValid() && !crewType.equals(CrewType.HUMAN)) {
-            output.add("choose position for" + crewType + "in one of the highlighted cabins");
-            output.add("or C to continue");
+            System.out.println("choose position for" + crewType + "in one of the highlighted cabins");
+            System.out.println("or C to continue");
             model.setSelectablePoints(model.getMyNickname(), model.getUnplacedCrew().get(crewType));
         }
         else {
-            output.add("empty cabins will be filled with humans, waiting for other players to finish");
+            System.out.println("empty cabins will be filled with humans, waiting for other players to finish");
         }
-        return output;
     }
 
-    @Override
-    public boolean isLegalInput(String input) {
-
-        // Validate format using regex
-        if (!input.matches("\\d+ \\d+")) {
-            return false;
-        }
-        if(input.matches("C")) {
-            return true;
-        }
-
-        // Split input and parse numbers
-        String[] parts = input.split(" ");
-        int x = Integer.parseInt(parts[0]);
-        int y = Integer.parseInt(parts[1]);
-
-        // Create point and check list
-        Point inputPoint = new Point(x, y);
-        return model.getSelectablePoints().contains(inputPoint);
-    }
+//    @Override
+//    public boolean isLegalInput(String input) {
+//
+//        // Validate format using regex
+//        if (!input.matches("\\d+ \\d+")) {
+//            return false;
+//        }
+//        if(input.matches("C")) {
+//            return true;
+//        }
+//
+//        // Split input and parse numbers
+//        String[] parts = input.split(" ");
+//        int x = Integer.parseInt(parts[0]);
+//        int y = Integer.parseInt(parts[1]);
+//
+//        // Create point and check list
+//        Point inputPoint = new Point(x, y);
+//        return model.getSelectablePoints().contains(inputPoint);
+//    }
 
     @Override
     public void parseAndInvoke(String input) {

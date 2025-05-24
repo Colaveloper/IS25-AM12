@@ -24,7 +24,7 @@ public class CliAllShips extends CliElement {
             try {
                 CliShipBoard cliShipBoard = new CliShipBoard(model, color);
                 cliShipBoards.put(color, cliShipBoard);
-                cliShipBoard.addListener(this);
+                //cliShipBoard.addListener(this);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -41,7 +41,7 @@ public class CliAllShips extends CliElement {
             try {
                 CliShipBoard cliShipBoard = new CliShipBoard(model, color);
                 cliShipBoards.put(color, cliShipBoard);
-                cliShipBoard.addListener(this);
+                //cliShipBoard.addListener(this);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -52,7 +52,7 @@ public class CliAllShips extends CliElement {
             try {
                 CliComponent hand = new CliComponent(model, componentProperty);
                 handsMap.put(color, hand);
-                hand.addListener(this);
+                //hand.addListener(this);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -65,7 +65,7 @@ public class CliAllShips extends CliElement {
                     List<CliComponent> stashedComponents = new ArrayList<>();
                     for(ObjectProperty<Component> property : propertyList) {
                         CliComponent stashed = new CliComponent(model, property);
-                        stashed.addListener(this);
+                        //stashed.addListener(this);
                         stashedComponents.add(stashed);
                     }
                     stashedComponentsMap.put(color, stashedComponents);
@@ -78,17 +78,17 @@ public class CliAllShips extends CliElement {
     }
 
     @Override
-    public List<String> getNewDescription() throws IOException {
+    public List<String> getNewDescription() {
         List<String> description = new ArrayList<>();
 
         for (FourColors c : model.getPlayerToColor().values()) {
 
-            List<String> singleShipDescription = new ArrayList<>(cliShipBoards.get(c).getDescription());
+            List<String> singleShipDescription = new ArrayList<>(cliShipBoards.get(c).getNewDescription());
             List<String> handAndStashDescription = new ArrayList<>();
             List<String> singleStashedDescription = new ArrayList<>();
 
             if (handsMap != null) {
-                List<String> hand = new ArrayList<>(handsMap.get(c).getDescription());
+                List<String> hand = new ArrayList<>(handsMap.get(c).getNewDescription());
                 hand.add(" ");
                 handAndStashDescription = DescriptionUtils.borderAndTitle(hand, "hand");
             }
@@ -98,7 +98,7 @@ public class CliAllShips extends CliElement {
                 int i = 1;
                 for(CliComponent component : stashedComponentsMap.get(c)) {
                     singleStashedDescription.clear();
-                    singleStashedDescription.addAll(component.getDescription());
+                    singleStashedDescription.addAll(component.getNewDescription());
                     singleStashedDescription.add("  "+i);
                     DescriptionUtils.sideBySide(stashed, singleStashedDescription);
                     i++;

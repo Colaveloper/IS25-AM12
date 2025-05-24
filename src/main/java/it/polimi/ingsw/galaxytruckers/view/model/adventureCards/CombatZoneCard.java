@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.penalty.Penalty;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.view.enums.Level;
 
 import java.util.List;
 

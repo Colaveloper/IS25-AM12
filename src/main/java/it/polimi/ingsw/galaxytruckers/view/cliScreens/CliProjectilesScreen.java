@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.enums.ComponentType;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
+import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 import java.awt.*;
 import java.io.IOException;
@@ -19,21 +20,18 @@ public class CliProjectilesScreen extends CliScreen {
     String direction;
 
 
-    public CliProjectilesScreen(ClientModel model, ControllerToServer controller) {
-        super(model, controller);
+    public CliProjectilesScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+        super(model, controller, gameState);
 
         flightBoard = new CliFlightBoard(model);
-        flightBoard.addListener(this);
-
         allShips = new CliAllShips(model);
-        allShips.addListener(this);
     }
 
     @Override
-    public List<String> getNewDescription() throws IOException {
+    public void render() {
         List<String> output = new ArrayList<>();
-        output.addAll(flightBoard.getDescription());
-        output.addAll(allShips.getDescription());
+        output.addAll(flightBoard.getNewDescription());
+        output.addAll(allShips.getNewDescription());
 
         switch (model.getCurrentProjectile().direction()) {
             case 0:
@@ -66,19 +64,19 @@ public class CliProjectilesScreen extends CliScreen {
         return output;
     }
 
-
-    @Override
-    public boolean isLegalInput(String input) {
-        // check if input = number + space + number
-        if (!input.matches("\\d+ \\d+") || !input.matches("C")) return false;
-
-        // check if the point made from those numbers is selectable
-        String[] parts = input.split(" ");
-        int x = Integer.parseInt(parts[0]);
-        int y = Integer.parseInt(parts[1]);
-        Point p = new Point(x, y);
-        return model.getSelectablePoints().contains(p) && model.getSelectableBatteries().contains(p);
-    }
+//
+//    @Override
+//    public boolean isLegalInput(String input) {
+//        // check if input = number + space + number
+//        if (!input.matches("\\d+ \\d+") || !input.matches("C")) return false;
+//
+//        // check if the point made from those numbers is selectable
+//        String[] parts = input.split(" ");
+//        int x = Integer.parseInt(parts[0]);
+//        int y = Integer.parseInt(parts[1]);
+//        Point p = new Point(x, y);
+//        return model.getSelectablePoints().contains(p) && model.getSelectableBatteries().contains(p);
+//    }
 
     @Override
     public void parseAndInvoke(String input) {

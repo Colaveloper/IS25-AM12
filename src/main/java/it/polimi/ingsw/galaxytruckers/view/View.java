@@ -1,18 +1,22 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.view.screens.ScreenFactory;
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.ScreenFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
-import java.io.IOException;
+public abstract class View {
 
-public interface View {
-    // this is not an abstract class in order to let GuiView extend Application
-    void setModel(ClientModel model);
-    void setController(ClientController controller);
-    /**
-     * Provides to the user a contract to interact with the game
-     * @throws IOException
-     */
-    void setScreen(ScreenFactory screenFactory);
+    protected final ScreenFactory screenFactory;
+    protected final ClientModel model;
+    protected final ControllerToServer controller;
+
+    public View(ControllerToServer controller, ClientModel model) {
+        this.screenFactory = new ScreenFactory();
+        this.controller = controller;
+        this.model = model;
+    }
+
+    //todo generic method for creating screen for cli and gui
+    public abstract void setScreen(GameState gameState);
 }

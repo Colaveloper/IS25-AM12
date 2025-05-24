@@ -1,10 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,22 +18,13 @@ public class CliShipPieceChoiceScreen extends CliScreen {
     CliAllShips allShips;
     int numPieces;
 
-    public CliShipPieceChoiceScreen(ClientModel model, ClientController controller) {
-        super(model, controller);
+    public CliShipPieceChoiceScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+        super(model, controller, gameState);
 
         flightBoard = new CliFlightBoard(model);
-        flightBoard.addListener(this);
-
         allShips = new CliAllShips(model);
-        allShips.addListener(this);
 
         numPieces =  model.getSelectableShipPieces().size();
-    }
-
-    @Override
-    public boolean isLegalInput(String input) {
-        return Integer.parseInt(input) <= numPieces &&
-                Integer.parseInt(input) > 0;
     }
 
     @Override
@@ -42,11 +35,11 @@ public class CliShipPieceChoiceScreen extends CliScreen {
     }
 
     @Override
-    protected List<String> getNewDescription() throws IOException {
+    public void render() {
         List<String> output = new ArrayList<>();
 
-        output.addAll(flightBoard.getDescription());
-        output.addAll(allShips.getDescription());
+        output.addAll(flightBoard.getNewDescription());
+        output.addAll(allShips.getNewDescription());
 
         if (!model.shipIsValid()) {
             output.add("your ship is broken, choose a piece of ship to keep");
@@ -59,7 +52,5 @@ public class CliShipPieceChoiceScreen extends CliScreen {
         else{
             output.add("someone else has a broken ship, wait while they choose what piece to keep");
         }
-
-        return output;
     }
 }

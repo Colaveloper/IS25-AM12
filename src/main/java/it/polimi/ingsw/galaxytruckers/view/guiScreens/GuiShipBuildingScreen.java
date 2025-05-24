@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.view.screens.GuiScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiAllShips;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiFlightBoard;

@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -17,14 +18,10 @@ import java.util.List;
 
 public class CliNicknameChoiceScreen extends CliScreen {
 
-    public CliNicknameChoiceScreen(ClientModel model, ControllerToServer controller) {
-        super(model, controller);
+    public CliNicknameChoiceScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+        super(model, controller, gameState);
     }
 
-    @Override
-    public boolean isLegalInput(String input) {
-        return true;
-    }
 
     @Override
     public void parseAndInvoke(String input) {
@@ -38,12 +35,8 @@ public class CliNicknameChoiceScreen extends CliScreen {
     }
 
     @Override
-    public List<String> getNewDescription() throws IOException {
-        List<String> output = new ArrayList<>();
-
-        output.add("Successfully bound to the server ✅");
-        output.add("Please choose a unique nickname in order to proceed: ");
-
-        return output;
+    public void render() {
+        System.out.println("Successfully bound to the server ✅");
+        System.out.println("Please choose a unique nickname in order to proceed: ");
     }
 }

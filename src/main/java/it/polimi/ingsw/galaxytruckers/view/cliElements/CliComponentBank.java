@@ -21,7 +21,7 @@ public class CliComponentBank extends CliElement {
 
     private final boolean[] forecastDeck;
 
-    private CliComponentBank(ClientModel model, ComponentBank componentBank, boolean[] forecasts) throws IOException {
+    public CliComponentBank(ClientModel model) {
         super(model);
         this.componentBank = componentBank;
         this.forecastDeck = forecasts;
@@ -65,7 +65,7 @@ public class CliComponentBank extends CliElement {
     }
 
     @Override
-    public List<String> getNewDescription() throws IOException {
+    public List<String> getNewDescription() {
         String padding = "  ";
         StringBuilder row = new StringBuilder();
         List<String> description = new ArrayList<>();
@@ -98,24 +98,5 @@ public class CliComponentBank extends CliElement {
         }
 
         return description;
-    }
-
-
-    /////////////////////////////////////////// SINGLETON LOGIC ///////////////////////////////////////
-    private static CliComponentBank instance;
-
-    public static synchronized CliComponentBank getInstance(ClientModel model, ConfigFactory config) throws IOException {
-        if (instance == null) {
-            instance = new CliComponentBank(model, config);
-        }
-        return instance;
-    }
-
-    // Optional: a version without parameters once initialized
-    public static CliComponentBank getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException("CliComponentBank not initialized. Call getInstance(model) first.");
-        }
-        return instance;
     }
 }
