@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 
 import java.awt.*;
 import java.util.UUID;
@@ -36,4 +37,18 @@ public interface ControllerToServer {
     void placeComponent(Point point, int orientation);
 
     void reportError(String details);
+
+    void goNext();
+
+    void chooseShipPiece(int choice);
+
+    void activateComponent(Point point);
+
+    void removeComponent(Point point);
+
+    void useBattery(Point point);
+
+    void initializeCabin(Point point, CrewType crewType);
+
+    void placeShipOnFlightboard(int startingPosition);
 }

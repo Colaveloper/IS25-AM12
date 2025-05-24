@@ -168,8 +168,8 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     }
 
     @Override
-    public void showShipPieces(String playerName, List<Set<Point>> shipPieces) {
-        submitUpdateTask(() -> remoteClient.showShipPieces(playerName, shipPieces));
+    public void showShipPieces(Map<String, List<Set<Point>>> brokenShips) {
+        submitUpdateTask(() -> remoteClient.showShipPieces(brokenShips));
     }
 
     @Override
@@ -223,28 +223,38 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     }
 
     @Override
-    public void notifySelection(String playerName, List<Point> selectablePoints) {
-        submitUpdateTask(() -> remoteClient.notifySelection(playerName, selectablePoints));
+    public void notifySelection(String playerName, List<Point> selectablePoints, List<Point> batteries) {
+        submitUpdateTask(() -> remoteClient.notifySelection(playerName, selectablePoints, batteries));
     }
 
     @Override
     public void notifyPlanetChoice(String playerName, int planetId, List<Point> cargoPositions) {
-        submitUpdateTask(() -> remoteClient.notifyPlanetChoice(playerName,planetId,cargoPositions));
+        submitUpdateTask(() -> remoteClient.notifyLandOnPlanet(playerName,planetId));
     }
 
     @Override
-    public void updateGoodsBuffer(GoodsType type) {
-        submitUpdateTask(() -> remoteClient.updateGoodsBuffer(type));
+    public void updateGoodsBuffer(boolean adding, GoodsType type) {
+        submitUpdateTask(() -> remoteClient.updateGoodsBuffer(adding, type));
     }
 
     @Override
-    public void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) {
-        submitUpdateTask(() -> remoteClient.showProjectile(projectileType,direction,roll,selectablePoints,batteries));
+    public void showProjectile(String playerName, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) {
+        submitUpdateTask(() -> remoteClient.showProjectile(playerName,projectileType,direction,roll,selectablePoints,batteries));
     }
 
     @Override
     public void showFinalScores(Map<String, Integer> playerToScore) {
         submitUpdateTask(() -> remoteClient.showFinalScores(playerToScore));
+    }
+
+    @Override
+    public void notifyComponentActivation(String playerName, Point point) {
+        submitUpdateTask(() -> remoteClient.notifyComponentActivation(playerName, point));
+    }
+
+    @Override
+    public void notifyAddGoods(String playerName, Map<GoodsType, Integer> goods, List<Point> cargos) {
+        submitUpdateTask(() -> remoteClient.notifyAddGoods(playerName,goods,cargos));
     }
 
     @Override

@@ -63,7 +63,7 @@ class StarDustCardTest {
         }
 
 
-        flightBoard = new FlightBoard(null) {
+        flightBoard = new FlightBoard() {
             @Override
             protected int getLoopLength() {
                 return 0;

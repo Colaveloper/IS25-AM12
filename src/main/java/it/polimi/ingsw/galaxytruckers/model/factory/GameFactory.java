@@ -9,11 +9,10 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
 import java.io.IOException;
-import java.util.Set;
 
 public abstract class GameFactory {
     public abstract Deck createDeck(Game game) throws IOException;
-    public abstract FlightBoard createFlightBoard(Set<ShipBoard> allShips);
+    public abstract FlightBoard createFlightBoard(int shipsN);
     public abstract ShipBoard createShipBoard(GameColor color);
     public abstract GameState createFirstGameState();
 

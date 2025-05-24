@@ -105,7 +105,7 @@ class SabotageCardTest {
         }
 
 
-        flightBoard = new FlightBoard(null) {
+        flightBoard = new FlightBoard() {
             @Override
             protected int getLoopLength() {
                 return 0;
@@ -128,7 +128,7 @@ class SabotageCardTest {
             }
         };
 
-        largerFlightBoard = new FlightBoard(null) {
+        largerFlightBoard = new FlightBoard() {
             @Override
             protected int getLoopLength() {
                 return 0;

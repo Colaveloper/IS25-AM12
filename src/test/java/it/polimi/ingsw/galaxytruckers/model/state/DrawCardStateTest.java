@@ -29,7 +29,7 @@ class DrawCardStateTest {
         game = new Game(Level.SECOND);
         ship1 = new SecondShipBoard(GameColor.RED);
         ship2 = new SecondShipBoard(GameColor.BLUE);
-        flightBoard = new SecondFlightBoard(Set.of(ship1, ship2)){
+        flightBoard = new SecondFlightBoard(2){
             @Override
             public List<ShipBoard> getOrderedShips(){
                 return List.of(ship1, ship2);

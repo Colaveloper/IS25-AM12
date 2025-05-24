@@ -46,7 +46,7 @@ class MeteorSwarmCardTest {
             }
         };
         ships = new ArrayList<>(List.of(ship1, ship2));
-        flightBoard = new FlightBoard(null) {
+        flightBoard = new FlightBoard() {
 
             @Override
             public List<ShipBoard> getOrderedShips() {

@@ -160,7 +160,19 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 
     @Override//Tommy approved
     public void notifyCabinUpdate(String nickname, Point position, int crew, CrewType crewType) {
+        if(nickname.equals(model.getMyNickname()) && crewType!= CrewType.HUMAN) {
+            runAndInterceptIOE(()->model.placeAliens(crewType, position));//happens only in building
+        }
         runAndInterceptIOE(()->model.setCabinStats(nickname, position, crewType, crew));
+    }
+
+    @Override//called once at the start of the phase
+    public void notifyCrewInitialization(Map<String, Map<CrewType, List<Point>>> playerToCabin) {
+        if(playerToCabin.containsKey(model.getMyNickname())){
+            model.setIsValid(false);
+            model.setUnplacedCrew(playerToCabin.get(model.getMyNickname()));
+        }
+        view.setScreen(new CrewInitialization());
     }
 
 
@@ -172,22 +184,40 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     }
 
     @Override
-    public void notifyComponentsRemoval(String nickname, List<Point> positionPoints) {
+    public void notifyComponentRemoval(String playerName, Point position) {
+        runAndInterceptIOE(()->model.removeComponent(position, playerName));
+    }
+
+    @Override
+    public void notifyShipPieceRemoval(String nickname, List<Point> positionPoints) {//use ONLY for disconnected ship
+        if(model.isMyNickname(nickname)) {
+            model.setIsValid(true);
+        }
+        model.resetAllSelections(nickname);
         for (Point p : positionPoints) {
             runAndInterceptIOE(()->model.removeComponent(p, nickname));
         }
     }
 
     @Override
-    public void showShipPieces(String nickname, List<Set<Point>> shipPieces) {
-        model.setSelectableShipPieces(nickname, shipPieces);
-        model.setIsValid(!model.isMyNickname(nickname));
+    public void showShipPieces(Map<String, List<Set<Point>>> brokenShips) {
+        for(String nickname : brokenShips.keySet()) {
+            model.setSelectableShipPieces(nickname, brokenShips.get(nickname));
+            if(model.isMyNickname(nickname)) {
+                model.setIsValid(false);
+            }
+        }
         view.setScreen(new ShipPieceChoiceScreen());
     }
 
     @Override
     public void notifyInvalidShipsUpdate(List<String> invalidPlayers) {
         model.setIsValid(!invalidPlayers.contains(model.getMyNickname()));
+        for(String playerName : model.getNicknames()) {
+            if(!invalidPlayers.contains(playerName)) {
+                model.resetAllSelections(playerName);
+            }
+        }
         view.setScreen(new ValidationScreen());
     }
 
@@ -203,11 +233,21 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void notifyNewCard(int cardId) {
         runAndInterceptIOE(()->model.setCurrentCard(cardId));
         model.setCurrentPlayerNickname(model.getCurrentLeader());
-//        view.setScreen(new NewCardScreen()); // TODO: restore
+        view.setScreen(new NewCardScreen());
     }
 
-    public void notifySelection(String nickname, List<Point> cannonsPositions) {
+    @Override
+    public void notifyComponentActivation(String playerName, Point position){
+        runAndInterceptIOE(()->model.activateComponent(playerName, position));
 
+    }
+
+    @Override
+    public void notifySelection(String nickname, List<Point> cannonsPositions, List<Point> batteryPositions) {//todo add batteries list
+        model.setCurrentPlayerNickname(nickname);
+        model.setSelectablePoints(nickname, cannonsPositions);
+        model.setSelectableBatteries(nickname, batteryPositions);
+        view.setScreen(new PointSelectionScreen());
     }
 
     @Override
@@ -226,22 +266,23 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         runAndInterceptIOE(()->model.setGoods(nickname, position, list));
     }
 
-
-    // first time goods are shown on screen
-//    @Override
-//    public void showPlaceGoods() {
-////        view.setScreen(new GoodsScreen()); // TODO: restore
-//    }
-
     // planetIndex is an index and starts from 0, UI listing on screen starts from 1
     @Override
-    public void choosePlanet(int planetId, List<Point> cargoPositions) {
-        model.setPlanetGoodBuffer(planetId);
+    public void notifyLandOnPlanet(String nickname, int planetId) {
+        //todo block planet with that id
+    }
+
+    //first call in place goods phase
+    @Override
+    public void notifyGrabGoodsState(String nickname, Map<GoodsType, Integer> goods, List<Point> cargoPositions){
+        //todo setup goodsbuffer
+        model.setSelectablePoints(nickname, cargoPositions);
+        view.setScreen(new GoodsScreen());
     }
 
     @Override
-    public void updateGoodsBuffer(GoodsType type) {
-        runAndInterceptIOE(()->model.updateGoodsBuffer(type));
+    public void updateGoodsBuffer(boolean adding, GoodsType type) {
+        runAndInterceptIOE(()->model.updateGoodsBuffer(adding, type));
     }
 
     // set current player for any action that involves a decision
@@ -252,9 +293,10 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 
     // called for each projectile
     @Override
-    public void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) {
+    public void showProjectile(String nickname, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) {
         model.setProjectile(projectileType, direction, roll);
-//        view.setScreen(new ProjectilesScreen()); // TODO: restore
+        model.setCurrentPlayerNickname(nickname);
+        view.setScreen(new ProjectileScreen());
     }
 
     // UPDATE FOR ENDGAME
@@ -266,13 +308,78 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     }
 
 
-
+//--------------------------------------------SERVER CALLS-------------------------------------------------------------------
 
 
     @Override
     public void reportError(String details) {
         System.out.println("Error: " + details);
         // view.show(ChosenStrategy)
+    }
+
+    @Override
+    public void goNext() {
+        try {
+            server.goNext(model.getMyNickname());
+        } catch (IllegalArgumentException e) {
+            reportError("could not go on with card");
+        }
+    }
+
+    @Override
+    public void chooseShipPiece(int choice) {
+        try {
+            server.chooseShipPiece(choice);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't choose ship piece");
+        }
+    }
+
+    @Override
+    public void activateComponent(Point point) {
+        try {
+            server.activateComponent(point);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't activate component");
+        }
+    }
+
+
+
+    @Override
+    public void removeComponent(Point point) {
+        try {
+            server.removeComponent(point);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't remove ship piece");
+        }
+    }
+
+    @Override
+    public void useBattery(Point point) {
+        try {
+            server.useBattery(point);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't spend battery");
+        }
+    }
+
+    @Override
+    public void initializeCabin(Point point, CrewType crewType) {
+        try {
+            server.initializeCabin(point, crewType);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't initialize cabin");
+        }
+    }
+
+    @Override
+    public void placeShipOnFlightboard(int startingPosition) {
+        try {
+            server.placeShipOnFlightBoard(startingPosition);
+        } catch (IllegalArgumentException e) {
+            reportError("couldn't place on flightboard");
+        }
     }
 
     @Override

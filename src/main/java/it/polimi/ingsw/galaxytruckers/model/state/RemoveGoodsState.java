@@ -29,9 +29,9 @@ public class RemoveGoodsState extends AdventureState {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
+        computeMostValuableGood();
         if (mostValuableGood != null) {
             shipBoard.removeGoods(position, mostValuableGood, 1);
-            computeMostValuableGood();
         } else {
             shipBoard.useBatteries(position, 1);
         }

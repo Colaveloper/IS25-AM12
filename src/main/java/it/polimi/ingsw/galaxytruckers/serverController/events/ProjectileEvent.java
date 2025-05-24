@@ -12,9 +12,9 @@ public record ProjectileEvent(String playerName, ProjectileType projectileType, 
     public static ProjectileEvent from(ShipBoard shipBoard, Projectile projectile) {
         return new ProjectileEvent(
                 Player.getPlayer(shipBoard).getNickname(),
-                null, //TODO: add projectile type as a shared enum and bind it to server model classes
-                0, //TODO: add getter for projectile direction
-                0, //TODO: add getter for projectile dice roll
+                projectile.getProjectileType(),
+                projectile.getDirection(),
+                projectile.getDiceRoll(),
                 projectile.getActivatablePoints(shipBoard).stream().toList(),
                 shipBoard.getBatteries().keySet().stream().toList()
         );

@@ -16,7 +16,7 @@ class SecondDeckTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        flightBoard = new SecondFlightBoard(Set.of());
+        flightBoard = new SecondFlightBoard(0);
         game = new Game(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoard;

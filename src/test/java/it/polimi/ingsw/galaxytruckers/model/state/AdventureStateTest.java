@@ -31,7 +31,7 @@ class AdventureStateTest {
     void giveUpThrowsExceptionWhenNotInSecondLevel(){
         game = new Game(Level.TEST);
         testAdventureState.setGame(game);
-        assertThrows(IllegalStateException.class, () -> testAdventureState.giveUp(ship1));
+        assertThrows(UnsupportedOperationException.class, () -> testAdventureState.giveUp(ship1));
     }
 
     @Test
@@ -49,7 +49,7 @@ class AdventureStateTest {
     @Test
     void giveUpAddsShipToGivenUpShips() throws IOException {
         game = new Game(Level.SECOND);
-        flightBoard = new SecondFlightBoard(Set.of(ship1));
+        flightBoard = new SecondFlightBoard(1);
         game.setFlightBoard(flightBoard);
         //game.start();
         testAdventureState.setGame(game);

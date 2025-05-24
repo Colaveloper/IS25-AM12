@@ -26,11 +26,14 @@ public class ClientModel {
     private final Set<Point> shipArea;
     private final Map<GameColor, List<List<ObjectProperty<Component>>>> ships;
     private final BiMap<String, GameColor> playerToColor;
-    private final ObservableList<Point> selectablePoints;
+    private List<Point> selectablePoints;
+    private List<Point> selectableBatteries;
     private final ObservableMap<GameColor, Map<StatType, Integer>> stats;
+
 
     // BUILDING
     private Point upLeft; // the upper-left point of the ship-area
+    private Point bottomRight;
     private final ListProperty<Component> revealedComponents;
     private final IntegerProperty coveredComponentN;
     private final Map<GameColor, List<ObjectProperty<Component>>> stashedComponents;
@@ -39,6 +42,7 @@ public class ClientModel {
     private final List<BooleanProperty> forecastAvailability;
     private List<Set<Point>> shipPieces;
     private boolean isValid;
+    private Map<CrewType, List<Point>> unplacedCrew;
 
     private final Map<GameColor, UnweldedComponent> unweldedComponent;
     // FLIGHTBOARD
@@ -50,6 +54,7 @@ public class ClientModel {
     // FLIGHT
     private int currentCardId;
     private int remainingCards;
+    private int batteryBalance;
 
     // PLANETS
 //    private final List<Optional<String>> landedPlayers;
@@ -70,9 +75,9 @@ public class ClientModel {
         playerToColor = HashBiMap.create();
         shipPieces = new ArrayList<>();
         ships = new SimpleMapProperty<>(FXCollections.observableMap(new HashMap<>()));
-        selectablePoints = FXCollections.observableArrayList();
         coveredComponentN = new SimpleIntegerProperty();
         revealedComponents = new SimpleListProperty<>(FXCollections.observableArrayList());
+        selectablePoints = new ArrayList<>();
         forecastDeck = new SimpleListProperty<>(FXCollections.observableArrayList(null, null, null));
         forecastAvailability = new SimpleListProperty<>(FXCollections.observableArrayList(
                 new SimpleBooleanProperty(true),
@@ -87,7 +92,7 @@ public class ClientModel {
         stats = FXCollections.observableHashMap();
         planets = FXCollections.observableArrayList();
         goods = FXCollections.observableArrayList();
-
+        batteryBalance = 0;
     }
 
     // SETUP PHASE
@@ -128,6 +133,7 @@ public class ClientModel {
 
         // Save top-left point
         upLeft = new Point(minX, minY);
+        bottomRight = new Point(maxX, maxY);
 
         playerToColor.forEach((_, c) -> {
 
@@ -159,6 +165,8 @@ public class ClientModel {
     // SHIP BUILDING PHASE
 
         // COMPONENT BANK
+
+
 
     public void addRevealedComponent(int revealedComponentId) throws IOException {
         revealedComponents.addLast(new Component(revealedComponentId));
@@ -274,6 +282,34 @@ public class ClientModel {
         ships.get(playerToColor.get(nickname)).get(p.y-upLeft.y).get(p.x- upLeft.x).get().setStat(crewSize);
     }
 
+    //happens only in building phase, removes the alien from the available to be placed
+    public void placeAliens(CrewType crewType, Point position) throws IOException {
+        resetAllSelections(myNickname);
+        unplacedCrew.remove(crewType);
+        ships.get(playerToColor.get(myNickname)).get(position.y-upLeft.y).get(position.x- upLeft.x).get().setCrewType(crewType);
+        ships.get(playerToColor.get(myNickname)).get(position.y-upLeft.y).get(position.x- upLeft.x).get().setStat(1);
+    }
+
+    public void setUnplacedCrew(Map<CrewType, List<Point>> unplacedCrew) {
+        this.unplacedCrew = unplacedCrew;
+    }
+
+    public Map<CrewType, List<Point>> getUnplacedCrew() {
+        return unplacedCrew;
+    }
+
+    public CrewType getUnplacedCrewType() {
+        if(unplacedCrew.containsKey(CrewType.PURPLE)){
+            return CrewType.PURPLE;
+        } else if (unplacedCrew.containsKey(CrewType.BROWN)) {
+            return CrewType.BROWN;
+        }
+        else {
+            setIsValid(true);// no humans mean game lost anyway
+            return CrewType.HUMAN;
+        }
+    }
+
         //  FORECAST
 
     public void freeForecast(int deckIndex) throws IOException {
@@ -327,7 +363,7 @@ public class ClientModel {
     }
 
     // remove good from the buffer
-    public void updateGoodsBuffer(GoodsType type) throws IOException {
+    public void updateGoodsBuffer(boolean adding, GoodsType type) throws IOException {
         goodsBuffer.remove(type);
     }
 
@@ -350,6 +386,10 @@ public class ClientModel {
 //        goodsBuffer = new GoodsBuffer(currentCard); // TODO: RESTORE
     }
 
+    public int getCurrentCard() {
+        return currentCardId;
+    }
+
     public void rotateCurrentComponentLeft() {
         if (unweldedComponent.get(playerToColor.get(myNickname)).getIsHand()) {
             hands.get(playerToColor.get(myNickname)).get().rotateLeft();
@@ -361,13 +401,62 @@ public class ClientModel {
 
         // OTHER
 
-    public void setSelectablePoints(List<Point> selectablePoints) {
-        List<List<ObjectProperty<Component>>> myShip = ships.get(playerToColor.get(myNickname));
-        for (int i = 0, y = upLeft.y; i < myShip.size(); i++, y++) {
-            for (int j = 0, x = upLeft.x; j<myShip.getFirst().size(); j++, x++) {
-                myShip.get(i).get(j).get().isSelectableProperty().set(
-                        selectablePoints.contains(new Point(x, y))
-                );
+    public void setSelectablePoints(String nickname, List<Point> selectablePoints) {
+        this.selectablePoints = selectablePoints;
+        for (Point p : selectablePoints) {
+            getComponent(nickname, p).setShipPart(1);
+        }
+
+//        List<List<ObjectProperty<Component>>> myShip = ships.get(playerToColor.get(myNickname));
+//        for (int i = 0, y = upLeft.y; i < myShip.size(); i++, y++) {
+//            for (int j = 0, x = upLeft.x; j<myShip.getFirst().size(); j++, x++) {
+//                myShip.get(i).get(j).get().isSelectableProperty().set(
+//                        selectablePoints.contains(new Point(x, y))
+//                );
+//            }
+//        }
+    }
+
+    public void activateComponent(String nickname, Point p) throws IOException {
+        getComponent(nickname, p).setShipPart(3);
+        if(isMyNickname(nickname)) {
+            if (getComponent(nickname, p).getType() == ComponentType.BATTERY) {
+                batteryBalance += 1;
+            }
+            else{
+                batteryBalance -= 1;
+            }
+        }
+    }
+
+    public int getBatteryBalance() {
+        return batteryBalance;
+    }
+
+
+    public List<Point> getSelectablePoints() {
+        return selectablePoints;
+    }
+
+    public void setSelectableBatteries(String nickname, List<Point> selectableBatteries) {
+        if (nickname.equals(myNickname)) {
+            this.selectableBatteries = selectableBatteries;
+        }
+        for (Point p : selectablePoints) {
+            getComponent(nickname, p).setShipPart(2);
+        }
+    }
+
+    public List<Point> getSelectableBatteries() {
+        return selectableBatteries;
+    }
+
+    public void resetAllSelections(String nickname) {
+        selectablePoints.clear();
+        isValid = true;
+        for (List<ObjectProperty<Component>> list : ships.get(playerToColor.get(nickname))){
+            for(ObjectProperty<Component> p : list){
+                p.get().setShipPart(0);
             }
         }
     }
@@ -400,10 +489,6 @@ public class ClientModel {
                 .orElse(null);
     }
 
-    public List<Point> getSelectablePoints() {
-        return selectablePoints;
-    }
-
     // GETTERS (Javafx properties used only for attributes that change over time)
 
     public Set<String> getNicknames() {
@@ -432,8 +517,16 @@ public class ClientModel {
         return ships;
     }
 
+    public List<List<ObjectProperty<Component>>> getMyShip() {
+        return ships.get(playerToColor.get(myNickname));
+    }
+
     public Point getUpLeft() {
         return upLeft;
+    }
+
+    public Point getBottomRight() {
+        return bottomRight;
     }
 
     public boolean isHandEmpty() {

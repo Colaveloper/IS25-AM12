@@ -38,7 +38,7 @@ class FlightBoardTest {
             ship2 = new TestShipBoard(GameColor.RED);
             ship3 = new TestShipBoard(GameColor.GREEN);
             allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
-            flightBoard = new TestFlightBoard(Set.of(ship1, ship2, ship3));
+            flightBoard = new TestFlightBoard(3);
         }
 
         @Test
@@ -78,7 +78,7 @@ class FlightBoardTest {
             ship2 = new SecondShipBoard(GameColor.RED);
             ship3 = new SecondShipBoard(GameColor.GREEN);
             allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
-            flightBoard = new SecondFlightBoard(Set.of(ship1, ship2, ship3));
+            flightBoard = new SecondFlightBoard(3);
             legalStartingPositions = new ArrayList<>(SecondFlightBoard.startingPositions
                     .subList(0, allShips.size()));
         }

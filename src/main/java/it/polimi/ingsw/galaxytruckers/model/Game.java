@@ -49,7 +49,7 @@ public class Game {
      * cards from disk
      */
     public void start() throws IOException{
-        this.flightBoard = gameFactory.createFlightBoard(shipBoards);
+        this.flightBoard = gameFactory.createFlightBoard(shipBoards.size());
         this.deck = gameFactory.createDeck(this);
         setCurrentState(gameFactory.createFirstGameState());
     }

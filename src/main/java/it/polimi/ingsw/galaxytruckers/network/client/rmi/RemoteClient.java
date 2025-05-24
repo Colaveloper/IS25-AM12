@@ -136,10 +136,9 @@ public interface RemoteClient extends Remote {
      * Signals to the client that their ship is not connected and that they should
      * choose one of the given pieces to keep
      *
-     * @param playerName
-     * @param shipPieces a list containing the ship's connected subsets
+     * @param
      */
-    void showShipPieces(String playerName, List<Set<Point>> shipPieces) throws RemoteException;
+    void showShipPieces(Map<String, List<Set<Point>>> brokenShips) throws RemoteException;
 
     /**
      * Signals to the client that the list of valid ships has changed
@@ -202,15 +201,19 @@ public interface RemoteClient extends Remote {
 
     void notifyShipPieceRemoval(String playerName, List<Point> positions) throws RemoteException;
 
-    void notifySelection(String playerName, List<Point> selectablePoints) throws RemoteException;
+    void notifySelection(String playerName, List<Point> selectablePoints, List<Point> batteries) throws RemoteException;
 
-    void notifyPlanetChoice(String playerName, int planetId, List<Point> cargoPositions) throws RemoteException;
+    void notifyLandOnPlanet(String playerName, int planetId) throws RemoteException;
 
-    void updateGoodsBuffer(GoodsType type) throws RemoteException;
+    void updateGoodsBuffer(boolean adding, GoodsType type) throws RemoteException;
 
-    void showProjectile(ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws RemoteException;
+    void showProjectile(String nickname, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) throws RemoteException;
 
     void showFinalScores(Map<String, Integer> playerToScore) throws RemoteException;
+
+    void notifyComponentActivation(String playerName, Point point) throws RemoteException;
+
+    void notifyAddGoods(String playerName, Map<GoodsType, Integer> goods, List<Point> cargos) throws RemoteException;
 
     void notifyPlayerDisconnection(String playerName) throws RemoteException;
 

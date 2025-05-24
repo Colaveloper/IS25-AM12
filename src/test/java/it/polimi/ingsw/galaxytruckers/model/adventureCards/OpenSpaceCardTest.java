@@ -45,7 +45,7 @@ class OpenSpaceCardTest {
             }
         };
         ships.addAll(List.of(ship1, ship2));
-        FlightBoard flightBoardStub = new FlightBoard(null) {
+        FlightBoard flightBoardStub = new FlightBoard() {
             @Override
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return false;
@@ -98,7 +98,7 @@ class OpenSpaceCardTest {
             }
         };
         ships.addAll(List.of(ship1, ship2));
-        FlightBoard flightBoardStub = new FlightBoard(null) {
+        FlightBoard flightBoardStub = new FlightBoard() {
             @Override
             public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
                 return false;

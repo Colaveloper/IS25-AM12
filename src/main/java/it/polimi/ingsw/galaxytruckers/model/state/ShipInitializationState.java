@@ -4,7 +4,6 @@ import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Cabin;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.serverController.events.SelectionPointsEvent;
 
 import java.awt.*;
 import java.util.*;
@@ -27,9 +26,6 @@ public class ShipInitializationState extends GameState {
             }
         }
         //TODO: add logic to notify the client that they should initialize cabins
-        for (ShipBoard shipBoard : shipRelevantCabins.keySet()) {
-            game.getEventListener().notifySelectionPointEvent(shipBoard,shipRelevantCabins.get(shipBoard).stream().toList());
-        }
         tryStateTransition();
     }
 
@@ -46,7 +42,6 @@ public class ShipInitializationState extends GameState {
                 tryStateTransition();
             } else {
                 shipRelevantCabins.put(shipBoard, updatedCabins);
-                game.getEventListener().notifySelectionPointEvent(shipBoard,updatedCabins.stream().toList());
             }
         } else {
             throw new IllegalArgumentException("The specified cabin does not need to be initialized");
@@ -60,7 +55,6 @@ public class ShipInitializationState extends GameState {
                 .filter(p -> cabins.get(p).getNumResidents() == 0)
                 .forEach(p -> shipBoard.initializeCabin(p,CrewType.HUMAN));
         shipRelevantCabins.remove(shipBoard);
-        game.getEventListener().notifySelectionPointEvent(shipBoard,new ArrayList<>());
     }
 
     private void tryStateTransition() {

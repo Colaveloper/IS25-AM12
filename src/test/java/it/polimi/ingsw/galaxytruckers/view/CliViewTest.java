@@ -56,9 +56,9 @@
 //    public void showAllScreens() throws Exception {
 //        new NicknameChoiceScreen().showCLI(model);
 //        System.out.println("_______________________________________________________________");
-////        new NewCardScreen().showCLI(model);
+////        new CliNewCardScreen().showCLI(model);
 //        System.out.println("_______________________________________________________________");
-////        new ProjectilesScreen().showCLI(model);
+////        new CliProjectilesScreen().showCLI(model);
 //        System.out.println("_______________________________________________________________");
 //        new CliShipBuildingScreen(model).showCLI(model);
 //    }

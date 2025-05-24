@@ -38,7 +38,7 @@ class AbandonedShipCardTest {
         for (int i = 0; i < ships.size(); i++) {
             shipPlaces.put(ships.get(i), 10-i);
         }
-        FlightBoard flightBoard = new FlightBoard(null) {
+        FlightBoard flightBoard = new FlightBoard() {
             @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return shipPlaces;
