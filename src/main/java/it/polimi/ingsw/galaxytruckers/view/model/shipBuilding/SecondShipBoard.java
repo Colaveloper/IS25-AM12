@@ -35,11 +35,13 @@ public class SecondShipBoard extends ShipBoard {
             new Point(10, 8),
             new Point(10, 9)));
 
-    private final List<Component> stashedComponents;
+    private final List<ShipBoardCell> stashedComponents;
+    private int numStashed;
 
     public SecondShipBoard(FourColors color) {
         super(color);
-        this.stashedComponents = new ArrayList<>();
+        this.stashedComponents = List.of(new ShipBoardCell(), new ShipBoardCell());
+        numStashed = 0;
     }
 
     @Override
@@ -50,16 +52,24 @@ public class SecondShipBoard extends ShipBoard {
     //Stashing methods
 
     public void stashComponent() {
-        stashedComponents.add(lastComponent);
+        stashedComponents.get(numStashed).setComponent(lastComponent);
+        numStashed++;
         resetLastComponent();
+        notifyObservers();
     }
 
     public void grabStashedComponent(int index) {
-        setLastComponent(stashedComponents.remove(index));
+        Component grabbedComponent = stashedComponents.get(index).getComponent();
+        for (int i = index + 1; i < stashedComponents.size(); i++) {
+            stashedComponents.get(i-1).setComponent(stashedComponents.get(i).getComponent());
+        }
+        numStashed--;
+        stashedComponents.get(numStashed).removeComponent();
+        offerComponent(grabbedComponent);
     }
 
     @Override
-    public List<Component> getStashedComponents() {
+    public List<ShipBoardCell> getStashedComponents() {
         return stashedComponents;
     }
 }

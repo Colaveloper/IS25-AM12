@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-public class ShipCorrectionState extends GameState {
+public final class ShipCorrectionState extends GameState {
     Set<ShipBoard> validShipBoards;
     Map<ShipBoard, List<Set<Point>>> shipPieces;
 

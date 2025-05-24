@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
-import it.polimi.ingsw.galaxytruckers.view.model.ComponentRegistry;
+import it.polimi.ingsw.galaxytruckers.view.controller.ComponentRegistry;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -11,7 +11,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class ShipBuildingState extends GameState {
+public sealed abstract class ShipBuildingState extends GameState permits
+        SecondShipBuildingState,
+        TestShipBuildingState
+{
     private final ComponentBank componentBank;
     protected final Set<ShipBoard> completedShipBoards;
 

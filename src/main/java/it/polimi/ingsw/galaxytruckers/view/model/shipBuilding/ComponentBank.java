@@ -5,14 +5,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
+import it.polimi.ingsw.galaxytruckers.view.Observer;
+import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class ComponentBank {
+public class ComponentBank implements ModelObservable {
     private int coveredComponentsN;
     private final List<Component> uncoveredComponents;
+
+    private final List<Observer> observers = new ArrayList<>();
 
     public ComponentBank(int coveredComponentsN) {
         this.coveredComponentsN = coveredComponentsN;
@@ -37,5 +41,15 @@ public class ComponentBank {
 
     public int getCoveredComponentsN() {
         return coveredComponentsN;
+    }
+
+    @Override
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
+        observers.remove(o);
     }
 }

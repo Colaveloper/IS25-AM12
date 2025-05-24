@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RemoveCrewState extends AdventureState {
+public final class RemoveCrewState extends AdventureState {
     int crewSacrifice;
     ShipBoard shipBoard;
 

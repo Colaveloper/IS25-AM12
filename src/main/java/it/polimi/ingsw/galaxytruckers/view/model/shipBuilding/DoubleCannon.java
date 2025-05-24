@@ -28,6 +28,7 @@ public final class DoubleCannon extends Cannon implements Activatable {
     @Override
     public void setActive(boolean active) {
         this.active = active;
+        notifyObservers();
     }
 
 }

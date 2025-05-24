@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class ChoosePlanetState extends AdventureState {
+public final class ChoosePlanetState extends AdventureState {
     private static final List<StateActions> availableActions = List.of(
             StateActions.CHOOSE_PLANET,
             StateActions.GO_NEXT

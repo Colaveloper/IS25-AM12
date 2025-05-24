@@ -43,6 +43,7 @@ public class Hourglass {
     public void flip() {
         long timeLeft = duration;
         isRunning.set(true);
+        flipsLeft--;
         ScheduledFuture<?> res = scheduler.scheduleAtFixedRate(() -> {
             if (timeLeft > 0) {
                 if (timeLeft%10 == 0) System.out.println("Time left: " + timeLeft + " seconds");

@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrawCardState extends AdventureState {
+public final class DrawCardState extends AdventureState {
     private final static List<StateActions> availableActions = List.of(
             StateActions.DRAW_CARD
     );

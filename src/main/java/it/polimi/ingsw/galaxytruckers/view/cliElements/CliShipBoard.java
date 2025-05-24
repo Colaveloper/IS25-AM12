@@ -3,23 +3,27 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CliShipBoard extends CliElement {
 
+    private final ShipBoard shipBoard;
     private final List<List<CliComponent>> componentMatrix; // ALL FINAL
     Point upLeft;
     private final FourColors color;
 
-    public CliShipBoard(ClientModel model, FourColors color) throws IOException {
+    public CliShipBoard(ClientModel model, ShipBoard shipBoard) throws IOException {
         super(model);
-        this.color = color;
-        upLeft = model.getUpLeft();
+        this.shipBoard = shipBoard;
+        this.color = shipBoard.getColor();
+        upLeft = getUpLeft(shipBoard.getShipArea());
         componentMatrix = model.getShips().get(color).stream()
                 .map(innerList -> innerList.stream()
                         .map(componentProperty -> {
@@ -65,5 +69,11 @@ public class CliShipBoard extends CliElement {
                 color.getDescription()+" "+model.getPlayerToColor().inverse().get(color)
         );
         return result;
+    }
+
+    private Point getUpLeft(Set<Point> points) {
+        int xMin = points.stream().mapToInt(point -> point.x).min().orElse(0);
+        int yMin = points.stream().mapToInt(point -> point.y).min().orElse(0);
+        return new Point(xMin, yMin);
     }
 }

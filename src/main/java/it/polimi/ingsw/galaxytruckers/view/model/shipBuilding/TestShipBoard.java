@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 
 import java.awt.*;

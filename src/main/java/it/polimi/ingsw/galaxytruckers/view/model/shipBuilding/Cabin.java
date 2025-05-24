@@ -30,10 +30,12 @@ public final class Cabin extends Component {
             case PURPLE, BROWN -> 1;
             case null -> throw new IllegalArgumentException("CrewType is null");
         };
+        notifyObservers();
     }
 
     public void loseCrew() {
         this.numResidents--;
+        notifyObservers();
     }
 
 }

@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.Set;
 
-public class HandleProjectileState extends ActivateState {
+public final class HandleProjectileState extends ActivateState {
     private final Projectile projectile;
 
     public HandleProjectileState(ShipBoard shipBoard, Projectile projectile, Set<Point> availablePositions) {

@@ -1,14 +1,17 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.view.Observer;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.*;
 
-public class FlightBoard {
+public class FlightBoard implements ModelObservable{
     private final Map<ShipBoard, Integer> shipToPlace;
     private final int loopLength;
     private final List<Integer> startingPositions;
+
+    private final List<Observer> observers = new ArrayList<>();
 
     public FlightBoard(List<Integer> startingPositions, int loopLength) {
         this.shipToPlace = new HashMap<>();
@@ -31,11 +34,12 @@ public class FlightBoard {
      */
     public void setShipPosition(ShipBoard shipBoard, int position) {
         shipToPlace.put(shipBoard, position);
+        notifyObservers();
     }
 
     /**
      * @return the flightboard's length*/
-    protected int getLoopLength() {
+    public int getLoopLength() {
         return loopLength;
     }
 
@@ -46,6 +50,7 @@ public class FlightBoard {
      */
     public void removeShip(ShipBoard shipBoard) {
         shipToPlace.remove(shipBoard);
+        notifyObservers();
     }
 
     /**
@@ -54,6 +59,22 @@ public class FlightBoard {
      * */
     public List<Integer> getStartingPositions() {
         return startingPositions;
+    }
+
+    private void notifyObservers() {
+        for (Observer o : observers) {
+            o.notifyObserver();
+        }
+    }
+
+    @Override
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
+        observers.remove(o);
     }
 }
 

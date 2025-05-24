@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class ChooseShipPieceState extends AdventureState {
+public final class ChooseShipPieceState extends AdventureState {
     private static List<StateActions> availableActions = List.of(
             StateActions.CHOOSE_SHIP_PIECE
     );

@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DeclareFirePowerState extends ActivateState {
+public final class DeclareFirePowerState extends ActivateState {
     public DeclareFirePowerState(ShipBoard shipBoard, Set<Point> availablePositions) {
         super(shipBoard, availablePositions);
     }

@@ -1,15 +1,13 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
-import it.polimi.ingsw.galaxytruckers.view.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-public class RemoveGoodsState extends AdventureState {
+public final class RemoveGoodsState extends AdventureState {
     private int goodsToLose;
     private final ShipBoard shipBoard;
 

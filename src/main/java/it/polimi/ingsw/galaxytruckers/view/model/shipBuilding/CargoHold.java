@@ -36,6 +36,7 @@ public final class CargoHold extends Component {
             goods.put(goodsType, 0);
         }
         goods.put(goodsType, goods.get(goodsType) + 1);
+        notifyObservers();
     }
 
     public void removeGoods(GoodsType goodsType) throws IllegalArgumentException {
@@ -45,6 +46,7 @@ public final class CargoHold extends Component {
                 goods.remove(goodsType);
             }
         }
+        notifyObservers();
     }
 
 }

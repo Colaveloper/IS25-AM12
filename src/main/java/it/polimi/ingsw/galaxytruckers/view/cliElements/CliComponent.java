@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.Component;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.enums.ComponentType;
 import javafx.beans.property.ObjectProperty;
 
@@ -16,8 +16,7 @@ import java.util.List;
 
 public class CliComponent extends CliElement {
 
-    private final ObjectProperty<Component> componentProperty;
-    private ComponentType type;
+    private final Component component;
     private boolean isSpecial;
     private final List<Connector> connectors = new ArrayList<>();
     private String open;
@@ -41,7 +40,7 @@ public class CliComponent extends CliElement {
 
     public String getConnector(int connectorDirection) {
         return switch (connectorDirection) {
-            case 0 -> switch (connectors.get(componentProperty.get().directionProperty().get() % 4)) {
+            case 0 -> switch (connectors.get(0)) {
                 case Connector.NONE -> "─";
                 case Connector.SINGLE -> "┴";
                 case Connector.DOUBLE -> "╨";

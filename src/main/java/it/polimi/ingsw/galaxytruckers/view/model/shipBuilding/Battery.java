@@ -18,5 +18,6 @@ public final class Battery extends Component {
 
     public void removeBattery() {
         this.numBatteries--;
+        notifyObservers();
     }
 }

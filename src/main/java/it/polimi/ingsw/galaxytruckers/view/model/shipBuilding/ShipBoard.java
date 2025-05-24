@@ -3,15 +3,17 @@ package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.view.Observer;
+import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
 
 import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public abstract class ShipBoard {
+public abstract class ShipBoard implements ModelObservable {
 
-    protected final Map<Point, Component> componentMap;
+    protected final Map<Point, ShipBoardCell> componentMap;
     protected Component lastComponent;  // can be null
     protected Point lastPosition;  // can be null
     protected final FourColors color;
@@ -30,6 +32,8 @@ public abstract class ShipBoard {
     protected final Map<Point, CargoHold>  cargoHolds;
     protected final Map<Point, Cabin> cabins;
     protected final Map<Point, Activatable> activatables;
+
+    private final List<Observer> observers = new ArrayList<>();
 
     public ShipBoard(FourColors color) { // (, Color color)
         this.color = color;
@@ -53,15 +57,15 @@ public abstract class ShipBoard {
         this.cabins = new HashMap<>();
         this.activatables = new HashMap<>();
 
+        for (Point p : getShipArea()) {
+            componentMap.put(p, new ShipBoardCell());
+        }
+
     }
 
     public abstract Set<Point> getShipArea();
 
     //CliComponentBank interaction methods
-
-    protected void setLastComponent(Component component) {
-        lastComponent = component;
-    }
 
     protected void resetLastComponent() {
         this.lastComponent = null;
@@ -75,20 +79,31 @@ public abstract class ShipBoard {
     public void offerComponent(Component component) {
         weldLastComponent();
         lastComponent = component;
+        lastPosition = null;
+        notifyObservers();
     }
 
     public Component rejectComponent() {
+        if (lastPosition != null) {
+            componentMap.remove(lastPosition);
+        }
         Component rejectedComponent = lastComponent;
         lastComponent = null;
         lastPosition = null;
+        notifyObservers();
         return rejectedComponent;
     }
 
     //Ship building methods
 
     public void placeComponent(Point newPosition, int orientation) {
+        if (lastPosition != null) {
+            componentMap.remove(lastPosition);
+        }
         lastPosition = newPosition;
         lastComponent.setOrientation(orientation);
+        componentMap.get(newPosition).setComponent(lastComponent);
+        notifyObservers();
     }
 
     public void stashComponent() {}
@@ -96,7 +111,6 @@ public abstract class ShipBoard {
     public void grabStashedComponent(int index) {}
 
     public void weldLastComponent() {
-        componentMap.put(lastPosition, lastComponent);
         switch (lastComponent) {
             case Battery c -> batteries.put(lastPosition, c);
             case Cabin c -> cabins.put(lastPosition, c);
@@ -125,7 +139,7 @@ public abstract class ShipBoard {
     }
 
     public void removeComponent(Point position) {
-        Component removedComponent = componentMap.remove(lastPosition);
+        Component removedComponent = componentMap.get(position).removeComponent();
         switch (removedComponent) {
             case Battery _ -> batteries.remove(position);
             case Cabin _ -> cabins.remove(position);
@@ -147,7 +161,8 @@ public abstract class ShipBoard {
             case Shield _ -> {
                 shields.remove(position);
             }
-            case Component _ -> {}
+            case Component _ -> {
+            }
         }
     }
 
@@ -223,7 +238,7 @@ public abstract class ShipBoard {
 
     // Components Observers
 
-    public Map<Point, Component> getComponentMap() {
+    public Map<Point, ShipBoardCell> getComponentMap() {
         return componentMap;
     }
 
@@ -267,7 +282,27 @@ public abstract class ShipBoard {
         return Optional.ofNullable(lastPosition);
     }
 
-    public List<Component> getStashedComponents() {
+    public List<ShipBoardCell> getStashedComponents() {
         return null;
+    }
+
+    public FourColors getColor() {
+        return color;
+    }
+
+    @Override
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
+        observers.remove(o);
+    }
+
+    public void notifyObservers() {
+        for (Observer o : observers) {
+            o.notifyObserver();
+        }
     }
 }

@@ -30,6 +30,7 @@ public final class DoubleEngine extends Engine implements Activatable {
     @Override
     public void setActive(boolean active) {
         this.active = active;
+        notifyObservers();
     }
 
 }

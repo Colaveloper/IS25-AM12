@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
@@ -16,14 +17,14 @@ import java.util.Map;
 
 public class CliComponentBank extends CliElement {
 
-    private final IntegerProperty coveredComponentN;
-    private final MapProperty<Component, CliComponent> revealedComponents;
+    private final ComponentBank componentBank;
 
-    private final List<BooleanProperty> forecastDeck;
+    private final boolean[] forecastDeck;
 
-    private CliComponentBank(ClientModel model, ConfigFactory config) throws IOException {
+    private CliComponentBank(ClientModel model, ComponentBank componentBank, boolean[] forecasts) throws IOException {
         super(model);
-
+        this.componentBank = componentBank;
+        this.forecastDeck = forecasts;
         if (config.isForecastPresent()) {
             forecastDeck = model.getForecastDeckAvailablility();
             for(BooleanProperty forecast : forecastDeck) {

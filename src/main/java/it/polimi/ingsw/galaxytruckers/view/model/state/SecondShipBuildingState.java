@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.*;
 
-public class SecondShipBuildingState extends ShipBuildingState {
+public final class SecondShipBuildingState extends ShipBuildingState {
     private static final List<StateActions> availableActions = List.of(
             StateActions.STASH_COMPONENT,
             StateActions.GRAB_STASHED_COMPONENT,
@@ -53,6 +53,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
     @Override
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
         blockedForecasts[deckIndex] = shipBoard;
+        shipBoard.weldLastComponent();
     }
 
     @Override

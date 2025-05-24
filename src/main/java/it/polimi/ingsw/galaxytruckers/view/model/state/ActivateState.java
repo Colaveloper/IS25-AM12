@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.List;
 
-public abstract class ActivateState extends AdventureState {
+public sealed abstract class ActivateState extends AdventureState permits
+        DeclareFirePowerState,
+        DeclareEnginePowerState,
+        HandleProjectileState
+{
     private static final List<StateActions> availableActions = List.of(
             StateActions.ACTIVATE_COMPONENT,
             StateActions.SPEND_BATTERIES,
