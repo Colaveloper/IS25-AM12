@@ -42,7 +42,11 @@ class EventQueueHandlerTest {
 
     @Test
     void setupLobbyIsCalled() {
-        if (lobby.getEventQueue().isEmpty()) eventQueueHandler.stop();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         assertEquals("setupLobby", client1.methods.getFirst());
     }
 }
