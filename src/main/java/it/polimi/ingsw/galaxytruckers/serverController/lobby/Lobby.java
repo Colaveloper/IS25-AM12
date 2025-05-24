@@ -47,7 +47,7 @@ public class Lobby implements LobbyInterface {
         this.playerColors = new HashMap<>();
 
         this.eventQueue = new EventQueue();
-        this.eventQueueHandler = new EventQueueHandler(this);
+        this.eventQueueHandler = new EventQueueHandler(getPlayers(), this.eventQueue);
 
         eventQueueHandler.start();
         addPlayer(creator);

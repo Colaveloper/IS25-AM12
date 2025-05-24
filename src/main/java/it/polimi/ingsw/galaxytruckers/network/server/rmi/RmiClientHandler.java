@@ -9,6 +9,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
+import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
@@ -98,170 +99,10 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     // VirtualClient
 
     @Override
-    public void setupLobby(UUID lobbyId, Map<String, FourColors> playerColors) {
-        submitUpdateTask(() -> remoteClient.setupLobby(lobbyId, playerColors));
+    public void notifyEvent(Event event) {
+        //TODO: implement this method
     }
 
-    @Override
-    public void updateLobbyPlayers(Map<String, FourColors> playerColors) {
-        submitUpdateTask(() -> remoteClient.updateLobbyPlayers(playerColors));
-    }
-
-    @Override
-    public void notifyStartBuilding(Level level, int playersN) {
-        submitUpdateTask(() -> remoteClient.notifyStartBuilding(level, playersN));
-    }
-
-    @Override
-    public void notifyFaceDownComponentRequest(String playerName, int componentId) {
-        submitUpdateTask(() -> remoteClient.notifyFaceDownComponentRequest(playerName, componentId));
-    }
-
-    @Override
-    public void notifyFaceUpComponentRequest(String playerName, int componentId) {
-        submitUpdateTask(() -> remoteClient.notifyFaceUpComponentRequest(playerName, componentId));
-    }
-
-    @Override
-    public void notifyComponentRejection(String playerName, int componentId) {
-        submitUpdateTask(() -> remoteClient.notifyComponentRejection(playerName, componentId));
-    }
-
-    @Override
-    public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) {
-        submitUpdateTask(() -> remoteClient.notifyStashComponent(playerName, stashComponentIds));
-    }
-
-    @Override
-    public void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) {
-        submitUpdateTask(() -> remoteClient.notifyGrabFromStash(playerName, componentId, stashComponentIds));
-    }
-
-    @Override
-    public void notifyHourglassFlipped(String playerName, boolean isLast) {
-        submitUpdateTask(() -> remoteClient.notifyHourglassFlipped(playerName, isLast));
-    }
-
-    @Override
-    public void notifyComponentPositioning(String playerName, int componentId, int rotation, Point position) {
-        submitUpdateTask(() -> remoteClient.notifyShipMapUpdate(playerName, componentId, rotation, position));
-    }
-
-    @Override
-    public void sendForecastDeck(List<Integer> deckCardIds) {
-        submitUpdateTask(() -> remoteClient.sendForecastDeck(deckCardIds));
-    }
-
-    @Override
-    public void notifyPeekForecast(String playerName, int deckIndex) {
-        submitUpdateTask(() -> remoteClient.notifyPeekForecast(playerName, deckIndex));
-    }
-
-    @Override
-    public void notifyReleaseForecast(String playerName, int deckIndex) {
-        submitUpdateTask(() -> remoteClient.notifyReleaseForecast(playerName, deckIndex));
-    }
-
-    @Override
-    public void notifyPlayerPosition(String playerName, int position) {
-        submitUpdateTask(() -> remoteClient.notifyPlaceShipOnFlightBoard(playerName, position));
-    }
-
-    @Override
-    public void showShipPieces(Map<String, List<Set<Point>>> brokenShips) {
-        submitUpdateTask(() -> remoteClient.showShipPieces(brokenShips));
-    }
-
-    @Override
-    public void notifyInvalidShipsUpdate(List<String> invalidPlayers) {
-        submitUpdateTask(() -> remoteClient.notifyInvalidShipsUpdate(invalidPlayers));
-    }
-
-    @Override
-    public void notifyCabinUpdate(String playerName, Point point, int numResidents, CrewType crewType) {
-        submitUpdateTask(() -> remoteClient.notifyCabinUpdate(playerName,point,numResidents,crewType));
-    }
-
-    @Override
-    public void notifyBatteryUpdate(String playerName, Point point, int numBatteries) {
-        submitUpdateTask(() -> remoteClient.notifyBatteryUpdate(playerName,point,numBatteries));
-    }
-
-    @Override
-    public void notifyCargoHoldUpdate(String playerName, Point point, Map<GoodsType, Integer> cargo) {
-        submitUpdateTask(() -> remoteClient.notifyCargoHoldUpdate(playerName,point,cargo));
-    }
-
-    @Override
-    public void notifyShipStatUpdate(String playerName, StatType statType, int value) {
-        submitUpdateTask(() -> remoteClient.notifyShipStatUpdate(playerName,statType,value));
-    }
-
-    @Override
-    public void notifyNewCard(int cardId) {
-        submitUpdateTask(() -> remoteClient.notifyNewCard(cardId));
-    }
-
-    @Override
-    public void notifySurrender(List<String> playerNames) {
-        submitUpdateTask(() -> remoteClient.notifySurrender(playerNames));
-    }
-
-    @Override
-    public void notifyHourglassEnd() {
-        submitUpdateTask(remoteClient::notifyHourglassEnd);
-    }
-
-    @Override
-    public void notifyComponentRemoval(String playerName, Point position) {
-        submitUpdateTask(() -> remoteClient.notifyComponentRemoval(playerName, position));
-    }
-
-    @Override
-    public void notifyShipPieceRemoval(String playerName, List<Point> positions) {
-        submitUpdateTask(() -> remoteClient.notifyShipPieceRemoval(playerName, positions));
-    }
-
-    @Override
-    public void notifySelection(String playerName, List<Point> selectablePoints, List<Point> batteries) {
-        submitUpdateTask(() -> remoteClient.notifySelection(playerName, selectablePoints, batteries));
-    }
-
-    @Override
-    public void notifyPlanetChoice(String playerName, int planetId, List<Point> cargoPositions) {
-        submitUpdateTask(() -> remoteClient.notifyLandOnPlanet(playerName,planetId));
-    }
-
-    @Override
-    public void updateGoodsBuffer(boolean adding, GoodsType type) {
-        submitUpdateTask(() -> remoteClient.updateGoodsBuffer(adding, type));
-    }
-
-    @Override
-    public void showProjectile(String playerName, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) {
-        submitUpdateTask(() -> remoteClient.showProjectile(playerName,projectileType,direction,roll,selectablePoints,batteries));
-    }
-
-    @Override
-    public void showFinalScores(Map<String, Integer> playerToScore) {
-        submitUpdateTask(() -> remoteClient.showFinalScores(playerToScore));
-    }
-
-    @Override
-    public void notifyComponentActivation(String playerName, Point point) {
-        submitUpdateTask(() -> remoteClient.notifyComponentActivation(playerName, point));
-    }
-
-    @Override
-    public void notifyAddGoods(String playerName, Map<GoodsType, Integer> goods, List<Point> cargos) {
-        submitUpdateTask(() -> remoteClient.notifyAddGoods(playerName,goods,cargos));
-    }
-
-    @Override
-    public void notifyPlayerDisconnection(String playerName) {
-        submitUpdateTask(() -> remoteClient.notifyPlayerDisconnection(playerName));
-        this.lobby = null;
-    }
 
     // RemoteController
 

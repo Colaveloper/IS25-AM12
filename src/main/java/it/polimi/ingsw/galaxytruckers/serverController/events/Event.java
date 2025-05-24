@@ -8,7 +8,7 @@ public sealed interface Event permits ActivateComponentEvent, FlightBoardUpdateE
                                       ForecastDetailsEvent, GameEndEvent, GoodsUpdateEvent, GrabStashedComponentEvent,
                                       HourglassEndEvent, InitializeCabinEvent, JoinLobbyEvent, LobbyDetailsEvent,
                                       NewCardEvent, PeekForecastEvent, PlaceComponentEvent, PlanetChoiceEvent,
-                                      PlayerDisconnectionEvent, PlayerExitEvent, ProjectileEvent, RejectComponentEvent,
+                                      PlayerDisconnectionEvent, PlayerExitEvent, RejectComponentEvent,
                                       ReleaseForecastEvent, RemoveComponentEvent, RequestFaceDownComponentEvent,
                                       RequestFaceUpComponentEvent, ShipNotConnectedEvent,
                                       ShipPieceRemoveEvent, ShipStatUpdateEvent,

@@ -24,7 +24,7 @@ public class GameEventListener {
     }
 
     public void notifyBatteryUpdateEvent(ShipBoard shipBoard, Point point, Battery battery) {
-        controllerListener.notifyEvent(UseBatteryEvent.from(shipBoard, point, battery));
+        //controllerListener.notifyEvent(UseBatteryEvent.from(shipBoard, point, battery));
     }
 
     public void notifyCabinUpdateEvent(ShipBoard shipBoard, Point point, Cabin cabin) {
@@ -32,7 +32,7 @@ public class GameEventListener {
     }
 
     public void notifyCargoHoldUpdateEvent(ShipBoard shipBoard, Point point, CargoHold cargoHold) {
-        controllerListener.notifyEvent(CargoHoldUpdateEvent.from(shipBoard,point,cargoHold));
+        //controllerListener.notifyEvent(CargoHoldUpdateEvent.from(shipBoard,point,cargoHold));
     }
 
     public void notifyFlightBoardUpdateEvent(ShipBoard shipBoard, int position) {
@@ -40,7 +40,7 @@ public class GameEventListener {
     }
 
     public void notifyFlipHourglassEvent(ShipBoard shipBoard, boolean isLast) {
-        controllerListener.notifyEvent(FlipHourglassEvent.from(shipBoard,isLast));
+        //controllerListener.notifyEvent(FlipHourglassEvent.from(shipBoard,isLast));
     }
 
     public void notifyGameEndEvent(Map<ShipBoard, Integer> finalScores) {
@@ -48,11 +48,11 @@ public class GameEventListener {
     }
 
     public void notifyGoodsBufferUpdateEvent(ShipBoard shipBoard, boolean adding, GoodsType goodsType) {
-        controllerListener.notifyEvent(GoodsBufferUpdateEvent.from(shipBoard,adding,goodsType));
+        //controllerListener.notifyEvent(GoodsBufferUpdateEvent.from(shipBoard,adding,goodsType));
     }
 
     public void notifyGrabStashedComponentEvent(ShipBoard shipBoard, Component component) {
-        controllerListener.notifyEvent(GrabStashedComponentEvent.from(shipBoard,component));
+        //controllerListener.notifyEvent(GrabStashedComponentEvent.from(shipBoard,component));
     }
 
     public void notifyHourglassEndEvent() {
@@ -60,7 +60,7 @@ public class GameEventListener {
     }
 
     public void notifyInvalidShipsUpdateEvent(Set<ShipBoard> invalidShips) {
-        controllerListener.notifyEvent(ValidateShipEvent.from(invalidShips));
+        //controllerListener.notifyEvent(ValidateShipEvent.from(invalidShips));
     }
 
     public void notifyNewCardEvent(AdventureCard adventureCard) {
@@ -68,7 +68,7 @@ public class GameEventListener {
     }
 
     public void notifyPeekForecastEvent(ShipBoard shipBoard, int deckIndex, java.util.List<AdventureCard> forecastDeck) {
-        controllerListener.notifyEvent(ForecastDetailsEvent.from(shipBoard, deckIndex, forecastDeck));
+        //controllerListener.notifyEvent(ForecastDetailsEvent.from(shipBoard, deckIndex, forecastDeck));
     }
 
     public void notifyPlaceComponentEvent(ShipBoard shipBoard, Component component, Point position) {
@@ -80,7 +80,7 @@ public class GameEventListener {
     }
 
     public void notifyProjectileEvent(ShipBoard shipBoard, Projectile projectile) {
-        controllerListener.notifyEvent(ProjectileEvent.from(shipBoard,projectile));
+        //controllerListener.notifyEvent(ProjectileEvent.from(shipBoard,projectile));
     }
 
     public void notifyRejectComponentEvent(ShipBoard shipBoard, Component component) {
@@ -104,7 +104,7 @@ public class GameEventListener {
     }
 
     public void notifySelectionPointEvent(ShipBoard shipBoard, List<Point> points, List<Point> batteries) {
-        controllerListener.notifyEvent(SelectionPointsEvent.from(shipBoard, points, batteries));
+        //controllerListener.notifyEvent(SelectionPointsEvent.from(shipBoard, points, batteries));
     }
 
     public void notifyShipNotConnectedEvent(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
@@ -112,7 +112,7 @@ public class GameEventListener {
     }
 
     public void notifyShipPieceRemoveEvent(ShipBoard shipBoard, List<Point> positions) {
-        controllerListener.notifyEvent(ShipPieceRemoveEvent.from(shipBoard,positions));
+        //controllerListener.notifyEvent(ShipPieceRemoveEvent.from(shipBoard,positions));
     }
 
     public void notifyShipStatUpdateEvent(ShipBoard shipBoard, StatType statType, int value) {
@@ -120,7 +120,7 @@ public class GameEventListener {
     }
 
     public void notifyStartBuildingEvent() {
-        controllerListener.notifyEvent(new StartBuildingEvent());
+        //controllerListener.notifyEvent(new StartBuildingEvent());
     }
 
     public void notifyStashComponentEvent(ShipBoard shipBoard) {
@@ -132,6 +132,6 @@ public class GameEventListener {
     }
 
     public void notifyActivateComponentEvent(ShipBoard shipBoard, Point point) {
-        controllerListener.notifyEvent(ActivateComponentEvent.from(shipBoard, point));
+        //controllerListener.notifyEvent(ActivateComponentEvent.from(shipBoard, point));
     }
 }
