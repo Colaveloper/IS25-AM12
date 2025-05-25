@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
 import javafx.beans.property.ObjectProperty;

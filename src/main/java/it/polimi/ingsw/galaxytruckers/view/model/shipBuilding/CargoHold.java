@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.view.enums.GoodsType;
 
 import java.util.HashMap;
 import java.util.List;

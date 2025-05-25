@@ -94,6 +94,12 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
+    public ShipBoard[] getLockedForecasts() {
+        System.err.println("This action is not permitted in this state, \n" +
+                "it seems the client and the server are out of sync");
+        return null;
+    }
+
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");

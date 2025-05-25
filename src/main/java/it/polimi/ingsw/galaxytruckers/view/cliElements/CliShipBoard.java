@@ -2,20 +2,22 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoardCell;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CliShipBoard extends CliElement {
 
     private final ShipBoard shipBoard;
-    private final List<List<CliComponent>> componentMatrix; // ALL FINAL
+    private final Map<Point, CliComponent> componentMap;
     Point upLeft;
     private final FourColors color;
 
@@ -24,8 +26,10 @@ public class CliShipBoard extends CliElement {
         this.shipBoard = shipBoard;
         this.color = shipBoard.getColor();
         upLeft = getUpLeft(shipBoard.getShipArea());
-        componentMatrix = model.getShips().get(color).stream()
-                .map(innerList -> innerList.stream()
+        componentMap = new HashMap<>();
+        shipBoard.getComponentMap().forEach(((point, shipBoardCell) -> {
+                    componentMap.put(point, CliComponentFactory.createCliComponent(shipBoardCell.getComponent()));
+                }))
                         .map(componentProperty -> {
                             try {
                                 CliComponent cliComponent = new CliComponent(model, componentProperty);
@@ -35,8 +39,7 @@ public class CliShipBoard extends CliElement {
                                 throw new RuntimeException(e);
                             }
                         })
-                        .collect(Collectors.toList()))
-                .collect(Collectors.toList());
+                        .collect(Collectors.toMap());
     }
 
     @Override
@@ -46,7 +49,7 @@ public class CliShipBoard extends CliElement {
         List<String> rowDescription = new ArrayList<>();
 
         int yIndex = upLeft.y;
-        for (List<CliComponent> row : componentMatrix) {
+        for (List<CliComponent> row : componentMap) {
             rowDescription.clear();
             rowDescription.addAll(List.of("",String.valueOf(yIndex),""));
             for (CliComponent cliComponent : row) {
@@ -58,7 +61,7 @@ public class CliShipBoard extends CliElement {
 
         int xIndex = upLeft.x;
         StringBuilder xIndexes = new StringBuilder(" ");
-        for (int i = 0; i < componentMatrix.getFirst().size(); i++) {
+        for (int i = 0; i < componentMap.getFirst().size(); i++) {
             xIndexes.append("   ").append(xIndex).append("  ");
             xIndex++;
         }

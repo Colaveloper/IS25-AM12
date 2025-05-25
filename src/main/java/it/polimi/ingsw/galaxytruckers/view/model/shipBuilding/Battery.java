@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.util.List;
 
