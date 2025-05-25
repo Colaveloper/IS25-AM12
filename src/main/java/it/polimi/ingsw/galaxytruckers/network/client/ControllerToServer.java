@@ -51,4 +51,6 @@ public interface ControllerToServer {
     void initializeCabin(Point point, CrewType crewType);
 
     void placeShipOnFlightboard(int startingPosition);
+
+    void drawCard();
 }

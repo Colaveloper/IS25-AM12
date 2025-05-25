@@ -43,13 +43,14 @@ public class ClientController implements
         }
     }
 
-//    //-----------------------------UPDATES FROM THE SERVER----------------------------------
+    //    //-----------------------------UPDATES FROM THE SERVER----------------------------------
 //
     @Override // TODO: DISCUSS
     public void showGameCreation() {
         view.setScreen(model.getGame().getCurrentState());
     }
-//
+
+    //
 //    @Override // Tommy approved
 //    public void updateLobbyPlayers(Map<String, FourColors> playerToColor) {
 //        for (Map.Entry<String, FourColors> entry : playerToColor.entrySet()) {
@@ -283,10 +284,11 @@ public class ClientController implements
 //    }
 //
 //    // set current player for any action that involves a decision
-////    @Override // TODO: restore
-////    public void setCurrentPlayer(String nickname) {
-////        model.setCurrentPlayerNickname(nickname);
-////    }
+
+    /// /    @Override // TODO: restore
+    /// /    public void setCurrentPlayer(String nickname) {
+    /// /        model.setCurrentPlayerNickname(nickname);
+    /// /    }
 //
 //    // called for each projectile
 //    @Override
@@ -306,8 +308,6 @@ public class ClientController implements
 
 
 //--------------------------------------------SERVER CALLS-------------------------------------------------------------------
-
-
     @Override
     public void reportError(String details) {
         System.out.println("Error: " + details);
@@ -340,7 +340,6 @@ public class ClientController implements
             reportError("couldn't activate component");
         }
     }
-
 
 
     @Override
@@ -465,15 +464,22 @@ public class ClientController implements
         }
     }
 
+    @Override
+    public void drawCard(){
+        try{
+            server.drawCard();
+        } catch(IllegalArgumentException e){
+            reportError("Cannot draw new card");
+        }
+    }
+
     private void runAndInterceptIOE(RunnableWithIOE action) {
         try {
             action.run();
         } catch (IOException e) {
-            reportError("IO Exception: "+e.getMessage());
+            reportError("IO Exception: " + e.getMessage());
         }
     }
-
-
 }
 
 @FunctionalInterface
