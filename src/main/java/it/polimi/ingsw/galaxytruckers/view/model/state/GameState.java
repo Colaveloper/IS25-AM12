@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
@@ -56,6 +57,12 @@ public abstract sealed class GameState permits
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
+    }
+
+    public ComponentBank getComponentBank(){
+        System.err.println("This action is not permitted in this state, \n" +
+                "it seems the client and the server are out of sync");
+        return null;
     }
 
     public void notifyFlipHourglass(ShipBoard shipBoard) {

@@ -25,23 +25,9 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     @Override
     public void render() {
-
         System.out.println(componentBank.getDescription());
-        System.out.println(flightBoard.getDescription());
-        System.out.println(allShips.getDescription());
-
-        System.out.println("C       \tGet New covered component" + "\t\t\tU [i]   \tGet i-th uncovered component");
-        System.out.println(model.getClientPlayer().getShipBoard().getStashedComponents().isEmpty() ? "S [i]   \tGet i-th stashed component" : "");
-        System.out.println("F [i]   \tGet i-th forecast deck");
-
-        if (model.getClientPlayer().getShipBoard().getLastComponent().isEmpty()) {
-            System.out.println("P [x] [y] \tPlace unwelded component in x, y" + "\t\t\tR       \tReject unwelded component");
-            System.out.println("S       \tStash unwelded component");
-            System.out.println("L       \tRotate unwelded component left");
-        }
-
-        System.out.println("H       \tFlip hourglass");
-        System.out.println("E [i]   \tend and place on flightboard");
+        printShips();
+        printActions();
     }
 
 //    @Override
@@ -60,7 +46,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
             case "U":
                 if (parts.length == 2) {
                     int index = Integer.parseInt(parts[1]) - 1;
-                    int componentId = model.revealedComponentsProperty().get(index).getComponentId();
+                    int componentId = gameState.getComponentBank().getUncoveredComponents().get(index).getId();
                     controller.requestComponent(componentId);
                 }
                 break;
@@ -94,7 +80,8 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                 break;
 
             case "L":
-                model.rotateCurrentComponentLeft();
+                //model.rotateCurrentComponentLeft();
+                //todo rotate component in model
                 break;
 
             case "H":

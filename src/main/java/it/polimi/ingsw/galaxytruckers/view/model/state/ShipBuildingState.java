@@ -59,4 +59,9 @@ public sealed abstract class ShipBuildingState extends GameState permits
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
         shipBoard.placeComponent(point, orientation);
     }
+
+    @Override
+    public ComponentBank getComponentBank(){
+        return componentBank;
+    }
 }

@@ -11,6 +11,8 @@ public class CliRemoveCrewScreen extends CliScreen {
 
     @Override
     public void render() {
+        printShips();
+        printActions();
 
     }
 

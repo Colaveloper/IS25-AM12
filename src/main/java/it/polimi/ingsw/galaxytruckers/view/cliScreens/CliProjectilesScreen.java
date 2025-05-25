@@ -28,16 +28,15 @@ public class CliProjectilesScreen extends CliScreen {
 
     @Override
     public void render() {
-        List<String> output = new ArrayList<>();
-        output.addAll(flightBoard.getDescription());
-        output.addAll(allShips.getDescription());
+        printShips();
+        printActions();
 
         switch (model.getCurrentProjectile().direction()) {
             case 0:
                 direction = "front on column";
                 break;
             case 1:
-                direction = "right or left on row";
+                direction = "right or left on row";//todo n
                 break;
             case 2:
                 direction = "back on column";
@@ -49,18 +48,17 @@ public class CliProjectilesScreen extends CliScreen {
                 direction = "error";
         }
 
-        output.add("a" + model.getCurrentProjectile().type().name() +
+        System.out.println("a" + model.getCurrentProjectile().type().name() +
                 "is approaching from" + direction + model.getCurrentProjectile().roll());
         if(model.isMyTurn()) {
             if (!model.getSelectablePoints().isEmpty()) {
-                output.add("choose what to activate OR a battery to use");
+                System.out.println("choose what to activate OR a battery to use");
             }
-            output.add("S to submit end activations");
+            System.out.println("S to submit end activations");
         }
         else {
-            output.add("it's not your turn");
+            System.out.println("it's not your turn");
         }
-        return output;
     }
 
 //
