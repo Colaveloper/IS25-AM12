@@ -19,14 +19,9 @@ public class CliAllShips extends CliElement {
     public CliAllShips(ClientModel model) {
         super(model);
         cliShipBoards = new HashMap<>();
-        model.getShips().forEach((color, _) -> {
-            try {
-                CliShipBoard cliShipBoard = new CliShipBoard(model, color);
-                cliShipBoards.put(color, cliShipBoard);
-                //cliShipBoard.addListener(this);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        model.getGame().getShipBoards().forEach((ship) -> {
+                CliShipBoard cliShipBoard = new CliShipBoard(model, ship);
+                cliShipBoards.put(ship.getColor(), cliShipBoard);
         });
         handsMap = null;
         stashedComponentsMap = null;
@@ -36,25 +31,14 @@ public class CliAllShips extends CliElement {
     public CliAllShips(ClientModel model, ConfigFactory config) {
         super(model);
         cliShipBoards = new HashMap<>();
-        model.getShips().forEach((color, _) -> {
-            try {
-                CliShipBoard cliShipBoard = new CliShipBoard(model, color);
-                cliShipBoards.put(color, cliShipBoard);
-                //cliShipBoard.addListener(this);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        model.getGame().getShipBoards().forEach((shipBoard) -> {
+                CliShipBoard cliShipBoard = new CliShipBoard(model, shipBoard);
+                cliShipBoards.put(shipBoard.getColor(), cliShipBoard);
         });
-
         handsMap = new HashMap<>();
         model.getHand().forEach((color, componentProperty) -> {
-            try {
                 CliComponent hand = new CliComponent(model, componentProperty);
                 handsMap.put(color, hand);
-                //hand.addListener(this);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         });
 
         if (config.isStashingAllowed()) {
@@ -76,11 +60,16 @@ public class CliAllShips extends CliElement {
         } else {stashedComponentsMap = null;}
     }
 
+    public CliAllShips(ClientModel model){
+        super(model);
+
+    }
+
     @Override
     public List<String> getDescription() {
         List<String> description = new ArrayList<>();
 
-        for (FourColors c : model.getPlayerToColor().values()) {
+        for (FourColors c : model.getGame().getShipColors()) {
 
             List<String> singleShipDescription = new ArrayList<>(cliShipBoards.get(c).getDescription());
             List<String> handAndStashDescription = new ArrayList<>();

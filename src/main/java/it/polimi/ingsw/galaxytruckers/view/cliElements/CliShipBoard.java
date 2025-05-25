@@ -19,7 +19,7 @@ public class CliShipBoard extends CliElement {
     Point upLeft;
     private final FourColors color;
 
-    public CliShipBoard(ClientModel model, ShipBoard shipBoard) throws IOException {
+    public CliShipBoard(ClientModel model, ShipBoard shipBoard) {
         super(model);
         this.shipBoard = shipBoard;
         this.color = shipBoard.getColor();
@@ -40,7 +40,7 @@ public class CliShipBoard extends CliElement {
     }
 
     @Override
-    public List<String> getDescription() throws IOException {
+    public List<String> getDescription(){
 
         List<String> result = new ArrayList<>();
         List<String> rowDescription = new ArrayList<>();

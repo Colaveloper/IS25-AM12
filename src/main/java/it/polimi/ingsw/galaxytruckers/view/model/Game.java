@@ -64,6 +64,14 @@ public class Game {
         return shipBoards;
     }
 
+    public Set<FourColors> getShipColors(){
+        Set<FourColors> colors = new HashSet<>();
+        for(ShipBoard s : shipBoards){
+            colors.add(s.getColor());
+        }
+        return colors;
+    }
+
     /**
      * @return the game's level
      */
