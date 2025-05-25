@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.messages.*;
-import it.polimi.ingsw.galaxytruckers.network.messages.requests.RequestNewGame;
+import it.polimi.ingsw.galaxytruckers.network.messages.requests.*;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
 
@@ -54,6 +54,7 @@ public class SocketClient implements VirtualServer, VirtualClient {
 
     public void stop() {
         isRunning = false;
+        inputThread.interrupt();
     }
 
     private void inputThreadTask() {
@@ -122,136 +123,136 @@ public class SocketClient implements VirtualServer, VirtualClient {
 
     @Override
     public void joinLobby(UUID lobbyID) {
-
+        sendRequest(new JoinLobby(lobbyID));
     }
 
     @Override
     public void leaveLobby() {
-
+        sendRequest(new LeaveLobby());
     }
 
     @Override
     public void requestRandComponent() {
-
+        sendRequest(new RequestRandComponent());
     }
 
     @Override
     public void requestComponent(int componentID) {
-
+        sendRequest(new RequestComponent(componentID));
     }
 
     @Override
     public void rejectComponent() {
-
+        sendRequest(new RejectComponent());
     }
 
     @Override
     public void stashComponent() {
-
+        sendRequest(new StashComponent());
     }
 
     @Override
     public void grabStashedComponent(int index) {
-
+        sendRequest(new GrabStashedComponent(index));
     }
 
     @Override
     public void placeComponent(Point point, int orientation) {
-
+        sendRequest(new PlaceComponent(point, orientation));
     }
 
     @Override
     public void flipHourglass() {
-
+        sendRequest(new FlipHourglass());
     }
 
     @Override
     public void placeShipOnFlightBoard(int startingPosition) {
-
+        sendRequest(new PlaceShipOnFlightBoard(startingPosition));
     }
 
     @Override
     public void acquireForecast(int deckIndex) {
-
+        sendRequest(new AcquireForecast(deckIndex));
     }
 
     @Override
     public void releaseForecast() {
-
+        sendRequest(new ReleaseForecast());
     }
 
     @Override
     public void removeComponent(Point point) {
-
+        sendRequest(new RemoveComponent(point));
     }
 
     @Override
     public void chooseShipPiece(int pieceIndex) {
-
+        sendRequest(new ChooseShipPiece(pieceIndex));
     }
 
     @Override
     public void initializeCabin(Point point, CrewType crewType) {
-
+        sendRequest(new InitializeCabin(point, crewType));
     }
 
     @Override
     public void drawCard() {
-
+        sendRequest(new DrawCard());
     }
 
     @Override
     public void activateComponent(Point point) {
-
+        sendRequest(new ActivateComponent(point));
     }
 
     @Override
     public void loseCrew(Point point) {
-
+        sendRequest(new LoseCrew(point));
     }
 
     @Override
     public void grabReward(boolean rewardGrabbed) {
-
+        sendRequest(new GrabReward(rewardGrabbed));
     }
 
     @Override
     public void placeGoods(Point point, GoodsType goodsType) {
-
+        sendRequest(new PlaceGoods(point, goodsType));
     }
 
     @Override
     public void removeGoods(Point point, GoodsType goodsType) {
-
+        sendRequest(new RemoveGoods(point, goodsType));
     }
 
     @Override
     public void loseGoods(Point point) {
-
+        sendRequest(new LoseGoods(point));
     }
 
     @Override
     public void useBattery(Point point) {
-
+        sendRequest(new UseBattery(point));
     }
 
     @Override
     public void choosePlanet(int choice) {
-
+        sendRequest(new ChoosePlanet(choice));
     }
 
     @Override
     public void goNext() {
-
+        sendRequest(new GoNext());
     }
 
     @Override
     public void giveUp() {
-
+        sendRequest(new GiveUp());
     }
 
     @Override
     public void notifyEvent(Event event) {
-
+        //TODO: send event to client controller
     }
 }

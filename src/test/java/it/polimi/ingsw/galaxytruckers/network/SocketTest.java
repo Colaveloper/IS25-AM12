@@ -1,13 +1,16 @@
 package it.polimi.ingsw.galaxytruckers.network;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
 import it.polimi.ingsw.galaxytruckers.network.client.socket.SocketClient;
 import it.polimi.ingsw.galaxytruckers.network.server.socket.SocketServer;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -44,5 +47,21 @@ public class SocketTest {
     @Test
     void registerNickname() {
         assertDoesNotThrow(() -> socketClient.registerNickname("x"));
+        verify(serverController).registerNickname("x");
+    }
+
+    @Test
+    void requestNewGame() {
+        socketClient.registerNickname("x");
+        socketClient.requestNewGame(Level.SECOND, 2);
+        verify(serverController).newGame(null,Level.SECOND,2);
+    }
+
+    @Test
+    void joinLobby() {
+        UUID userUUID = UUID.randomUUID();
+        socketClient.registerNickname("x");
+        socketClient.joinLobby(userUUID);
+        verify(serverController).joinLobby(null,userUUID);
     }
 }

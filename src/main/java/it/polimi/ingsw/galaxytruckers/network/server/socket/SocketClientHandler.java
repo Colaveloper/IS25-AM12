@@ -46,10 +46,12 @@ class SocketClientHandler implements VirtualClient, VirtualServer {
 
     public void start() {
         if (!isRunning) {
+            isRunning = true;
             requestThread = new Thread(this::requestTask, "RequestThread");
             requestThread.start();
         }
         if (!isUpdating) {
+            isUpdating = true;
             updateThread = new Thread(this::updateTask, "UpdateThread");
             updateThread.start();
         }
