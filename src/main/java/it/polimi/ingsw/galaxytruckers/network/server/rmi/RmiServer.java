@@ -15,7 +15,6 @@ public class RmiServer extends UnicastRemoteObject implements RemoteServer {
     private final ServerControllerInterface controller;
     private Registry registry;
     private String name;
-    private int port;
 
     public RmiServer(ServerControllerInterface controller) throws RemoteException {
         super();
@@ -29,7 +28,6 @@ public class RmiServer extends UnicastRemoteObject implements RemoteServer {
         registry.rebind(name, boundInterface);
 
         this.name = name;
-        this.port = port;
     }
 
     @Override
