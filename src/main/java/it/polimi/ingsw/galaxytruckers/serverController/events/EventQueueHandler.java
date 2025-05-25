@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
@@ -12,6 +13,12 @@ public class EventQueueHandler implements EventHandler {
     private final List<Player> players;
     private final EventQueue eventQueue;
     private Thread thread;
+    private Runnable afterEach = () -> {};
+
+    @VisibleForTesting
+    protected void setAfterEach(Runnable afterEach) {
+        this.afterEach = afterEach;
+    }
 
     public EventQueueHandler(List<Player> players, EventQueue eventQueue) {
         this.players = players;
@@ -37,6 +44,7 @@ public class EventQueueHandler implements EventHandler {
             while (true) {
                 Event event = eventQueue.dequeue();
                 handleEvent(event);
+                afterEach.run();
             }
         } catch (InterruptedException e) {
             System.out.println("EventQueueHandler interrupted");

@@ -1,16 +1,25 @@
 package it.polimi.ingsw.galaxytruckers.network.server.socket;
 
+import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
+
 import java.io.*;
 import java.net.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SocketServer {
+    private final ServerControllerInterface serverController;
+
     private boolean running;
     private ServerSocket serverSocket;
     private Thread listenThread;
 
-    public SocketServer() {
+    private final Set<NotRegisteredSocketHandler> unregisteredSocketHandlers = new HashSet<>();
+
+    public SocketServer(ServerControllerInterface serverController) {
         this.running = false;
         this.listenThread = null;
+        this.serverController = serverController;
     }
 
     public void start(int port) throws IOException {
@@ -27,11 +36,32 @@ public class SocketServer {
                 Socket clientSocket = serverSocket.accept();
                 ObjectInputStream inputStream = new ObjectInputStream(clientSocket.getInputStream());
                 ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-                //TODO: create handler for each client
+                NotRegisteredSocketHandler handler = new NotRegisteredSocketHandler(
+                        inputStream,
+                        outputStream,
+                        this::removeHandler,
+                        serverController);
+                addHandler(handler);
             } catch (IOException e) {
                 handleIOException(e);
             }
         }
+    }
+
+    public void addHandler(NotRegisteredSocketHandler handler) {
+        synchronized (unregisteredSocketHandlers) {
+            unregisteredSocketHandlers.add(handler);
+        }
+    }
+
+    public void removeHandler(NotRegisteredSocketHandler handler) {
+        synchronized (unregisteredSocketHandlers) {
+            unregisteredSocketHandlers.remove(handler);
+        }
+    }
+
+    public Set<NotRegisteredSocketHandler> getUnregisteredSocketHandlers() {
+        return unregisteredSocketHandlers;
     }
 
     private void handleIOException(IOException e) {

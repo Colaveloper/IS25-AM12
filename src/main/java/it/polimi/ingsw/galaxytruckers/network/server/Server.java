@@ -30,7 +30,7 @@ public class Server {
             e.printStackTrace(System.err);
         }
         try {
-            SocketServer socketServer = new SocketServer();
+            SocketServer socketServer = new SocketServer(controller);
             socketServer.start(socketPort);
         } catch (IOException e) {
             System.err.println("Failed to start socket server: ");
