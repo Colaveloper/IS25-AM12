@@ -1,9 +1,10 @@
-package it.polimi.ingsw.galaxytruckers.network.messages;
+package it.polimi.ingsw.galaxytruckers.network.messages.requests;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.network.messages.RegisteredRequest;
 
-public class RequestNewGame extends RegisteredRequest{
+public class RequestNewGame extends RegisteredRequest {
     private final Level level;
     private final int playerN;
 
