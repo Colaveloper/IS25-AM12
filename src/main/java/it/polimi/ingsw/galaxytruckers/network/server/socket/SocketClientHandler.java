@@ -143,7 +143,7 @@ class SocketClientHandler implements VirtualClient, VirtualServer {
     }
 
     @Override
-    public void leaveLobby(String nickname) {
+    public void leaveLobby() {
         checkInLobby();
         controller.leaveLobby(player);
         lobby = null;
@@ -276,13 +276,13 @@ class SocketClientHandler implements VirtualClient, VirtualServer {
     }
 
     @Override
-    public void goNext(String nickname) {
+    public void goNext() {
         checkInLobby();
         lobby.goNext(player);
     }
 
     @Override
-    public void giveUp(String nickname) {
+    public void giveUp() {
         checkInLobby();
         lobby.giveUp(player);
     }

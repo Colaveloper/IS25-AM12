@@ -167,12 +167,12 @@ class ClientControllerTest {
             }
 
             @Override
-            public void goNext(String nickname) {
+            public void goNext() {
 
             }
 
             @Override
-            public void giveUp(String nickname) {
+            public void giveUp() {
 
             }
 
@@ -188,7 +188,7 @@ class ClientControllerTest {
             }
 
             @Override
-            public void leaveLobby(String nickname) {
+            public void leaveLobby() {
 
             }
         };

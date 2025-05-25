@@ -320,7 +320,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     @Override
     public void goNext() {
         try {
-            server.goNext(model.getMyNickname());
+            server.goNext();
         } catch (IllegalArgumentException e) {
             reportError("could not go on with card");
         }

@@ -246,12 +246,8 @@ class ShipBuildingStateTest {
                 shipBuildingState.getHourglass().setDuration(10);
 
                 for (int i = 1; i < 3; i++) {
-                    try {
-                        shipBuildingState.flipHourglass(shipBoards.getFirst());
-                    } catch (IllegalStateException e) {
-                        throw new RuntimeException("Timer is still running, i = " + i);
-                    }
-                    Thread.sleep(20);
+                    shipBuildingState.flipHourglass(shipBoards.getFirst());
+                    Thread.sleep(100);
                 }
 
                 assertNotEquals(game.getCurrentState(), shipBuildingState);
