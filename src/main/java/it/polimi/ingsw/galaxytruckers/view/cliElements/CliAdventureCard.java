@@ -7,14 +7,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.*;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.penalty.Penalty;
 
-public class CliAdventureCard{
-    public static String getNewDescription(AdventureCard card){
+public class CliAdventureCard extends CliElement{
+    public CliAdventureCard(ClientModel model){
+        super(model);
+    }
+
+    @Override
+    public List<String> getDescription(){
         StringBuilder result = new StringBuilder();
         result.append("[NO CARD]"); // default value
-        switch(card){
+        switch(model.getGame().getCurrentAdventureCard()){
             case AbandonedShipCard abandonedShipCard -> {
                 result.setLength(0);
                 result.append("[ABANDONED SHIP]\n");
@@ -114,7 +120,7 @@ public class CliAdventureCard{
                         .append("Hope you have those connectors sealed!\n");
             }
         }
-        return result.toString();
+        return List.of(result.toString());
     }
 
     private static String describePlanets(List<Map<GoodsType, Integer>> planets) {
