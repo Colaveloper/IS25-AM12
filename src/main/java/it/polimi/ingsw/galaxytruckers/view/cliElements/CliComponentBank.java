@@ -1,11 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
-import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.Component;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -25,14 +22,7 @@ public class CliComponentBank extends CliElement {
         super(model);
         this.componentBank = componentBank;
         this.forecastDeck = forecasts;
-        if (config.isForecastPresent()) {
-            forecastDeck = model.getForecastDeckAvailablility();
-            for(BooleanProperty forecast : forecastDeck) {
-                forecast.addListener(this);
-            }
-        } else {
-            forecastDeck = null;
-        }
+        forecastDeck = model.getForecastDeckAvailablility();
 
         coveredComponentN = model.coveredComponentNProperty();
         coveredComponentN.addListener(this);

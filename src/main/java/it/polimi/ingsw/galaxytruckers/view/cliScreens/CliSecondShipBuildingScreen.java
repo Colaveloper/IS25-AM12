@@ -31,16 +31,16 @@ public class CliSecondShipBuildingScreen extends CliScreen {
         System.out.println(allShips.getDescription());
 
         System.out.println("C       \tGet New covered component" + "\t\t\tU [i]   \tGet i-th uncovered component");
-        System.out.println(model.getClientPlayer().getShipBoard().getStashedComponents() ? "S [i]   \tGet i-th stashed component" : "");
+        System.out.println(model.getClientPlayer().getShipBoard().getStashedComponents().isEmpty() ? "S [i]   \tGet i-th stashed component" : "");
         System.out.println("F [i]   \tGet i-th forecast deck");
 
         if (model.getClientPlayer().getShipBoard().getLastComponent().isEmpty()) {
             System.out.println("P [x] [y] \tPlace unwelded component in x, y" + "\t\t\tR       \tReject unwelded component");
-            System.out.println(config.isStashingAllowed() ? "S       \tStash unwelded component" : "");
+            System.out.println("S       \tStash unwelded component");
             System.out.println("L       \tRotate unwelded component left");
         }
 
-        System.out.println(config.isHourglassPresent() ? "H       \tFlip hourglass" : "");
+        System.out.println("H       \tFlip hourglass");
         System.out.println("E [i]   \tend and place on flightboard");
     }
 
