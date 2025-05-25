@@ -66,6 +66,10 @@ public class ClientModel implements ModelObservable{
         return shipToPlayer.get(shipBoard);
     }
 
+    public Map<ShipBoard, Player> getShipToPlayer() {
+        return shipToPlayer;
+    }
+
     public Map<Player, Integer> getFinalScores() {
         return finalScores;
     }

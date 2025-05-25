@@ -12,8 +12,8 @@ public class CliCabin extends CliComponent{
     
     Cabin cabin;
     
-    public CliCabin(ClientModel model, Cabin component) {
-        super(model, component);
+    public CliCabin(Cabin component) {
+        super(component);
         this.cabin = component;
     }
 

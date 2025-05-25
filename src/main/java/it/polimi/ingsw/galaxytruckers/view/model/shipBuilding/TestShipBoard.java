@@ -26,7 +26,8 @@ public class TestShipBoard extends ShipBoard {
             new Point(8, 9),
             new Point(9, 7),
             new Point(9, 8),
-            new Point(9, 9)));
+            new Point(9, 9)
+    ));
 
     public TestShipBoard(FourColors color) {
         super(color);

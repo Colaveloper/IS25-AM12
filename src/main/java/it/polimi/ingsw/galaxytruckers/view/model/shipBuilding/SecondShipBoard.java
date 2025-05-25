@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.*;
 
 public class SecondShipBoard extends ShipBoard {
-    private static final Set<Point> shipArea = new HashSet<>(List.of(new Point(4, 7),
+    private static final Set<Point> shipArea = new HashSet<>(List.of(
+            new Point(4, 7),
             new Point(4, 8),
             new Point(4, 9),
             new Point(5, 6),
@@ -33,7 +34,8 @@ public class SecondShipBoard extends ShipBoard {
             new Point(9, 9),
             new Point(10, 7),
             new Point(10, 8),
-            new Point(10, 9)));
+            new Point(10, 9)
+    ));
 
     private final List<ShipBoardCell> stashedComponents;
     private int numStashed;

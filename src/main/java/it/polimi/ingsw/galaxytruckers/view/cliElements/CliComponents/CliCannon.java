@@ -8,11 +8,11 @@ import java.util.List;
 
 public class CliCannon extends CliComponent {
 
-    private Cannon cannon;
-    private static List<String> symbols = List.of("△", "▷", "▽", "◁");
+    private final Cannon cannon;
+    private static final List<String> symbols = List.of("△", "▷", "▽", "◁");
 
-    public CliCannon(ClientModel model, Cannon component) {
-        super(model, component);
+    public CliCannon(Cannon component) {
+        super(component);
         this.cannon = component;
     }
 

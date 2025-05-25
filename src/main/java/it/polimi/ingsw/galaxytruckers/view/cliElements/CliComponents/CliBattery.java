@@ -9,8 +9,8 @@ import java.util.List;
 public class CliBattery extends CliComponent {
     private final Battery battery;
 
-    public CliBattery(ClientModel model, Battery component) {
-        super(model, component);
+    public CliBattery(Battery component) {
+        super(component);
         this.battery = component;
     }
 

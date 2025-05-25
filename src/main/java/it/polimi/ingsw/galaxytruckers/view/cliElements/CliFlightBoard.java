@@ -10,7 +10,7 @@ public class CliFlightBoard extends CliElement {
     private final FlightBoard flightBoard;
 
     public CliFlightBoard(ClientModel model) {
-        super(model);
+        super();
         this.flightBoard = model.getGame().getFlightBoard();
         //model.startingPositionLeftProperty().addListener(this);
     }

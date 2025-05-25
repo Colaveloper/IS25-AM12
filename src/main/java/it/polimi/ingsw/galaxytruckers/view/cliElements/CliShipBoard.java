@@ -3,10 +3,8 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoardCell;
 
 import java.awt.*;
 import java.io.IOException;
@@ -16,30 +14,27 @@ import java.util.stream.Collectors;
 
 public class CliShipBoard extends CliElement {
 
-    private final ShipBoard shipBoard;
+    protected final ShipBoard shipBoard;
     private final Map<Point, CliComponent> componentMap;
-    Point upLeft;
     private final FourColors color;
+    private final String nickname;
+    int minX;
+    int maxX;
+    int minY;
+    int maxY;
 
-    public CliShipBoard(ClientModel model, ShipBoard shipBoard) {
-        super(model);
+    public CliShipBoard(ShipBoard shipBoard, String nickname) {
         this.shipBoard = shipBoard;
+        this.nickname = nickname;
         this.color = shipBoard.getColor();
-        upLeft = getUpLeft(shipBoard.getShipArea());
         componentMap = new HashMap<>();
         shipBoard.getComponentMap().forEach(((point, shipBoardCell) -> {
-                    componentMap.put(point, CliComponentFactory.createCliComponent(shipBoardCell.getComponent()));
-                }))
-                        .map(componentProperty -> {
-                            try {
-                                CliComponent cliComponent = new CliComponent(model, componentProperty);
-                                cliComponent.addListener(this);
-                                return cliComponent;
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        })
-                        .collect(Collectors.toMap());
+                    componentMap.put(point, CliComponent.of(shipBoardCell.getComponent()));
+        }));
+        minX = componentMap.keySet().stream().mapToInt(p -> p.x).min().orElse(0);
+        maxX = componentMap.keySet().stream().mapToInt(p -> p.x).max().orElse(0);
+        minY = componentMap.keySet().stream().mapToInt(p -> p.y).min().orElse(0);
+        maxY = componentMap.keySet().stream().mapToInt(p -> p.y).max().orElse(0);
     }
 
     @Override
@@ -48,35 +43,35 @@ public class CliShipBoard extends CliElement {
         List<String> result = new ArrayList<>();
         List<String> rowDescription = new ArrayList<>();
 
-        int yIndex = upLeft.y;
-        for (List<CliComponent> row : componentMap) {
+        for (int y = minY; y <= maxY; y++) {
             rowDescription.clear();
-            rowDescription.addAll(List.of("",String.valueOf(yIndex),""));
-            for (CliComponent cliComponent : row) {
-                DescriptionUtils.sideBySide(rowDescription, cliComponent.getDescription());
+            rowDescription.addAll(List.of("",String.valueOf(y),""));
+            for (int x = minX; x <= maxX; x++) {
+                List<String> newCell = new ArrayList<>();
+                if (!componentMap.containsKey(new Point(x, y))) {
+                    // empty space
+                    newCell = List.of("   ", "   ", "   ");
+                } else if (componentMap.get(new Point(x, y)) == null) {
+                    // empty area
+                    newCell = List.of("   ", " X ", "   ");
+                } else {
+                    newCell = componentMap.get(new Point(x, y)).getDescription();
+                }
             }
             result.addAll(rowDescription);
-            yIndex ++;
         }
 
-        int xIndex = upLeft.x;
         StringBuilder xIndexes = new StringBuilder(" ");
-        for (int i = 0; i < componentMap.getFirst().size(); i++) {
-            xIndexes.append("   ").append(xIndex).append("  ");
-            xIndex++;
+        for (int x = minX; x < maxX; x++) {
+            xIndexes.append("   ").append(x).append("  ");
+            x++;
         }
         result.add(xIndexes.toString());
 
         DescriptionUtils.borderAndTitle(
                 result,
-                color.getDescription()+" "+model.getPlayerToColor().inverse().get(color)
+                color.getDescription()+" "+nickname
         );
         return result;
-    }
-
-    private Point getUpLeft(Set<Point> points) {
-        int xMin = points.stream().mapToInt(point -> point.x).min().orElse(0);
-        int yMin = points.stream().mapToInt(point -> point.y).min().orElse(0);
-        return new Point(xMin, yMin);
     }
 }

@@ -18,7 +18,7 @@ public class CliComponentBank extends CliElement {
     private List<CliComponent> revealedComponents;
 
     public CliComponentBank(ClientModel model) {
-        super(model);
+        super();
         ComponentBank componentBank = model.getGame().getCurrentState().getComponentBank();
         this.forecastDeck = model.getGame().getCurrentState().getLockedForecasts();
         this.coveredComponentN = componentBank.getCoveredComponentsN();

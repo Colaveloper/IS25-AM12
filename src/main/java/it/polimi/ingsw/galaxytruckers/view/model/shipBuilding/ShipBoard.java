@@ -282,7 +282,7 @@ public abstract class ShipBoard implements ModelObservable {
         return Optional.ofNullable(lastPosition);
     }
 
-    public List<ShipBoardCell> getStashedComponents() {
+    public List<Component> getStashedComponents() {
         return null;
     }
 

@@ -20,7 +20,7 @@ public class CliShipPieceChoiceScreen extends CliScreen {
         super(model, controller, gameState);
 
         flightBoard = new CliFlightBoard(model);
-        allShips = new CliAllShips(model);
+        allShips = new CliAllShips(model.getShipToPlayer());
 
         numPieces =  model.getSelectableShipPieces().size();
     }

@@ -12,7 +12,7 @@ public class CliForecast extends CliElement {
     private final List<AdventureCard> forecastDeck;
 
     public CliForecast(ClientModel model, boolean[] blockedForecasts, List<AdventureCard> forecastDeck) {
-        super(model);
+        super();
         this.blockedForecasts = blockedForecasts;
         this.forecastDeck = forecastDeck;
     }

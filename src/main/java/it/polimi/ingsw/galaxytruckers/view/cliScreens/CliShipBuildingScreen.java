@@ -21,7 +21,7 @@ public class CliShipBuildingScreen extends CliScreen {
 
         this.componentBank = new CliComponentBank(model);
         this.flightBoard = new CliFlightBoard(model);
-        this.allShips = new CliAllShips(model);
+        this.allShips = new CliAllShips(model.getShipToPlayer());
     }
 
     @Override

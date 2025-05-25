@@ -18,7 +18,7 @@ public class CliCrewInitialization extends CliScreen {
         super(model, controller, gameState);
 
         flightBoard = new CliFlightBoard(model);
-        allShips = new CliAllShips(model);
+        allShips = new CliAllShips(model.getShipToPlayer());
     }
 
     @Override

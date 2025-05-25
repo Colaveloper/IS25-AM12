@@ -26,7 +26,7 @@ public abstract class CliScreen {
         this.gameState = gameState;
         availableActions = gameState.getAvailableActions();
         this.flightBoard = new CliFlightBoard(model);
-        this.allShips = new CliAllShips(model);
+        this.allShips = new CliAllShips(model.getShipToPlayer());
     }
 
     public abstract void render();

@@ -1,5 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
+import org.checkerframework.dataflow.qual.Pure;
+
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -7,7 +11,11 @@ import java.util.regex.Pattern;
 public class DescriptionUtils {
     private static final Pattern ANSI_ESCAPE = Pattern.compile("\u001B\\[[;\\d]*m");
 
-    public static void sideBySide(List<String> a, List<String> b) {
+    @Pure
+    @CheckReturnValue
+    public static List<String> sideBySide(List<String> a, List<String> b) {
+        List<String> c = new ArrayList<>(a);
+
         // Find max length among a strings (treat empty strings normally)
         int leftWidth = 1;
         for (String s : a) {
@@ -20,7 +28,7 @@ public class DescriptionUtils {
 
         // Extend a list if needed
         while (a.size() < maxSize) {
-            a.add("");
+            c.add("");
         }
 
         for (int i = 0; i < maxSize; i++) {
@@ -35,11 +43,13 @@ public class DescriptionUtils {
             line.append(' ');
             line.append(right);
 
-            a.set(i, line.toString());
+            c.set(i, line.toString());
         }
-
+        return c;
     }
 
+    @Pure
+    @CheckReturnValue
     public static List<String> borderAndTitle(List<String> original, String title) {
         int contentWidth = 0;
         for (String line : original) {

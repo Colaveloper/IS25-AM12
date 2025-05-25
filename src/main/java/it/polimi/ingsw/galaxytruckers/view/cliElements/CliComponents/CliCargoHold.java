@@ -15,8 +15,8 @@ public class CliCargoHold extends CliComponent {
     private final CargoHold cargoHold;
     private final List<String> symbols;
 
-    public CliCargoHold(ClientModel model, CargoHold component) {
-        super(model, component);
+    public CliCargoHold(CargoHold component) {
+        super(component);
         this.cargoHold = component;
         if (component.isSpecial()){
             symbols = List.of("○","●");

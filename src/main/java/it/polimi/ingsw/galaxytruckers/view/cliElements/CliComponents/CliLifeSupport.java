@@ -11,8 +11,8 @@ import java.util.List;
 public class CliLifeSupport extends CliComponent {
 
     LifeSupport lifeSupport;
-    public CliLifeSupport(ClientModel model, LifeSupport component) {
-        super(model, component);
+    public CliLifeSupport(LifeSupport component) {
+        super(component);
         this.lifeSupport = component;
     }
 

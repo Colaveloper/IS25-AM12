@@ -12,8 +12,8 @@ public class CliEngine extends CliComponent {
     private Engine engine;
     private static final List<String> symbols = List.of("↓", "←", "↑", "→");
 
-    public CliEngine(ClientModel model, Engine engine) {
-        super(model, engine);
+    public CliEngine(Engine engine) {
+        super(engine);
         this.engine = engine;
     }
 

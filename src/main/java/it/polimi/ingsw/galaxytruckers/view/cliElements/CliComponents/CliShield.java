@@ -8,11 +8,11 @@ import java.util.List;
 
 public class CliShield extends CliComponent {
 
-    private Shield shield;
-    private static List<String> symbols = List.of("╮", "╯", "╰", "╭");
+    private final Shield shield;
+    private static final List<String> symbols = List.of("╮", "╯", "╰", "╭");
 
-    public CliShield(ClientModel model, Shield shield) {
-        super(model, shield);
+    public CliShield(Shield shield) {
+        super(shield);
         this.shield = shield;
     }
 

@@ -13,7 +13,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.penalty.Penalty;
 
 public class CliAdventureCard extends CliElement{
     public CliAdventureCard(ClientModel model){
-        super(model);
+        super();
     }
 
     @Override
