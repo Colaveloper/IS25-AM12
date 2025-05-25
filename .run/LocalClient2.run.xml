@@ -2,7 +2,7 @@
   <configuration default="false" name="LocalClient2" type="Application" factoryName="Application" folderName="System2Clients" singleton="false">
     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.network.client.Client" />
     <module name="Galaxy_Truckers" />
-    <option name="PROGRAM_PARAMETERS" value="Galaxy-Truckers-Server 127.0.0.1 12345" />
+    <option name="PROGRAM_PARAMETERS" value="Galaxy-Truckers-Server 127.0.0.1 12345 12346" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

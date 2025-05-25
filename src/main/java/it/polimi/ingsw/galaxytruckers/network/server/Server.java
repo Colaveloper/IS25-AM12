@@ -39,7 +39,7 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        if (args.length != 2) {
+        if (args.length != 3) {
             throw new IllegalArgumentException("Wrong number of arguments");
         }
         Server server = new Server(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]));

@@ -5,8 +5,10 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.messages.Message;
+import it.polimi.ingsw.galaxytruckers.network.messages.Ping;
 import it.polimi.ingsw.galaxytruckers.network.messages.Request;
 import it.polimi.ingsw.galaxytruckers.network.messages.Response;
+import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
@@ -51,6 +53,7 @@ class SocketClientHandler implements VirtualClient, VirtualServer {
             updateThread = new Thread(this::updateTask, "UpdateThread");
             updateThread.start();
         }
+        System.out.println("Started Socket Client Handler");
     }
 
     public void stopUpdateThread() {
@@ -86,6 +89,10 @@ class SocketClientHandler implements VirtualClient, VirtualServer {
                     case Request request -> {
                         Response response = runRequest(request);
                         outputStream.writeObject(response);
+                        outputStream.flush();
+                    }
+                    case Ping ping -> {
+                        SessionManager.getInstance().ping(player);
                     }
                     default -> {
                         System.err.println("ERROR: the server received a message of type " + message.getClass().getName());
@@ -100,6 +107,22 @@ class SocketClientHandler implements VirtualClient, VirtualServer {
                 stopRequestThread();
             }
         }
+    }
+
+    private Response runRequest(Request request) {
+        try {
+            request.execute(this);
+            return new Response(request.getUuid());
+        } catch (RuntimeException e) {
+            return new Response(request.getUuid(), e);
+        }
+    }
+
+    private void handleIOException(IOException e) {
+        System.err.println("An IOException occurred while trying to communicate with the server.");
+        e.printStackTrace(System.err);
+        stopRequestThread();
+        stopUpdateThread();
     }
 
     private void checkInLobby() {
@@ -285,21 +308,5 @@ class SocketClientHandler implements VirtualClient, VirtualServer {
     public void giveUp() {
         checkInLobby();
         lobby.giveUp(player);
-    }
-
-    private Response runRequest(Request request) {
-        try {
-            request.execute(this);
-            return new Response(request.getUuid());
-        } catch (RuntimeException e) {
-            return new Response(request.getUuid(), e);
-        }
-    }
-
-    private void handleIOException(IOException e) {
-        System.err.println("An IOException occurred while trying to communicate with the server.");
-        e.printStackTrace(System.err);
-        stopRequestThread();
-        stopUpdateThread();
     }
 }

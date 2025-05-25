@@ -33,6 +33,7 @@ public class NotRegisteredSocketHandler {
             listening = true;
             listenThread = new Thread(this::listenTask, "ListenThread");
             listenThread.start();
+            System.out.println("A not registered socket handler has started");
         }
     }
 
@@ -48,15 +49,12 @@ public class NotRegisteredSocketHandler {
                 switch (message) {
                     case RegisterNickname registerNickname -> {
                         //registerNickname.getNickname();
-                        Response response = this.registerNickname(registerNickname);
-                        outputStream.writeObject(response);
-                        if (!response.isError()) {
-                            stop();
-                        }
+                        this.registerNickname(registerNickname);
                     }
                     case RegisteredRequest req -> {
                         Response response = new Response(req.getUuid(), new IllegalStateException("You must register first"));
                         outputStream.writeObject(response);
+                        outputStream.flush();
                     }
                     default -> {
                         System.err.println("ERROR: the server received a message of type "  + message.getClass().getName());
@@ -70,14 +68,18 @@ public class NotRegisteredSocketHandler {
         }
     }
 
-    private Response registerNickname(RegisterNickname message) {
+    private void registerNickname(RegisterNickname message) throws IOException{
         try {
             Player player = controller.registerNickname(message.getNickname());
-            SocketClientHandler clientHandler = new SocketClientHandler(inputStream,outputStream,player, controller);
+            SocketClientHandler clientHandler = new SocketClientHandler(inputStream,outputStream,player,controller);
+            Response response = new Response(message.getUuid());
+            outputStream.writeObject(response);
+            outputStream.flush();
+            stop();
             SessionManager.getInstance().registerClient(player, clientHandler);
-            return new Response(message.getUuid());
+            clientHandler.start();
         } catch (RuntimeException e) {
-            return new Response(message.getUuid(), e);
+            outputStream.writeObject(new Response(message.getUuid(),e));
         }
     }
 

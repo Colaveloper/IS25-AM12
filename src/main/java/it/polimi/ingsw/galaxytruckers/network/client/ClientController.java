@@ -15,18 +15,27 @@ import javafx.application.Application;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.ObjectInputFilter;
 import java.util.*;
 import java.util.List;
 
 public class ClientController implements ClientControllerInterface, ControllerToServer{
     private final ClientModel model;
-    private final VirtualServer server;
+    private VirtualServer server;
     private View view;
     private ConfigFactory config;
 
     public ClientController(VirtualServer server) {
         this.server = server;
         this.model = new ClientModel();
+    }
+
+    public ClientController() {
+        this.model = new ClientModel();
+    }
+
+    public void setServer(VirtualServer server) {
+        this.server = server;
     }
 
     public void showInterfaceChoice() {

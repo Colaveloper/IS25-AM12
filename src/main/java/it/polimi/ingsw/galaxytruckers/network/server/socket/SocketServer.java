@@ -34,14 +34,16 @@ public class SocketServer {
         while (running) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                ObjectInputStream inputStream = new ObjectInputStream(clientSocket.getInputStream());
                 ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+                ObjectInputStream inputStream = new ObjectInputStream(clientSocket.getInputStream());
                 NotRegisteredSocketHandler handler = new NotRegisteredSocketHandler(
                         inputStream,
                         outputStream,
                         this::removeHandler,
                         serverController);
                 addHandler(handler);
+                handler.start();
+                System.out.println("Accepted new unregistered client connection");
             } catch (IOException e) {
                 handleIOException(e);
             }
@@ -58,6 +60,7 @@ public class SocketServer {
         synchronized (unregisteredSocketHandlers) {
             unregisteredSocketHandlers.remove(handler);
         }
+        System.out.println("Removed unregistered socket handler");
     }
 
     public Set<NotRegisteredSocketHandler> getUnregisteredSocketHandlers() {
