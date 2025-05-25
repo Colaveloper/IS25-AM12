@@ -1,44 +1,40 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponentBank;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.state.ShipBuildingState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
-public class CliShipBuildingScreen extends CliScreen {
-    //ConfigFactory config;
+public class CliSecondShipBuildingScreen extends CliScreen {
+
     CliComponentBank componentBank;
     CliFlightBoard flightBoard;
     CliAllShips allShips;
 
-    public CliShipBuildingScreen(ClientModel model, ControllerToServer controller, ShipBuildingState gameState) {
+    public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
-        //this.config = config;
 
-        componentBank = new CliComponentBank(model);
-        flightBoard = new CliFlightBoard(model);
-        allShips = new CliAllShips(model);
+        this.componentBank = new CliComponentBank(model);
+        this.flightBoard = new CliFlightBoard(model);
+        this.allShips = new CliAllShips(model);
     }
 
     @Override
     public void render() {
-        List<String> output = new ArrayList<>();
 
         System.out.println(componentBank.getDescription());
         System.out.println(flightBoard.getDescription());
         System.out.println(allShips.getDescription());
 
         System.out.println("C       \tGet New covered component" + "\t\t\tU [i]   \tGet i-th uncovered component");
-        System.out.println(config.isStashingAllowed() ? "S [i]   \tGet i-th stashed component" : "");
-        System.out.println(config.isForecastPresent() ? "F [i]   \tGet i-th forecast deck" : "");
+        System.out.println(model.getClientPlayer().getShipBoard().getStashedComponents() ? "S [i]   \tGet i-th stashed component" : "");
+        System.out.println("F [i]   \tGet i-th forecast deck");
 
-        if (model.getExistsUnweldedComponent()) {
+        if (model.getClientPlayer().getShipBoard().getLastComponent().isEmpty()) {
             System.out.println("P [x] [y] \tPlace unwelded component in x, y" + "\t\t\tR       \tReject unwelded component");
             System.out.println(config.isStashingAllowed() ? "S       \tStash unwelded component" : "");
             System.out.println("L       \tRotate unwelded component left");
@@ -63,7 +59,7 @@ public class CliShipBuildingScreen extends CliScreen {
 
             case "U":
                 if (parts.length == 2) {
-                    int index = Integer.parseInt(parts[1])-1;
+                    int index = Integer.parseInt(parts[1]) - 1;
                     int componentId = model.revealedComponentsProperty().get(index).getComponentId();
                     controller.requestComponent(componentId);
                 }

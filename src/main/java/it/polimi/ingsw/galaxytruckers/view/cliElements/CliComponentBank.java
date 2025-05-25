@@ -65,7 +65,7 @@ public class CliComponentBank extends CliElement {
     }
 
     @Override
-    public List<String> getNewDescription() {
+    public List<String> getDescription() {
         String padding = "  ";
         StringBuilder row = new StringBuilder();
         List<String> description = new ArrayList<>();

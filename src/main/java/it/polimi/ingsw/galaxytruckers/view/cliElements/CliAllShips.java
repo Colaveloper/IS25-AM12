@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
 import javafx.beans.property.ObjectProperty;
-import jdk.jshell.execution.Util;
 
 import java.io.IOException;
 import java.util.*;
@@ -78,17 +77,17 @@ public class CliAllShips extends CliElement {
     }
 
     @Override
-    public List<String> getNewDescription() {
+    public List<String> getDescription() {
         List<String> description = new ArrayList<>();
 
         for (FourColors c : model.getPlayerToColor().values()) {
 
-            List<String> singleShipDescription = new ArrayList<>(cliShipBoards.get(c).getNewDescription());
+            List<String> singleShipDescription = new ArrayList<>(cliShipBoards.get(c).getDescription());
             List<String> handAndStashDescription = new ArrayList<>();
             List<String> singleStashedDescription = new ArrayList<>();
 
             if (handsMap != null) {
-                List<String> hand = new ArrayList<>(handsMap.get(c).getNewDescription());
+                List<String> hand = new ArrayList<>(handsMap.get(c).getDescription());
                 hand.add(" ");
                 handAndStashDescription = DescriptionUtils.borderAndTitle(hand, "hand");
             }
@@ -98,7 +97,7 @@ public class CliAllShips extends CliElement {
                 int i = 1;
                 for(CliComponent component : stashedComponentsMap.get(c)) {
                     singleStashedDescription.clear();
-                    singleStashedDescription.addAll(component.getNewDescription());
+                    singleStashedDescription.addAll(component.getDescription());
                     singleStashedDescription.add("  "+i);
                     DescriptionUtils.sideBySide(stashed, singleStashedDescription);
                     i++;

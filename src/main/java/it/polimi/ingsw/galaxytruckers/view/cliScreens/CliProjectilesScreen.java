@@ -9,7 +9,6 @@ import it.polimi.ingsw.galaxytruckers.view.model.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +29,8 @@ public class CliProjectilesScreen extends CliScreen {
     @Override
     public void render() {
         List<String> output = new ArrayList<>();
-        output.addAll(flightBoard.getNewDescription());
-        output.addAll(allShips.getNewDescription());
+        output.addAll(flightBoard.getDescription());
+        output.addAll(allShips.getDescription());
 
         switch (model.getCurrentProjectile().direction()) {
             case 0:

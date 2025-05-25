@@ -3,9 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements;
 import it.polimi.ingsw.galaxytruckers.view.UiElement;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,5 +49,5 @@ public abstract class CliElement extends UiElement /*implements InvalidationList
 //        return descriptionCache;
 //    }
 
-    protected abstract List<String> getNewDescription();
+    protected abstract List<String> getDescription();
 }

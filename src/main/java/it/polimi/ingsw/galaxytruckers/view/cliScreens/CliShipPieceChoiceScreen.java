@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
@@ -8,7 +7,6 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +36,8 @@ public class CliShipPieceChoiceScreen extends CliScreen {
     public void render() {
         List<String> output = new ArrayList<>();
 
-        output.addAll(flightBoard.getNewDescription());
-        output.addAll(allShips.getNewDescription());
+        output.addAll(flightBoard.getDescription());
+        output.addAll(allShips.getDescription());
 
         if (!model.shipIsValid()) {
             output.add("your ship is broken, choose a piece of ship to keep");

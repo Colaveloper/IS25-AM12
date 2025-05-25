@@ -40,7 +40,7 @@ public class CliShipBoard extends CliElement {
     }
 
     @Override
-    public List<String> getNewDescription() throws IOException {
+    public List<String> getDescription() throws IOException {
 
         List<String> result = new ArrayList<>();
         List<String> rowDescription = new ArrayList<>();

@@ -18,7 +18,7 @@ public class CliForecast extends CliElement {
     }
 
     @Override
-    protected List<String> getNewDescription() throws IOException {
+    protected List<String> getDescription() throws IOException {
         //Visualizza array di booleani per i deck bloccati
         for (AdventureCard adventureCard : forecastDeck) {
             switch (adventureCard) {

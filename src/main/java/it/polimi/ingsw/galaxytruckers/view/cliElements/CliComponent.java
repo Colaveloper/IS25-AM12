@@ -74,7 +74,7 @@ public class CliComponent extends CliElement {
     }
 
     @Override
-    public List<String> getNewDescription() {
+    public List<String> getDescription() {
         JsonNode node = componentProperty.get().getNode();
 
         Highlights color = Highlights.getSomeColors(componentProperty.get().getDisconnectedShipIndex()).getLast();
