@@ -5,8 +5,6 @@ import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
-import java.rmi.AlreadyBoundException;
-import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;

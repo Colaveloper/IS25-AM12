@@ -53,7 +53,7 @@ public class Player {
         }
     }
 
-    private Player(String nickname) {
+    public Player(String nickname) {
         this.nickname = nickname;
     }
 

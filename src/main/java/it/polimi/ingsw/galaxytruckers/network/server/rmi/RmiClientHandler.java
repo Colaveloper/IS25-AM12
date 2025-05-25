@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -22,6 +23,8 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     private final RemoteClient remoteClient;
     private final ServerControllerInterface controller;
     private LobbyInterface lobby;
+    private SessionManager sessionManager;
+    private Runnable afterEach = () -> {};
 
     private Thread updateThread;
     private boolean running = false;
@@ -36,7 +39,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
         this.controller = controller;
         this.updateThread = null;
         this.events = new LinkedBlockingDeque<>();
-        startUpdateThread();
+        this.sessionManager = SessionManager.getInstance();
     }
 
     public void startUpdateThread() {
@@ -63,7 +66,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
         stopUpdateThread();
     }
 
-    private void runUpdateThread() {
+    protected void runUpdateThread() {
         Event event = null;
         while (running) {
             try {
@@ -74,13 +77,15 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
             } catch (RemoteException e) {
                 events.offerFirst(event);
                 handleNetworkError(e);
+            } finally {
+                afterEach.run();
             }
         }
     }
 
     @Override
     public void ping() throws RemoteException {
-        SessionManager.getInstance().ping(player);
+        sessionManager.ping(player);
     }
 
     // VirtualClient
@@ -256,6 +261,31 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
     public void giveUp() throws RemoteException {
         checkLobby();
         lobby.giveUp(player);
+    }
+
+    @VisibleForTesting
+    protected void setLobby(LobbyInterface lobby) {
+        this.lobby = lobby;
+    }
+
+    @VisibleForTesting
+    protected void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
+
+    @VisibleForTesting
+    protected boolean isRunning() {
+        return running;
+    }
+
+    @VisibleForTesting
+    protected void setAfterEach(Runnable afterEach) {
+        this.afterEach = afterEach;
+    }
+
+    @VisibleForTesting
+    protected Thread getUpdateThread() {
+        return updateThread;
     }
 }
 
