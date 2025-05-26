@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.Dice;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
@@ -18,7 +19,7 @@ public class SabotageCard extends AdventureCard {
     }
 
     @Override
-    public GameState nextStep() {
+    public AdventureState getNextState() {
         currentShipBoard = flightBoard.getOrderedShips().getFirst();
         for (ShipBoard shipBoard : flightBoard.getOrderedShips()) {
             if (shipBoard.getCrewSize() < currentShipBoard.getCrewSize()) {

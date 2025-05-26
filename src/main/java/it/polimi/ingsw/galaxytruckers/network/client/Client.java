@@ -1,29 +1,39 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RmiClient;
-import it.polimi.ingsw.galaxytruckers.network.server.Server;
+import it.polimi.ingsw.galaxytruckers.network.client.socket.SocketClient;
 
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class Client {
     private ClientController clientController;
-    private RmiClient rmiClient;
+    private VirtualServer server;
     //TODO: add socket implementation
 
-    public void start(String serverName, String serverAddress, int port) {
+    public void start(String serverName, String serverAddress, int rmiPort, int socketPort) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Do you wish to use RMI (0) or Socket (1) for communication with the server?");
         boolean chosen = false;
+        this.clientController = new ClientController();
         do {
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
                 if (choice == 0) {
                     chosen = true;
-                    this.rmiClient = new RmiClient();
-                    rmiClient.start(serverName, serverAddress, port);
+                    RmiClient rmiClient = new RmiClient();
+                    server = rmiClient;
+                    clientController.setServer(server);
+                    rmiClient.setClientController(clientController);
+                    rmiClient.start(serverName, serverAddress, rmiPort);
+                    this.server = rmiClient;
                 } else if (choice == 1) {
-                    //TODO: set virtual server to SocketImplementation
+                    chosen = true;
+                    SocketClient socketClient = new SocketClient();
+                    server = socketClient;
+                    clientController.setServer(server);
+                    socketClient.setController(clientController);
+                    socketClient.start(serverAddress, socketPort);
                     System.out.println("TODO: implement Socket communication");
                     return;
                 } else {
@@ -35,26 +45,20 @@ public class Client {
                 throw new RuntimeException(e);
             }
         } while (!chosen);
-
-        this.clientController = new ClientController(this.rmiClient);
-        this.rmiClient.setClientController(this.clientController);
     }
 
     public ClientController getClientController() {
         return clientController;
     }
 
-    public RmiClient getRmiClient() {
-        return rmiClient;
-    }
 
     public static void main(String[] args) {
         Client client = new Client();
-        if (args.length == 0) {
+        if (args.length != 4) {
             System.out.println("Please enter the address of the server");
             return;
         }
-        client.start(Server.name, args[0], Server.port);
+        client.start(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
         System.out.println("Successfully connected to the server");
         client.clientController.showInterfaceChoice();
     }

@@ -4,6 +4,9 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Component;
 import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -11,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
@@ -26,6 +30,7 @@ public class GuiComponentBank extends GuiElement {
         box.setAlignment(Pos.CENTER);
         ObservableList<Node> squares = box.getChildren();
         squares.add(covered());
+        squares.add(revealedComponents());
 
         model.revealedComponentsProperty().addListener((ListChangeListener<Component>) change -> {
             while (change.next()) {
@@ -52,9 +57,7 @@ public class GuiComponentBank extends GuiElement {
         square.setStyle("-fx-background-color: lightgray; -fx-border-color: black;");
 
         Label label = new Label();
-        model.coveredComponentNProperty().addListener((observable, oldValue, newValue) -> {
-            Platform.runLater(() -> label.textProperty().set(newValue.toString()));
-        });
+        label.textProperty().bind(model.coveredComponentNProperty().asString());
 
         square.getChildren().add(label);
 
@@ -63,5 +66,28 @@ public class GuiComponentBank extends GuiElement {
         });
 
         return square;
+    }
+
+    private Node revealedComponents() {
+        VBox container = new VBox(10); // Spacing between components
+        container.setAlignment(Pos.TOP_LEFT); // Optional alignment
+        ListProperty<Component> componentList = model.revealedComponentsProperty();
+        componentList.addListener((ListChangeListener<Component>) change -> {
+            Platform.runLater(() -> {
+                container.getChildren().clear();
+                for (Component component : componentList) {
+                    GuiComponent guiComponent = new GuiComponent(model, controller, component);
+                    container.getChildren().add(guiComponent.getNode());
+                }
+            });
+        });
+
+        // Initial population
+        for (Component component : componentList) {
+            GuiComponent guiComponent = new GuiComponent(model, controller, component);
+            container.getChildren().add(guiComponent.getNode());
+        }
+
+        return container;
     }
 }

@@ -4,14 +4,13 @@ import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,8 +30,8 @@ class ChoosePlanetStateTest {
 
     @BeforeEach
     void setup(){
-        ship1 = new SecondShipBoard(FourColors.RED);
-        ship2 = new SecondShipBoard(FourColors.BLUE);
+        ship1 = new SecondShipBoard(GameColor.RED);
+        ship2 = new SecondShipBoard(GameColor.BLUE);
         options = new HashSet<>();
         options.add(1);
         options.add(2);
@@ -53,7 +52,7 @@ class ChoosePlanetStateTest {
     }
 
     @Test
-    void choosePlanetAcceptsChoiceAndChangesGameState() throws IOException {
+    void choosePlanetAcceptsChoiceAndChangesAdventureState() throws IOException {
         game = new Game(Level.SECOND){
             @Override
             public Deck getDeck(){
@@ -62,7 +61,7 @@ class ChoosePlanetStateTest {
         };
         adventureCard = new AdventureCard(game, Level.SECOND,1) {
             @Override
-            public GameState nextStep() {
+            public AdventureState getNextState() {
                 return new AdventureState();
             }
         };
@@ -83,7 +82,7 @@ class ChoosePlanetStateTest {
     }
 
     @Test
-    void goNextChangesGameState() throws IOException {
+    void goNextChangesAdventureState() throws IOException {
         game = new Game(Level.SECOND){
             @Override
             public Deck getDeck(){
@@ -92,7 +91,7 @@ class ChoosePlanetStateTest {
         };
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
-            public GameState nextStep() {
+            public AdventureState getNextState() {
                 return new AdventureState();
             }
         };

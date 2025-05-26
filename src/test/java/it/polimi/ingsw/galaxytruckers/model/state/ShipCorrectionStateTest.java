@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
@@ -34,9 +34,9 @@ class ShipCorrectionStateTest {
         void setup() throws IOException {
             shipCorrectionState = new TestShipCorrectionState();
             game = new Game(Level.TEST);
-            shipBoards.add(game.addShipBoard(FourColors.BLUE));
-            shipBoards.add(game.addShipBoard(FourColors.RED));
-            shipBoards.add(game.addShipBoard(FourColors.GREEN));
+            shipBoards.add(game.addShipBoard(GameColor.BLUE));
+            shipBoards.add(game.addShipBoard(GameColor.RED));
+            shipBoards.add(game.addShipBoard(GameColor.GREEN));
             game.setEventListener(new GameEventListenerStub());
             game.start();
             for (ShipBoard shipBoard : shipBoards) {
@@ -135,9 +135,9 @@ class ShipCorrectionStateTest {
         void setup() throws IOException {
             shipCorrectionState = new SecondShipCorrectionState();
             game = new Game(Level.TEST);
-            shipBoards.add(game.addShipBoard(FourColors.BLUE));
-            shipBoards.add(game.addShipBoard(FourColors.RED));
-            shipBoards.add(game.addShipBoard(FourColors.GREEN));
+            shipBoards.add(game.addShipBoard(GameColor.BLUE));
+            shipBoards.add(game.addShipBoard(GameColor.RED));
+            shipBoards.add(game.addShipBoard(GameColor.GREEN));
             game.setEventListener(new GameEventListenerStub());
             game.start();
             for (ShipBoard shipBoard : shipBoards) {

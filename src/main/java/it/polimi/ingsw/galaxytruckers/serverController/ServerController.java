@@ -13,7 +13,6 @@ import java.util.concurrent.ConcurrentMap;
 
 public class ServerController implements ServerControllerInterface {
 
-
     private final GameModelInterface model;
     private static final ConcurrentMap<UUID, Lobby> idToLobby = new ConcurrentHashMap<>();
 
@@ -28,7 +27,7 @@ public class ServerController implements ServerControllerInterface {
 
     @Override
     public LobbyInterface newGame(Player creator, Level level, int numPlayers) {
-        Lobby newLobby = new Lobby(model, this, creator, level, numPlayers);
+        Lobby newLobby = new Lobby(model, creator, level, numPlayers);
         idToLobby.put(newLobby.getId(), newLobby);
         System.out.println(creator.getNickname() + " has created a new lobby: " + newLobby.getId());
         return newLobby;

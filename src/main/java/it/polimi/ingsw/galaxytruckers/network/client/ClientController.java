@@ -1,5 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.*;
@@ -10,19 +12,26 @@ import it.polimi.ingsw.galaxytruckers.view.model.Player;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.ObjectInputFilter;
 import java.util.*;
 
-public class ClientController implements
-        //ClientControllerInterface,
-        ControllerToServer {
+public class ClientController implements ClientControllerInterface, ControllerToServer{
     private final ClientModel model;
-    private final VirtualServer server;
+    private VirtualServer server;
     private View view;
     private ConfigFactory config;
 
     public ClientController(VirtualServer server) {
         this.server = server;
         this.model = new ClientModel();
+    }
+
+    public ClientController() {
+        this.model = new ClientModel();
+    }
+
+    public void setServer(VirtualServer server) {
+        this.server = server;
     }
 
     public void showInterfaceChoice() {
@@ -318,6 +327,7 @@ public class ClientController implements
     public void goNext() {
         try {
             server.goNext(model.getClientPlayer().getNickname());
+            server.goNext();
         } catch (IllegalArgumentException e) {
             reportError("could not go on with card");
         }

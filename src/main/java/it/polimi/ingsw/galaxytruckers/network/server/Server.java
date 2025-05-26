@@ -2,27 +2,47 @@ package it.polimi.ingsw.galaxytruckers.network.server;
 
 import it.polimi.ingsw.galaxytruckers.model.GameModel;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;
+import it.polimi.ingsw.galaxytruckers.network.server.socket.SocketServer;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 
 public class Server {
-    public static final String name = "Galaxy-Truckers-Server";
-    public static final int port = 12345;
+    private final String name;
+    private final int rmiPort;
+    private final int socketPort;
+
+    public Server(String name, int rmiPort, int socketPort) {
+        this.name = name;
+        this.rmiPort = rmiPort;
+        this.socketPort = socketPort;
+    }
 
     public void start() {
-        ServerController controller = new ServerController(new GameModel());
+        ServerController controller = new ServerController(new GameModel()); // TODO: consider making ServerControllerInterface
         SessionManager.getInstance().setServerController(controller);
         try {
             RmiServer rmiServer = new RmiServer(controller);
-            rmiServer.start(name, port);
+            rmiServer.start(name, rmiPort);
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.err.println("Failed to start RMI server: ");
+            e.printStackTrace(System.err);
+        }
+        try {
+            SocketServer socketServer = new SocketServer(controller);
+            socketServer.start(socketPort);
+        } catch (IOException e) {
+            System.err.println("Failed to start socket server: ");
+            e.printStackTrace(System.err);
         }
     }
 
     public static void main(String[] args) {
-        Server server = new Server();
+        if (args.length != 3) {
+            throw new IllegalArgumentException("Wrong number of arguments");
+        }
+        Server server = new Server(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]));
         server.start();
         System.out.println("The server has been started...");
     }

@@ -47,7 +47,7 @@ public class AddGoodsState extends AdventureState {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
-        game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
+        game.setCurrentState(super.getNextState());
     }
 
     @VisibleForTesting

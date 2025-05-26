@@ -1,10 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.SecondFlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -25,7 +24,7 @@ class AdventureStateTest {
     @BeforeEach
     void setup(){
         testAdventureState = new AdventureState();
-        ship1 = new SecondShipBoard(FourColors.RED);
+        ship1 = new SecondShipBoard(GameColor.RED);
     }
 
     @Test

@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -49,7 +49,7 @@ class SabotageCardTest {
         ships = new ArrayList<>();
         largerShips = new ArrayList<>();
 
-        ship1 = new SecondShipBoard(FourColors.BLUE) {
+        ship1 = new SecondShipBoard(GameColor.BLUE) {
             @Override
             public int getCrewSize() {
                 return 2;
@@ -61,7 +61,7 @@ class SabotageCardTest {
             }
         };
 
-        ship2 = new SecondShipBoard(FourColors.RED) {
+        ship2 = new SecondShipBoard(GameColor.RED) {
             @Override
             public int getCrewSize() {
                 return 3;
@@ -73,7 +73,7 @@ class SabotageCardTest {
             }
         };
 
-        ship3 = new SecondShipBoard(FourColors.GREEN) {
+        ship3 = new SecondShipBoard(GameColor.GREEN) {
             @Override
             public int getCrewSize() {
                 return 1;
@@ -163,7 +163,7 @@ class SabotageCardTest {
 
     @Test
     void correctShipExplodes() {
-        testState = sabotageCard.nextStep();
+        testState = sabotageCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
         assertTrue(shipExploded.contains(ship1));
         assertFalse(shipExploded.contains(ship2));
@@ -178,7 +178,7 @@ class SabotageCardTest {
         };
         sabotageCard = new SabotageCard(game, Level.SECOND,1);
         sabotageCard.initialize();
-        testState = sabotageCard.nextStep();
+        testState = sabotageCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
         assertTrue(shipExploded.contains(ship3));
         assertFalse(shipExploded.contains(ship1));

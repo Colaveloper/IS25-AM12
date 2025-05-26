@@ -10,7 +10,7 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.FirePowerCheck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.penalty.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.BigFire;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
@@ -43,7 +43,7 @@ class CombatZoneCardTest {
                 new CrewLoss(1),
                 new GoodsLoss(1),
                 new ProjectileThreat(new ArrayList<>(projectiles)));
-        ShipBoard shipBoard1 = new ShipBoard(FourColors.BLUE) {
+        ShipBoard shipBoard1 = new ShipBoard(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
@@ -64,7 +64,7 @@ class CombatZoneCardTest {
                 return 1;
             }
         };
-        ShipBoard shipBoard2 = new ShipBoard(FourColors.RED) {
+        ShipBoard shipBoard2 = new ShipBoard(GameColor.RED) {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
@@ -85,7 +85,7 @@ class CombatZoneCardTest {
                 return 2;
             }
         };
-        ShipBoard shipBoard3 = new ShipBoard(FourColors.GREEN) {
+        ShipBoard shipBoard3 = new ShipBoard(GameColor.GREEN) {
             @Override
             protected boolean containsPoint(Point point) {
                 return false;
@@ -124,14 +124,14 @@ class CombatZoneCardTest {
 
     @Test
     void checkWithNoAvailableActionImmediatelyGivesPenalty() {
-        GameState testState = card.nextStep();
+        GameState testState = card.getNextState();
         assertInstanceOf(DeclareEnginePowerState.class, testState);
     }
 
     @Test
     void checkWithAvailableActionReturnsActionForEachPlayer() {
         for (int i = 0; i < shipBoards.size(); i++) {
-            GameState testState = card.nextStep();
+            GameState testState = card.getNextState();
             assertInstanceOf(DeclareEnginePowerState.class, testState);
         }
     }
@@ -139,19 +139,19 @@ class CombatZoneCardTest {
     @Test
     void penaltyWithRelatedActionReturnsAction() {
         for (int i = 0; i < shipBoards.size(); i++) {
-            card.nextStep();
+            card.getNextState();
         }
-        GameState testState = card.nextStep();
+        GameState testState = card.getNextState();
         assertInstanceOf(RemoveCrewState.class, testState);
     }
 
     @Test
     void penaltyWithNoMoreActionsSkipsToNextCheck() {
         for (int i = 0; i < shipBoards.size(); i++) {
-            card.nextStep();
+            card.getNextState();
         }
-        card.nextStep();
-        GameState testState = card.nextStep();
+        card.getNextState();
+        GameState testState = card.getNextState();
         assertInstanceOf(DeclareFirePowerState.class, testState);
     }
 
@@ -160,28 +160,28 @@ class CombatZoneCardTest {
         GameState testState = null;
         for (int times = 0; times < 2; times++) {
             for (int i = 0; i < shipBoards.size(); i++) {
-                card.nextStep();
+                card.getNextState();
             }
-            card.nextStep();
+            card.getNextState();
         }
         for (int i = 0; i < projectiles.size(); i++) {
-            testState = card.nextStep();
+            testState = card.getNextState();
             assertInstanceOf(HandleProjectileState.class, testState);
         }
     }
 
     @Test
-    void nextStepWhenCardIsOverReturnsDraw() {
+    void getNextStateWhenCardIsOverReturnsDraw() {
         for (int times = 0; times < 2; times++) {
             for (int i = 0; i < shipBoards.size(); i++) {
-                card.nextStep();
+                card.getNextState();
             }
-            card.nextStep();
+            card.getNextState();
         }
         for (int i = 0; i < projectiles.size(); i++) {
-            card.nextStep();
+            card.getNextState();
         }
-        assertInstanceOf(DrawCardState.class, card.nextStep());
+        assertInstanceOf(DrawCardState.class, card.getNextState());
     }
 
     @Test

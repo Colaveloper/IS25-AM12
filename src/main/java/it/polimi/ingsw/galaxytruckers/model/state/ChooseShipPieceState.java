@@ -24,6 +24,6 @@ public class ChooseShipPieceState extends AdventureState {
         Set<Point> componentsToRemove = shipBoard.getComponentMap().keySet();
         componentsToRemove.removeAll(shipPieces.get(pieceIndex));
         componentsToRemove.forEach(shipBoard::discardComponent);
-        game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
+        game.setCurrentState(super.getNextState());
     }
 }

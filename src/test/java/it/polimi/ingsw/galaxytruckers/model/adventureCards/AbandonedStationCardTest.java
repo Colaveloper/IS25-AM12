@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -49,7 +49,7 @@ class AbandonedStationCardTest {
         ships = new ArrayList<>();
         loserShips = new ArrayList<>();
 
-        ship1 = new SecondShipBoard(FourColors.RED) {
+        ship1 = new SecondShipBoard(GameColor.RED) {
 
             @Override
             public int getCrewSize() {
@@ -57,21 +57,21 @@ class AbandonedStationCardTest {
             }
         };
 
-        ship2 = new SecondShipBoard(FourColors.GREEN) {
+        ship2 = new SecondShipBoard(GameColor.GREEN) {
             @Override
             public int getCrewSize() {
                 return 3;
             }
         };
 
-        ship3 = new SecondShipBoard(FourColors.BLUE) {
+        ship3 = new SecondShipBoard(GameColor.BLUE) {
             @Override
             public int getCrewSize() {
                 return 1;
             }
         };
 
-        ship4 = new SecondShipBoard(FourColors.BLUE) {
+        ship4 = new SecondShipBoard(GameColor.BLUE) {
             @Override
             public int getCrewSize() {
                 return 5;
@@ -168,13 +168,13 @@ class AbandonedStationCardTest {
         };
         abandonedStationCard = new AbandonedStationCard(game, Level.SECOND, goodsWon, 2, 1,1);
         abandonedStationCard.initialize();
-        testState = abandonedStationCard.nextStep();
+        testState = abandonedStationCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
     }
 
     @Test
     void firstStepSkipToFirstWhoCanLand() {
-        testState = abandonedStationCard.nextStep();
+        testState = abandonedStationCard.getNextState();
         assertInstanceOf(GrabRewardState.class, testState);
     }
 
@@ -183,14 +183,14 @@ class AbandonedStationCardTest {
 
     @Test
     void chooseToTakeAndProcessUntilEndCard() {
-        testState = abandonedStationCard.nextStep();
+        testState = abandonedStationCard.getNextState();
         assertInstanceOf(GrabRewardState.class, testState);
 
         abandonedStationCard.getReward();
-        testState = abandonedStationCard.nextStep();
+        testState = abandonedStationCard.getNextState();
         assertInstanceOf(AddGoodsState.class, testState);
 
-        testState = abandonedStationCard.nextStep();
+        testState = abandonedStationCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
 
         assertTrue(displacedShips.contains(ship2));
@@ -198,20 +198,20 @@ class AbandonedStationCardTest {
 
     @Test
     void ship2DoestTakeButShip4DoesToEnd() {
-        testState = abandonedStationCard.nextStep();
+        testState = abandonedStationCard.getNextState();
         assertInstanceOf(GrabRewardState.class, testState);
 
         // abandonedStationCard.getReward();
 
-        testState = abandonedStationCard.nextStep();
+        testState = abandonedStationCard.getNextState();
         assertInstanceOf(GrabRewardState.class, testState);
 
         abandonedStationCard.getReward();
 
-        testState = abandonedStationCard.nextStep();
+        testState = abandonedStationCard.getNextState();
         assertInstanceOf(AddGoodsState.class, testState);
 
-        testState = abandonedStationCard.nextStep();
+        testState = abandonedStationCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
 
         assertTrue(displacedShips.contains(ship4));

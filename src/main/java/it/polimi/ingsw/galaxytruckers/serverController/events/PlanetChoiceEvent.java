@@ -6,16 +6,12 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import java.awt.*;
 import java.util.List;
 
-public record PlanetChoiceEvent(String playerName, int planetId, List<Point> cargoPoints) implements Event {
+public record PlanetChoiceEvent(String playerName, int planetId) implements Event {
     public static PlanetChoiceEvent from(ShipBoard shipBoard, int planetId) {
         return new PlanetChoiceEvent(
                 Player.getPlayer(shipBoard).getNickname(),
-                planetId,
-                shipBoard.getCargoHolds().keySet().stream().toList());
+                planetId
+        );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

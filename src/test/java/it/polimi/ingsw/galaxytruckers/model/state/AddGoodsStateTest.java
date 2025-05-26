@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -30,7 +30,7 @@ class AddGoodsStateTest {
 
     @BeforeEach
     void setup(){
-        ship1 = new SecondShipBoard(FourColors.RED){
+        ship1 = new SecondShipBoard(GameColor.RED){
             @Override
             public void placeGoods(Point pos, GoodsType goods, int num){
                 // mock
@@ -40,7 +40,7 @@ class AddGoodsStateTest {
                 // mock
             }
         };
-        ship2 = new SecondShipBoard(FourColors.BLUE);
+        ship2 = new SecondShipBoard(GameColor.BLUE);
         goodsBuffer = new HashMap<>();
         goodsBuffer.put(GoodsType.GREEN, 0);
         goodsBuffer.put(GoodsType.RED, 1);
@@ -100,7 +100,7 @@ class AddGoodsStateTest {
         };
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
-            public GameState nextStep() {
+            public AdventureState getNextState() {
                 return new AdventureState();
             }
         };

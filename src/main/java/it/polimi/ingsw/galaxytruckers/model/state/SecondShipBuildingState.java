@@ -14,7 +14,7 @@ import java.util.Set;
 public class SecondShipBuildingState extends ShipBuildingState {
     private final Hourglass hourglass = new Hourglass(3);
     private final Map<ShipBoard, Integer> shipToForecasts = new HashMap<>();
-    private final Set<Integer> blockedForecasts = new HashSet<>();
+        private final Set<Integer> blockedForecasts = new HashSet<>();
 
     public SecondShipBuildingState() {
         super();

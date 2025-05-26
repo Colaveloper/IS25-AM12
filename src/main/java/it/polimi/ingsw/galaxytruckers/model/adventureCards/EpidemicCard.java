@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Cabin;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
@@ -21,7 +22,7 @@ public class EpidemicCard extends AdventureCard {
     }
 
     @Override
-    public GameState nextStep() {
+    public AdventureState getNextState() {
         for(ShipBoard shipBoard : flightBoard.getOrderedShips()) {
 
             // check currentShipboard for cabins

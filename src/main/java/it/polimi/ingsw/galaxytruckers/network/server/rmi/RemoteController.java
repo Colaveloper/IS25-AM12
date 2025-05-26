@@ -15,7 +15,7 @@ public interface RemoteController extends Remote {
     void newGame(Level level, int numPlayers) throws RemoteException;
     void joinLobby(UUID lobbyID) throws RemoteException;
     void leaveLobby() throws RemoteException;
-    // void chooseColor(FourColors color) throws RemoteException;
+    // void chooseColor(GameColor color) throws RemoteException;
 
     // Ship building
     void requestRandComponent() throws RemoteException;

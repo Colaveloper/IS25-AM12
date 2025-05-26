@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CombatZoneCheck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.penalty.Penalty;
@@ -42,24 +41,24 @@ public class CombatZoneCard extends AdventureCard {
     }
 
     @Override
-    public GameState nextStep() {
+    public AdventureState getNextState() {
         if (penalizedShipBoard == null) {
             if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {
                 currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex++);
-                Optional<GameState> availableAction = checks.get(checkIndex).getAvailableAction(currentShipBoard);
+                Optional<AdventureState> availableAction = checks.get(checkIndex).getAvailableAction(currentShipBoard);
                 if (availableAction.isPresent()) {
                     return availableAction.get();
                 } else {
                     penalizedShipBoard = checks.get(checkIndex).getWeakestPlayer(flightBoard);
-                    return nextStep();
+                    return getNextState();
                 }
             } else {
                 penalizedShipBoard = checks.get(checkIndex).getWeakestPlayer(flightBoard);
                 flightBoard.getShipToPlace().keySet().forEach(ShipBoard::deactivateAll);
-                return nextStep();
+                return getNextState();
             }
         } else {
-            Optional<GameState> penaltyAction = penalties.get(checkIndex).givePenalty(penalizedShipBoard, flightBoard);
+            Optional<AdventureState> penaltyAction = penalties.get(checkIndex).inflictPenalty(penalizedShipBoard, flightBoard);
             if (penaltyAction.isPresent()) {
                 return penaltyAction.get();
             } else {
@@ -69,7 +68,7 @@ public class CombatZoneCard extends AdventureCard {
                 if (checkIndex >= checks.size()) {
                     return new DrawCardState();
                 }
-                return nextStep();
+                return getNextState();
             }
         }
     }

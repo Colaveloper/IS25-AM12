@@ -2,9 +2,6 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.serverController.events.InvalidShipsUpdateEvent;
-import it.polimi.ingsw.galaxytruckers.serverController.events.ShipNotConnectedEvent;
-import it.polimi.ingsw.galaxytruckers.serverController.events.ShipPieceRemoveEvent;
 
 import java.awt.*;
 import java.util.*;

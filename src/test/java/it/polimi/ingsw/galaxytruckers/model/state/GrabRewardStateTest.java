@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -26,8 +26,8 @@ class GrabRewardStateTest {
 
     @BeforeEach
     void setup(){
-        ship1 = new SecondShipBoard(FourColors.BLUE);
-        ship2 = new SecondShipBoard(FourColors.RED);
+        ship1 = new SecondShipBoard(GameColor.BLUE);
+        ship2 = new SecondShipBoard(GameColor.RED);
         rewardMethod = () ->{
             // mock
         };
@@ -40,7 +40,7 @@ class GrabRewardStateTest {
     }
 
     @Test
-    void grabRewardRunsRewardMethodAndChangesGameState() throws IOException {
+    void grabRewardRunsRewardMethodAndChangesAdventureState() throws IOException {
         game = new Game(Level.SECOND){
             @Override
             public Deck getDeck(){
@@ -49,7 +49,7 @@ class GrabRewardStateTest {
         };
         adventureCard = new AdventureCard(game, Level.SECOND,1) {
             @Override
-            public GameState nextStep() {
+            public AdventureState getNextState() {
                 return new AdventureState();
             }
         };
@@ -70,7 +70,7 @@ class GrabRewardStateTest {
     }
 
     @Test
-    void goNextChangesGameState() throws  IOException{
+    void goNextChangesAdventureState() throws  IOException{
         game = new Game(Level.SECOND){
             @Override
             public Deck getDeck(){
@@ -79,7 +79,7 @@ class GrabRewardStateTest {
         };
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
-            public GameState nextStep() {
+            public AdventureState getNextState() {
                 return new AdventureState();
             }
         };

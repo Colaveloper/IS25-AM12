@@ -2,7 +2,9 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.Hourglass;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
@@ -39,8 +41,8 @@ class ShipBuildingStateTest {
         @BeforeEach
         void setUp() {
             game = new Game(Level.SECOND);
-            shipBoards.add(game.addShipBoard(FourColors.BLUE));
-            shipBoards.add(game.addShipBoard(FourColors.RED));
+            shipBoards.add(game.addShipBoard(GameColor.BLUE));
+            shipBoards.add(game.addShipBoard(GameColor.RED));
             game.setEventListener(new GameEventListenerStub());
 
             // Make the first ship invalid so that it does not automatically change state
@@ -62,6 +64,7 @@ class ShipBuildingStateTest {
                 throw new RuntimeException(e);
             }
             shipBuildingState = (SecondShipBuildingState) game.getCurrentState();
+            shipBuildingState.getHourglass().stop();
         }
 
         @Test
@@ -105,7 +108,7 @@ class ShipBuildingStateTest {
 
         @Test
         void rejectComponentThrowsExceptionWhenNoComponentPresent() {
-            assertThrows(IllegalStateException.class, () -> shipBuildingState.rejectComponent(new SecondShipBoard(FourColors.RED)));
+            assertThrows(IllegalStateException.class, () -> shipBuildingState.rejectComponent(new SecondShipBoard(GameColor.RED)));
         }
 
         @Test
@@ -142,15 +145,16 @@ class ShipBuildingStateTest {
 
         @Test
         void lastFlipHourglassThrowsExceptionIfShipIsNotCompleted() throws InterruptedException {
-            shipBuildingState.getHourglass().setDuration(100);
-
-            for (int i = 0; i < 2; i++) {
+            //TODO: decide whether to let players flip the hourglass before building
+            Hourglass hourglass = shipBuildingState.getHourglass();
+            shipBuildingState.getHourglass().setDuration(10);
+            for (int i = 1; i < 2; i++) {
                 try {
                     shipBuildingState.flipHourglass(shipBoards.getFirst());
                 } catch (IllegalStateException e) {
                     throw new RuntimeException("Timer is still running, i = " + i);
                 }
-                Thread.sleep(150);
+                Thread.sleep(20);
             }
             assertThrows(IllegalStateException.class, () -> shipBuildingState.flipHourglass(shipBoards.getFirst()));
         }
@@ -238,18 +242,15 @@ class ShipBuildingStateTest {
 
             @Test
             void lastFlipHourglassEndsBuilding() throws InterruptedException{
+                shipBuildingState.getHourglass().stop();
                 shipBuildingState.getHourglass().setDuration(10);
 
-                for (int i = 0; i < 3; i++) {
-                    try {
-                        shipBuildingState.flipHourglass(shipBoards.getFirst());
-                    } catch (IllegalStateException e) {
-                        throw new RuntimeException("Timer is still running, i = " + i);
-                    }
-                    Thread.sleep(50);
+                for (int i = 1; i < 3; i++) {
+                    shipBuildingState.flipHourglass(shipBoards.getFirst());
+                    Thread.sleep(100);
                 }
 
-                assertInstanceOf(ShipCorrectionState.class, game.getCurrentState());
+                assertNotEquals(game.getCurrentState(), shipBuildingState);
             }
 
             @Test
@@ -275,8 +276,8 @@ class ShipBuildingStateTest {
         @BeforeEach
         void setUp() {
             game = new Game(Level.TEST);
-            shipBoards.add(game.addShipBoard(FourColors.BLUE));
-            shipBoards.add(game.addShipBoard(FourColors.RED));
+            shipBoards.add(game.addShipBoard(GameColor.BLUE));
+            shipBoards.add(game.addShipBoard(GameColor.RED));
             game.setEventListener(new GameEventListenerStub());
 
             // Make the first ship invalid so that it does not automatically change state

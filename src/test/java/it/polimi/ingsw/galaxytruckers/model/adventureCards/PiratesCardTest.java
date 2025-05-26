@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -36,7 +36,7 @@ class PiratesCardTest {
         shipPieces.add(new HashSet<>());
         removePiece = false;
         lastShipPower = firePowerThreshold+1;
-        ships.add(new SecondShipBoard(FourColors.BLUE) {
+        ships.add(new SecondShipBoard(GameColor.BLUE) {
             @Override
             public int getFirePower() {
                 return firePowerThreshold-1;
@@ -47,13 +47,13 @@ class PiratesCardTest {
                 return shipPieces;
             }
         });
-        ships.add(new SecondShipBoard(FourColors.RED) {
+        ships.add(new SecondShipBoard(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return firePowerThreshold;
             }
         });
-        ships.add(new SecondShipBoard(FourColors.RED) {
+        ships.add(new SecondShipBoard(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return lastShipPower;
@@ -142,8 +142,8 @@ class PiratesCardTest {
     }
 
     @Test
-    void nextStepReturnsActivate() {
-        GameState testState = piratesCard.nextStep();
+    void getNextStateReturnsActivate() {
+        GameState testState = piratesCard.getNextState();
         assertInstanceOf(DeclareFirePowerState.class, testState);
         assertFalse(piratesCard.isDefeated());
         assertNull(piratesCard.getWinnerShipBoard());
@@ -151,8 +151,8 @@ class PiratesCardTest {
 
     @Test
     void weakPlayerIsDefeated() {
-        piratesCard.nextStep();
-        GameState testState = piratesCard.nextStep();
+        piratesCard.getNextState();
+        GameState testState = piratesCard.getNextState();
         assertEquals(ships.subList(0,1), piratesCard.getDefeatedPlayers());
         assertFalse(piratesCard.isDefeated());
         assertInstanceOf(DeclareFirePowerState.class, testState);
@@ -161,9 +161,9 @@ class PiratesCardTest {
 
     @Test
     void playerWithEqualPowerChangesNothing() {
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        GameState testState = piratesCard.nextStep();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        GameState testState = piratesCard.getNextState();
         assertEquals(ships.subList(0,1), piratesCard.getDefeatedPlayers());
         assertFalse(piratesCard.isDefeated());
         assertInstanceOf(DeclareFirePowerState.class, testState);
@@ -172,10 +172,10 @@ class PiratesCardTest {
 
     @Test
     void playerWithMorePowerDefeatsEnemies() {
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        GameState testState = piratesCard.nextStep();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        GameState testState = piratesCard.getNextState();
         assertEquals(ships.subList(0,1), piratesCard.getDefeatedPlayers());
         assertTrue(piratesCard.isDefeated());
         assertInstanceOf(GrabRewardState.class, testState);
@@ -183,12 +183,12 @@ class PiratesCardTest {
     }
 
     @Test
-    void nextStepSetsDefeatedTrueWhenPlayersAreOver() {
+    void getNextStateSetsDefeatedTrueWhenPlayersAreOver() {
         lastShipPower = firePowerThreshold;
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        GameState testState = piratesCard.nextStep();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        GameState testState = piratesCard.getNextState();
         assertEquals(ships.subList(0,1), piratesCard.getDefeatedPlayers());
         assertTrue(piratesCard.isDefeated());
         assertInstanceOf(HandleProjectileState.class, testState);
@@ -196,12 +196,12 @@ class PiratesCardTest {
     }
 
     @Test
-    void nextStepReturnsHandleProjectileWhileThereAreProjectilesAndPlayers() {
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        GameState testState = piratesCard.nextStep();
+    void getNextStateReturnsHandleProjectileWhileThereAreProjectilesAndPlayers() {
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        GameState testState = piratesCard.getNextState();
         assertEquals(ships.subList(0,1), piratesCard.getDefeatedPlayers());
         assertTrue(piratesCard.isDefeated());
         assertEquals(projectiles.getFirst(), piratesCard.getCurrentProjectile());
@@ -210,23 +210,23 @@ class PiratesCardTest {
     }
 
     @Test
-    void nextStepReturnsDrawWhenCardIsOver() {
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        GameState testState = piratesCard.nextStep();
+    void getNextStateReturnsDrawWhenCardIsOver() {
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        GameState testState = piratesCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
     }
 
     @Test
     void getRewardDoesNotAffectCardState() {
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        piratesCard.nextStep();
-        piratesCard.nextStep();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
+        piratesCard.getNextState();
         piratesCard.getReward();
         assertEquals(ships.subList(0,1), piratesCard.getDefeatedPlayers());
         assertTrue(piratesCard.isDefeated());

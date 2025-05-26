@@ -10,14 +10,8 @@ public record NewCardEvent(int cardId) implements Event {
 
     public static NewCardEvent from(AdventureCard card) {
         return new NewCardEvent(
-                0
-                //TODO: add ids to cards
-                // card.getId()
+                card.getId()
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

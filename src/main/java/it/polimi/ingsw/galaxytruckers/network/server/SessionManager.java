@@ -19,6 +19,7 @@ public class SessionManager {
 
     private final Map<Player, Session> activeSessions;
     private final ScheduledExecutorService scheduler;
+    // TODO: consider reducing the interface to include handlePlayerDisconnection only
     private ServerControllerInterface serverController;
 
     public static SessionManager getInstance() {

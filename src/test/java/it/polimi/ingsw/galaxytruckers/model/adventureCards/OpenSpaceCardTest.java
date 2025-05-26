@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -32,13 +32,13 @@ class OpenSpaceCardTest {
     void setUp() {
         ships = new ArrayList<>();
         // non-zero engine power required, otherwise the ships are required to give up
-        ShipBoard ship1 = new SecondShipBoard(FourColors.RED) {
+        ShipBoard ship1 = new SecondShipBoard(GameColor.RED) {
             @Override
             public int getEnginePower(){
                 return 1;
             }
         };
-        ShipBoard ship2 = new SecondShipBoard(FourColors.BLUE) {
+        ShipBoard ship2 = new SecondShipBoard(GameColor.BLUE) {
             @Override
             public int getEnginePower(){
                 return 1;
@@ -85,13 +85,13 @@ class OpenSpaceCardTest {
     void setupShipWithNoEnginePower(){
         ships = new ArrayList<>();
         // non-zero engine power required, otherwise the ships are required to give up
-        ShipBoard ship1 = new SecondShipBoard(FourColors.RED) {
+        ShipBoard ship1 = new SecondShipBoard(GameColor.RED) {
             @Override
             public int getEnginePower(){
                 return 1;
             }
         };
-        ShipBoard ship2 = new SecondShipBoard(FourColors.BLUE) {
+        ShipBoard ship2 = new SecondShipBoard(GameColor.BLUE) {
             @Override
             public int getEnginePower(){
                 return 0;
@@ -140,18 +140,18 @@ class OpenSpaceCardTest {
     }
 
     @Test
-    void nextStepWhenThereArePlayersLeftReturnsActivate() {
-        GameState testState = openSpaceCard.nextStep();
+    void getNextStateWhenThereArePlayersLeftReturnsActivate() {
+        GameState testState = openSpaceCard.getNextState();
         assertInstanceOf(ActivateState.class, testState);
-        testState = openSpaceCard.nextStep();
+        testState = openSpaceCard.getNextState();
         assertInstanceOf(ActivateState.class, testState);
     }
 
     @Test
-    void nextStepWhenPlayersAreOverReturnsDrawCard() {
-        openSpaceCard.nextStep();
-        openSpaceCard.nextStep();
-        GameState testState = openSpaceCard.nextStep();
+    void getNextStateWhenPlayersAreOverReturnsDrawCard() {
+        openSpaceCard.getNextState();
+        openSpaceCard.getNextState();
+        GameState testState = openSpaceCard.getNextState();
 
         assertInstanceOf(DrawCardState.class, testState);
     }
@@ -161,9 +161,9 @@ class OpenSpaceCardTest {
 //    void shipWithNoEnginePowerIsForcedToGiveUp() throws IOException {
 //        setupShipWithNoEnginePower();
 //        game.start();
-//        openSpaceCard.nextStep();
-//        openSpaceCard.nextStep();
-//        openSpaceCard.nextStep();
+//        openSpaceCard.setNextState();
+//        openSpaceCard.setNextState();
+//        openSpaceCard.setNextState();
 //        assertEquals(Set.of(ships.get(1)), game.getGivenUpShips());
 //    }
 }

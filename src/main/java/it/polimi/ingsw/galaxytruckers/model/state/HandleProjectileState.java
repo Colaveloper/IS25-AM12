@@ -40,6 +40,6 @@ public class HandleProjectileState extends ActivateState{
                 return;
             }
         }
-        game.setCurrentState(game.getDeck().getCurrentCard().nextStep());
+        game.setCurrentState(super.getNextState());
     }
 }

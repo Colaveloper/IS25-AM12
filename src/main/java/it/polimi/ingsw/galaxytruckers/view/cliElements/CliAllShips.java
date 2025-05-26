@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
@@ -16,7 +16,7 @@ public class CliShipBoard extends CliElement {
 
     protected final ShipBoard shipBoard;
     private final Map<Point, CliComponent> componentMap;
-    private final FourColors color;
+    private final GameColor color;
     private final String nickname;
     int minX;
     int maxX;

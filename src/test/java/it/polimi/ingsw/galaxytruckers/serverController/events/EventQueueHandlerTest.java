@@ -1,33 +1,26 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
-import it.polimi.ingsw.galaxytruckers.model.GameModel;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
-import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
-import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EventQueueHandlerTest {
-    Lobby lobby;
     EventQueueHandler eventQueueHandler;
     EventQueue eventQueue;
     VirtualClientStub client1;
     VirtualClientStub client2;
+    Player p1;
+    Player p2;
 
     Object queueLock;
 
@@ -35,215 +28,59 @@ class EventQueueHandlerTest {
     void setup() {
         client1 = new VirtualClientStub();
         client2 = new VirtualClientStub();
-        Player p1 = Player.addPlayer("p1");
-        Player p2 = Player.addPlayer("p2");
+        p1 = Player.addPlayer("p1");
+        p2 = Player.addPlayer("p2");
         SessionManager.getInstance().registerClient(p1,client1);
         SessionManager.getInstance().registerClient(p2,client2);
-        lobby = new Lobby(new GameModel(), new ServerControllerStub(), p1, Level.SECOND,2);
-        lobby.addPlayer(p2);
-        eventQueue = lobby.getEventQueue();
-        eventQueueHandler = lobby.getEventQueueHandler();
+        eventQueue = new EventQueue();
+        eventQueueHandler = new EventQueueHandler(List.of(p1,p2), eventQueue);
+        eventQueueHandler.start();
     }
 
     @Test
-    void setupLobbyIsCalled() throws InterruptedException {
+    void broadCastUpdateTest() throws InterruptedException {
         long time = 0;
-        while(!eventQueue.isEmpty() && time < 1000) {
-            Thread.sleep(100);
-            time += 100;
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        eventQueueHandler.setAfterEach(countDownLatch::countDown);
+        eventQueue.notifyEvent(new JoinLobbyEvent("test"));
+        if (countDownLatch.await(1, TimeUnit.SECONDS)) {
+            eventQueueHandler.stop();
+            assertInstanceOf(JoinLobbyEvent.class, client1.receivedEvents.getFirst());
+            assertInstanceOf(JoinLobbyEvent.class, client2.receivedEvents.getFirst());
+        } else {
+            throw new RuntimeException("Timeout waiting for latch");
         }
-        eventQueueHandler.stop();
-        assertEquals("setupLobby", client1.methods.getFirst());
+    }
+
+    @Test
+    void directUpdateTest() throws InterruptedException {
+        long time = 0;
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        eventQueueHandler.setAfterEach(countDownLatch::countDown);
+        eventQueue.notifyEvent(new ForecastDetailsEvent("p1", List.of()));
+        if (countDownLatch.await(1, TimeUnit.SECONDS)) {
+            eventQueueHandler.stop();
+            assertInstanceOf(ForecastDetailsEvent.class, client1.receivedEvents.getFirst());
+            assertTrue(client2.receivedEvents.isEmpty());
+        } else {
+            throw new RuntimeException("Timeout waiting for latch");
+        }
+    }
+
+    @AfterEach
+    void tearDown() {
+        SessionManager.getInstance().unregisterClient(p1);
+        SessionManager.getInstance().unregisterClient(p2);
+        Player.removePlayer("p1");
+        Player.removePlayer("p2");
     }
 }
 
 class VirtualClientStub implements VirtualClient {
-    List<String> methods = new ArrayList<>();
+    List<Event> receivedEvents = new ArrayList<>();
 
     @Override
-    public void setupLobby(UUID lobbyId, Map<String, FourColors> playerColors) {
-        methods.add("setupLobby");
+    public void notifyEvent(Event event) {
+        receivedEvents.add(event);
     }
-
-    @Override
-    public void updateLobbyPlayers(Map<String, FourColors> playerColors) {
-        methods.add("updateLobbyPlayers");
-    }
-
-    @Override
-    public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) {
-
-    }
-
-    @Override
-    public void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) {
-
-    }
-
-    @Override
-    public void notifyComponentPositioning(String playerName, int componentId, int rotation, Point position) {
-
-    }
-
-    @Override
-    public void notifyComponentRejection(String playerName, int componentId) {
-
-    }
-
-    @Override
-    public void notifyFaceDownComponentRequest(String playerName, int componentId) {
-
-    }
-
-    @Override
-    public void notifyFaceUpComponentRequest(String playerName, int componentId) {
-
-    }
-
-    @Override
-    public void notifyPeekForecast(String playerName, int deckIndex) {
-
-    }
-
-    @Override
-    public void notifyReleaseForecast(String playerName, int deckIndex) {
-
-    }
-
-    @Override
-    public void sendForecastDeck(List<Integer> deckCardIds) {
-
-    }
-
-    @Override
-    public void notifyHourglassFlipped(String playerName, boolean isLast) {
-
-    }
-
-    @Override
-    public void notifyHourglassEnd() {
-
-    }
-
-    @Override
-    public void notifyStartBuilding(Level level, int playersN) {
-
-    }
-
-    @Override
-    public void notifyCabinUpdate(String playerName, Point point, int numResidents, CrewType crewType) {
-
-    }
-
-    @Override
-    public void notifyPlayerPosition(String playerName, int position) {
-
-    }
-
-    @Override
-    public void notifyComponentRemoval(String playerName, Point position) {
-
-    }
-
-    @Override
-    public void notifyShipPieceRemoval(String playerName, List<Point> positions) {
-
-    }
-
-    @Override
-    public void showShipPieces(Map<String, List<Set<Point>>> shipPieces) {
-
-    }
-
-    @Override
-    public void notifyInvalidShipsUpdate(List<String> invalidPlayers) {
-
-    }
-
-    @Override
-    public void notifyShipStatUpdate(String playerName, StatType statType, int value) {
-
-    }
-
-    @Override
-    public void notifyNewCard(int cardId) {
-
-    }
-
-    @Override
-    public void notifySelection(String playerName, List<Point> selectablePoints, List<Point> batteries) {
-
-    }
-
-    @Override
-    public void notifyCargoHoldUpdate(String playerName, Point point, Map<GoodsType, Integer> cargo) {
-
-    }
-
-    @Override
-    public void notifyBatteryUpdate(String playerName, Point point, int numBatteries) {
-
-    }
-
-    @Override
-    public void notifyPlanetChoice(String playerName, int planetId, List<Point> cargoPositions) {
-
-    }
-
-    @Override
-    public void updateGoodsBuffer(boolean adding, GoodsType type) {
-
-    }
-
-    @Override
-    public void showProjectile(String playerName, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) {
-
-    }
-
-    @Override
-    public void showFinalScores(Map<String, Integer> playerToScore) {
-
-    }
-
-    @Override
-    public void notifySurrender(List<String> playerNames) {
-
-    }
-
-    @Override
-    public void notifyComponentActivation(String playername, Point point) {
-
-    }
-
-    @Override
-    public void notifyAddGoods(String playerName, Map<GoodsType, Integer> goods, List<Point> cargos) {
-
-    }
-
-    @Override
-    public void notifyPlayerDisconnection(String playerName) {
-
-    }
-}
-
-class ServerControllerStub extends ServerController {
-    public ServerControllerStub() {
-        super(null);
-    }
-
-    @Override
-    public Player registerNickname(String nickname) {
-        return null;
-    }
-
-    @Override
-    public LobbyInterface newGame(Player creator, Level level, int numPlayers) {
-        return null;
-    }
-
-    @Override
-    public LobbyInterface joinLobby(Player player, UUID lobbyID) {
-        return null;
-    }
-
 }

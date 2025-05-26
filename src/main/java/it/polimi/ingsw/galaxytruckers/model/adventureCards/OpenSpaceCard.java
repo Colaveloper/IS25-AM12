@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.model.state.DeclareEnginePowerState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
@@ -12,7 +13,7 @@ public class OpenSpaceCard extends AdventureCard {
     }
 
     @Override
-    public GameState nextStep() {
+    public AdventureState getNextState() {
         if (currentShipBoard != null) {
             if(currentShipBoard.getEnginePower() == 0){
                 game.forceShipToGiveUp(currentShipBoard);

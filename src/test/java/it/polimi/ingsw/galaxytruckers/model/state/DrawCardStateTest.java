@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -27,8 +27,8 @@ class DrawCardStateTest {
     @BeforeEach
     void setup() throws IOException{
         game = new Game(Level.SECOND);
-        ship1 = new SecondShipBoard(FourColors.RED);
-        ship2 = new SecondShipBoard(FourColors.BLUE);
+        ship1 = new SecondShipBoard(GameColor.RED);
+        ship2 = new SecondShipBoard(GameColor.BLUE);
         flightBoard = new SecondFlightBoard(2){
             @Override
             public List<ShipBoard> getOrderedShips(){
@@ -66,7 +66,7 @@ class DrawCardStateTest {
                 // mock
             }
             @Override
-            public GameState nextStep(){
+            public AdventureState getNextState(){
                 return new AdventureState();
             }
         };

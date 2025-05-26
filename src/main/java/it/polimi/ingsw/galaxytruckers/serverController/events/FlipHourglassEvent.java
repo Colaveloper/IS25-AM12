@@ -3,17 +3,12 @@ package it.polimi.ingsw.galaxytruckers.serverController.events;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
-public record FlipHourglassEvent(String playerName, boolean isLast) implements Event {
+public record FlipHourglassEvent(String playerName) implements Event {
 
-    public static FlipHourglassEvent from(ShipBoard shipBoard, boolean isLast) {
+    public static FlipHourglassEvent from(ShipBoard shipBoard) {
         return new FlipHourglassEvent(
-                Player.getPlayer(shipBoard).getNickname(),
-                isLast
+                Player.getPlayer(shipBoard).getNickname()
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

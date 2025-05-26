@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -15,7 +15,7 @@ class ClientControllerTest {
     static ClientController controller;
 
     static String myNickname;
-    static Map<String, FourColors> nicknames;
+    static Map<String, GameColor> nicknames;
     static int loopLength;
     static List<Integer> startingPositions;
     static Set<Point> shipArea;
@@ -34,7 +34,7 @@ class ClientControllerTest {
             @Override
             public void registerNickname(String myNickname) {
                 System.out.println("FAKE SERVER EVENT: successfully registered nickname " + myNickname);
-                nicknames.put(myNickname, FourColors.RED);
+                nicknames.put(myNickname, GameColor.RED);
                 controller.setMyNickname(myNickname);
                 ClientControllerTest.myNickname = myNickname;
             }
@@ -167,12 +167,12 @@ class ClientControllerTest {
             }
 
             @Override
-            public void goNext(String nickname) {
+            public void goNext() {
 
             }
 
             @Override
-            public void giveUp(String nickname) {
+            public void giveUp() {
 
             }
 
@@ -188,7 +188,7 @@ class ClientControllerTest {
             }
 
             @Override
-            public void leaveLobby(String nickname) {
+            public void leaveLobby() {
 
             }
         };
@@ -200,7 +200,7 @@ class ClientControllerTest {
         controller.updateLobbyPlayers(nicknames);
 
         System.out.println("FAKE SERVER EVENT: another player joined, lobby is complete");
-        nicknames.put("OtherPlayer1", FourColors.BLUE);
+        nicknames.put("OtherPlayer1", GameColor.BLUE);
         controller.updateLobbyPlayers(nicknames);
 
         controller.notifyNewGame(Level.TEST, 2);
@@ -213,10 +213,15 @@ class ClientControllerTest {
 //                System.out.println("FAKE SERVER EVENT: OtherPlayer1 took a covered component");
 //                controller.notifyFaceDownComponentRequest("OtherPlayer1", 10);
 //
-//                //Thread.sleep(1000);
-//                System.out.println("FAKE SERVER EVENT: OtherPlayer1 rejected component");
-//                faceUpComponents.add(10);
-//                controller.notifyComponentRejection("OtherPlayer1",10);
+                Thread.sleep(1000);
+                System.out.println("FAKE SERVER EVENT: OtherPlayer1 rejected component");
+                faceUpComponents.add(10);
+                controller.notifyComponentRejection("OtherPlayer1",10);
+
+                Thread.sleep(1000);
+                System.out.println("FAKE SERVER EVENT: OtherPlayer1 rejected component");
+                faceUpComponents.add(11);
+                controller.notifyComponentRejection("OtherPlayer1",11);
 //
 //                //Thread.sleep(1000);
 //                System.out.println("FAKE SERVER EVENT: OtherPlayer1 took the component back");

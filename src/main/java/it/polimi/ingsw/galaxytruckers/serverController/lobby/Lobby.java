@@ -2,12 +2,11 @@ package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
 
@@ -18,8 +17,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Lobby implements LobbyInterface {
     private final GameModelInterface model;
-    private final ServerController controller;
-
     private final UUID id;
     private final Level level;
     private final int numPlayers;
@@ -27,15 +24,14 @@ public class Lobby implements LobbyInterface {
     private final AtomicReference<LobbyState> state;
     private final AtomicReference<Game> game;
     private final List<Player> players;
-    private final Set<FourColors> chosenColors;
-    private final Map<String, FourColors> playerColors;
+    private final Set<GameColor> chosenColors;
+    private final Map<String, GameColor> playerColors;
 
     private final EventQueue eventQueue;
     private final EventQueueHandler eventQueueHandler;
 
-    public Lobby(GameModelInterface model, ServerController serverController, Player creator, Level level, int numPlayers) {
+    public Lobby(GameModelInterface model, Player creator, Level level, int numPlayers) {
         this.model = model;
-        this.controller = serverController;
         this.id = UUID.randomUUID();
         this.level = level;
         this.numPlayers = numPlayers;
@@ -47,7 +43,7 @@ public class Lobby implements LobbyInterface {
         this.playerColors = new HashMap<>();
 
         this.eventQueue = new EventQueue();
-        this.eventQueueHandler = new EventQueueHandler(this);
+        this.eventQueueHandler = new EventQueueHandler(getPlayers(), this.eventQueue);
 
         eventQueueHandler.start();
         addPlayer(creator);
@@ -79,7 +75,7 @@ public class Lobby implements LobbyInterface {
         return Optional.ofNullable(game.get());
     }
 
-    public Set<FourColors> getChosenColors() {
+    public Set<GameColor> getChosenColors() {
         synchronized (chosenColors) {
             return chosenColors;
         }
@@ -93,17 +89,23 @@ public class Lobby implements LobbyInterface {
         return eventQueueHandler;
     }
 
-    public Map<String, FourColors> getPlayerColors() {
+    public Map<String, GameColor> getPlayerColors() {
         synchronized (playerColors) {
             return new HashMap<>(playerColors);
         }
     }
 
+    /**
+     * Adds a player to the lobby, assigning a color among the remaining ones.
+     * If {@link #numPlayers} is not reached, enqueues the joining event,
+     * otherwise calls {@link #startGame()}
+     * @param player the player to add
+     */
     public void addPlayer(Player player) {
         checkLobbyState(LobbyState.PREPARATION);
-        FourColors chosenColor;
+        GameColor chosenColor;
         synchronized (chosenColors) {
-            chosenColor = Arrays.stream(FourColors.values())
+            chosenColor = Arrays.stream(GameColor.values())
                     .filter(c -> !chosenColors.contains(c))
                     .findAny().orElseThrow();
             chosenColors.add(chosenColor);
@@ -116,7 +118,7 @@ public class Lobby implements LobbyInterface {
             playerColors.put(player.getNickname(), chosenColor);
         }
         player.setLobby(this);
-        eventQueue.notifyEvent(new LobbyEvent(player.getNickname(), getPlayerColors()));
+        eventQueue.notifyEvent(new JoinLobbyEvent(player.getNickname()));
         if (players.size() == numPlayers) {
             startGame();
         }
@@ -144,6 +146,10 @@ public class Lobby implements LobbyInterface {
         this.game.set(game);
     }
 
+    /**
+     * Brings the state of the lobby to {@link LobbyState#INGAME}
+     * Sets the game of the lobby to a new instance of {@link Game} of the specified level
+     */
     private void startGame() {
         Game game = model.createGame(this.level);
         for (Player player : getPlayers()) {

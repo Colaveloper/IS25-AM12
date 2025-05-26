@@ -13,8 +13,4 @@ public record RemoveComponentEvent(String playerName, Point point) implements Ev
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-
-    }
 }

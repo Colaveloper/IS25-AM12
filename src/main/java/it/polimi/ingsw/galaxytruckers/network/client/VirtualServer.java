@@ -9,15 +9,19 @@ import java.util.UUID;
 
 public interface VirtualServer {
 
+    //region App methods
+
     void registerNickname(String myNickname);
     void requestNewGame(Level level, int playerN);
-    void drawCard();
     void joinLobby(UUID lobbyID);
-    void leaveLobby(String nickname);
+    void leaveLobby();
 
-    // Game methods
+    //endregion
 
-    // Ship building
+    //region Game methods
+
+    //region Ship building
+
     void requestRandComponent();
     void requestComponent(int componentID);
     void rejectComponent();
@@ -29,14 +33,24 @@ public interface VirtualServer {
     void acquireForecast(int deckIndex);
     void releaseForecast();
 
-    // Ship validity check
+    //endregion
+
+    //region Ship validity check
+
     void removeComponent(Point point);
     void chooseShipPiece(int pieceIndex);
 
-    // Ship init
+    //endregion
+
+    //region Ship init
+
     void initializeCabin(Point point, CrewType crewType);
 
-    // Adventure
+    //endregion
+
+    //region Adventure
+
+    void drawCard();
     void activateComponent(Point point);
     void loseCrew(Point point);
     void grabReward(boolean rewardGrabbed);
@@ -45,7 +59,10 @@ public interface VirtualServer {
     void loseGoods(Point point);
     void useBattery(Point point);
     void choosePlanet(int choice);
-    void goNext(String nickname);
+    void goNext();
+    void giveUp();
 
-    void giveUp(String nickname);
+    //endregion
+
+    //endregion
 }

@@ -8,17 +8,12 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import java.util.HashSet;
 import java.util.Set;
 
-public record RejectComponentEvent(String playerName, int componentId) implements Event {
+public record RejectComponentEvent(String playerName) implements Event {
 
     public static RejectComponentEvent from(ShipBoard shipBoard, Component component) {
         return new RejectComponentEvent(
-                Player.getPlayer(shipBoard).getNickname(),
-                component.getId()
+                Player.getPlayer(shipBoard).getNickname()
         );
     }
 
-    @Override
-    public void accept(EventVisitor visitor) {
-        visitor.visit(this);
-    }
 }

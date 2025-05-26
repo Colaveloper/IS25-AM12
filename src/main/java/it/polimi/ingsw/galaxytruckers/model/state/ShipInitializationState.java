@@ -57,10 +57,9 @@ public class ShipInitializationState extends GameState {
         shipRelevantCabins.remove(shipBoard);
     }
 
-    public void tryStateTransition() {
+    private void tryStateTransition() {
         if (shipRelevantCabins.isEmpty()) {
             game.setCurrentState(new DrawCardState());
         }
     }
-
 }

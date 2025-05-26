@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -30,7 +30,7 @@ class RemoveGoodsStateTest {
 
     @BeforeEach
     void setup(){
-        ship1 = new SecondShipBoard(FourColors.BLUE);
+        ship1 = new SecondShipBoard(GameColor.BLUE);
         testGoods = new HashMap<>();
     }
 
@@ -43,7 +43,7 @@ class RemoveGoodsStateTest {
         };
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
-            public GameState nextStep() {
+            public AdventureState getNextState() {
                 return new AdventureState();
             }
         };
@@ -65,7 +65,7 @@ class RemoveGoodsStateTest {
 
     @Test
     void setGameDoesNotChangeStateWhenShipHasNoGoodsValue() throws IOException {
-        ship1 = new SecondShipBoard(FourColors.BLUE){
+        ship1 = new SecondShipBoard(GameColor.BLUE){
             @Override
             public int getGoodsValue(){
                 return 0;
@@ -83,7 +83,7 @@ class RemoveGoodsStateTest {
 
     @Test
     void setGameDoesNotChangeStateWhenShipHasPositiveGoodsValue() throws IOException {
-        ship1 = new SecondShipBoard(FourColors.BLUE){
+        ship1 = new SecondShipBoard(GameColor.BLUE){
             @Override
             public int getGoodsValue(){
                 return 1;
@@ -101,7 +101,7 @@ class RemoveGoodsStateTest {
 
     @Test
     void setGameChangesStateWhenShipHasBatteries() throws IOException {
-        ship1 = new SecondShipBoard(FourColors.BLUE){
+        ship1 = new SecondShipBoard(GameColor.BLUE){
             @Override
             public int getGoodsValue(){
                 return 0;
@@ -119,7 +119,7 @@ class RemoveGoodsStateTest {
 
     @Test
     void loseGoodThrowsExceptionWhenOutOfTurn(){
-        ShipBoard ship2 = new SecondShipBoard(FourColors.RED);
+        ShipBoard ship2 = new SecondShipBoard(GameColor.RED);
         testState = new RemoveGoodsState(2, ship2);
         assertThrows(IllegalStateException.class, () -> testState.loseGood(ship1, new Point(7,7)));
     }
@@ -127,7 +127,7 @@ class RemoveGoodsStateTest {
     @Test
     void loseGoodUsesBatteriesIfNoMostValuableGoodPresentAndAttemptsStateTransition(){
         game = new Game(Level.SECOND);
-        ship1 = new SecondShipBoard(FourColors.RED){
+        ship1 = new SecondShipBoard(GameColor.RED){
             @Override
             public Map<GoodsType, Integer> getGoods(){
                 return testGoods;
@@ -156,7 +156,7 @@ class RemoveGoodsStateTest {
 
         setupGame();
 
-        ship1 = new SecondShipBoard(FourColors.BLUE){
+        ship1 = new SecondShipBoard(GameColor.BLUE){
             @Override
             public Map<GoodsType, Integer> getGoods(){
                 return testGoods;
@@ -179,7 +179,7 @@ class RemoveGoodsStateTest {
 
         setupGame();
 
-        ship1 = new SecondShipBoard(FourColors.BLUE){
+        ship1 = new SecondShipBoard(GameColor.BLUE){
             @Override
             public Map<GoodsType, Integer> getGoods(){
                 return testGoods;

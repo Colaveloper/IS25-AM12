@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
 public abstract class AdventureCard {
@@ -31,7 +32,7 @@ public abstract class AdventureCard {
         return cardLevel;
     }
 
-    public abstract GameState nextStep();
+    public abstract AdventureState getNextState();
 
     public int getId() {
         return id;

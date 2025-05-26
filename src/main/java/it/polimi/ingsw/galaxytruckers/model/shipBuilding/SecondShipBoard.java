@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 
 import java.awt.*;
 import java.util.*;
@@ -45,7 +45,7 @@ public class SecondShipBoard extends ShipBoard {
 
     private final Map<Point, LifeSupport> lifeSupports;
 
-    public SecondShipBoard(FourColors color) {
+    public SecondShipBoard(GameColor color) {
         super(color);
         this.lifeSupports = new HashMap<>();
         this.stashedComponents = new ArrayList<>();

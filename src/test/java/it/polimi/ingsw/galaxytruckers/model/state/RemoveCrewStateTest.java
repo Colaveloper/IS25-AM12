@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -26,7 +26,7 @@ class RemoveCrewStateTest {
 
     @BeforeEach
     void setup(){
-        ship1 = new SecondShipBoard(FourColors.RED){
+        ship1 = new SecondShipBoard(GameColor.RED){
             @Override
             public int getCrewSize(){
                 return 1;
@@ -41,7 +41,7 @@ class RemoveCrewStateTest {
 
     @Test
     void loseCrewThrowsExceptionWhenOutOfTurn(){
-        ship2 = new SecondShipBoard(FourColors.BLUE);
+        ship2 = new SecondShipBoard(GameColor.BLUE);
         assertThrows(IllegalStateException.class, () -> testState.loseCrew(ship2, new Point(7,7)));
     }
 
@@ -52,7 +52,7 @@ class RemoveCrewStateTest {
     }
 
     @Test
-    void loseCrewChangesGameState() throws IOException {
+    void loseCrewChangesAdventureState() throws IOException {
         testState = new RemoveCrewState(1, ship1);
         game = new Game(Level.SECOND){
             @Override
@@ -62,7 +62,7 @@ class RemoveCrewStateTest {
         };
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
-            public GameState nextStep() {
+            public AdventureState getNextState() {
                 return new AdventureState();
             }
         };
@@ -78,8 +78,8 @@ class RemoveCrewStateTest {
     }
 
     @Test
-    void loseCrewChangesGameStateWhenShipHasNoCrew() throws IOException{
-        ship1 = new SecondShipBoard(FourColors.RED){
+    void loseCrewChangesAdventureStateWhenShipHasNoCrew() throws IOException{
+        ship1 = new SecondShipBoard(GameColor.RED){
             @Override
             public int getCrewSize(){
                 return 0;
@@ -98,7 +98,7 @@ class RemoveCrewStateTest {
         };
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
-            public GameState nextStep() {
+            public AdventureState getNextState() {
                 return new AdventureState();
             }
         };
@@ -114,7 +114,7 @@ class RemoveCrewStateTest {
     }
 
     @Test
-    void loseCrewDoesNotSacrificeCrewIfNoCrewToSacrificeAndChangesGameState() throws IOException{
+    void loseCrewDoesNotSacrificeCrewIfNoCrewToSacrificeAndChangesAdventureState() throws IOException{
         testState = new RemoveCrewState(0, ship1);
         game = new Game(Level.SECOND){
             @Override
@@ -124,7 +124,7 @@ class RemoveCrewStateTest {
         };
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
-            public GameState nextStep() {
+            public AdventureState getNextState() {
                 return new AdventureState();
             }
         };

@@ -1,6 +1,6 @@
 //package it.polimi.ingsw.galaxytruckers.view;
 //
-//import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+//import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 //import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 //import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 //import it.polimi.ingsw.galaxytruckers.view.screens.*;
@@ -41,7 +41,7 @@
 //
 //        model.setGoods("Roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE));
 //        model.setSelectablePoints(new ArrayList<>(List.of(new Point(8, 8), new Point(9, 7))));
-//        model.setPlayerColor("Roborbio", FourColors.RED);
+//        model.setPlayerColor("Roborbio", GameColor.RED);
 //        model.setColorToPlace(Map.of("Roborbio", 2));
 //        model.setCurrentCard(3);
 //        model.setProjectile(ProjectileType.BIGFIRE, 1, 7);

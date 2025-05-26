@@ -13,10 +13,6 @@ public class EventQueue implements EventListener {
         }
     }
 
-    public boolean isEmpty() {
-        return queue.isEmpty();
-    }
-
     public boolean enqueue(Event event) {
         return this.queue.offer(event);
     }

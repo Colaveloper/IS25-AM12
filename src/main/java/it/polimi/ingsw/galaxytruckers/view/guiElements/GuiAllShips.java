@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
@@ -28,10 +28,10 @@ public class GuiAllShips extends GuiElement {
         HBox handBox = new HBox(10);
         handBox.setAlignment(Pos.CENTER);
 
-        Map<FourColors, ObjectProperty<Component>> hand = model.getHand();
+        Map<GameColor, ObjectProperty<Component>> hand = model.getHand();
 
-        for (Map.Entry<FourColors, ObjectProperty<Component>> entry : hand.entrySet()) {
-            FourColors color = entry.getKey();
+        for (Map.Entry<GameColor, ObjectProperty<Component>> entry : hand.entrySet()) {
+            GameColor color = entry.getKey();
             ObjectProperty<Component> componentProperty = entry.getValue();
 
             VBox cardBox = new VBox(5);
