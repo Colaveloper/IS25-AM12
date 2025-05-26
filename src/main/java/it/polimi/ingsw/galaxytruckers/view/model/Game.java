@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.enums.Level;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.factory.GameFactory;
@@ -28,7 +28,7 @@ public class Game {
         this.flightBoard = this.gameFactory.createFlightBoard();
     }
 
-    public ShipBoard addShipBoard(FourColors color) {
+    public ShipBoard addShipBoard(GameColor color) {
         ShipBoard shipBoard = gameFactory.createShipBoard(color);
         shipBoards.add(shipBoard);
         return shipBoard;
@@ -64,8 +64,8 @@ public class Game {
         return shipBoards;
     }
 
-    public Set<FourColors> getShipColors(){
-        Set<FourColors> colors = new HashSet<>();
+    public Set<GameColor> getShipColors(){
+        Set<GameColor> colors = new HashSet<>();
         for(ShipBoard s : shipBoards){
             colors.add(s.getColor());
         }

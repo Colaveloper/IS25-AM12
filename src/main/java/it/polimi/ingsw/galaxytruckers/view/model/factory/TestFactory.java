@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.model.factory;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.model.*;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.TestShipBoard;
@@ -18,7 +18,7 @@ public class TestFactory extends GameFactory {
     }
 
     @Override
-    public ShipBoard createShipBoard(FourColors color) {
+    public ShipBoard createShipBoard(GameColor color) {
         return new TestShipBoard(color);
     }
 

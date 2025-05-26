@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 public class Player {

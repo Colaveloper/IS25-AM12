@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 
 import java.awt.*;
 import java.util.List;
@@ -37,12 +37,12 @@ public class SecondShipBoard extends ShipBoard {
             new Point(10, 9)
     ));
 
-    private final List<ShipBoardCell> stashedComponents;
+    private final List<Component> stashedComponents;
     private int numStashed;
 
-    public SecondShipBoard(FourColors color) {
+    public SecondShipBoard(GameColor color) {
         super(color);
-        this.stashedComponents = List.of(new ShipBoardCell(), new ShipBoardCell());
+        this.stashedComponents = new ArrayList<>();
         numStashed = 0;
     }
 
@@ -54,24 +54,24 @@ public class SecondShipBoard extends ShipBoard {
     //Stashing methods
 
     public void stashComponent() {
-        stashedComponents.get(numStashed).setComponent(lastComponent);
+        stashedComponents.add(numStashed, lastComponent);
         numStashed++;
         resetLastComponent();
         notifyObservers();
     }
 
     public void grabStashedComponent(int index) {
-        Component grabbedComponent = stashedComponents.get(index).getComponent();
+        Component grabbedComponent = stashedComponents.remove(index);
         for (int i = index + 1; i < stashedComponents.size(); i++) {
-            stashedComponents.get(i-1).setComponent(stashedComponents.get(i).getComponent());
+            stashedComponents.add(i-1, stashedComponents.get(i));
         }
         numStashed--;
-        stashedComponents.get(numStashed).removeComponent();
+        stashedComponents.remove(numStashed);
         offerComponent(grabbedComponent);
     }
 
     @Override
-    public List<ShipBoardCell> getStashedComponents() {
+    public List<Component> getStashedComponents() {
         return stashedComponents;
     }
 }

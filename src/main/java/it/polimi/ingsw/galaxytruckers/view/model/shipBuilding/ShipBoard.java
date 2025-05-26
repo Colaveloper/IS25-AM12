@@ -1,10 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.Observer;
-import it.polimi.ingsw.galaxytruckers.view.enums.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
 
 import java.awt.*;
@@ -17,7 +17,7 @@ public abstract class ShipBoard implements ModelObservable {
     protected final Map<Point, ShipBoardCell> componentMap;
     protected Component lastComponent;  // can be null
     protected Point lastPosition;  // can be null
-    protected final FourColors color;
+    protected final GameColor color;
 
     protected int firePower;
     protected int enginePower;
@@ -36,7 +36,7 @@ public abstract class ShipBoard implements ModelObservable {
 
     private final List<Observer> observers = new ArrayList<>();
 
-    public ShipBoard(FourColors color) { // (, Color color)
+    public ShipBoard(GameColor color) { // (, Color color)
         this.color = color;
 
         this.lastComponent = null;
@@ -287,7 +287,7 @@ public abstract class ShipBoard implements ModelObservable {
         return null;
     }
 
-    public FourColors getColor() {
+    public GameColor getColor() {
         return color;
     }
 

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 
-import it.polimi.ingsw.galaxytruckers.view.enums.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import java.util.*;
 import java.util.List;
 import java.util.Map;

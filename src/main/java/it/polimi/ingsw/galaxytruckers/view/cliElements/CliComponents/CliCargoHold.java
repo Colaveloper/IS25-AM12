@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 
-import it.polimi.ingsw.galaxytruckers.view.enums.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.CargoHold;

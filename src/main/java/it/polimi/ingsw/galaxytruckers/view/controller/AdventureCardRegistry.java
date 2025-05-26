@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.galaxytruckers.view.enums.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.enums.Level;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.*;

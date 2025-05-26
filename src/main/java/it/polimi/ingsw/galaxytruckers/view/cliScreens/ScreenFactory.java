@@ -2,6 +2,9 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiScreen;
+//import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipBuildingScreen;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipPieceChoiceScreen;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiValidationScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 

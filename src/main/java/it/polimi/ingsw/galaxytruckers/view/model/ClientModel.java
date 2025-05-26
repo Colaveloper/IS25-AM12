@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.view.Observer;
-import it.polimi.ingsw.galaxytruckers.view.enums.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.enums.Level;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
@@ -25,7 +25,7 @@ public class ClientModel implements ModelObservable{
 
     private Player clientPlayer = null;
     private Game game = null;
-    private final Set<Player> players = new HashSet<>();
+    private final Set<Player> players = new HashSet<Player>();
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
 
     private List<Observer> observers = new ArrayList<>();
