@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.view.enums.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -637,6 +637,15 @@ public class ClientController implements ClientControllerInterface, ControllerTo
             server.drawCard();
         } catch(IllegalArgumentException e){
             reportError("Cannot draw new card");
+        }
+    }
+
+    @Override
+    public void placeGoods(Point point, GoodsType good){
+        try{
+            server.placeGoods(point, good);
+        } catch(IllegalArgumentException e){
+            reportError("Cannot place good");
         }
     }
 

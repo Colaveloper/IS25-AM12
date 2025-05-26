@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
+import it.polimi.ingsw.galaxytruckers.view.enums.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 
@@ -53,4 +54,6 @@ public interface ControllerToServer {
     void placeShipOnFlightboard(int startingPosition);
 
     void drawCard();
+
+    void placeGoods(Point point, GoodsType good);
 }
