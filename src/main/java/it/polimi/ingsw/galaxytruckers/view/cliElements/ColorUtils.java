@@ -13,9 +13,9 @@ public class ColorUtils {
         };
     }
 
-    public static Color getColor(FourColors color) {
-        switch (color) {
-
-        }
-    }
+//    public static Color getColor(FourColors color) {
+//        switch (color) {
+//
+//        }
+//    }
 }

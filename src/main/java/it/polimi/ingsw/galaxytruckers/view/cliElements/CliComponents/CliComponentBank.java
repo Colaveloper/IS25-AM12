@@ -1,7 +1,7 @@
-package it.polimi.ingsw.galaxytruckers.view.cliElements;
+package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliElement;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
@@ -23,7 +23,7 @@ public class CliComponentBank extends CliElement {
         this.forecastDeck = model.getGame().getCurrentState().getLockedForecasts();
         this.coveredComponentN = componentBank.getCoveredComponentsN();
         for(Component component : componentBank.getUncoveredComponents()){
-            revealedComponents.add(new CliComponent(model, component));
+            revealedComponents.add(new CliComponent(component));
         }
     }
 

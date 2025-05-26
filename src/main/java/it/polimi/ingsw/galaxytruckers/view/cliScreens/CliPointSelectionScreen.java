@@ -7,8 +7,6 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CliPointSelectionScreen extends CliScreen {
 
@@ -26,21 +24,20 @@ public class CliPointSelectionScreen extends CliScreen {
 
     @Override
     public void render() {
-        List<String> output = new ArrayList<>();
-        output.addAll(flightBoard.getDescription());
-        output.addAll(allShips.getDescription());
-        if(model.isMyTurn()) {
-            output.add("select component to activate");
+        printShips();
+        printActions();
+        if(model.getMyShip().equals(gameState.getShipBoard())) {
+            System.out.println("select component to activate");
         }
         else {
-            output.add("it's not your turn");
+            System.out.println("it's not your turn");
         }
     }
 
 
     @Override
     public void parseAndInvoke(String input) {
-        if(model.isMyTurn()) {
+        if(model.getMyShip().equals(gameState.getShipBoard())) {
             String[] parts = input.split(" ");
             int x = Integer.parseInt(parts[0]);
             int y = Integer.parseInt(parts[1]);
@@ -48,6 +45,4 @@ public class CliPointSelectionScreen extends CliScreen {
             controller.activateComponent(p);
         }
     }
-
-
 }

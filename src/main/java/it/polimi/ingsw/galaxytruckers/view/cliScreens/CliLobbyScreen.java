@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -25,6 +26,9 @@ public class CliLobbyScreen extends CliScreen {
 
     @Override
     public void render() {
-        System.out.println("Currently in lobby: " + model.getNicknames());
+        System.out.print("Currently in lobby: ");
+        for(Player player : model.getPlayers()) {
+            System.out.print(player.getNickname());
+        }
     }
 }

@@ -2,11 +2,10 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponentBank;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
-import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 
 import java.awt.*;
 

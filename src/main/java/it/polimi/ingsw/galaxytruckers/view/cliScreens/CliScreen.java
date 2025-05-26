@@ -8,7 +8,6 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public abstract class CliScreen {
 
@@ -38,7 +37,7 @@ public abstract class CliScreen {
         System.out.println(allShips.getDescription());
     }
 
-    protected List<String> printActions() {
+    protected void printActions() {
         List<String> actions = new ArrayList<>();
         for(StateActions action : availableActions){
             switch(action){
@@ -123,7 +122,6 @@ public abstract class CliScreen {
                 System.out.println();
             }
         }
-        return actions;
     }
 
     public boolean isLegalInput(String input) {

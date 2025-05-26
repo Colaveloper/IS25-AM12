@@ -12,15 +12,28 @@ import java.util.List;
 
 public class CliValidationScreen extends CliScreen {
 
-    CliFlightBoard flightBoard;
-    CliAllShips allShips;
+    private boolean shipNotValid;
 
     public CliValidationScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         super(model, controller, gameState);
-
-        flightBoard = new CliFlightBoard(model);
-        allShips = new CliAllShips(model.getShipToPlayer());
+        shipNotValid = gameState.getValidShipBoards().contains(model.getMyShip());
     }
+
+    @Override
+    public void render() {
+        printShips();
+
+        shipNotValid = gameState.getValidShipBoards().contains(model.getMyShip());
+        if (shipNotValid) {
+            System.out.println("your ship is invalid, choose a component to remove");
+        }
+        else{
+            System.out.println("someone else has an invalid ship, wait while they correct them");
+        }
+
+        printActions();
+    }
+
 
 //    @Override
 //    public boolean isLegalInput(String input) {
@@ -47,7 +60,7 @@ public class CliValidationScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input)  {
-        if(!model.shipIsValid()) {
+        if(shipNotValid) {
             String[] parts = input.split(" ");
             int x = Integer.parseInt(parts[0]);
             int y = Integer.parseInt(parts[1]);
@@ -56,18 +69,5 @@ public class CliValidationScreen extends CliScreen {
         }
     }
 
-    @Override
-    public void render() {
-        List<String> output = new ArrayList<>();
 
-        output.addAll(flightBoard.getDescription());
-        output.addAll(allShips.getDescription());
-
-        if (!model.shipIsValid()) {
-            output.add("your ship is invalid, choose a component to remove");
-        }
-        else{
-            output.add("someone else has an invalid ship, wait while they correct them");
-        }
-    }
 }

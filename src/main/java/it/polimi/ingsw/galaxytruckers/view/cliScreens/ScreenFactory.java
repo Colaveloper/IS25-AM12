@@ -2,9 +2,6 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiScreen;
-import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipBuildingScreen;
-import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipPieceChoiceScreen;
-import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiValidationScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 
@@ -15,8 +12,18 @@ public class ScreenFactory {
             case AdventureState adventureState -> {
                 switch (adventureState) {
                     case ActivateState activateState -> {
-                        //todo maybe check what kind of activation and use a different screen (like pointSelection OR projectile screens)
-                        return new CliPointSelectionScreen(model, controller, state);
+                        switch (activateState) {
+                            case DeclareEnginePowerState declareEnginePowerState -> {
+                                return new CliPointSelectionScreen(model, controller, state);
+                            }
+                            case DeclareFirePowerState declareFirePowerState -> {
+                                return new CliPointSelectionScreen(model, controller, state);
+                            }
+                            case HandleProjectileState handleProjectileState -> {
+                                return new CliProjectilesScreen(model, controller, state);
+                            }
+                        }
+
                     }
                     case AddGoodsState addGoodsState -> {
                         return new CliGoodsScreen(model, controller, state);
@@ -55,7 +62,7 @@ public class ScreenFactory {
                 return new CliValidationScreen(model, controller, state);
             }
             case ShipInitializationState shipInitializationState -> {
-                return new CliCrewInitialization(model, controller, state);
+                return new CliCrewInitializationScreen(model, controller, state);
             }
         }
     }

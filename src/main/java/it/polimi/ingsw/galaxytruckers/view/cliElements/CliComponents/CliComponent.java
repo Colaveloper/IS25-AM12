@@ -20,7 +20,7 @@ public class CliComponent extends CliElement {
 
     private String crewColorOpen;
 
-    private CliComponent(Component component) {
+    protected CliComponent(Component component) {
         this.component = component;
     }
 

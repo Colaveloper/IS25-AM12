@@ -4,7 +4,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiElements;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.Component;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Pos;

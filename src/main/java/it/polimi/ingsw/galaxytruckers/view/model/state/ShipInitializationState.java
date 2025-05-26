@@ -27,4 +27,8 @@ public final class ShipInitializationState extends GameState {
         shipBoard.initializeCabin(point, crewType);
         crewtypeToPoints.get(shipBoard).remove(crewType);
     }
+
+    public Map<ShipBoard, Map<CrewType,List<Point>>> getCrewtypeToPoints() {
+        return crewtypeToPoints;
+    }
 }

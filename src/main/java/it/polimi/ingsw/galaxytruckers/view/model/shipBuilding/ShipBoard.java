@@ -1,9 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.Observer;
+import it.polimi.ingsw.galaxytruckers.view.enums.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
 
 import java.awt.*;

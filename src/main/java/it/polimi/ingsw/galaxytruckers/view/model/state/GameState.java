@@ -1,15 +1,18 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
+import it.polimi.ingsw.galaxytruckers.view.enums.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public abstract sealed class GameState permits
         AdventureState,
@@ -105,14 +108,32 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
+    public Projectile getProjectile(){
+        System.err.println("This action is not permitted in this state, \n" +
+                "it seems the client and the server are out of sync");
+        return null;
+    }
+
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
     }
 
+    public Set<ShipBoard> getValidShipBoards() {
+        System.err.println("This action is not permitted in this state, \n" +
+                "it seems the client and the server are out of sync");
+        return null;
+    }
+
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
+    }
+
+    public Map<ShipBoard, Map<CrewType,List<Point>>> getCrewtypeToPoints() {
+        System.err.println("This action is not permitted in this state, \n" +
+                "it seems the client and the server are out of sync");
+        return null;
     }
 
     public void notifyDrawCard(ShipBoard shipBoard, AdventureCard adventureCard) {
@@ -149,6 +170,25 @@ public abstract sealed class GameState permits
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
     }
+
+    public ShipBoard getShipBoard() {
+        System.err.println("This action is not permitted in this state, \n" +
+                "it seems the client and the server are out of sync");
+        return null;
+    }
+
+    public Set<Point> getAvailablePositions() {
+        System.err.println("This action is not permitted in this state, \n" +
+                "it seems the client and the server are out of sync");
+        return null;
+    }
+
+    public int getBatteriesToSpend() {
+        System.err.println("This action is not permitted in this state, \n" +
+                "it seems the client and the server are out of sync");
+        return -1;
+    }
+
 
     public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
         System.err.println("This action is not permitted in this state, \n" +

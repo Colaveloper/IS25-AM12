@@ -35,5 +35,10 @@ public final class ShipCorrectionState extends GameState {
         shipBoard.removeShipPiece(shipPieces.get(shipBoard), pieceIndex);
     }
 
+    @Override
+    public Set<ShipBoard> getValidShipBoards() {
+        return validShipBoards;
+    }
+
     //TODO: notify ship is valid, notify shipPieces
 }

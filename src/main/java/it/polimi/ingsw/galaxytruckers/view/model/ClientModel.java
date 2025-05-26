@@ -1,10 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
 import it.polimi.ingsw.galaxytruckers.view.Observer;
+import it.polimi.ingsw.galaxytruckers.view.enums.GoodsType;
+import it.polimi.ingsw.galaxytruckers.view.enums.Level;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -180,6 +180,10 @@ public class ClientModel implements ModelObservable{
         this.finalScores = finalScores;
     }
     //endregion
+
+    public ShipBoard getMyShip() {
+        return clientPlayer.getShipBoard();
+    }
 
     private void notifyObservers() {
         for (Observer o : observers) {
