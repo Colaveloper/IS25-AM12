@@ -25,7 +25,7 @@ public class CliGameCreationScreen extends CliScreen {
     }
 
 //    @Override
-//    public boolean isLegalInput(String input) {
+//    public boolean isFormatLegal(String input) {
 //        if (input.trim().isEmpty()) {
 //            return true;
 //        }

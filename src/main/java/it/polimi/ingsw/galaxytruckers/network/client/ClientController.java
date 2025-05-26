@@ -18,7 +18,7 @@ import java.io.ObjectInputFilter;
 import java.util.*;
 import java.util.List;
 
-public class ClientController implements ClientControllerInterface, ControllerToServer{
+public class ClientController implements ClientControllerInterface, ControllerToServer {
     private final ClientModel model;
     private VirtualServer server;
     private View view;

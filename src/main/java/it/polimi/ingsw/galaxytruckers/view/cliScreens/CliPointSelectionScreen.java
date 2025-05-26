@@ -39,10 +39,7 @@ public class CliPointSelectionScreen extends CliScreen {
     @Override
     public void parseAndInvoke(String input) {
         if(model.getMyShip().equals(gameState.getShipBoard())) {
-            String[] parts = input.split(" ");
-            int x = Integer.parseInt(parts[1]);
-            int y = Integer.parseInt(parts[2]);
-            Point p = new Point(x, y);
+            Point p = getPoint(input);
             if(model.getMyShip().getBatteries().containsKey(p)){
                 controller.useBattery(p);
             }

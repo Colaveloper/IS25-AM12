@@ -2,22 +2,21 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import org.checkerframework.checker.regex.qual.Regex;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public abstract class CliScreen {
 
-    ClientModel model;
-    GameState gameState;
-    ControllerToServer controller;
-    List<StateActions> availableActions;
+    protected ClientModel model;
+    protected GameState gameState;
+    protected ControllerToServer controller;
+    protected List<StateActions> availableActions;
 
     CliFlightBoard flightBoard;
     CliAllShips allShips;
@@ -126,16 +125,19 @@ public abstract class CliScreen {
         }
     }
 
-    private Point getPoint(String input) {
+    protected Point getPoint(String input) {
         String[] parts = input.split(" ");
         int x = Integer.parseInt(parts[1]);
         int y = Integer.parseInt(parts[2]);
         return new Point(x, y);
     }
 
+    public boolean isInputLegal(String input) {
+        return isFormatLegal(input);
+    }
 
     //todo controlli dell'input dal model
-    public boolean isLegalInput(String input) {
+    protected boolean isFormatLegal(String input) {
         String[] parts = input.split(" ");
         return switch (parts[0]) {
             case "P" -> availableActions.contains(StateActions.PLACE_COMPONENT) && input.matches("(?i)P\\s+\\d+\\s+\\d+") ||

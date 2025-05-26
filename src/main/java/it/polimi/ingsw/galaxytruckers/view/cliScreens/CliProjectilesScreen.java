@@ -43,7 +43,7 @@ public class CliProjectilesScreen extends CliScreen {
 
 //
 //    @Override
-//    public boolean isLegalInput(String input) {
+//    public boolean isFormatLegal(String input) {
 //        // check if input = number + space + number
 //        if (!input.matches("\\d+ \\d+") || !input.matches("C")) return false;
 //
@@ -57,17 +57,23 @@ public class CliProjectilesScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        if(model.getMyShip().equals(gameState.getShipBoard())) {
-            String[] parts = input.split(" ");
-            int x = Integer.parseInt(parts[1]);
-            int y = Integer.parseInt(parts[2]);
-            Point p = new Point(x, y);
-            if(model.getMyShip().getBatteries().containsKey(p)){
+        if (model.getMyShip().equals(gameState.getShipBoard())) {
+            Point p = getPoint(input);
+            if (model.getMyShip().getBatteries().containsKey(p)) {
                 controller.useBattery(p);
             }
             else {
                 controller.activateComponent(p);
             }
         }
+    }
+
+    @Override
+    public boolean isInputLegal(String input) {
+        if (!isFormatLegal(input)) return false;
+        Point p = getPoint(input);
+        return
+                model.getMyShip().getActivatables().containsKey(p) ||
+                model.getMyShip().getBatteries().containsKey(p);
     }
 }

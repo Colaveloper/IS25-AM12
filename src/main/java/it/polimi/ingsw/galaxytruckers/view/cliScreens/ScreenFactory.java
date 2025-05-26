@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiScreen;
 //import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipBuildingScreen;
+//import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipBuildingScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipPieceChoiceScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiValidationScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
@@ -72,53 +73,64 @@ public class ScreenFactory {
 
     public GuiScreen createGuiScreen(ClientModel model, GameState state, ControllerToServer controller) {
 
-        return null;
-//        switch(state){
-//            case AdventureState adventureState -> {
-//                switch (adventureState){
-//                    case ActivateState activateState -> {
-//                        return new GuiPointSelectionScreen(model, controller, state);
-//                    }
-//                    case AddGoodsState addGoodsState -> {
-//                        return new GuiGoodsScreen(model, controller, state);
-//                    }
-//                    case ChoosePlanetState choosePlanetState -> {
-//                        return new GuiPlanetScreen(model, controller, state);
-//                    }
-//                    case ChooseShipPieceState chooseShipPieceState -> {
-//                        return new GuiShipPieceChoiceScreen(model, controller, state);
-//                    }
-//                    case DrawCardState drawCardState -> {
-//                        return new GuiNewCardScreen(model, controller, state);
-//                    }
-//                    case GrabRewardState grabRewardState -> {
-//                        return new GuiRewardScreen(model, controller, state);
-//                    }
-//                    case RemoveCrewState removeCrewState -> {
-//                        return new GuiRemoveCrewScreen(model, controller, state);
-//                    }
-//                    case RemoveGoodsState removeGoodsState -> {
-//                        return new GuiGoodsScreen(model, controller, state);
-//                    }
-//                }
-//            }
-//            case ShipBuildingState shipBuildingState -> {
-//                switch (shipBuildingState){
-//                    case SecondShipBuildingState secondShipBuildingState -> {
-//                        return new GuiShipBuildingScreen(model, controller, state);
-//                    }
-//                    case TestShipBuildingState testShipBuildingState -> {
-//                        return new GuiShipBuildingScreen(model, controller, state);
-//                    }
-//                }
-//            }
-//            case ShipCorrectionState shipCorrectionState -> {
-//                return new GuiValidationScreen(model, controller, state);
-//            }
-//            case ShipInitializationState shipInitializationState -> {
-//                return new GuiCrewInitialization(model, controller, state);
-//            }
-//        }
+        switch(state){
+            case AdventureState adventureState -> {
+                switch (adventureState){
+                    case ActivateState activateState -> {
+                        return null;
+//                        new GuiPointSelectionScreen(model, controller, state);
+                    }
+                    case AddGoodsState addGoodsState -> {
+                        return null;
+//                        new GuiGoodsScreen(model, controller, state);
+                    }
+                    case ChoosePlanetState choosePlanetState -> {
+                        return null;
+//                        new GuiPlanetScreen(model, controller, state);
+                    }
+                    case ChooseShipPieceState chooseShipPieceState -> {
+                        return null;
+//                        new GuiShipPieceChoiceScreen(model, controller, state);
+                    }
+                    case DrawCardState drawCardState -> {
+                        return null;
+//                        new GuiNewCardScreen(model, controller, state);
+                    }
+                    case GrabRewardState grabRewardState -> {
+                        return null;
+//                        new GuiRewardScreen(model, controller, state);
+                    }
+                    case RemoveCrewState removeCrewState -> {
+                        return null;
+//                        new GuiRemoveCrewScreen(model, controller, state);
+                    }
+                    case RemoveGoodsState removeGoodsState -> {
+                        return null;
+//                        new GuiGoodsScreen(model, controller, state);
+                    }
+                }
+            }
+            case ShipBuildingState shipBuildingState -> {
+                switch (shipBuildingState){
+                    case SecondShipBuildingState secondShipBuildingState -> {
+                        return null;
+//                        new GuiShipBuildingScreen(model, controller, state);
+                    }
+                    case TestShipBuildingState testShipBuildingState -> {
+                        return null;
+//                        new GuiShipBuildingScreen(model, controller, state);
+                    }
+                }
+            }
+            case ShipCorrectionState shipCorrectionState -> {
+                return null;
+//                new GuiValidationScreen(model, controller, state);
+            }
+            case ShipInitializationState shipInitializationState -> {
+                return null;
+//                new GuiCrewInitialization(model, controller, state);
+            }
+        }
     }
 }
 

@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class AddGoodsState extends AdventureState {
     private final GoodsBuffer goodsBuffer;

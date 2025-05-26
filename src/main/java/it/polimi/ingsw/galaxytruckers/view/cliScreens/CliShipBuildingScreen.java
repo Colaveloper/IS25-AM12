@@ -1,9 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
@@ -63,9 +61,7 @@ public class CliShipBuildingScreen extends CliScreen {
 
             case "P":
                 if (parts.length == 3) {
-                    int x = Integer.parseInt(parts[1]);
-                    int y = Integer.parseInt(parts[2]);
-                    controller.placeComponent(new Point(x, y), 0);//todo add orientation
+                    controller.placeComponent(getPoint(input), 0); //todo add orientation
                 }
                 break;
 
@@ -90,5 +86,16 @@ public class CliShipBuildingScreen extends CliScreen {
                 System.out.println("Invalid command.");
                 break;
         }
+    }
+
+    @Override
+    public boolean isInputLegal(String input) {
+        if (!isFormatLegal(input)) return false;
+
+        if (input.matches("^[A-Za-z]\\d\\d$")) {
+
+
+        }
+        return true;
     }
 }

@@ -60,7 +60,7 @@ public class CliCrewInitializationScreen extends CliScreen {
     }
 
 //    @Override
-//    public boolean isLegalInput(String input) {
+//    public boolean isFormatLegal(String input) {
 //
 //        // Validate format using regex
 //        if (!input.matches("\\d+ \\d+")) {

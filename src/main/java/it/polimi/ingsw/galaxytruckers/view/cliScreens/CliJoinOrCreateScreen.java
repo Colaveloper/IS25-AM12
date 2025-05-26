@@ -15,7 +15,7 @@ public class CliJoinOrCreateScreen extends CliScreen {
     }
 
 //    @Override
-//    public boolean isLegalInput(String input) {
+//    public boolean isFormatLegal(String input) {
 //        if (input == null) return false;
 //        if (input.equalsIgnoreCase("C")) return true;
 //

@@ -71,7 +71,7 @@
 //                input = scanner.nextLine();
 //
 //                // letting the user correct format errors
-//                while (!screen.isLegalInput(input)) {
+//                while (!screen.isFormatLegal(input)) {
 //                    //todo: this is called also when it s not your turn where u don t have to check invalid input format
 //                    //todo: ask the screen what to print, screens then prints either not your turn or a specific message
 //                    //screen.invalidInput();
