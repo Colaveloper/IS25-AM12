@@ -15,12 +15,16 @@ public class CliGoodsScreen extends CliScreen {
 
 
     @Override
+    public void render() {
+        printShips();
+
+        printActions();
+    }
+
+    @Override
     public void parseAndInvoke(String input) {
 
     }
 
-    @Override
-    public void render() {
 
-    }
 }

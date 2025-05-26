@@ -29,6 +29,8 @@ public class CliCrewInitializationScreen extends CliScreen {
 
     @Override
     public void render() {
+        printShips();
+
         shipNotValid = gameState.getCrewtypeToPoints().containsKey(model.getMyShip());
         if (shipNotValid) {
             crewtypeToPoints = gameState.getCrewtypeToPoints().get(model.getMyShip());

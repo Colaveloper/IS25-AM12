@@ -12,15 +12,10 @@ import java.awt.*;
 public class CliShipBuildingScreen extends CliScreen {
 
     CliComponentBank componentBank;
-    CliFlightBoard flightBoard;
-    CliAllShips allShips;
 
     public CliShipBuildingScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         super(model, controller, gameState);
-
         this.componentBank = new CliComponentBank(model);
-        this.flightBoard = new CliFlightBoard(model);
-        this.allShips = new CliAllShips(model.getShipToPlayer());
     }
 
     @Override

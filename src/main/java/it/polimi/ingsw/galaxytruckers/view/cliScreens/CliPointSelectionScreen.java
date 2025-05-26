@@ -25,13 +25,14 @@ public class CliPointSelectionScreen extends CliScreen {
     @Override
     public void render() {
         printShips();
-        printActions();
+
         if(model.getMyShip().equals(gameState.getShipBoard())) {
             System.out.println("select component to activate");
         }
         else {
             System.out.println("it's not your turn");
         }
+        printActions();
     }
 
 
@@ -39,10 +40,15 @@ public class CliPointSelectionScreen extends CliScreen {
     public void parseAndInvoke(String input) {
         if(model.getMyShip().equals(gameState.getShipBoard())) {
             String[] parts = input.split(" ");
-            int x = Integer.parseInt(parts[0]);
-            int y = Integer.parseInt(parts[1]);
+            int x = Integer.parseInt(parts[1]);
+            int y = Integer.parseInt(parts[2]);
             Point p = new Point(x, y);
-            controller.activateComponent(p);
+            if(model.getMyShip().getBatteries().containsKey(p)){
+                controller.useBattery(p);
+            }
+            else {
+                controller.activateComponent(p);
+            }
         }
     }
 }

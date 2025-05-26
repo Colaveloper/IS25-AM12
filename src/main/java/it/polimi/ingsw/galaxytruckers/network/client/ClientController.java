@@ -484,7 +484,6 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     @Override
     public void goNext() {
         try {
-            server.goNext(model.getClientPlayer().getNickname());
             server.goNext();
         } catch (IllegalArgumentException e) {
             reportError("could not go on with card");

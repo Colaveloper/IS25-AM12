@@ -2,10 +2,13 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import org.checkerframework.checker.regex.qual.Regex;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,26 +33,25 @@ public abstract class CliScreen {
 
     public abstract void render();
 
-    public abstract void parseAndInvoke(String input) ;
+    public abstract void parseAndInvoke(String input);
 
     protected void printShips() {
-        System.out.println(flightBoard.getDescription());
-        System.out.println(allShips.getDescription());
+        flightBoard.getDescription().forEach(System.out::println);
+        allShips.getDescription().forEach(System.out::println);//todo sistemare altri tipi di allships
     }
 
     protected void printActions() {
         List<String> actions = new ArrayList<>();
-        for(StateActions action : availableActions){
-            switch(action){
+        for (StateActions action : availableActions) {
+            switch (action) {
                 case ACTIVATE_COMPONENT -> {
                     actions.add("P [x] [y] \tPlace unwelded component");
                 }
                 case SPEND_BATTERIES -> {
-                    actions.add("P [x] [y] \tSpend battery on component");
+                    actions.add("B [x] [y] \tSpend battery on component");
                 }
                 case GRAB_REWARD -> {
                     actions.add("P       \tTo pick reward");
-                    actions.add("R       \tTo reject reward");
                 }
                 case CHOOSE_SHIP_PIECE -> {
                     actions.add("[i]     \tChoose piece of ship to keep");
@@ -60,7 +62,7 @@ public abstract class CliScreen {
                 case LOSE_CREW -> {
                     actions.add("L [x] [y] \tremove crew from component");
                 }
-                case LOSE_GOOD  -> {
+                case LOSE_GOOD -> {
                     actions.add("R [x] [y] \tRemove valuable good from cargo hold");
                 }
                 case REMOVE_GOOD -> {
@@ -116,7 +118,7 @@ public abstract class CliScreen {
                 }
             }
         }
-        for(int i = 0; i < availableActions.size(); i++){
+        for (int i = 0; i < availableActions.size(); i++) {
             System.out.print(actions.get(i));
             if ((i + 1) % 4 == 0) {
                 System.out.println();
@@ -124,67 +126,63 @@ public abstract class CliScreen {
         }
     }
 
-    public boolean isLegalInput(String input) {
-        for(StateActions action : availableActions){
-            switch(action){
-                case ACTIVATE_COMPONENT -> {
-                    //todo
-                }
-                case SPEND_BATTERIES -> {
-                }
-                case GRAB_REWARD -> {
-                }
-                case CHOOSE_SHIP_PIECE -> {
-                }
-                case DRAW_CARD -> {
-                }
-                case LOSE_CREW -> {
-                }
-                case LOSE_GOOD -> {
-                }
-                case ADD_GOOD -> {
-                }
-                case REMOVE_GOOD -> {
-                }
-                case GO_NEXT -> {
-                }
-                case CHOOSE_PLANET -> {
-                }
-                case REQUEST_RAND_COMPONENT -> {
-                }
-                case REQUEST_COMPONENT -> {
-                }
-                case REJECT_COMPONENT -> {
-                }
-                case STASH_COMPONENT -> {
-                }
-                case GRAB_STASHED_COMPONENT -> {
-                }
-                case PLACE_COMPONENT -> {
-                }
-                case FLIP_HOURGLASS -> {
-                }
-                case PLACE_SHIP_ON_FLIGHTBOARD -> {
-                }
-                case FINISH_BUILDING -> {
-                }
-                case ACQUIRE_FORECAST -> {
-                }
-                case RELEASE_FORECAST -> {
-                }
-                case REMOVE_COMPONENT -> {
-                }
-                case INITIALIZE_CABIN -> {
-                }
-                case GIVE_UP -> {
-
-                }
-                default -> {
-                    return false;
-                }
-            }
-        }
-        return false;
+    private Point getPoint(String input) {
+        String[] parts = input.split(" ");
+        int x = Integer.parseInt(parts[1]);
+        int y = Integer.parseInt(parts[2]);
+        return new Point(x, y);
     }
 
+
+    //todo controlli dell'input dal model
+    public boolean isLegalInput(String input) {
+        String[] parts = input.split(" ");
+        return switch (parts[0]) {
+            case "P" -> availableActions.contains(StateActions.PLACE_COMPONENT) && input.matches("(?i)P\\s+\\d+\\s+\\d+") ||
+                    availableActions.contains(StateActions.GRAB_REWARD) && input.matches("(?i)P");
+            case "H" -> availableActions.contains(StateActions.FLIP_HOURGLASS) && input.matches("(?i)H");
+            case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.matches("(?i)S") ||
+                    availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.matches("(?i)S\\s+\\d+");
+            case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT) && input.matches("(?i)R");
+            case "C" -> availableActions.contains(StateActions.REQUEST_COMPONENT) && input.matches("(?i)C");
+            case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST) && input.matches("(?i)F\\s+\\d+");
+            case "X" -> availableActions.contains(StateActions.FINISH_BUILDING) && input.matches("(?i)X");
+            case "L" -> availableActions.contains(StateActions.LOSE_CREW) && input.matches("(?i)L\\s+\\d+\\s+\\d+");
+            case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("(?i)B\\s+\\d+\\s+\\d+");
+
+            default -> {
+                System.out.println("invalid input");
+                yield false;
+            }
+        };
+    }
 }
+
+
+//        for(StateActions action : availableActions){
+//            switch(action){
+//                case ACTIVATE_COMPONENT -> {
+//                    //check if input = number + space + number
+//                    if (checkFormat(input, "\\d+ \\d+")) return false;
+//
+//                    // check if the point made from those numbers is selectable
+//                    if (!gameState.getAvailablePositions().contains(getPoint(input))){
+//                        return false;
+//                    }
+//                }
+//                case SPEND_BATTERIES -> {
+//                    //check if input = number + space + number
+//                    if (!input.matches("\\d+ \\d+")) return false;
+//
+//                    // check if the point made from those numbers is selectable
+//                    return model.getMyShip().getBatteries().containsKey(getPoint(input));
+//                }
+//                case GRAB_REWARD -> {
+//                    if (!input.matches("(?i)[pr]")) return false;
+//                }
+//                case CHOOSE_SHIP_PIECE -> {
+//                    if (!input.matches("\\d")) return false;
+//                }
+//            }
+//        }
+//        return false;
