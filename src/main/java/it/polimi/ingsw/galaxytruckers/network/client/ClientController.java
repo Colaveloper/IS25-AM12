@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.*;
 import it.polimi.ingsw.galaxytruckers.view.CliView;
+import it.polimi.ingsw.galaxytruckers.view.controller.PlayerRegistry;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.GuiView;
@@ -23,6 +24,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     private VirtualServer server;
     private View view;
     private ConfigFactory config;
+    private PlayerRegistry playerRegistry = new PlayerRegistry();
 
     public ClientController(VirtualServer server) {
         this.server = server;
