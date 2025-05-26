@@ -32,4 +32,14 @@ public final class ChooseShipPieceState extends AdventureState {
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
         shipBoard.removeShipPiece(shipPieces, pieceIndex);
     }
+
+    @Override
+    public ShipBoard getShipBoard() {
+        return shipBoard;
+    }
+
+    @Override
+    public List<Set<Point>> getShipPieces() {
+        return shipPieces;
+    }
 }

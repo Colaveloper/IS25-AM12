@@ -12,43 +12,40 @@ import java.util.List;
 
 public class CliShipPieceChoiceScreen extends CliScreen {
 
-    CliFlightBoard flightBoard;
-    CliAllShips allShips;
+    private boolean shipNotValid;
     int numPieces;
 
     public CliShipPieceChoiceScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         super(model, controller, gameState);
 
-        flightBoard = new CliFlightBoard(model);
-        allShips = new CliAllShips(model.getShipToPlayer());
+        shipNotValid = gameState.getShipBoard().equals(model.getMyShip());
 
-        numPieces =  model.getSelectableShipPieces().size();
+        numPieces =  gameState.getShipPieces().size();
     }
 
     @Override
     public void parseAndInvoke(String input) {
-        if(!model.shipIsValid()) {
+        if(shipNotValid) {
             controller.chooseShipPiece(Integer.parseInt(input));
         }
     }
 
     @Override
     public void render() {
-        List<String> output = new ArrayList<>();
+        printShips();
 
-        output.addAll(flightBoard.getDescription());
-        output.addAll(allShips.getDescription());
-
-        if (!model.shipIsValid()) {
-            output.add("your ship is broken, choose a piece of ship to keep");
-            output.add("choose from one of the following pieces: \n");
+        if (shipNotValid) {
+            System.out.println("your ship is broken, choose a piece of ship to keep");
+            System.out.println("choose from one of the following pieces: \n");
             List<Highlights> highlights = Highlights.getSomeColors(numPieces);
             for(int i = 1; i <= numPieces; i++) {
-                output.add(highlights.get(i).getHighlight() + i + "\t" + highlights.get(i) + Highlights.RESET.getHighlight() + "\n"); //todo: add color
+                System.out.println(highlights.get(i).getHighlight() + i + "\t" + highlights.get(i) + Highlights.RESET.getHighlight() + "\n");
             }
         }
         else{
-            output.add("someone else has a broken ship, wait while they choose what piece to keep");
+            System.out.println("someone else has a broken ship, wait while they choose what piece to keep");
         }
+
+        printActions();
     }
 }

@@ -171,6 +171,12 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
+    public List<Set<Point>> getShipPieces() {
+        System.err.println("This action is not permitted in this state, \n" +
+                "it seems the client and the server are out of sync");
+        return null;
+    }
+
     public ShipBoard getShipBoard() {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
