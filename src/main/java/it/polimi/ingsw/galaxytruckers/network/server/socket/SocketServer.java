@@ -30,6 +30,16 @@ public class SocketServer {
         System.out.println("Socket server: started ✅");
     }
 
+    public void stop() {
+        try {
+            this.running = false;
+            this.serverSocket.close();
+            this.listenThread.interrupt();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void listen() {
         while (running) {
             try {
