@@ -23,6 +23,11 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
     private ClientModel clientModel;
     private PlayerRegistry playerRegistry;
 
+    public EventHandler(ClientModel clientModel, PlayerRegistry playerRegistry) {
+        this.clientModel = clientModel;
+        this.playerRegistry = playerRegistry;
+    }
+
     /**
      * Handles the {@code ModelEvent} passed as the argument, updating all
      * affected classes
