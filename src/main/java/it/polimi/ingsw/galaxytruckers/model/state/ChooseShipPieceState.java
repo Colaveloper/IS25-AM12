@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class ChooseShipPieceState extends AdventureState {
+public final class ChooseShipPieceState extends AdventureState {
     private final ShipBoard shipBoard;
     private final List<Set<Point>> shipPieces;
 
@@ -25,5 +25,13 @@ public class ChooseShipPieceState extends AdventureState {
         componentsToRemove.removeAll(shipPieces.get(pieceIndex));
         componentsToRemove.forEach(shipBoard::discardComponent);
         game.setCurrentState(super.getNextState());
+    }
+
+    public ShipBoard getShipBoard() {
+        return shipBoard;
+    }
+
+    public List<Set<Point>> getShipPieces() {
+        return shipPieces;
     }
 }

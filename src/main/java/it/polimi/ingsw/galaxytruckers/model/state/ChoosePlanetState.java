@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class ChoosePlanetState extends AdventureState {
+public final class ChoosePlanetState extends AdventureState {
     ShipBoard shipBoard;
     Consumer<Integer> choosePlanetMethod;
     Set<Integer> options;
@@ -34,5 +34,13 @@ public class ChoosePlanetState extends AdventureState {
             throw new IllegalStateException("It's not your turn");
         }
         game.setCurrentState(super.getNextState());
+    }
+
+    public ShipBoard getShipBoard() {
+        return shipBoard;
+    }
+
+    public Set<Integer> getOptions() {
+        return options;
     }
 }

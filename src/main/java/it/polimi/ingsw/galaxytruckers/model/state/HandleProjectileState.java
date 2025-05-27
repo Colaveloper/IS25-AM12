@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Set;
 
-public class HandleProjectileState extends ActivateState{
+public non-sealed class HandleProjectileState extends ActivateState{
     Projectile projectile;
 
     public HandleProjectileState(ShipBoard shipBoard, Projectile projectile) {
@@ -41,5 +41,9 @@ public class HandleProjectileState extends ActivateState{
             }
         }
         game.setCurrentState(super.getNextState());
+    }
+
+    public Projectile getProjectile() {
+        return projectile;
     }
 }

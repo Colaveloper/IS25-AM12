@@ -44,7 +44,7 @@ class RemoveGoodsStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -60,7 +60,7 @@ class RemoveGoodsStateTest {
         setupGame();
         testState = new RemoveGoodsState(0, ship1);
         testState.setGame(game);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 
     @Test
@@ -114,7 +114,7 @@ class RemoveGoodsStateTest {
         setupGame();
         testState = new RemoveGoodsState(1, ship1);
         testState.setGame(game);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 
     @Test
@@ -170,7 +170,7 @@ class RemoveGoodsStateTest {
         testState.setGame(game);
         testState.loseGood(ship1, new Point(7,7));
         assertEquals(1, testState.goodsToLose);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 
     @Test

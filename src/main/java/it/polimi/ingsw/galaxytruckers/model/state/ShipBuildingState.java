@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class ShipBuildingState extends GameState {
+public non-sealed abstract class ShipBuildingState extends GameState {
     private final ComponentBank componentBank;
     protected final Set<ShipBoard> completedShipBoards;
 

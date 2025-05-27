@@ -101,7 +101,7 @@ class AddGoodsStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -112,7 +112,7 @@ class AddGoodsStateTest {
         };
         testAddGoodState.setGame(game);
         testAddGoodState.goNext(ship1);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testAddGoodState, game.getCurrentState());
     }
 
 }

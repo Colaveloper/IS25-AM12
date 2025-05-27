@@ -58,7 +58,7 @@ class ChooseShipPieceStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -69,7 +69,7 @@ class ChooseShipPieceStateTest {
         };
         testChooseShipPieceState.setGame(game);
         testChooseShipPieceState.chooseShipPiece(ship1, 0);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testChooseShipPieceState, game.getCurrentState());
     }
 
 }

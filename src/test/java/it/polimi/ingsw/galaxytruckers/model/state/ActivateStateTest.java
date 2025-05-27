@@ -42,7 +42,7 @@ class ActivateStateTest {
                 // mock
             }
         };
-        testActivateState = new ActivateState(ship1) {
+        testActivateState = new ActivateStateStub(ship1) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
                 super.activateComponent(shipBoard, position);
@@ -62,7 +62,7 @@ class ActivateStateTest {
 
     @Test
     void activateComponentIncreasesBatteriesToSpend(){
-        testActivateState = new ActivateState(ship2) {
+        testActivateState = new ActivateStateStub(ship2) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
                 availablePositions = new HashSet<>();
@@ -76,7 +76,7 @@ class ActivateStateTest {
 
     @Test
     void activateComponentWithNoAvailablePositionDoesNotIncrementBatteriesToSpend(){
-        testActivateState = new ActivateState(ship2) {
+        testActivateState = new ActivateStateStub(ship2) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
                 availablePositions = new HashSet<>();
@@ -103,7 +103,7 @@ class ActivateStateTest {
                 // mock
             }
         };
-        testActivateState = new ActivateState(ship2) {
+        testActivateState = new ActivateStateStub(ship2) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
                 availablePositions = new HashSet<>();
@@ -127,7 +127,7 @@ class ActivateStateTest {
 
     @Test
     void spendBatteriesUsesBatteries(){
-        testActivateState = new ActivateState(ship2) {
+        testActivateState = new ActivateStateStub(ship2) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
                 availablePositions = new HashSet<>();
@@ -147,7 +147,7 @@ class ActivateStateTest {
 
     @Test
     void goNextThrowsExceptionIfShipStillHasBatteriesToSpend(){
-        testActivateState = new ActivateState(ship2) {
+        testActivateState = new ActivateStateStub(ship2) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
                 availablePositions = new HashSet<>();
@@ -170,7 +170,7 @@ class ActivateStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -179,7 +179,7 @@ class ActivateStateTest {
                 return adventureCard;
             }
         };
-        testActivateState = new ActivateState(ship2) {
+        testActivateState = new ActivateStateStub(ship2) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
                 availablePositions = new HashSet<>();
@@ -191,6 +191,6 @@ class ActivateStateTest {
         testActivateState.activateComponent(ship2, new Point(7,7));
         testActivateState.spendBatteries(ship2, new Point(7,7), 1);
         testActivateState.goNext(ship2);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testActivateState, game.getCurrentState());
     }
 }

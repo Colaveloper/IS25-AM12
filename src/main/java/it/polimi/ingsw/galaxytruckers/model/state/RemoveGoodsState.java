@@ -7,7 +7,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.Comparator;
 
-public class RemoveGoodsState extends AdventureState {
+public final class RemoveGoodsState extends AdventureState {
     int goodsToLose;
     ShipBoard shipBoard;
     GoodsType mostValuableGood;
@@ -50,5 +50,13 @@ public class RemoveGoodsState extends AdventureState {
         if (goodsToLose == 0 || (shipBoard.getGoodsValue() == 0 && shipBoard.getNumBatteries() == 0)) {
             game.setCurrentState(super.getNextState());
         }
+    }
+
+    public int getGoodsToLose() {
+        return goodsToLose;
+    }
+
+    public ShipBoard getShipBoard() {
+        return shipBoard;
     }
 }
