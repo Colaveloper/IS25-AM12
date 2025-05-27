@@ -56,4 +56,6 @@ public interface ControllerToServer {
     void drawCard();
 
     void placeGoods(Point point, GoodsType good);
+
+    void removeGoods(Point point, GoodsType good);
 }
