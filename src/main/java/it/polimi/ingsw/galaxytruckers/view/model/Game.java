@@ -17,7 +17,7 @@ public class Game {
     private final GameFactory gameFactory;
     private final Set<ShipBoard> shipBoards = new HashSet<>();
     private final FlightBoard flightBoard;
-    private GameState currentState;
+    private ObservableProperty<GameState> currentState;
 
     private AdventureCard currentAdventureCard;
 
@@ -39,7 +39,7 @@ public class Game {
      * @param state the {@code GameState} to be set
      */
     public void setCurrentState(GameState state) {
-        this.currentState = state;
+        this.currentState.setValue(state);
         state.setGame(this);
     }
 
@@ -47,7 +47,7 @@ public class Game {
      * @return the game's current state
      */
     public GameState getCurrentState() {
-        return currentState;
+        return currentState.getValue();
     }
 
     /**

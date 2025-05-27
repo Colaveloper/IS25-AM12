@@ -28,6 +28,8 @@ public class ClientModel implements ModelObservable{
     private final Set<Player> players = new HashSet<Player>();
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
 
+    private final ObservableProperty<ClientState> clientState = new ObservableProperty<>(ClientState.REGISTER);
+
     private List<Observer> observers = new ArrayList<>();
 
     private Map<Player, Integer> finalScores;
@@ -194,6 +196,14 @@ public class ClientModel implements ModelObservable{
         for (Observer o : observers) {
             o.notifyObserver();
         }
+    }
+
+    public ObservableProperty<ClientState> getClientState() {
+        return clientState;
+    }
+
+    public void setClientState(ClientState clientState) {
+        this.clientState.setValue(clientState);
     }
 
     @Override
