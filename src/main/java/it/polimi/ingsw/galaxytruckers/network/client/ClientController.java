@@ -643,6 +643,15 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         }
     }
 
+    @Override
+    public void choosePlanet(int choice){
+        try{
+            server.choosePlanet(choice);
+        } catch(IllegalArgumentException e){
+            reportError("Cannot land on planet");
+        }
+    }
+
     private void runAndInterceptIOE(RunnableWithIOE action) {
         try {
             action.run();

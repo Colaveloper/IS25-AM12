@@ -58,4 +58,6 @@ public interface ControllerToServer {
     void placeGoods(Point point, GoodsType good);
 
     void removeGoods(Point point, GoodsType good);
+
+    void choosePlanet(int choice);
 }
