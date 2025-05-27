@@ -18,8 +18,8 @@ public abstract class CliScreen {
     protected ControllerToServer controller;
     protected List<StateActions> availableActions;
 
-    CliFlightBoard flightBoard;
-    CliAllShips allShips;
+    protected CliFlightBoard flightBoard;
+    protected CliAllShips allShips;
 
     public CliScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         this.model = model;

@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
@@ -10,20 +11,25 @@ import java.awt.*;
 
 public class CliPointSelectionScreen extends CliScreen {
 
-    CliFlightBoard flightBoard;
-    CliAllShips allShips;
-
     public CliPointSelectionScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         super(model, controller, gameState);
-
-        flightBoard = new CliFlightBoard(model);
-        allShips = new CliAllShips(model.getShipToPlayer());
     }
 
 
+    @Override
+    public boolean isInputLegal(String input) {
+        if (!isFormatLegal(input)){
+            return false;
+        }
+        Point p = getPoint(input);
+
+        return gameState.getAvailablePositions().contains(p);
+    }
 
     @Override
     public void render() {
+        allShips.highlightPoints(model.getShipToPlayer().get(gameState.getShipBoard()), gameState.getAvailablePositions(), Highlights.GREEN);
+
         printShips();
 
         if(model.getMyShip().equals(gameState.getShipBoard())) {

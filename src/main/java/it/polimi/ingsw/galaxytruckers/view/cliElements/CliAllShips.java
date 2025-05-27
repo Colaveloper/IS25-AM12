@@ -4,13 +4,16 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
+import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import javafx.beans.property.ObjectProperty;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 public class CliAllShips extends CliElement {
     private final Map<Player, CliShipBoard> playerToCliShip;
@@ -21,6 +24,10 @@ public class CliAllShips extends CliElement {
                 CliShipBoard cliShipBoard = new CliShipBoard(ship, player.getNickname());
             playerToCliShip.put(player, cliShipBoard);
         });
+    }
+
+    public void highlightPoints(Player player, Set<Point> points, Highlights color){
+        playerToCliShip.get(player).highlightPoints(points, color);
     }
 
     @Override

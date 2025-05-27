@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
+import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
@@ -35,6 +36,12 @@ public class CliShipBoard extends CliElement {
         maxX = componentMap.keySet().stream().mapToInt(p -> p.x).max().orElse(0);
         minY = componentMap.keySet().stream().mapToInt(p -> p.y).min().orElse(0);
         maxY = componentMap.keySet().stream().mapToInt(p -> p.y).max().orElse(0);
+    }
+
+    public void highlightPoints(Set<Point> points, Highlights color){
+        for (Point point : points){
+            componentMap.get(point).highlight(color);
+        }
     }
 
     @Override
