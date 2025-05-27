@@ -44,7 +44,9 @@ public class SessionManager {
         synchronized (activeSessions) {
             session = activeSessions.remove(player);
         }
-        session.getClientHandler().stop();
+        if(session != null){
+            session.getClientHandler().stop();
+        }
     }
 
     public ClientHandler getClient(Player player) {
