@@ -52,4 +52,11 @@ public class ComponentBank implements ModelObservable {
     public void removeObserver(Observer o) {
         observers.remove(o);
     }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer o : observers) {
+            o.onNotified();
+        }
+    }
 }

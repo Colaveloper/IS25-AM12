@@ -2,9 +2,8 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
-import it.polimi.ingsw.galaxytruckers.view.Observer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.ObservableMap;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.MapListener;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -17,8 +16,8 @@ public class CliShipBoard extends CliElement {
 
     protected final ShipBoard shipBoard;
 
-    // no key = empty space
-    // no value = empty area
+    // no key = empty-space,
+    // no value = empty-area
     private final Map<Point, CliComponent> cliComponentMap;
     private final GameColor color;
     private final String nickname;
@@ -34,29 +33,35 @@ public class CliShipBoard extends CliElement {
 
         cliComponentMap = new HashMap<>();
 
-        shipBoard.getComponentMap().addListener(new ObservableMap.Listener<>() {
+        shipBoard.getComponentMap().addListener(new MapListener<>() {
             @Override
             public void onPut(Point p, Component oldValue, Component newValue) {
-                CliComponent newCliComponent = CliComponent.of(newValue);
-                newCliComponent.addObserver();
-                cliComponentMap.put(p, newCliComponent);
+                onPutComponent(p, oldValue, newValue);
             }
 
             @Override
             public void onRemove(Point p, Component oldValue) {
-                cliComponentMap.put(p, null);
+                onRemoveComponent(p, oldValue);
             }
         });
 
         shipBoard.getShipArea().forEach(p-> cliComponentMap.put(p, null));
 
-        shipBoard.getComponentMap().forEach(((point, shipBoardCell) -> {
-                    cliComponentMap.put(point, CliComponent.of(shipBoardCell.getComponent()));
-        }));
         minX = cliComponentMap.keySet().stream().mapToInt(p -> p.x).min().orElse(0);
         maxX = cliComponentMap.keySet().stream().mapToInt(p -> p.x).max().orElse(0);
         minY = cliComponentMap.keySet().stream().mapToInt(p -> p.y).min().orElse(0);
         maxY = cliComponentMap.keySet().stream().mapToInt(p -> p.y).max().orElse(0);
+    }
+
+    private void onPutComponent(Point p, Component oldValue, Component newValue) {
+        CliComponent newCliComponent = CliComponent.of(newValue);
+        newCliComponent.addObserver(this);
+        cliComponentMap.put(p, newCliComponent);
+    }
+
+    private void onRemoveComponent(Point p, Component oldValue) {
+        cliComponentMap.get(p).removeObserver(this);
+        cliComponentMap.put(p, null);
     }
 
     public void highlightPoints(Set<Point> points, Highlights color){
@@ -77,14 +82,15 @@ public class CliShipBoard extends CliElement {
             for (int x = minX; x <= maxX; x++) {
                 List<String> newCell = new ArrayList<>();
                 if (!cliComponentMap.containsKey(new Point(x, y))) {
-                    // empty space
+                    // empty-space
                     newCell = List.of("   ", "   ", "   ");
                 } else if (cliComponentMap.get(new Point(x, y)) == null) {
-                    // empty area
+                    // empty-area
                     newCell = List.of("   ", " X ", "   ");
                 } else {
                     newCell = cliComponentMap.get(new Point(x, y)).getNewDescription();
                 }
+                rowDescription = DescriptionUtils.sideBySide(rowDescription, newCell);
             }
             result.addAll(rowDescription);
         }
@@ -96,7 +102,7 @@ public class CliShipBoard extends CliElement {
         }
         result.add(xIndexes.toString());
 
-        DescriptionUtils.borderAndTitle(
+        result = DescriptionUtils.borderAndTitle(
                 result,
                 color.getDescription()+" "+nickname
         );

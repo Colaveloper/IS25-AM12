@@ -51,7 +51,7 @@ public class GoodsBuffer implements ModelObservable {
         observers.remove(o);
     }
 
-    protected void notifyObservers() {
+    public void notifyObservers() {
         for (Observer o : observers) {
             o.onNotified();
         }

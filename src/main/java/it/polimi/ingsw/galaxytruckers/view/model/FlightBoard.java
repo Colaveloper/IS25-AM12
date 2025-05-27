@@ -60,7 +60,7 @@ public class FlightBoard implements ModelObservable{
         return startingPositions;
     }
 
-    private void notifyObservers() {
+    public void notifyObservers() {
         for (Observer o : observers) {
             o.onNotified();
         }

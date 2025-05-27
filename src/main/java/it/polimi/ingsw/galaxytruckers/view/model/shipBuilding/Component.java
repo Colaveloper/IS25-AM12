@@ -60,7 +60,7 @@ public sealed class Component implements ModelObservable permits
         observers.remove(o);
     }
 
-    protected void notifyObservers() {
+    public void notifyObservers() {
         for (Observer o : observers) {
             o.onNotified();
         }

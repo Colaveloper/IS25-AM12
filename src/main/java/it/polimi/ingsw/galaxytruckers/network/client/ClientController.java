@@ -44,6 +44,9 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //        view.updateScreen(model.getGame().getCurrentState());
 //    }
 
+    public void initEventHandler() {
+        this.eventHandler = new EventHandler(model,playerRegistry);
+    }
 
     @Override
     public void notifyEvent(Event event) {
@@ -78,7 +81,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 
     @Override
     public void showGameCreation() {
-
+        model.setMetaState(MetaState.CREATION);
     }
 
 //    @Override

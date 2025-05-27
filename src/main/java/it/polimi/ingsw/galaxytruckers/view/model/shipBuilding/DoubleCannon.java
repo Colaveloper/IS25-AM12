@@ -15,7 +15,7 @@ public final class DoubleCannon extends Cannon implements Activatable {
     @Override
     public int getFirePower() {
         int power = this.active ? 2 : 0;
-        if (getOrientationProperty() == 0) return power*2;
+        if (getOrientation() == 0) return power*2;
         else return power;
     }
 

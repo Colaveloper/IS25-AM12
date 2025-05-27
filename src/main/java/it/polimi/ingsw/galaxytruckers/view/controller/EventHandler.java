@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.dto.states.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -105,10 +106,12 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
             }
             case LobbyDetailsEvent lobbyDetailsEvent -> {
                 //TODO: update client state
+                clientModel.createGame(lobbyDetailsEvent.level(), lobbyDetailsEvent.playersN());
                 for (String name : lobbyDetailsEvent.playerColors().keySet()) {
                     Player player = playerRegistry.addPlayer(name);
                     clientModel.addPlayer(player, lobbyDetailsEvent.playerColors().get(name));
                 }
+                clientModel.setMetaState(MetaState.INLOBBY);
             }
             case NewCardEvent newCardEvent -> {
                 clientModel.notifyDrawCard(

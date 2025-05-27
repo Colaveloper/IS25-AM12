@@ -10,7 +10,7 @@ public sealed class Engine extends Component permits DoubleEngine{
     }
 
     public boolean isValid() {
-        return getOrientationProperty() == 0;
+        return getOrientation() == 0;
     }
 
     public int getEnginePower() {

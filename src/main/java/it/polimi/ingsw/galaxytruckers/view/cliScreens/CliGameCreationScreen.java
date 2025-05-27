@@ -20,22 +20,9 @@ import java.util.List;
 
 public class CliGameCreationScreen extends CliScreen {
 
-    public CliGameCreationScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
-        super(model, controller, gameState);
+    public CliGameCreationScreen(ClientModel model, ControllerToServer controller) {
+        super(model, controller);
     }
-
-//    @Override
-//    public boolean isFormatLegal(String input) {
-//        if (input.trim().isEmpty()) {
-//            return true;
-//        }
-//        for (Level level : Level.values()) {
-//            if (input.matches("^" + level.name() + "\\s[2-4]$")) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
     @Override
     public void parseAndInvoke(String input) {
@@ -44,6 +31,19 @@ public class CliGameCreationScreen extends CliScreen {
         }
         String[] parts = input.split("\\s");
         controller.requestNewGame(Level.valueOf(parts[0].toUpperCase()), Integer.parseInt(parts[1]));
+    }
+
+    @Override
+    public boolean isInputLegal(String input) {
+        if (input.trim().isEmpty()) {
+            return true;
+        }
+        for (Level level : Level.values()) {
+            if (input.matches("^" + level.name() + "\\s[2-4]$")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

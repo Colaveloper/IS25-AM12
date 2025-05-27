@@ -15,6 +15,7 @@ public class ScreenFactory {
         return switch (metaState) {
             case REGISTER -> new CliNicknameChoiceScreen(model, controller);
             case JOINORCREATE -> new CliJoinOrCreateScreen(model, controller);
+            case CREATION -> new CliGameCreationScreen(model, controller);
             case INLOBBY -> new CliLobbyScreen(model, controller);
             case INGAME -> {
                 GameState gameState = model.getGame().getCurrentState();

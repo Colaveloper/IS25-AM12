@@ -16,6 +16,7 @@ public class CliAllShips extends CliElement {
         playerToCliShip = new HashMap<>();
         shipToPlayer.forEach(( ship,player) -> {
                 CliShipBoard cliShipBoard = new CliShipBoard(ship, player.getNickname());
+                cliShipBoard.addObserver(this);
             playerToCliShip.put(player, cliShipBoard);
         });
     }

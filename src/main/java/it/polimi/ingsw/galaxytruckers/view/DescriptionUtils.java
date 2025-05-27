@@ -94,10 +94,7 @@ public class DescriptionUtils {
         }
 
         bordered.add(bottomBorder);
-
-        original.clear();
-        original.addAll(bordered);
-        return original;
+        return bordered;
     }
 
     private static int getRealWidth(String line) {

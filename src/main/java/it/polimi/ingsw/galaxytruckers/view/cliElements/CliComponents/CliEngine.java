@@ -16,6 +16,6 @@ public class CliEngine extends CliComponent {
 
     @Override
     public List<String> getNewDescription() {
-        return addBorders(" " + symbols.get(engine.getOrientationProperty()) + " ");
+        return addBorders(" " + symbols.get(engine.getOrientation()) + " ");
     }
 }

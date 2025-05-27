@@ -21,6 +21,8 @@ public class Client {
         System.out.println("Do you wish to use RMI (0) or Socket (1) for communication with the server?");
         boolean chosen = false;
         controller = new ClientController();
+        controller.setModel(new ClientModel());
+        controller.initEventHandler();
         do {
             try {
                 int choice = Integer.parseInt(scanner.nextLine());

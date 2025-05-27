@@ -16,6 +16,6 @@ public class CliShield extends CliComponent {
 
     @Override
     public List<String> getNewDescription() {
-        return addBorders(" " + symbols.get(shield.getOrientationProperty()) + " ");
+        return addBorders(" " + symbols.get(shield.getOrientation()) + " ");
     }
 }

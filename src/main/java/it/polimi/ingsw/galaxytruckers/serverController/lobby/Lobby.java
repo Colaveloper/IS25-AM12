@@ -119,6 +119,12 @@ public class Lobby implements LobbyInterface {
         }
         player.setLobby(this);
         eventQueue.notifyEvent(new JoinLobbyEvent(player.getNickname(), player.getColor().orElseThrow()));
+        eventQueue.notifyEvent(new LobbyDetailsEvent(
+                player.getNickname(),
+                getId(),
+                getPlayerColors(),
+                getLevel(),
+                getNumPlayers()));
         if (players.size() == numPlayers) {
             startGame();
         }

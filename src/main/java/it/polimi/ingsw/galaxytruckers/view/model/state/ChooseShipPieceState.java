@@ -33,7 +33,6 @@ public final class ChooseShipPieceState extends AdventureState {
         shipBoard.removeShipPiece(shipPieces, pieceIndex);
     }
 
-    @Override
     public ShipBoard getShipBoard() {
         return shipBoard;
     }
