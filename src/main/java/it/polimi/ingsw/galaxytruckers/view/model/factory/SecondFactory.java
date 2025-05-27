@@ -4,6 +4,8 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.model.*;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.ShipBuildingState;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +25,7 @@ public class SecondFactory extends GameFactory {
     }
 
     @Override
-    public Hourglass createHourglass() {
-        return new Hourglass(3);
+    public ShipBuildingState createShipBuildingState() {
+        return new SecondShipBuildingState();
     }
 }

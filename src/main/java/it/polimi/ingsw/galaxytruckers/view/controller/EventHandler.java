@@ -2,11 +2,21 @@ package it.polimi.ingsw.galaxytruckers.view.controller;
 
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.states.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
+import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 
+import java.awt.*;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverController.events.EventHandler {
@@ -178,6 +188,95 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
             case ValidateShipEvent validateShipEvent -> {
                 //TODO: add method to model to update correct shipBoards
             }
+            case GameStateUpdateEvent gameStateUpdateEvent -> {
+                updateGameState(gameStateUpdateEvent.stateDTO());
+            }
         }
+    }
+
+    private void updateGameState(StateDTO stateDTO) {
+        GameState gameState = null;
+        switch (stateDTO) {
+            case AddGoodsDTO addGoodsDTO -> {
+                 gameState = new AddGoodsState(
+                        addGoodsDTO.goodsBuffer(),
+                        playerRegistry.getByNickname(addGoodsDTO.playerName()).getShipBoard()
+                );
+            }
+            case ChoosePlanetDTO choosePlanetDTO -> {
+                gameState = new ChoosePlanetState(
+                        playerRegistry.getByNickname(choosePlanetDTO.playerName()).getShipBoard(),
+                        choosePlanetDTO.availablePlanets()
+                );
+            }
+            case ChooseShipPieceDTO chooseShipPieceDTO -> {
+                gameState = new ChooseShipPieceState(
+                        chooseShipPieceDTO.shipPieces(),
+                        playerRegistry.getByNickname(chooseShipPieceDTO.playerName()).getShipBoard()
+                );
+            }
+            case HandleProjectileDTO handleProjectileDTO -> {
+                gameState = new HandleProjectileState(
+                        playerRegistry.getByNickname(handleProjectileDTO.playerName()).getShipBoard(),
+                        new Projectile(handleProjectileDTO.diceRoll(), handleProjectileDTO.direction(), handleProjectileDTO.projectileType()),
+                        handleProjectileDTO.availablePoints()
+                );
+            }
+            case RemoveCrewDTO removeCrewDTO -> {
+                gameState = new RemoveCrewState(
+                        removeCrewDTO.crewLoss(),
+                        playerRegistry.getByNickname(removeCrewDTO.playerName()).getShipBoard()
+                );
+            }
+            case RemoveGoodsDTO removeGoodsDTO -> {
+                gameState = new RemoveGoodsState(
+                        removeGoodsDTO.goodsLoss(),
+                        playerRegistry.getByNickname(removeGoodsDTO.playerName()).getShipBoard()
+                );
+            }
+            case ShipBuildingDTO shipBuildingDTO -> {
+                gameState = clientModel.getGame().getGameFactory().createShipBuildingState();
+            }
+            case ShipCorrectionDTO shipCorrectionDTO -> {
+                gameState = new ShipCorrectionState();
+            }
+            case ShipInitializationDTO shipInitializationDTO -> {
+                Map<ShipBoard, Map<CrewType, Set<Point>>> setMap = shipInitializationDTO.crewTypeToCabins()
+                        .entrySet()
+                        .stream()
+                        .map(e -> Map.entry(
+                                playerRegistry.getByNickname(e.getKey()).getShipBoard(),
+                                e.getValue()))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                Map<ShipBoard, Map<CrewType, List<Point>>> finalMap = new HashMap<>();
+                for (ShipBoard shipBoard : setMap.keySet()) {
+                    finalMap.put(shipBoard, new HashMap<>());
+                    for (CrewType crewType : setMap.get(shipBoard).keySet()) {
+                        finalMap.get(shipBoard).put(crewType, setMap.get(shipBoard).get(crewType).stream().toList());
+                    }
+                }
+                gameState = new ShipInitializationState(
+                        finalMap
+                );
+            }
+            case SimpleStateDTO simpleStateDTO -> {
+                ShipBoard shipBoard = playerRegistry.getByNickname(simpleStateDTO.playerName()).getShipBoard();
+                switch (simpleStateDTO.type()) {
+                    case DECLARE_ENGINE_POWER -> {
+                        gameState = new DeclareEnginePowerState(shipBoard);
+                    }
+                    case DECLARE_FIRE_POWER -> {
+                        gameState = new DeclareFirePowerState(shipBoard);
+                    }
+                    case DRAW_CARD -> {
+                        gameState = new DrawCardState(shipBoard);
+                    }
+                    case GRAB_REWARD -> {
+                        gameState = new GrabRewardState(shipBoard);
+                    }
+                }
+            }
+        }
+        clientModel.notifyCurrentState(gameState);
     }
 }
