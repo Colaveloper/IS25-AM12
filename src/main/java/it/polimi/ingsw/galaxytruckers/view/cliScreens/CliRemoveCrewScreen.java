@@ -3,12 +3,16 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.RemoveCrewState;
 
 import java.awt.*;
 
 public class CliRemoveCrewScreen extends CliScreen {
-    public CliRemoveCrewScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+
+    private RemoveCrewState gameState;
+    public CliRemoveCrewScreen(ClientModel model, ControllerToServer controller, RemoveCrewState gameState) {
         super(model, controller, gameState);
+        this.gameState = gameState;
     }
 
     @Override

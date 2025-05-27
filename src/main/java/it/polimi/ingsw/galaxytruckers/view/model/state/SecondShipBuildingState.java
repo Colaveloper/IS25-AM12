@@ -61,6 +61,10 @@ public final class SecondShipBuildingState extends ShipBuildingState {
         this.forecastDeck = adventureCards;
     }
 
+    public List<AdventureCard> getForecastDeck() {
+        return forecastDeck;
+    }
+
     @Override
     public void notifyReleaseForecast(ShipBoard shipBoard) {
         for (int i = 0; i < this.blockedForecasts.length; i++) {

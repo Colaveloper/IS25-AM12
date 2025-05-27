@@ -7,16 +7,18 @@ import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.HandleProjectileState;
 
 import java.awt.*;
 import java.util.Set;
 
 public class CliProjectilesScreen extends CliScreen {
 
-    public CliProjectilesScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+    private HandleProjectileState gameState;
+
+    public CliProjectilesScreen(ClientModel model, ControllerToServer controller, HandleProjectileState gameState) {
         super(model, controller, gameState);
-
-
+        this.gameState = gameState;
     }
 
     @Override

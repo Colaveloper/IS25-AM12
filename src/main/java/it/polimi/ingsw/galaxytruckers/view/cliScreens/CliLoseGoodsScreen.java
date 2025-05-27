@@ -4,12 +4,17 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.RemoveGoodsState;
 
 import java.awt.*;
 
 public class CliLoseGoodsScreen extends CliScreen{
-    public CliLoseGoodsScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+
+    private RemoveGoodsState gameState;
+
+    public CliLoseGoodsScreen(ClientModel model, ControllerToServer controller, RemoveGoodsState gameState) {
         super(model, controller, gameState);
+        this.gameState = gameState;
     }
 
 

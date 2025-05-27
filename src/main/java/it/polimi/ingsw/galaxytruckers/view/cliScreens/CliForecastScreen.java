@@ -5,14 +5,17 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 
 import java.util.List;
 
 public class CliForecastScreen extends CliScreen {
     private final List<AdventureCard> forecastDeck;
+    private SecondShipBuildingState gameState;
 
-    public CliForecastScreen(ClientModel model, ClientController controller, GameState gameState) {
+    public CliForecastScreen(ClientModel model, ClientController controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
+        this.gameState = gameState;
         this.forecastDeck = gameState.getForecastDeck();
     }
 

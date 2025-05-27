@@ -6,14 +6,16 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.DeclareEnginePowerState;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 import java.awt.*;
 
-public class CliPointSelectionScreen extends CliScreen {
+public class CliDeclareEnginePowerScreen extends CliScreen {
 
-    public CliPointSelectionScreen(ClientModel model, ControllerToServer controller, DeclareEnginePowerState gameState) {
+    private DeclareEnginePowerState gamestate;
+
+    public CliDeclareEnginePowerScreen(ClientModel model, ControllerToServer controller, DeclareEnginePowerState gameState) {
         super(model, controller, gameState);
+        this.gamestate = gameState;
     }
 
 
@@ -24,16 +26,16 @@ public class CliPointSelectionScreen extends CliScreen {
         }
         Point p = getPoint(input);
 
-        return gameState.getAvailablePositions().contains(p);
+        return gamestate.getAvailablePositions().contains(p);
     }
 
     @Override
     public void render() {
-        allShips.highlightPoints(model.getShipToPlayer().get(gameState.getShipBoard()), gameState.getAvailablePositions(), Highlights.GREEN);
+        allShips.highlightPoints(model.getShipToPlayer().get(gamestate.getShipBoard()), gamestate.getAvailablePositions(), Highlights.GREEN);
 
         printShips();
 
-        if(model.getMyShip().equals(gameState.getShipBoard())) {
+        if(model.getMyShip().equals(gamestate.getShipBoard())) {
             System.out.println("select component to activate");
         }
         else {
@@ -45,7 +47,7 @@ public class CliPointSelectionScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        if(model.getMyShip().equals(gameState.getShipBoard())) {
+        if(model.getMyShip().equals(gamestate.getShipBoard())) {
             Point p = getPoint(input);
             if(model.getMyShip().getBatteries().containsKey(p)){
                 controller.useBattery(p);
