@@ -652,6 +652,15 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         }
     }
 
+    @Override
+    public void loseCrew(Point p){
+        try{
+            server.loseCrew(p);
+        } catch(IllegalArgumentException e){
+            reportError("Cannot remove crew member");
+        }
+    }
+
     private void runAndInterceptIOE(RunnableWithIOE action) {
         try {
             action.run();
