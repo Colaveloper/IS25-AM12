@@ -19,7 +19,12 @@ public class CliRemoveCrewScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        String[] parts = input.split("\\s");
-        controller.loseCrew(new Point(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])));
+        if(input.equalsIgnoreCase("X")){
+            controller.giveUp();
+        }
+        else{
+            String[] parts = input.split("\\s");
+            controller.loseCrew(new Point(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])));
+        }
     }
 }

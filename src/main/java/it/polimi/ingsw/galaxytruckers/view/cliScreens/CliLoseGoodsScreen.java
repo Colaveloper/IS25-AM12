@@ -22,6 +22,11 @@ public class CliLoseGoodsScreen extends CliScreen{
     @Override
     public void parseAndInvoke(String input) {
         String[] parts = input.split("\\s");
-        controller.loseGoods(new Point(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+        if (parts[0].equalsIgnoreCase("X")){
+            controller.giveUp();
+        }
+        else{
+            controller.loseGoods(new Point(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+        }
     }
 }

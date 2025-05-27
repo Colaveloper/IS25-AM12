@@ -17,6 +17,11 @@ public class CliRewardScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        controller.grabReward(!input.isEmpty());
+        if(input.equalsIgnoreCase("X")){
+            controller.giveUp();
+        }
+        else {
+            controller.grabReward(!input.isEmpty());
+        }
     }
 }

@@ -26,7 +26,12 @@ public class CliNewCardScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        // TODO: probably needs fixing
-        controller.goNext();
+        if(input.equalsIgnoreCase("X")){
+            controller.giveUp();
+        }
+        else{
+            // TODO: probably needs fixing
+            controller.goNext();
+        }
     }
 }

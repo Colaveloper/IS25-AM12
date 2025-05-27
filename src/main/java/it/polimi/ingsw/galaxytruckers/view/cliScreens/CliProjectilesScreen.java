@@ -64,6 +64,9 @@ public class CliProjectilesScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
+        if(input.equalsIgnoreCase("X")){
+            controller.giveUp();
+        }
         if (model.getMyShip().equals(gameState.getShipBoard())) {
             Point p = getPoint(input);
             if (model.getMyShip().getBatteries().containsKey(p)) {

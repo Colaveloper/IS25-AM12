@@ -532,6 +532,15 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         }
     }
 
+    @Override
+    public void giveUp(){
+        try {
+            server.giveUp();
+        } catch(IllegalArgumentException e){
+            reportError("Cannot give up");
+        }
+    }
+
     private void runAndInterceptIOE(RunnableWithIOE action) {
         try {
             action.run();

@@ -17,6 +17,11 @@ public class CliPlanetScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input){
-        controller.choosePlanet(Integer.parseInt(input));
+        if(input.equalsIgnoreCase("X")){
+            controller.giveUp();
+        }
+        else{
+            controller.choosePlanet(Integer.parseInt(input));
+        }
     }
 }

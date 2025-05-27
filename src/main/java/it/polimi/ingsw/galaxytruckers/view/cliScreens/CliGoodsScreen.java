@@ -25,10 +25,13 @@ public class CliGoodsScreen extends CliScreen {
     @Override
     public void parseAndInvoke(String input) {
         String[] parts = input.split("\\s");
-        if (parts[0].equalsIgnoreCase("P")){
+        if (parts[0].equalsIgnoreCase("X")){
+            controller.giveUp();
+        }
+        else if (parts[0].equalsIgnoreCase("P")){
             controller.placeGoods(new Point(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])), GoodsType.valueOf(parts[3].toUpperCase()));
         }
-        if (parts[0].equalsIgnoreCase("R")){
+        else if (parts[0].equalsIgnoreCase("R")){
             controller.removeGoods(new Point(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])), GoodsType.valueOf(parts[3].toUpperCase()));
         }
     }
