@@ -661,6 +661,15 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         }
     }
 
+    @Override
+    public void grabReward(boolean g){
+        try{
+            server.grabReward(g);
+        }catch (IllegalArgumentException e){
+            reportError("Cannot grab reward");
+        }
+    }
+
     private void runAndInterceptIOE(RunnableWithIOE action) {
         try {
             action.run();

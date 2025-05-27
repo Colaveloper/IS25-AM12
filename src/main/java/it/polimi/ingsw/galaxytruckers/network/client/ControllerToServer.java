@@ -62,4 +62,6 @@ public interface ControllerToServer {
     void choosePlanet(int choice);
 
     void loseCrew(Point p);
+
+    void grabReward(boolean rewardGrabbed);
 }
