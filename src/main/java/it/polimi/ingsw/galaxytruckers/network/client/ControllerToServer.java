@@ -59,6 +59,8 @@ public interface ControllerToServer {
 
     void removeGoods(Point point, GoodsType good);
 
+    void loseGoods(Point p);
+
     void choosePlanet(int choice);
 
     void loseCrew(Point p);

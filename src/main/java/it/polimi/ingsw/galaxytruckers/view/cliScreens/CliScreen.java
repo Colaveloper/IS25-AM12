@@ -67,10 +67,10 @@ public abstract class CliScreen {
                     actions.add("L [x] [y] \tremove crew from component");
                 }
                 case LOSE_GOOD -> {
-                    actions.add("R [x] [y] \tRemove valuable good from cargo hold");
+                    actions.add("[x] [y] \tRemove valuable good from cargo hold");
                 }
                 case REMOVE_GOOD -> {
-                    actions.add("R [x] [y] [good type]\tPick goods from cargo hold");
+                    actions.add("R [x] [y] [good type] \tPick goods from cargo hold");
                 }
                 case ADD_GOOD -> {
                     actions.add("P [x] [y] [good type] \tPlace goods on cargo hold");

@@ -523,6 +523,15 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         }
     }
 
+    @Override
+    public void loseGoods(Point p){
+        try{
+            server.loseGoods(p);
+        } catch(IllegalArgumentException e){
+            reportError("Cannot lose good");
+        }
+    }
+
     private void runAndInterceptIOE(RunnableWithIOE action) {
         try {
             action.run();
