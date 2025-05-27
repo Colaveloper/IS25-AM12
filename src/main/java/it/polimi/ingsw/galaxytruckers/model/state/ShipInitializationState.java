@@ -7,21 +7,28 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class ShipInitializationState extends GameState {
-    private final Map<ShipBoard, Set<Point>> shipRelevantCabins = new HashMap<>();
+public final class ShipInitializationState extends GameState {
+    private final Map<ShipBoard, Map<CrewType, Set<Point>>> shipRelevantCabins = new HashMap<>();
 
     @Override
     public void setGame(Game game) {
         super.setGame(game);
         for (ShipBoard shipBoard : game.getShipBoards()) {
-            Set<Point> relevantCabins = shipBoard.getCabins().keySet().stream()
-                    .filter(p -> shipBoard.getCrewTypeOptions(p).size() > 1)
-                    .collect(Collectors.toSet());
-            if (!relevantCabins.isEmpty()) {
-                shipRelevantCabins.put(shipBoard, relevantCabins);
-            } else {
+            shipRelevantCabins.put(shipBoard, new HashMap<>());
+            Map<CrewType, Set<Point>> crewTypeCabin = shipRelevantCabins.get(shipBoard);
+            for (Point p : shipBoard.getCabins().keySet()) {
+                Set<CrewType> availableCrewTypes = shipBoard.getCrewTypeOptions(p);
+                for (CrewType crewType : availableCrewTypes) {
+                    if (crewType != CrewType.HUMAN) {
+                        if (!crewTypeCabin.containsKey(crewType)) {
+                            crewTypeCabin.put(crewType, new HashSet<>());
+                        }
+                        crewTypeCabin.get(crewType).add(p);
+                    }
+                }
+            }
+            if (crewTypeCabin.isEmpty()) {
                 goNext(shipBoard);
             }
         }
@@ -31,18 +38,16 @@ public class ShipInitializationState extends GameState {
 
     @Override
     public void initializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
-        if (shipRelevantCabins.containsKey(shipBoard) && shipRelevantCabins.get(shipBoard).contains(point)) {
+        if (shipRelevantCabins.containsKey(shipBoard) &&
+                shipRelevantCabins.get(shipBoard).containsKey(crewType) &&
+                shipRelevantCabins.get(shipBoard).get(crewType).contains(point)) {
+
             shipBoard.initializeCabin(point, crewType);
-            shipRelevantCabins.get(shipBoard).remove(point);
-            Set<Point> updatedCabins = shipRelevantCabins.get(shipBoard).stream()
-                            .filter(p -> shipBoard.getCrewTypeOptions(p).size() > 1)
-                            .collect(Collectors.toSet());
-            if (updatedCabins.isEmpty()) {
+            shipRelevantCabins.get(shipBoard).remove(crewType);
+            if (shipRelevantCabins.get(shipBoard).isEmpty()) {
                 goNext(shipBoard);
-                tryStateTransition();
-            } else {
-                shipRelevantCabins.put(shipBoard, updatedCabins);
             }
+            game.getEventListener().notifyCabinInitializationEvent(shipBoard,point,crewType);
         } else {
             throw new IllegalArgumentException("The specified cabin does not need to be initialized");
         }
@@ -53,7 +58,10 @@ public class ShipInitializationState extends GameState {
         Map<Point, Cabin> cabins = shipBoard.getCabins();
         cabins.keySet().stream()
                 .filter(p -> cabins.get(p).getNumResidents() == 0)
-                .forEach(p -> shipBoard.initializeCabin(p,CrewType.HUMAN));
+                .forEach(p -> {
+                    shipBoard.initializeCabin(p, CrewType.HUMAN);
+                    game.getEventListener().notifyCabinInitializationEvent(shipBoard,p,CrewType.HUMAN);
+                });
         shipRelevantCabins.remove(shipBoard);
     }
 
@@ -61,5 +69,9 @@ public class ShipInitializationState extends GameState {
         if (shipRelevantCabins.isEmpty()) {
             game.setCurrentState(new DrawCardState());
         }
+    }
+
+    public Map<ShipBoard, Map<CrewType, Set<Point>>> getShipRelevantCabins() {
+        return shipRelevantCabins;
     }
 }

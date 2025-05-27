@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 /**
@@ -7,12 +8,5 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
  *
  * @param playerName the nickname of the player who left/joined
  */
-public record JoinLobbyEvent(String playerName) implements Event {
-
-    public static JoinLobbyEvent from(Player player) {
-        return new JoinLobbyEvent(
-            player.getNickname()
-        );
-    }
-
+public record JoinLobbyEvent(String playerName, GameColor color) implements Event {
 }

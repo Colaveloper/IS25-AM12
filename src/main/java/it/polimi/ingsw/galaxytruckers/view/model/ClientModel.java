@@ -138,12 +138,20 @@ public class ClientModel implements ModelObservable {
         game.getCurrentState().notifyChooseShipPiece(shipBoard, pieceIndex);
     }
 
+    public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
+        game.getCurrentState().notifyShipNotConnected(shipBoard, shipPieces);
+    }
+
+    public void notifyShipValidated(ShipBoard shipBoard) {
+        game.getCurrentState().notifyShipValidated(shipBoard);
+    }
+
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
         game.getCurrentState().notifyInitializeCabin(shipBoard, point, crewType);
     }
 
-    public void notifyDrawCard(ShipBoard shipBoard, AdventureCard adventureCard) {
-        game.getCurrentState().notifyDrawCard(shipBoard, adventureCard);
+    public void notifyDrawCard(AdventureCard adventureCard) {
+        game.getCurrentState().notifyDrawCard(adventureCard);
     }
 
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {

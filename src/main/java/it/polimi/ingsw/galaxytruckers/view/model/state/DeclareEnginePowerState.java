@@ -5,10 +5,13 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class DeclareEnginePowerState extends ActivateState {
 
-    public DeclareEnginePowerState(ShipBoard shipBoard, Set<Point> availablePoints) {
-        super(shipBoard, availablePoints);
+    public DeclareEnginePowerState(ShipBoard shipBoard) {
+        super(shipBoard, shipBoard.getEngines().keySet().stream()
+                .filter(p -> shipBoard.getActivatables().containsKey(p))
+                .collect(Collectors.toSet()));
     }
 }

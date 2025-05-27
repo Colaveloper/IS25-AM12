@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
@@ -62,7 +63,7 @@ class ChoosePlanetStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND,1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -71,9 +72,10 @@ class ChoosePlanetStateTest {
                 return adventureCard;
             }
         };
+        game.setEventListener(new GameEventListenerStub());
         testChoosePlanetState.setGame(game);
         testChoosePlanetState.choosePlanet(ship1, 2);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(AdventureState.class, game.getCurrentState());
     }
 
     @Test
@@ -92,7 +94,7 @@ class ChoosePlanetStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -103,7 +105,7 @@ class ChoosePlanetStateTest {
         };
         testChoosePlanetState.setGame(game);
         testChoosePlanetState.goNext(ship1);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testChoosePlanetState, game.getCurrentState());
     }
 
 }

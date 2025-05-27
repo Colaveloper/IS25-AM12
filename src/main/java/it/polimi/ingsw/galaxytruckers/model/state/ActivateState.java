@@ -5,13 +5,15 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.Set;
 
-public abstract class ActivateState extends AdventureState {
+public abstract sealed class ActivateState extends AdventureState permits DeclareEnginePowerState,
+                                                                          DeclareFirePowerState, HandleProjectileState,
+                                                                          ActivateStateStub {
     Set<Point> availablePositions;
     ShipBoard shipBoard;
     int batteriesToSpend;
     int activatedComponents;
 
-    ActivateState(ShipBoard shipBoard) {
+    protected ActivateState(ShipBoard shipBoard) {
         this.shipBoard = shipBoard;
         this.batteriesToSpend = 0;
         this.activatedComponents = 0;
@@ -28,6 +30,7 @@ public abstract class ActivateState extends AdventureState {
         if (availablePositions.contains(position)) {
             if (shipBoard.activateComponent(position)) {
                 batteriesToSpend++;
+                game.getEventListener().notifyActivateComponentEvent(shipBoard,position,true);
             }
         }
     }
@@ -42,6 +45,7 @@ public abstract class ActivateState extends AdventureState {
         }
         shipBoard.useBatteries(point, amount);
         batteriesToSpend -= amount;
+        game.getEventListener().notifyUserBatteryEvent(shipBoard,point);
     }
 
     @Override
@@ -53,5 +57,21 @@ public abstract class ActivateState extends AdventureState {
             throw new IllegalStateException("You still have batteries to spend");
         }
         game.setCurrentState(super.getNextState());
+    }
+
+    public Set<Point> getAvailablePositions() {
+        return availablePositions;
+    }
+
+    public ShipBoard getShipBoard() {
+        return shipBoard;
+    }
+
+    public int getBatteriesToSpend() {
+        return batteriesToSpend;
+    }
+
+    public int getActivatedComponents() {
+        return activatedComponents;
     }
 }

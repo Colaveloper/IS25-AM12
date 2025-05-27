@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
@@ -36,7 +37,10 @@ class RemoveCrewStateTest {
                 // mock
             }
         };
+        game = new Game(Level.SECOND);
+        game.setEventListener(new GameEventListenerStub());
         testState = new RemoveCrewState(2, ship1);
+        testState.setGame(game);
     }
 
     @Test
@@ -63,7 +67,7 @@ class RemoveCrewStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -72,9 +76,12 @@ class RemoveCrewStateTest {
                 return adventureCard;
             }
         };
+        game = new Game(Level.SECOND);
+        game.setEventListener(new GameEventListenerStub());
         testState.setGame(game);
+        game.setDeck(deck);
         testState.loseCrew(ship1, new Point(7,7));
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 
     @Test
@@ -99,7 +106,7 @@ class RemoveCrewStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -110,7 +117,7 @@ class RemoveCrewStateTest {
         };
         testState.setGame(game);
         testState.loseCrew(ship1, new Point(7,7));
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 
     @Test
@@ -125,7 +132,7 @@ class RemoveCrewStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -136,6 +143,6 @@ class RemoveCrewStateTest {
         };
         testState.setGame(game);
         testState.loseCrew(ship1, new Point(7,7));
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 }

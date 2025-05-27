@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class ShipBuildingState extends GameState {
+public non-sealed abstract class ShipBuildingState extends GameState {
     private final ComponentBank componentBank;
     protected final Set<ShipBoard> completedShipBoards;
 
@@ -24,12 +24,6 @@ public abstract class ShipBuildingState extends GameState {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public void setGame(Game game) {
-        super.setGame(game);
-        game.getEventListener().notifyStartBuildingEvent();
     }
 
     @Override
@@ -62,7 +56,7 @@ public abstract class ShipBuildingState extends GameState {
             throw new IllegalStateException("You don't have any component to reject");
         }
         componentBank.addToUncoveredComponents(component);
-        game.getEventListener().notifyRejectComponentEvent(shipBoard,component);
+        game.getEventListener().notifyRejectComponentEvent(shipBoard);
     }
 
     @Override
@@ -82,7 +76,7 @@ public abstract class ShipBuildingState extends GameState {
         }
         shipBoard.placeComponent(point, orientation);
         Component component = shipBoard.getLastComponent().orElseThrow();
-        game.getEventListener().notifyPlaceComponentEvent(shipBoard,component,point);
+        game.getEventListener().notifyPlaceComponentEvent(shipBoard,orientation, point);
     }
 
     @Override
