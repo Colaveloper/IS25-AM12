@@ -23,6 +23,8 @@ public class CliForecastScreen extends CliScreen {
 
     @Override
     public void render() {
+        printShips();
+        printActions();
         System.out.println("Cards in the forecast deck:\n");
         for (AdventureCard card : forecastDeck){
             System.out.println(new CliAdventureCard(model).getNewDescription());

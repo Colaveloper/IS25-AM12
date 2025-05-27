@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
-public class GrabRewardState extends AdventureState {
+public final class GrabRewardState extends AdventureState {
     Runnable rewardMethod;
     ShipBoard shipBoard;
 
@@ -26,5 +26,9 @@ public class GrabRewardState extends AdventureState {
             throw new IllegalStateException("It's not your turn");
         }
         game.setCurrentState(super.getNextState());
+    }
+
+    public ShipBoard getShipBoard() {
+        return shipBoard;
     }
 }

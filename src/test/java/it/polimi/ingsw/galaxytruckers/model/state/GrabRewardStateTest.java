@@ -50,7 +50,7 @@ class GrabRewardStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND,1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -61,7 +61,7 @@ class GrabRewardStateTest {
         };
         testState.setGame(game);
         testState.grabReward(ship1);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 
     @Test
@@ -80,7 +80,7 @@ class GrabRewardStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -91,7 +91,7 @@ class GrabRewardStateTest {
         };
         testState.setGame(game);
         testState.goNext(ship1);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 
 }

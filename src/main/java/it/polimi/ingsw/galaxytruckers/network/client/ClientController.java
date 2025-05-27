@@ -1,12 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
 import it.polimi.ingsw.galaxytruckers.view.*;
-import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.controller.EventHandler;
+import it.polimi.ingsw.galaxytruckers.view.controller.PlayerRegistry;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
@@ -14,13 +14,15 @@ import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.List;
 
 public class ClientController implements ClientControllerInterface, ControllerToServer {
     private ClientModel model;
     private VirtualServer server;
     private View view;
     private ConfigFactory config;
+    private PlayerRegistry playerRegistry = new PlayerRegistry();
+
+    private EventHandler eventHandler;
 
     public void setModel(ClientModel model) {
         this.model = model;
@@ -41,6 +43,12 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //    public void showGameCreation() {
 //        view.updateScreen(model.getGame().getCurrentState());
 //    }
+
+
+    @Override
+    public void notifyEvent(Event event) {
+        eventHandler.handleEvent(event);
+    }
 
     //
 //    @Override // Tommy approved
@@ -282,156 +290,6 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //
 //    // set current player for any action that involves a decision
 
-    @Override
-    public void updateLobbyPlayers(Map<String, GameColor> playerToColor) {
-
-    }
-
-    @Override
-    public void notifyStashComponent(String playerName, List<Integer> stashComponentIds) {
-
-    }
-
-    @Override
-    public void notifyGrabFromStash(String playerName, int componentId, List<Integer> stashComponentIds) {
-
-    }
-
-    @Override
-    public void notifyComponentPositioning(String nickname, int componentId, int direction, Point position) {
-
-    }
-
-    @Override
-    public void notifyComponentRejection(String playerName, int componentId) {
-
-    }
-
-    @Override
-    public void notifyFaceDownComponentRequest(String playerName, int componentId) {
-
-    }
-
-    @Override
-    public void notifyFaceUpComponentRequest(String playerName, int componentId) {
-
-    }
-
-    @Override
-    public void notifyPeekForecast(String playerName, int deckIndex) {
-
-    }
-
-    @Override
-    public void notifyReleaseForecast(String playerName, int deckIndex) {
-
-    }
-
-    @Override
-    public void sendForecastDeck(List<Integer> deckCardIds) {
-
-    }
-
-    @Override
-    public void notifyHourglassFlipped(String playerName, boolean isLast) {
-
-    }
-
-    @Override
-    public void notifyHourglassEnd() {
-
-    }
-
-    @Override
-    public void notifyCabinUpdate(String nickname, Point position, int crew, CrewType crewType) {
-
-    }
-
-    @Override
-    public void notifyPlayerPosition(String playerName, int position) {
-
-    }
-
-    @Override
-    public void notifyShipPieceRemoval(String nickname, List<Point> positionPoints) {
-
-    }
-
-    @Override
-    public void notifyComponentRemoval(String playerName, Point position) {
-
-    }
-
-    @Override
-    public void showShipPieces(Map<String, List<Set<Point>>> brokenShips) {
-
-    }
-
-    @Override
-    public void notifyInvalidShipsUpdate(List<String> invalidPlayers) {
-
-    }
-
-    @Override
-    public void notifyShipStatusUpdate(String nickname, StatType statType, int value) {
-
-    }
-
-    @Override
-    public void notifyNewCard(int cardId) {
-
-    }
-
-    @Override
-    public void notifySelection(String nickname, List<Point> cannonsPositions, List<Point> batteryPositions) {
-
-    }
-
-    @Override
-    public void notifyComponentActivation(String playerName, Point position) {
-
-    }
-
-    @Override
-    public void changeBatteriesOnComponent(String nickname, Point batteryComponent, int batteries) {
-
-    }
-
-    @Override
-    public void notifyGrabGoodsState(String nickname, Map<GoodsType, Integer> goods, List<Point> cargoPositions) {
-
-    }
-
-    @Override
-    public void notifyCrewInitialization(Map<String, Map<CrewType, List<Point>>> playerToCabin) {
-
-    }
-
-    @Override
-    public void notifyCargoHoldUpdate(String nickname, Point position, Map<GoodsType, Integer> goods) {
-
-    }
-
-    @Override
-    public void notifyLandOnPlanet(String nickname, int planetId) {
-
-    }
-
-    @Override
-    public void updateGoodsBuffer(boolean adding, GoodsType type) {
-
-    }
-
-    @Override
-    public void showProjectile(String nickname, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) {
-
-    }
-
-    @Override
-    public void showFinalStats() {
-
-    }
-
     /// /    @Override // TODO: restore
     /// /    public void setCurrentPlayer(String nickname) {
     /// /        model.setCurrentPlayerNickname(nickname);
@@ -459,11 +317,6 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void reportError(String details) {
         System.out.println("Error: " + details);
         // view.show(ChosenStrategy)
-    }
-
-    @Override
-    public void notifyNewGame(Level level, int i) {
-
     }
 
     @Override
@@ -631,6 +484,60 @@ public class ClientController implements ClientControllerInterface, ControllerTo
             server.placeGoods(point, good);
         } catch(IllegalArgumentException e){
             reportError("Cannot place good");
+        }
+    }
+
+    @Override
+    public void removeGoods(Point point, GoodsType good){
+        try{
+            server.removeGoods(point, good);
+        } catch(IllegalArgumentException e){
+            reportError("Cannot remove good");
+        }
+    }
+
+    @Override
+    public void choosePlanet(int choice){
+        try{
+            server.choosePlanet(choice);
+        } catch(IllegalArgumentException e){
+            reportError("Cannot land on planet");
+        }
+    }
+
+    @Override
+    public void loseCrew(Point p){
+        try{
+            server.loseCrew(p);
+        } catch(IllegalArgumentException e){
+            reportError("Cannot remove crew member");
+        }
+    }
+
+    @Override
+    public void grabReward(boolean g){
+        try{
+            server.grabReward(g);
+        }catch (IllegalArgumentException e){
+            reportError("Cannot grab reward");
+        }
+    }
+
+    @Override
+    public void loseGoods(Point p){
+        try{
+            server.loseGoods(p);
+        } catch(IllegalArgumentException e){
+            reportError("Cannot lose good");
+        }
+    }
+
+    @Override
+    public void giveUp(){
+        try {
+            server.giveUp();
+        } catch(IllegalArgumentException e){
+            reportError("Cannot give up");
         }
     }
 

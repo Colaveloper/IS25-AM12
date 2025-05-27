@@ -16,6 +16,7 @@ public class Game {
 
     private final GameFactory gameFactory;
     private final Set<ShipBoard> shipBoards = new HashSet<>();
+    private Set<ShipBoard> givenUpShips;
     private final FlightBoard flightBoard;
     private final ObservableProperty<GameState> currentState = new ObservableProperty<>(null);
 
@@ -63,6 +64,8 @@ public class Game {
     public Set<ShipBoard> getShipBoards() {
         return shipBoards;
     }
+
+    public Set<ShipBoard> getGivenUpShips(){return givenUpShips;}
 
     public Set<GameColor> getShipColors(){
         Set<GameColor> colors = new HashSet<>();

@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.HashSet;
 
-public class DeclareFirePowerState extends ActivateState {
+public final class DeclareFirePowerState extends ActivateState {
     int currentFirePower;
 
     public DeclareFirePowerState(ShipBoard shipBoard) {

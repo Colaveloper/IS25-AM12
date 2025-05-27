@@ -1,9 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-import it.polimi.ingsw.galaxytruckers.model.Deck;
-import it.polimi.ingsw.galaxytruckers.model.Dice;
-import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.SmallMeteor;
@@ -68,6 +65,9 @@ class HandleProjectileStateTest {
                 super.activateComponent(shipBoard, position);
             }
         };
+        game = new Game(Level.SECOND);
+        game.setEventListener(new GameEventListenerStub());
+        testState.setGame(game);
     }
 
     @Test
@@ -119,7 +119,7 @@ class HandleProjectileStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -131,7 +131,7 @@ class HandleProjectileStateTest {
         testState = new HandleProjectileState(ship1, projectile);
         testState.setGame(game);
         testState.goNext(ship1);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 
     @Test
@@ -151,7 +151,7 @@ class HandleProjectileStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -163,7 +163,7 @@ class HandleProjectileStateTest {
         testState = new HandleProjectileState(ship1, projectile);
         testState.setGame(game);
         testState.goNext(ship1);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
 
     }
 

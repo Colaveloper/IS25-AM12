@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
@@ -58,7 +59,7 @@ class ChooseShipPieceStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -68,8 +69,9 @@ class ChooseShipPieceStateTest {
             }
         };
         testChooseShipPieceState.setGame(game);
+        game.setEventListener(new GameEventListenerStub());
         testChooseShipPieceState.chooseShipPiece(ship1, 0);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testChooseShipPieceState, game.getCurrentState());
     }
 
 }

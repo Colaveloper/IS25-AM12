@@ -56,4 +56,16 @@ public interface ControllerToServer {
     void drawCard();
 
     void placeGoods(Point point, GoodsType good);
+
+    void removeGoods(Point point, GoodsType good);
+
+    void loseGoods(Point p);
+
+    void choosePlanet(int choice);
+
+    void loseCrew(Point p);
+
+    void grabReward(boolean rewardGrabbed);
+
+    void giveUp();
 }

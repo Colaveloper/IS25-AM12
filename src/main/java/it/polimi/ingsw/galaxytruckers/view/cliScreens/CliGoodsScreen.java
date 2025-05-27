@@ -19,15 +19,20 @@ public class CliGoodsScreen extends CliScreen {
     @Override
     public void render() {
         printShips();
-        System.out.println("To grab one of the goods, type the point on the ship where\n" +
-                "you wish to place the good, followed by the type of good\n" +
-                "e.g. 5 6 yellow\n");
         printActions();
     }
 
     @Override
     public void parseAndInvoke(String input) {
         String[] parts = input.split("\\s");
-        controller.placeGoods(new Point(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])), GoodsType.valueOf(parts[2].toUpperCase()));
+        if (parts[0].equalsIgnoreCase("X")){
+            controller.giveUp();
+        }
+        else if (parts[0].equalsIgnoreCase("P")){
+            controller.placeGoods(new Point(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])), GoodsType.valueOf(parts[3].toUpperCase()));
+        }
+        else if (parts[0].equalsIgnoreCase("R")){
+            controller.removeGoods(new Point(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])), GoodsType.valueOf(parts[3].toUpperCase()));
+        }
     }
 }

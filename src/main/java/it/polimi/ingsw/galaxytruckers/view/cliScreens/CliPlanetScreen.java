@@ -11,11 +11,17 @@ public class CliPlanetScreen extends CliScreen {
 
     @Override
     public void render() {
-        // TODO
+        printShips();
+        printActions();
     }
 
     @Override
     public void parseAndInvoke(String input){
-        // TODO
+        if(input.equalsIgnoreCase("X")){
+            controller.giveUp();
+        }
+        else{
+            controller.choosePlanet(Integer.parseInt(input));
+        }
     }
 }

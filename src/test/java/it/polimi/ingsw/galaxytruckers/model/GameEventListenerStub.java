@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
+import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventListener;
 
 import java.awt.*;
@@ -15,43 +16,11 @@ import java.util.Set;
 
 public class GameEventListenerStub extends GameEventListener{
     @Override
-    public void notifySurrenderEvent(List<ShipBoard> ships) {
+    public void notifyLoseCrewEvent(ShipBoard shipBoard, Point point) {
     }
 
     @Override
-    public void notifyStashComponentEvent(ShipBoard shipBoard) {
-    }
-
-    @Override
-    public void notifyStartBuildingEvent() {
-    }
-
-    @Override
-    public void notifyShipStatUpdateEvent(ShipBoard shipBoard, StatType statType, int value) {
-    }
-
-    @Override
-    public void notifyShipPieceRemoveEvent(ShipBoard shipBoard, List<Point> positions) {
-    }
-
-    @Override
-    public void notifyShipNotConnectedEvent(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
-    }
-
-    @Override
-    public void notifySelectionPointEvent(ShipBoard shipBoard, List<Point> points, List<Point> batteries) {
-    }
-
-    @Override
-    public void notifyRequestFaceUpComponentEvent(ShipBoard shipBoard, Component component) {
-    }
-
-    @Override
-    public void notifyRequestFaceDownComponentEvent(ShipBoard shipBoard, Component component) {
-    }
-
-    @Override
-    public void notifyRemoveComponentEvent(ShipBoard shipBoard, Point point) {
+    public void notifyRejectComponentEvent(ShipBoard shipBoard) {
     }
 
     @Override
@@ -59,11 +28,43 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifyRejectComponentEvent(ShipBoard shipBoard, Component component) {
+    public void notifyRemoveComponentEvent(ShipBoard shipBoard, Point point) {
     }
 
     @Override
-    public void notifyProjectileEvent(ShipBoard shipBoard, Projectile projectile) {
+    public void notifyRequestFaceDownComponentEvent(ShipBoard shipBoard, Component component) {
+    }
+
+    @Override
+    public void notifyRequestFaceUpComponentEvent(ShipBoard shipBoard, Component component) {
+    }
+
+    @Override
+    public void notifyShipNotConnectedEvent(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
+    }
+
+    @Override
+    public void notifyShipPieceRemovalEvent(ShipBoard shipBoard, int pieceIndex) {
+    }
+
+    @Override
+    public void notifyShipStatUpdateEvent(ShipBoard shipBoard, StatType statType, int value) {
+    }
+
+    @Override
+    public void notifyStashComponentEvent(ShipBoard shipBoard) {
+    }
+
+    @Override
+    public void notifySurrenderEvent(List<ShipBoard> ships) {
+    }
+
+    @Override
+    public void notifyValidateShipEvent(ShipBoard shipBoard) {
+    }
+
+    @Override
+    public void notifyUserBatteryEvent(ShipBoard shipBoard, Point point) {
     }
 
     @Override
@@ -71,11 +72,11 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifyPlaceComponentEvent(ShipBoard shipBoard, Component component, Point position) {
+    public void notifyPlaceComponentEvent(ShipBoard shipBoard, int orientation, Point position) {
     }
 
     @Override
-    public void notifyPeekForecastEvent(ShipBoard shipBoard, int deckIndex, List<AdventureCard> forecastDeck) {
+    public void notifyPeekForecastEvent(ShipBoard shipBoard, int deckIndex) {
     }
 
     @Override
@@ -83,7 +84,7 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifyInvalidShipsUpdateEvent(Set<ShipBoard> invalidShips) {
+    public void notifyCabinInitializationEvent(ShipBoard shipBoard, Point point, CrewType crewType) {
     }
 
     @Override
@@ -91,11 +92,15 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifyGrabStashedComponentEvent(ShipBoard shipBoard, Component component) {
+    public void notifyGrabStashedComponentEvent(ShipBoard shipBoard, int index) {
     }
 
     @Override
-    public void notifyGoodsBufferUpdateEvent(ShipBoard shipBoard, boolean adding, GoodsType goodsType) {
+    public void notifyGoodsUpdateEvent(ShipBoard shipBoard, Point point, GoodsType goodsType, boolean add) {
+    }
+
+    @Override
+    public void notifyGameStateUpdateEvent(GameState gameState) {
     }
 
     @Override
@@ -103,7 +108,11 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifyFlipHourglassEvent(ShipBoard shipBoard, boolean isLast) {
+    public void notifyForecastDetailsEvent(ShipBoard shipBoard, List<AdventureCard> adventureCards) {
+    }
+
+    @Override
+    public void notifyFlipHourglassEvent(ShipBoard shipBoard) {
     }
 
     @Override
@@ -111,15 +120,7 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifyCargoHoldUpdateEvent(ShipBoard shipBoard, Point point, CargoHold cargoHold) {
-    }
-
-    @Override
-    public void notifyCabinUpdateEvent(ShipBoard shipBoard, Point point, Cabin cabin) {
-    }
-
-    @Override
-    public void notifyBatteryUpdateEvent(ShipBoard shipBoard, Point point, Battery battery) {
+    public void notifyActivateComponentEvent(ShipBoard shipBoard, Point point, boolean active) {
     }
 
     @Override
