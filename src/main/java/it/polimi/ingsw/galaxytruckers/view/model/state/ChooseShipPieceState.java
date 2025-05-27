@@ -38,7 +38,6 @@ public final class ChooseShipPieceState extends AdventureState {
         return shipBoard;
     }
 
-    @Override
     public List<Set<Point>> getShipPieces() {
         return shipPieces;
     }

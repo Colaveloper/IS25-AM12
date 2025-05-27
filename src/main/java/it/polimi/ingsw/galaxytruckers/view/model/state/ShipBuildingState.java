@@ -60,7 +60,6 @@ public sealed abstract class ShipBuildingState extends GameState permits
         shipBoard.placeComponent(point, orientation);
     }
 
-    @Override
     public ComponentBank getComponentBank(){
         return componentBank;
     }

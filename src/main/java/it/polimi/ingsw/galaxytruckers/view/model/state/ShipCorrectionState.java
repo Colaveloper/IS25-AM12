@@ -46,7 +46,6 @@ public final class ShipCorrectionState extends GameState {
         shipPieces.remove(shipBoard);
     }
 
-    @Override
     public Set<ShipBoard> getValidShipBoards() {
         return validShipBoards;
     }

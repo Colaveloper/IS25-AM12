@@ -2,8 +2,11 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
+import it.polimi.ingsw.galaxytruckers.view.Observer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.ObservableMap;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
@@ -13,7 +16,10 @@ import java.util.List;
 public class CliShipBoard extends CliElement {
 
     protected final ShipBoard shipBoard;
-    private final Map<Point, CliComponent> componentMap;
+
+    // no key = empty space
+    // no value = empty area
+    private final Map<Point, CliComponent> cliComponentMap;
     private final GameColor color;
     private final String nickname;
     int minX;
@@ -25,19 +31,37 @@ public class CliShipBoard extends CliElement {
         this.shipBoard = shipBoard;
         this.nickname = nickname;
         this.color = shipBoard.getColor();
-        componentMap = new HashMap<>();
+
+        cliComponentMap = new HashMap<>();
+
+        shipBoard.getComponentMap().addListener(new ObservableMap.Listener<>() {
+            @Override
+            public void onPut(Point p, Component oldValue, Component newValue) {
+                CliComponent newCliComponent = CliComponent.of(newValue);
+                newCliComponent.addObserver();
+                cliComponentMap.put(p, newCliComponent);
+            }
+
+            @Override
+            public void onRemove(Point p, Component oldValue) {
+                cliComponentMap.put(p, null);
+            }
+        });
+
+        shipBoard.getShipArea().forEach(p-> cliComponentMap.put(p, null));
+
         shipBoard.getComponentMap().forEach(((point, shipBoardCell) -> {
-                    componentMap.put(point, CliComponent.of(shipBoardCell.getComponent()));
+                    cliComponentMap.put(point, CliComponent.of(shipBoardCell.getComponent()));
         }));
-        minX = componentMap.keySet().stream().mapToInt(p -> p.x).min().orElse(0);
-        maxX = componentMap.keySet().stream().mapToInt(p -> p.x).max().orElse(0);
-        minY = componentMap.keySet().stream().mapToInt(p -> p.y).min().orElse(0);
-        maxY = componentMap.keySet().stream().mapToInt(p -> p.y).max().orElse(0);
+        minX = cliComponentMap.keySet().stream().mapToInt(p -> p.x).min().orElse(0);
+        maxX = cliComponentMap.keySet().stream().mapToInt(p -> p.x).max().orElse(0);
+        minY = cliComponentMap.keySet().stream().mapToInt(p -> p.y).min().orElse(0);
+        maxY = cliComponentMap.keySet().stream().mapToInt(p -> p.y).max().orElse(0);
     }
 
     public void highlightPoints(Set<Point> points, Highlights color){
         for (Point point : points){
-            componentMap.get(point).highlight(color);
+            cliComponentMap.get(point).highlight(color);
         }
     }
 
@@ -52,14 +76,14 @@ public class CliShipBoard extends CliElement {
             rowDescription.addAll(List.of("",String.valueOf(y),""));
             for (int x = minX; x <= maxX; x++) {
                 List<String> newCell = new ArrayList<>();
-                if (!componentMap.containsKey(new Point(x, y))) {
+                if (!cliComponentMap.containsKey(new Point(x, y))) {
                     // empty space
                     newCell = List.of("   ", "   ", "   ");
-                } else if (componentMap.get(new Point(x, y)) == null) {
+                } else if (cliComponentMap.get(new Point(x, y)) == null) {
                     // empty area
                     newCell = List.of("   ", " X ", "   ");
                 } else {
-                    newCell = componentMap.get(new Point(x, y)).getNewDescription();
+                    newCell = cliComponentMap.get(new Point(x, y)).getNewDescription();
                 }
             }
             result.addAll(rowDescription);

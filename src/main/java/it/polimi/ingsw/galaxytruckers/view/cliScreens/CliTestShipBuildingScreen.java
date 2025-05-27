@@ -4,14 +4,17 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.TestShipBuildingState;
 
-public class CliShipBuildingScreen extends CliScreen {
+public class CliTestShipBuildingScreen extends CliScreen {
 
-    CliComponentBank componentBank;
+    private CliComponentBank componentBank;
+    private TestShipBuildingState gameState;
 
-    public CliShipBuildingScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+    public CliTestShipBuildingScreen(ClientModel model, ControllerToServer controller, TestShipBuildingState gameState) {
         super(model, controller, gameState);
         this.componentBank = new CliComponentBank(model);
+        this.gameState = gameState;
     }
 
     @Override

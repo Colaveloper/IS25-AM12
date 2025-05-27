@@ -20,25 +20,25 @@ public class ScreenFactory {
                 GameState gameState = model.getGame().getCurrentState();
                 yield switch (gameState) {
                     case AdventureState s -> switch (s) {
-                        case ActivateState s -> switch (s) {
-                            case DeclareEnginePowerState s -> new CliPointSelectionScreen(model, controller, s);
-                            case DeclareFirePowerState s -> new CliPointSelectionScreen(model, controller, s);
-                            case HandleProjectileState handleProjectileState -> new CliProjectilesScreen(model, controller, s);
+                        case ActivateState activateState -> switch (activateState) {
+                            case DeclareEnginePowerState declareEnginePowerState -> new CliDeclareEnginePowerScreen(model, controller, declareEnginePowerState);
+                            case DeclareFirePowerState declareFirePowerState -> new CliDeclareFirePowerScreen(model, controller, declareFirePowerState);
+                            case HandleProjectileState handleProjectileState -> new CliProjectilesScreen(model, controller, handleProjectileState);
                         };
-                        case AddGoodsState addGoodsState -> new CliGoodsScreen(model, controller, gameState);
-                        case ChoosePlanetState choosePlanetState -> new CliPlanetScreen(model, controller, gameState);
-                        case ChooseShipPieceState chooseShipPieceState -> new CliShipPieceChoiceScreen(model, controller, gameState);
-                        case DrawCardState drawCardState -> new CliNewCardScreen(model, controller, gameState);
-                        case GrabRewardState grabRewardState -> new CliRewardScreen(model, controller, gameState);
-                        case RemoveCrewState removeCrewState -> new CliRemoveCrewScreen(model, controller, gameState);
-                        case RemoveGoodsState removeGoodsState -> new CliGoodsScreen(model, controller, gameState);
+                        case AddGoodsState addGoodsState -> new CliGoodsScreen(model, controller, addGoodsState);
+                        case ChoosePlanetState choosePlanetState -> new CliPlanetScreen(model, controller, choosePlanetState);
+                        case ChooseShipPieceState chooseShipPieceState -> new CliShipPieceChoiceScreen(model, controller, chooseShipPieceState);
+                        case DrawCardState drawCardState -> new CliNewCardScreen(model, controller, drawCardState);
+                        case GrabRewardState grabRewardState -> new CliRewardScreen(model, controller, grabRewardState);
+                        case RemoveCrewState removeCrewState -> new CliRemoveCrewScreen(model, controller, removeCrewState);
+                        case RemoveGoodsState removeGoodsState -> new CliLoseGoodsScreen(model, controller, removeGoodsState);
                     };
                     case ShipBuildingState shipBuildingState -> switch (shipBuildingState) {
-                        case SecondShipBuildingState secondShipBuildingState -> new CliShipBuildingScreen(model, controller, gameState);
-                        case TestShipBuildingState testShipBuildingState -> new CliShipBuildingScreen(model, controller, gameState);
+                        case SecondShipBuildingState secondShipBuildingState -> new CliSecondShipBuildingScreen(model, controller, secondShipBuildingState);
+                        case TestShipBuildingState testShipBuildingState -> new CliTestShipBuildingScreen(model, controller, testShipBuildingState);
                     };
-                    case ShipCorrectionState shipCorrectionState -> new CliValidationScreen(model, controller, gameState);
-                    case ShipInitializationState shipInitializationState -> new CliCrewInitializationScreen(model, controller, gameState);
+                    case ShipCorrectionState shipCorrectionState -> new CliValidationScreen(model, controller, shipCorrectionState);
+                    case ShipInitializationState shipInitializationState -> new CliCrewInitializationScreen(model, controller, shipInitializationState);
                 };
             }
         };

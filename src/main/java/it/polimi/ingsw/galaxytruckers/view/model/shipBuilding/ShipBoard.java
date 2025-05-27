@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.Observer;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.ObservableMap;
 import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
 
 import java.awt.*;
@@ -14,7 +15,7 @@ import java.util.stream.IntStream;
 
 public abstract class ShipBoard implements ModelObservable {
 
-    protected final Map<Point, ShipBoardCell> componentMap;
+    protected final ObservableMap<Point, Component> componentMap;
     protected Component lastComponent;  // can be null
     protected Point lastPosition;  // can be null
     protected final GameColor color;
@@ -49,7 +50,7 @@ public abstract class ShipBoard implements ModelObservable {
         this.credits = 0;
         this.losses = 0;
 
-        this.componentMap = new HashMap<>();
+        this.componentMap = new ObservableMap<>();
         this.cannons = new HashMap<>();
         this.engines = new HashMap<>();
         this.batteries = new HashMap<>();
@@ -57,11 +58,6 @@ public abstract class ShipBoard implements ModelObservable {
         this.cargoHolds = new HashMap<>();
         this.cabins = new HashMap<>();
         this.activatables = new HashMap<>();
-
-        for (Point p : getShipArea()) {
-            componentMap.put(p, new ShipBoardCell());
-        }
-
     }
 
     public abstract Set<Point> getShipArea();
@@ -103,7 +99,7 @@ public abstract class ShipBoard implements ModelObservable {
         }
         lastPosition = newPosition;
         lastComponent.setOrientation(orientation);
-        componentMap.get(newPosition).setComponent(lastComponent);
+        componentMap.put(newPosition, lastComponent);
         notifyObservers();
     }
 
@@ -140,7 +136,7 @@ public abstract class ShipBoard implements ModelObservable {
     }
 
     public void removeComponent(Point position) {
-        Component removedComponent = componentMap.get(position).removeComponent();
+        Component removedComponent = componentMap.remove(position);
         switch (removedComponent) {
             case Battery _ -> batteries.remove(position);
             case Cabin _ -> cabins.remove(position);
@@ -239,7 +235,7 @@ public abstract class ShipBoard implements ModelObservable {
 
     // Components Observers
 
-    public Map<Point, ShipBoardCell> getComponentMap() {
+    public ObservableMap<Point, Component> getComponentMap() {
         return componentMap;
     }
 

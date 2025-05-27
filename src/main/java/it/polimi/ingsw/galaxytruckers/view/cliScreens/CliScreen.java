@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class CliScreen {
 
     protected ClientModel model;
-    protected GameState gameState;
+    private GameState state;
     protected ControllerToServer controller;
     protected List<StateActions> availableActions;
 
@@ -23,7 +23,7 @@ public abstract class CliScreen {
     public CliScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         this.model = model;
         this.controller = controller;
-        this.gameState = gameState;
+        this.state = gameState;
         availableActions = gameState.getAvailableActions();
         this.flightBoard = new CliFlightBoard(model);
         this.allShips = new CliAllShips(model.getShipToPlayer());

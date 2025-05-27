@@ -71,7 +71,6 @@ public final class SecondShipBuildingState extends ShipBuildingState {
         }
     }
 
-    @Override
     public ShipBoard[] getLockedForecasts() {
         return blockedForecasts;
     }

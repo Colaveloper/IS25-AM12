@@ -62,12 +62,6 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
-    public ComponentBank getComponentBank(){
-        System.err.println("This action is not permitted in this state, \n" +
-                "it seems the client and the server are out of sync");
-        return null;
-    }
-
     public void notifyFlipHourglass(ShipBoard shipBoard) {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
@@ -97,21 +91,9 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
-    public ShipBoard[] getLockedForecasts() {
-        System.err.println("This action is not permitted in this state, \n" +
-                "it seems the client and the server are out of sync");
-        return null;
-    }
-
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
-    }
-
-    public Projectile getProjectile(){
-        System.err.println("This action is not permitted in this state, \n" +
-                "it seems the client and the server are out of sync");
-        return null;
     }
 
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
@@ -129,21 +111,9 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
-    public Set<ShipBoard> getValidShipBoards() {
-        System.err.println("This action is not permitted in this state, \n" +
-                "it seems the client and the server are out of sync");
-        return null;
-    }
-
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
-    }
-
-    public Map<ShipBoard, Map<CrewType,List<Point>>> getCrewtypeToPoints() {
-        System.err.println("This action is not permitted in this state, \n" +
-                "it seems the client and the server are out of sync");
-        return null;
     }
 
     public void notifyDrawCard(AdventureCard adventureCard) {
@@ -181,24 +151,6 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
-    public List<Set<Point>> getShipPieces() {
-        System.err.println("This action is not permitted in this state, \n" +
-                "it seems the client and the server are out of sync");
-        return null;
-    }
-
-    public ShipBoard getShipBoard() {
-        System.err.println("This action is not permitted in this state, \n" +
-                "it seems the client and the server are out of sync");
-        return null;
-    }
-
-    public Set<Point> getAvailablePositions() {
-        System.err.println("This action is not permitted in this state, \n" +
-                "it seems the client and the server are out of sync");
-        return null;
-    }
-
     public int getBatteriesToSpend() {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
@@ -214,12 +166,5 @@ public abstract sealed class GameState permits
     public void notifyGiveUp(ShipBoard shipBoard) {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
-    }
-
-    // Getters
-    public List<AdventureCard> getForecastDeck(){
-        System.err.println("This action is not permitted in this state, \n" +
-                "it seems the client and the server are out of sync");
-        return null;
     }
 }
