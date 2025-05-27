@@ -104,7 +104,11 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
                 clientModel.addPlayer(player, GameColor.BLUE);
             }
             case LobbyDetailsEvent lobbyDetailsEvent -> {
-                //TODO: send all lobby information
+                //TODO: update client state
+                for (String name : lobbyDetailsEvent.playerColors().keySet()) {
+                    Player player = playerRegistry.addPlayer(name);
+                    clientModel.addPlayer(player, lobbyDetailsEvent.playerColors().get(name));
+                }
             }
             case NewCardEvent newCardEvent -> {
                 clientModel.notifyDrawCard(
@@ -165,7 +169,10 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
                 );
             }
             case ShipNotConnectedEvent shipNotConnectedEvent -> {
-                //TODO: add method to model to notify a ship is not connected
+                clientModel.notifyShipNotConnected(
+                        playerRegistry.getByNickname(shipNotConnectedEvent.playerName()).getShipBoard(),
+                        shipNotConnectedEvent.shipPieces()
+                );
             }
             case ShipPieceRemoveEvent shipPieceRemoveEvent -> {
                 clientModel.notifyChooseShipPiece(
@@ -191,7 +198,9 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
                 );
             }
             case ValidateShipEvent validateShipEvent -> {
-                //TODO: add method to model to update correct shipBoards
+                clientModel.notifyShipValidated(
+                        playerRegistry.getByNickname(validateShipEvent.playerName()).getShipBoard()
+                );
             }
             case GameStateUpdateEvent gameStateUpdateEvent -> {
                 updateGameState(gameStateUpdateEvent.stateDTO());

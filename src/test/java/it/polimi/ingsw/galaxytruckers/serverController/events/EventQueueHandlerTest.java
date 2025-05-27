@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
@@ -42,7 +43,7 @@ class EventQueueHandlerTest {
         long time = 0;
         CountDownLatch countDownLatch = new CountDownLatch(1);
         eventQueueHandler.setAfterEach(countDownLatch::countDown);
-        eventQueue.notifyEvent(new JoinLobbyEvent("test"));
+        eventQueue.notifyEvent(new JoinLobbyEvent("test", GameColor.BLUE));
         if (countDownLatch.await(1, TimeUnit.SECONDS)) {
             eventQueueHandler.stop();
             assertInstanceOf(JoinLobbyEvent.class, client1.receivedEvents.getFirst());

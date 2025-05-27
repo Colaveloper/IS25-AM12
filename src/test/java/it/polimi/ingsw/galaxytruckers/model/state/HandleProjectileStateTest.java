@@ -1,9 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-import it.polimi.ingsw.galaxytruckers.model.Deck;
-import it.polimi.ingsw.galaxytruckers.model.Dice;
-import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.SmallMeteor;
@@ -68,6 +65,9 @@ class HandleProjectileStateTest {
                 super.activateComponent(shipBoard, position);
             }
         };
+        game = new Game(Level.SECOND);
+        game.setEventListener(new GameEventListenerStub());
+        testState.setGame(game);
     }
 
     @Test

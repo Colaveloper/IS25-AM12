@@ -20,8 +20,10 @@ public class ClientModel implements ModelObservable{
 
     private Player clientPlayer = null;
     private Game game = null;
-    private final Set<Player> players = new HashSet<Player>();
+    private final Set<Player> players = new HashSet<>();
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
+
+    private Lobby currentLobby = null;
 
     private List<Observer> observers = new ArrayList<>();
 
@@ -73,9 +75,18 @@ public class ClientModel implements ModelObservable{
     public Map<Player, Integer> getFinalScores() {
         return finalScores;
     }
+
+    public Lobby getCurrentLobby() {
+        return currentLobby;
+    }
+
     //endregion
 
     //region Event update methods
+    public void setLobby(Lobby lobby) {
+        this.currentLobby = lobby;
+    }
+
     public void notifyCurrentState(GameState gameState) {
         game.setCurrentState(gameState);
     }
@@ -134,6 +145,14 @@ public class ClientModel implements ModelObservable{
 
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
         game.getCurrentState().notifyChooseShipPiece(shipBoard, pieceIndex);
+    }
+
+    public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
+        game.getCurrentState().notifyShipNotConnected(shipBoard, shipPieces);
+    }
+
+    public void notifyShipValidated(ShipBoard shipBoard) {
+        game.getCurrentState().notifyShipValidated(shipBoard);
     }
 
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
