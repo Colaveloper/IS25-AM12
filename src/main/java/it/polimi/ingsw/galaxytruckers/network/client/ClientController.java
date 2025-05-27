@@ -487,6 +487,15 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         }
     }
 
+    @Override
+    public void removeGoods(Point point, GoodsType good){
+        try{
+            server.removeGoods(point, good);
+        } catch(IllegalArgumentException e){
+            reportError("Cannot remove good");
+        }
+    }
+
     private void runAndInterceptIOE(RunnableWithIOE action) {
         try {
             action.run();
