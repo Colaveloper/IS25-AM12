@@ -1,17 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
-import javafx.beans.property.ObjectProperty;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -31,7 +25,7 @@ public class CliAllShips extends CliElement {
     }
 
     @Override
-    public List<String> getDescription() {
+    public List<String> getNewDescription() {
         List<String> description = new ArrayList<>();
 
         for (Map.Entry<Player, CliShipBoard> entry : playerToCliShip.entrySet()) {
@@ -40,7 +34,7 @@ public class CliAllShips extends CliElement {
                     new CliShipAndHand(
                             entry.getValue().shipBoard,
                             entry.getKey().getNickname()
-                    ).getDescription()
+                    ).getNewDescription()
             );
         }
 

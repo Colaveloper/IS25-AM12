@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.view.Observer;
 import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
+import it.polimi.ingsw.galaxytruckers.view.model.ObservableProperty;
 
 import java.util.ArrayList;
 import java.util.List;

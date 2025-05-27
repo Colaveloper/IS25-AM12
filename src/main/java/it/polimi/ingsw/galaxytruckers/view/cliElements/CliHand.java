@@ -3,7 +3,6 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
-import jdk.jfr.Description;
 
 import java.util.List;
 
@@ -16,11 +15,11 @@ public class CliHand extends CliElement {
     }
 
     @Override
-    protected List<String> getDescription() {
+    protected List<String> getNewDescription() {
         return DescriptionUtils.borderAndTitle(
                 component == null
                         ? List.of("   ", "   ", "   ")
-                        : CliComponent.of(component).getDescription(),
+                        : CliComponent.of(component).getNewDescription(),
                 "hand"
         );
     }

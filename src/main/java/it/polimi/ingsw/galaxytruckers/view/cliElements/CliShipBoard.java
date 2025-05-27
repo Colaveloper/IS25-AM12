@@ -4,14 +4,11 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CliShipBoard extends CliElement {
 
@@ -45,7 +42,7 @@ public class CliShipBoard extends CliElement {
     }
 
     @Override
-    public List<String> getDescription(){
+    public List<String> getNewDescription(){
 
         List<String> result = new ArrayList<>();
         List<String> rowDescription = new ArrayList<>();
@@ -62,7 +59,7 @@ public class CliShipBoard extends CliElement {
                     // empty area
                     newCell = List.of("   ", " X ", "   ");
                 } else {
-                    newCell = componentMap.get(new Point(x, y)).getDescription();
+                    newCell = componentMap.get(new Point(x, y)).getNewDescription();
                 }
             }
             result.addAll(rowDescription);

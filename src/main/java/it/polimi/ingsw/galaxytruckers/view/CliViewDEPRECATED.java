@@ -57,7 +57,7 @@
 //        // showing the visualization
 //        System.out.println("█".repeat(150));
 //        try {
-//            screen.getDescription().forEach(System.out::println);
+//            screen.getNewDescription().forEach(System.out::println);
 //        } catch (IOException e) {
 //            controller.reportError("Unable to show the screen due to an IO error: "+e.getMessage());
 //        }

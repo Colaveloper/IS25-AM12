@@ -18,7 +18,7 @@
 //    }
 //
 //    @Override
-//    protected List<String> getDescription() {
+//    protected List<String> getNewDescription() {
 //        //Visualizza array di booleani per i deck bloccati
 //        for (AdventureCard adventureCard : forecastDeck) {
 //            switch (adventureCard) {

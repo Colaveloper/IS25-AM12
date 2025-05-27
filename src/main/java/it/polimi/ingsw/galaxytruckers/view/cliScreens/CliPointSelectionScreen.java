@@ -5,13 +5,14 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.state.DeclareEnginePowerState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 import java.awt.*;
 
 public class CliPointSelectionScreen extends CliScreen {
 
-    public CliPointSelectionScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+    public CliPointSelectionScreen(ClientModel model, ControllerToServer controller, DeclareEnginePowerState gameState) {
         super(model, controller, gameState);
     }
 

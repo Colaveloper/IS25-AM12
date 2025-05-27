@@ -16,7 +16,7 @@ public class CliFlightBoard extends CliElement {
     }
 
     @Override
-    public List<String> getDescription() {
+    public List<String> getNewDescription() {
         String[] asArray = new String[flightBoard.getLoopLength()];
         Arrays.fill(asArray, "_");
 

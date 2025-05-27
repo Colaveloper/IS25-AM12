@@ -5,8 +5,6 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponen
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
-import java.awt.*;
-
 public class CliShipBuildingScreen extends CliScreen {
 
     CliComponentBank componentBank;
@@ -18,7 +16,7 @@ public class CliShipBuildingScreen extends CliScreen {
 
     @Override
     public void render() {
-        System.out.println(componentBank.getDescription());
+        System.out.println(componentBank.getNewDescription());
         printShips();
         printActions();
     }

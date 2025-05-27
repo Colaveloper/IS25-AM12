@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
-import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 
 import java.util.List;
@@ -11,7 +10,7 @@ public sealed class Engine extends Component permits DoubleEngine{
     }
 
     public boolean isValid() {
-        return getOrientation() == 0;
+        return getOrientationProperty() == 0;
     }
 
     public int getEnginePower() {

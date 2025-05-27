@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.ArrayList;
@@ -12,10 +11,10 @@ public class CliShipAndHand extends CliShipBoard {
     }
 
     @Override
-    public List<String> getDescription(){
+    public List<String> getNewDescription(){
         List<String> description = new ArrayList<>();
-        description.addAll(super.getDescription());
-        description.addAll(new CliHand(shipBoard.getLastComponent().orElse(null)).getDescription());
+        description.addAll(super.getNewDescription());
+        description.addAll(new CliHand(shipBoard.getLastComponent().orElse(null)).getNewDescription());
         return description;
     }
 }

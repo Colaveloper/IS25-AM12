@@ -12,13 +12,13 @@ public class CliShipHandAndStash extends CliShipBoard {
     }
 
     @Override
-    public List<String> getDescription(){
+    public List<String> getNewDescription(){
         List<String> description = new ArrayList<>();
-        description.addAll(super.getDescription());
+        description.addAll(super.getNewDescription());
         description.addAll(
                 DescriptionUtils.sideBySide(
-                        new CliHand(shipBoard.getLastComponent().orElse(null)).getDescription(),
-                        new CliStash(shipBoard.getStashedComponents()).getDescription()
+                        new CliHand(shipBoard.getLastComponent().orElse(null)).getNewDescription(),
+                        new CliStash(shipBoard.getStashedComponents()).getNewDescription()
                 )
         );
         return description;

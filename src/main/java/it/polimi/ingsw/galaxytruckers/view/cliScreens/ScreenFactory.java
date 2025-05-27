@@ -19,11 +19,11 @@ public class ScreenFactory {
             case INGAME -> {
                 GameState gameState = model.getGame().getCurrentState();
                 yield switch (gameState) {
-                    case AdventureState adventureState -> switch (adventureState) {
-                        case ActivateState activateState -> switch (activateState) {
-                            case DeclareEnginePowerState declareEnginePowerState -> new CliPointSelectionScreen(model, controller, gameState);
-                            case DeclareFirePowerState declareFirePowerState -> new CliPointSelectionScreen(model, controller, gameState);
-                            case HandleProjectileState handleProjectileState -> new CliProjectilesScreen(model, controller, gameState);
+                    case AdventureState s -> switch (s) {
+                        case ActivateState s -> switch (s) {
+                            case DeclareEnginePowerState s -> new CliPointSelectionScreen(model, controller, s);
+                            case DeclareFirePowerState s -> new CliPointSelectionScreen(model, controller, s);
+                            case HandleProjectileState handleProjectileState -> new CliProjectilesScreen(model, controller, s);
                         };
                         case AddGoodsState addGoodsState -> new CliGoodsScreen(model, controller, gameState);
                         case ChoosePlanetState choosePlanetState -> new CliPlanetScreen(model, controller, gameState);

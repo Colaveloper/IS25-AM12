@@ -9,7 +9,6 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public abstract class CliScreen {
 
@@ -40,8 +39,8 @@ public abstract class CliScreen {
     public abstract void parseAndInvoke(String input);
 
     protected void printShips() {
-        flightBoard.getDescription().forEach(System.out::println);
-        allShips.getDescription().forEach(System.out::println);//todo sistemare altri tipi di allships
+        flightBoard.getNewDescription().forEach(System.out::println);
+        allShips.getNewDescription().forEach(System.out::println);//todo sistemare altri tipi di allships
     }
 
     protected void printActions() {

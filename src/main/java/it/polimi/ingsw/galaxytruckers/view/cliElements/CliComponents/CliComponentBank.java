@@ -28,7 +28,7 @@ public class CliComponentBank extends CliElement {
     }
 
     @Override
-    public List<String> getDescription() {
+    public List<String> getNewDescription() {
         String padding = "  ";
         StringBuilder row = new StringBuilder();
         List<String> description = new ArrayList<>();
@@ -38,7 +38,7 @@ public class CliComponentBank extends CliElement {
         description.add("Face up: ");
         for (int i = 0; i < 3; i++) {
             for (CliComponent cliComponent : revealedComponents) {
-                row.append(cliComponent.getDescription().get(i));
+                row.append(cliComponent.getNewDescription().get(i));
                 row.append(padding);
             }
             description.add(row.toString());

@@ -13,7 +13,7 @@ public final class Shield extends Component implements Activatable {
     }
 
     public int[] getDefensibleDirections() {
-        return new int[]{getOrientation(), (getOrientation()+1)%4};
+        return new int[]{getOrientationProperty(), (getOrientationProperty()+1)%4};
     }
 
     @Override
