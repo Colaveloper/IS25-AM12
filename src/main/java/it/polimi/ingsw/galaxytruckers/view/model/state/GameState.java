@@ -119,6 +119,16 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
+    public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
+        System.err.println("This action is not permitted in this state, \n" +
+                "it seems the client and the server are out of sync");
+    }
+
+    public void notifyShipValidated(ShipBoard shipBoard) {
+        System.err.println("This action is not permitted in this state, \n" +
+                "it seems the client and the server are out of sync");
+    }
+
     public Set<ShipBoard> getValidShipBoards() {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
@@ -136,7 +146,7 @@ public abstract sealed class GameState permits
         return null;
     }
 
-    public void notifyDrawCard(ShipBoard shipBoard, AdventureCard adventureCard) {
+    public void notifyDrawCard(AdventureCard adventureCard) {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
     }

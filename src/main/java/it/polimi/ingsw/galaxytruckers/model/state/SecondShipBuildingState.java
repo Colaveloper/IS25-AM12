@@ -31,7 +31,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
         } else {
             hourglass.flip(this::notifyHourglassEnd);
         }
-        game.getEventListener().notifyFlipHourglassEvent(shipBoard,isLast);
+        game.getEventListener().notifyFlipHourglassEvent(shipBoard);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.grabStashedComponent(index);
-        game.getEventListener().notifyGrabStashedComponentEvent(shipBoard, shipBoard.getLastComponent().orElseThrow());
+        game.getEventListener().notifyGrabStashedComponentEvent(shipBoard, index);
     }
 
     @Override
@@ -79,7 +79,8 @@ public class SecondShipBuildingState extends ShipBuildingState {
         }
         blockedForecasts.add(deckIndex);
         shipToForecasts.put(shipBoard, deckIndex);
-        game.getEventListener().notifyPeekForecastEvent(shipBoard,deckIndex,game.getDeck().getForecastDeck(deckIndex));
+        game.getEventListener().notifyPeekForecastEvent(shipBoard,deckIndex);
+        game.getEventListener().notifyForecastDetailsEvent(shipBoard,game.getDeck().getForecastDeck(deckIndex));
     }
 
     @Override

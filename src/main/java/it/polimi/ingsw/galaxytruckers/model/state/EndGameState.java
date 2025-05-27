@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.util.Map;
 
-public class EndGameState extends AdventureState {
+public final class EndGameState extends AdventureState {
     Map<ShipBoard, Integer> finalScores;
 
     public EndGameState(Map<ShipBoard, Integer> finalScores){
@@ -13,6 +13,7 @@ public class EndGameState extends AdventureState {
 
     @Override
     public void endGame(){
-        // TODO: send final scores to clients via controller
+        //TODO: notify at game end (state unnecessary)
+        game.getEventListener().notifyGameEndEvent(finalScores);
     }
 }

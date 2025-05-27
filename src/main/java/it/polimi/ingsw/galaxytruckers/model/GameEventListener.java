@@ -4,12 +4,12 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Battery;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Cabin;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CargoHold;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.StateDTOConverter;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.awt.*;
 import java.util.Map;
@@ -23,72 +23,91 @@ public class GameEventListener {
         this.controllerListener = controllerListener;
     }
 
-    public void notifyBatteryUpdateEvent(ShipBoard shipBoard, Point point, Battery battery) {
-        //controllerListener.notifyEvent(UseBatteryEvent.from(shipBoard, point, battery));
-    }
-
-    public void notifyCabinUpdateEvent(ShipBoard shipBoard, Point point, Cabin cabin) {
-        controllerListener.notifyEvent(InitializeCabinEvent.from(shipBoard, point, cabin));
-    }
-
-    public void notifyCargoHoldUpdateEvent(ShipBoard shipBoard, Point point, CargoHold cargoHold) {
-        //controllerListener.notifyEvent(CargoHoldUpdateEvent.from(shipBoard,point,cargoHold));
+    public void notifyActivateComponentEvent(ShipBoard shipBoard, Point point, boolean active) {
+        controllerListener.notifyEvent(new ActivateComponentEvent(Player.getPlayer(shipBoard).getNickname(), point, active));
     }
 
     public void notifyFlightBoardUpdateEvent(ShipBoard shipBoard, int position) {
         controllerListener.notifyEvent(FlightBoardUpdateEvent.from(shipBoard,position));
     }
 
-    public void notifyFlipHourglassEvent(ShipBoard shipBoard, boolean isLast) {
-        //controllerListener.notifyEvent(FlipHourglassEvent.from(shipBoard,isLast));
+    public void notifyFlipHourglassEvent(ShipBoard shipBoard) {
+        controllerListener.notifyEvent(new FlipHourglassEvent(Player.getPlayer(shipBoard).getNickname()));
+    }
+
+    public void notifyForecastDetailsEvent(ShipBoard shipBoard, List<AdventureCard> adventureCards) {
+        controllerListener.notifyEvent(new ForecastDetailsEvent(
+                Player.getPlayer(shipBoard).getNickname(),
+                adventureCards.stream().map(AdventureCard::getId).toList()));
     }
 
     public void notifyGameEndEvent(Map<ShipBoard, Integer> finalScores) {
         controllerListener.notifyEvent(GameEndEvent.from(finalScores));
     }
 
-    public void notifyGoodsBufferUpdateEvent(ShipBoard shipBoard, boolean adding, GoodsType goodsType) {
-        //controllerListener.notifyEvent(GoodsBufferUpdateEvent.from(shipBoard,adding,goodsType));
+    public void notifyGameStateUpdateEvent(GameState gameState) {
+        controllerListener.notifyEvent(new GameStateUpdateEvent(
+                StateDTOConverter.convert(gameState)
+        ));
     }
 
-    public void notifyGrabStashedComponentEvent(ShipBoard shipBoard, Component component) {
-        //controllerListener.notifyEvent(GrabStashedComponentEvent.from(shipBoard,component));
+    public void notifyGoodsUpdateEvent(ShipBoard shipBoard, Point point, GoodsType goodsType, boolean add) {
+        controllerListener.notifyEvent(new GoodsUpdateEvent(
+                Player.getPlayer(shipBoard).getNickname(),
+                point,
+                goodsType,
+                add
+        ));
+    }
+
+    public void notifyGrabStashedComponentEvent(ShipBoard shipBoard, int index) {
+        controllerListener.notifyEvent(GrabStashedComponentEvent.from(shipBoard, index));
     }
 
     public void notifyHourglassEndEvent() {
         controllerListener.notifyEvent(new HourglassEndEvent());
     }
 
-    public void notifyInvalidShipsUpdateEvent(Set<ShipBoard> invalidShips) {
-        //controllerListener.notifyEvent(ValidateShipEvent.from(invalidShips));
+    public void notifyCabinInitializationEvent(ShipBoard shipBoard, Point point, CrewType crewType) {
+        controllerListener.notifyEvent(new InitializeCabinEvent(Player.getPlayer(shipBoard).getNickname(),point, crewType));
+    }
+
+    public void notifyLoseCrewEvent(ShipBoard shipBoard, Point point) {
+        controllerListener.notifyEvent(new LoseCrewEvent(
+                Player.getPlayer(shipBoard).getNickname(),
+                point
+        ));
     }
 
     public void notifyNewCardEvent(AdventureCard adventureCard) {
         controllerListener.notifyEvent(NewCardEvent.from(adventureCard));
     }
 
-    public void notifyPeekForecastEvent(ShipBoard shipBoard, int deckIndex, java.util.List<AdventureCard> forecastDeck) {
-        //controllerListener.notifyEvent(ForecastDetailsEvent.from(shipBoard, deckIndex, forecastDeck));
+    public void notifyPeekForecastEvent(ShipBoard shipBoard, int deckIndex) {
+        controllerListener.notifyEvent(new PeekForecastEvent(
+                Player.getPlayer(shipBoard).getNickname(),
+                deckIndex));
     }
 
-    public void notifyPlaceComponentEvent(ShipBoard shipBoard, Component component, Point position) {
-        controllerListener.notifyEvent(PlaceComponentEvent.from(shipBoard,component,position));
+    public void notifyPlaceComponentEvent(ShipBoard shipBoard, int orientation, Point position) {
+        controllerListener.notifyEvent(new PlaceComponentEvent(
+                Player.getPlayer(shipBoard).getNickname(),
+                position,
+                orientation
+        ));
     }
 
     public void notifyPlanetChoiceEvent(ShipBoard shipBoard, int planetId) {
         controllerListener.notifyEvent(PlanetChoiceEvent.from(shipBoard,planetId));
     }
 
-    public void notifyProjectileEvent(ShipBoard shipBoard, Projectile projectile) {
-        //controllerListener.notifyEvent(ProjectileEvent.from(shipBoard,projectile));
-    }
-
-    public void notifyRejectComponentEvent(ShipBoard shipBoard, Component component) {
-        controllerListener.notifyEvent(RejectComponentEvent.from(shipBoard,component));
+    public void notifyRejectComponentEvent(ShipBoard shipBoard) {
+        controllerListener.notifyEvent(new RejectComponentEvent(Player.getPlayer(shipBoard).getNickname()));
     }
 
     public void notifyReleaseForecastEvent(ShipBoard shipBoard, int deckIndex) {
-        controllerListener.notifyEvent(ReleaseForecastEvent.from(shipBoard,deckIndex));
+        controllerListener.notifyEvent(new ReleaseForecastEvent(
+                Player.getPlayer(shipBoard).getNickname(), deckIndex));
     }
 
     public void notifyRemoveComponentEvent(ShipBoard shipBoard, Point point) {
@@ -103,35 +122,43 @@ public class GameEventListener {
         controllerListener.notifyEvent(RequestFaceUpComponentEvent.from(shipBoard,component));
     }
 
-    public void notifySelectionPointEvent(ShipBoard shipBoard, List<Point> points, List<Point> batteries) {
-        //controllerListener.notifyEvent(SelectionPointsEvent.from(shipBoard, points, batteries));
-    }
-
     public void notifyShipNotConnectedEvent(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
-        controllerListener.notifyEvent(ShipNotConnectedEvent.from(shipBoard,shipPieces));
+        controllerListener.notifyEvent(new ShipNotConnectedEvent(
+                Player.getPlayer(shipBoard).getNickname(),
+                shipPieces
+        ));
     }
 
-    public void notifyShipPieceRemoveEvent(ShipBoard shipBoard, List<Point> positions) {
-        //controllerListener.notifyEvent(ShipPieceRemoveEvent.from(shipBoard,positions));
+    public void notifyShipPieceRemovalEvent(ShipBoard shipBoard, int pieceIndex) {
+        controllerListener.notifyEvent(new ShipPieceRemoveEvent(
+                Player.getPlayer(shipBoard).getNickname(),
+                pieceIndex
+        ));
     }
 
     public void notifyShipStatUpdateEvent(ShipBoard shipBoard, StatType statType, int value) {
-        controllerListener.notifyEvent(ShipStatUpdateEvent.from(shipBoard,statType,value));
-    }
-
-    public void notifyStartBuildingEvent() {
-        //controllerListener.notifyEvent(new StartBuildingEvent());
+        controllerListener.notifyEvent(new ShipStatUpdateEvent(
+                Player.getPlayer(shipBoard).getNickname(),
+                statType,
+                value
+        ));
     }
 
     public void notifyStashComponentEvent(ShipBoard shipBoard) {
-        controllerListener.notifyEvent(StashComponentEvent.from(shipBoard));
+        controllerListener.notifyEvent(new StashComponentEvent(Player.getPlayer(shipBoard).getNickname()));
     }
 
     public void notifySurrenderEvent(List<ShipBoard> ships) {
-        controllerListener.notifyEvent(SurrenderEvent.from(ships));
+        controllerListener.notifyEvent(new SurrenderEvent(
+                ships.stream().map(s -> Player.getPlayer(s).getNickname()).toList()
+        ));
     }
 
-    public void notifyActivateComponentEvent(ShipBoard shipBoard, Point point) {
-        //controllerListener.notifyEvent(ActivateComponentEvent.from(shipBoard, point));
+    public void notifyUserBatteryEvent(ShipBoard shipBoard, Point point) {
+        controllerListener.notifyEvent(new UseBatteryEvent(Player.getPlayer(shipBoard).getNickname(), point));
+    }
+
+    public void notifyValidateShipEvent(ShipBoard shipBoard) {
+        controllerListener.notifyEvent(ValidateShipEvent.from(shipBoard));
     }
 }

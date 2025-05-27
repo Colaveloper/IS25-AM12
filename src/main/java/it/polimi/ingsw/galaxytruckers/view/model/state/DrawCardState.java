@@ -5,7 +5,6 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public final class DrawCardState extends AdventureState {
     private final static List<StateActions> availableActions = List.of(
@@ -25,7 +24,7 @@ public final class DrawCardState extends AdventureState {
     }
 
     @Override
-    public void notifyDrawCard(ShipBoard shipBoard, AdventureCard adventureCard) {
+    public void notifyDrawCard(AdventureCard adventureCard) {
         game.setCurrentAdventureCard(adventureCard);
     }
 }

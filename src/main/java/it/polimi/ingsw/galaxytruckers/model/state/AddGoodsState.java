@@ -7,7 +7,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.Map;
 
-public class AddGoodsState extends AdventureState {
+public final class AddGoodsState extends AdventureState {
     Map<GoodsType, Integer> goodsBuffer;
     ShipBoard shipBoard;
 
@@ -24,6 +24,7 @@ public class AddGoodsState extends AdventureState {
         if (goodsBuffer.containsKey(good) && goodsBuffer.get(good) > 0) {
             shipBoard.placeGoods(position, good, 1);
             goodsBuffer.put(good, goodsBuffer.get(good) - 1);
+            game.getEventListener().notifyGoodsUpdateEvent(shipBoard,position,good,true);
         } else {
             throw new IllegalArgumentException("You don't have goods of this type to add");
         }
@@ -35,6 +36,7 @@ public class AddGoodsState extends AdventureState {
             throw new IllegalStateException("It's not your turn");
         }
         shipBoard.removeGoods(position, good, 1);
+        game.getEventListener().notifyGoodsUpdateEvent(shipBoard,position,good,false);
         if (goodsBuffer.containsKey(good)) {
             goodsBuffer.put(good, goodsBuffer.get(good) + 1);
         } else {
@@ -50,7 +52,10 @@ public class AddGoodsState extends AdventureState {
         game.setCurrentState(super.getNextState());
     }
 
-    @VisibleForTesting
+    public ShipBoard getShipBoard() {
+        return shipBoard;
+    }
+
     public Map<GoodsType, Integer> getGoodsBuffer(){
         return goodsBuffer;
     }

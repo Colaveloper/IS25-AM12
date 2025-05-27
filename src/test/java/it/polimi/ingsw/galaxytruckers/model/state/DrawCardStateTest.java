@@ -67,7 +67,7 @@ class DrawCardStateTest {
             }
             @Override
             public AdventureState getNextState(){
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -82,7 +82,7 @@ class DrawCardStateTest {
         };
         game.setDeck(deck);
         testState.drawCard(ship1);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 
 }

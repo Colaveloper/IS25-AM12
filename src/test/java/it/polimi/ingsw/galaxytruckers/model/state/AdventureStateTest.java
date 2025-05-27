@@ -23,7 +23,7 @@ class AdventureStateTest {
 
     @BeforeEach
     void setup(){
-        testAdventureState = new AdventureState();
+        testAdventureState = new AdventureStateStub();
         ship1 = new SecondShipBoard(GameColor.RED);
     }
 
