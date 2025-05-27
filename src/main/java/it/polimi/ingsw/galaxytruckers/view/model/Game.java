@@ -97,4 +97,8 @@ public class Game {
     public void setCurrentAdventureCard(AdventureCard currentAdventureCard) {
         this.currentAdventureCard = currentAdventureCard;
     }
+
+    public ObservableProperty<GameState> getStateProperty() {
+        return currentState;
+    }
 }

@@ -12,7 +12,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
-        this.componentBank = new CliComponentBank(model);
+        this.componentBank = new CliComponentBank(gameState.getComponentBank(), gameState.getLockedForecasts());
         this.gameState = gameState;
     }
 

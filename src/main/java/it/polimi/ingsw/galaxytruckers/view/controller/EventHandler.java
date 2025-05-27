@@ -301,5 +301,6 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
             }
         }
         clientModel.notifyCurrentState(gameState);
+        clientModel.setMetaState(MetaState.INGAME);
     }
 }

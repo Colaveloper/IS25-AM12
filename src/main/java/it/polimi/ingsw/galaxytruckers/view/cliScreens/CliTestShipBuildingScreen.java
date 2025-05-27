@@ -13,7 +13,7 @@ public class CliTestShipBuildingScreen extends CliScreen {
 
     public CliTestShipBuildingScreen(ClientModel model, ControllerToServer controller, TestShipBuildingState gameState) {
         super(model, controller, gameState);
-        this.componentBank = new CliComponentBank(model);
+        this.componentBank = new CliComponentBank(gameState.getComponentBank(), null);
         this.gameState = gameState;
     }
 

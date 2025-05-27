@@ -64,7 +64,8 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //
     @Override
     public void setMyNickname(String nickname) { // gets called only after legal registration
-        model.setPlayer(new Player(nickname));
+        Player player = playerRegistry.addPlayer(nickname);
+        model.setPlayer(player);
         model.setMetaState(MetaState.JOINORCREATE);
     }
 

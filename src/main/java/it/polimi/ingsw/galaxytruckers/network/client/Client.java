@@ -11,8 +11,8 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class Client {
-    private static ClientController controller;
-    private static ClientModel model;
+    private static ClientController controller = new ClientController();
+    private static ClientModel model = new ClientModel();
     private VirtualServer server;
     //TODO: add socket implementation
 
@@ -20,8 +20,7 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Do you wish to use RMI (0) or Socket (1) for communication with the server?");
         boolean chosen = false;
-        controller = new ClientController();
-        controller.setModel(new ClientModel());
+        controller.setModel(model);
         controller.initEventHandler();
         do {
             try {
@@ -67,9 +66,6 @@ public class Client {
         }
         client.start(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
         System.out.println("Successfully connected to the server");
-
-        model = new ClientModel();
-        controller.setModel(model);
 
         System.out.println("Enter \"G\" to switch to the Graphical Interface, or press any other key to continue here");
         if (new Scanner(System.in).nextLine().trim().equalsIgnoreCase("G")) {

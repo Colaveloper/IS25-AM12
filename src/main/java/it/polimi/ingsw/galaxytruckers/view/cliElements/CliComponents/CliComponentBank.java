@@ -13,18 +13,18 @@ import java.util.List;
 public class CliComponentBank extends CliElement {
 
 
-    private final ShipBoard[] forecastDeck = new ShipBoard[3]; // TODO: RESTORE
-    private final int coveredComponentN = 0; // TODO: RESTORE
-    private List<CliComponent> revealedComponents;
+    private final ShipBoard[] forecastDeck; // TODO: RESTORE
+    private int coveredComponentN; // TODO: RESTORE
+    private final List<CliComponent> revealedComponents;
 
-    public CliComponentBank(ClientModel model) {
+    public CliComponentBank(ComponentBank componentBank, ShipBoard[] forecastDeck) {
         super();
-//        ComponentBank componentBank = model.getGame().getCurrentState().getComponentBank();
-//        this.forecastDeck = model.getGame().getCurrentState().getLockedForecasts();
-//        this.coveredComponentN = componentBank.getCoveredComponentsN();
-//        for(Component component : componentBank.getUncoveredComponents()){
-//            revealedComponents.add(new CliComponent(component));
-//        }
+        this.coveredComponentN = componentBank.getCoveredComponentsN();
+        this.forecastDeck = forecastDeck;
+        this.revealedComponents = new ArrayList<>();
+        for(Component component : componentBank.getUncoveredComponents()){
+            revealedComponents.add(new CliComponent(component));
+        }
     }
 
     @Override

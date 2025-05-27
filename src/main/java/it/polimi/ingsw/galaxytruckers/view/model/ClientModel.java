@@ -19,7 +19,7 @@ public class ClientModel implements ModelObservable {
     private final Map<UUID, Lobby> activeLobbies = new HashMap<>();
 
     private Player clientPlayer = null;
-    private Game game = null;
+    private ObservableProperty<Game> game = new ObservableProperty<>(null);
     private final Set<Player> players = new HashSet<>();
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
 
@@ -29,6 +29,10 @@ public class ClientModel implements ModelObservable {
 
     private Map<Player, Integer> finalScores;
 
+    public ClientModel() {
+
+    }
+
     //region Setup methods
 
     public void setPlayer(Player player) {
@@ -36,12 +40,12 @@ public class ClientModel implements ModelObservable {
     }
 
     public void createGame(Level level, int playersN) {
-        game = new Game(level, playersN);
+        game.setValue(new Game(level, playersN));
     }
 
     public void addPlayer(Player player, GameColor color) {
         players.add(player);
-        player.setShipBoard(game.addShipBoard(color));
+        player.setShipBoard(game.getValue().addShipBoard(color));
         shipToPlayer.put(player.getShipBoard(), player);
     }
 
@@ -57,6 +61,10 @@ public class ClientModel implements ModelObservable {
     }
 
     public Game getGame() {
+        return game.getValue();
+    }
+
+    public ObservableProperty<Game> getGameProperty() {
         return game;
     }
 
@@ -79,111 +87,112 @@ public class ClientModel implements ModelObservable {
 
     //region Event update methods
     public void notifyCurrentState(GameState gameState) {
-        game.setCurrentState(gameState);
+        game.getValue().setCurrentState(gameState);
+        System.out.println("Updated to state: " + gameState.getClass().getSimpleName());
     }
 
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
-        game.getCurrentState().notifyRequestRandComponent(shipBoard, component);
+        getGame().getCurrentState().notifyRequestRandComponent(shipBoard, component);
     }
 
     public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
-        game.getCurrentState().notifyRequestComponent(shipBoard, component);
+        getGame().getCurrentState().notifyRequestComponent(shipBoard, component);
     }
 
     public void notifyRejectComponent(ShipBoard shipBoard) {
-        game.getCurrentState().notifyRejectComponent(shipBoard);
+        getGame().getCurrentState().notifyRejectComponent(shipBoard);
     }
 
     public void notifyStashComponent(ShipBoard shipBoard) {
-        game.getCurrentState().notifyStashComponent(shipBoard);
+        getGame().getCurrentState().notifyStashComponent(shipBoard);
     }
 
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index) {
-        game.getCurrentState().notifyGrabStashedComponent(shipBoard, index);
+        getGame().getCurrentState().notifyGrabStashedComponent(shipBoard, index);
     }
 
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
-        game.getCurrentState().notifyPlaceComponent(shipBoard, point, orientation);
+        getGame().getCurrentState().notifyPlaceComponent(shipBoard, point, orientation);
     }
 
     public void notifyFlipHourglass(ShipBoard shipBoard) {
-        game.getCurrentState().notifyFlipHourglass(shipBoard);
+        getGame().getCurrentState().notifyFlipHourglass(shipBoard);
     }
 
     public void notifyHourglassEnd() {
-        game.getCurrentState().notifyHourglassEnd();
+        getGame().getCurrentState().notifyHourglassEnd();
     }
 
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
-        game.getCurrentState().notifyFlightBoardPosition(shipBoard, position);
+        getGame().getCurrentState().notifyFlightBoardPosition(shipBoard, position);
     }
 
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        game.getCurrentState().notifyPeekForecast(shipBoard, deckIndex);
+        getGame().getCurrentState().notifyPeekForecast(shipBoard, deckIndex);
     }
 
     public void setForecastDeck(List<AdventureCard> adventureCards) {
-        game.getCurrentState().setForecastDeck(adventureCards);
+        getGame().getCurrentState().setForecastDeck(adventureCards);
     }
 
     public void notifyReleaseForecast(ShipBoard shipBoard) {
-        game.getCurrentState().notifyReleaseForecast(shipBoard);
+        getGame().getCurrentState().notifyReleaseForecast(shipBoard);
     }
 
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        game.getCurrentState().notifyRemoveComponent(shipBoard, point);
+        getGame().getCurrentState().notifyRemoveComponent(shipBoard, point);
     }
 
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
-        game.getCurrentState().notifyChooseShipPiece(shipBoard, pieceIndex);
+        getGame().getCurrentState().notifyChooseShipPiece(shipBoard, pieceIndex);
     }
 
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
-        game.getCurrentState().notifyShipNotConnected(shipBoard, shipPieces);
+        getGame().getCurrentState().notifyShipNotConnected(shipBoard, shipPieces);
     }
 
     public void notifyShipValidated(ShipBoard shipBoard) {
-        game.getCurrentState().notifyShipValidated(shipBoard);
+        getGame().getCurrentState().notifyShipValidated(shipBoard);
     }
 
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
-        game.getCurrentState().notifyInitializeCabin(shipBoard, point, crewType);
+        getGame().getCurrentState().notifyInitializeCabin(shipBoard, point, crewType);
     }
 
     public void notifyDrawCard(AdventureCard adventureCard) {
-        game.getCurrentState().notifyDrawCard(adventureCard);
+        getGame().getCurrentState().notifyDrawCard(adventureCard);
     }
 
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-        game.getCurrentState().notifyActivateComponent(shipBoard, point);
+        getGame().getCurrentState().notifyActivateComponent(shipBoard, point);
     }
 
     public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
-        game.getCurrentState().notifyLoseCrew(shipBoard, point);
+        getGame().getCurrentState().notifyLoseCrew(shipBoard, point);
     }
 
     public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed) {
-        game.getCurrentState().notifyGrabReward(shipBoard, rewardGrabbed);
+        getGame().getCurrentState().notifyGrabReward(shipBoard, rewardGrabbed);
     }
 
     public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        game.getCurrentState().notifyPlaceGoods(shipBoard, point, goodsType);
+        getGame().getCurrentState().notifyPlaceGoods(shipBoard, point, goodsType);
     }
 
     public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        game.getCurrentState().notifyRemoveGoods(shipBoard, point, goodsType);
+        getGame().getCurrentState().notifyRemoveGoods(shipBoard, point, goodsType);
     }
 
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        game.getCurrentState().notifyUseBattery(shipBoard,point);
+        getGame().getCurrentState().notifyUseBattery(shipBoard,point);
     }
 
     public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
-        game.getCurrentState().notifyChoosePlanet(shipBoard, choice);
+        getGame().getCurrentState().notifyChoosePlanet(shipBoard, choice);
     }
 
     public void notifyGiveUp(ShipBoard shipBoard) {
-        game.getCurrentState().notifyGiveUp(shipBoard);
+        getGame().getCurrentState().notifyGiveUp(shipBoard);
     }
 
     public void setFinalScores(Map<Player, Integer> finalScores) {
