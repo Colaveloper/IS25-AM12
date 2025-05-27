@@ -17,9 +17,14 @@ public class GuiView extends View {
     }
 
     @Override
-    public void setScreen(GameState gameState) {
-        screen = screenFactory.createGuiScreen(model, gameState, controller);
+    public void updateScreen() {
+//        screen = screenFactory.createGuiScreen(model, controller);
 //        this.refreshScreen();
+    }
+
+    @Override
+    public void start() {
+
     }
 
     private void refreshScreen(VBox root) {

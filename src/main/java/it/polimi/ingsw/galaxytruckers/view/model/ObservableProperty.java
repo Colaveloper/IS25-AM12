@@ -23,7 +23,7 @@ public class ObservableProperty<T> {
 
     private void notifyObservers() {
         for (ModelObserver<T> observer : observers) {
-            observer.notifyObservers(value);
+            observer.onNotified(value);
         }
     }
 

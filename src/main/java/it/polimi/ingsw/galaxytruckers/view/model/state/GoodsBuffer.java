@@ -53,7 +53,7 @@ public class GoodsBuffer implements ModelObservable {
 
     protected void notifyObservers() {
         for (Observer o : observers) {
-            o.notifyObserver();
+            o.onNotified();
         }
     }
 }

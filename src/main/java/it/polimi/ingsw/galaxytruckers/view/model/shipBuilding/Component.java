@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
-import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.view.Observer;
 import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
@@ -62,7 +61,7 @@ public sealed class Component implements ModelObservable permits
 
     protected void notifyObservers() {
         for (Observer o : observers) {
-            o.notifyObserver();
+            o.onNotified();
         }
     }
 }

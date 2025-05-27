@@ -6,61 +6,41 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.*;
-import it.polimi.ingsw.galaxytruckers.view.CliView;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.GuiView;
+import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 
 import java.awt.*;
 import java.io.IOException;
-import java.io.ObjectInputFilter;
 import java.util.*;
 import java.util.List;
 
 public class ClientController implements ClientControllerInterface, ControllerToServer {
-    private final ClientModel model;
+    private ClientModel model;
     private VirtualServer server;
     private View view;
     private ConfigFactory config;
 
-    public ClientController(VirtualServer server) {
-        this.server = server;
-        this.model = new ClientModel();
-    }
-
-    public ClientController() {
-        this.model = new ClientModel();
+    public void setModel(ClientModel model) {
+        this.model = model;
     }
 
     public void setServer(VirtualServer server) {
         this.server = server;
     }
 
-    public void showInterfaceChoice() {
-        // TODO: consider whether to relocate prints and scans
-        System.out.println("Enter \"G\" to switch to the Graphical Interface, or press any other key to continue here");
-        if (new Scanner(System.in).nextLine().trim().equalsIgnoreCase("G")) {
-            view = new GuiView(this, model);
-//            view.setController(this);
-//            view.setModel(model);
-//            GuiView.screen = new NicknameChoiceScreen().getGuiScreen(model, this);
-//            Application.launch(GuiView.class); // calls view.setScreen(...)
-        } else {
-            view = new CliView(this, model);
-//            view = new CliView();
-//            view.setController(this);
-//            view.setModel(model);
-//            view.setScreen(new NicknameChoiceScreen());
-        }
+    public void setView(View view) {
+        this.view = view;
+        view.start();
     }
 
     //    //-----------------------------UPDATES FROM THE SERVER----------------------------------
 //
-    @Override // TODO: DISCUSS
-    public void showGameCreation() {
-        view.setScreen(model.getGame().getCurrentState());
-    }
+//    @Override // TODO: remove
+//    public void showGameCreation() {
+//        view.updateScreen(model.getGame().getCurrentState());
+//    }
 
     //
 //    @Override // Tommy approved
@@ -68,13 +48,13 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //        for (Map.Entry<String, FourColors> entry : playerToColor.entrySet()) {
 //            model.setPlayerColor(entry.getKey(), entry.getValue());
 //        }
-//        view.setScreen(new LobbyScreen());
+//        view.updateScreen(new LobbyScreen());
 //    }
 //
     @Override
     public void setMyNickname(String nickname) { // gets called only after legal registration
         model.setPlayer(new Player(nickname));
-        view.setScreen(model.getGame().getCurrentState());
+        model.setMetaState(MetaState.JOINORCREATE);
     }
 
     @Override
@@ -88,6 +68,11 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         server.requestNewGame(level, playersN);
     }
 
+    @Override
+    public void showGameCreation() {
+
+    }
+
 //    @Override
 //    public void notifyNewGame(Level level, int playersN) {
 //        config = switch (level) {
@@ -98,7 +83,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //        model.setFlightBoard(config.getLoopLength(), config.getStartingPositions());
 //        model.setShipArea(config.getShipArea());
 //        model.setCoveredComponents(config.getComponentsN());
-//        view.setScreen(new ShipBuildingScreen(config));
+//        view.updateScreen(new ShipBuildingScreen(config));
 //    }
 //
 //
@@ -147,7 +132,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //    public void notifyReleaseForecast(String playerName, int deckIndex) {
 //        runAndInterceptIOE(()->model.freeForecast(deckIndex));
 //        if (model.isMyNickname(playerName)) {
-//            view.setScreen(new ShipBuildingScreen(config));
+//            view.updateScreen(new ShipBuildingScreen(config));
 //        }
 //    }
 //
@@ -155,7 +140,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //    public void sendForecastDeck(List<Integer> deckCardIds) {
 //        model.setForecast(deckCardIds);
 //        model.setExistsUnweldedComponent(model.getMyNickname(), false); //quote:  picking up a pile welds your most recent component to your ship
-//        view.setScreen(new ForecastScreen());
+//        view.updateScreen(new ForecastScreen());
 //    }
 //
 //    @Override
@@ -182,7 +167,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //            model.setIsValid(false);
 //            model.setUnplacedCrew(playerToCabin.get(model.getMyNickname()));
 //        }
-//        view.setScreen(new CrewInitialization());
+//        view.updateScreen(new CrewInitialization());
 //    }
 //
 //
@@ -217,7 +202,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //                model.setIsValid(false);
 //            }
 //        }
-//        view.setScreen(new ShipPieceChoiceScreen());
+//        view.updateScreen(new ShipPieceChoiceScreen());
 //    }
 //
 //    @Override
@@ -228,7 +213,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //                model.resetAllSelections(playerName);
 //            }
 //        }
-//        view.setScreen(new ValidationScreen());
+//        view.updateScreen(new ValidationScreen());
 //    }
 //
 //    @Override
@@ -243,7 +228,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //    public void notifyNewCard(int cardId) {
 //        runAndInterceptIOE(()->model.setCurrentCard(cardId));
 //        model.setCurrentPlayerNickname(model.getCurrentLeader());
-//        view.setScreen(new NewCardScreen());
+//        view.updateScreen(new NewCardScreen());
 //    }
 //
 //    @Override
@@ -257,7 +242,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //        model.setCurrentPlayerNickname(nickname);
 //        model.setSelectablePoints(nickname, cannonsPositions);
 //        model.setSelectableBatteries(nickname, batteryPositions);
-//        view.setScreen(new PointSelectionScreen());
+//        view.updateScreen(new PointSelectionScreen());
 //    }
 //
 //    @Override
@@ -287,7 +272,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //    public void notifyGrabGoodsState(String nickname, Map<GoodsType, Integer> goods, List<Point> cargoPositions){
 //        //todo setup goodsbuffer
 //        model.setSelectablePoints(nickname, cargoPositions);
-//        view.setScreen(new GoodsScreen());
+//        view.updateScreen(new GoodsScreen());
 //    }
 //
 //    @Override
@@ -457,7 +442,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 //    public void showProjectile(String nickname, ProjectileType projectileType, int direction, int roll, List<Point> selectablePoints, List<Point> batteries) {
 //        model.setProjectile(projectileType, direction, roll);
 //        model.setCurrentPlayerNickname(nickname);
-//        view.setScreen(new ProjectileScreen());
+//        view.updateScreen(new ProjectileScreen());
 //    }
 //
 //    // UPDATE FOR ENDGAME

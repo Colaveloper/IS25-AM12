@@ -30,6 +30,11 @@ public abstract class CliScreen {
         this.allShips = new CliAllShips(model.getShipToPlayer());
     }
 
+    public CliScreen(ClientModel model, ControllerToServer controller) {
+        this.model = model;
+        this.controller = controller;
+    }
+
     public abstract void render();
 
     public abstract void parseAndInvoke(String input);

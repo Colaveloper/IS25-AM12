@@ -4,71 +4,44 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiScreen;
 //import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipBuildingScreen;
 //import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipBuildingScreen;
-import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipPieceChoiceScreen;
-import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiValidationScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 
 public class ScreenFactory {
 
-    public CliScreen createCliScreen(ClientModel model, GameState state, ControllerToServer controller) {
-        switch (state) {
-            case AdventureState adventureState -> {
-                switch (adventureState) {
-                    case ActivateState activateState -> {
-                        switch (activateState) {
-                            case DeclareEnginePowerState declareEnginePowerState -> {
-                                return new CliPointSelectionScreen(model, controller, state);
-                            }
-                            case DeclareFirePowerState declareFirePowerState -> {
-                                return new CliPointSelectionScreen(model, controller, state);
-                            }
-                            case HandleProjectileState handleProjectileState -> {
-                                return new CliProjectilesScreen(model, controller, state);
-                            }
-                        }
-
-                    }
-                    case AddGoodsState addGoodsState -> {
-                        return new CliGoodsScreen(model, controller, state);
-                    }
-                    case ChoosePlanetState choosePlanetState -> {
-                        return new CliPlanetScreen(model, controller, state);
-                    }
-                    case ChooseShipPieceState chooseShipPieceState -> {
-                        return new CliShipPieceChoiceScreen(model, controller, state);
-                    }
-                    case DrawCardState drawCardState -> {
-                        return new CliNewCardScreen(model, controller, state);
-                    }
-                    case GrabRewardState grabRewardState -> {
-                        return new CliRewardScreen(model, controller, state);
-                    }
-                    case RemoveCrewState removeCrewState -> {
-                        return new CliRemoveCrewScreen(model, controller, state);
-                    }
-                    case RemoveGoodsState removeGoodsState -> {
-                        return new CliGoodsScreen(model, controller, state);
-                    }
-                }
+    public CliScreen createCliScreen(ClientModel model, ControllerToServer controller) {
+        MetaState metaState = model.getMetaState().getValue();
+        return switch (metaState) {
+            case REGISTER -> new CliNicknameChoiceScreen(model, controller);
+            case JOINORCREATE -> new CliJoinOrCreateScreen(model, controller);
+            case INLOBBY -> new CliLobbyScreen(model, controller);
+            case INGAME -> {
+                GameState gameState = model.getGame().getCurrentState();
+                yield switch (gameState) {
+                    case AdventureState adventureState -> switch (adventureState) {
+                        case ActivateState activateState -> switch (activateState) {
+                            case DeclareEnginePowerState declareEnginePowerState -> new CliPointSelectionScreen(model, controller, gameState);
+                            case DeclareFirePowerState declareFirePowerState -> new CliPointSelectionScreen(model, controller, gameState);
+                            case HandleProjectileState handleProjectileState -> new CliProjectilesScreen(model, controller, gameState);
+                        };
+                        case AddGoodsState addGoodsState -> new CliGoodsScreen(model, controller, gameState);
+                        case ChoosePlanetState choosePlanetState -> new CliPlanetScreen(model, controller, gameState);
+                        case ChooseShipPieceState chooseShipPieceState -> new CliShipPieceChoiceScreen(model, controller, gameState);
+                        case DrawCardState drawCardState -> new CliNewCardScreen(model, controller, gameState);
+                        case GrabRewardState grabRewardState -> new CliRewardScreen(model, controller, gameState);
+                        case RemoveCrewState removeCrewState -> new CliRemoveCrewScreen(model, controller, gameState);
+                        case RemoveGoodsState removeGoodsState -> new CliGoodsScreen(model, controller, gameState);
+                    };
+                    case ShipBuildingState shipBuildingState -> switch (shipBuildingState) {
+                        case SecondShipBuildingState secondShipBuildingState -> new CliShipBuildingScreen(model, controller, gameState);
+                        case TestShipBuildingState testShipBuildingState -> new CliShipBuildingScreen(model, controller, gameState);
+                    };
+                    case ShipCorrectionState shipCorrectionState -> new CliValidationScreen(model, controller, gameState);
+                    case ShipInitializationState shipInitializationState -> new CliCrewInitializationScreen(model, controller, gameState);
+                };
             }
-            case ShipBuildingState shipBuildingState -> {
-                switch (shipBuildingState) {
-                    case SecondShipBuildingState secondShipBuildingState -> {
-                        return new CliShipBuildingScreen(model, controller, state);
-                    }
-                    case TestShipBuildingState testShipBuildingState -> {
-                        return new CliShipBuildingScreen(model, controller, state);
-                    }
-                }
-            }
-            case ShipCorrectionState shipCorrectionState -> {
-                return new CliValidationScreen(model, controller, state);
-            }
-            case ShipInitializationState shipInitializationState -> {
-                return new CliCrewInitializationScreen(model, controller, state);
-            }
-        }
+        };
     }
 
     public GuiScreen createGuiScreen(ClientModel model, GameState state, ControllerToServer controller) {

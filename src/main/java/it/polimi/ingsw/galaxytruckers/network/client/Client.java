@@ -2,12 +2,17 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RmiClient;
 import it.polimi.ingsw.galaxytruckers.network.client.socket.SocketClient;
+import it.polimi.ingsw.galaxytruckers.view.CliView;
+import it.polimi.ingsw.galaxytruckers.view.GuiView;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import javafx.application.Application;
 
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class Client {
-    private ClientController clientController;
+    private static ClientController controller;
+    private static ClientModel model;
     private VirtualServer server;
     //TODO: add socket implementation
 
@@ -15,7 +20,7 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Do you wish to use RMI (0) or Socket (1) for communication with the server?");
         boolean chosen = false;
-        this.clientController = new ClientController();
+        controller = new ClientController();
         do {
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
@@ -23,16 +28,16 @@ public class Client {
                     chosen = true;
                     RmiClient rmiClient = new RmiClient();
                     server = rmiClient;
-                    clientController.setServer(server);
-                    rmiClient.setClientController(clientController);
+                    controller.setServer(server);
+                    rmiClient.setClientController(controller);
                     rmiClient.start(serverName, serverAddress, rmiPort);
                     this.server = rmiClient;
                 } else if (choice == 1) {
                     chosen = true;
                     SocketClient socketClient = new SocketClient();
                     server = socketClient;
-                    clientController.setServer(server);
-                    socketClient.setController(clientController);
+                    controller.setServer(server);
+                    socketClient.setController(controller);
                     socketClient.start(serverAddress, socketPort);
                     System.out.println("TODO: implement Socket communication");
                     return;
@@ -48,7 +53,7 @@ public class Client {
     }
 
     public ClientController getClientController() {
-        return clientController;
+        return controller;
     }
 
 
@@ -60,6 +65,16 @@ public class Client {
         }
         client.start(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
         System.out.println("Successfully connected to the server");
-        client.clientController.showInterfaceChoice();
+
+        model = new ClientModel();
+        controller.setModel(model);
+
+        System.out.println("Enter \"G\" to switch to the Graphical Interface, or press any other key to continue here");
+        if (new Scanner(System.in).nextLine().trim().equalsIgnoreCase("G")) {
+            controller.setView(new GuiView(controller, model));
+//            Application.launch(GuiView.class); // calls view.updateScreen(...)
+        } else {
+            controller.setView(new CliView(controller, model));
+        }
     }
 }

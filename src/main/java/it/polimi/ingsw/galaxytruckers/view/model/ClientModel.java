@@ -1,15 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.view.Observer;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.enums.Level;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -19,18 +14,18 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class ClientModel implements ModelObservable{
+public class ClientModel implements ModelObservable {
     
     private final Map<UUID, Lobby> activeLobbies = new HashMap<>();
 
     private Player clientPlayer = null;
     private Game game = null;
-    private final Set<Player> players = new HashSet<Player>();
+    private final Set<Player> players = new HashSet<>();
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
 
-    private final ObservableProperty<ClientState> clientState = new ObservableProperty<>(ClientState.REGISTER);
+    private final ObservableProperty<MetaState> clientState = new ObservableProperty<>(MetaState.REGISTER);
 
-    private List<Observer> observers = new ArrayList<>();
+    private final List<Observer> observers = new ArrayList<>();
 
     private Map<Player, Integer> finalScores;
 
@@ -194,16 +189,16 @@ public class ClientModel implements ModelObservable{
 
     private void notifyObservers() {
         for (Observer o : observers) {
-            o.notifyObserver();
+            o.onNotified();
         }
     }
 
-    public ObservableProperty<ClientState> getClientState() {
+    public ObservableProperty<MetaState> getMetaState() {
         return clientState;
     }
 
-    public void setClientState(ClientState clientState) {
-        this.clientState.setValue(clientState);
+    public void setMetaState(MetaState metaState) {
+        this.clientState.setValue(metaState);
     }
 
     @Override

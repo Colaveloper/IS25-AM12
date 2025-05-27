@@ -2,8 +2,9 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.ScreenFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 
 import java.util.Scanner;
 
@@ -20,10 +21,15 @@ public class CliView extends View {
     }
 
     @Override
-    public void setScreen(GameState gameState) {
-        currentScreen = screenFactory.createCliScreen(model, gameState, controller);
+    public void updateScreen() {
+        currentScreen = new ScreenFactory().createCliScreen(model, controller);
+        currentScreen.render();
     }
 
+    @Override
+    public void start() {
+        updateScreen();
+    }
 
     private void startInputLoop() {
         new Thread(() -> {

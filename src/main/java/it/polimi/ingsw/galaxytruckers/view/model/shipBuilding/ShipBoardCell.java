@@ -47,7 +47,7 @@ public class ShipBoardCell implements ModelObservable {
 
     private void notifyObservers() {
         for (Observer o : observers) {
-            o.notifyObserver();
+            o.onNotified();
         }
     }
 }

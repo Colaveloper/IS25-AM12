@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.ScreenFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 
 public abstract class View {
 
@@ -15,8 +15,13 @@ public abstract class View {
         this.screenFactory = new ScreenFactory();
         this.controller = controller;
         this.model = model;
+        model.getMetaState().addObserver((_)->updateScreen());
     }
 
     //todo generic method for creating screen for cli and gui
-    public abstract void setScreen(GameState gameState);
+    public abstract void updateScreen();
+
+    public abstract void start();
+
+//    public abstract void updateScreen(GameState gameState);
 }

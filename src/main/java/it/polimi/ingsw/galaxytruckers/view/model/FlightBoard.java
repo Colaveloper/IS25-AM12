@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.view.Observer;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
@@ -63,7 +62,7 @@ public class FlightBoard implements ModelObservable{
 
     private void notifyObservers() {
         for (Observer o : observers) {
-            o.notifyObserver();
+            o.onNotified();
         }
     }
 

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
-public enum ClientState {
+public enum MetaState {
     REGISTER,
     JOINORCREATE,
     INLOBBY,

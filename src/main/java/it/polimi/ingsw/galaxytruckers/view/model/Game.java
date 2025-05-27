@@ -17,7 +17,7 @@ public class Game {
     private final GameFactory gameFactory;
     private final Set<ShipBoard> shipBoards = new HashSet<>();
     private final FlightBoard flightBoard;
-    private ObservableProperty<GameState> currentState;
+    private final ObservableProperty<GameState> currentState = new ObservableProperty<>(null);
 
     private AdventureCard currentAdventureCard;
 

@@ -303,7 +303,7 @@ public abstract class ShipBoard implements ModelObservable {
 
     public void notifyObservers() {
         for (Observer o : observers) {
-            o.notifyObserver();
+            o.onNotified();
         }
     }
 }

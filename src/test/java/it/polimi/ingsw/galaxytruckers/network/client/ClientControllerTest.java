@@ -4,6 +4,8 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.view.CliView;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.awt.*;
 import java.util.*;
@@ -193,7 +195,12 @@ class ClientControllerTest {
             }
         };
 
-        controller = new ClientController(server);
+        ClientModel model = new ClientModel();
+
+        controller = new ClientController();
+        controller.setServer(server);
+        controller.setModel(model);
+        controller.setView(new CliView(controller, model));
     }
 
     public static void lobbySequence() {
@@ -304,6 +311,5 @@ class ClientControllerTest {
     public static void main(String[] args) {
         setUp();
         System.out.println("use this nickname or it breaks: qwe");
-        controller.showInterfaceChoice();
     }
 }

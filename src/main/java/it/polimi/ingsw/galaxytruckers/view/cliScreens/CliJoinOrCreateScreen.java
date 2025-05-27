@@ -10,22 +10,20 @@ import java.util.List;
 import java.util.UUID;
 
 public class CliJoinOrCreateScreen extends CliScreen {
-    public CliJoinOrCreateScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
-        super(model, controller, gameState);
+    public CliJoinOrCreateScreen(ClientModel model, ControllerToServer controller) {
+        super(model, controller);
     }
 
-//    @Override
-//    public boolean isFormatLegal(String input) {
-//        if (input == null) return false;
-//        if (input.equalsIgnoreCase("C")) return true;
-//
-//        try {
-//            UUID.fromString(input);
-//            return true;
-//        } catch (IllegalArgumentException e) {
-//            return false;
-//        }
-//    }
+    @Override
+    public boolean isInputLegal(String input) {
+        if (input.equalsIgnoreCase("C")) return true;
+        try {
+            UUID.fromString(input);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 
     @Override
     public void parseAndInvoke(String input) {

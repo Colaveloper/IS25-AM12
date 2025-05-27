@@ -33,7 +33,7 @@
 //    }
 //
 //    @Override
-//    public void setScreen(ScreenFactory screenFactory) {
+//    public void updateScreen(ScreenFactory screenFactory) {
 //        try {
 //            screen = screenFactory.getCliScreen(model, controller);
 //        } catch (IOException e) {

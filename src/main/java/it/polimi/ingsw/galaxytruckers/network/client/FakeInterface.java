@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface FakeInterface {
-    //void showInterfaceChoice(VirtualServer server) throws IOException;    //interno
+    //void startUI(VirtualServer server) throws IOException;    //interno
 
     //void showGameCreation() throws IOException; //interno
 
