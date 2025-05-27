@@ -5,14 +5,13 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
 import it.polimi.ingsw.galaxytruckers.network.client.socket.SocketClient;
 import it.polimi.ingsw.galaxytruckers.network.server.socket.SocketServer;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class SocketTest {
@@ -46,7 +45,7 @@ public class SocketTest {
 
     @Test
     void registerNickname() {
-        assertDoesNotThrow(() -> socketClient.registerNickname("x"));
+        socketClient.registerNickname("x");
         verify(serverController).registerNickname("x");
     }
 
@@ -63,5 +62,10 @@ public class SocketTest {
         socketClient.registerNickname("x");
         socketClient.joinLobby(userUUID);
         verify(serverController).joinLobby(null,userUUID);
+    }
+
+    @AfterEach
+    void cleanup() {
+        socketServer.stop();
     }
 }
