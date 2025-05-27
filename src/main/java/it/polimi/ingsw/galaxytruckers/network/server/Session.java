@@ -6,20 +6,20 @@ import java.time.temporal.ChronoUnit;
 
 public class Session {
     private static final Duration expirationDelay = Duration.of(15, ChronoUnit.SECONDS);
-    private VirtualClient virtualClient;
+    private ClientHandler clientHandler;
     private Instant lastPing;
 
-    public Session(VirtualClient virtualClient, Instant lastPing) {
-        this.virtualClient = virtualClient;
+    public Session(ClientHandler clientHandler, Instant lastPing) {
+        this.clientHandler = clientHandler;
         this.lastPing = lastPing;
     }
 
-    public VirtualClient getVirtualClient() {
-        return virtualClient;
+    public ClientHandler getClientHandler() {
+        return clientHandler;
     }
 
-    public void setVirtualClient(VirtualClient virtualClient) {
-        this.virtualClient = virtualClient;
+    public void setClientHandler(ClientHandler clientHandler) {
+        this.clientHandler = clientHandler;
     }
 
     public Instant getLastPing() {

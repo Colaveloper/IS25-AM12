@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
 import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
@@ -154,7 +155,7 @@ public class EventQueueHandler implements EventHandler {
 
     private void broadcastEvent(Event event) {
         for (Player player : getPlayers()) {
-            VirtualClient virtualClient = SessionManager.getInstance().getClient(player);
+            ClientHandler virtualClient = SessionManager.getInstance().getClient(player);
             if (virtualClient != null) {
                 virtualClient.notifyEvent(event);
             }
@@ -162,7 +163,7 @@ public class EventQueueHandler implements EventHandler {
     }
 
     private void sendEvent(String playerName, Event event) {
-        VirtualClient virtualClient = SessionManager.getInstance().getClient(Player.getPlayer(playerName));
+        ClientHandler virtualClient = SessionManager.getInstance().getClient(Player.getPlayer(playerName));
         if (virtualClient != null) {
             virtualClient.notifyEvent(event);
         }

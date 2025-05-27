@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
+import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
@@ -13,13 +14,14 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.awt.*;
+import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class RmiClientHandler extends UnicastRemoteObject implements VirtualClient, RemoteController {
+public class RmiClientHandler extends UnicastRemoteObject implements RemoteController, ClientHandler {
     private final RemoteClient remoteClient;
     private final ServerControllerInterface controller;
     private LobbyInterface lobby;
@@ -42,28 +44,35 @@ public class RmiClientHandler extends UnicastRemoteObject implements VirtualClie
         this.sessionManager = SessionManager.getInstance();
     }
 
-    public void startUpdateThread() {
+    public void start() {
         running = true;
         updateThread = new Thread(this::runUpdateThread,"UpdateThread");
         updateThread.start();
     }
 
-    public void stopUpdateThread() {
+    @Override
+    public void stop() {
         running = false;
         this.updateThread = null;
+        try {
+            System.out.println("Stopping RmiClientHandler");
+            UnicastRemoteObject.unexportObject(this, true);
+        } catch (NoSuchObjectException e) {
+            System.out.println("The RMI client is not currently exported");
+        }
     }
 
     private void handleNetworkError(RemoteException e) {
         System.out.println("WARNING: Failed to contact player " + player.getNickname() + "\n" +
                 "A remote exception was thrown: " +  e.getMessage());
         controller.handlePlayerDisconnection(player);
-        stopUpdateThread();
+        stop();
     }
 
     private void handleInternalError() {
         System.err.println("ERROR: The update queue for " + player.getNickname() +
                 " has failed to handle all updates");
-        stopUpdateThread();
+        stop();
     }
 
     protected void runUpdateThread() {

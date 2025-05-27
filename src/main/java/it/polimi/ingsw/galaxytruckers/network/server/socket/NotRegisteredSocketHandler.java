@@ -40,6 +40,7 @@ public class NotRegisteredSocketHandler {
     public void stop() {
         listening = false;
         removeHandler.accept(this);
+        listenThread.interrupt();
     }
 
     private void listenTask() {
@@ -75,9 +76,9 @@ public class NotRegisteredSocketHandler {
             Response response = new Response(message.getUuid());
             outputStream.writeObject(response);
             outputStream.flush();
-            stop();
             SessionManager.getInstance().registerClient(player, clientHandler);
             clientHandler.start();
+            stop();
         } catch (RuntimeException e) {
             outputStream.writeObject(new Response(message.getUuid(),e));
         }
