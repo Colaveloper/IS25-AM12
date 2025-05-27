@@ -146,6 +146,9 @@ public class EventQueueHandler implements EventHandler {
             case GameStateUpdateEvent gameStateUpdateEvent -> {
                 broadcastEvent(gameStateUpdateEvent);
             }
+            case LoseCrewEvent loseCrewEvent -> {
+                broadcastEvent(loseCrewEvent);
+            }
         }
     }
 

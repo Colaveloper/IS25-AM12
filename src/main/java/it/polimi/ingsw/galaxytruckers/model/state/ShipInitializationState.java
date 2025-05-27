@@ -47,6 +47,7 @@ public final class ShipInitializationState extends GameState {
             if (shipRelevantCabins.get(shipBoard).isEmpty()) {
                 goNext(shipBoard);
             }
+            game.getEventListener().notifyCabinInitializationEvent(shipBoard,point,crewType);
         } else {
             throw new IllegalArgumentException("The specified cabin does not need to be initialized");
         }
@@ -57,7 +58,10 @@ public final class ShipInitializationState extends GameState {
         Map<Point, Cabin> cabins = shipBoard.getCabins();
         cabins.keySet().stream()
                 .filter(p -> cabins.get(p).getNumResidents() == 0)
-                .forEach(p -> shipBoard.initializeCabin(p, CrewType.HUMAN));
+                .forEach(p -> {
+                    shipBoard.initializeCabin(p, CrewType.HUMAN);
+                    game.getEventListener().notifyCabinInitializationEvent(shipBoard,p,CrewType.HUMAN);
+                });
         shipRelevantCabins.remove(shipBoard);
     }
 

@@ -27,12 +27,6 @@ public non-sealed abstract class ShipBuildingState extends GameState {
     }
 
     @Override
-    public void setGame(Game game) {
-        super.setGame(game);
-        game.getEventListener().notifyStartBuildingEvent();
-    }
-
-    @Override
     public void requestRandComponent(ShipBoard shipBoard) {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
@@ -62,7 +56,7 @@ public non-sealed abstract class ShipBuildingState extends GameState {
             throw new IllegalStateException("You don't have any component to reject");
         }
         componentBank.addToUncoveredComponents(component);
-        game.getEventListener().notifyRejectComponentEvent(shipBoard,component);
+        game.getEventListener().notifyRejectComponentEvent(shipBoard);
     }
 
     @Override
@@ -82,7 +76,7 @@ public non-sealed abstract class ShipBuildingState extends GameState {
         }
         shipBoard.placeComponent(point, orientation);
         Component component = shipBoard.getLastComponent().orElseThrow();
-        game.getEventListener().notifyPlaceComponentEvent(shipBoard,component,point);
+        game.getEventListener().notifyPlaceComponentEvent(shipBoard,orientation, point);
     }
 
     @Override

@@ -20,10 +20,11 @@ public final class RemoveCrewState extends AdventureState {
         }
         if (shipBoard.getCrewSize() > 0 && crewSacrifice > 0) {
             shipBoard.loseCrew(position,1);
+            game.getEventListener().notifyLoseCrewEvent(shipBoard, position);
             crewSacrifice--;
         }
         if (crewSacrifice <= 0 || shipBoard.getCrewSize() <= 0) {
-            game.setCurrentState(super.getNextState());
+            game.setCurrentState(getNextState());
         }
     }
 

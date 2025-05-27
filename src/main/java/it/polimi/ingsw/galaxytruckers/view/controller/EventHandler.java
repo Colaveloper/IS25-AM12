@@ -196,6 +196,12 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
             case GameStateUpdateEvent gameStateUpdateEvent -> {
                 updateGameState(gameStateUpdateEvent.stateDTO());
             }
+            case LoseCrewEvent loseCrewEvent -> {
+                clientModel.notifyLoseCrew(
+                        playerRegistry.getByNickname(loseCrewEvent.playerName()).getShipBoard(),
+                        loseCrewEvent.point()
+                );
+            }
         }
     }
 

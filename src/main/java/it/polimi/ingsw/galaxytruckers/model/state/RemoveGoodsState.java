@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
@@ -32,10 +33,13 @@ public final class RemoveGoodsState extends AdventureState {
         computeMostValuableGood();
         if (mostValuableGood != null) {
             shipBoard.removeGoods(position, mostValuableGood, 1);
+            game.getEventListener().notifyGoodsUpdateEvent(shipBoard, position, mostValuableGood, false);
         } else {
             shipBoard.useBatteries(position, 1);
+            game.getEventListener().notifyUserBatteryEvent(shipBoard, position);
         }
         goodsToLose--;
+
         tryStateTransition();
     }
 

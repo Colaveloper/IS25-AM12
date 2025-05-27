@@ -13,6 +13,7 @@ public final class EndGameState extends AdventureState {
 
     @Override
     public void endGame(){
-        // TODO: send final scores to clients via controller
+        //TODO: notify at game end (state unnecessary)
+        game.getEventListener().notifyGameEndEvent(finalScores);
     }
 }

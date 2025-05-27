@@ -15,6 +15,9 @@ public final class DrawCardState extends AdventureState {
             game.forceShipsToGiveUp();
             game.endGameIfAllShipsHaveGivenUp();
             game.getFlightBoard().removeShips(game.getGivenUpShips());
+            if (!game.getGivenUpShips().isEmpty()) {
+                game.getEventListener().notifySurrenderEvent(game.getGivenUpShips().stream().toList());
+            }
         }
     }
 

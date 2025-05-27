@@ -40,7 +40,7 @@ public non-sealed class HandleProjectileState extends ActivateState{
                 return;
             }
         }
-        game.setCurrentState(super.getNextState());
+        game.setCurrentState(getNextState());
     }
 
     public Projectile getProjectile() {

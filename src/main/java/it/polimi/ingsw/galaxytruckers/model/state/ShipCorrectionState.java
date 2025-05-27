@@ -22,16 +22,11 @@ public non-sealed abstract class ShipCorrectionState extends GameState {
     public void setGame(Game game) {
         super.setGame(game);
         for (ShipBoard shipBoard : game.getShipBoards()) {
-            checkShipValidity(shipBoard);
+            if (checkShipValidity(shipBoard)) {
+                checkShipConnection(shipBoard);
+            }
         }
         tryStateTransition();
-        Set<ShipBoard> invalidShips = getInvalidShips();
-        if (!invalidShips.isEmpty()) {
-            game.getEventListener().notifyInvalidShipsUpdateEvent(invalidShips);
-        }
-        for (ShipBoard shipBoard : shipPieces.keySet()) {
-            game.getEventListener().notifyShipNotConnectedEvent(shipBoard, shipPieces.get(shipBoard));
-        }
     }
 
     protected abstract void tryStateTransition();
@@ -59,18 +54,14 @@ public non-sealed abstract class ShipCorrectionState extends GameState {
             throw new IllegalStateException("Ship Board is already valid");
         }
         removeAt(shipBoard, point);
-        boolean canTransition = true;
         if (checkShipValidity(shipBoard)) {
-            if (!getInvalidShips().isEmpty()) {
-                game.getEventListener().notifyInvalidShipsUpdateEvent(getInvalidShips());
-                canTransition = false;
-            }
             if (!checkShipConnection(shipBoard)) {
-                canTransition = false;
                 game.getEventListener().notifyShipNotConnectedEvent(shipBoard, shipPieces.get(shipBoard));
+            } else {
+                game.getEventListener().notifyValidateShipEvent(shipBoard);
             }
         }
-        if (canTransition) tryStateTransition();
+        tryStateTransition();
     }
 
     @Override
@@ -87,7 +78,7 @@ public non-sealed abstract class ShipCorrectionState extends GameState {
             removeAt(shipBoard, point);
         }
         shipPieces.remove(shipBoard);
-        game.getEventListener().notifyShipPieceRemoveEvent(shipBoard,componentsToRemove.stream().toList());
+        game.getEventListener().notifyShipPieceRemovalEvent(shipBoard,pieceIndex);
         tryStateTransition();
     }
 
@@ -97,11 +88,5 @@ public non-sealed abstract class ShipCorrectionState extends GameState {
 
     public Map<ShipBoard, List<Set<Point>>> getShipPieces() {
         return new HashMap<>(shipPieces);
-    }
-    
-    public Set<ShipBoard> getInvalidShips() {
-        Set<ShipBoard> invalidShips = new HashSet<>(game.getShipBoards());
-        invalidShips.removeAll(validShipBoards);
-        return invalidShips;
     }
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
@@ -27,6 +28,8 @@ class ActivateStateTest {
 
     @BeforeEach
     void setup() {
+        game = new Game(Level.SECOND);
+        game.setEventListener(new  GameEventListenerStub());
         ship1 = new SecondShipBoard(GameColor.RED);
         ship2 = new SecondShipBoard(GameColor.BLUE){
             @Override
@@ -48,6 +51,7 @@ class ActivateStateTest {
                 super.activateComponent(shipBoard, position);
             }
         };
+        testActivateState.setGame(game);
     }
 
     @Test
@@ -70,6 +74,7 @@ class ActivateStateTest {
                 super.activateComponent(shipBoard, position);
             }
         };
+        testActivateState.setGame(game);
         testActivateState.activateComponent(ship2, new Point(7,7));
         assertEquals(1, testActivateState.batteriesToSpend);
     }
@@ -135,6 +140,7 @@ class ActivateStateTest {
                 super.activateComponent(shipBoard, position);
             }
         };
+        testActivateState.setGame(game);
         testActivateState.activateComponent(ship2, new Point(7,7));
         testActivateState.spendBatteries(ship2, new Point(7,7), 1);
         assertEquals(0, testActivateState.batteriesToSpend);
@@ -155,6 +161,7 @@ class ActivateStateTest {
                 super.activateComponent(shipBoard, position);
             }
         };
+        testActivateState.setGame(game);
         testActivateState.activateComponent(ship2, new Point(7,7));
         assertThrows(IllegalStateException.class, () -> testActivateState.goNext(ship2));
     }
@@ -167,6 +174,7 @@ class ActivateStateTest {
                 return deck;
             }
         };
+        game.setEventListener(new GameEventListenerStub());
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {

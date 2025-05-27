@@ -30,6 +30,7 @@ public abstract sealed class ActivateState extends AdventureState permits Declar
         if (availablePositions.contains(position)) {
             if (shipBoard.activateComponent(position)) {
                 batteriesToSpend++;
+                game.getEventListener().notifyActivateComponentEvent(shipBoard,position,true);
             }
         }
     }
@@ -44,6 +45,7 @@ public abstract sealed class ActivateState extends AdventureState permits Declar
         }
         shipBoard.useBatteries(point, amount);
         batteriesToSpend -= amount;
+        game.getEventListener().notifyUserBatteryEvent(shipBoard,point);
     }
 
     @Override
