@@ -55,6 +55,7 @@ public class CliComponentBank extends CliElement {
             revealedDescriptionUnit.addAll(cliComponent.getNewDescription());
             revealedDescriptionUnit.add("  "+i+"  ");
             revealedDescription = DescriptionUtils.sideBySide(revealedDescription, revealedDescriptionUnit);
+            revealedDescriptionUnit.clear();
         }
         revealedDescription = DescriptionUtils.borderAndTitle(revealedDescription, "up");
 

@@ -11,7 +11,7 @@ public class CliShipAndHand extends CliShipBoard {
 
     public CliShipAndHand(ShipBoard shipBoard, String nickname) {
         super(shipBoard, nickname);
-        cliHand = new CliHand(shipBoard.getLastComponentProperty());
+        cliHand = new CliHand(shipBoard.getLastComponentProperty(), shipBoard.getLastPosition());
         cliHand.addObserver(this);
     }
 

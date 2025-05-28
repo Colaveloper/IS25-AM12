@@ -14,7 +14,7 @@ public class CliShipHandAndStash extends CliShipBoard {
     public CliShipHandAndStash(ShipBoard shipBoard, String nickname) {
         super(shipBoard, nickname);
 
-        cliHand = new CliHand(shipBoard.getLastComponentProperty());
+        cliHand = new CliHand(shipBoard.getLastComponentProperty(), shipBoard.getLastPosition());
         cliHand.addObserver(this);
 
         cliStash = new CliStash(shipBoard.getStashedComponentsProperty());
