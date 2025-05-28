@@ -10,11 +10,15 @@ import java.util.*;
 
 public final class SecondShipBuildingState extends ShipBuildingState {
     private static final List<StateActions> availableActions = List.of(
+            StateActions.REQUEST_RAND_COMPONENT,
             StateActions.STASH_COMPONENT,
             StateActions.GRAB_STASHED_COMPONENT,
             StateActions.FLIP_HOURGLASS,
             StateActions.ACQUIRE_FORECAST,
-            StateActions.RELEASE_FORECAST);
+            StateActions.PLACE_COMPONENT,
+            StateActions.REJECT_COMPONENT,
+            StateActions.PLACE_SHIP_ON_FLIGHTBOARD
+    );
 
     private List<AdventureCard> forecastDeck;
 

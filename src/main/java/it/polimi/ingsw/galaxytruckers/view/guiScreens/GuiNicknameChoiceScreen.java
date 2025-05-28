@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,8 +16,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 public class GuiNicknameChoiceScreen extends GuiScreen {
-    public GuiNicknameChoiceScreen(ClientModel model, ClientController controller) {
-        super(model, controller);
+    public GuiNicknameChoiceScreen(ClientModel model, ClientController controller, GameState gameState) {
+        super(model, controller, gameState);
     }
 
     @Override

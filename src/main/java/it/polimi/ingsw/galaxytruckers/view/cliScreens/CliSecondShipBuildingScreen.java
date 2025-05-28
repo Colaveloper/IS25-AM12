@@ -101,15 +101,4 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                 break;
         }
     }
-
-    @Override
-    public boolean isInputLegal(String input) {
-        if (!isFormatLegal(input)) return false;
-
-        if (input.matches("^[A-Za-z]\\d\\d$")) {
-
-
-        }
-        return true;
-    }
 }

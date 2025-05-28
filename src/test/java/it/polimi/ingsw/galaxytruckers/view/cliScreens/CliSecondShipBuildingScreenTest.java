@@ -102,6 +102,4 @@ class CliSecondShipBuildingScreenTest {
         model.notifyFlightBoardPosition(player1.getShipBoard(), 1);
         screen.render();
     }
-
-
 }

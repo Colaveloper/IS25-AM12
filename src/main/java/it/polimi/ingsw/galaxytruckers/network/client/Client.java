@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.rmi.RmiClient;
 import it.polimi.ingsw.galaxytruckers.network.client.socket.SocketClient;
 import it.polimi.ingsw.galaxytruckers.view.CliView;
 import it.polimi.ingsw.galaxytruckers.view.GuiView;
+import it.polimi.ingsw.galaxytruckers.view.JavaFxApp;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.application.Application;
@@ -85,7 +86,7 @@ public class Client {
 
         if (command.trim().equalsIgnoreCase("G")) {
             controller.setView(new GuiView(controller, model));
-//            Application.launch(GuiView.class); // calls view.updateScreen(...)
+            Application.launch(GuiView.class);
         } else {
             controller.setView(new CliView(controller, model));
         }

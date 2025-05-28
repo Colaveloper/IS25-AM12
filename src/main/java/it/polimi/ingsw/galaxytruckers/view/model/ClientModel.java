@@ -26,7 +26,7 @@ public class ClientModel implements Invalidator {
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
     private boolean cheatOn = false;
 
-    private final ObservableGeneric<MetaState> clientState = new ObservableGeneric<>(MetaState.REGISTER);
+    private MetaState metaState = MetaState.REGISTER;
 
     private final List<Listener> listeners = new ArrayList<>();
 
@@ -268,13 +268,12 @@ public class ClientModel implements Invalidator {
         }
     }
 
-    public ObservableGeneric<MetaState> getMetaState() {
-        //non sicuro se lockare
-        return clientState;
+    public MetaState getMetaState() {
+        return metaState;
     }
 
     public void setMetaState(MetaState metaState) {
-        this.clientState.setValue(metaState);
+        this.metaState = metaState;
     }
 
     @Override

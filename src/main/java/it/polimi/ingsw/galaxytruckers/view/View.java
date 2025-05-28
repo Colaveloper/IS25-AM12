@@ -1,34 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
-import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.ScreenFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 
-public abstract class View {
+import java.io.IOException;
 
-    protected final ScreenFactory screenFactory;
-    protected final ClientModel model;
-    protected final ControllerToServer controller;
-
-    public View(ControllerToServer controller, ClientModel model) {
-        this.screenFactory = new ScreenFactory();
-        this.controller = controller;
-        this.model = model;
-        model.getMetaState().addObserver((_)->updateScreen());
-        model.getGameProperty().addObserver(game -> {
-            if (game != null) {
-                game.getStateProperty().addObserver((_)->updateScreen());
-            }
-        });
-    }
-
-    public abstract void updateScreen();
-
-    public abstract void start();
-
-    public abstract void refresh();
-
-//    public abstract void updateScreen(GameState gameState);
+public interface View {
+    // this is not an abstract class in order to let GuiView extend Application
+    void updateScreen();
 }
