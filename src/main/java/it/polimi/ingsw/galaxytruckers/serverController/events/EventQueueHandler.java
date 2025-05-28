@@ -144,6 +144,12 @@ public class EventQueueHandler implements EventHandler {
             case ValidateShipEvent validateShipEvent -> {
                 broadcastEvent(validateShipEvent);
             }
+            case GameStateUpdateEvent gameStateUpdateEvent -> {
+                broadcastEvent(gameStateUpdateEvent);
+            }
+            case LoseCrewEvent loseCrewEvent -> {
+                broadcastEvent(loseCrewEvent);
+            }
         }
     }
 

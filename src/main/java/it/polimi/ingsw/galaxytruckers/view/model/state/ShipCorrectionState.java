@@ -36,6 +36,16 @@ public final class ShipCorrectionState extends GameState {
     }
 
     @Override
+    public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
+        validShipBoards.add(shipBoard);
+        this.shipPieces.put(shipBoard, shipPieces);
+    }
+
+    @Override
+    public void notifyShipValidated(ShipBoard shipBoard) {
+        shipPieces.remove(shipBoard);
+    }
+
     public Set<ShipBoard> getValidShipBoards() {
         return validShipBoards;
     }

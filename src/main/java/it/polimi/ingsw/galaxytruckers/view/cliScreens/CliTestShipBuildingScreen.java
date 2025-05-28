@@ -1,27 +1,25 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.TestShipBuildingState;
 
-import java.awt.*;
+public class CliTestShipBuildingScreen extends CliScreen {
 
-public class CliShipBuildingScreen extends CliScreen {
+    private final CliComponentBank componentBank;
+    private final TestShipBuildingState gameState;
 
-    CliComponentBank componentBank;
-
-    public CliShipBuildingScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+    public CliTestShipBuildingScreen(ClientModel model, ControllerToServer controller, TestShipBuildingState gameState) {
         super(model, controller, gameState);
-        this.componentBank = new CliComponentBank(model);
+        this.componentBank = new CliComponentBank(gameState.getComponentBank());
+        this.gameState = gameState;
     }
 
     @Override
     public void render() {
-        System.out.println(componentBank.getDescription());
-        printShips();
+        componentBank.getDescription().forEach(System.out::println);
+//        printShips();
         printActions();
     }
 
@@ -36,7 +34,7 @@ public class CliShipBuildingScreen extends CliScreen {
             case "U":
                 if (parts.length == 2) {
                     int index = Integer.parseInt(parts[1]) - 1;
-                    int componentId = gameState.getComponentBank().getUncoveredComponents().get(index).getId();
+                    int componentId = gameState.getComponentBank().getUncoveredComponentsProperty().get(index).getId();
                     controller.requestComponent(componentId);
                 }
                 break;
@@ -63,9 +61,7 @@ public class CliShipBuildingScreen extends CliScreen {
 
             case "P":
                 if (parts.length == 3) {
-                    int x = Integer.parseInt(parts[1]);
-                    int y = Integer.parseInt(parts[2]);
-                    controller.placeComponent(new Point(x, y), 0);//todo add orientation
+                    controller.placeComponent(getPoint(input), 0); //todo add orientation
                 }
                 break;
 
@@ -90,5 +86,16 @@ public class CliShipBuildingScreen extends CliScreen {
                 System.out.println("Invalid command.");
                 break;
         }
+    }
+
+    @Override
+    public boolean isInputLegal(String input) {
+        if (!isFormatLegal(input)) return false;
+
+        if (input.matches("^[A-Za-z]\\d\\d$")) {
+
+
+        }
+        return true;
     }
 }

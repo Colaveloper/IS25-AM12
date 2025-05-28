@@ -4,6 +4,8 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.model.*;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.TestShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.model.state.ShipBuildingState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.TestShipBuildingState;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,9 +25,7 @@ public class TestFactory extends GameFactory {
     }
 
     @Override
-    public Hourglass createHourglass() {
-        System.err.println("You are trying to create an hourglass for a TEST game," +
-                " there is probably some error in the configuration");
-        return null;
+    public ShipBuildingState createShipBuildingState() {
+        return new TestShipBuildingState();
     }
 }

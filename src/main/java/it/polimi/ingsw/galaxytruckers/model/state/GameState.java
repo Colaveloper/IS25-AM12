@@ -7,7 +7,8 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 
-public abstract class GameState {
+public abstract sealed class GameState permits AdventureState, GameStateStub, ShipBuildingState, ShipCorrectionState,
+                                               ShipInitializationState {
     protected Game game;
 
     public void setGame(Game game) {

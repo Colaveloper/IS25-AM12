@@ -3,19 +3,21 @@ package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.Observer;
+import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableMap;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
 
 import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public abstract class ShipBoard implements ModelObservable {
+public abstract class ShipBoard implements Invalidator {
 
-    protected final Map<Point, ShipBoardCell> componentMap;
-    protected Component lastComponent;  // can be null
+    protected final ObservableMap<Point, Component> componentMap;
+    protected ObservableGeneric<Component> lastComponent;  // content can be null
     protected Point lastPosition;  // can be null
     protected final GameColor color;
 
@@ -34,12 +36,12 @@ public abstract class ShipBoard implements ModelObservable {
     protected final Map<Point, Cabin> cabins;
     protected final Map<Point, Activatable> activatables;
 
-    private final List<Observer> observers = new ArrayList<>();
+    private final List<Listener> listeners = new ArrayList<>();
 
     public ShipBoard(GameColor color) { // (, Color color)
         this.color = color;
 
-        this.lastComponent = null;
+        this.lastComponent = new ObservableGeneric<Component>(null);
         this.lastPosition = null;
 
         this.firePower = 0;
@@ -49,7 +51,7 @@ public abstract class ShipBoard implements ModelObservable {
         this.credits = 0;
         this.losses = 0;
 
-        this.componentMap = new HashMap<>();
+        this.componentMap = new ObservableMap<>();
         this.cannons = new HashMap<>();
         this.engines = new HashMap<>();
         this.batteries = new HashMap<>();
@@ -57,11 +59,6 @@ public abstract class ShipBoard implements ModelObservable {
         this.cargoHolds = new HashMap<>();
         this.cabins = new HashMap<>();
         this.activatables = new HashMap<>();
-
-        for (Point p : getShipArea()) {
-            componentMap.put(p, new ShipBoardCell());
-        }
-
     }
 
     public abstract Set<Point> getShipArea();
@@ -69,7 +66,7 @@ public abstract class ShipBoard implements ModelObservable {
     //CliComponentBank interaction methods
 
     protected void resetLastComponent() {
-        this.lastComponent = null;
+        this.lastComponent.setValue(null);
         this.lastPosition = null;
     }
 
@@ -79,7 +76,7 @@ public abstract class ShipBoard implements ModelObservable {
 
     public void offerComponent(Component component) {
         weldLastComponent();
-        lastComponent = component;
+        lastComponent.setValue(component);
         lastPosition = null;
         notifyObservers();
     }
@@ -88,8 +85,8 @@ public abstract class ShipBoard implements ModelObservable {
         if (lastPosition != null) {
             componentMap.remove(lastPosition);
         }
-        Component rejectedComponent = lastComponent;
-        lastComponent = null;
+        Component rejectedComponent = lastComponent.getValue();
+        lastComponent.setValue(null);
         lastPosition = null;
         notifyObservers();
         return rejectedComponent;
@@ -102,8 +99,8 @@ public abstract class ShipBoard implements ModelObservable {
             componentMap.remove(lastPosition);
         }
         lastPosition = newPosition;
-        lastComponent.setOrientation(orientation);
-        componentMap.get(newPosition).setComponent(lastComponent);
+        lastComponent.getValue().setOrientation(orientation);
+        componentMap.put(newPosition, lastComponent.getValue());
         notifyObservers();
     }
 
@@ -112,7 +109,8 @@ public abstract class ShipBoard implements ModelObservable {
     public void grabStashedComponent(int index) {}
 
     public void weldLastComponent() {
-        switch (lastComponent) {
+        switch (lastComponent.getValue()) {
+            case null -> {}
             case Battery c -> batteries.put(lastPosition, c);
             case Cabin c -> cabins.put(lastPosition, c);
             case DoubleCannon c -> {
@@ -133,14 +131,14 @@ public abstract class ShipBoard implements ModelObservable {
             case Shield c -> {
                 shields.put(lastPosition,c);
             }
-            case Component c -> {}
+            case Component _ -> {}
         }
-        lastComponent = null;
+        lastComponent.setValue(null);
         lastPosition = null;
     }
 
     public void removeComponent(Point position) {
-        Component removedComponent = componentMap.get(position).removeComponent();
+        Component removedComponent = componentMap.remove(position);
         switch (removedComponent) {
             case Battery _ -> batteries.remove(position);
             case Cabin _ -> cabins.remove(position);
@@ -239,7 +237,7 @@ public abstract class ShipBoard implements ModelObservable {
 
     // Components Observers
 
-    public Map<Point, ShipBoardCell> getComponentMap() {
+    public ObservableMap<Point, Component> getComponentMap() {
         return componentMap;
     }
 
@@ -275,16 +273,12 @@ public abstract class ShipBoard implements ModelObservable {
         return activatables;
     }
 
-    public Optional<Component> getLastComponent() {
-        return Optional.ofNullable(lastComponent);
+    public ObservableGeneric<Component> getLastComponentProperty() {
+        return lastComponent;
     }
 
     public Optional<Point> getLastPosition() {
         return Optional.ofNullable(lastPosition);
-    }
-
-    public List<Component> getStashedComponents() {
-        return null;
     }
 
     public GameColor getColor() {
@@ -292,18 +286,22 @@ public abstract class ShipBoard implements ModelObservable {
     }
 
     @Override
-    public void addObserver(Observer o) {
-        observers.add(o);
+    public void addObserver(Listener o) {
+        listeners.add(o);
     }
 
     @Override
-    public void removeObserver(Observer o) {
-        observers.remove(o);
+    public void removeObserver(Listener o) {
+        listeners.remove(o);
     }
 
     public void notifyObservers() {
-        for (Observer o : observers) {
-            o.notifyObserver();
+        for (Listener o : listeners) {
+            o.onNotified();
         }
     }
+
+    public ObservableList<Component> getStashedComponentsProperty() {
+        return null;
+    };
 }

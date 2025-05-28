@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Deck;
 import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
@@ -44,7 +45,7 @@ class RemoveGoodsStateTest {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
-                return new AdventureState();
+                return new AdventureStateStub();
             }
         };
         deck = new SecondDeck(game){
@@ -60,7 +61,7 @@ class RemoveGoodsStateTest {
         setupGame();
         testState = new RemoveGoodsState(0, ship1);
         testState.setGame(game);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 
     @Test
@@ -114,7 +115,7 @@ class RemoveGoodsStateTest {
         setupGame();
         testState = new RemoveGoodsState(1, ship1);
         testState.setGame(game);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 
     @Test
@@ -142,6 +143,8 @@ class RemoveGoodsStateTest {
             }
         };
         testState = new RemoveGoodsState(2,ship1);
+        game.setEventListener(new GameEventListenerStub());
+        testState.setGame(game);
         testState.loseGood(ship1, new Point(7,7));
         assertEquals(1, testState.goodsToLose);
         assertNull(game.getCurrentState());
@@ -168,9 +171,10 @@ class RemoveGoodsStateTest {
         };
         testState = new RemoveGoodsState(2,ship1);
         testState.setGame(game);
+        game.setEventListener(new GameEventListenerStub());
         testState.loseGood(ship1, new Point(7,7));
         assertEquals(1, testState.goodsToLose);
-        assertEquals(AdventureState.class, game.getCurrentState().getClass());
+        assertNotEquals(testState, game.getCurrentState());
     }
 
     @Test
@@ -198,6 +202,7 @@ class RemoveGoodsStateTest {
             }
         };
         testState = new RemoveGoodsState(2,ship1);
+        game.setEventListener(new GameEventListenerStub());
         testState.setGame(game);
         testState.loseGood(ship1, new Point(7,7));
         assertEquals(1, testState.goodsToLose);

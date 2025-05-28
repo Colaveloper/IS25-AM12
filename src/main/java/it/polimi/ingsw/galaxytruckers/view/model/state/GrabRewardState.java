@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public final class GrabRewardState extends AdventureState {
     private static final List<StateActions> availableActions = List.of(

@@ -27,20 +27,20 @@ class GameStateTest {
 
     @Test
     void setGame() {
-        testState = new AdventureState();
+        testState = new AdventureStateStub();
         testState.setGame(game);
         assertEquals(game, testState.game);
     }
 
     @Test
     void endGameThrowsExceptionWhenUsingInvalidState() {
-        testState = new AdventureState();
+        testState = new AdventureStateStub();
         assertThrows(IllegalStateException.class, () -> testState.endGame());
     }
 
     @Test
     void giveUpThrowsExceptionWhenUsingInvalidState() {
-        testState = new GameState() {
+        testState = new GameStateStub() {
         };
         assertThrows(IllegalStateException.class, () -> testState.giveUp(ship1));
     }
@@ -49,7 +49,7 @@ class GameStateTest {
     class AdventureStateMethodsTest{
         @BeforeEach
         void setup(){
-            testState = new AdventureState();
+            testState = new AdventureStateStub();
         }
 
         @Test
@@ -113,7 +113,7 @@ class GameStateTest {
 
         @BeforeEach
         void setup() {
-            testState = new GameState() {
+            testState = new GameStateStub() {
             };
         }
 

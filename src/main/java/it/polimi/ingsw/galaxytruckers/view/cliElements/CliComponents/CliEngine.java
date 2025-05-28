@@ -1,9 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Engine;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Shield;
 
 import java.util.List;
 
@@ -18,7 +15,7 @@ public class CliEngine extends CliComponent {
     }
 
     @Override
-    public List<String> getDescription() {
-        return generateborders(" " + symbols.get(engine.getOrientation()) + " ");
+    protected List<String> getNewDescription() {
+        return addBorders(" " + symbols.get(engine.getOrientation()) + " ");
     }
 }

@@ -12,7 +12,7 @@
 //    public void showCLI(ClientModel model) {
 //        System.out.println("Please write the number of the planet you wish to land on, then press enter.");
 //        System.out.println("For example, to land on the second planet type: 2");
-//        model.getPlanets().getDescription().forEach(System.out::println);
+//        model.getPlanets().getNewDescription().forEach(System.out::println);
 //
 //        if (model.isMyTurn()) {
 //            System.out.println("Please write the number of the planet you wish to land on, then press enter.");
@@ -24,7 +24,7 @@
 //    }
 //
 //    @Override
-//    public boolean isLegalInput(ClientModel model, String input) {
+//    public boolean isFormatLegal(ClientModel model, String input) {
 //        return false; // TODO
 //    }
 //

@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.ShipInitializationState;
 
 import java.awt.*;
 import java.util.List;
@@ -17,10 +18,11 @@ public class CliCrewInitializationScreen extends CliScreen {
     Map<CrewType,List<Point>> crewtypeToPoints;
     private boolean shipNotValid;
     private CrewType currentCrewType;
+    private ShipInitializationState gameState;
 
-    public CliCrewInitializationScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+    public CliCrewInitializationScreen(ClientModel model, ControllerToServer controller,  ShipInitializationState gameState) {
         super(model, controller, gameState);
-
+        this.gameState = gameState;
         shipNotValid = gameState.getCrewtypeToPoints().containsKey(model.getMyShip());
         if (shipNotValid) {
             this.crewtypeToPoints = gameState.getCrewtypeToPoints().get(model.getMyShip());
@@ -60,7 +62,7 @@ public class CliCrewInitializationScreen extends CliScreen {
     }
 
 //    @Override
-//    public boolean isLegalInput(String input) {
+//    public boolean isFormatLegal(String input) {
 //
 //        // Validate format using regex
 //        if (!input.matches("\\d+ \\d+")) {

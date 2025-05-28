@@ -43,7 +43,7 @@ public class Lobby implements LobbyInterface {
         this.playerColors = new HashMap<>();
 
         this.eventQueue = new EventQueue();
-        this.eventQueueHandler = new EventQueueHandler(getPlayers(), this.eventQueue);
+        this.eventQueueHandler = new EventQueueHandler(this.players, this.eventQueue);
 
         eventQueueHandler.start();
         addPlayer(creator);
@@ -118,7 +118,13 @@ public class Lobby implements LobbyInterface {
             playerColors.put(player.getNickname(), chosenColor);
         }
         player.setLobby(this);
-        eventQueue.notifyEvent(new JoinLobbyEvent(player.getNickname()));
+        eventQueue.notifyEvent(new LobbyDetailsEvent(
+                player.getNickname(),
+                getId(),
+                getPlayerColors(),
+                getLevel(),
+                getNumPlayers()));
+        eventQueue.notifyEvent(new JoinLobbyEvent(player.getNickname(), player.getColor().orElseThrow()));
         if (players.size() == numPlayers) {
             startGame();
         }

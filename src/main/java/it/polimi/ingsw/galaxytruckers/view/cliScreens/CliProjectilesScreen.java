@@ -3,21 +3,30 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.HandleProjectileState;
 
 import java.awt.*;
+import java.util.Set;
 
 public class CliProjectilesScreen extends CliScreen {
 
-    public CliProjectilesScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+    private HandleProjectileState gameState;
+
+    public CliProjectilesScreen(ClientModel model, ControllerToServer controller, HandleProjectileState gameState) {
         super(model, controller, gameState);
-
-
+        this.gameState = gameState;
     }
 
     @Override
     public void render() {
+        Player player = model.getShipToPlayer().get(gameState.getShipBoard());
+//        allShips.highlightPoints(player, gameState.getAvailablePositions(), Highlights.RED);                    //color activatable red
+//        allShips.highlightPoints(player, gameState.getShipBoard().getBatteries().keySet(), Highlights.GREEN);   //color batteries green
+
         printShips();
 
         String direction = switch (gameState.getProjectile().direction()) {
@@ -43,7 +52,7 @@ public class CliProjectilesScreen extends CliScreen {
 
 //
 //    @Override
-//    public boolean isLegalInput(String input) {
+//    public boolean isFormatLegal(String input) {
 //        // check if input = number + space + number
 //        if (!input.matches("\\d+ \\d+") || !input.matches("C")) return false;
 //
@@ -57,17 +66,26 @@ public class CliProjectilesScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        if(model.getMyShip().equals(gameState.getShipBoard())) {
-            String[] parts = input.split(" ");
-            int x = Integer.parseInt(parts[1]);
-            int y = Integer.parseInt(parts[2]);
-            Point p = new Point(x, y);
-            if(model.getMyShip().getBatteries().containsKey(p)){
+        if(input.equalsIgnoreCase("X")){
+            controller.giveUp();
+        }
+        if (model.getMyShip().equals(gameState.getShipBoard())) {
+            Point p = getPoint(input);
+            if (model.getMyShip().getBatteries().containsKey(p)) {
                 controller.useBattery(p);
             }
             else {
                 controller.activateComponent(p);
             }
         }
+    }
+
+    @Override
+    public boolean isInputLegal(String input) {
+        if (!isFormatLegal(input)) return false;
+        Point p = getPoint(input);
+        return
+                model.getMyShip().getActivatables().containsKey(p) ||
+                model.getMyShip().getBatteries().containsKey(p);
     }
 }

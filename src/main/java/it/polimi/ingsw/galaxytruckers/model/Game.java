@@ -69,6 +69,7 @@ public class Game {
     public void setCurrentState(GameState state) {
         this.currentState = state;
         state.setGame(this);
+        eventListener.notifyGameStateUpdateEvent(state);
     }
 
     /**

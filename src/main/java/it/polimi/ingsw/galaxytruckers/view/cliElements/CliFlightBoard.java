@@ -16,7 +16,7 @@ public class CliFlightBoard extends CliElement {
     }
 
     @Override
-    public List<String> getDescription() {
+    protected List<String> getNewDescription() {
         String[] asArray = new String[flightBoard.getLoopLength()];
         Arrays.fill(asArray, "_");
 
@@ -31,7 +31,7 @@ public class CliFlightBoard extends CliElement {
                 .forEach((e) -> asArray[e.getValue()] = e.getKey().getDescription());
 
         List<String> result = new ArrayList<>(List.of(String.join("", asArray)));
-        DescriptionUtils.borderAndTitle(result, "flight board");
+        result = DescriptionUtils.borderAndTitle(result, "flight board");
 
         return result;
     }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
 import java.util.List;
+import java.util.Set;
 
 public sealed abstract class AdventureState extends GameState permits
         ActivateState,

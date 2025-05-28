@@ -45,7 +45,7 @@
 //
 //        //TODO refine
 //        for(AdventureCard card : deckInHand) {
-//            newDescription.addAll(card.getDescription());
+//            newDescription.addAll(card.getNewDescription());
 //            newDescription.add("----------------------------");
 //        }
 //

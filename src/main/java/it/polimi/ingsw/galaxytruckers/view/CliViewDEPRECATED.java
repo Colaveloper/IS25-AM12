@@ -4,13 +4,13 @@
 //import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 //import it.polimi.ingsw.galaxytruckers.view.screens.ScreenFactory;
 //import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-//import javafx.beans.InvalidationListener;
+//import javafx.beans.GenericObserver;
 //import javafx.beans.Observable;
 //
 //import java.io.IOException;
 //import java.util.Scanner;
 //
-//public class CliView implements View, InvalidationListener {
+//public class CliView implements View, GenericObserver {
 //    Scanner scanner;
 //    String input;
 //    static ClientModel model;
@@ -33,7 +33,7 @@
 //    }
 //
 //    @Override
-//    public void setScreen(ScreenFactory screenFactory) {
+//    public void updateScreen(ScreenFactory screenFactory) {
 //        try {
 //            screen = screenFactory.getCliScreen(model, controller);
 //        } catch (IOException e) {
@@ -57,7 +57,7 @@
 //        // showing the visualization
 //        System.out.println("█".repeat(150));
 //        try {
-//            screen.getDescription().forEach(System.out::println);
+//            screen.getNewDescription().forEach(System.out::println);
 //        } catch (IOException e) {
 //            controller.reportError("Unable to show the screen due to an IO error: "+e.getMessage());
 //        }
@@ -71,7 +71,7 @@
 //                input = scanner.nextLine();
 //
 //                // letting the user correct format errors
-//                while (!screen.isLegalInput(input)) {
+//                while (!screen.isFormatLegal(input)) {
 //                    //todo: this is called also when it s not your turn where u don t have to check invalid input format
 //                    //todo: ask the screen what to print, screens then prints either not your turn or a specific message
 //                    //screen.invalidInput();

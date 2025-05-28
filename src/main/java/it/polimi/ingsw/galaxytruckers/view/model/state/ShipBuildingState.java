@@ -27,7 +27,7 @@ public sealed abstract class ShipBuildingState extends GameState permits
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
         actions.add(StateActions.REQUEST_RAND_COMPONENT);
-        if (!componentBank.getUncoveredComponents().isEmpty()) {
+        if (!componentBank.getUncoveredComponentsProperty().getUnmodifiableView().isEmpty()) {
             actions.add(StateActions.REQUEST_COMPONENT);
         }
         actions.add(StateActions.REJECT_COMPONENT);
@@ -60,7 +60,6 @@ public sealed abstract class ShipBuildingState extends GameState permits
         shipBoard.placeComponent(point, orientation);
     }
 
-    @Override
     public ComponentBank getComponentBank(){
         return componentBank;
     }

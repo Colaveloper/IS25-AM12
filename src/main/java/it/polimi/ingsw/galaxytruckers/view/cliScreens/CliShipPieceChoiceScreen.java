@@ -5,22 +5,27 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.model.Player;
+import it.polimi.ingsw.galaxytruckers.view.model.state.ChooseShipPieceState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
+import java.awt.*;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CliShipPieceChoiceScreen extends CliScreen {
 
     private boolean shipNotValid;
-    int numPieces;
+    private int numPieces;
+    private ChooseShipPieceState gameState;
 
-    public CliShipPieceChoiceScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+    public CliShipPieceChoiceScreen(ClientModel model, ControllerToServer controller, ChooseShipPieceState gameState) {
         super(model, controller, gameState);
 
         shipNotValid = gameState.getShipBoard().equals(model.getMyShip());
-
         numPieces =  gameState.getShipPieces().size();
+        this.gameState = gameState;
     }
 
     @Override
@@ -32,6 +37,11 @@ public class CliShipPieceChoiceScreen extends CliScreen {
 
     @Override
     public void render() {
+        List<Highlights> colors= Highlights.getSomeColors(numPieces);
+        Player player = model.getShipToPlayer().get(gameState.getShipBoard());
+        for(int i = 0; i < gameState.getShipPieces().size(); i++){
+//            allShips.highlightPoints(player, gameState.getShipPieces().get(i), colors.get(i));  //color ship pieces with list of colors
+        }
         printShips();
 
         if (shipNotValid) {

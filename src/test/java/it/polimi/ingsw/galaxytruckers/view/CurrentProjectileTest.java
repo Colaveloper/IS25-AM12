@@ -19,10 +19,10 @@
 //    }
 //
 //    @Test
-//    void getDescription() {
+//    void getNewDescription() {
 //        List<String> expected = List.of(
 //                "a big meteor is approaching on row 7 from the left!"
 //        );
-//        assertEquals(expected, currentProjectile.getDescription());
+//        assertEquals(expected, currentProjectile.getNewDescription());
 //    }
 //}

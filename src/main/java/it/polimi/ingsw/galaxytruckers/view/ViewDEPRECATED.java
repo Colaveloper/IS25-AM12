@@ -13,5 +13,5 @@
 //     * Provides to the user a contract to interact with the game
 //     * @throws IOException
 //     */
-//    void setScreen(ScreenFactory screenFactory);
+//    void updateScreen(ScreenFactory screenFactory);
 //}

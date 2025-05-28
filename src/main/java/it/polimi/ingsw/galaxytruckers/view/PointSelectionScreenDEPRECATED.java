@@ -22,7 +22,7 @@
 //    }
 //
 //    @Override
-//    public boolean isLegalInput(ClientModel model, String input) {
+//    public boolean isFormatLegal(ClientModel model, String input) {
 //        // check if input = number + space + number
 //        if (!input.matches("\\d+ \\d+")) return false;
 //

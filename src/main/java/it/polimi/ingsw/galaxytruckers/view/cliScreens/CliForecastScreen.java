@@ -7,14 +7,15 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CliForecastScreen extends CliScreen {
     private final List<AdventureCard> forecastDeck;
+    private SecondShipBuildingState gameState;
 
-    public CliForecastScreen(ClientModel model, ClientController controller, GameState gameState) {
+    public CliForecastScreen(ClientModel model, ClientController controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
+        this.gameState = gameState;
         this.forecastDeck = gameState.getForecastDeck();
     }
 
@@ -25,9 +26,11 @@ public class CliForecastScreen extends CliScreen {
 
     @Override
     public void render() {
+        printShips();
+        printActions();
         System.out.println("Cards in the forecast deck:\n");
         for (AdventureCard card : forecastDeck){
-            System.out.println(new CliAdventureCard(model).getDescription());
+//            System.out.println(new CliAdventureCard(model).getDescription());
         }
     }
 }

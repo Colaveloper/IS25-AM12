@@ -23,7 +23,7 @@
 //    }
 //
 //    @Override
-//    public boolean isLegalInput(ClientModel model, String input) {
+//    public boolean isFormatLegal(ClientModel model, String input) {
 //        // TODO: complete this method
 //        return true;
 //    }

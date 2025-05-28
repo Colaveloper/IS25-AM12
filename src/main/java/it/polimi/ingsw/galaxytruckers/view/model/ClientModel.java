@@ -1,15 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
-import it.polimi.ingsw.galaxytruckers.view.Observer;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.view.enums.Level;
+import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -19,190 +15,268 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class ClientModel implements ModelObservable{
+public class ClientModel implements Invalidator {
     
     private final Map<UUID, Lobby> activeLobbies = new HashMap<>();
 
     private Player clientPlayer = null;
-    private Game game = null;
-    private final Set<Player> players = new HashSet<Player>();
+    private ObservableGeneric<Game> game = new ObservableGeneric<>(null);
+    private final Set<Player> players = new HashSet<>();
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
 
-    private List<Observer> observers = new ArrayList<>();
+    private final ObservableGeneric<MetaState> clientState = new ObservableGeneric<>(MetaState.REGISTER);
+
+    private final List<Listener> listeners = new ArrayList<>();
 
     private Map<Player, Integer> finalScores;
+
+    public ClientModel() {
+
+    }
+
+    // Locks
+    private final Object playersLock = new Object();
+    private final Object gameLock = new Object();
+    private final Object observersLock = new Object();
 
     //region Setup methods
 
     public void setPlayer(Player player) {
-        this.clientPlayer = player;
+        synchronized (playersLock) {
+            this.clientPlayer = player;
+        }
     }
 
     public void createGame(Level level, int playersN) {
-        game = new Game(level, playersN);
+        synchronized (gameLock) {
+            game.setValue(new Game(level, playersN));
+        }
     }
 
     public void addPlayer(Player player, GameColor color) {
-        players.add(player);
-        player.setShipBoard(game.addShipBoard(color));
-        shipToPlayer.put(player.getShipBoard(), player);
+        synchronized (playersLock) {
+            synchronized (gameLock) {
+                players.add(player);
+                player.setShipBoard(game.getValue().addShipBoard(color));
+                shipToPlayer.put(player.getShipBoard(), player);
+            }
+        }
     }
 
     //endregion
 
     //region Getters
     public Map<UUID, Lobby> getActiveLobbies() {
-        return activeLobbies;
+        synchronized (gameLock) {
+            //sincronizzare su una copia se serve
+            return activeLobbies;
+        }
     }
 
     public Player getClientPlayer() {
-        return clientPlayer;
+        synchronized (playersLock) {
+            return clientPlayer;
+        }
     }
 
     public Game getGame() {
+        synchronized (gameLock) {
+            return game.getValue();
+        }
+    }
+
+    public ObservableGeneric<Game> getGameProperty() {
         return game;
     }
 
     public Set<Player> getPlayers() {
-        return players;
+        synchronized (playersLock) {
+            //sincronizzare su una copia se serve
+            return players;
+        }
     }
 
     public Player getPlayerByShip(ShipBoard shipBoard) {
-        return shipToPlayer.get(shipBoard);
+        synchronized (playersLock) {
+            return shipToPlayer.get(shipBoard);
+        }
     }
 
     public Map<ShipBoard, Player> getShipToPlayer() {
-        return shipToPlayer;
+        synchronized (playersLock) {
+            return new HashMap<>(shipToPlayer);
+        }
     }
 
     public Map<Player, Integer> getFinalScores() {
-        return finalScores;
+        //forse anche su player?
+        synchronized (gameLock) {
+            return finalScores;
+        }
     }
     //endregion
 
     //region Event update methods
     public void notifyCurrentState(GameState gameState) {
-        game.setCurrentState(gameState);
+        synchronized (gameLock) {
+            game.getValue().setCurrentState(gameState);
+        }
+        System.out.println("Updated to state: " + gameState.getClass().getSimpleName());
+    }
+
+    private GameState safeGetCurrentState() {
+        synchronized (gameLock) {
+            return game.getValue().getCurrentState();
+        }
     }
 
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
-        game.getCurrentState().notifyRequestRandComponent(shipBoard, component);
+        safeGetCurrentState().notifyRequestRandComponent(shipBoard, component);
     }
 
     public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
-        game.getCurrentState().notifyRequestComponent(shipBoard, component);
+        safeGetCurrentState().notifyRequestComponent(shipBoard, component);
     }
 
     public void notifyRejectComponent(ShipBoard shipBoard) {
-        game.getCurrentState().notifyRejectComponent(shipBoard);
+        safeGetCurrentState().notifyRejectComponent(shipBoard);
     }
 
     public void notifyStashComponent(ShipBoard shipBoard) {
-        game.getCurrentState().notifyStashComponent(shipBoard);
+        safeGetCurrentState().notifyStashComponent(shipBoard);
     }
 
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index) {
-        game.getCurrentState().notifyGrabStashedComponent(shipBoard, index);
+        safeGetCurrentState().notifyGrabStashedComponent(shipBoard, index);
     }
 
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
-        game.getCurrentState().notifyPlaceComponent(shipBoard, point, orientation);
+        safeGetCurrentState().notifyPlaceComponent(shipBoard, point, orientation);
     }
 
     public void notifyFlipHourglass(ShipBoard shipBoard) {
-        game.getCurrentState().notifyFlipHourglass(shipBoard);
+        safeGetCurrentState().notifyFlipHourglass(shipBoard);
     }
 
     public void notifyHourglassEnd() {
-        game.getCurrentState().notifyHourglassEnd();
+        safeGetCurrentState().notifyHourglassEnd();
     }
 
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
-        game.getCurrentState().notifyFlightBoardPosition(shipBoard, position);
+        safeGetCurrentState().notifyFlightBoardPosition(shipBoard, position);
     }
 
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        game.getCurrentState().notifyPeekForecast(shipBoard, deckIndex);
+        safeGetCurrentState().notifyPeekForecast(shipBoard, deckIndex);
     }
 
     public void setForecastDeck(List<AdventureCard> adventureCards) {
-        game.getCurrentState().setForecastDeck(adventureCards);
+        safeGetCurrentState().setForecastDeck(adventureCards);
     }
 
     public void notifyReleaseForecast(ShipBoard shipBoard) {
-        game.getCurrentState().notifyReleaseForecast(shipBoard);
+        safeGetCurrentState().notifyReleaseForecast(shipBoard);
     }
 
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        game.getCurrentState().notifyRemoveComponent(shipBoard, point);
+        safeGetCurrentState().notifyRemoveComponent(shipBoard, point);
     }
 
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
-        game.getCurrentState().notifyChooseShipPiece(shipBoard, pieceIndex);
+        safeGetCurrentState().notifyChooseShipPiece(shipBoard, pieceIndex);
+    }
+
+    public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
+        safeGetCurrentState().notifyShipNotConnected(shipBoard, shipPieces);
+    }
+
+    public void notifyShipValidated(ShipBoard shipBoard) {
+        safeGetCurrentState().notifyShipValidated(shipBoard);
     }
 
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
-        game.getCurrentState().notifyInitializeCabin(shipBoard, point, crewType);
+        safeGetCurrentState().notifyInitializeCabin(shipBoard, point, crewType);
     }
 
-    public void notifyDrawCard(ShipBoard shipBoard, AdventureCard adventureCard) {
-        game.getCurrentState().notifyDrawCard(shipBoard, adventureCard);
+    public void notifyDrawCard(AdventureCard adventureCard) {
+        safeGetCurrentState().notifyDrawCard(adventureCard);
     }
 
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-        game.getCurrentState().notifyActivateComponent(shipBoard, point);
+        safeGetCurrentState().notifyActivateComponent(shipBoard, point);
     }
 
     public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
-        game.getCurrentState().notifyLoseCrew(shipBoard, point);
+        safeGetCurrentState().notifyLoseCrew(shipBoard, point);
     }
 
     public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed) {
-        game.getCurrentState().notifyGrabReward(shipBoard, rewardGrabbed);
+        safeGetCurrentState().notifyGrabReward(shipBoard, rewardGrabbed);
     }
 
     public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        game.getCurrentState().notifyPlaceGoods(shipBoard, point, goodsType);
+        safeGetCurrentState().notifyPlaceGoods(shipBoard, point, goodsType);
     }
 
     public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        game.getCurrentState().notifyRemoveGoods(shipBoard, point, goodsType);
+        safeGetCurrentState().notifyRemoveGoods(shipBoard, point, goodsType);
     }
 
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        game.getCurrentState().notifyUseBattery(shipBoard,point);
+        safeGetCurrentState().notifyUseBattery(shipBoard,point);
     }
 
     public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
-        game.getCurrentState().notifyChoosePlanet(shipBoard, choice);
+        safeGetCurrentState().notifyChoosePlanet(shipBoard, choice);
     }
 
     public void notifyGiveUp(ShipBoard shipBoard) {
-        game.getCurrentState().notifyGiveUp(shipBoard);
+        safeGetCurrentState().notifyGiveUp(shipBoard);
     }
 
     public void setFinalScores(Map<Player, Integer> finalScores) {
-        this.finalScores = finalScores;
+        synchronized (gameLock) {
+            this.finalScores = finalScores;
+        }
     }
     //endregion
 
     public ShipBoard getMyShip() {
-        return clientPlayer.getShipBoard();
+        synchronized (playersLock) {
+            return clientPlayer.getShipBoard();
+        }
     }
 
-    private void notifyObservers() {
-        for (Observer o : observers) {
-            o.notifyObserver();
+    public void notifyObservers() {
+        List<Listener> copy;
+        synchronized (observersLock) {
+            copy = new ArrayList<>(listeners);
+        }
+        for (Listener o : copy) {
+            o.onNotified();
+        }
+    }
+
+    public ObservableGeneric<MetaState> getMetaState() {
+        //non sicuro se lockare
+        return clientState;
+    }
+
+    public void setMetaState(MetaState metaState) {
+        this.clientState.setValue(metaState);
+    }
+
+    @Override
+    public void addObserver(Listener o) {
+        synchronized (observersLock) {
+            listeners.add(o);
         }
     }
 
     @Override
-    public void addObserver(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void removeObserver(Observer o) {
-        observers.remove(o);
+    public void removeObserver(Listener o) {
+        synchronized (observersLock) {
+            listeners.remove(o);
+        }
     }
 }

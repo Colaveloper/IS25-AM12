@@ -1,21 +1,25 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CliShipAndHand extends CliShipBoard {
+
+    CliHand cliHand;
+
     public CliShipAndHand(ShipBoard shipBoard, String nickname) {
         super(shipBoard, nickname);
+        cliHand = new CliHand(shipBoard.getLastComponentProperty());
+        cliHand.addObserver(this);
     }
 
     @Override
-    public List<String> getDescription(){
+    protected List<String> getNewDescription(){
         List<String> description = new ArrayList<>();
         description.addAll(super.getDescription());
-        description.addAll(new CliHand(shipBoard.getLastComponent().orElse(null)).getDescription());
+        description.addAll(cliHand.getDescription());
         return description;
     }
 }

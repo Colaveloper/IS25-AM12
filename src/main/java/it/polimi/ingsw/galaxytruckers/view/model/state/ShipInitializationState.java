@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class ShipInitializationState extends GameState {
     private final Map<ShipBoard, Map<CrewType,List<Point>>> crewtypeToPoints;

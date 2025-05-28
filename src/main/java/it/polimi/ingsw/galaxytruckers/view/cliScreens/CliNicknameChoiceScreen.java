@@ -18,8 +18,8 @@ import java.util.List;
 
 public class CliNicknameChoiceScreen extends CliScreen {
 
-    public CliNicknameChoiceScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
-        super(model, controller, gameState);
+    public CliNicknameChoiceScreen(ClientModel model, ControllerToServer controller) {
+        super(model, controller);
     }
 
 
@@ -32,6 +32,11 @@ public class CliNicknameChoiceScreen extends CliScreen {
             controller.reportError(e.getMessage());
         }
 
+    }
+
+    @Override
+    public boolean isInputLegal(String input) {
+        return !input.trim().isEmpty();
     }
 
     @Override

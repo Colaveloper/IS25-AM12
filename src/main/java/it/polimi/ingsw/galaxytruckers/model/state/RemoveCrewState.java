@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 
-public class RemoveCrewState extends AdventureState {
+public final class RemoveCrewState extends AdventureState {
     int crewSacrifice;
     ShipBoard shipBoard;
 
@@ -20,10 +20,19 @@ public class RemoveCrewState extends AdventureState {
         }
         if (shipBoard.getCrewSize() > 0 && crewSacrifice > 0) {
             shipBoard.loseCrew(position,1);
+            game.getEventListener().notifyLoseCrewEvent(shipBoard, position);
             crewSacrifice--;
         }
         if (crewSacrifice <= 0 || shipBoard.getCrewSize() <= 0) {
-            game.setCurrentState(super.getNextState());
+            game.setCurrentState(getNextState());
         }
+    }
+
+    public ShipBoard getShipBoard() {
+        return shipBoard;
+    }
+
+    public int getCrewSacrifice() {
+        return crewSacrifice;
     }
 }

@@ -3,7 +3,6 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliElement;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
 
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ public class CliComponent extends CliElement {
 
     protected CliComponent(Component component) {
         this.component = component;
+        component.addObserver(this);
     }
 
     public static CliComponent of(Component component) {
@@ -39,7 +39,7 @@ public class CliComponent extends CliElement {
 
     public String getConnector(int connectorDirection) {
         return switch (connectorDirection) {
-            case 0 -> switch (connectors.get(0)) {
+            case 0 -> switch (connectors.get(component.getOrientation()% 4)) {
                 case Connector.NONE -> "─";
                 case Connector.SINGLE -> "┴";
                 case Connector.DOUBLE -> "╨";
@@ -73,11 +73,11 @@ public class CliComponent extends CliElement {
     }
 
     @Override
-    public List<String> getDescription() {
-        return generateborders("   ");
+    protected List<String> getNewDescription() {
+        return addBorders("   ");
     };
 
-    protected List<String> generateborders(String middle) {
+    protected List<String> addBorders(String middle) {
 
         open = Highlights.RESET.getHighlight();
         close = Highlights.RESET.getHighlight();
@@ -90,23 +90,4 @@ public class CliComponent extends CliElement {
             lines.add(2, open+"╰─" + getConnector(2) + "─╯"+close);
         return lines;
     }
-
-//    private static List<Connector> parseConnectors(JsonNode connectorNode){
-//        List<Connector> connectors = new ArrayList<>();
-//        if(connectorNode != null && connectorNode.isArray()){
-//            for (JsonNode conn : connectorNode){
-//                connectors.add(Connector.valueOf(conn.asText().toUpperCase()));
-//            }
-//        }
-//        return connectors;
-//    }
-
-//
-//    public void setGoods(List<GoodsType> goods) {
-//         componentProperty.get().cargoProperty().set(goods);
-//    }
-//
-//    public void setCrewType(CrewType crewType) {
-//
-//    }
 }

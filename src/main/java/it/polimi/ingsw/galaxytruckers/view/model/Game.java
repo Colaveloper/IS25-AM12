@@ -1,7 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.view.enums.Level;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -16,8 +17,9 @@ public class Game {
 
     private final GameFactory gameFactory;
     private final Set<ShipBoard> shipBoards = new HashSet<>();
+    private final Set<ShipBoard> givenUpShips = new HashSet<>();
     private final FlightBoard flightBoard;
-    private GameState currentState;
+    private final ObservableGeneric<GameState> currentState = new ObservableGeneric<>(null);
 
     private AdventureCard currentAdventureCard;
 
@@ -39,7 +41,7 @@ public class Game {
      * @param state the {@code GameState} to be set
      */
     public void setCurrentState(GameState state) {
-        this.currentState = state;
+        this.currentState.setValue(state);
         state.setGame(this);
     }
 
@@ -47,7 +49,7 @@ public class Game {
      * @return the game's current state
      */
     public GameState getCurrentState() {
-        return currentState;
+        return currentState.getValue();
     }
 
     /**
@@ -63,6 +65,8 @@ public class Game {
     public Set<ShipBoard> getShipBoards() {
         return shipBoards;
     }
+
+    public Set<ShipBoard> getGivenUpShips(){return givenUpShips;}
 
     public Set<GameColor> getShipColors(){
         Set<GameColor> colors = new HashSet<>();
@@ -93,5 +97,9 @@ public class Game {
 
     public void setCurrentAdventureCard(AdventureCard currentAdventureCard) {
         this.currentAdventureCard = currentAdventureCard;
+    }
+
+    public ObservableGeneric<GameState> getStateProperty() {
+        return currentState;
     }
 }
