@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
 import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
 import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -23,6 +24,7 @@ public class ClientModel implements Invalidator {
     private ObservableGeneric<Game> game = new ObservableGeneric<>(null);
     private final Set<Player> players = new HashSet<>();
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
+    private boolean cheatOn = false;
 
     private final ObservableGeneric<MetaState> clientState = new ObservableGeneric<>(MetaState.REGISTER);
 
@@ -61,6 +63,11 @@ public class ClientModel implements Invalidator {
                 shipToPlayer.put(player.getShipBoard(), player);
             }
         }
+    }
+
+    public void activateCheats(int input) {
+        cheatOn = true;
+        CheatCodes.activateCheats(input);
     }
 
     //endregion
@@ -113,6 +120,10 @@ public class ClientModel implements Invalidator {
         synchronized (gameLock) {
             return finalScores;
         }
+    }
+
+    public boolean isCheatOn() {
+        return cheatOn;
     }
     //endregion
 
