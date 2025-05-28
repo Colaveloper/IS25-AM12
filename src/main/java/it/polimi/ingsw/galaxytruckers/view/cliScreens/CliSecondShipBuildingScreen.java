@@ -2,24 +2,33 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliForecast;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 
 public class CliSecondShipBuildingScreen extends CliScreen {
 
-    private CliComponentBank componentBank;
+    private final CliComponentBank cliComponentBank;
+    private final CliForecast cliForecast;
     private SecondShipBuildingState gameState;
 
     public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
-        this.componentBank = new CliComponentBank(gameState.getComponentBank(), gameState.getLockedForecasts());
+
+        this.cliComponentBank = new CliComponentBank(gameState.getComponentBank());
+        this.cliComponentBank.addObserver(this::render);
+        this.cliForecast = new CliForecast(gameState.getLockedForecastsProperty());
+        this.cliForecast.addObserver(this::render);
         this.gameState = gameState;
     }
 
     @Override
     public void render() {
-        System.out.println(componentBank.getNewDescription());
-        printShips();
+        this.cliComponentBank.getDescription().forEach(System.out::println);
+//        this.cliForecast.getDescription().forEach(System.out::println);
+        super.cliFlightBoard.getDescription().forEach(System.out::println);
+        super.cliAllShips.getDescription().forEach(System.out::println);
         printActions();
     }
 
@@ -34,7 +43,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
             case "U":
                 if (parts.length == 2) {
                     int index = Integer.parseInt(parts[1]) - 1;
-                    int componentId = gameState.getComponentBank().getUncoveredComponents().get(index).getId();
+                    int componentId = gameState.getComponentBank().getUncoveredComponentsProperty().get(index).getId();
                     controller.requestComponent(componentId);
                 }
                 break;

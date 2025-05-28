@@ -24,8 +24,8 @@ public class CliProjectilesScreen extends CliScreen {
     @Override
     public void render() {
         Player player = model.getShipToPlayer().get(gameState.getShipBoard());
-        allShips.highlightPoints(player, gameState.getAvailablePositions(), Highlights.RED);                    //color activatable red
-        allShips.highlightPoints(player, gameState.getShipBoard().getBatteries().keySet(), Highlights.GREEN);   //color batteries green
+//        allShips.highlightPoints(player, gameState.getAvailablePositions(), Highlights.RED);                    //color activatable red
+//        allShips.highlightPoints(player, gameState.getShipBoard().getBatteries().keySet(), Highlights.GREEN);   //color batteries green
 
         printShips();
 

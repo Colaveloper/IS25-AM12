@@ -16,7 +16,7 @@ public class CliCabin extends CliComponent{
     }
 
     @Override
-    public List<String> getNewDescription() {
+    protected List<String> getNewDescription() {
         String open;
         switch (cabin.getCrewType()){
             case CrewType.PURPLE -> {

@@ -51,6 +51,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     @Override
     public void notifyEvent(Event event) {
         eventHandler.handleEvent(event);
+//        view.updateScreen();
     }
 
     //

@@ -7,8 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CliShipHandAndStash extends CliShipBoard {
+
+    CliHand cliHand;
+    CliStash cliStash;
+
     public CliShipHandAndStash(ShipBoard shipBoard, String nickname) {
         super(shipBoard, nickname);
+
+        cliHand = new CliHand(shipBoard.getLastComponentProperty());
+        cliHand.addObserver(this);
+
+        cliStash = new CliStash(shipBoard.getStashedComponentsProperty());
+        cliStash.addObserver(this);
     }
 
     @Override
@@ -17,8 +27,8 @@ public class CliShipHandAndStash extends CliShipBoard {
         description.addAll(super.getNewDescription());
         description.addAll(
                 DescriptionUtils.sideBySide(
-                        new CliHand(shipBoard.getLastComponent().orElse(null)).getNewDescription(),
-                        new CliStash(shipBoard.getStashedComponents()).getNewDescription()
+                        cliHand.getDescription(),
+                        cliStash.getDescription()
                 )
         );
         return description;

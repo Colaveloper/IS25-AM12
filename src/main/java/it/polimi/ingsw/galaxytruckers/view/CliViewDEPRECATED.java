@@ -4,13 +4,13 @@
 //import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 //import it.polimi.ingsw.galaxytruckers.view.screens.ScreenFactory;
 //import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-//import javafx.beans.InvalidationListener;
+//import javafx.beans.GenericObserver;
 //import javafx.beans.Observable;
 //
 //import java.io.IOException;
 //import java.util.Scanner;
 //
-//public class CliView implements View, InvalidationListener {
+//public class CliView implements View, GenericObserver {
 //    Scanner scanner;
 //    String input;
 //    static ClientModel model;

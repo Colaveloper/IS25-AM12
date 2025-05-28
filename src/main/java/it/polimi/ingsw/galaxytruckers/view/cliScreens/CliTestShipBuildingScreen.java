@@ -3,24 +3,23 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.TestShipBuildingState;
 
 public class CliTestShipBuildingScreen extends CliScreen {
 
-    private CliComponentBank componentBank;
-    private TestShipBuildingState gameState;
+    private final CliComponentBank componentBank;
+    private final TestShipBuildingState gameState;
 
     public CliTestShipBuildingScreen(ClientModel model, ControllerToServer controller, TestShipBuildingState gameState) {
         super(model, controller, gameState);
-        this.componentBank = new CliComponentBank(gameState.getComponentBank(), null);
+        this.componentBank = new CliComponentBank(gameState.getComponentBank());
         this.gameState = gameState;
     }
 
     @Override
     public void render() {
-        System.out.println(componentBank.getNewDescription());
-        printShips();
+        componentBank.getDescription().forEach(System.out::println);
+//        printShips();
         printActions();
     }
 
@@ -35,7 +34,7 @@ public class CliTestShipBuildingScreen extends CliScreen {
             case "U":
                 if (parts.length == 2) {
                     int index = Integer.parseInt(parts[1]) - 1;
-                    int componentId = gameState.getComponentBank().getUncoveredComponents().get(index).getId();
+                    int componentId = gameState.getComponentBank().getUncoveredComponentsProperty().get(index).getId();
                     controller.requestComponent(componentId);
                 }
                 break;

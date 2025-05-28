@@ -1,21 +1,52 @@
-//package it.polimi.ingsw.galaxytruckers.view.cliElements;
-//
-//import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AbandonedShipCard;
-//import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
-//import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-//
-//import java.io.IOException;
-//import java.util.List;
-//
-//public class CliForecast extends CliElement {
-//    private final boolean[] blockedForecasts;
-//    private final List<AdventureCard> forecastDeck;
-//
-//    public CliForecast(ClientModel model, boolean[] blockedForecasts, List<AdventureCard> forecastDeck) {
-//        super();
-//        this.blockedForecasts = blockedForecasts;
-//        this.forecastDeck = forecastDeck;
-//    }
+package it.polimi.ingsw.galaxytruckers.view.cliElements;
+
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
+import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CliForecast extends CliElement {
+    private final List<GameColor> blockedForecasts = new ArrayList<>();
+
+    public CliForecast(ObservableList<GameColor> blockedForecasts) {
+
+        this.blockedForecasts.add(null);
+        this.blockedForecasts.add(null);
+        this.blockedForecasts.add(null);
+        blockedForecasts.addListener(new ObservableList.Listener<>() {
+            @Override
+            public void onAdd(int index, GameColor element) {
+                blockedForecasts.add(index, element);
+            }
+
+            @Override
+            public void onRemove(int index, GameColor element) {
+                blockedForecasts.remove(index);
+            }
+        });
+    }
+
+    @Override
+    protected List<String> getNewDescription() {
+        List<String> result = new ArrayList<>();
+
+        for (int i=0; i<blockedForecasts.size(); i++) {
+            List<String> forecastDescription = new ArrayList<>();
+            forecastDescription.add("   "+i+"   ");
+            forecastDescription.add(blockedForecasts.get(i) != null
+                            ? "   "+blockedForecasts.get(i).getDescription()+"   "
+                            : " free  "
+                    );
+            result = DescriptionUtils.sideBySide(result, forecastDescription);
+        }
+
+        return DescriptionUtils.borderAndTitle(result, "forecast decks");
+    }
+}
+
+//    //    private final List<AdventureCard> forecastDeck;
 //
 //    @Override
 //    protected List<String> getNewDescription() {
@@ -31,4 +62,10 @@
 //        }
 //        return List.of();
 //    }
-//}
+
+//            this.forecastDeck = model.getGame().getCurrentState().getLockedForecasts();
+//        this.coveredComponentN = componentBank.getCoveredComponentsNProperty();
+//        for(Component component : componentBank.getUncoveredComponentsProperty()){
+//            revealedComponents.add(new CliComponent(component));
+//        }
+

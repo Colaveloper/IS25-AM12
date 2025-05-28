@@ -31,7 +31,7 @@ public class CliDeclareEnginePowerScreen extends CliScreen {
 
     @Override
     public void render() {
-        allShips.highlightPoints(model.getShipToPlayer().get(gamestate.getShipBoard()), gamestate.getAvailablePositions(), Highlights.GREEN);
+//        allShips.highlightPoints(model.getShipToPlayer().get(gamestate.getShipBoard()), gamestate.getAvailablePositions(), Highlights.GREEN);
 
         printShips();
 

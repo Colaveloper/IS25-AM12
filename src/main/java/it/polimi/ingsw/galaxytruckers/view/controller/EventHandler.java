@@ -41,7 +41,8 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
             case ActivateComponentEvent activateComponentEvent -> {
                 clientModel.notifyActivateComponent(
                         playerRegistry.getByNickname(activateComponentEvent.playerName()).getShipBoard(),
-                        activateComponentEvent.point());
+                        activateComponentEvent.point()
+                );
             }
             case FlightBoardUpdateEvent flightBoardUpdateEvent -> {
                 clientModel.notifyFlightBoardPosition(

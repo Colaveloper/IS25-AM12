@@ -1,26 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
-import it.polimi.ingsw.galaxytruckers.view.Observer;
-import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-
-public class ComponentBank implements ModelObservable {
-    private int coveredComponentsN;
-    private final List<Component> uncoveredComponents;
-
-    private final List<Observer> observers = new ArrayList<>();
+public class ComponentBank {
+    private final ObservableGeneric<Integer> coveredComponentsN;
+    private final ObservableList<Component> uncoveredComponents;
 
     public ComponentBank(int coveredComponentsN) {
-        this.coveredComponentsN = coveredComponentsN;
-        this.uncoveredComponents = new ArrayList<>();
+        this.coveredComponentsN = new ObservableGeneric<>(coveredComponentsN);
+        this.uncoveredComponents = new ObservableList<>();
     }
 
     public void removeUncoveredComponent(Component component) {
@@ -31,32 +20,15 @@ public class ComponentBank implements ModelObservable {
         uncoveredComponents.add(component);
     }
 
-    public List<Component> getUncoveredComponents() {
+    public ObservableList<Component> getUncoveredComponentsProperty() {
         return uncoveredComponents;
     }
 
     public void removeCoveredComponent() {
-        this.coveredComponentsN--;
+        coveredComponentsN.setValue(coveredComponentsN.getValue() - 1);
     }
 
-    public int getCoveredComponentsN() {
+    public ObservableGeneric<Integer> getCoveredComponentsNProperty() {
         return coveredComponentsN;
-    }
-
-    @Override
-    public void addObserver(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void removeObserver(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for (Observer o : observers) {
-            o.onNotified();
-        }
     }
 }

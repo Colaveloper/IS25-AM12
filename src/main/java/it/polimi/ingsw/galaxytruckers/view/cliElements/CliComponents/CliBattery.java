@@ -13,7 +13,7 @@ public class CliBattery extends CliComponent {
     }
 
     @Override
-    public List<String> getNewDescription() {
+    protected List<String> getNewDescription() {
         return addBorders(" ⭍" + battery.getNumBatteries());
     }
 }

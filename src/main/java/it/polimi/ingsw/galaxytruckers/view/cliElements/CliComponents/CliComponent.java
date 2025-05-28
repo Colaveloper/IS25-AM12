@@ -73,7 +73,7 @@ public class CliComponent extends CliElement {
     }
 
     @Override
-    public List<String> getNewDescription() {
+    protected List<String> getNewDescription() {
         return addBorders("   ");
     };
 

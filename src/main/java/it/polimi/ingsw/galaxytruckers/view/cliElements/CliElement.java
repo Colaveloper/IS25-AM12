@@ -1,27 +1,26 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.view.Observer;
-import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
+import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CliElement implements ModelObservable, Observer {
+public abstract class CliElement implements Invalidator, Invalidator.Listener {
     private boolean dirty = true;
     protected final List<String> descriptionCache = new ArrayList<>();
-    private Observer parent;
+    private Listener parent;
 
     @Override
-    public void addObserver(Observer parent) {
+    public void addObserver(Listener parent) {
         this.parent = parent;
     }
 
     @Override
-    public void removeObserver(Observer parent) {
+    public void removeObserver(Listener parent) {
         this.parent = null;
     }
 
-    @Override // from ModelObservable
+    @Override // from Invalidator
     public void notifyObservers() {
         dirty = true;
 //        System.out.println("PHYSICAL DIRTY "+toString());
@@ -31,7 +30,7 @@ public abstract class CliElement implements ModelObservable, Observer {
         }
     }
 
-    @Override // from Observer
+    @Override // from Listener
     public void onNotified() {
         notifyObservers();
     }

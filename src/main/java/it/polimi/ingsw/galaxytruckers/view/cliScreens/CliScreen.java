@@ -16,17 +16,18 @@ public abstract class CliScreen {
     private GameState state;
     protected ControllerToServer controller;
     protected List<StateActions> availableActions;
-
-    protected CliFlightBoard flightBoard;
-    protected CliAllShips allShips;
+    protected CliFlightBoard cliFlightBoard;
+    protected CliAllShips cliAllShips;
 
     public CliScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         this.model = model;
         this.controller = controller;
         this.state = gameState;
         availableActions = gameState.getAvailableActions();
-        this.flightBoard = new CliFlightBoard(model);
-        this.allShips = new CliAllShips(model.getShipToPlayer());
+        this.cliFlightBoard = new CliFlightBoard(model);
+        this.cliFlightBoard.addObserver(this::render);
+        this.cliAllShips = new CliAllShips(model.getShipToPlayer());
+        this.cliFlightBoard.addObserver(this::render);
     }
 
     public CliScreen(ClientModel model, ControllerToServer controller) {
@@ -39,8 +40,8 @@ public abstract class CliScreen {
     public abstract void parseAndInvoke(String input);
 
     protected void printShips() {
-        flightBoard.getNewDescription().forEach(System.out::println);
-        allShips.getNewDescription().forEach(System.out::println);//todo sistemare altri tipi di allships
+//        flightBoard.getNewDescription().forEach(System.out::println);
+//        allShips.getNewDescription().forEach(System.out::println);//todo sistemare altri tipi di allships
     }
 
     protected void printActions() {

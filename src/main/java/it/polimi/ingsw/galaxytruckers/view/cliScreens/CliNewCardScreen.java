@@ -21,7 +21,7 @@ public class CliNewCardScreen extends CliScreen {
         printShips();
         printActions();
         System.out.println("A new card has been drawn:\n");
-        System.out.println(new CliAdventureCard(model).getNewDescription());
+        System.out.println(new CliAdventureCard(model).getDescription());
     }
 
     @Override

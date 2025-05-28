@@ -4,7 +4,7 @@
 //import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 //import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 //import javafx.application.Platform;
-//import javafx.beans.InvalidationListener;
+//import javafx.beans.GenericObserver;
 //import javafx.collections.ListChangeListener;
 //import javafx.geometry.Pos;
 //import javafx.scene.Node;
@@ -79,7 +79,7 @@
 //
 //        update.run();
 //        model.startingPositionLeftProperty().addListener((ListChangeListener<Integer>) c -> update.run());
-//        model.colorToPlaceProperty().addListener((InvalidationListener) c -> update.run());
+//        model.colorToPlaceProperty().addListener((GenericObserver) c -> update.run());
 //
 //        return container;
 //    }

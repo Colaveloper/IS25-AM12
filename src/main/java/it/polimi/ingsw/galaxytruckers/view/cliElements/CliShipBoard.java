@@ -1,9 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableMap;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.MapListener;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -33,7 +33,7 @@ public class CliShipBoard extends CliElement {
 
         cliComponentMap = new HashMap<>();
 
-        shipBoard.getComponentMap().addListener(new MapListener<>() {
+        shipBoard.getComponentMap().addListener(new ObservableMap.Listener<>() {
             @Override
             public void onPut(Point p, Component oldValue, Component newValue) {
                 onPutComponent(p, oldValue, newValue);
@@ -71,7 +71,7 @@ public class CliShipBoard extends CliElement {
     }
 
     @Override
-    public List<String> getNewDescription(){
+    protected List<String> getNewDescription(){
 
         List<String> result = new ArrayList<>();
         List<String> rowDescription = new ArrayList<>();
@@ -88,7 +88,7 @@ public class CliShipBoard extends CliElement {
                     // empty-area
                     newCell = List.of("   ", " X ", "   ");
                 } else {
-                    newCell = cliComponentMap.get(new Point(x, y)).getNewDescription();
+                    newCell = cliComponentMap.get(new Point(x, y)).getDescription();
                 }
                 rowDescription = DescriptionUtils.sideBySide(rowDescription, newCell);
             }

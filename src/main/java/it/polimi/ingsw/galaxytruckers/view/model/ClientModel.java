@@ -2,7 +2,8 @@ package it.polimi.ingsw.galaxytruckers.view.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.view.Observer;
+import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -14,18 +15,18 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class ClientModel implements ModelObservable {
+public class ClientModel implements Invalidator {
     
     private final Map<UUID, Lobby> activeLobbies = new HashMap<>();
 
     private Player clientPlayer = null;
-    private ObservableProperty<Game> game = new ObservableProperty<>(null);
+    private ObservableGeneric<Game> game = new ObservableGeneric<>(null);
     private final Set<Player> players = new HashSet<>();
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
 
-    private final ObservableProperty<MetaState> clientState = new ObservableProperty<>(MetaState.REGISTER);
+    private final ObservableGeneric<MetaState> clientState = new ObservableGeneric<>(MetaState.REGISTER);
 
-    private final List<Observer> observers = new ArrayList<>();
+    private final List<Listener> listeners = new ArrayList<>();
 
     private Map<Player, Integer> finalScores;
 
@@ -84,8 +85,7 @@ public class ClientModel implements ModelObservable {
         }
     }
 
-    public ObservableProperty<Game> getGameProperty() {
-        //sincronizzare se serve
+    public ObservableGeneric<Game> getGameProperty() {
         return game;
     }
 
@@ -248,16 +248,16 @@ public class ClientModel implements ModelObservable {
     }
 
     public void notifyObservers() {
-        List<Observer> copy;
+        List<Listener> copy;
         synchronized (observersLock) {
-            copy = new ArrayList<>(observers);
+            copy = new ArrayList<>(listeners);
         }
-        for (Observer o : copy) {
+        for (Listener o : copy) {
             o.onNotified();
         }
     }
 
-    public ObservableProperty<MetaState> getMetaState() {
+    public ObservableGeneric<MetaState> getMetaState() {
         //non sicuro se lockare
         return clientState;
     }
@@ -267,16 +267,16 @@ public class ClientModel implements ModelObservable {
     }
 
     @Override
-    public void addObserver(Observer o) {
+    public void addObserver(Listener o) {
         synchronized (observersLock) {
-            observers.add(o);
+            listeners.add(o);
         }
     }
 
     @Override
-    public void removeObserver(Observer o) {
+    public void removeObserver(Listener o) {
         synchronized (observersLock) {
-            observers.remove(o);
+            listeners.remove(o);
         }
     }
 }

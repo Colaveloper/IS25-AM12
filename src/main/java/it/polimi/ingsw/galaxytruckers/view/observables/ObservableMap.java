@@ -1,24 +1,29 @@
-package it.polimi.ingsw.galaxytruckers.view.cliScreens;
+package it.polimi.ingsw.galaxytruckers.view.observables;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 
 public class ObservableMap<K, V> {
+
+    public interface Listener<K, V> {
+        void onPut(K key, V oldValue, V newValue);
+        void onRemove(K key, V oldValue);
+    }
+
     private final Map<K, V> map = new HashMap<>();
 
-    private final List<MapListener<K, V>> listeners = new ArrayList<>();
+    private final List<Listener<K, V>> listeners = new ArrayList<>();
 
-    public void addListener(MapListener<K, V> listener) {
+    public void addListener(Listener<K, V> listener) {
         listeners.add(listener);
     }
 
-    public void removeListener(MapListener<K, V> listener) {
+    public void removeListener(Listener<K, V> listener) {
         listeners.remove(listener);
     }
 
     public V put(K key, V value) {
         V old = map.put(key, value);
-        for (MapListener<K, V> l : listeners) {
+        for (Listener<K, V> l : listeners) {
             l.onPut(key, old, value);
         }
         return old;
@@ -27,7 +32,7 @@ public class ObservableMap<K, V> {
     public V remove(K key) {
         V old = map.remove(key);
         if (old != null) {
-            for (MapListener<K, V> l : listeners) {
+            for (Listener<K, V> l : listeners) {
                 l.onRemove(key, old);
             }
         }
@@ -60,7 +65,7 @@ public class ObservableMap<K, V> {
 
     public void clear() {
         for (Map.Entry<K, V> entry : map.entrySet()) {
-            for (MapListener<K, V> l : listeners) {
+            for (Listener<K, V> l : listeners) {
                 l.onRemove(entry.getKey(), entry.getValue());
             }
         }

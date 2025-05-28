@@ -2,24 +2,32 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 
 import java.util.List;
 
 public class CliHand extends CliElement {
 
-    private final Component component;
+    CliComponent cliComponent;
 
-    public CliHand(Component component) {
-        this.component = component;
+    public CliHand(ObservableGeneric<Component> componentProperty) {
+        componentProperty.addObserver(newComponent -> {
+            if (newComponent != null) {
+                cliComponent = CliComponent.of(newComponent);
+                cliComponent.addObserver(this);
+            } else {
+                cliComponent = null;
+            }
+        });
     }
 
     @Override
     protected List<String> getNewDescription() {
         return DescriptionUtils.borderAndTitle(
-                component == null
+                cliComponent == null
                         ? List.of("   ", "   ", "   ")
-                        : CliComponent.of(component).getNewDescription(),
+                        : cliComponent.getDescription(),
                 "hand"
         );
     }

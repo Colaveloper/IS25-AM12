@@ -18,7 +18,7 @@ public class CliAdventureCard extends CliElement{
     }
 
     @Override
-    public List<String> getNewDescription(){
+    protected List<String> getNewDescription(){
         StringBuilder result = new StringBuilder();
         result.append("[NO CARD]"); // default value
         switch(model.getGame().getCurrentAdventureCard()){

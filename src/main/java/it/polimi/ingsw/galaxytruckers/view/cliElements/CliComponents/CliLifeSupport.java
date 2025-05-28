@@ -15,7 +15,7 @@ public class CliLifeSupport extends CliComponent {
     }
 
     @Override
-    public List<String> getNewDescription() {
+    protected List<String> getNewDescription() {
         String open;
         switch (lifeSupport.getAlienType()){
             case CrewType.PURPLE -> open = Highlights.PURPLE.getHighlight();

@@ -1,23 +1,22 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
-import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class CliAllShips extends CliElement {
-    private final List<CliShipBoard> playerToCliShip;
+public class CliAllShipsHandAndStash extends CliElement{
+    private final List<CliShipHandAndStash> playerToCliShip;
 
-    public CliAllShips(Map<ShipBoard, Player> shipToPlayer) {
+    public CliAllShipsHandAndStash(Map<ShipBoard, Player> shipToPlayer) {
         playerToCliShip = new ArrayList<>();
         shipToPlayer.forEach(( ship,player) -> {
-                CliShipBoard cliShipBoard = new CliShipBoard(ship, player.getNickname());
-                cliShipBoard.addObserver(this);
-            playerToCliShip.add(cliShipBoard);
+            CliShipHandAndStash cliShipBoardHandAndStash = new CliShipHandAndStash(ship, player.getNickname());
+            cliShipBoardHandAndStash.addObserver(this);
+            playerToCliShip.add(cliShipBoardHandAndStash);
         });
     }
 
@@ -25,14 +24,12 @@ public class CliAllShips extends CliElement {
     protected List<String> getNewDescription() {
         List<String> description = new ArrayList<>();
 
-        for (CliShipBoard cliShipBoard : playerToCliShip) {
+        for (CliShipHandAndStash cliShipBoardHandAndStash : playerToCliShip) {
             description = DescriptionUtils.sideBySide(
                     description,
-                    cliShipBoard.getDescription()
+                    cliShipBoardHandAndStash.getDescription()
             );
         }
-
-        description = DescriptionUtils.borderAndTitle(description, "all ships");
 
         return description;
     }

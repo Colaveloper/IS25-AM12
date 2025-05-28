@@ -30,7 +30,7 @@ public class CliForecastScreen extends CliScreen {
         printActions();
         System.out.println("Cards in the forecast deck:\n");
         for (AdventureCard card : forecastDeck){
-            System.out.println(new CliAdventureCard(model).getNewDescription());
+//            System.out.println(new CliAdventureCard(model).getDescription());
         }
     }
 }

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
 import it.polimi.ingsw.galaxytruckers.view.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -15,11 +17,16 @@ public final class SecondShipBuildingState extends ShipBuildingState {
             StateActions.RELEASE_FORECAST);
 
     private List<AdventureCard> forecastDeck;
-    private final ShipBoard[] blockedForecasts = new ShipBoard[]{null, null, null};
+
+    // if there is a color, then that player has taken the forecast
+    private final ObservableList<GameColor> blockedForecasts = new ObservableList<>();
     private Hourglass hourglass = new Hourglass(3);
 
     public SecondShipBuildingState() {
         super();
+        blockedForecasts.add(null);
+        blockedForecasts.add(null);
+        blockedForecasts.add(null);
     }
 
     @Override
@@ -52,7 +59,7 @@ public final class SecondShipBuildingState extends ShipBuildingState {
 
     @Override
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        blockedForecasts[deckIndex] = shipBoard;
+        blockedForecasts.add(deckIndex, shipBoard.getColor());
         shipBoard.weldLastComponent();
     }
 
@@ -67,15 +74,15 @@ public final class SecondShipBuildingState extends ShipBuildingState {
 
     @Override
     public void notifyReleaseForecast(ShipBoard shipBoard) {
-        for (int i = 0; i < this.blockedForecasts.length; i++) {
-            if (blockedForecasts[i].equals(shipBoard)) {
-                blockedForecasts[i] = null;
+        for (int i = 0; i < this.blockedForecasts.size(); i++) {
+            if (blockedForecasts.get(i).equals(shipBoard.getColor())) {
+                blockedForecasts.add(i, null);
                 return;
             }
         }
     }
 
-    public ShipBoard[] getLockedForecasts() {
+    public ObservableList<GameColor> getLockedForecastsProperty() {
         return blockedForecasts;
     }
 }

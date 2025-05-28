@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
 
 import java.awt.*;
 import java.util.List;
@@ -37,12 +38,12 @@ public class SecondShipBoard extends ShipBoard {
             new Point(10, 9)
     ));
 
-    private final List<Component> stashedComponents;
+    private final ObservableList<Component> stashedComponents;
     private int numStashed;
 
     public SecondShipBoard(GameColor color) {
         super(color);
-        this.stashedComponents = new ArrayList<>();
+        this.stashedComponents = new ObservableList<>();
         numStashed = 0;
     }
 
@@ -54,7 +55,7 @@ public class SecondShipBoard extends ShipBoard {
     //Stashing methods
 
     public void stashComponent() {
-        stashedComponents.add(numStashed, lastComponent);
+        stashedComponents.add(numStashed, lastComponent.getValue());
         numStashed++;
         resetLastComponent();
         notifyObservers();
@@ -71,7 +72,7 @@ public class SecondShipBoard extends ShipBoard {
     }
 
     @Override
-    public List<Component> getStashedComponents() {
+    public ObservableList<Component> getStashedComponentsProperty() {
         return stashedComponents;
     }
 }

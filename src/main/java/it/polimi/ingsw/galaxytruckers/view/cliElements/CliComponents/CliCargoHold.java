@@ -24,7 +24,7 @@ public class CliCargoHold extends CliComponent {
     }
 
     @Override
-    public List<String> getNewDescription() {
+    protected List<String> getNewDescription() {
         Map<GoodsType, Integer> goodMap = cargoHold.getGoods();
         StringBuilder result = new StringBuilder();
         String open;

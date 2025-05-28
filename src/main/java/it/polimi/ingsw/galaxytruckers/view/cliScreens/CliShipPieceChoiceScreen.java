@@ -40,7 +40,7 @@ public class CliShipPieceChoiceScreen extends CliScreen {
         List<Highlights> colors= Highlights.getSomeColors(numPieces);
         Player player = model.getShipToPlayer().get(gameState.getShipBoard());
         for(int i = 0; i < gameState.getShipPieces().size(); i++){
-            allShips.highlightPoints(player, gameState.getShipPieces().get(i), colors.get(i));  //color ship pieces with list of colors
+//            allShips.highlightPoints(player, gameState.getShipPieces().get(i), colors.get(i));  //color ship pieces with list of colors
         }
         printShips();
 

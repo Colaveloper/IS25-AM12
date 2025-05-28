@@ -3,20 +3,21 @@ package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.Observer;
+import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.ObservableMap;
-import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableMap;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
 
 import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public abstract class ShipBoard implements ModelObservable {
+public abstract class ShipBoard implements Invalidator {
 
     protected final ObservableMap<Point, Component> componentMap;
-    protected Component lastComponent;  // can be null
+    protected ObservableGeneric<Component> lastComponent;  // content can be null
     protected Point lastPosition;  // can be null
     protected final GameColor color;
 
@@ -35,7 +36,7 @@ public abstract class ShipBoard implements ModelObservable {
     protected final Map<Point, Cabin> cabins;
     protected final Map<Point, Activatable> activatables;
 
-    private final List<Observer> observers = new ArrayList<>();
+    private final List<Listener> listeners = new ArrayList<>();
 
     public ShipBoard(GameColor color) { // (, Color color)
         this.color = color;
@@ -75,7 +76,7 @@ public abstract class ShipBoard implements ModelObservable {
 
     public void offerComponent(Component component) {
         weldLastComponent();
-        lastComponent = component;
+        lastComponent.setValue(component);
         lastPosition = null;
         notifyObservers();
     }
@@ -84,7 +85,7 @@ public abstract class ShipBoard implements ModelObservable {
         if (lastPosition != null) {
             componentMap.remove(lastPosition);
         }
-        Component rejectedComponent = lastComponent;
+        Component rejectedComponent = lastComponent.getValue();
         lastComponent = null;
         lastPosition = null;
         notifyObservers();
@@ -98,8 +99,8 @@ public abstract class ShipBoard implements ModelObservable {
             componentMap.remove(lastPosition);
         }
         lastPosition = newPosition;
-        lastComponent.setOrientation(orientation);
-        componentMap.put(newPosition, lastComponent);
+        lastComponent.getValue().setOrientation(orientation);
+        componentMap.put(newPosition, lastComponent.getValue());
         notifyObservers();
     }
 
@@ -108,7 +109,7 @@ public abstract class ShipBoard implements ModelObservable {
     public void grabStashedComponent(int index) {}
 
     public void weldLastComponent() {
-        switch (lastComponent) {
+        switch (lastComponent.getValue()) {
             case Battery c -> batteries.put(lastPosition, c);
             case Cabin c -> cabins.put(lastPosition, c);
             case DoubleCannon c -> {
@@ -271,16 +272,12 @@ public abstract class ShipBoard implements ModelObservable {
         return activatables;
     }
 
-    public Optional<Component> getLastComponent() {
-        return Optional.ofNullable(lastComponent);
+    public ObservableGeneric<Component> getLastComponentProperty() {
+        return lastComponent;
     }
 
     public Optional<Point> getLastPosition() {
         return Optional.ofNullable(lastPosition);
-    }
-
-    public List<Component> getStashedComponents() {
-        return null;
     }
 
     public GameColor getColor() {
@@ -288,18 +285,22 @@ public abstract class ShipBoard implements ModelObservable {
     }
 
     @Override
-    public void addObserver(Observer o) {
-        observers.add(o);
+    public void addObserver(Listener o) {
+        listeners.add(o);
     }
 
     @Override
-    public void removeObserver(Observer o) {
-        observers.remove(o);
+    public void removeObserver(Listener o) {
+        listeners.remove(o);
     }
 
     public void notifyObservers() {
-        for (Observer o : observers) {
+        for (Listener o : listeners) {
             o.onNotified();
         }
     }
+
+    public ObservableList<Component> getStashedComponentsProperty() {
+        return null;
+    };
 }
