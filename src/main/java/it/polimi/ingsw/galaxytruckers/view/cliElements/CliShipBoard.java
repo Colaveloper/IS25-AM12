@@ -83,10 +83,10 @@ public class CliShipBoard extends CliElement {
                 List<String> newCell = new ArrayList<>();
                 if (!cliComponentMap.containsKey(new Point(x, y))) {
                     // empty-space
-                    newCell = List.of("   ", "   ", "   ");
+                    newCell = List.of("     ", "     ", "     ");
                 } else if (cliComponentMap.get(new Point(x, y)) == null) {
                     // empty-area
-                    newCell = List.of("   ", " X ", "   ");
+                    newCell = List.of("     ", "  X  ", "     ");
                 } else {
                     newCell = cliComponentMap.get(new Point(x, y)).getDescription();
                 }
