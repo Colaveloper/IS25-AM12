@@ -33,184 +33,232 @@ public class ClientModel implements ModelObservable {
 
     }
 
+    // Locks
+    private final Object playersLock = new Object();
+    private final Object gameLock = new Object();
+    private final Object observersLock = new Object();
+
     //region Setup methods
 
     public void setPlayer(Player player) {
-        this.clientPlayer = player;
+        synchronized (playersLock) {
+            this.clientPlayer = player;
+        }
     }
 
     public void createGame(Level level, int playersN) {
-        game.setValue(new Game(level, playersN));
+        synchronized (gameLock) {
+            game.setValue(new Game(level, playersN));
+        }
     }
 
     public void addPlayer(Player player, GameColor color) {
-        players.add(player);
-        player.setShipBoard(game.getValue().addShipBoard(color));
-        shipToPlayer.put(player.getShipBoard(), player);
+        synchronized (playersLock) {
+            synchronized (gameLock) {
+                players.add(player);
+                player.setShipBoard(game.getValue().addShipBoard(color));
+                shipToPlayer.put(player.getShipBoard(), player);
+            }
+        }
     }
 
     //endregion
 
     //region Getters
     public Map<UUID, Lobby> getActiveLobbies() {
-        return activeLobbies;
+        synchronized (gameLock) {
+            //sincronizzare su una copia se serve
+            return activeLobbies;
+        }
     }
 
     public Player getClientPlayer() {
-        return clientPlayer;
+        synchronized (playersLock) {
+            return clientPlayer;
+        }
     }
 
     public Game getGame() {
-        return game.getValue();
+        synchronized (gameLock) {
+            return game.getValue();
+        }
     }
 
     public ObservableProperty<Game> getGameProperty() {
+        //sincronizzare se serve
         return game;
     }
 
     public Set<Player> getPlayers() {
-        return players;
+        synchronized (playersLock) {
+            //sincronizzare su una copia se serve
+            return players;
+        }
     }
 
     public Player getPlayerByShip(ShipBoard shipBoard) {
-        return shipToPlayer.get(shipBoard);
+        synchronized (playersLock) {
+            return shipToPlayer.get(shipBoard);
+        }
     }
 
     public Map<ShipBoard, Player> getShipToPlayer() {
-        return shipToPlayer;
+        synchronized (playersLock) {
+            return new HashMap<>(shipToPlayer);
+        }
     }
 
     public Map<Player, Integer> getFinalScores() {
-        return finalScores;
+        //forse anche su player?
+        synchronized (gameLock) {
+            return finalScores;
+        }
     }
     //endregion
 
     //region Event update methods
     public void notifyCurrentState(GameState gameState) {
-        game.getValue().setCurrentState(gameState);
+        synchronized (gameLock) {
+            game.getValue().setCurrentState(gameState);
+        }
         System.out.println("Updated to state: " + gameState.getClass().getSimpleName());
     }
 
+    private GameState safeGetCurrentState() {
+        synchronized (gameLock) {
+            return game.getValue().getCurrentState();
+        }
+    }
+
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
-        getGame().getCurrentState().notifyRequestRandComponent(shipBoard, component);
+        safeGetCurrentState().notifyRequestRandComponent(shipBoard, component);
     }
 
     public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
-        getGame().getCurrentState().notifyRequestComponent(shipBoard, component);
+        safeGetCurrentState().notifyRequestComponent(shipBoard, component);
     }
 
     public void notifyRejectComponent(ShipBoard shipBoard) {
-        getGame().getCurrentState().notifyRejectComponent(shipBoard);
+        safeGetCurrentState().notifyRejectComponent(shipBoard);
     }
 
     public void notifyStashComponent(ShipBoard shipBoard) {
-        getGame().getCurrentState().notifyStashComponent(shipBoard);
+        safeGetCurrentState().notifyStashComponent(shipBoard);
     }
 
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index) {
-        getGame().getCurrentState().notifyGrabStashedComponent(shipBoard, index);
+        safeGetCurrentState().notifyGrabStashedComponent(shipBoard, index);
     }
 
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
-        getGame().getCurrentState().notifyPlaceComponent(shipBoard, point, orientation);
+        safeGetCurrentState().notifyPlaceComponent(shipBoard, point, orientation);
     }
 
     public void notifyFlipHourglass(ShipBoard shipBoard) {
-        getGame().getCurrentState().notifyFlipHourglass(shipBoard);
+        safeGetCurrentState().notifyFlipHourglass(shipBoard);
     }
 
     public void notifyHourglassEnd() {
-        getGame().getCurrentState().notifyHourglassEnd();
+        safeGetCurrentState().notifyHourglassEnd();
     }
 
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
-        getGame().getCurrentState().notifyFlightBoardPosition(shipBoard, position);
+        safeGetCurrentState().notifyFlightBoardPosition(shipBoard, position);
     }
 
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        getGame().getCurrentState().notifyPeekForecast(shipBoard, deckIndex);
+        safeGetCurrentState().notifyPeekForecast(shipBoard, deckIndex);
     }
 
     public void setForecastDeck(List<AdventureCard> adventureCards) {
-        getGame().getCurrentState().setForecastDeck(adventureCards);
+        safeGetCurrentState().setForecastDeck(adventureCards);
     }
 
     public void notifyReleaseForecast(ShipBoard shipBoard) {
-        getGame().getCurrentState().notifyReleaseForecast(shipBoard);
+        safeGetCurrentState().notifyReleaseForecast(shipBoard);
     }
 
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        getGame().getCurrentState().notifyRemoveComponent(shipBoard, point);
+        safeGetCurrentState().notifyRemoveComponent(shipBoard, point);
     }
 
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
-        getGame().getCurrentState().notifyChooseShipPiece(shipBoard, pieceIndex);
+        safeGetCurrentState().notifyChooseShipPiece(shipBoard, pieceIndex);
     }
 
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
-        getGame().getCurrentState().notifyShipNotConnected(shipBoard, shipPieces);
+        safeGetCurrentState().notifyShipNotConnected(shipBoard, shipPieces);
     }
 
     public void notifyShipValidated(ShipBoard shipBoard) {
-        getGame().getCurrentState().notifyShipValidated(shipBoard);
+        safeGetCurrentState().notifyShipValidated(shipBoard);
     }
 
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
-        getGame().getCurrentState().notifyInitializeCabin(shipBoard, point, crewType);
+        safeGetCurrentState().notifyInitializeCabin(shipBoard, point, crewType);
     }
 
     public void notifyDrawCard(AdventureCard adventureCard) {
-        getGame().getCurrentState().notifyDrawCard(adventureCard);
+        safeGetCurrentState().notifyDrawCard(adventureCard);
     }
 
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-        getGame().getCurrentState().notifyActivateComponent(shipBoard, point);
+        safeGetCurrentState().notifyActivateComponent(shipBoard, point);
     }
 
     public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
-        getGame().getCurrentState().notifyLoseCrew(shipBoard, point);
+        safeGetCurrentState().notifyLoseCrew(shipBoard, point);
     }
 
     public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed) {
-        getGame().getCurrentState().notifyGrabReward(shipBoard, rewardGrabbed);
+        safeGetCurrentState().notifyGrabReward(shipBoard, rewardGrabbed);
     }
 
     public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        getGame().getCurrentState().notifyPlaceGoods(shipBoard, point, goodsType);
+        safeGetCurrentState().notifyPlaceGoods(shipBoard, point, goodsType);
     }
 
     public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        getGame().getCurrentState().notifyRemoveGoods(shipBoard, point, goodsType);
+        safeGetCurrentState().notifyRemoveGoods(shipBoard, point, goodsType);
     }
 
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        getGame().getCurrentState().notifyUseBattery(shipBoard,point);
+        safeGetCurrentState().notifyUseBattery(shipBoard,point);
     }
 
     public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
-        getGame().getCurrentState().notifyChoosePlanet(shipBoard, choice);
+        safeGetCurrentState().notifyChoosePlanet(shipBoard, choice);
     }
 
     public void notifyGiveUp(ShipBoard shipBoard) {
-        getGame().getCurrentState().notifyGiveUp(shipBoard);
+        safeGetCurrentState().notifyGiveUp(shipBoard);
     }
 
     public void setFinalScores(Map<Player, Integer> finalScores) {
-        this.finalScores = finalScores;
+        synchronized (gameLock) {
+            this.finalScores = finalScores;
+        }
     }
     //endregion
 
     public ShipBoard getMyShip() {
-        return clientPlayer.getShipBoard();
+        synchronized (playersLock) {
+            return clientPlayer.getShipBoard();
+        }
     }
 
     public void notifyObservers() {
-        for (Observer o : observers) {
+        List<Observer> copy;
+        synchronized (observersLock) {
+            copy = new ArrayList<>(observers);
+        }
+        for (Observer o : copy) {
             o.onNotified();
         }
     }
 
     public ObservableProperty<MetaState> getMetaState() {
+        //non sicuro se lockare
         return clientState;
     }
 
@@ -220,11 +268,15 @@ public class ClientModel implements ModelObservable {
 
     @Override
     public void addObserver(Observer o) {
-        observers.add(o);
+        synchronized (observersLock) {
+            observers.add(o);
+        }
     }
 
     @Override
     public void removeObserver(Observer o) {
-        observers.remove(o);
+        synchronized (observersLock) {
+            observers.remove(o);
+        }
     }
 }
