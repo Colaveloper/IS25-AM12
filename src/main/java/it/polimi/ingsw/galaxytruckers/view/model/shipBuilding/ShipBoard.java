@@ -18,7 +18,7 @@ public abstract class ShipBoard implements Invalidator {
 
     protected final ObservableMap<Point, Component> componentMap;
     protected ObservableGeneric<Component> lastComponent;  // content can be null
-    protected Point lastPosition;  // can be null
+    protected ObservableGeneric<Point> lastPosition;  // can be null
     protected final GameColor color;
 
     protected int firePower;
@@ -41,8 +41,8 @@ public abstract class ShipBoard implements Invalidator {
     public ShipBoard(GameColor color) { // (, Color color)
         this.color = color;
 
-        this.lastComponent = new ObservableGeneric<Component>(null);
-        this.lastPosition = null;
+        this.lastComponent = new ObservableGeneric<>(null);
+        this.lastPosition = new ObservableGeneric<>(null);
 
         this.firePower = 0;
         this.enginePower = 0;
@@ -67,7 +67,7 @@ public abstract class ShipBoard implements Invalidator {
 
     protected void resetLastComponent() {
         this.lastComponent.setValue(null);
-        this.lastPosition = null;
+        this.lastPosition.setValue(null);
     }
 
     //Ship building methods
@@ -77,17 +77,17 @@ public abstract class ShipBoard implements Invalidator {
     public void offerComponent(Component component) {
         weldLastComponent();
         lastComponent.setValue(component);
-        lastPosition = null;
+        lastPosition.setValue(null);
         notifyObservers();
     }
 
     public Component rejectComponent() {
-        if (lastPosition != null) {
-            componentMap.remove(lastPosition);
+        if (lastPosition.getValue() != null) {
+            componentMap.remove(lastPosition.getValue());
         }
         Component rejectedComponent = lastComponent.getValue();
         lastComponent.setValue(null);
-        lastPosition = null;
+        lastPosition.setValue(null);
         notifyObservers();
         return rejectedComponent;
     }
@@ -95,10 +95,10 @@ public abstract class ShipBoard implements Invalidator {
     //Ship building methods
 
     public void placeComponent(Point newPosition, int orientation) {
-        if (lastPosition != null) {
-            componentMap.remove(lastPosition);
+        if (lastPosition.getValue() != null) {
+            componentMap.remove(lastPosition.getValue());
         }
-        lastPosition = newPosition;
+        lastPosition.setValue(newPosition);
         lastComponent.getValue().setOrientation(orientation);
         componentMap.put(newPosition, lastComponent.getValue());
         notifyObservers();
@@ -111,30 +111,30 @@ public abstract class ShipBoard implements Invalidator {
     public void weldLastComponent() {
         switch (lastComponent.getValue()) {
             case null -> {}
-            case Battery c -> batteries.put(lastPosition, c);
-            case Cabin c -> cabins.put(lastPosition, c);
+            case Battery c -> batteries.put(lastPosition.getValue(), c);
+            case Cabin c -> cabins.put(lastPosition.getValue(), c);
             case DoubleCannon c -> {
-                cannons.put(lastPosition,c);
-                activatables.put(lastPosition,c);
+                cannons.put(lastPosition.getValue(),c);
+                activatables.put(lastPosition.getValue(),c);
             }
-            case Cannon c -> cannons.put(lastPosition,c);
+            case Cannon c -> cannons.put(lastPosition.getValue(),c);
             case DoubleEngine c -> {
-                engines.put(lastPosition,c);
-                activatables.put(lastPosition,c);
+                engines.put(lastPosition.getValue(),c);
+                activatables.put(lastPosition.getValue(),c);
             }
             case Engine c -> {
-                engines.put(lastPosition,c);
+                engines.put(lastPosition.getValue(),c);
             }
             case CargoHold c -> {
-                cargoHolds.put(lastPosition,c);
+                cargoHolds.put(lastPosition.getValue(),c);
             }
             case Shield c -> {
-                shields.put(lastPosition,c);
+                shields.put(lastPosition.getValue(),c);
             }
             case Component _ -> {}
         }
         lastComponent.setValue(null);
-        lastPosition = null;
+        lastPosition.setValue(null);
     }
 
     public void removeComponent(Point position) {
@@ -277,8 +277,8 @@ public abstract class ShipBoard implements Invalidator {
         return lastComponent;
     }
 
-    public Optional<Point> getLastPosition() {
-        return Optional.ofNullable(lastPosition);
+    public ObservableGeneric<Point> getLastPosition() {
+        return lastPosition;
     }
 
     public GameColor getColor() {

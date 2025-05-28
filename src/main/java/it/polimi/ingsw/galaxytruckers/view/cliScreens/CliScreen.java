@@ -127,6 +127,7 @@ public abstract class CliScreen {
                     System.out.println();
                 }
             }
+            System.out.println();
         }
         else{
             //TODO: print something in place of actions

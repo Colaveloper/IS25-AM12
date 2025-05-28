@@ -13,15 +13,17 @@ public class CliStash extends CliElement {
     protected final List<CliComponent> cliStashedComponents = new ArrayList<>();
 
     public CliStash(ObservableList<Component> stashedComponents) {
-        stashedComponents.addListener(new ObservableList.Listener<Component>() {
+        stashedComponents.addListener(new ObservableList.Listener<>() {
             @Override
             public void onAdd(int index, Component element) {
                 cliStashedComponents.add(index, element!=null ? CliComponent.of(element) : null);
+                CliStash.super.notifyObservers();
             }
 
             @Override
             public void onRemove(int index, Component element) {
                 cliStashedComponents.add(index, null);
+                CliStash.super.notifyObservers();
             }
         });
     }
@@ -33,12 +35,12 @@ public class CliStash extends CliElement {
         for(int i=0 ; i<cliStashedComponents.size() ; i++) {
             unitDescription.clear();
             if(cliStashedComponents.get(i) == null) {
-                unitDescription.addAll(List.of("   ", " X ", "   "));
+                unitDescription.addAll(List.of("     ", "  X  ", "     "));
+            } else {
+                unitDescription.addAll(cliStashedComponents.get(i).getDescription());
             }
-            unitDescription.addAll(cliStashedComponents.get(i).getDescription());
-            unitDescription.add("  "+i);
+            unitDescription.add(" "+i+" ");
             description = DescriptionUtils.sideBySide(description, unitDescription);
-            i++;
         }
 
         return DescriptionUtils.borderAndTitle(description, "stash");
