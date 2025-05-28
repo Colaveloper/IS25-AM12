@@ -24,7 +24,7 @@ public abstract class CliScreen {
         this.controller = controller;
         this.state = gameState;
         availableActions = gameState.getAvailableActions();
-        this.cliFlightBoard = new CliFlightBoard(model);
+        this.cliFlightBoard = new CliFlightBoard(model.getGame().getFlightBoard());
         this.cliFlightBoard.addObserver(this::render);
     }
 

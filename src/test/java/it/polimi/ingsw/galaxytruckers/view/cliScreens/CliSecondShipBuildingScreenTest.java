@@ -95,4 +95,13 @@ class CliSecondShipBuildingScreenTest {
         model.notifyPlaceComponent(player1.getShipBoard(), new Point(7, 7), 3);
         screen.render();
     }
+
+    @Test
+    void notifyPlaceOnFlightBoard() {
+        screen.render();
+        model.notifyFlightBoardPosition(player1.getShipBoard(), 1);
+        screen.render();
+    }
+
+
 }

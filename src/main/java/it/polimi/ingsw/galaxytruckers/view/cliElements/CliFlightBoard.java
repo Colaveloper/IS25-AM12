@@ -7,12 +7,11 @@ import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import java.util.*;
 
 public class CliFlightBoard extends CliElement {
-    private final FlightBoard flightBoard;
+    FlightBoard flightBoard;
 
-    public CliFlightBoard(ClientModel model) {
-        super();
-        this.flightBoard = model.getGame().getFlightBoard();
-        //model.startingPositionLeftProperty().addListener(this);
+    public CliFlightBoard(FlightBoard flightBoard) {
+        this.flightBoard = flightBoard;
+        flightBoard.addObserver(this);
     }
 
     @Override
