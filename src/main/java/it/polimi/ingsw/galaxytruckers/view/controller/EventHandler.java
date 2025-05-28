@@ -103,7 +103,10 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
             case JoinLobbyEvent joinLobbyEvent -> {
                 Player player = playerRegistry.addPlayer(joinLobbyEvent.playerName());
                 //TODO: also send the player color
-                clientModel.addPlayer(player, GameColor.BLUE);
+                // Only add to model if the player is not already present
+                if(!clientModel.getPlayers().contains(player)) {
+                    clientModel.addPlayer(player, joinLobbyEvent.color());
+                }
             }
             case LobbyDetailsEvent lobbyDetailsEvent -> {
                 //TODO: update client state
