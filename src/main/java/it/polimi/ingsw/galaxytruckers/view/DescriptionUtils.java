@@ -14,37 +14,34 @@ public class DescriptionUtils {
     @Pure
     @CheckReturnValue
     public static List<String> sideBySide(List<String> a, List<String> b) {
+        if (a.isEmpty()) return new ArrayList<>(b);
+        if (b.isEmpty()) return new ArrayList<>(a);
+
         List<String> c = new ArrayList<>(a);
 
-        // Find max length among a strings (treat empty strings normally)
         int leftWidth = 1;
         for (String s : a) {
-            if (getRealWidth(s) > leftWidth) {
-                leftWidth = getRealWidth(s);
-            }
+            leftWidth = Math.max(leftWidth, getRealWidth(s));
         }
 
         int maxSize = Math.max(a.size(), b.size());
 
-        // Extend a list if needed
-        while (a.size() < maxSize) {
+        while (c.size() < maxSize) {
             c.add("");
         }
 
         for (int i = 0; i < maxSize; i++) {
-            String left = a.get(i);
+            String left = c.get(i);
             String right = (i < b.size()) ? b.get(i) : "";
 
             StringBuilder line = new StringBuilder(left);
             int padding = leftWidth - getRealWidth(left);
             line.append(" ".repeat(Math.max(0, padding)));
 
-            // Add the space between left and right
-            line.append(' ');
-            line.append(right);
-
+            line.append(' ').append(right);
             c.set(i, line.toString());
         }
+
         return c;
     }
 
@@ -56,10 +53,13 @@ public class DescriptionUtils {
             contentWidth = Math.max(contentWidth, getRealWidth(line));
         }
 
-        int totalWidth = contentWidth + 2 + 2; // padding + border
-
         String titleWithSpace = " " + title + " ";
         int titleDisplayWidth = getRealWidth(titleWithSpace);
+
+        // Ensure contentWidth is at least as wide as the title
+        contentWidth = Math.max(contentWidth, titleDisplayWidth);
+
+        int totalWidth = contentWidth + 4; // 2 padding + 2 border
 
         // Calculate start position to center the title
         int titleStart = Math.max(0, (totalWidth - 2 - titleDisplayWidth) / 2);
@@ -75,22 +75,22 @@ public class DescriptionUtils {
             topBorder.append('─');
             i++;
         }
-
         topBorder.append('╮');
 
-        String bottomBorder = "╰" + "─".repeat(totalWidth - 2) +
-                '╯';
+        String bottomBorder = "╰" + "─".repeat(totalWidth - 2) + '╯';
 
         List<String> bordered = new ArrayList<>();
         bordered.add(topBorder.toString());
 
         for (String line : original) {
-            StringBuilder borderedLine = new StringBuilder("│ ");
-            borderedLine.append(line);
-            int linePadding = contentWidth - getRealWidth(line);
-            borderedLine.append(" ".repeat(Math.max(0, linePadding)));
-            borderedLine.append(" │");
-            bordered.add(borderedLine.toString());
+            int realLineWidth = getRealWidth(line);
+            int totalPadding = contentWidth - realLineWidth;
+            int leftPadding = totalPadding / 2;
+            int rightPadding = totalPadding - leftPadding;
+
+            String borderedLine =
+                    "│ " + " ".repeat(leftPadding) + line + " ".repeat(rightPadding) + " │";
+            bordered.add(borderedLine);
         }
 
         bordered.add(bottomBorder);

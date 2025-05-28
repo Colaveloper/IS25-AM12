@@ -17,7 +17,7 @@ public class Game {
 
     private final GameFactory gameFactory;
     private final Set<ShipBoard> shipBoards = new HashSet<>();
-    private Set<ShipBoard> givenUpShips;
+    private final Set<ShipBoard> givenUpShips = new HashSet<>();
     private final FlightBoard flightBoard;
     private final ObservableGeneric<GameState> currentState = new ObservableGeneric<>(null);
 

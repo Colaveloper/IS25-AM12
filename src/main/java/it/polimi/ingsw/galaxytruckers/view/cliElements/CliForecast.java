@@ -34,11 +34,11 @@ public class CliForecast extends CliElement {
 
         for (int i=0; i<blockedForecasts.size(); i++) {
             List<String> forecastDescription = new ArrayList<>();
-            forecastDescription.add("   "+i+"   ");
             forecastDescription.add(blockedForecasts.get(i) != null
                             ? "   "+blockedForecasts.get(i).getDescription()+"   "
                             : " free  "
                     );
+            forecastDescription.add("   "+i+"   ");
             result = DescriptionUtils.sideBySide(result, forecastDescription);
         }
 

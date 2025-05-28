@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 
+import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliElement;
@@ -42,26 +43,21 @@ public class CliComponentBank extends CliElement {
 
     @Override
     protected List<String> getNewDescription() {
-        String padding = "  ";
         StringBuilder row = new StringBuilder();
-        List<String> description = new ArrayList<>();
 
-        description.add("Face down: " + componentBank.getCoveredComponentsNProperty().getValue());
+        int nCovered = componentBank.getCoveredComponentsNProperty().getValue();
+        List<String> coveredDescription = new ArrayList<>(DescriptionUtils.borderAndTitle(List.of("", String.valueOf(nCovered), ""), "down"));
 
-        description.add("Face up: ");
-        for (int i = 0; i < 3; i++) {
-            for (CliComponent cliComponent : revealedComponents.values()) {
-                row.append(cliComponent.getNewDescription().get(i));
-                row.append(padding);
-            }
-            description.add(row.toString());
-            row.setLength(0);
+        List<String> revealedDescription = new ArrayList<>();
+        List<String> revealedDescriptionUnit = new ArrayList<>();
+        int i = 0;
+        for (CliComponent cliComponent : revealedComponents.values()) {
+            revealedDescriptionUnit.addAll(cliComponent.getNewDescription());
+            revealedDescriptionUnit.add("  "+i+"  ");
+            revealedDescription = DescriptionUtils.sideBySide(revealedDescription, revealedDescriptionUnit);
         }
-        for (int n = 1; n <= revealedComponents.size(); n++) {
-            row.append("  ").append(n).append("  ").append(padding);
-        }
-        description.add(row.toString());
+        revealedDescription = DescriptionUtils.borderAndTitle(revealedDescription, "up");
 
-        return description;
+        return DescriptionUtils.sideBySide(coveredDescription, revealedDescription);
     }
 }

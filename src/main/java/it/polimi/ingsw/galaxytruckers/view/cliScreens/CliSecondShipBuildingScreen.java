@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliForecast;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
@@ -26,7 +25,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     @Override
     public void render() {
         this.cliComponentBank.getDescription().forEach(System.out::println);
-//        this.cliForecast.getDescription().forEach(System.out::println);
+        this.cliForecast.getDescription().forEach(System.out::println);
         super.cliFlightBoard.getDescription().forEach(System.out::println);
         super.cliAllShips.getDescription().forEach(System.out::println);
         printActions();
