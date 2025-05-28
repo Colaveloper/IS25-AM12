@@ -47,78 +47,30 @@ public abstract class CliScreen {
             List<String> actions = new ArrayList<>();
             for (StateActions action : availableActions) {
                 switch (action) {
-                    case ACTIVATE_COMPONENT -> {
-                        actions.add("P[x][y] Activate component        ");
-                    }
-                    case SPEND_BATTERIES -> {
-                        actions.add("B[x][y] Spend battery on component");
-                    }
-                    case GRAB_REWARD -> {
-                        actions.add("P       To pick reward            ");
-                    }
-                    case CHOOSE_SHIP_PIECE -> {
-                        actions.add("[i]   Choose piece of ship to keep");
-                    }
-                    case GO_NEXT, RELEASE_FORECAST -> {
-                        actions.add("C to continue                     ");
-                    }
-                    case LOSE_CREW -> {
-                        actions.add("L[x][y] Remove crew from component");
-                    }
-                    case LOSE_GOOD -> {
-                        actions.add("L[x][y] Remove good from cargo hold");
-                    }
-                    case REMOVE_GOOD -> {
-                        actions.add("R[x][y][color] Pick goods from cargo hold");
-                    }
-                    case ADD_GOOD -> {
-                        actions.add("P[x][y][color] Place goods on cargo hold");
-                    }
-                    case CHOOSE_PLANET -> {
-                        actions.add("L[i]  Land on i-th planet         ");
-                    }
-                    case REQUEST_RAND_COMPONENT -> {
-                        actions.add("C  Get New covered component      ");
-                    }
-                    case REQUEST_COMPONENT -> {
-                        actions.add("U[i] Pick i-th uncovered component");
-                    }
-                    case REJECT_COMPONENT -> {
-                        actions.add("R  Rejected component             ");
-                    }
-                    case STASH_COMPONENT -> {
-                        actions.add("S  To stash current component     ");
-                    }
-                    case GRAB_STASHED_COMPONENT -> {
-                        actions.add("S [i]  To grab i-th stashed       ");
-                    }
-                    case PLACE_COMPONENT -> {
-                        actions.add("P[x][y]  Place component in [x][y]");
-                    }
-                    case FLIP_HOURGLASS -> {
-                        actions.add("H  To Flip hourglass              ");
-                    }
-                    case PLACE_SHIP_ON_FLIGHTBOARD -> {
-                        actions.add("E [i] End and place on flightboard");
-                    }
-                    case FINISH_BUILDING -> {
-                        actions.add("X  To finish building             ");
-                    }
-                    case ACQUIRE_FORECAST -> {
-                        actions.add("F [i]  Pick i-th forecast deck    ");
-                    }
-                    case DRAW_CARD -> {
-                        actions.add("  Press any key to draw a card    ");
-                    }
-                    case REMOVE_COMPONENT -> {
-                        actions.add("P[x][y]  Remove component in x, y ");
-                    }
-                    case INITIALIZE_CABIN -> {
-                        actions.add("P[x][y]  Initialize cabin in x, y ");
-                    }
-                    case GIVE_UP -> {
-                        actions.add("Y  To give up and stop playing    ");
-                    }
+                    case ACTIVATE_COMPONENT ->      actions.add("P[x][y] Activate component        ");
+                    case SPEND_BATTERIES ->         actions.add("B[x][y] Spend battery on component");
+                    case GRAB_REWARD ->             actions.add("P       To pick reward            ");
+                    case CHOOSE_SHIP_PIECE ->       actions.add("[i]   Choose piece of ship to keep");
+                    case GO_NEXT, RELEASE_FORECAST->actions.add("C to continue                     ");
+                    case LOSE_CREW ->               actions.add("L[x][y] Remove crew from component");
+                    case LOSE_GOOD ->               actions.add("L[x][y] Remove good from cargo hold");
+                    case REMOVE_GOOD ->             actions.add("R[x][y][color] Pick goods from cargo hold");
+                    case ADD_GOOD ->                actions.add("P[x][y][color] Place goods on cargo hold");
+                    case CHOOSE_PLANET ->           actions.add("L[i]  Land on i-th planet         ");
+                    case REQUEST_RAND_COMPONENT ->  actions.add("C  Get New covered component      ");
+                    case REQUEST_COMPONENT ->       actions.add("U[i] Pick i-th uncovered component");
+                    case REJECT_COMPONENT ->        actions.add("R  Rejected component             ");
+                    case STASH_COMPONENT ->         actions.add("S  To stash current component     ");
+                    case GRAB_STASHED_COMPONENT ->  actions.add("S [i]  To grab i-th stashed       ");
+                    case PLACE_COMPONENT ->         actions.add("P[x][y]  Place component in [x][y]");
+                    case FLIP_HOURGLASS ->          actions.add("H  To Flip hourglass              ");
+                    case PLACE_SHIP_ON_FLIGHTBOARD->actions.add("E [i] End and place on flightboard");
+                    case FINISH_BUILDING ->         actions.add("X  To finish building             ");
+                    case ACQUIRE_FORECAST ->        actions.add("F [i]  Pick i-th forecast deck    ");
+                    case DRAW_CARD ->               actions.add("  Press any key to draw a card    ");
+                    case REMOVE_COMPONENT ->        actions.add("P[x][y]  Remove component in x, y ");
+                    case INITIALIZE_CABIN ->        actions.add("P[x][y]  Initialize cabin in x, y ");
+                    case GIVE_UP ->                 actions.add("Y  To give up and stop playing    ");
                 }
             }
             for (int i = 0; i < availableActions.size(); i++) {
@@ -177,32 +129,3 @@ public abstract class CliScreen {
         };
     }
 }
-
-
-//        for(StateActions action : availableActions){
-//            switch(action){
-//                case ACTIVATE_COMPONENT -> {
-//                    //check if input = number + space + number
-//                    if (checkFormat(input, "\\d+ \\d+")) return false;
-//
-//                    // check if the point made from those numbers is selectable
-//                    if (!gameState.getAvailablePositions().contains(getPoint(input))){
-//                        return false;
-//                    }
-//                }
-//                case SPEND_BATTERIES -> {
-//                    //check if input = number + space + number
-//                    if (!input.matches("\\d+ \\d+")) return false;
-//
-//                    // check if the point made from those numbers is selectable
-//                    return model.getMyShip().getBatteries().containsKey(getPoint(input));
-//                }
-//                case GRAB_REWARD -> {
-//                    if (!input.matches("(?i)[pr]")) return false;
-//                }
-//                case CHOOSE_SHIP_PIECE -> {
-//                    if (!input.matches("\\d")) return false;
-//                }
-//            }
-//        }
-//        return false;
