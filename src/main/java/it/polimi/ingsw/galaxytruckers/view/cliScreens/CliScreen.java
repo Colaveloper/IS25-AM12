@@ -17,7 +17,7 @@ public abstract class CliScreen {
     protected ControllerToServer controller;
     protected List<StateActions> availableActions;
     protected CliFlightBoard cliFlightBoard;
-    protected CliAllShips cliAllShips;
+
 
     public CliScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         this.model = model;
@@ -25,8 +25,6 @@ public abstract class CliScreen {
         this.state = gameState;
         availableActions = gameState.getAvailableActions();
         this.cliFlightBoard = new CliFlightBoard(model);
-        this.cliFlightBoard.addObserver(this::render);
-        this.cliAllShips = new CliAllShips(model.getShipToPlayer());
         this.cliFlightBoard.addObserver(this::render);
     }
 

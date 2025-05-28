@@ -41,7 +41,7 @@ public abstract class ShipBoard implements Invalidator {
     public ShipBoard(GameColor color) { // (, Color color)
         this.color = color;
 
-        this.lastComponent = null;
+        this.lastComponent = new ObservableGeneric<Component>(null);
         this.lastPosition = null;
 
         this.firePower = 0;
@@ -66,7 +66,7 @@ public abstract class ShipBoard implements Invalidator {
     //CliComponentBank interaction methods
 
     protected void resetLastComponent() {
-        this.lastComponent = null;
+        this.lastComponent.setValue(null);
         this.lastPosition = null;
     }
 
@@ -86,7 +86,7 @@ public abstract class ShipBoard implements Invalidator {
             componentMap.remove(lastPosition);
         }
         Component rejectedComponent = lastComponent.getValue();
-        lastComponent = null;
+        lastComponent.setValue(null);
         lastPosition = null;
         notifyObservers();
         return rejectedComponent;
@@ -110,6 +110,7 @@ public abstract class ShipBoard implements Invalidator {
 
     public void weldLastComponent() {
         switch (lastComponent.getValue()) {
+            case null -> {}
             case Battery c -> batteries.put(lastPosition, c);
             case Cabin c -> cabins.put(lastPosition, c);
             case DoubleCannon c -> {
@@ -130,9 +131,9 @@ public abstract class ShipBoard implements Invalidator {
             case Shield c -> {
                 shields.put(lastPosition,c);
             }
-            case Component c -> {}
+            case Component _ -> {}
         }
-        lastComponent = null;
+        lastComponent.setValue(null);
         lastPosition = null;
     }
 

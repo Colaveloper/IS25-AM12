@@ -1,33 +1,39 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShipsHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliForecast;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 
 public class CliSecondShipBuildingScreen extends CliScreen {
+    private SecondShipBuildingState gameState;
 
     private final CliComponentBank cliComponentBank;
     private final CliForecast cliForecast;
-    private SecondShipBuildingState gameState;
+    private final CliAllShipsHandAndStash cliAllShips;
+
 
     public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
 
-        this.cliComponentBank = new CliComponentBank(gameState.getComponentBank());
-        this.cliComponentBank.addObserver(this::render);
-        this.cliForecast = new CliForecast(gameState.getLockedForecastsProperty());
-        this.cliForecast.addObserver(this::render);
-        this.gameState = gameState;
+        cliComponentBank = new CliComponentBank(gameState.getComponentBank());
+//        cliComponentBank.addObserver(this::render); // todo: delegate to controller
+        cliForecast = new CliForecast(gameState.getLockedForecastsProperty());
+//        cliForecast.addObserver(this::render); // todo: delegate to controller
+        cliAllShips = new CliAllShipsHandAndStash(model.getShipToPlayer());
+//        cliAllShips.addObserver(this::render); // todo: delegate to controller
+        gameState = gameState;
     }
 
     @Override
     public void render() {
-        this.cliComponentBank.getDescription().forEach(System.out::println);
-        this.cliForecast.getDescription().forEach(System.out::println);
-        super.cliFlightBoard.getDescription().forEach(System.out::println);
-        super.cliAllShips.getDescription().forEach(System.out::println);
+        cliComponentBank.getDescription().forEach(System.out::println);
+        cliForecast.getDescription().forEach(System.out::println);
+        cliFlightBoard.getDescription().forEach(System.out::println);
+        cliAllShips.getDescription().forEach(System.out::println);
         printActions();
     }
 

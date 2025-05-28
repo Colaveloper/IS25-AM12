@@ -13,6 +13,7 @@ public class CliHand extends CliElement {
 
     public CliHand(ObservableGeneric<Component> componentProperty) {
         componentProperty.addObserver(newComponent -> {
+            super.notifyObservers();
             if (newComponent != null) {
                 cliComponent = CliComponent.of(newComponent);
                 cliComponent.addObserver(this);

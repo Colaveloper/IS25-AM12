@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CliStash extends CliElement {
 
-    List<CliComponent> cliStashedComponents;
+    protected final List<CliComponent> cliStashedComponents = new ArrayList<>();
 
     public CliStash(ObservableList<Component> stashedComponents) {
         stashedComponents.addListener(new ObservableList.Listener<Component>() {
