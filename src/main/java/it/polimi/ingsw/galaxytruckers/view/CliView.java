@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.ScreenFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
@@ -35,7 +36,16 @@ public class CliView extends View {
         new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             while (true) {
-                input = scanner.nextLine();
+                if(model.isCheatOn() && !CheatCodes.cheatEmpty()){
+                    try {
+                        input = CheatCodes.cheat();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else {
+                    input = scanner.nextLine();
+                }
 
                 // letting the user correct format errors
                 while (!currentScreen.isInputLegal(input)) {
