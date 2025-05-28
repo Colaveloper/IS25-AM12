@@ -28,5 +28,7 @@ public abstract class View {
 
     public abstract void start();
 
+    public abstract void refresh();
+
 //    public abstract void updateScreen(GameState gameState);
 }

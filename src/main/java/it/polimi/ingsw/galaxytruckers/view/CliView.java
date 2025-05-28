@@ -28,6 +28,11 @@ public class CliView extends View {
     }
 
     @Override
+    public void refresh() {
+        currentScreen.render();
+    }
+
+    @Override
     public void start() {
         updateScreen();
     }

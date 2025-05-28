@@ -212,6 +212,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     @Override
     public void notifyEvent(Event event) throws RemoteException {
         clientController.notifyEvent(event);
+        
     }
 
     @VisibleForTesting

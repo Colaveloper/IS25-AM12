@@ -20,11 +20,11 @@ public class CliSecondShipBuildingScreen extends CliScreen {
         super(model, controller, gameState);
 
         cliComponentBank = new CliComponentBank(gameState.getComponentBank());
-//        cliComponentBank.addObserver(this::render); // todo: delegate to controller
+        //cliComponentBank.addObserver(this::render); // todo: delegate to controller
         cliForecast = new CliForecast(gameState.getLockedForecastsProperty());
-//        cliForecast.addObserver(this::render); // todo: delegate to controller
+        //cliForecast.addObserver(this::render); // todo: delegate to controller
         cliAllShips = new CliAllShipsHandAndStash(model.getShipToPlayer());
-//        cliAllShips.addObserver(this::render); // todo: delegate to controller
+        //cliAllShips.addObserver(this::render); // todo: delegate to controller
         gameState = gameState;
     }
 

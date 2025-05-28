@@ -146,21 +146,22 @@ public abstract class CliScreen {
         return isFormatLegal(input);
     }
 
-    //todo controlli dell'input dal model
     protected boolean isFormatLegal(String input) {
         String[] parts = input.split(" ");
         return switch (parts[0]) {
-            case "P" -> availableActions.contains(StateActions.PLACE_COMPONENT) && input.matches("(?i)P\\s+\\d+\\s+\\d+") ||
-                    availableActions.contains(StateActions.GRAB_REWARD) && input.matches("(?i)P");
-            case "H" -> availableActions.contains(StateActions.FLIP_HOURGLASS) && input.matches("(?i)H");
-            case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.matches("(?i)S") ||
-                    availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.matches("(?i)S\\s+\\d+");
-            case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT) && input.matches("(?i)R");
-            case "C" -> availableActions.contains(StateActions.REQUEST_COMPONENT) && input.matches("(?i)C");
-            case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST) && input.matches("(?i)F\\s+\\d+");
-            case "X" -> availableActions.contains(StateActions.FINISH_BUILDING) && input.matches("(?i)X");
-            case "L" -> availableActions.contains(StateActions.LOSE_CREW) && input.matches("(?i)L\\s+\\d+\\s+\\d+");
-            case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("(?i)B\\s+\\d+\\s+\\d+");
+            case "P" -> availableActions.contains(StateActions.PLACE_COMPONENT) && input.trim().matches("(?i)P\\s+\\d+\\s+\\d+") ||
+                    availableActions.contains(StateActions.GRAB_REWARD) && input.trim().matches("(?i)P");
+            case "H" -> availableActions.contains(StateActions.FLIP_HOURGLASS) && input.trim().matches("(?i)H");
+            case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.trim().matches("(?i)S") ||
+                    availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.trim().matches("(?i)S\\s+\\d+");
+            case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT) && input.trim().matches("(?i)R");
+            case "C" -> availableActions.contains(StateActions.REQUEST_RAND_COMPONENT) && input.trim().matches("(?i)C") ||
+                    availableActions.contains(StateActions.REQUEST_COMPONENT) && input.trim().matches("(?i)C\\s+\\d+");
+            //case "C" -> true;
+            case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST) && input.trim().matches("(?i)F\\s+\\d+");
+            case "X" -> availableActions.contains(StateActions.FINISH_BUILDING) && input.trim().matches("(?i)X");
+            case "L" -> availableActions.contains(StateActions.LOSE_CREW) && input.trim().matches("(?i)L\\s+\\d+\\s+\\d+");
+            case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.trim().matches("(?i)B\\s+\\d+\\s+\\d+");
 
             default -> {
                 System.out.println("invalid input");

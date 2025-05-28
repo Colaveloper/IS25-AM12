@@ -27,6 +27,11 @@ public class GuiView extends View {
 
     }
 
+    @Override
+    public void refresh() {
+
+    }
+
     private void refreshScreen(VBox root) {
         Platform.runLater(() -> {
             root.getChildren().clear();

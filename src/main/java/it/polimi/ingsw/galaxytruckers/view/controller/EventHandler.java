@@ -113,7 +113,9 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
                 clientModel.createGame(lobbyDetailsEvent.level(), lobbyDetailsEvent.playersN());
                 for (String name : lobbyDetailsEvent.playerColors().keySet()) {
                     Player player = playerRegistry.addPlayer(name);
-                    clientModel.addPlayer(player, lobbyDetailsEvent.playerColors().get(name));
+                    if(!clientModel.getPlayers().contains(player)) {
+                        clientModel.addPlayer(player, lobbyDetailsEvent.playerColors().get(name));
+                    }
                 }
                 clientModel.setMetaState(MetaState.INLOBBY);
             }
