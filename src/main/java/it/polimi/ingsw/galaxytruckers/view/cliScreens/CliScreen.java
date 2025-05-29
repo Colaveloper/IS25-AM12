@@ -123,7 +123,8 @@ public abstract class CliScreen {
             case "K" -> availableActions.contains(StateActions.CHOOSE_SHIP_PIECE)&& input.trim().matches("(?i)K");
             case "Y" -> availableActions.contains(StateActions.GIVE_UP)         && input.trim().matches("(?i)Y");
             case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.trim().matches("(?i)A\\s+\\d+\\s+\\d+");
-
+            case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.trim().matches("(?i)E\\s+\\d+");
+            case "" -> (availableActions.contains(StateActions.GO_NEXT) || availableActions.contains(StateActions.DRAW_CARD)) && input.isEmpty();
 
             default -> {
                 System.out.println("invalid input");

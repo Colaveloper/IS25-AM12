@@ -21,7 +21,7 @@ public final class SecondShipBuildingState extends ShipBuildingState {
 
     // if there is a color, then that player has taken the forecast
     private final ObservableList<GameColor> blockedForecasts = new ObservableList<>();
-    private Hourglass hourglass = new Hourglass(3);
+    private final Hourglass hourglass = new Hourglass(3);
 
     public SecondShipBuildingState() {
         super();
@@ -55,6 +55,7 @@ public final class SecondShipBuildingState extends ShipBuildingState {
 
     @Override
     public void notifyHourglassEnd() {
+        System.out.println("Hourglass end");
         hourglass.end();
     }
 

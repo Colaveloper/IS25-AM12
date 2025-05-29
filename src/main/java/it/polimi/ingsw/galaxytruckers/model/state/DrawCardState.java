@@ -9,8 +9,9 @@ public final class DrawCardState extends AdventureState {
 
     @Override
     public void setGame(Game game) {
-        super.setGame(game);
+        this.game = game;
         this.shipBoard = game.getFlightBoard().getOrderedShips().getFirst();
+        game.getEventListener().notifyGameStateUpdateEvent(this);
         if (game.getLevel() == Level.SECOND) { // TODO: do not predicate directly on the type
             game.forceShipsToGiveUp();
             game.endGameIfAllShipsHaveGivenUp();
