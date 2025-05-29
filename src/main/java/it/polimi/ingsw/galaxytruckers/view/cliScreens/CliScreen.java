@@ -46,7 +46,7 @@ public abstract class CliScreen {
     }
 
     protected void printActions() {
-        if(!model.getGame().getGivenUpShips().contains(model.getClientPlayer())) {
+        if(!model.getGame().getGivenUpShips().contains(model.getClientPlayer().getShipBoard())) {
             List<String> actions = new ArrayList<>();
             for (StateActions action : availableActions) {
                 switch (action) {
@@ -110,11 +110,10 @@ public abstract class CliScreen {
             case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.trim().matches("(?i)S") ||
                         availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.trim().matches("(?i)S\\s+\\d+");
             case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT)&& input.trim().matches("(?i)R");
-//            case "C" -> availableActions.contains(StateActions.REQUEST_RAND_COMPONENT)&& input.trim().matches("(?i)C\\s+") ||
-//                        availableActions.contains(StateActions.REQUEST_COMPONENT)&& input.trim().matches("(?i)C\\s+\\d+") ||
-//                        availableActions.contains(StateActions.GO_NEXT)         && input.trim().matches("(?i)C") ||
-//                        availableActions.contains(StateActions.RELEASE_FORECAST)&& input.trim().matches("(?i)C");
-            case "C" -> true;
+            case "C" -> availableActions.contains(StateActions.REQUEST_RAND_COMPONENT)&& input.trim().matches("(?i)C") ||
+                        availableActions.contains(StateActions.REQUEST_COMPONENT)&& input.trim().matches("(?i)C\\s+\\d+") ||
+                        availableActions.contains(StateActions.GO_NEXT)         && input.trim().matches("(?i)C") ||
+                        availableActions.contains(StateActions.RELEASE_FORECAST)&& input.trim().matches("(?i)C");
             case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST)&& input.trim().matches("(?i)F\\s+\\d+");
             case "X" -> availableActions.contains(StateActions.FINISH_BUILDING) && input.trim().matches("(?i)X");
             case "L" -> availableActions.contains(StateActions.LOSE_CREW)       && input.trim().matches("(?i)L\\s+\\d+\\s+\\d+") ||

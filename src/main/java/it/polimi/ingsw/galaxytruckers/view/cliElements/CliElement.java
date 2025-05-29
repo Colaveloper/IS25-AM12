@@ -37,14 +37,14 @@ public abstract class CliElement implements Invalidator, Invalidator.Listener {
 
     public List<String> getDescription() {
         if (dirty) {
-//            System.out.println("REDESCRIBE "+toString());
+            System.out.println("REDESCRIBE "+toString());
             descriptionCache.clear();
             descriptionCache.addAll(getNewDescription());
             dirty = false;
         }
-//        else {
-//            System.out.println("USE CACHED DESCRIPTION "+toString());
-//        }
+        else {
+            System.out.println("USE CACHED DESCRIPTION "+toString());
+        }
         return descriptionCache;
     }
 

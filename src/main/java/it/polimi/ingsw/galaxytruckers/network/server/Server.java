@@ -36,6 +36,7 @@ public class Server {
             System.err.println("Failed to start socket server: ");
             e.printStackTrace(System.err);
         }
+        SessionManager.getInstance().shutDown(); //TODO: remove
     }
 
     public static void main(String[] args) {

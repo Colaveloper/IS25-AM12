@@ -28,6 +28,7 @@ public class CliView implements View {
     @Override
     public void updateScreen() {
         if (isToUpdate()) {
+            this.metaState = model.getMetaState();
             currentScreen = screenFactory.createCliScreen(model, controller);
         }
         currentScreen.render();
