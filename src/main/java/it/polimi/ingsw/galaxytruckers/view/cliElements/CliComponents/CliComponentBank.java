@@ -32,11 +32,13 @@ public class CliComponentBank extends CliElement {
             @Override
             public void onAdd(int index, Component component) {
                 revealedComponents.put(component, CliComponent.of(component));
+                notifyObservers(); // Notify observers when component added to uncovered pile
             }
 
             @Override
             public void onRemove(int index, Component component) {
                 revealedComponents.remove(component);
+                notifyObservers(); // Notify observers when component removed from uncovered pile
             }
         });
     }
