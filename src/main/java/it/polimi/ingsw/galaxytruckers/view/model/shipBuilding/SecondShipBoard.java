@@ -55,7 +55,7 @@ public class SecondShipBoard extends ShipBoard {
     //Stashing methods
 
     public void stashComponent() {
-        stashedComponents.add(numStashed, lastComponent.getValue());
+        stashedComponents.add(lastComponent.getValue());
         numStashed++;
         resetLastComponent();
         notifyObservers();
@@ -63,11 +63,6 @@ public class SecondShipBoard extends ShipBoard {
 
     public void grabStashedComponent(int index) {
         Component grabbedComponent = stashedComponents.remove(index);
-        for (int i = index + 1; i < stashedComponents.size(); i++) {
-            stashedComponents.add(i-1, stashedComponents.get(i));
-        }
-        numStashed--;
-        stashedComponents.remove(numStashed);
         offerComponent(grabbedComponent);
     }
 

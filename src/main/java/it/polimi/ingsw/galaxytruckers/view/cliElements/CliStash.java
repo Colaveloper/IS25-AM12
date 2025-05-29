@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CliStash extends CliElement {
+    private static final int SIZE = 2;
 
     protected final List<CliComponent> cliStashedComponents = new ArrayList<>();
 
@@ -16,13 +17,13 @@ public class CliStash extends CliElement {
         stashedComponents.addListener(new ObservableList.Listener<>() {
             @Override
             public void onAdd(int index, Component element) {
-                cliStashedComponents.add(index, element!=null ? CliComponent.of(element) : null);
+                cliStashedComponents.add(CliComponent.of(element));
                 CliStash.super.notifyObservers();
             }
 
             @Override
             public void onRemove(int index, Component element) {
-                cliStashedComponents.add(index, null);
+                cliStashedComponents.remove(index);
                 CliStash.super.notifyObservers();
             }
         });
@@ -32,9 +33,9 @@ public class CliStash extends CliElement {
     protected List<String> getNewDescription() {
         List<String> description = new ArrayList<>();
         List<String> unitDescription = new ArrayList<>();
-        for(int i=0 ; i<cliStashedComponents.size() ; i++) {
+        for(int i=0 ; i<SIZE ; i++) {
             unitDescription.clear();
-            if(cliStashedComponents.get(i) == null) {
+            if(i >= cliStashedComponents.size()) {
                 unitDescription.addAll(List.of("     ", "  X  ", "     "));
             } else {
                 unitDescription.addAll(cliStashedComponents.get(i).getDescription());
