@@ -28,4 +28,6 @@ public final class GrabRewardState extends AdventureState {
     public ShipBoard getShipBoard() {
         return shipBoard;
     }
+
+    public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed){}
 }

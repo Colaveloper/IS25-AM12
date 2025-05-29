@@ -10,9 +10,7 @@ import java.util.List;
 
 public class CliComponent extends CliElement {
 
-    protected final Component component;
-//    private boolean isSpecial;
-    private final List<Connector> connectors = new ArrayList<>();
+    private final Component component;
     private String open;
     private String close;
 
@@ -21,7 +19,6 @@ public class CliComponent extends CliElement {
 
     protected CliComponent(Component component) {
         this.component = component;
-        component.addObserver(this);
     }
 
     public static CliComponent of(Component component) {
@@ -38,6 +35,7 @@ public class CliComponent extends CliElement {
     }
 
     public String getConnector(int connectorDirection) {
+        List<Connector> connectors = component.getConnectors();
         return switch (connectorDirection) {
             case 0 -> switch (connectors.get(component.getOrientation()% 4)) {
                 case Connector.NONE -> "─";
@@ -78,11 +76,8 @@ public class CliComponent extends CliElement {
     };
 
     protected List<String> addBorders(String middle) {
-
         open = Highlights.RESET.getHighlight();
         close = Highlights.RESET.getHighlight();
-
-        connectors.addAll(component.getConnectors());
 
         List<String> lines = new ArrayList<>();
             lines.add(0, open+"╭─" + getConnector(0) + "─╮"+close);

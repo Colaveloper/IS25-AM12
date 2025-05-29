@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.HandleProjectileState;
 
@@ -88,4 +89,8 @@ public class CliProjectilesScreen extends CliScreen {
                 model.getMyShip().getActivatables().containsKey(p) ||
                 model.getMyShip().getBatteries().containsKey(p);
     }
+
+    public void notifyRemoveComponent(ShipBoard shipBoard, Point point){}
+
+    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex){}
 }

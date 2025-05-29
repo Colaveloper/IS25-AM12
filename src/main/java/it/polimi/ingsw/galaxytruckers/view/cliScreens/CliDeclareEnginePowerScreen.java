@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.DeclareEnginePowerState;
 
 import java.awt.*;
@@ -57,4 +58,10 @@ public class CliDeclareEnginePowerScreen extends CliScreen {
             }
         }
     }
+
+    @Override
+    public void notifyActivateComponent(ShipBoard shipBoard, Point point){}
+
+    public void notifyUseBattery(ShipBoard shipBoard, Point point){}
+
 }

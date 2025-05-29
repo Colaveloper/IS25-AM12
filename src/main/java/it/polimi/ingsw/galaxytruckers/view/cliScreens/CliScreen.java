@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
+import it.polimi.ingsw.galaxytruckers.view.Screen;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
@@ -10,7 +11,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CliScreen {
+public abstract class CliScreen extends Screen {
 
     protected ClientModel model;
     private GameState state;
@@ -133,4 +134,5 @@ public abstract class CliScreen {
             }
         };
     }
+
 }

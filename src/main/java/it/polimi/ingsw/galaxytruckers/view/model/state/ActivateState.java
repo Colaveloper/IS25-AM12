@@ -38,12 +38,14 @@ public sealed abstract class ActivateState extends AdventureState permits
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
         shipBoard.activateComponent(point);
         batteriesToSpend++;
+        game.getObservers().forEach(observer -> observer.notifyActivateComponent(shipBoard, point));
     }
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
         shipBoard.useBattery(point);
         batteriesToSpend--;
+        game.getObservers().forEach(observer -> observer.notifyUseBattery(shipBoard, point));
     }
 
     public Set<Point> getAvailablePositions() {

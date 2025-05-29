@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.RemoveGoodsState;
 
@@ -34,4 +35,8 @@ public class CliLoseGoodsScreen extends CliScreen{
             controller.loseGoods(new Point(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
         }
     }
+
+    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType){}
+
+    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType){}
 }

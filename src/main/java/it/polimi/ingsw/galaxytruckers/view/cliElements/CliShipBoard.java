@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableMap;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
@@ -18,7 +17,7 @@ public class CliShipBoard extends CliElement {
 
     // no key = empty-space,
     // no value = empty-area
-    private final Map<Point, CliComponent> cliComponentMap;
+    protected final Map<Point, CliComponent> cliComponentMap;
     private final GameColor color;
     private final String nickname;
     int minX;
@@ -33,35 +32,27 @@ public class CliShipBoard extends CliElement {
 
         cliComponentMap = new HashMap<>();
 
-        shipBoard.getComponentMap().addListener(new ObservableMap.Listener<>() {
-            @Override
-            public void onPut(Point p, Component oldValue, Component newValue) {
-                onPutComponent(p, oldValue, newValue);
-            }
+        //shipBoard.getShipArea().forEach(p-> cliComponentMap.put(p, null));
+        Set<Point> shipArea = shipBoard.getShipArea();
 
-            @Override
-            public void onRemove(Point p, Component oldValue) {
-                onRemoveComponent(p, oldValue);
-            }
-        });
+        minX = shipArea.stream().mapToInt(p -> p.x).min().orElse(0);
+        maxX = shipArea.stream().mapToInt(p -> p.x).max().orElse(0);
+        minY = shipArea.stream().mapToInt(p -> p.y).min().orElse(0);
+        maxY = shipArea.stream().mapToInt(p -> p.y).max().orElse(0);
 
-        shipBoard.getShipArea().forEach(p-> cliComponentMap.put(p, null));
-
-        minX = cliComponentMap.keySet().stream().mapToInt(p -> p.x).min().orElse(0);
-        maxX = cliComponentMap.keySet().stream().mapToInt(p -> p.x).max().orElse(0);
-        minY = cliComponentMap.keySet().stream().mapToInt(p -> p.y).min().orElse(0);
-        maxY = cliComponentMap.keySet().stream().mapToInt(p -> p.y).max().orElse(0);
+        for (Point p : shipBoard.getComponentMap().keySet()) {
+            cliComponentMap.put(p, CliComponent.of(shipBoard.getComponentMap().get(p)));
+        }
     }
 
-    private void onPutComponent(Point p, Component oldValue, Component newValue) {
+    public void onPutComponent(Point p, Component newValue) {
         CliComponent newCliComponent = CliComponent.of(newValue);
-        newCliComponent.addObserver(this);
         cliComponentMap.put(p, newCliComponent);
     }
 
-    private void onRemoveComponent(Point p, Component oldValue) {
+    public void onRemoveComponent(Point p) {
         cliComponentMap.get(p).removeObserver(this);
-        cliComponentMap.put(p, null);
+        cliComponentMap.remove(p);
     }
 
     public void highlightPoints(Set<Point> points, Highlights color){

@@ -1,32 +1,29 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CliStash extends CliElement {
     private static final int SIZE = 2;
 
-    protected final List<CliComponent> cliStashedComponents = new ArrayList<>();
+    protected final List<CliComponent> cliStashedComponents;
 
-    public CliStash(ObservableList<Component> stashedComponents) {
-        stashedComponents.addListener(new ObservableList.Listener<>() {
-            @Override
-            public void onAdd(int index, Component element) {
-                cliStashedComponents.add(CliComponent.of(element));
-                CliStash.super.notifyObservers();
-            }
+    public CliStash(List<Component> stashedComponents) {
+        this.cliStashedComponents = stashedComponents.stream()
+                .map(CliComponent::of).collect(Collectors.toList());
+    }
 
-            @Override
-            public void onRemove(int index, Component element) {
-                cliStashedComponents.remove(index);
-                CliStash.super.notifyObservers();
-            }
-        });
+    public void onStash(int index, Component component) {
+        cliStashedComponents.add(index, CliComponent.of(component));
+    }
+
+    public void onGrab(int index) {
+        cliStashedComponents.remove(index);
     }
 
     @Override

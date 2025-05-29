@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public final class RemoveGoodsState extends AdventureState {
     private int goodsToLose;
@@ -28,12 +27,14 @@ public final class RemoveGoodsState extends AdventureState {
     public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
         shipBoard.removeGoods(point, goodsType);
         goodsToLose--;
+        game.getObservers().forEach(observer -> observer.notifyRemoveGoods(shipBoard, point, goodsType));
     }
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
         shipBoard.useBattery(point);
         goodsToLose--;
+        game.getObservers().forEach(observer -> observer.notifyUseBattery(shipBoard, point));
     }
 
     public int getGoodsToLose() {

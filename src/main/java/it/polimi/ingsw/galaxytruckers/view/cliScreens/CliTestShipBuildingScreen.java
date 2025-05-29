@@ -34,7 +34,7 @@ public class CliTestShipBuildingScreen extends CliScreen {
             case "U":
                 if (parts.length == 2) {
                     int index = Integer.parseInt(parts[1]) - 1;
-                    int componentId = gameState.getComponentBank().getUncoveredComponentsProperty().get(index).getId();
+                    int componentId = gameState.getComponentBank().getUncoveredComponents().get(index).getId();
                     controller.requestComponent(componentId);
                 }
                 break;

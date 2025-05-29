@@ -34,7 +34,6 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 
     public void setView(View view) {
         this.view = view;
-        view.updateScreen();
     }
 
     public void initEventHandler() {
@@ -45,7 +44,6 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 
     public void showGameCreation() {
         model.setMetaState(MetaState.CREATION);
-        view.updateScreen();
     }
 
 //--------------------------------------UPDATES FROM THE SERVER----------------------------------
@@ -53,7 +51,6 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     @Override
     public void notifyEvent(Event event) {
         eventHandler.handleEvent(event);
-        view.updateScreen();
     }
 
     @Override
@@ -61,7 +58,6 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         Player player = playerRegistry.addPlayer(nickname);
         model.setPlayer(player);
         model.setMetaState(MetaState.JOINORCREATE);
-        view.updateScreen();
     }
 
 //----------------------------------------REQUESTS TO THE SERVER----------------------------------

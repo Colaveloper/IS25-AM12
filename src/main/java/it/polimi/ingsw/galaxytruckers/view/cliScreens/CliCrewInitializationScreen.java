@@ -101,5 +101,8 @@ public class CliCrewInitializationScreen extends CliScreen {
         }
     }
 
+    @Override
+    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType){
 
+    }
 }

@@ -55,10 +55,9 @@ public class SecondShipBoard extends ShipBoard {
     //Stashing methods
 
     public void stashComponent() {
-        stashedComponents.add(lastComponent.getValue());
+        stashedComponents.add(lastComponent);
         numStashed++;
         resetLastComponent();
-        notifyObservers();
     }
 
     public void grabStashedComponent(int index) {
@@ -67,7 +66,7 @@ public class SecondShipBoard extends ShipBoard {
     }
 
     @Override
-    public ObservableList<Component> getStashedComponentsProperty() {
-        return stashedComponents;
+    public List<Component> getStashedComponents() {
+        return stashedComponents.getUnmodifiableView();
     }
 }

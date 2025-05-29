@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 public class CliPlanetScreen extends CliScreen {
@@ -24,4 +25,6 @@ public class CliPlanetScreen extends CliScreen {
             controller.choosePlanet(Integer.parseInt(input));
         }
     }
+
+    public void notifyChoosePlanet(ShipBoard shipBoard, int choice){}
 }

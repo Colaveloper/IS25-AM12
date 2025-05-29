@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.DeclareFirePowerState;
 
 import java.awt.*;
@@ -55,4 +56,10 @@ public class CliDeclareFirePowerScreen extends CliScreen {
             }
         }
     }
+
+    @Override
+    public void notifyActivateComponent(ShipBoard shipBoard, Point point){}
+
+    @Override
+    public void notifyUseBattery(ShipBoard shipBoard, Point point){}
 }

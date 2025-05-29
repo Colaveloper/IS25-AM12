@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CliCabin extends CliComponent{
     
-    Cabin cabin;
+    private final Cabin cabin;
     
     public CliCabin(Cabin component) {
         super(component);

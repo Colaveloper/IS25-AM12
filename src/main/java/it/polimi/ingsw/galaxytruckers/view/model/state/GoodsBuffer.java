@@ -1,16 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
-import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-public class GoodsBuffer implements Invalidator {
+public class GoodsBuffer {
     private final Map<GoodsType, Integer> goodsBuffer;
-
-    private final List<Listener> listeners = new ArrayList<>();
 
     public GoodsBuffer(Map<GoodsType, Integer> goodsBuffer) {
         this.goodsBuffer = goodsBuffer;
@@ -29,30 +24,12 @@ public class GoodsBuffer implements Invalidator {
             goodsBuffer.put(goodsType, 0);
         }
         goodsBuffer.put(goodsType, goodsBuffer.get(goodsType) + 1);
-        notifyObservers();
     }
 
     public void removeFromBuffer(GoodsType goodsType) {
         goodsBuffer.put(goodsType, goodsBuffer.get(goodsType) - 1);
         if (goodsBuffer.get(goodsType) == 0) {
             goodsBuffer.remove(goodsType);
-        }
-        notifyObservers();
-    }
-
-    @Override
-    public void addObserver(Listener o) {
-        listeners.add(o);
-    }
-
-    @Override
-    public void removeObserver(Listener o) {
-        listeners.remove(o);
-    }
-
-    public void notifyObservers() {
-        for (Listener o : listeners) {
-            o.onNotified();
         }
     }
 }

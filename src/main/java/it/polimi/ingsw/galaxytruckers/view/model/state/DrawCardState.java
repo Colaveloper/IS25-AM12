@@ -29,6 +29,7 @@ public final class DrawCardState extends AdventureState {
     public void notifyDrawCard(AdventureCard adventureCard) {
         game.setCurrentAdventureCard(adventureCard);
         hasDrawn = true;
+        game.getObservers().forEach(observer -> observer.notifyDrawCard(adventureCard));
     }
 
     public ShipBoard getShipBoard() {

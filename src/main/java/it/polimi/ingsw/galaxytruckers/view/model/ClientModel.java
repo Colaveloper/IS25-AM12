@@ -2,9 +2,8 @@ package it.polimi.ingsw.galaxytruckers.view.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.view.ModelObserver;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
-import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -16,30 +15,36 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class ClientModel implements Invalidator {
+public class ClientModel {
+
+    private final List<ModelObserver> observers = new ArrayList<>();
     
     private final Map<UUID, Lobby> activeLobbies = new HashMap<>();
 
     private Player clientPlayer = null;
-    private ObservableGeneric<Game> game = new ObservableGeneric<>(null);
+    private Game game = null;
     private final Set<Player> players = new HashSet<>();
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
     private boolean cheatOn = false;
 
     private MetaState metaState = MetaState.REGISTER;
 
-    private final List<Listener> listeners = new ArrayList<>();
-
     private Map<Player, Integer> finalScores;
-
-    public ClientModel() {
-
-    }
 
     // Locks
     private final Object playersLock = new Object();
     private final Object gameLock = new Object();
     private final Object observersLock = new Object();
+
+    //region Observer methods
+    public void addObserver(ModelObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(ModelObserver observer) {
+        observers.remove(observer);
+    }
+    //endregion
 
     //region Setup methods
 
@@ -51,7 +56,8 @@ public class ClientModel implements Invalidator {
 
     public void createGame(Level level, int playersN) {
         synchronized (gameLock) {
-            game.setValue(new Game(level, playersN));
+            game = new Game(level, playersN);
+            game.setObservers(observers);
         }
     }
 
@@ -59,7 +65,7 @@ public class ClientModel implements Invalidator {
         synchronized (playersLock) {
             synchronized (gameLock) {
                 players.add(player);
-                player.setShipBoard(game.getValue().addShipBoard(color));
+                player.setShipBoard(game.addShipBoard(color));
                 shipToPlayer.put(player.getShipBoard(), player);
             }
         }
@@ -88,12 +94,8 @@ public class ClientModel implements Invalidator {
 
     public Game getGame() {
         synchronized (gameLock) {
-            return game.getValue();
+            return game;
         }
-    }
-
-    public ObservableGeneric<Game> getGameProperty() {
-        return game;
     }
 
     public Set<Player> getPlayers() {
@@ -130,14 +132,14 @@ public class ClientModel implements Invalidator {
     //region Event update methods
     public void notifyCurrentState(GameState gameState) {
         synchronized (gameLock) {
-            game.getValue().setCurrentState(gameState);
+            game.setCurrentState(gameState);
         }
-        System.out.println("Updated to state: " + gameState.getClass().getSimpleName());
+        observers.forEach(modelObserver -> modelObserver.notifyCurrentState(gameState));
     }
 
     private GameState safeGetCurrentState() {
         synchronized (gameLock) {
-            return game.getValue().getCurrentState();
+            return game.getCurrentState();
         }
     }
 
@@ -258,35 +260,14 @@ public class ClientModel implements Invalidator {
         }
     }
 
-    public void notifyObservers() {
-        List<Listener> copy;
-        synchronized (observersLock) {
-            copy = new ArrayList<>(listeners);
-        }
-        for (Listener o : copy) {
-            o.onNotified();
-        }
-    }
-
     public MetaState getMetaState() {
         return metaState;
     }
 
     public void setMetaState(MetaState metaState) {
-        this.metaState = metaState;
-    }
-
-    @Override
-    public void addObserver(Listener o) {
-        synchronized (observersLock) {
-            listeners.add(o);
-        }
-    }
-
-    @Override
-    public void removeObserver(Listener o) {
-        synchronized (observersLock) {
-            listeners.remove(o);
+        if (metaState != this.metaState) {
+            this.metaState = metaState;
+            observers.forEach(observer -> observer.notifyMetaState(metaState));
         }
     }
 }

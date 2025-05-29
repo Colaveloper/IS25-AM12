@@ -1,12 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
+import it.polimi.ingsw.galaxytruckers.view.ModelObserver;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public final class SecondShipBuildingState extends ShipBuildingState {
     private static final List<StateActions> availableActions = List.of(
@@ -20,15 +22,9 @@ public final class SecondShipBuildingState extends ShipBuildingState {
     private List<AdventureCard> forecastDeck;
 
     // if there is a color, then that player has taken the forecast
-    private final ObservableList<GameColor> blockedForecasts = new ObservableList<>();
+    private final ShipBoard[] blockedForecasts = new ShipBoard[]{null,null,null};
+    private final Map<ShipBoard,Integer> shipToForecast = new HashMap<>();
     private final Hourglass hourglass = new Hourglass(3);
-
-    public SecondShipBuildingState() {
-        super();
-        blockedForecasts.add(null);
-        blockedForecasts.add(null);
-        blockedForecasts.add(null);
-    }
 
     @Override
     public List<StateActions> getAvailableActions() {
@@ -40,51 +36,63 @@ public final class SecondShipBuildingState extends ShipBuildingState {
 
     @Override
     public void notifyStashComponent(ShipBoard shipBoard) {
+        Point prevPos = shipBoard.getLastPosition();
+        Component component = shipBoard.getLastComponent();
         shipBoard.stashComponent();
+        if (prevPos != null) {
+            game.getObservers().forEach(observer -> observer.notifyStashComponent(shipBoard,component,prevPos));
+        } else {
+            game.getObservers().forEach(observer -> observer.notifyStashComponent(shipBoard,component));
+        }
     }
 
     @Override
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index) {
         shipBoard.grabStashedComponent(index);
+        Component component = shipBoard.getLastComponent();
+        game.getObservers().forEach(observer -> observer.notifyGrabStashedComponent(shipBoard, index, component));
     }
 
     @Override
     public void notifyFlipHourglass(ShipBoard shipBoard) {
         hourglass.flip();
+        game.getObservers().forEach(observer -> observer.notifyFlipHourglass(shipBoard));
     }
 
     @Override
     public void notifyHourglassEnd() {
-        System.out.println("Hourglass end");
         hourglass.end();
+        game.getObservers().forEach(ModelObserver::notifyHourglassEnd);
     }
 
     @Override
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        blockedForecasts.set(deckIndex, shipBoard.getColor());
+        blockedForecasts[deckIndex] = shipBoard;
+        shipToForecast.put(shipBoard,deckIndex);
         shipBoard.weldLastComponent();
+        game.getObservers().forEach(observer -> observer.notifyPeekForecast(shipBoard, deckIndex));
     }
 
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards) {
         this.forecastDeck = adventureCards;
+        game.getObservers().forEach(observer -> observer.setForecastDeck(adventureCards));
+    }
+
+
+    @Override
+    public void notifyReleaseForecast(ShipBoard shipBoard) {
+        int index = shipToForecast.get(shipBoard);
+        blockedForecasts[index] = null;
+        shipToForecast.remove(shipBoard);
+        game.getObservers().forEach(observer -> observer.notifyReleaseForecast(shipBoard, index));
     }
 
     public List<AdventureCard> getForecastDeck() {
         return forecastDeck;
     }
 
-    @Override
-    public void notifyReleaseForecast(ShipBoard shipBoard) {
-        for (int i = 0; i < this.blockedForecasts.size(); i++) {
-            if (blockedForecasts.get(i).equals(shipBoard.getColor())) {
-                blockedForecasts.set(i, null);
-                return;
-            }
-        }
-    }
-
-    public ObservableList<GameColor> getLockedForecastsProperty() {
+    public ShipBoard[] getBlockedForecasts() {
         return blockedForecasts;
     }
 }

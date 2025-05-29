@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
 import java.util.ArrayList;
 import java.util.List;
 
-public sealed class Component implements Invalidator permits
+public sealed class Component permits
         Battery,
         Cabin,
         Cannon,
@@ -18,8 +18,6 @@ public sealed class Component implements Invalidator permits
     private final List<Connector> connectors;
     private int orientation;
     private final int id;
-
-    private final List<Listener> listeners = new ArrayList<>();
 
     public Component(List<Connector> connectors, int id) {
         this.connectors = connectors;
@@ -45,22 +43,5 @@ public sealed class Component implements Invalidator permits
 
     public void setOrientation(int orientation) {
         this.orientation = orientation;
-        notifyObservers();
-    }
-
-    @Override
-    public void addObserver(Listener o) {
-        listeners.add(o);
-    }
-
-    @Override
-    public void removeObserver(Listener o) {
-        listeners.remove(o);
-    }
-
-    public void notifyObservers() {
-        for (Listener o : listeners) {
-            o.onNotified();
-        }
     }
 }

@@ -6,19 +6,19 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableMap;
 import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
 
 import java.awt.*;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public abstract class ShipBoard implements Invalidator {
+public abstract class ShipBoard{
 
-    protected final ObservableMap<Point, Component> componentMap;
-    protected ObservableGeneric<Component> lastComponent;  // content can be null
-    protected ObservableGeneric<Point> lastPosition;  // can be null
+    protected final Map<Point, Component> componentMap;
+    protected Component lastComponent;  // content can be null
+    protected Point lastPosition;  // can be null
     protected final GameColor color;
 
     protected int firePower;
@@ -36,13 +36,11 @@ public abstract class ShipBoard implements Invalidator {
     protected final Map<Point, Cabin> cabins;
     protected final Map<Point, Activatable> activatables;
 
-    private final List<Listener> listeners = new ArrayList<>();
-
     public ShipBoard(GameColor color) { // (, Color color)
         this.color = color;
 
-        this.lastComponent = new ObservableGeneric<>(null);
-        this.lastPosition = new ObservableGeneric<>(null);
+        this.lastComponent = null;
+        this.lastPosition = null;
 
         this.firePower = 0;
         this.enginePower = 0;
@@ -51,7 +49,7 @@ public abstract class ShipBoard implements Invalidator {
         this.credits = 0;
         this.losses = 0;
 
-        this.componentMap = new ObservableMap<>();
+        this.componentMap = new HashMap<>();
         this.cannons = new HashMap<>();
         this.engines = new HashMap<>();
         this.batteries = new HashMap<>();
@@ -66,8 +64,8 @@ public abstract class ShipBoard implements Invalidator {
     //CliComponentBank interaction methods
 
     protected void resetLastComponent() {
-        this.lastComponent.setValue(null);
-        this.lastPosition.setValue(null);
+        this.lastComponent = null;
+        this.lastPosition = null;
     }
 
     //Ship building methods
@@ -76,32 +74,29 @@ public abstract class ShipBoard implements Invalidator {
 
     public void offerComponent(Component component) {
         weldLastComponent();
-        lastComponent.setValue(component);
-        lastPosition.setValue(null);
-        notifyObservers();
+        lastComponent = component;
+        lastPosition = null;
     }
 
     public Component rejectComponent() {
-        if (lastPosition.getValue() != null) {
-            componentMap.remove(lastPosition.getValue());
+        if (lastPosition != null) {
+            componentMap.remove(lastPosition);
         }
-        Component rejectedComponent = lastComponent.getValue();
-        lastComponent.setValue(null);
-        lastPosition.setValue(null);
-        notifyObservers();
+        Component rejectedComponent = lastComponent;
+        lastComponent = null;
+        lastPosition = null;
         return rejectedComponent;
     }
 
     //Ship building methods
 
     public void placeComponent(Point newPosition, int orientation) {
-        if (lastPosition.getValue() != null) {
-            componentMap.remove(lastPosition.getValue());
+        if (lastPosition != null) {
+            componentMap.remove(lastPosition);
         }
-        lastPosition.setValue(newPosition);
-        lastComponent.getValue().setOrientation(orientation);
-        componentMap.put(newPosition, lastComponent.getValue());
-        notifyObservers();
+        lastPosition = newPosition;
+        lastComponent.setOrientation(orientation);
+        componentMap.put(newPosition, lastComponent);
     }
 
     public void stashComponent() {}
@@ -109,32 +104,31 @@ public abstract class ShipBoard implements Invalidator {
     public void grabStashedComponent(int index) {}
 
     public void weldLastComponent() {
-        switch (lastComponent.getValue()) {
-            case null -> {}
-            case Battery c -> batteries.put(lastPosition.getValue(), c);
-            case Cabin c -> cabins.put(lastPosition.getValue(), c);
+        switch (lastComponent) {
+            case Battery c -> batteries.put(lastPosition, c);
+            case Cabin c -> cabins.put(lastPosition, c);
             case DoubleCannon c -> {
-                cannons.put(lastPosition.getValue(),c);
-                activatables.put(lastPosition.getValue(),c);
+                cannons.put(lastPosition,c);
+                activatables.put(lastPosition,c);
             }
-            case Cannon c -> cannons.put(lastPosition.getValue(),c);
+            case Cannon c -> cannons.put(lastPosition,c);
             case DoubleEngine c -> {
-                engines.put(lastPosition.getValue(),c);
-                activatables.put(lastPosition.getValue(),c);
+                engines.put(lastPosition,c);
+                activatables.put(lastPosition,c);
             }
             case Engine c -> {
-                engines.put(lastPosition.getValue(),c);
+                engines.put(lastPosition,c);
             }
             case CargoHold c -> {
-                cargoHolds.put(lastPosition.getValue(),c);
+                cargoHolds.put(lastPosition,c);
             }
             case Shield c -> {
-                shields.put(lastPosition.getValue(),c);
+                shields.put(lastPosition,c);
             }
             case Component _ -> {}
         }
-        lastComponent.setValue(null);
-        lastPosition.setValue(null);
+        lastComponent = null;
+        lastPosition = null;
     }
 
     public void removeComponent(Point position) {
@@ -160,17 +154,18 @@ public abstract class ShipBoard implements Invalidator {
             case Shield _ -> {
                 shields.remove(position);
             }
-            case Component _ -> {
-            }
+            case Component _ -> {}
         }
     }
 
-    public void removeShipPiece(List<Set<Point>> shipPieces, int pieceIndex) {
-        IntStream.range(0, shipPieces.size())
+    public List<Point> removeShipPiece(List<Set<Point>> shipPieces, int pieceIndex) {
+        List<Point> pointsToRemove = IntStream.range(0, shipPieces.size())
                 .filter(i -> i != pieceIndex)
                 .boxed()
                 .flatMap(i -> shipPieces.get(i).stream())
-                .forEach(this::removeComponent);
+                .toList();
+        pointsToRemove.forEach(this::removeComponent);
+        return pointsToRemove;
     }
 
     public void placeGoods(Point position, GoodsType goods) {
@@ -189,8 +184,9 @@ public abstract class ShipBoard implements Invalidator {
 
     //Cabin (and LifeSupport) methods
 
-    public void initializeCabin(Point position, CrewType crewType) {
+    public int initializeCabin(Point position, CrewType crewType) {
         cabins.get(position).initialize(crewType);
+        return cabins.get(position).getNumResidents();
     }
 
     public void loseCrew(Point position) {
@@ -237,7 +233,7 @@ public abstract class ShipBoard implements Invalidator {
 
     // Components Observers
 
-    public ObservableMap<Point, Component> getComponentMap() {
+    public Map<Point, Component> getComponentMap() {
         return componentMap;
     }
 
@@ -273,35 +269,19 @@ public abstract class ShipBoard implements Invalidator {
         return activatables;
     }
 
-    public ObservableGeneric<Component> getLastComponentProperty() {
-        return lastComponent;
+    public Component getLastComponent() {
+        return this.lastComponent;
     }
 
-    public ObservableGeneric<Point> getLastPosition() {
+    public List<Component> getStashedComponents() {
+        return null;
+    }
+
+    public Point getLastPosition() {
         return lastPosition;
     }
 
     public GameColor getColor() {
         return color;
     }
-
-    @Override
-    public void addObserver(Listener o) {
-        listeners.add(o);
-    }
-
-    @Override
-    public void removeObserver(Listener o) {
-        listeners.remove(o);
-    }
-
-    public void notifyObservers() {
-        for (Listener o : listeners) {
-            o.onNotified();
-        }
-    }
-
-    public ObservableList<Component> getStashedComponentsProperty() {
-        return null;
-    };
 }

@@ -9,7 +9,7 @@ import java.util.Set;
 
 
 public final class ChooseShipPieceState extends AdventureState {
-    private static List<StateActions> availableActions = List.of(
+    private static final List<StateActions> availableActions = List.of(
             StateActions.CHOOSE_SHIP_PIECE
     );
 
@@ -30,7 +30,8 @@ public final class ChooseShipPieceState extends AdventureState {
 
     @Override
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
-        shipBoard.removeShipPiece(shipPieces, pieceIndex);
+        List<Point> removedPoints = shipBoard.removeShipPiece(shipPieces, pieceIndex);
+        game.getObservers().forEach(observer -> observer.notifyChooseShipPiece(shipBoard, pieceIndex, removedPoints));
     }
 
     public ShipBoard getShipBoard() {

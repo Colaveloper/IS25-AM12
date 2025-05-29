@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CliLifeSupport extends CliComponent {
 
-    LifeSupport lifeSupport;
+    private final LifeSupport lifeSupport;
     public CliLifeSupport(LifeSupport component) {
         super(component);
         this.lifeSupport = component;
