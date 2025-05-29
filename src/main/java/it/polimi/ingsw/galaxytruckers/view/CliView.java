@@ -44,16 +44,16 @@ public class CliView implements View {
             Scanner scanner = new Scanner(System.in);
             String input;
             while (true) {
-//                if(model.isCheatOn() && !CheatCodes.cheatEmpty()){
-//                    try {
-//                        input = CheatCodes.cheat();
-//                    } catch (InterruptedException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//                else {
+                if(model.isCheatOn() && !CheatCodes.cheatEmpty()){
+                    try {
+                        input = CheatCodes.cheat();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else {
                     input = scanner.nextLine();
-//                }
+                }
 
                 // letting the user correct format errors
                 while (!currentScreen.isInputLegal(input)) {
