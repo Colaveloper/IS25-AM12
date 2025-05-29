@@ -61,7 +61,7 @@ public final class SecondShipBuildingState extends ShipBuildingState {
 
     @Override
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        blockedForecasts.add(deckIndex, shipBoard.getColor());
+        blockedForecasts.set(deckIndex, shipBoard.getColor());
         shipBoard.weldLastComponent();
     }
 
@@ -78,7 +78,7 @@ public final class SecondShipBuildingState extends ShipBuildingState {
     public void notifyReleaseForecast(ShipBoard shipBoard) {
         for (int i = 0; i < this.blockedForecasts.size(); i++) {
             if (blockedForecasts.get(i).equals(shipBoard.getColor())) {
-                blockedForecasts.add(i, null);
+                blockedForecasts.set(i, null);
                 return;
             }
         }

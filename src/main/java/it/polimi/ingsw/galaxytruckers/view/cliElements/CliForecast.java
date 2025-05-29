@@ -18,12 +18,12 @@ public class CliForecast extends CliElement {
         blockedForecasts.addListener(new ObservableList.Listener<>() {
             @Override
             public void onAdd(int index, GameColor element) {
-                blockedForecasts.add(index, element);
+                CliForecast.this.blockedForecasts.set(index, element);
             }
 
             @Override
             public void onRemove(int index, GameColor element) {
-                blockedForecasts.remove(index);
+                CliForecast.this.blockedForecasts.remove(index);
             }
         });
     }

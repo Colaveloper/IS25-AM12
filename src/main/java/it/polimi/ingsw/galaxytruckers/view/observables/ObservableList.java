@@ -38,6 +38,13 @@ public class ObservableList<T> {
         }
     }
 
+    public void set(int index, T element) {
+        internalList.set(index, element);
+        for (Listener<T> listener : listeners) {
+            listener.onAdd(index, element);
+        }
+    }
+
     public T remove(int index) {
         T removed = internalList.remove(index);
         for (Listener<T> listener : listeners) {

@@ -13,15 +13,20 @@ import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.penalty.Penalty;
 
 public class CliAdventureCard extends CliElement{
     ClientModel model;
+    AdventureCard card;
     public CliAdventureCard(ClientModel model){
         this.model = model;
+    }
+
+    public CliAdventureCard(AdventureCard card) {
+        this.card = card;
     }
 
     @Override
     protected List<String> getNewDescription(){
         StringBuilder result = new StringBuilder();
         result.append("[NO CARD]"); // default value
-        switch(model.getGame().getCurrentAdventureCard()){
+        switch(card){
             case AbandonedShipCard abandonedShipCard -> {
                 result.setLength(0);
                 result.append("[ABANDONED SHIP]\n");

@@ -1,12 +1,18 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShipsHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliForecast;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
+
+import java.util.List;
 
 public class CliSecondShipBuildingScreen extends CliScreen {
     private SecondShipBuildingState gameState;
@@ -25,15 +31,24 @@ public class CliSecondShipBuildingScreen extends CliScreen {
         //cliForecast.addObserver(this::render); // todo: delegate to controller
         cliAllShips = new CliAllShipsHandAndStash(model.getShipToPlayer());
         //cliAllShips.addObserver(this::render); // todo: delegate to controller
-        gameState = gameState;
+        this.gameState = gameState;
     }
 
     @Override
     public void render() {
-        cliComponentBank.getDescription().forEach(System.out::println);
-        cliForecast.getDescription().forEach(System.out::println);
-        cliFlightBoard.getDescription().forEach(System.out::println);
-        cliAllShips.getDescription().forEach(System.out::println);
+        List<GameColor> list = gameState.getLockedForecastsProperty().getUnmodifiableView();
+//        if(list != null && list.contains(model.getMyShip().getColor())) {
+//            System.out.println("Cards in the forecast deck:\n");
+//            for (AdventureCard card : gameState.getForecastDeck()){
+//                System.out.println(new CliAdventureCard(card).getDescription());
+//            }
+//        }
+//        else {
+            cliComponentBank.getDescription().forEach(System.out::println);
+            cliForecast.getDescription().forEach(System.out::println);
+            cliFlightBoard.getDescription().forEach(System.out::println);
+            cliAllShips.getDescription().forEach(System.out::println);
+//        }
         printActions();
     }
 
