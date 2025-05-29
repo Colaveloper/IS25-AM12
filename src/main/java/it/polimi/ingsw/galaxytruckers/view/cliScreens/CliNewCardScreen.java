@@ -20,8 +20,10 @@ public class CliNewCardScreen extends CliScreen {
     public void render() {
         printShips();
         printActions();
-        System.out.println("A new card has been drawn:\n");
-        System.out.println(new CliAdventureCard(model).getDescription());
+        if (gameState.isHasDrawn()) {
+            System.out.println("A new card has been drawn:\n");
+            System.out.println(new CliAdventureCard(model).getDescription());
+        }
     }
 
     @Override
@@ -30,8 +32,10 @@ public class CliNewCardScreen extends CliScreen {
             controller.giveUp();
         }
         else{
-            // TODO: probably needs fixing
-            controller.goNext();
+            if (input.isEmpty())
+                controller.drawCard();
+            else
+                controller.goNext();
         }
     }
 }

@@ -12,12 +12,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class SecondShipBuildingState extends ShipBuildingState {
-    private final Hourglass hourglass = new Hourglass(3);
+    private final Hourglass hourglass;
     private final Map<ShipBoard, Integer> shipToForecasts = new HashMap<>();
         private final Set<Integer> blockedForecasts = new HashSet<>();
 
     public SecondShipBuildingState() {
         super();
+        this.hourglass = new Hourglass(3);
     }
 
     @Override
@@ -27,7 +28,10 @@ public class SecondShipBuildingState extends ShipBuildingState {
             if (!completedShipBoards.contains(shipBoard)) {
                 throw new IllegalStateException("Ship must be completed before the last flip");
             }
-            hourglass.flip(this::endBuilding);
+            hourglass.flip(() -> {
+                notifyHourglassEnd();
+                endBuilding();
+            });
         } else {
             hourglass.flip(this::notifyHourglassEnd);
         }
@@ -36,7 +40,10 @@ public class SecondShipBuildingState extends ShipBuildingState {
 
     @Override
     public void setGame(Game game) {
-        super.setGame(game);
+        this.game = game;
+        hourglass.setDuration(3); //TODO: remove this line
+        game.getEventListener().notifyGameStateUpdateEvent(this);
+        game.getEventListener().notifyFlipHourglassEvent(game.getShipBoards().stream().findAny().orElseThrow());
         hourglass.flip(this::notifyHourglassEnd);
     }
 

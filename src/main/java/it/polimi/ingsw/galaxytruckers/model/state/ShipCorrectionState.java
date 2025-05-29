@@ -20,12 +20,13 @@ public non-sealed abstract class ShipCorrectionState extends GameState {
 
     @Override
     public void setGame(Game game) {
-        super.setGame(game);
+        this.game = game;
         for (ShipBoard shipBoard : game.getShipBoards()) {
             if (checkShipValidity(shipBoard)) {
                 checkShipConnection(shipBoard);
             }
         }
+        game.getEventListener().notifyGameStateUpdateEvent(this);
         tryStateTransition();
     }
 

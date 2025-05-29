@@ -13,7 +13,7 @@ public final class ShipInitializationState extends GameState {
 
     @Override
     public void setGame(Game game) {
-        super.setGame(game);
+        this.game = game;
         for (ShipBoard shipBoard : game.getShipBoards()) {
             shipRelevantCabins.put(shipBoard, new HashMap<>());
             Map<CrewType, Set<Point>> crewTypeCabin = shipRelevantCabins.get(shipBoard);
@@ -32,7 +32,7 @@ public final class ShipInitializationState extends GameState {
                 goNext(shipBoard);
             }
         }
-        //TODO: add logic to notify the client that they should initialize cabins
+        game.getEventListener().notifyGameStateUpdateEvent(this);
         tryStateTransition();
     }
 
