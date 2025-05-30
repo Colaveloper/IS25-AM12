@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.ScreenFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
@@ -141,8 +142,8 @@ public class CliView implements View {
     }
 
     @Override
-    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
-        currentScreen.notifyFlightBoardPosition(shipBoard, position);
+    public void notifyFlightBoardPosition(FlightBoard flightBoard) {
+        currentScreen.notifyFlightBoardPosition(flightBoard);
         currentScreen.render();
     }
 

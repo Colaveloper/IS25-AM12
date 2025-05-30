@@ -56,7 +56,4 @@ public sealed abstract class ActivateState extends AdventureState permits
         return shipBoard;
     }
 
-    public int getBatteriesToSpend() {
-        return batteriesToSpend;
-    }
 }
