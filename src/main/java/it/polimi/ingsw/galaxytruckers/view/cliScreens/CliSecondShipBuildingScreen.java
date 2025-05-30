@@ -152,6 +152,14 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     }
 
     @Override
+    public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
+        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        ship.onRemoveComponent(oldPosition);
+        cliComponentBank.addUncovered(component);
+        cliAllShips.setDirty();
+    }
+
+    @Override
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
         CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
         ship.setHand(component);
@@ -204,5 +212,12 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
         // Update the forecast display when a forecast is released
         // cliForecast.setDirty();
+    }
+
+    @Override
+    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
+        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        ship.onRemoveComponent(point);
+        cliAllShips.setDirty();
     }
 }

@@ -48,10 +48,12 @@ public class CliShipBoard extends CliElement {
     public void onPutComponent(Point p, Component newValue) {
         CliComponent newCliComponent = CliComponent.of(newValue);
         cliComponentMap.put(p, newCliComponent);
+        setDirty();
     }
 
     public void onRemoveComponent(Point p) {
         cliComponentMap.remove(p);
+        setDirty();
     }
 
     public void highlightPoints(Set<Point> points, Highlights color){
