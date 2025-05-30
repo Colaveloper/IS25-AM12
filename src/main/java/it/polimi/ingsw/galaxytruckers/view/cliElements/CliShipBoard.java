@@ -71,14 +71,14 @@ public class CliShipBoard extends CliElement {
             rowDescription.addAll(List.of("",String.valueOf(y),""));
             for (int x = minX; x <= maxX; x++) {
                 List<String> newCell = new ArrayList<>();
-                if (!cliComponentMap.containsKey(new Point(x, y))) {
+                if (!shipBoard.getShipArea().contains(new Point(x, y))) {
                     // empty-space
                     newCell = List.of("     ", "     ", "     ");
-                } else if (cliComponentMap.get(new Point(x, y)) == null) {
+                } else if (cliComponentMap.containsKey(new Point(x, y))) {
+                    newCell = cliComponentMap.get(new Point(x, y)).getDescription();
+                } else {
                     // empty-area
                     newCell = List.of("     ", "  X  ", "     ");
-                } else {
-                    newCell = cliComponentMap.get(new Point(x, y)).getDescription();
                 }
                 rowDescription = DescriptionUtils.sideBySide(rowDescription, newCell);
             }

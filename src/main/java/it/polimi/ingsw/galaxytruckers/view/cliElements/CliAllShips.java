@@ -13,6 +13,8 @@ public class CliAllShips extends CliElement {
     private final List<CliShipBoard> playerToCliShip;
 
     public CliAllShips(List<? extends CliShipBoard> ships) {
+        //posso mettere una cliShipBoard qualsiasi invece di specificare se ha stash o no
+        //togliendo anche la necessità di specificare quando uso CliAllShipsHandAndStash
         this.playerToCliShip = new ArrayList<>();
         playerToCliShip.addAll(ships);
     }
