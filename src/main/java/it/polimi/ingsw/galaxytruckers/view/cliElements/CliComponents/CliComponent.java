@@ -65,6 +65,10 @@ public class CliComponent extends CliElement {
         };
     }
 
+    public int getId() {
+        return component.getId();
+    }
+
     public void highlight(Highlights color) {
         open = color.getHighlight();
         close = Highlights.RESET.getHighlight();

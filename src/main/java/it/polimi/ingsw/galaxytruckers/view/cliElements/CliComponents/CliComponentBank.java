@@ -60,9 +60,26 @@ public class CliComponentBank extends CliElement {
     }
 
     public void removeUncovered(Component component) {
-        CliComponent cliComponent = cliComponentMap.remove(component.getId());
-        uncoveredComponents.remove(cliComponent);
-        setDirty();
+        CliComponent cliComponent = cliComponentMap.get(component.getId());
+        if (cliComponent != null) {
+            cliComponentMap.remove(component.getId());
+            uncoveredComponents.remove(cliComponent);
+            setDirty();
+        } else {
+            // try to find it by checking equality instead
+            for (CliComponent comp : new ArrayList<>(uncoveredComponents)) {
+                if (comp.getId() == component.getId()) {
+                    uncoveredComponents.remove(comp);
+                    cliComponentMap.remove(component.getId());
+                    setDirty();
+                    break;
+                }
+            }
+        }
+    }
+
+    public List<CliComponent> getUncoveredComponents() {
+        return uncoveredComponents;
     }
 
     @Override

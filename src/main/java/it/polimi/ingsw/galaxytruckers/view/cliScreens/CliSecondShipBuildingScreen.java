@@ -61,9 +61,13 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
             case "U":
                 if (parts.length == 2) {
-                    int index = Integer.parseInt(parts[1]) - 1;
-                    //int componentId = gameState.getComponentBank().getUncoveredComponentsProperty().get(index).getId();
-                    //controller.requestComponent(componentId);
+                    int index = Integer.parseInt(parts[1]);
+                    if (index >= 0) {
+                        int componentId = cliComponentBank.getUncoveredComponents().get(index).getId();
+                        controller.requestComponent(componentId);
+                    } else {
+                        System.out.println("Invalid component index, must be at least 0");
+                    }
                 }
                 break;
 
