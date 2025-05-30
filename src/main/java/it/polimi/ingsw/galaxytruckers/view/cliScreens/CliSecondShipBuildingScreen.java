@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.*;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
@@ -19,8 +20,10 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     private final CliComponentBank cliComponentBank;
     private final CliForecast cliForecast;
+    private final CliForecastCards cliForecastCards;
     private final CliAllShips cliAllShips;
     private final Map<ShipBoard, CliShipHandAndStash> shipToCliShip;
+    private boolean hasForecastDeck = false;
 
     public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
@@ -31,23 +34,20 @@ public class CliSecondShipBuildingScreen extends CliScreen {
         cliAllShips = new CliAllShips(shipToCliShip.values().stream().toList());
         cliComponentBank = new CliComponentBank(gameState.getComponentBank());
         cliForecast = new CliForecast(gameState.getBlockedForecasts());
+        cliForecastCards = new CliForecastCards();
     }
 
     @Override
     public void render() {
-        //<GameColor> list = gameState.getLockedForecastsProperty().getUnmodifiableView();
-//        if(list != null && list.contains(model.getMyShip().getColor())) {
-//            System.out.println("Cards in the forecast deck:\n");
-//            for (AdventureCard card : gameState.getForecastDeck()){
-//                System.out.println(new CliAdventureCard(card).getDescription());
-//            }
-//        }
-//        else {
+        if(hasForecastDeck) {
+            cliForecastCards.getDescription().forEach(System.out::println);
+        }
+        else {
             cliComponentBank.getDescription().forEach(System.out::println);
             cliForecast.getDescription().forEach(System.out::println);
             cliFlightBoard.getDescription().forEach(System.out::println);
             cliAllShips.getDescription().forEach(System.out::println);
-//        }
+        }
         printActions();
     }
 
@@ -112,7 +112,9 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                     controller.placeShipOnFlightboard(index);
                 }
                 break;
-
+            case "":
+                controller.releaseForecast();
+                break;
             default:
                 // should be impossible
                 System.out.println("Invalid command.");
@@ -195,9 +197,10 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     }
 
     @Override
-    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+    public void notifyFlightBoardPosition(FlightBoard flightBoard) {
         // Update the flight board position and mark it as dirty
-        // cliFlightBoard.setDirty();
+        cliFlightBoard = new CliFlightBoard(flightBoard);
+        cliFlightBoard.setDirty();
     }
 
     @Override
@@ -208,14 +211,18 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards) {
-        // Update the forecast deck and mark the forecast UI as dirty
-        // cliForecast.setDirty();
+        cliForecastCards.setCards(adventureCards);
+        hasForecastDeck = true;
+        cliForecastCards.setDirty();
     }
 
     @Override
     public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
         // Update the forecast display when a forecast is released
-        // cliForecast.setDirty();
+        if(model.getMyShip() == shipBoard) {
+            hasForecastDeck = false;
+        }
+        cliForecast.setDirty();
     }
 
     @Override

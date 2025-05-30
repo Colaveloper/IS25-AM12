@@ -151,13 +151,6 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
-    public int getBatteriesToSpend() {
-        System.err.println("This action is not permitted in this state, \n" +
-                "it seems the client and the server are out of sync");
-        return -1;
-    }
-
-
     public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
         System.err.println("This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");

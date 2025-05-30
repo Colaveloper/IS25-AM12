@@ -15,8 +15,8 @@ public final class SecondShipBuildingState extends ShipBuildingState {
             StateActions.STASH_COMPONENT,
             StateActions.GRAB_STASHED_COMPONENT,
             StateActions.FLIP_HOURGLASS,
-            StateActions.ACQUIRE_FORECAST
-            //StateActions.RELEASE_FORECAST
+            StateActions.ACQUIRE_FORECAST,
+            StateActions.RELEASE_FORECAST
     );
 
     private List<AdventureCard> forecastDeck;
@@ -71,6 +71,12 @@ public final class SecondShipBuildingState extends ShipBuildingState {
         shipToForecast.put(shipBoard,deckIndex);
         shipBoard.weldLastComponent();
         game.getObservers().forEach(observer -> observer.notifyPeekForecast(shipBoard, deckIndex));
+    }
+
+    @Override
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+        game.getFlightBoard().setShipPosition(shipBoard, position);
+        game.getObservers().forEach(observer -> observer.notifyFlightBoardPosition(game.getFlightBoard()));
     }
 
     @Override
