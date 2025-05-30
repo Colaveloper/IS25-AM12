@@ -54,7 +54,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     @Override
     public void parseAndInvoke(String input) {
         String[] parts = input.split("\\s+");
-        switch (parts[0]) {
+        switch (parts[0].toUpperCase()) {
             case "C":
                 controller.requestRandComponent();
                 break;
@@ -120,6 +120,77 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                 System.out.println("Invalid command.");
                 break;
         }
+    }
+
+    @Override
+    public boolean isInputLegal(String input) {
+        if(!super.isFormatLegal(input)){
+            return false;
+        }
+        String[] parts = input.split("\\s+");
+        switch (parts[0].toUpperCase()) {
+            case "C":
+                //controlla di non avere in mano
+                //model.check qualosa
+                return true;
+
+            case "U":
+                if (parts.length == 2) {
+                    int index = Integer.parseInt(parts[1]) - 1;
+                    //int componentId = gameState.getComponentBank().getUncoveredComponentsProperty().get(index).getId();
+                    //controller.requestComponent(componentId);
+                }
+
+            case "S":
+                if (parts.length == 1) {
+                    controller.stashComponent();
+                } else if (parts.length == 2) {
+                    int index = Integer.parseInt(parts[1]);
+                    controller.grabStashedComponent(index);
+                }
+                break;
+
+            case "F":
+                if (parts.length == 2) {
+                    int index = Integer.parseInt(parts[1]);
+                    controller.acquireForecast(index);
+                }
+                break;
+
+            case "R":
+                controller.rejectComponent();
+                break;
+
+            case "P":
+                if (parts.length == 3) {
+                    controller.placeComponent(getPoint(input), 0); //todo add orientation
+                }
+                break;
+
+            case "L":
+                //model.rotateCurrentComponentLeft();
+                //todo rotate component in model
+                break;
+
+            case "H":
+                controller.flipHourglass();
+                break;
+
+            case "E":
+                if (parts.length == 2) {
+                    int index = Integer.parseInt(parts[1]);
+                    controller.placeShipOnFlightboard(index);
+                }
+                break;
+            case "":
+                controller.releaseForecast();
+                break;
+            default:
+                // should be impossible
+                System.out.println("Invalid command.");
+                break;
+        }
+        return true;
     }
 
     @Override
