@@ -6,18 +6,27 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CliComponentBank extends CliElement {
 
-    private final ComponentBank componentBank;
     private int coveredComponentsN;
-    private final List<Component> uncoveredComponents;
+    private final Map<Integer, CliComponent> cliComponentMap;
+    private final List<CliComponent> uncoveredComponents;
 
     public CliComponentBank(ComponentBank componentBank) {
-        this.componentBank = componentBank;
+        this.cliComponentMap = new HashMap<>();
         this.coveredComponentsN = componentBank.getCoveredComponentsN();
-        this.uncoveredComponents = componentBank.getUncoveredComponents();
+        List<Component> modelUncovered =  componentBank.getUncoveredComponents();
+        this.uncoveredComponents = new ArrayList<>();
+        for (Component component : modelUncovered) {
+            CliComponent cliComponent = new CliComponent(component);
+            this.uncoveredComponents.add(cliComponent);
+            this.cliComponentMap.put(component.getId(),cliComponent);
+        }
 //        componentBank.getCoveredComponentsNProperty().addObserver(_ -> {
 //            super.notifyObservers();
 //        });
@@ -42,14 +51,18 @@ public class CliComponentBank extends CliElement {
 
     public void removeCovered() {
         coveredComponentsN--;
+        setDirty();
     }
 
     public void addUncovered(Component component) {
-        uncoveredComponents.add(component);
+        uncoveredComponents.add(CliComponent.of(component));
+        setDirty();
     }
 
     public void removeUncovered(Component component) {
-        uncoveredComponents.remove(component);
+        CliComponent cliComponent = cliComponentMap.remove(component.getId());
+        uncoveredComponents.remove(cliComponent);
+        setDirty();
     }
 
     @Override
@@ -61,9 +74,7 @@ public class CliComponentBank extends CliElement {
         List<String> revealedDescription = new ArrayList<>();
         List<String> revealedDescriptionUnit = new ArrayList<>();
         int i = 0;
-        List<CliComponent> components = componentBank.getUncoveredComponents().stream()
-                .map(CliComponent::of).toList();
-        for (CliComponent cliComponent : components) {
+        for (CliComponent cliComponent : uncoveredComponents) {
             revealedDescriptionUnit.addAll(cliComponent.getNewDescription());
             revealedDescriptionUnit.add("  "+i+"  ");
             revealedDescription = DescriptionUtils.sideBySide(revealedDescription, revealedDescriptionUnit);

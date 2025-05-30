@@ -11,7 +11,6 @@ public class CliFlightBoard extends CliElement {
 
     public CliFlightBoard(FlightBoard flightBoard) {
         this.flightBoard = flightBoard;
-        flightBoard.addObserver(this);
     }
 
     @Override

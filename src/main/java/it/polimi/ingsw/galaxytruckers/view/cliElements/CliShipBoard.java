@@ -51,7 +51,6 @@ public class CliShipBoard extends CliElement {
     }
 
     public void onRemoveComponent(Point p) {
-        cliComponentMap.get(p).removeObserver(this);
         cliComponentMap.remove(p);
     }
 

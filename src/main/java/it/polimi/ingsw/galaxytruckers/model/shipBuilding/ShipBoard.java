@@ -537,4 +537,8 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         this.engines.remove(this.lastPosition);
         this.activatables.remove(this.lastPosition);
     }
+
+    public GameColor getColor() {
+        return color;
+    }
 }

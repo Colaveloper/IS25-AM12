@@ -23,7 +23,7 @@ public class CliShipAndHand extends CliShipBoard {
 
     public void onOffer(Component component) {
         this.lastComponent = component;
-        cliHand.updateHand(component);
+        //cliHand.updateHand(component);
     }
 
     public void onWeld() {

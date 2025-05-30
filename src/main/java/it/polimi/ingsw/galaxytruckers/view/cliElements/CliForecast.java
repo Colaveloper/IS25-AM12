@@ -1,41 +1,42 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CliForecast extends CliElement {
-    private final List<GameColor> blockedForecasts = new ArrayList<>();
+    private final GameColor[] blockedForecasts;
 
-    public CliForecast(ObservableList<GameColor> blockedForecasts) {
-
-        this.blockedForecasts.add(null);
-        this.blockedForecasts.add(null);
-        this.blockedForecasts.add(null);
-        blockedForecasts.addListener(new ObservableList.Listener<>() {
-            @Override
-            public void onAdd(int index, GameColor element) {
-                CliForecast.this.blockedForecasts.set(index, element);
+    public CliForecast(ShipBoard[] blockedForecasts) {
+        this.blockedForecasts = new GameColor[blockedForecasts.length];
+        for (int i = 0; i < blockedForecasts.length; i++) {
+            if (blockedForecasts[i] != null) {
+                this.blockedForecasts[i] = blockedForecasts[i].getColor();
+            } else {
+                this.blockedForecasts[i] = null;
             }
+        }
+    }
 
-            @Override
-            public void onRemove(int index, GameColor element) {
-                CliForecast.this.blockedForecasts.remove(index);
-            }
-        });
+    public void removeBlockedForecast(int index) {
+        this.blockedForecasts[index] = null;
+    }
+
+    public void setBlockedForecasts(int index, GameColor gameColor) {
+        this.blockedForecasts[index] = gameColor;
     }
 
     @Override
     protected List<String> getNewDescription() {
         List<String> result = new ArrayList<>();
 
-        for (int i=0; i<blockedForecasts.size(); i++) {
+        for (int i=0; i<blockedForecasts.length; i++) {
             List<String> forecastDescription = new ArrayList<>();
-            forecastDescription.add(blockedForecasts.get(i) != null
-                            ? "   "+blockedForecasts.get(i).getDescription()+"   "
+            forecastDescription.add(blockedForecasts[i] != null
+                            ? "   "+blockedForecasts[i].getDescription()+"   "
                             : " free  "
                     );
             forecastDescription.add("   "+i+"   ");

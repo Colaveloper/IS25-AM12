@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public abstract class ShipBoard{
+public abstract class ShipBoard {
 
     protected final Map<Point, Component> componentMap;
     protected Component lastComponent;  // content can be null
@@ -104,31 +104,33 @@ public abstract class ShipBoard{
     public void grabStashedComponent(int index) {}
 
     public void weldLastComponent() {
-        switch (lastComponent) {
-            case Battery c -> batteries.put(lastPosition, c);
-            case Cabin c -> cabins.put(lastPosition, c);
-            case DoubleCannon c -> {
-                cannons.put(lastPosition,c);
-                activatables.put(lastPosition,c);
+        if (lastComponent != null) {
+            switch (lastComponent) {
+                case Battery c -> batteries.put(lastPosition, c);
+                case Cabin c -> cabins.put(lastPosition, c);
+                case DoubleCannon c -> {
+                    cannons.put(lastPosition,c);
+                    activatables.put(lastPosition,c);
+                }
+                case Cannon c -> cannons.put(lastPosition,c);
+                case DoubleEngine c -> {
+                    engines.put(lastPosition,c);
+                    activatables.put(lastPosition,c);
+                }
+                case Engine c -> {
+                    engines.put(lastPosition,c);
+                }
+                case CargoHold c -> {
+                    cargoHolds.put(lastPosition,c);
+                }
+                case Shield c -> {
+                    shields.put(lastPosition,c);
+                }
+                case Component _ -> {}
             }
-            case Cannon c -> cannons.put(lastPosition,c);
-            case DoubleEngine c -> {
-                engines.put(lastPosition,c);
-                activatables.put(lastPosition,c);
-            }
-            case Engine c -> {
-                engines.put(lastPosition,c);
-            }
-            case CargoHold c -> {
-                cargoHolds.put(lastPosition,c);
-            }
-            case Shield c -> {
-                shields.put(lastPosition,c);
-            }
-            case Component _ -> {}
+            lastComponent = null;
+            lastPosition = null;
         }
-        lastComponent = null;
-        lastPosition = null;
     }
 
     public void removeComponent(Point position) {

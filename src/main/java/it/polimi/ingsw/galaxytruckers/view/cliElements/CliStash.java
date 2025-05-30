@@ -18,12 +18,14 @@ public class CliStash extends CliElement {
                 .map(CliComponent::of).collect(Collectors.toList());
     }
 
-    public void onStash(int index, Component component) {
-        cliStashedComponents.add(index, CliComponent.of(component));
+    public void onStash(Component component) {
+        cliStashedComponents.add(CliComponent.of(component));
+        setDirty();
     }
 
     public void onGrab(int index) {
         cliStashedComponents.remove(index);
+        setDirty();
     }
 
     @Override

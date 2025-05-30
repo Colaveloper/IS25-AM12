@@ -1,13 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.view.Screen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public abstract class GuiScreen {
+public abstract class GuiScreen extends Screen {
     protected final ClientModel model;
     protected final ClientController controller;
     public GuiScreen(ClientModel model, ClientController controller, GameState gameState) {

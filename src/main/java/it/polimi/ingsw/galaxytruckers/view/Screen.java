@@ -17,11 +17,11 @@ public abstract class Screen {
 
     public void notifyRequestComponent(ShipBoard shipBoard, Component component){}
 
-    public void notifyRejectComponent(ShipBoard shipBoard){}
+    public void notifyRejectComponent(ShipBoard shipBoard, Component component){}
 
-    public void notifyStashComponent(ShipBoard shipBoard){}
+    public void notifyStashComponent(ShipBoard shipBoard, Component component){}
 
-    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index){}
+    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component){}
 
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation){}
 
@@ -35,17 +35,17 @@ public abstract class Screen {
 
     public void setForecastDeck(java.util.List<AdventureCard> adventureCards){}
 
-    public void notifyReleaseForecast(ShipBoard shipBoard){}
+    public void notifyReleaseForecast(ShipBoard shipBoard, int index){}
 
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point){}
 
-    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex){}
+    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List<Point> removed){}
 
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces){}
 
     public void notifyShipValidated(ShipBoard shipBoard){}
 
-    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType){}
+    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){}
 
     public void notifyDrawCard(AdventureCard adventureCard){}
 
@@ -66,4 +66,12 @@ public abstract class Screen {
     public void notifyGiveUp(ShipBoard shipBoard){}
 
     public void setFinalScores(Map<Player, Integer> finalScores){}
+
+    public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition){}
+
+    public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {}
+
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, int orientation, Point oldPosition) {
+
+    }
 }

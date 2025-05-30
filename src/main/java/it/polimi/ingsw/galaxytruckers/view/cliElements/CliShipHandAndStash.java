@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.ArrayList;
@@ -14,8 +15,32 @@ public class CliShipHandAndStash extends CliShipBoard {
     public CliShipHandAndStash(ShipBoard shipBoard, String nickname) {
         super(shipBoard, nickname);
 
-        cliHand = new CliHand(shipBoard.getLastComponent());
+        if (shipBoard.getLastComponent() != null) {
+            cliHand = new CliHand(shipBoard.getLastComponent());
+        } else {
+            cliHand = new CliHand();
+        }
         cliStash = new CliStash(shipBoard.getStashedComponents());
+    }
+
+    public void onStash(Component component) {
+        cliStash.onStash(component);
+        setDirty();
+    }
+
+    public void onGrabStashed(int index) {
+        cliStash.onGrab(index);
+        setDirty();
+    }
+
+    public void clearHand() {
+        cliHand.clearHand();
+        setDirty();
+    }
+
+    public void setHand(Component component) {
+        cliHand.setHand(component);
+        setDirty();
     }
 
     @Override

@@ -2,11 +2,8 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ShipInitializationState;
 
 import java.awt.*;
@@ -102,7 +99,7 @@ public class CliCrewInitializationScreen extends CliScreen {
     }
 
     @Override
-    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType){
+    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
 
     }
 }

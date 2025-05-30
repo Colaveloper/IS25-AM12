@@ -32,6 +32,9 @@ public class CliView implements View {
         this.controller = controller;
         this.model = model;
         this.screenFactory = new ScreenFactory();
+        this.currentScreen = screenFactory.createCliScreen(model, controller);
+        this.model.addObserver(this);
+        currentScreen.render();
     }
 
     public void updateScreen() {

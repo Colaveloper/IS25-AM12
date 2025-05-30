@@ -15,7 +15,6 @@ public class CliAllShipsHandAndStash extends CliElement{
         playerToCliShip = new ArrayList<>();
         shipToPlayer.forEach(( ship,player) -> {
             CliShipHandAndStash cliShipBoardHandAndStash = new CliShipHandAndStash(ship, player.getNickname());
-            cliShipBoardHandAndStash.addObserver(this);
             playerToCliShip.add(cliShipBoardHandAndStash);
         });
     }

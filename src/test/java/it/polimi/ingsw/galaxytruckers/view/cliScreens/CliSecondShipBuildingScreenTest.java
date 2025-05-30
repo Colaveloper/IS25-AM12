@@ -34,9 +34,9 @@ class CliSecondShipBuildingScreenTest {
 //        model.addPlayer(player2, GameColor.RED);
 //        model.addPlayer(player3, GameColor.GREEN);
 //        model.addPlayer(player4, GameColor.YELLOW);
-        model.setMetaState(MetaState.INGAME);
 
         SecondShipBuildingState state = new SecondShipBuildingState();
+        model.setMetaState(MetaState.INGAME);
         model.notifyCurrentState(state);
 
         screen = new CliSecondShipBuildingScreen(model, null, state);

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.*;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
@@ -17,12 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 public class CliSecondShipBuildingScreen extends CliScreen {
-    private SecondShipBuildingState gameState;
 
     private final CliComponentBank cliComponentBank;
     private final CliForecast cliForecast;
     private final CliAllShips cliAllShips;
-    private final Map<ShipBoard, CliShipBoard> shipToCliShip;
+    private final Map<ShipBoard, CliShipHandAndStash> shipToCliShip;
 
     public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
@@ -32,9 +30,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
         }
         cliAllShips = new CliAllShips(shipToCliShip.values().stream().toList());
         cliComponentBank = new CliComponentBank(gameState.getComponentBank());
-        cliForecast = null; //TODO: remove
-        //cliForecast = new CliForecast(gameState.getBlockedForecasts());
-        this.gameState = gameState;
+        cliForecast = new CliForecast(gameState.getBlockedForecasts());
     }
 
     @Override
@@ -123,27 +119,41 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     @Override
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
         cliComponentBank.removeCovered();
-        this.render();
+        shipToCliShip.get(shipBoard).setHand(component);
+        cliAllShips.setDirty();
+        // shipToCliShip.get(shipBoard).setHand(component);
     }
 
     @Override
     public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
-        super.notifyRequestComponent(shipBoard, component);
+        cliComponentBank.removeUncovered(component);
+        shipToCliShip.get(shipBoard).setHand(component);
+        cliAllShips.setDirty();
     }
 
     @Override
-    public void notifyStashComponent(ShipBoard shipBoard) {
-        super.notifyStashComponent(shipBoard);
+    public void notifyStashComponent(ShipBoard shipBoard, Component component) {
+        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        ship.clearHand();
+        ship.onStash(component);
+        cliAllShips.setDirty();
     }
 
     @Override
-    public void notifyRejectComponent(ShipBoard shipBoard) {
-        super.notifyRejectComponent(shipBoard);
+    public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
+        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
     }
 
     @Override
-    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index) {
-        super.notifyGrabStashedComponent(shipBoard, index);
+    public void notifyRejectComponent(ShipBoard shipBoard, Component component) {
+        shipToCliShip.get(shipBoard).clearHand();
+        cliComponentBank.addUncovered(component);
+        cliAllShips.setDirty();
+    }
+
+    @Override
+    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
+        super.notifyGrabStashedComponent(shipBoard, index, component);
     }
 
     @Override
@@ -177,7 +187,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     }
 
     @Override
-    public void notifyReleaseForecast(ShipBoard shipBoard) {
-        super.notifyReleaseForecast(shipBoard);
+    public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
+        super.notifyReleaseForecast(shipBoard, index);
     }
 }

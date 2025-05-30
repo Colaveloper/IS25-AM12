@@ -19,12 +19,14 @@ public class CliHand extends CliElement {
         this.cliComponent = null;
     }
 
-    void updateHand(Component lastComponent) {
-        if (lastComponent != null) {
-            cliComponent = CliComponent.of(lastComponent);
-        } else {
-            cliComponent = null;
-        }
+    void setHand(Component lastComponent) {
+        cliComponent = CliComponent.of(lastComponent);
+        setDirty();
+    }
+
+    void clearHand() {
+        cliComponent = null;
+        setDirty();
     }
 
     @Override

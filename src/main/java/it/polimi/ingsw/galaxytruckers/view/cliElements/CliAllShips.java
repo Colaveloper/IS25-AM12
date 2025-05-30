@@ -12,19 +12,10 @@ import java.util.List;
 public class CliAllShips extends CliElement {
     private final List<CliShipBoard> playerToCliShip;
 
-    public CliAllShips(List<CliShipBoard> playerToCliShip) {
-        this.playerToCliShip = playerToCliShip;
+    public CliAllShips(List<? extends CliShipBoard> ships) {
+        this.playerToCliShip = new ArrayList<>();
+        playerToCliShip.addAll(ships);
     }
-
-//    public CliAllShips(Map<ShipBoard, Player> shipToPlayer) {
-//        playerToCliShip = new ArrayList<>();
-//        this.shipToCli = new HashMap<>();
-//        shipToPlayer.forEach(( ship,player) -> {
-//            CliShipBoard cliShipBoard = new CliShipBoard(ship, player.getNickname());
-//            shipToCli.put(ship, cliShipBoard);
-//            playerToCliShip.add(cliShipBoard);
-//        });
-//    }
 
     @Override
     protected List<String> getNewDescription() {

@@ -265,9 +265,7 @@ public class ClientModel {
     }
 
     public void setMetaState(MetaState metaState) {
-        if (metaState != this.metaState) {
-            this.metaState = metaState;
-            observers.forEach(observer -> observer.notifyMetaState(metaState));
-        }
+        this.metaState = metaState;
+        observers.forEach(observer -> observer.notifyMetaState(metaState));
     }
 }

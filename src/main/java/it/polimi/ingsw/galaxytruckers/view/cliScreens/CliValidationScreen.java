@@ -1,15 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ShipCorrectionState;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -76,7 +72,7 @@ public class CliValidationScreen extends CliScreen {
 
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point){}
 
-    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex){}
+    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List<Point> removed){}
 
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces){}
 
