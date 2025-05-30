@@ -56,7 +56,7 @@ public abstract class CliScreen extends Screen {
                     case SPEND_BATTERIES ->         actions.add("B[x][y] Spend battery on component");
                     case GRAB_REWARD ->             actions.add("P       To pick reward            ");
                     case CHOOSE_SHIP_PIECE ->       actions.add("[i]   Choose piece of ship to keep");
-                    case GO_NEXT, RELEASE_FORECAST->actions.add("C to continue                     ");
+                    case GO_NEXT, RELEASE_FORECAST->actions.add("press any key to continue         ");
                     case LOSE_CREW ->               actions.add("L[x][y] Remove crew from component");
                     case LOSE_GOOD ->               actions.add("L[x][y] Remove good from cargo hold");
                     case REMOVE_GOOD ->             actions.add("R[x][y][color] Pick goods from cargo hold");
@@ -113,8 +113,7 @@ public abstract class CliScreen extends Screen {
                         availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.trim().matches("(?i)S\\s+\\d+");
             case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT)&& input.trim().matches("(?i)R");
             case "C" -> availableActions.contains(StateActions.REQUEST_RAND_COMPONENT)&& input.trim().matches("(?i)C") ||
-                        availableActions.contains(StateActions.GO_NEXT)         && input.trim().matches("(?i)C") ||
-                        availableActions.contains(StateActions.RELEASE_FORECAST)&& input.trim().matches("(?i)C");
+                        availableActions.contains(StateActions.GO_NEXT)         && input.trim().matches("(?i)C");
             case "U" -> availableActions.contains(StateActions.REQUEST_COMPONENT)&& input.trim().matches("(?i)U\\s+\\d+");
             case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST)&& input.trim().matches("(?i)F\\s+\\d+");
             case "X" -> availableActions.contains(StateActions.FINISH_BUILDING) && input.trim().matches("(?i)X");
@@ -126,7 +125,9 @@ public abstract class CliScreen extends Screen {
             case "Y" -> availableActions.contains(StateActions.GIVE_UP)         && input.trim().matches("(?i)Y");
             case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.trim().matches("(?i)A\\s+\\d+\\s+\\d+");
             case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.trim().matches("(?i)E\\s+\\d+");
-            case "" -> (availableActions.contains(StateActions.GO_NEXT) || availableActions.contains(StateActions.DRAW_CARD)) && input.isEmpty();
+            case "" -> (availableActions.contains(StateActions.GO_NEXT) ||
+                        availableActions.contains(StateActions.DRAW_CARD) ||
+                        availableActions.contains(StateActions.RELEASE_FORECAST)) && input.isEmpty();
 
             default -> {
                 System.out.println("invalid input");
