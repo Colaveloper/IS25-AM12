@@ -46,6 +46,12 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         model.setMetaState(MetaState.CREATION);
     }
 
+    public void setMyNickname(String nickname) {
+        Player player = playerRegistry.addPlayer(nickname);
+        model.setPlayer(player);
+        model.setMetaState(MetaState.JOINORCREATE);
+    }
+
 //--------------------------------------UPDATES FROM THE SERVER----------------------------------
 
     @Override
@@ -53,14 +59,13 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         eventHandler.handleEvent(event);
     }
 
-    @Override
-    public void setMyNickname(String nickname) { // gets called only after legal registration
-        Player player = playerRegistry.addPlayer(nickname);
-        model.setPlayer(player);
-        model.setMetaState(MetaState.JOINORCREATE);
-    }
 
 //----------------------------------------REQUESTS TO THE SERVER----------------------------------
+
+    @Override
+    public void registerNickname(String nickname) throws IllegalArgumentException {
+        server.registerNickname(nickname);
+    }
 
     @Override
     public void joinLobby(UUID lobbyID) {
@@ -140,11 +145,6 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         } catch (IllegalArgumentException e) {
             reportError("couldn't place on flightboard");
         }
-    }
-
-    @Override
-    public void registerNickname(String nickname) throws IllegalArgumentException {
-        server.registerNickname(nickname);
     }
 
     @Override

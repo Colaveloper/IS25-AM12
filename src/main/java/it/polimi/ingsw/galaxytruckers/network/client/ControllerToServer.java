@@ -13,7 +13,7 @@ public interface ControllerToServer {
 
     void flipHourglass();
 
-    void setMyNickname(String nickname);
+    void setMyNickname(String nickname); // TODO: REMOVE! THIS DOES NOT CALL THE SERVER, registerNickname DOES!
 
     void releaseForecast();
 

@@ -1,11 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -15,12 +15,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class GuiGameCreationScreen extends GuiScreen {
-    public GuiGameCreationScreen(ClientModel model, ClientController controller, GameState gameState) {
-        super(model, controller, gameState);
+    public GuiGameCreationScreen(ClientModel model, ControllerToServer controller) {
+        super(model, controller);
     }
 
     @Override
-    public void attachContentToRoot(VBox root) {
+    public Parent getNode() {
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(40));
@@ -70,7 +70,6 @@ public class GuiGameCreationScreen extends GuiScreen {
         });
 
         layout.getChildren().addAll(instructionLabel, levelComboBox, playersComboBox, createButton);
-        root.setAlignment(Pos.CENTER);
-        root.getChildren().add(layout);
+        return layout;
     }
 }

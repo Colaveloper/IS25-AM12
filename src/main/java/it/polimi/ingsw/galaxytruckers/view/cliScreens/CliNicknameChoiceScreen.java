@@ -31,7 +31,6 @@ public class CliNicknameChoiceScreen extends CliScreen {
         } catch (IllegalArgumentException e) {
             controller.reportError(e.getMessage());
         }
-
     }
 
     @Override
