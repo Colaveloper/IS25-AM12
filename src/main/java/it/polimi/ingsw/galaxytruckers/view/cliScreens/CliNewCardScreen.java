@@ -10,20 +10,35 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.RemoveGoodsState;
 
 public class CliNewCardScreen extends CliScreen {
 
-    private DrawCardState gameState;
+    private CliAdventureCard adventureCard;
+    private final boolean imLeader;
     public CliNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState gameState){
         super(model, controller, gameState);
-        this.gameState = gameState;
+        imLeader = gameState.getShipBoard() == model.getMyShip();
+        adventureCard = null;
+        adventureCard = new CliAdventureCard(gameState.getGame().getCurrentAdventureCard());
     }
 
     @Override
     public void render() {
         printShips();
-        printActions();
-        if (gameState.isHasDrawn()) {
+        if(adventureCard == null && !imLeader){
+            System.out.println("Wait for leader to draw");
+        }
+        if (adventureCard != null) {
             System.out.println("A new card has been drawn:\n");
             System.out.println(new CliAdventureCard(model).getDescription());
         }
+        printActions();
+    }
+
+    @Override
+    public boolean isInputLegal(String input) {
+        if(!imLeader){
+            System.out.println("wait for leader");
+            return false;
+        }
+        return isFormatLegal(input);
     }
 
     @Override
@@ -37,5 +52,10 @@ public class CliNewCardScreen extends CliScreen {
             else
                 controller.goNext();
         }
+    }
+
+    @Override
+    public void notifyDrawCard(AdventureCard adventureCard) {
+        this.adventureCard = new CliAdventureCard(adventureCard);
     }
 }
