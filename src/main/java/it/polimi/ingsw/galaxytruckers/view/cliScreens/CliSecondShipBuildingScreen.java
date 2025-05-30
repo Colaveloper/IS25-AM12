@@ -153,41 +153,56 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     @Override
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
-        super.notifyGrabStashedComponent(shipBoard, index, component);
+        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        ship.setHand(component);
+        ship.onGrabStashed(index);
+        cliAllShips.setDirty();
     }
 
     @Override
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
-        super.notifyPlaceComponent(shipBoard, point, orientation);
+        Component placedComponent = shipBoard.getComponentMap().get(point);
+        if (placedComponent != null) {
+            CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+            ship.onPutComponent(point, placedComponent);
+            ship.clearHand();
+            cliAllShips.setDirty();
+        }
     }
 
     @Override
     public void notifyFlipHourglass(ShipBoard shipBoard) {
-        super.notifyFlipHourglass(shipBoard);
+        // Update the hourglass status in the UI
+        // cliFlightBoard.setDirty();
     }
 
     @Override
     public void notifyHourglassEnd() {
-        super.notifyHourglassEnd();
+        // Mark the flight board as dirty to update the hourglass status
+        // cliFlightBoard.setDirty();
     }
 
     @Override
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
-        super.notifyFlightBoardPosition(shipBoard, position);
+        // Update the flight board position and mark it as dirty
+        // cliFlightBoard.setDirty();
     }
 
     @Override
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        super.notifyPeekForecast(shipBoard, deckIndex);
+        // Mark the forecast display as dirty to update it
+        // cliForecast.setDirty();
     }
 
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards) {
-        super.setForecastDeck(adventureCards);
+        // Update the forecast deck and mark the forecast UI as dirty
+        // cliForecast.setDirty();
     }
 
     @Override
     public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
-        super.notifyReleaseForecast(shipBoard, index);
+        // Update the forecast display when a forecast is released
+        // cliForecast.setDirty();
     }
 }
