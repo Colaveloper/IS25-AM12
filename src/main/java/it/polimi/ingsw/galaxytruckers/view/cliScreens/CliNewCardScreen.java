@@ -12,9 +12,11 @@ public class CliNewCardScreen extends CliScreen {
 
     private CliAdventureCard adventureCard;
     private final boolean imLeader;
+    private boolean hasDrown;
     public CliNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState gameState){
         super(model, controller, gameState);
         imLeader = gameState.getShipBoard() == model.getMyShip();
+        hasDrown = false;
         adventureCard = null;
         adventureCard = new CliAdventureCard(gameState.getGame().getCurrentAdventureCard());
     }
@@ -22,7 +24,7 @@ public class CliNewCardScreen extends CliScreen {
     @Override
     public void render() {
         printShips();
-        if(adventureCard == null && !imLeader){
+        if(!hasDrown && !imLeader){
             System.out.println("Wait for leader to draw");
         }
         if (adventureCard != null) {
@@ -43,19 +45,27 @@ public class CliNewCardScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        if(input.equalsIgnoreCase("X")){
-            controller.giveUp();
-        }
-        else{
-            if (input.isEmpty())
-                controller.drawCard();
-            else
-                controller.goNext();
+        String command = input.split(" ")[0];
+        switch (command.toUpperCase()) {
+            case "Y":
+                controller.giveUp();
+                break;
+            case "":
+                if(imLeader && hasDrown){
+                    controller.goNext();
+                }
+                else if(imLeader){
+                    controller.drawCard();
+                }
+                else{
+                    System.out.println("wait for the leader to continue");
+                }
         }
     }
 
     @Override
     public void notifyDrawCard(AdventureCard adventureCard) {
+        hasDrown = true;
         this.adventureCard = new CliAdventureCard(adventureCard);
     }
 }
