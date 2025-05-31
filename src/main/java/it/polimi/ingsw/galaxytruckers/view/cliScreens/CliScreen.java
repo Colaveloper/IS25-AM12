@@ -1,33 +1,45 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
+import it.polimi.ingsw.galaxytruckers.view.Screen;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
+import it.polimi.ingsw.galaxytruckers.view.model.Player;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
-public abstract class CliScreen {
+public abstract class CliScreen extends Screen {
 
     protected ClientModel model;
-    protected GameState gameState;
+    private GameState state;
     protected ControllerToServer controller;
     protected List<StateActions> availableActions;
+    protected CliFlightBoard cliFlightBoard;
+    protected ShipBoard myShipBoard;
+    protected CliAllShips cliAllShips;
+    protected Map<ShipBoard, CliShipHandAndStash> shipToCliShip;
 
-    protected CliFlightBoard flightBoard;
-    protected CliAllShips allShips;
 
     public CliScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         this.model = model;
         this.controller = controller;
-        this.gameState = gameState;
-        availableActions = gameState.getAvailableActions();
-        this.flightBoard = new CliFlightBoard(model);
-        this.allShips = new CliAllShips(model.getShipToPlayer());
+        this.state = gameState;
+        this.availableActions = gameState.getAvailableActions();
+        this.myShipBoard = model.getMyShip();
+        this.shipToCliShip = new HashMap<>();
+        for (Player player : model.getPlayers()) {
+            shipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));
+        }
+        cliAllShips = new CliAllShips(shipToCliShip.values().stream().toList());
+        this.cliFlightBoard = new CliFlightBoard(model.getGame().getFlightBoard());
     }
 
     public CliScreen(ClientModel model, ControllerToServer controller) {
@@ -35,100 +47,58 @@ public abstract class CliScreen {
         this.controller = controller;
     }
 
+    public GameState getState() {
+        return state;
+    }
+
     public abstract void render();
 
     public abstract void parseAndInvoke(String input);
 
     protected void printShips() {
-        flightBoard.getDescription().forEach(System.out::println);
-        allShips.getDescription().forEach(System.out::println);//todo sistemare altri tipi di allships
+//        flightBoard.getNewDescription().forEach(System.out::println);
+//        allShips.getNewDescription().forEach(System.out::println);//todo sistemare altri tipi di allships
     }
 
     protected void printActions() {
-        if(!model.getGame().getGivenUpShips().contains(model.getClientPlayer())) {
+        if(!model.getGame().getGivenUpShips().contains(model.getClientPlayer().getShipBoard())) {
             List<String> actions = new ArrayList<>();
+            availableActions = state.getAvailableActions(); // refresh available actions
             for (StateActions action : availableActions) {
                 switch (action) {
-                    case ACTIVATE_COMPONENT -> {
-                        actions.add("P [x] [y] \tPlace unwelded component");
-                    }
-                    case SPEND_BATTERIES -> {
-                        actions.add("B [x] [y] \tSpend battery on component");
-                    }
-                    case GRAB_REWARD -> {
-                        actions.add("P       \tTo pick reward");
-                    }
-                    case CHOOSE_SHIP_PIECE -> {
-                        actions.add("[i]     \tChoose piece of ship to keep");
-                    }
-                    case GO_NEXT, RELEASE_FORECAST -> {
-                        actions.add("        \tPress any key to continue");
-                    }
-                    case LOSE_CREW -> {
-                        actions.add("L [x] [y] \tremove crew from component");
-                    }
-                    case LOSE_GOOD -> {
-                        actions.add("[x] [y] \tRemove valuable good from cargo hold");
-                    }
-                    case REMOVE_GOOD -> {
-                        actions.add("R [x] [y] [good type] \tPick goods from cargo hold");
-                    }
-                    case ADD_GOOD -> {
-                        actions.add("P [x] [y] [good type] \tPlace goods on cargo hold");
-                    }
-                    case CHOOSE_PLANET -> {
-                        actions.add("[i]     \tLand on i-th planet");
-                    }
-                    case REQUEST_RAND_COMPONENT -> {
-                        actions.add("C       \tGet New covered component");
-                    }
-                    case REQUEST_COMPONENT -> {
-                        actions.add("U [i]   \tPick i-th uncovered component");
-                    }
-                    case REJECT_COMPONENT -> {
-                        actions.add("R       \tRejected component");
-                    }
-                    case STASH_COMPONENT -> {
-                        actions.add("S       \tTo stash current component");
-                    }
-                    case GRAB_STASHED_COMPONENT -> {
-                        actions.add("S [i]   \tTo grab i-th stashed component");
-                    }
-                    case PLACE_COMPONENT -> {
-                        actions.add("P [x] [y] \tPlace unwelded component in x, y");
-                    }
-                    case FLIP_HOURGLASS -> {
-                        actions.add("H       \tTo Flip hourglass");
-                    }
-                    case PLACE_SHIP_ON_FLIGHTBOARD -> {
-                        actions.add("E [i]   \tend and place on flightboard");
-                    }
-                    case FINISH_BUILDING -> {
-                        actions.add("X       \tTo finish building");
-                    }
-                    case ACQUIRE_FORECAST -> {
-                        actions.add("F [i]   \tTo get i-th forecast");
-                    }
-                    case DRAW_CARD -> {
-                        actions.add("        \tPress any key to draw a card");
-                    }
-                    case REMOVE_COMPONENT -> {
-                        actions.add("P [x] [y] \tRemove component in x, y");
-                    }
-                    case INITIALIZE_CABIN -> {
-                        actions.add("P [x] [y] \tInitialize cabin in x, y");
-                    }
-                    case GIVE_UP -> {
-                        actions.add("X       \tTo give up");
-                    }
+                    case ACTIVATE_COMPONENT ->      actions.add("P[x][y] Activate component        ");
+                    case SPEND_BATTERIES ->         actions.add("B[x][y] Spend battery on component");
+                    case GRAB_REWARD ->             actions.add("P       To pick reward            ");
+                    case CHOOSE_SHIP_PIECE ->       actions.add("[i]   Choose piece of ship to keep");
+                    case GO_NEXT, RELEASE_FORECAST->actions.add("press ENTER key to continue       ");
+                    case LOSE_CREW ->               actions.add("L[x][y] Remove crew from component");
+                    case LOSE_GOOD ->               actions.add("L[x][y] Remove good from cargo hold");
+                    case REMOVE_GOOD ->             actions.add("R[x][y][color] Pick goods from cargo hold");
+                    case ADD_GOOD ->                actions.add("P[x][y][color] Place goods on cargo hold");
+                    case CHOOSE_PLANET ->           actions.add("L[i]  Land on i-th planet         ");
+                    case REQUEST_RAND_COMPONENT ->  actions.add("C  Get New covered component      ");
+                    case REQUEST_COMPONENT ->       actions.add("U[i] Pick i-th uncovered component");
+                    case REJECT_COMPONENT ->        actions.add("R  Rejected component             ");
+                    case STASH_COMPONENT ->         actions.add("S  To stash current component     ");
+                    case GRAB_STASHED_COMPONENT ->  actions.add("S [i]  To grab i-th stashed       ");
+                    case PLACE_COMPONENT ->         actions.add("P[x][y]  Place component in [x][y]");
+                    case FLIP_HOURGLASS ->          actions.add("H  To Flip hourglass              ");
+                    case PLACE_SHIP_ON_FLIGHTBOARD->actions.add("E [i] End and place on flightboard");
+                    case FINISH_BUILDING ->         actions.add("X  To finish building             ");
+                    case ACQUIRE_FORECAST ->        actions.add("F [i]  Pick i-th forecast deck    ");
+                    case DRAW_CARD ->               actions.add("  Press any key to draw a card    ");
+                    case REMOVE_COMPONENT ->        actions.add("P[x][y]  Remove component in x, y ");
+                    case INITIALIZE_CABIN ->        actions.add("P[x][y]  Initialize cabin in x, y ");
+                    case GIVE_UP ->                 actions.add("Y  To give up and stop playing    ");
                 }
             }
             for (int i = 0; i < availableActions.size(); i++) {
-                System.out.print(actions.get(i));
+                System.out.print(actions.get(i) + "\t\t");
                 if ((i + 1) % 4 == 0) {
                     System.out.println();
                 }
             }
+            System.out.println();
         }
         else{
             //TODO: print something in place of actions
@@ -147,55 +117,40 @@ public abstract class CliScreen {
         return isFormatLegal(input);
     }
 
-    //todo controlli dell'input dal model
     protected boolean isFormatLegal(String input) {
-        String[] parts = input.split(" ");
-        return switch (parts[0]) {
-            case "P" -> availableActions.contains(StateActions.PLACE_COMPONENT) && input.matches("(?i)P\\s+\\d+\\s+\\d+") ||
-                    availableActions.contains(StateActions.GRAB_REWARD) && input.matches("(?i)P");
-            case "H" -> availableActions.contains(StateActions.FLIP_HOURGLASS) && input.matches("(?i)H");
-            case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.matches("(?i)S") ||
-                    availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.matches("(?i)S\\s+\\d+");
-            case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT) && input.matches("(?i)R");
-            case "C" -> availableActions.contains(StateActions.REQUEST_COMPONENT) && input.matches("(?i)C");
-            case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST) && input.matches("(?i)F\\s+\\d+");
-            case "X" -> availableActions.contains(StateActions.FINISH_BUILDING) && input.matches("(?i)X");
-            case "L" -> availableActions.contains(StateActions.LOSE_CREW) && input.matches("(?i)L\\s+\\d+\\s+\\d+");
-            case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("(?i)B\\s+\\d+\\s+\\d+");
+        input = input.toUpperCase().trim();
+        if(input.isEmpty()) input = " "; //to check last case of empty input
+        //String[] parts = input.split(" ");
+        return switch (input.substring(0, 1)) {
+            case "P" -> (availableActions.contains(StateActions.PLACE_COMPONENT) ||
+                        availableActions.contains(StateActions.INITIALIZE_CABIN))&& input.matches("P\\s+\\d+\\s+\\d+") ||
+                        availableActions.contains(StateActions.GRAB_REWARD)     && input.matches("P");
+            case "H" -> availableActions.contains(StateActions.FLIP_HOURGLASS)  && input.matches("H");
+            case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.matches("S") ||
+                        availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.matches("S\\s+\\d+");
+            case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT)&& input.matches("R");
+            case "C" ->(availableActions.contains(StateActions.REQUEST_RAND_COMPONENT) ||
+                        availableActions.contains(StateActions.GO_NEXT))        && input.matches("C");
+            case "U" -> availableActions.contains(StateActions.REQUEST_COMPONENT)&& input.matches("U\\s+\\d+");
+            case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST)&& input.matches("F\\s+\\d+");
+            case "X" -> availableActions.contains(StateActions.FINISH_BUILDING) && input.matches("X");
+            case "L" ->(availableActions.contains(StateActions.LOSE_CREW)   ||
+                        availableActions.contains(StateActions.LOSE_GOOD))      && input.matches("L\\s+\\d+\\s+\\d+") ||
+                        availableActions.contains(StateActions.CHOOSE_PLANET)   && input.matches("L");
+            case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("B\\s+\\d+\\s+\\d+");
+            case "K" -> availableActions.contains(StateActions.CHOOSE_SHIP_PIECE)&& input.matches("K");
+            case "Y" -> availableActions.contains(StateActions.GIVE_UP)         && input.matches("Y");
+            case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.matches("A\\s+\\d+\\s+\\d+");
+            case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.matches("E\\s+\\d+");
+            case " " -> (availableActions.contains(StateActions.GO_NEXT)    ||
+                        availableActions.contains(StateActions.DRAW_CARD)   ||
+                        availableActions.contains(StateActions.RELEASE_FORECAST));
 
             default -> {
-                System.out.println("invalid input");
+                //System.out.println("invalid input");
                 yield false;
             }
         };
     }
+
 }
-
-
-//        for(StateActions action : availableActions){
-//            switch(action){
-//                case ACTIVATE_COMPONENT -> {
-//                    //check if input = number + space + number
-//                    if (checkFormat(input, "\\d+ \\d+")) return false;
-//
-//                    // check if the point made from those numbers is selectable
-//                    if (!gameState.getAvailablePositions().contains(getPoint(input))){
-//                        return false;
-//                    }
-//                }
-//                case SPEND_BATTERIES -> {
-//                    //check if input = number + space + number
-//                    if (!input.matches("\\d+ \\d+")) return false;
-//
-//                    // check if the point made from those numbers is selectable
-//                    return model.getMyShip().getBatteries().containsKey(getPoint(input));
-//                }
-//                case GRAB_REWARD -> {
-//                    if (!input.matches("(?i)[pr]")) return false;
-//                }
-//                case CHOOSE_SHIP_PIECE -> {
-//                    if (!input.matches("\\d")) return false;
-//                }
-//            }
-//        }
-//        return false;

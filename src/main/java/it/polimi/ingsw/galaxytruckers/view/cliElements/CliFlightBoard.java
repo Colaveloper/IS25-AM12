@@ -7,16 +7,14 @@ import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import java.util.*;
 
 public class CliFlightBoard extends CliElement {
-    private final FlightBoard flightBoard;
+    FlightBoard flightBoard;
 
-    public CliFlightBoard(ClientModel model) {
-        super();
-        this.flightBoard = model.getGame().getFlightBoard();
-        //model.startingPositionLeftProperty().addListener(this);
+    public CliFlightBoard(FlightBoard flightBoard) {
+        this.flightBoard = flightBoard;
     }
 
     @Override
-    public List<String> getDescription() {
+    protected List<String> getNewDescription() {
         String[] asArray = new String[flightBoard.getLoopLength()];
         Arrays.fill(asArray, "_");
 
@@ -31,7 +29,7 @@ public class CliFlightBoard extends CliElement {
                 .forEach((e) -> asArray[e.getValue()] = e.getKey().getDescription());
 
         List<String> result = new ArrayList<>(List.of(String.join("", asArray)));
-        DescriptionUtils.borderAndTitle(result, "flight board");
+        result = DescriptionUtils.borderAndTitle(result, "flight board");
 
         return result;
     }

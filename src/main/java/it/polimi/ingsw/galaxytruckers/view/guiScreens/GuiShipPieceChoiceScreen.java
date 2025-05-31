@@ -2,13 +2,14 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
 public class GuiShipPieceChoiceScreen extends GuiScreen {
-    public GuiShipPieceChoiceScreen(ClientModel model, ClientController controller) {
-        super(model, controller);
+    public GuiShipPieceChoiceScreen(ClientModel model, ClientController controller, GameState gameState) {
+        super(model, controller, gameState);
     }
 
     @Override

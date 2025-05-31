@@ -8,16 +8,16 @@ public enum GameColor {
     YELLOW("\u001B[33m●\u001B[0m", Color.YELLOW),
     GREEN("\u001B[32m●\u001B[0m", Color.GREEN);
 
-    private final String emoji;
+    private final String bullet;
     private final Color jfxColor;
 
-    GameColor(String emoji, Color color) {
-        this.emoji = emoji;
+    GameColor(String bullet, Color color) {
+        this.bullet = bullet;
         this.jfxColor = color;
     }
 
     public String getDescription() {
-        return emoji;
+        return bullet;
     }
 
     public Color getJfxColor() {

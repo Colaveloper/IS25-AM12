@@ -2,8 +2,9 @@ package it.polimi.ingsw.galaxytruckers.view.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.view.Observer;
-import it.polimi.ingsw.galaxytruckers.view.enums.Level;
+import it.polimi.ingsw.galaxytruckers.view.ModelObserver;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
@@ -14,7 +15,9 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class ClientModel implements ModelObservable {
+public class ClientModel {
+
+    private final List<ModelObserver> observers = new ArrayList<>();
     
     private final Map<UUID, Lobby> activeLobbies = new HashMap<>();
 
@@ -22,200 +25,247 @@ public class ClientModel implements ModelObservable {
     private Game game = null;
     private final Set<Player> players = new HashSet<>();
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
+    private boolean cheatOn = false;
 
-    private final ObservableProperty<MetaState> clientState = new ObservableProperty<>(MetaState.REGISTER);
-
-    private final List<Observer> observers = new ArrayList<>();
+    private MetaState metaState = MetaState.REGISTER;
 
     private Map<Player, Integer> finalScores;
+
+    // Locks
+    private final Object playersLock = new Object();
+    private final Object gameLock = new Object();
+    private final Object observersLock = new Object();
+
+    //region Observer methods
+    public void addObserver(ModelObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(ModelObserver observer) {
+        observers.remove(observer);
+    }
+    //endregion
 
     //region Setup methods
 
     public void setPlayer(Player player) {
-        this.clientPlayer = player;
+        synchronized (playersLock) {
+            this.clientPlayer = player;
+        }
     }
 
     public void createGame(Level level, int playersN) {
-        game = new Game(level, playersN);
+        synchronized (gameLock) {
+            game = new Game(level, playersN);
+            game.setObservers(observers);
+        }
     }
 
     public void addPlayer(Player player, GameColor color) {
-        players.add(player);
-        player.setShipBoard(game.addShipBoard(color));
-        shipToPlayer.put(player.getShipBoard(), player);
+        synchronized (playersLock) {
+            synchronized (gameLock) {
+                players.add(player);
+                player.setShipBoard(game.addShipBoard(color));
+                shipToPlayer.put(player.getShipBoard(), player);
+            }
+        }
+    }
+
+    public void activateCheats(int input) {
+        cheatOn = true;
+        CheatCodes.activateCheats(input);
     }
 
     //endregion
 
     //region Getters
     public Map<UUID, Lobby> getActiveLobbies() {
-        return activeLobbies;
+        synchronized (gameLock) {
+            //sincronizzare su una copia se serve
+            return activeLobbies;
+        }
     }
 
     public Player getClientPlayer() {
-        return clientPlayer;
+        synchronized (playersLock) {
+            return clientPlayer;
+        }
     }
 
     public Game getGame() {
-        return game;
+        synchronized (gameLock) {
+            return game;
+        }
     }
 
     public Set<Player> getPlayers() {
-        return players;
+        synchronized (playersLock) {
+            //sincronizzare su una copia se serve
+            return players;
+        }
     }
 
     public Player getPlayerByShip(ShipBoard shipBoard) {
-        return shipToPlayer.get(shipBoard);
+        synchronized (playersLock) {
+            return shipToPlayer.get(shipBoard);
+        }
     }
 
     public Map<ShipBoard, Player> getShipToPlayer() {
-        return shipToPlayer;
+        synchronized (playersLock) {
+            return new HashMap<>(shipToPlayer);
+        }
     }
 
     public Map<Player, Integer> getFinalScores() {
-        return finalScores;
+        //forse anche su player?
+        synchronized (gameLock) {
+            return finalScores;
+        }
+    }
+
+    public boolean isCheatOn() {
+        return cheatOn;
     }
     //endregion
 
     //region Event update methods
     public void notifyCurrentState(GameState gameState) {
-        game.setCurrentState(gameState);
+        synchronized (gameLock) {
+            game.setCurrentState(gameState);
+        }
+        observers.forEach(modelObserver -> modelObserver.notifyCurrentState(gameState));
+    }
+
+    private GameState safeGetCurrentState() {
+        synchronized (gameLock) {
+            return game.getCurrentState();
+        }
     }
 
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
-        game.getCurrentState().notifyRequestRandComponent(shipBoard, component);
+        safeGetCurrentState().notifyRequestRandComponent(shipBoard, component);
     }
 
     public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
-        game.getCurrentState().notifyRequestComponent(shipBoard, component);
+        safeGetCurrentState().notifyRequestComponent(shipBoard, component);
     }
 
     public void notifyRejectComponent(ShipBoard shipBoard) {
-        game.getCurrentState().notifyRejectComponent(shipBoard);
+        safeGetCurrentState().notifyRejectComponent(shipBoard);
     }
 
     public void notifyStashComponent(ShipBoard shipBoard) {
-        game.getCurrentState().notifyStashComponent(shipBoard);
+        safeGetCurrentState().notifyStashComponent(shipBoard);
     }
 
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index) {
-        game.getCurrentState().notifyGrabStashedComponent(shipBoard, index);
+        safeGetCurrentState().notifyGrabStashedComponent(shipBoard, index);
     }
 
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
-        game.getCurrentState().notifyPlaceComponent(shipBoard, point, orientation);
+        safeGetCurrentState().notifyPlaceComponent(shipBoard, point, orientation);
     }
 
     public void notifyFlipHourglass(ShipBoard shipBoard) {
-        game.getCurrentState().notifyFlipHourglass(shipBoard);
+        safeGetCurrentState().notifyFlipHourglass(shipBoard);
     }
 
     public void notifyHourglassEnd() {
-        game.getCurrentState().notifyHourglassEnd();
+        safeGetCurrentState().notifyHourglassEnd();
     }
 
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
-        game.getCurrentState().notifyFlightBoardPosition(shipBoard, position);
+        safeGetCurrentState().notifyFlightBoardPosition(shipBoard, position);
     }
 
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        game.getCurrentState().notifyPeekForecast(shipBoard, deckIndex);
+        safeGetCurrentState().notifyPeekForecast(shipBoard, deckIndex);
     }
 
     public void setForecastDeck(List<AdventureCard> adventureCards) {
-        game.getCurrentState().setForecastDeck(adventureCards);
+        safeGetCurrentState().setForecastDeck(adventureCards);
     }
 
     public void notifyReleaseForecast(ShipBoard shipBoard) {
-        game.getCurrentState().notifyReleaseForecast(shipBoard);
+        safeGetCurrentState().notifyReleaseForecast(shipBoard);
     }
 
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        game.getCurrentState().notifyRemoveComponent(shipBoard, point);
+        safeGetCurrentState().notifyRemoveComponent(shipBoard, point);
     }
 
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
-        game.getCurrentState().notifyChooseShipPiece(shipBoard, pieceIndex);
+        safeGetCurrentState().notifyChooseShipPiece(shipBoard, pieceIndex);
     }
 
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
-        game.getCurrentState().notifyShipNotConnected(shipBoard, shipPieces);
+        safeGetCurrentState().notifyShipNotConnected(shipBoard, shipPieces);
     }
 
     public void notifyShipValidated(ShipBoard shipBoard) {
-        game.getCurrentState().notifyShipValidated(shipBoard);
+        safeGetCurrentState().notifyShipValidated(shipBoard);
     }
 
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
-        game.getCurrentState().notifyInitializeCabin(shipBoard, point, crewType);
+        safeGetCurrentState().notifyInitializeCabin(shipBoard, point, crewType);
     }
 
     public void notifyDrawCard(AdventureCard adventureCard) {
-        game.getCurrentState().notifyDrawCard(adventureCard);
+        safeGetCurrentState().notifyDrawCard(adventureCard);
     }
 
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-        game.getCurrentState().notifyActivateComponent(shipBoard, point);
+        safeGetCurrentState().notifyActivateComponent(shipBoard, point);
     }
 
     public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
-        game.getCurrentState().notifyLoseCrew(shipBoard, point);
+        safeGetCurrentState().notifyLoseCrew(shipBoard, point);
     }
 
     public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed) {
-        game.getCurrentState().notifyGrabReward(shipBoard, rewardGrabbed);
+        safeGetCurrentState().notifyGrabReward(shipBoard, rewardGrabbed);
     }
 
     public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        game.getCurrentState().notifyPlaceGoods(shipBoard, point, goodsType);
+        safeGetCurrentState().notifyPlaceGoods(shipBoard, point, goodsType);
     }
 
     public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        game.getCurrentState().notifyRemoveGoods(shipBoard, point, goodsType);
+        safeGetCurrentState().notifyRemoveGoods(shipBoard, point, goodsType);
     }
 
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        game.getCurrentState().notifyUseBattery(shipBoard,point);
+        safeGetCurrentState().notifyUseBattery(shipBoard,point);
     }
 
     public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
-        game.getCurrentState().notifyChoosePlanet(shipBoard, choice);
+        safeGetCurrentState().notifyChoosePlanet(shipBoard, choice);
     }
 
     public void notifyGiveUp(ShipBoard shipBoard) {
-        game.getCurrentState().notifyGiveUp(shipBoard);
+        safeGetCurrentState().notifyGiveUp(shipBoard);
     }
 
     public void setFinalScores(Map<Player, Integer> finalScores) {
-        this.finalScores = finalScores;
+        synchronized (gameLock) {
+            this.finalScores = finalScores;
+        }
     }
     //endregion
 
     public ShipBoard getMyShip() {
-        return clientPlayer.getShipBoard();
-    }
-
-    private void notifyObservers() {
-        for (Observer o : observers) {
-            o.onNotified();
+        synchronized (playersLock) {
+            return clientPlayer.getShipBoard();
         }
     }
 
-    public ObservableProperty<MetaState> getMetaState() {
-        return clientState;
+    public MetaState getMetaState() {
+        return metaState;
     }
 
     public void setMetaState(MetaState metaState) {
-        this.clientState.setValue(metaState);
-    }
-
-    @Override
-    public void addObserver(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void removeObserver(Observer o) {
-        observers.remove(o);
+        this.metaState = metaState;
+        observers.forEach(observer -> observer.notifyMetaState(metaState));
     }
 }

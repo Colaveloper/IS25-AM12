@@ -1,16 +1,16 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
-import it.polimi.ingsw.galaxytruckers.view.Observer;
+import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.*;
 
-public class FlightBoard implements ModelObservable{
+public class FlightBoard implements Invalidator {
     private final Map<ShipBoard, Integer> shipToPlace;
     private final int loopLength;
     private final List<Integer> startingPositions;
 
-    private final List<Observer> observers = new ArrayList<>();
+    private final List<Listener> listeners = new ArrayList<>();
 
     public FlightBoard(List<Integer> startingPositions, int loopLength) {
         this.shipToPlace = new HashMap<>();
@@ -60,20 +60,20 @@ public class FlightBoard implements ModelObservable{
         return startingPositions;
     }
 
-    private void notifyObservers() {
-        for (Observer o : observers) {
+    public void notifyObservers() {
+        for (Listener o : listeners) {
             o.onNotified();
         }
     }
 
     @Override
-    public void addObserver(Observer o) {
-        observers.add(o);
+    public void addObserver(Listener o) {
+        listeners.add(o);
     }
 
     @Override
-    public void removeObserver(Observer o) {
-        observers.remove(o);
+    public void removeObserver(Listener o) {
+        listeners.remove(o);
     }
 }
 

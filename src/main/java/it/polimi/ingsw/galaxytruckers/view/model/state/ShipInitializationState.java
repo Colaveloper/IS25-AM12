@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public final class ShipInitializationState extends GameState {
     private final Map<ShipBoard, Map<CrewType,List<Point>>> crewtypeToPoints;
@@ -25,8 +24,9 @@ public final class ShipInitializationState extends GameState {
 
     @Override
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
-        shipBoard.initializeCabin(point, crewType);
+        int numResidents = shipBoard.initializeCabin(point, crewType);
         crewtypeToPoints.get(shipBoard).remove(crewType);
+        game.getObservers().forEach(observer -> observer.notifyInitializeCabin(shipBoard, point, crewType, numResidents));
     }
 
     public Map<ShipBoard, Map<CrewType,List<Point>>> getCrewtypeToPoints() {

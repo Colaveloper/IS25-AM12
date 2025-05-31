@@ -3,24 +3,38 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
-import jdk.jfr.Description;
 
+import java.awt.*;
 import java.util.List;
 
 public class CliHand extends CliElement {
 
-    private final Component component;
+    private CliComponent cliComponent;
 
     public CliHand(Component component) {
-        this.component = component;
+        this.cliComponent = CliComponent.of(component);
+    }
+
+    public CliHand() {
+        this.cliComponent = null;
+    }
+
+    void setHand(Component lastComponent) {
+        cliComponent = CliComponent.of(lastComponent);
+        setDirty();
+    }
+
+    void clearHand() {
+        cliComponent = null;
+        setDirty();
     }
 
     @Override
-    protected List<String> getDescription() {
+    protected List<String> getNewDescription() {
         return DescriptionUtils.borderAndTitle(
-                component == null
-                        ? List.of("   ", "   ", "   ")
-                        : CliComponent.of(component).getDescription(),
+                cliComponent == null
+                        ? List.of("    ", "     ", "   ")
+                        : cliComponent.getDescription(),
                 "hand"
         );
     }

@@ -2,15 +2,13 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Battery;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Cabin;
 
 import java.util.List;
 
 public class CliCabin extends CliComponent{
     
-    Cabin cabin;
+    private final Cabin cabin;
     
     public CliCabin(Cabin component) {
         super(component);
@@ -18,7 +16,7 @@ public class CliCabin extends CliComponent{
     }
 
     @Override
-    public List<String> getDescription() {
+    protected List<String> getNewDescription() {
         String open;
         switch (cabin.getCrewType()){
             case CrewType.PURPLE -> {
@@ -34,6 +32,6 @@ public class CliCabin extends CliComponent{
                 open = Highlights.RESET.getHighlight();
             }
         };
-        return generateborders(open + " ⌂" + cabin.getNumResidents() + Highlights.RESET.getHighlight());
+        return addBorders(open + " ⌂" + cabin.getNumResidents() + Highlights.RESET.getHighlight());
     }
 }

@@ -21,6 +21,7 @@ public class ComponentBank {
 
     public void initialize() throws IOException {
         this.coveredComponents = loadComponents();
+        Collections.shuffle(this.coveredComponents);
     }
 
     public Component removeUncoveredComponent(int id) {

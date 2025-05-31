@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -14,8 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class GuiGameCreationScreen extends GuiScreen {
-    public GuiGameCreationScreen(ClientModel model, ClientController controller) {
-        super(model, controller);
+    public GuiGameCreationScreen(ClientModel model, ClientController controller, GameState gameState) {
+        super(model, controller, gameState);
     }
 
     @Override

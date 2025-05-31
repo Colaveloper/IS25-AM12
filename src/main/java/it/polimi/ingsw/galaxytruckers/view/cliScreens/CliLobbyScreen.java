@@ -32,9 +32,10 @@ public class CliLobbyScreen extends CliScreen {
 
     @Override
     public void render() {
-        System.out.print("Currently in lobby: ");
+        StringBuilder lobbyScreen = new StringBuilder("Currently in lobby: ");
         for(Player player : model.getPlayers()) {
-            System.out.print(player.getNickname());
+            lobbyScreen.append(" ").append(player.getNickname());
         }
+        System.out.println(lobbyScreen);
     }
 }

@@ -2,11 +2,8 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.CargoHold;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +24,7 @@ public class CliCargoHold extends CliComponent {
     }
 
     @Override
-    public List<String> getDescription() {
+    protected List<String> getNewDescription() {
         Map<GoodsType, Integer> goodMap = cargoHold.getGoods();
         StringBuilder result = new StringBuilder();
         String open;
@@ -57,7 +54,7 @@ public class CliCargoHold extends CliComponent {
         result.append(symbols.get(0).repeat(cargoHold.getSize() - placed));
         result.append(" ".repeat(3 - cargoHold.getSize()));
 
-        return generateborders(result.toString());
+        return addBorders(result.toString());
     }
 }
 

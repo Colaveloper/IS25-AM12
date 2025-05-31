@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.view.enums.Level;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 
 import java.util.List;
 

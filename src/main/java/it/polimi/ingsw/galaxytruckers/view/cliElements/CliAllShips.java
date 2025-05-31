@@ -1,48 +1,36 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.network.client.ConfigFactory;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
-import javafx.beans.property.ObjectProperty;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
 public class CliAllShips extends CliElement {
-    private final Map<Player, CliShipBoard> playerToCliShip;
+    private final List<CliShipBoard> playerToCliShip;
 
-    public CliAllShips(Map<ShipBoard, Player> shipToPlayer) {
-        playerToCliShip = new HashMap<>();
-        shipToPlayer.forEach(( ship,player) -> {
-                CliShipBoard cliShipBoard = new CliShipBoard(ship, player.getNickname());
-            playerToCliShip.put(player, cliShipBoard);
-        });
-    }
-
-    public void highlightPoints(Player player, Set<Point> points, Highlights color){
-        playerToCliShip.get(player).highlightPoints(points, color);
+    public CliAllShips(List<? extends CliShipBoard> ships) {
+        //posso mettere una cliShipBoard qualsiasi invece di specificare se ha stash o no
+        //togliendo anche la necessità di specificare quando uso CliAllShipsHandAndStash
+        this.playerToCliShip = new ArrayList<>();
+        playerToCliShip.addAll(ships);
     }
 
     @Override
-    public List<String> getDescription() {
+    protected List<String> getNewDescription() {
         List<String> description = new ArrayList<>();
 
-        for (Map.Entry<Player, CliShipBoard> entry : playerToCliShip.entrySet()) {
+        for (CliShipBoard cliShipBoard : playerToCliShip) {
             description = DescriptionUtils.sideBySide(
                     description,
-                    new CliShipAndHand(
-                            entry.getValue().shipBoard,
-                            entry.getKey().getNickname()
-                    ).getDescription()
+                    cliShipBoard.getDescription()
             );
         }
+
+        description = DescriptionUtils.borderAndTitle(description, "all ships");
 
         return description;
     }

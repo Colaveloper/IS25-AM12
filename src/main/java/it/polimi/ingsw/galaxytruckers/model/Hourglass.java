@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Hourglass {
-    private final static long DURATION = 60000;
+    private final static long DURATION = 600000; //todo set to 60000 later
 
     private final AtomicInteger flipsLeft = new AtomicInteger();
     private final AtomicBoolean isRunning = new AtomicBoolean(false);

@@ -3,6 +3,8 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.model.state.AddGoodsState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 import java.awt.*;
@@ -11,8 +13,11 @@ import java.util.List;
 
 public class CliGoodsScreen extends CliScreen {
 
-    public CliGoodsScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+    AddGoodsState gamestate;
+
+    public CliGoodsScreen(ClientModel model, ControllerToServer controller, AddGoodsState gameState) {
         super(model, controller, gameState);
+        this.gamestate = gameState;
     }
 
 
@@ -35,4 +40,8 @@ public class CliGoodsScreen extends CliScreen {
             controller.removeGoods(new Point(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])), GoodsType.valueOf(parts[3].toUpperCase()));
         }
     }
+
+    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType){}
+
+    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType){}
 }

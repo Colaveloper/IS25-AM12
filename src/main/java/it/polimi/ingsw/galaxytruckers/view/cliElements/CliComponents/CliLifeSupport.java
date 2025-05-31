@@ -2,22 +2,20 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.LifeSupport;
 
 import java.util.List;
 
 public class CliLifeSupport extends CliComponent {
 
-    LifeSupport lifeSupport;
+    private final LifeSupport lifeSupport;
     public CliLifeSupport(LifeSupport component) {
         super(component);
         this.lifeSupport = component;
     }
 
     @Override
-    public List<String> getDescription() {
+    protected List<String> getNewDescription() {
         String open;
         switch (lifeSupport.getAlienType()){
             case CrewType.PURPLE -> open = Highlights.PURPLE.getHighlight();
@@ -25,6 +23,6 @@ public class CliLifeSupport extends CliComponent {
             case CrewType.HUMAN -> open = Highlights.WHITE.getHighlight();
             default -> open = Highlights.RESET.getHighlight();
         }
-        return generateborders(open + " Ѫ " + Highlights.RESET.getHighlight());
+        return addBorders(open + " Ѫ " + Highlights.RESET.getHighlight());
     }
 }

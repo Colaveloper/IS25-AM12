@@ -4,5 +4,6 @@ public enum MetaState {
     REGISTER,
     JOINORCREATE,
     INLOBBY,
+    CREATION,
     INGAME
 }

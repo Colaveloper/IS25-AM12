@@ -1,22 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
-import it.polimi.ingsw.galaxytruckers.view.Observer;
-import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ComponentBank implements ModelObservable {
+public class ComponentBank {
     private int coveredComponentsN;
     private final List<Component> uncoveredComponents;
-
-    private final List<Observer> observers = new ArrayList<>();
 
     public ComponentBank(int coveredComponentsN) {
         this.coveredComponentsN = coveredComponentsN;
@@ -31,25 +23,15 @@ public class ComponentBank implements ModelObservable {
         uncoveredComponents.add(component);
     }
 
-    public List<Component> getUncoveredComponents() {
-        return uncoveredComponents;
-    }
-
     public void removeCoveredComponent() {
-        this.coveredComponentsN--;
+        coveredComponentsN--;
     }
 
     public int getCoveredComponentsN() {
         return coveredComponentsN;
     }
 
-    @Override
-    public void addObserver(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void removeObserver(Observer o) {
-        observers.remove(o);
+    public List<Component> getUncoveredComponents() {
+        return uncoveredComponents;
     }
 }

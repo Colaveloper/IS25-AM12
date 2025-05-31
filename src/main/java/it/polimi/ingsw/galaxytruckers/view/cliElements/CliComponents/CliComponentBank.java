@@ -2,64 +2,103 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliElement;
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CliComponentBank extends CliElement {
 
+    private int coveredComponentsN;
+    private final Map<Integer, CliComponent> cliComponentMap;
+    private final List<CliComponent> uncoveredComponents;
 
-    private final ShipBoard[] forecastDeck;
-    private final int coveredComponentN;
-    private List<CliComponent> revealedComponents;
+    public CliComponentBank(ComponentBank componentBank) {
+        this.cliComponentMap = new HashMap<>();
+        this.coveredComponentsN = componentBank.getCoveredComponentsN();
+        List<Component> modelUncovered =  componentBank.getUncoveredComponents();
+        this.uncoveredComponents = new ArrayList<>();
+        for (Component component : modelUncovered) {
+            CliComponent cliComponent = new CliComponent(component);
+            this.uncoveredComponents.add(cliComponent);
+            this.cliComponentMap.put(component.getId(),cliComponent);
+        }
+//        componentBank.getCoveredComponentsNProperty().addObserver(_ -> {
+//            super.notifyObservers();
+//        });
+//
+//        componentBank.getUncoveredComponentsProperty().getUnmodifiableView().forEach(component -> {
+//            revealedComponents.put(component, CliComponent.of(component));
+//        });
+//        componentBank.getUncoveredComponentsProperty().addListener(new ObservableList.Listener<>() {
+//            @Override
+//            public void onAdd(int index, Component component) {
+//                revealedComponents.put(component, CliComponent.of(component));
+//                notifyObservers(); // Notify observers when component added to uncovered pile
+//            }
+//
+//            @Override
+//            public void onRemove(int index, Component component) {
+//                revealedComponents.remove(component);
+//                notifyObservers(); // Notify observers when component removed from uncovered pile
+//            }
+//        });
+    }
 
-    public CliComponentBank(ClientModel model) {
-        super();
-        ComponentBank componentBank = model.getGame().getCurrentState().getComponentBank();
-        this.forecastDeck = model.getGame().getCurrentState().getLockedForecasts();
-        this.coveredComponentN = componentBank.getCoveredComponentsN();
-        for(Component component : componentBank.getUncoveredComponents()){
-            revealedComponents.add(new CliComponent(component));
+    public void removeCovered() {
+        coveredComponentsN--;
+        setDirty();
+    }
+
+    public void addUncovered(Component component) {
+        uncoveredComponents.add(CliComponent.of(component));
+        setDirty();
+    }
+
+    public void removeUncovered(Component component) {
+        CliComponent cliComponent = cliComponentMap.get(component.getId());
+        if (cliComponent != null) {
+            cliComponentMap.remove(component.getId());
+            uncoveredComponents.remove(cliComponent);
+            setDirty();
+        } else {
+            // try to find it by checking equality instead
+            for (CliComponent comp : new ArrayList<>(uncoveredComponents)) {
+                if (comp.getId() == component.getId()) {
+                    uncoveredComponents.remove(comp);
+                    cliComponentMap.remove(component.getId());
+                    setDirty();
+                    break;
+                }
+            }
         }
     }
 
+    public List<CliComponent> getUncoveredComponents() {
+        return uncoveredComponents;
+    }
+
     @Override
-    public List<String> getDescription() {
-        String padding = "  ";
+    protected List<String> getNewDescription() {
         StringBuilder row = new StringBuilder();
-        List<String> description = new ArrayList<>();
 
-        description.add("Face down: " + coveredComponentN);
+        List<String> coveredDescription = new ArrayList<>(DescriptionUtils.borderAndTitle(List.of("", String.valueOf(coveredComponentsN), ""), "down"));
 
-        description.add("Face up: ");
-        for (int i = 0; i < 3; i++) {
-            for (CliComponent cliComponent : revealedComponents) {
-                row.append(cliComponent.getDescription().get(i));
-                row.append(padding);
-            }
-            description.add(row.toString());
-            row.setLength(0);
+        List<String> revealedDescription = new ArrayList<>();
+        List<String> revealedDescriptionUnit = new ArrayList<>();
+        int i = 0;
+        for (CliComponent cliComponent : uncoveredComponents) {
+            revealedDescriptionUnit.addAll(cliComponent.getNewDescription());
+            revealedDescriptionUnit.add("  "+i+"  ");
+            revealedDescription = DescriptionUtils.sideBySide(revealedDescription, revealedDescriptionUnit);
+            revealedDescriptionUnit.clear();
         }
-        for (int n = 1; n <= revealedComponents.size(); n++) {
-            row.append("  ").append(n).append("  ").append(padding);
-        }
-        description.add(row.toString());
+        revealedDescription = DescriptionUtils.borderAndTitle(revealedDescription, "up");
 
-        if (forecastDeck != null) {
-            List<String> forecast = new ArrayList<>();
-            forecast.add("  deck 1    deck 2    deck 3  ");
-            forecast.add(
-                    (forecastDeck[0] == null ? "available " : forecastDeck[0].getColor().toString()) +
-                    (forecastDeck[1] == null ? "available " : forecastDeck[1].getColor().toString()) +
-                    (forecastDeck[2] == null ? "available " : forecastDeck[2].getColor().toString())
-            );
-            description.addAll(DescriptionUtils.borderAndTitle(forecast, "forecast decks"));
-        }
-
-        return description;
+        return DescriptionUtils.sideBySide(coveredDescription, revealedDescription);
     }
 }

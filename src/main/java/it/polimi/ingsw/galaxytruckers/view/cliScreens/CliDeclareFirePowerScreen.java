@@ -1,18 +1,20 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.model.state.DeclareFirePowerState;
 
 import java.awt.*;
 
-public class CliPointSelectionScreen extends CliScreen {
+public class CliDeclareFirePowerScreen extends CliScreen {
 
-    public CliPointSelectionScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+    private DeclareFirePowerState gamestate;
+
+    public CliDeclareFirePowerScreen(ClientModel model, ControllerToServer controller, DeclareFirePowerState gameState) {
         super(model, controller, gameState);
+        this.gamestate = gameState;
     }
 
 
@@ -23,16 +25,16 @@ public class CliPointSelectionScreen extends CliScreen {
         }
         Point p = getPoint(input);
 
-        return gameState.getAvailablePositions().contains(p);
+        return gamestate.getAvailablePositions().contains(p);
     }
 
     @Override
     public void render() {
-        allShips.highlightPoints(model.getShipToPlayer().get(gameState.getShipBoard()), gameState.getAvailablePositions(), Highlights.GREEN);
+//        allShips.highlightPoints(model.getShipToPlayer().get(gamestate.getShipBoard()), gamestate.getAvailablePositions(), Highlights.GREEN);
 
         printShips();
 
-        if(model.getMyShip().equals(gameState.getShipBoard())) {
+        if(model.getMyShip().equals(gamestate.getShipBoard())) {
             System.out.println("select component to activate");
         }
         else {
@@ -44,7 +46,7 @@ public class CliPointSelectionScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        if(model.getMyShip().equals(gameState.getShipBoard())) {
+        if(model.getMyShip().equals(gamestate.getShipBoard())) {
             Point p = getPoint(input);
             if(model.getMyShip().getBatteries().containsKey(p)){
                 controller.useBattery(p);
@@ -54,4 +56,10 @@ public class CliPointSelectionScreen extends CliScreen {
             }
         }
     }
+
+    @Override
+    public void notifyActivateComponent(ShipBoard shipBoard, Point point){}
+
+    @Override
+    public void notifyUseBattery(ShipBoard shipBoard, Point point){}
 }

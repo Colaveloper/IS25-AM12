@@ -41,26 +41,39 @@ public sealed abstract class ShipBuildingState extends GameState permits
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
         shipBoard.offerComponent(component);
         componentBank.removeCoveredComponent();
+        game.getObservers().forEach(observer -> observer.notifyRequestRandComponent(shipBoard, component));
     }
 
     @Override
     public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
         shipBoard.offerComponent(component);
         componentBank.removeCoveredComponent();
+        game.getObservers().forEach(observer -> observer.notifyRequestComponent(shipBoard, component));
     }
 
     @Override
     public void notifyRejectComponent(ShipBoard shipBoard) {
+        Point prevPos = shipBoard.getLastPosition();
         Component component = shipBoard.rejectComponent();
         componentBank.addUncoveredComponent(component);
+        if (prevPos != null) {
+            game.getObservers().forEach(observer -> observer.notifyRejectComponent(shipBoard, component, prevPos));
+        } else {
+            game.getObservers().forEach(observer -> observer.notifyRejectComponent(shipBoard, component));
+        }
     }
 
     @Override
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
+        Point prevPos = shipBoard.getLastPosition();
         shipBoard.placeComponent(point, orientation);
+        if (prevPos != null) {
+            game.getObservers().forEach(observer -> observer.notifyPlaceComponent(shipBoard, prevPos, orientation, prevPos));
+        } else {
+            game.getObservers().forEach(observer -> observer.notifyPlaceComponent(shipBoard, point, orientation));
+        }
     }
 
-    @Override
     public ComponentBank getComponentBank(){
         return componentBank;
     }

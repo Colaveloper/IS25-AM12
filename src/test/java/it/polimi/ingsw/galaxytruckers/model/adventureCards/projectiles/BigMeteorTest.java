@@ -269,7 +269,7 @@ class BigMeteorTest {
 //
 //        directedCannon = new Cannon( null) {
 //            @Override
-//            public int getOrientation() {
+//            public int getOrientationProperty() {
 //                return 0;
 //            }
 //        };
@@ -280,7 +280,7 @@ class BigMeteorTest {
 //
 //        directedCannon = new Cannon( null) {
 //            @Override
-//            public int getOrientation() {
+//            public int getOrientationProperty() {
 //                return 1;
 //            }
 //        };

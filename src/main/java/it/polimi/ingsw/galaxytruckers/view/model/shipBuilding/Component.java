@@ -1,13 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
-import it.polimi.ingsw.galaxytruckers.view.Observer;
-import it.polimi.ingsw.galaxytruckers.view.model.ModelObservable;
+import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public sealed class Component implements ModelObservable permits
+public sealed class Component permits
         Battery,
         Cabin,
         Cannon,
@@ -19,8 +18,6 @@ public sealed class Component implements ModelObservable permits
     private final List<Connector> connectors;
     private int orientation;
     private final int id;
-
-    private final List<Observer> observers = new ArrayList<>();
 
     public Component(List<Connector> connectors, int id) {
         this.connectors = connectors;
@@ -46,22 +43,5 @@ public sealed class Component implements ModelObservable permits
 
     public void setOrientation(int orientation) {
         this.orientation = orientation;
-        notifyObservers();
-    }
-
-    @Override
-    public void addObserver(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void removeObserver(Observer o) {
-        observers.remove(o);
-    }
-
-    protected void notifyObservers() {
-        for (Observer o : observers) {
-            o.onNotified();
-        }
     }
 }

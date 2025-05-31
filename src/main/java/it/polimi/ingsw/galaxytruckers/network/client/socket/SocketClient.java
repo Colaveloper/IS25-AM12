@@ -253,6 +253,6 @@ public class SocketClient implements VirtualServer, VirtualClient {
 
     @Override
     public void notifyEvent(Event event) {
-        //TODO: send event to client controller
+        controller.notifyEvent(event);
     }
 }

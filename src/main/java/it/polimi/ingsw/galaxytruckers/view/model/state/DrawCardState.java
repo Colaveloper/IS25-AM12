@@ -8,9 +8,11 @@ import java.util.List;
 
 public final class DrawCardState extends AdventureState {
     private final static List<StateActions> availableActions = List.of(
-            StateActions.DRAW_CARD
+            StateActions.DRAW_CARD,
+            StateActions.GO_NEXT
     );
     private final ShipBoard shipBoard;
+    private boolean hasDrawn = false;
 
     public DrawCardState(ShipBoard shipBoard) {
         this.shipBoard = shipBoard;
@@ -26,5 +28,15 @@ public final class DrawCardState extends AdventureState {
     @Override
     public void notifyDrawCard(AdventureCard adventureCard) {
         game.setCurrentAdventureCard(adventureCard);
+        hasDrawn = true;
+        game.getObservers().forEach(observer -> observer.notifyDrawCard(adventureCard));
+    }
+
+    public ShipBoard getShipBoard() {
+        return shipBoard;
+    }
+
+    public boolean isHasDrawn() {
+        return hasDrawn;
     }
 }

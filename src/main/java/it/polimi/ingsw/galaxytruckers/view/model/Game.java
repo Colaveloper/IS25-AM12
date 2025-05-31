@@ -1,24 +1,30 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.view.enums.Level;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.view.ModelObserver;
+import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Game {
+    private List<ModelObserver> observers;
+
     private final Level level;
     private final int playersNumber;
 
     private final GameFactory gameFactory;
     private final Set<ShipBoard> shipBoards = new HashSet<>();
-    private Set<ShipBoard> givenUpShips;
+    private final Set<ShipBoard> givenUpShips = new HashSet<>();
     private final FlightBoard flightBoard;
-    private final ObservableProperty<GameState> currentState = new ObservableProperty<>(null);
+    private GameState currentState = null;
 
     private AdventureCard currentAdventureCard;
 
@@ -27,6 +33,14 @@ public class Game {
         this.playersNumber = playersNumber;
         this.gameFactory = GameFactory.getFactory(level);
         this.flightBoard = this.gameFactory.createFlightBoard();
+    }
+
+    public void setObservers(List<ModelObserver> observers) {
+        this.observers = observers;
+    }
+
+    public List<ModelObserver> getObservers() {
+        return observers;
     }
 
     public ShipBoard addShipBoard(GameColor color) {
@@ -40,7 +54,7 @@ public class Game {
      * @param state the {@code GameState} to be set
      */
     public void setCurrentState(GameState state) {
-        this.currentState.setValue(state);
+        this.currentState = state;
         state.setGame(this);
     }
 
@@ -48,7 +62,7 @@ public class Game {
      * @return the game's current state
      */
     public GameState getCurrentState() {
-        return currentState.getValue();
+        return currentState;
     }
 
     /**

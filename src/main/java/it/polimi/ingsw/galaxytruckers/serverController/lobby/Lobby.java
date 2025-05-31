@@ -13,6 +13,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Lobby implements LobbyInterface {
     private final GameModelInterface model;
@@ -43,7 +44,7 @@ public class Lobby implements LobbyInterface {
         this.playerColors = new HashMap<>();
 
         this.eventQueue = new EventQueue();
-        this.eventQueueHandler = new EventQueueHandler(getPlayers(), this.eventQueue);
+        this.eventQueueHandler = new EventQueueHandler(this::getPlayers, this.eventQueue);
 
         eventQueueHandler.start();
         addPlayer(creator);
@@ -85,6 +86,17 @@ public class Lobby implements LobbyInterface {
             }
             playerColors.put(player, chosenColor);
             player.setLobby(this);
+            eventQueue.notifyEvent(new LobbyDetailsEvent(
+                    player.getNickname(),
+                    this.getId(),
+                    playerColors.entrySet().stream()
+                            .collect(Collectors.toMap(
+                                    e -> e.getKey().getNickname(),
+                                    Map.Entry::getValue
+                            )),
+                    level,
+                    numPlayers
+            ));
             eventQueue.notifyEvent(new JoinLobbyEvent(player.getNickname(), playerColors.get(player)));
             if (players.size() == numPlayers) {
                 startGame();

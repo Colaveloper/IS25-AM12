@@ -3,23 +3,23 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.TestShipBuildingState;
 
-import java.awt.*;
+public class CliTestShipBuildingScreen extends CliScreen {
 
-public class CliShipBuildingScreen extends CliScreen {
+    private final CliComponentBank componentBank;
+    private final TestShipBuildingState gameState;
 
-    CliComponentBank componentBank;
-
-    public CliShipBuildingScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
+    public CliTestShipBuildingScreen(ClientModel model, ControllerToServer controller, TestShipBuildingState gameState) {
         super(model, controller, gameState);
-        this.componentBank = new CliComponentBank(model);
+        this.componentBank = new CliComponentBank(gameState.getComponentBank());
+        this.gameState = gameState;
     }
 
     @Override
     public void render() {
-        System.out.println(componentBank.getDescription());
-        printShips();
+        componentBank.getDescription().forEach(System.out::println);
+//        printShips();
         printActions();
     }
 

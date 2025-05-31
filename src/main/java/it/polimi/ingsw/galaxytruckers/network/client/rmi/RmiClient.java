@@ -59,7 +59,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     public void registerNickname(String myNickname) {
         runRemoteMethod(() -> {
             this.remoteController = server.registerNickname(this, myNickname);
-            this.scheduler.scheduleAtFixedRate(this::ping,5,5, TimeUnit.SECONDS);
+            this.scheduler.scheduleAtFixedRate(this::ping,50,50, TimeUnit.SECONDS); //todo set to 5 later
         });
     }
 
@@ -211,7 +211,8 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
 
     @Override
     public void notifyEvent(Event event) throws RemoteException {
-        //TODO: implement this method (create EventHandler ClientSide)
+        clientController.notifyEvent(event);
+        
     }
 
     @VisibleForTesting

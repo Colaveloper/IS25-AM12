@@ -31,6 +31,8 @@ class ServerControllerTest {
     @AfterEach
     void cleanup(){
         testController.getIdToLobby().clear();
+        Player.removePlayer("player1");
+        Player.removePlayer("player2");
     }
 
     @Test
@@ -40,22 +42,21 @@ class ServerControllerTest {
 
     @Test
     void newGameInitializesCorrectly(){
-        Player p = new Player("testPlayer");
-        testController.newGame(p, Level.SECOND, 2);
+        testController.newGame(testController.registerNickname("testPlayer"), Level.SECOND, 2);
         assertNotNull(testController.getIdToLobby());
         assertEquals(1, testController.getIdToLobby().size());
     }
 
     @Test
     void joinLobbyWithInCorrectKey(){
-        Player p = new Player("player1");
-        testController.newGame(p, Level.SECOND, 2);
-        assertThrows(IllegalArgumentException.class, () -> testController.joinLobby(new Player("player2"),new Lobby(model, p, Level.SECOND, 2).getId()));
+        Player p1 = testController.registerNickname("player1");
+        testController.newGame(p1, Level.SECOND, 2);
+        assertThrows(IllegalArgumentException.class, () -> testController.joinLobby(testController.registerNickname("player2"),new Lobby(model, p1, Level.SECOND, 2).getId()));
     }
 
     @Test
     void joinLobbyWithCorrectKey(){
-        Player p1 = new Player("player1");
+        Player p1 = testController.registerNickname("player1");
         testController.newGame(p1, Level.SECOND, 2);
 
         // grabbing the key
@@ -64,7 +65,7 @@ class ServerControllerTest {
         UUID firstKey = iterator.next();
         System.out.println("First key: " + firstKey);
 
-        Player p2 = new Player("player2");
+        Player p2 = testController.registerNickname("player2");
         testController.joinLobby(p2, firstKey);
         assertEquals(List.of(p1, p2), testController.getIdToLobby().get(firstKey).getPlayers());
     }
@@ -72,7 +73,7 @@ class ServerControllerTest {
     @Test
     void handlePlayerDisconnectionWhenPlayerPresent(){
         // player 1 creates game
-        Player p1 = new Player("player1");
+        Player p1 = testController.registerNickname("player1");
         testController.newGame(p1, Level.SECOND, 2);
 
         // grabbing the key
@@ -82,7 +83,7 @@ class ServerControllerTest {
         System.out.println("First key: " + firstKey);
 
         // player 2 joins with the key
-        Player p2 = new Player("player2");
+        Player p2 = testController.registerNickname("player2");
         testController.joinLobby(p2, firstKey);
 
         // player 2 disconnects
@@ -93,11 +94,11 @@ class ServerControllerTest {
     @Test
     void handlePlayerDisconnectionWhenPlayerNotPresent(){
         // player 1 creates game
-        Player p1 = new Player("player1");
+        Player p1 = testController.registerNickname("player1");
         testController.newGame(p1, Level.SECOND, 2);
 
         // player 2 doesn't join, but tries to disconnect
-        Player p2 = new Player("player2");
+        Player p2 = testController.registerNickname("player2");
         testController.handlePlayerDisconnection(p2);
         assertThrows(IllegalArgumentException.class, () -> Player.getPlayer("player2"));
     }
@@ -105,7 +106,7 @@ class ServerControllerTest {
     @Test
     void leaveLobbyIfPresent(){
         // player 1 creates game
-        Player p1 = new Player("player1");
+        Player p1 = testController.registerNickname("player1");
         testController.newGame(p1, Level.SECOND, 2);
 
         testController.leaveLobby(p1);
@@ -115,11 +116,11 @@ class ServerControllerTest {
     @Test
     void leaveLobbyIfNotPresentChangesNothing(){
         // player 1 creates game
-        Player p1 = new Player("player1");
+        Player p1 = testController.registerNickname("player1");
         testController.newGame(p1, Level.SECOND, 2);
         Map<UUID, Lobby> lobby1 = testController.getIdToLobby();
 
-        Player p2 = new Player("player2");
+        Player p2 = testController.registerNickname("player2");
         testController.leaveLobby(p2);
         Map<UUID, Lobby> lobby2 = testController.getIdToLobby();
 

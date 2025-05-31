@@ -1,37 +1,71 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
+import it.polimi.ingsw.galaxytruckers.view.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAdventureCard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.view.model.state.DrawCardState;
-
-import java.io.IOException;
+import it.polimi.ingsw.galaxytruckers.view.model.state.RemoveGoodsState;
 
 public class CliNewCardScreen extends CliScreen {
-    public CliNewCardScreen(ClientModel model, ControllerToServer controller, GameState gameState){
+
+    private CliAdventureCard adventureCard;
+    private final boolean imLeader;
+    private boolean hasDrown;
+    public CliNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState gameState){
         super(model, controller, gameState);
+        imLeader = gameState.getShipBoard() == model.getMyShip();
+        hasDrown = false;
+        adventureCard = null;
+        adventureCard = new CliAdventureCard(gameState.getGame().getCurrentAdventureCard());
     }
 
     @Override
     public void render() {
         printShips();
+        if(!hasDrown && !imLeader){
+            System.out.println("Wait for leader to draw");
+        }
+        if (adventureCard != null) {
+            System.out.println("A new card has been drawn:\n");
+            System.out.println(new CliAdventureCard(model).getDescription());
+        }
         printActions();
-        System.out.println("A new card has been drawn:\n");
-        System.out.println(new CliAdventureCard(model).getDescription());
+    }
+
+    @Override
+    public boolean isInputLegal(String input) {
+        if(!imLeader){
+            System.out.println("wait for leader");
+            return false;
+        }
+        return isFormatLegal(input);
     }
 
     @Override
     public void parseAndInvoke(String input) {
-        if(input.equalsIgnoreCase("X")){
-            controller.giveUp();
+        String command = input.split(" ")[0];
+        switch (command.toUpperCase()) {
+            case "Y":
+                controller.giveUp();
+                break;
+            case "":
+                if(imLeader && hasDrown){
+                    controller.goNext();
+                }
+                else if(imLeader){
+                    controller.drawCard();
+                }
+                else{
+                    System.out.println("wait for the leader to continue");
+                }
         }
-        else{
-            // TODO: probably needs fixing
-            controller.goNext();
-        }
+    }
+
+    @Override
+    public void notifyDrawCard(AdventureCard adventureCard) {
+        hasDrown = true;
+        this.adventureCard = new CliAdventureCard(adventureCard);
     }
 }

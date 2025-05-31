@@ -4,19 +4,20 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CliShipBoard extends CliElement {
 
     protected final ShipBoard shipBoard;
-    private final Map<Point, CliComponent> componentMap;
+
+    // no key = empty-space,
+    // no value = empty-area
+    protected final Map<Point, CliComponent> cliComponentMap;
     private final GameColor color;
     private final String nickname;
     int minX;
@@ -28,24 +29,41 @@ public class CliShipBoard extends CliElement {
         this.shipBoard = shipBoard;
         this.nickname = nickname;
         this.color = shipBoard.getColor();
-        componentMap = new HashMap<>();
-        shipBoard.getComponentMap().forEach(((point, shipBoardCell) -> {
-                    componentMap.put(point, CliComponent.of(shipBoardCell.getComponent()));
-        }));
-        minX = componentMap.keySet().stream().mapToInt(p -> p.x).min().orElse(0);
-        maxX = componentMap.keySet().stream().mapToInt(p -> p.x).max().orElse(0);
-        minY = componentMap.keySet().stream().mapToInt(p -> p.y).min().orElse(0);
-        maxY = componentMap.keySet().stream().mapToInt(p -> p.y).max().orElse(0);
+
+        cliComponentMap = new HashMap<>();
+
+        //shipBoard.getShipArea().forEach(p-> cliComponentMap.put(p, null));
+        Set<Point> shipArea = shipBoard.getShipArea();
+
+        minX = shipArea.stream().mapToInt(p -> p.x).min().orElse(0);
+        maxX = shipArea.stream().mapToInt(p -> p.x).max().orElse(0);
+        minY = shipArea.stream().mapToInt(p -> p.y).min().orElse(0);
+        maxY = shipArea.stream().mapToInt(p -> p.y).max().orElse(0);
+
+        for (Point p : shipBoard.getComponentMap().keySet()) {
+            cliComponentMap.put(p, CliComponent.of(shipBoard.getComponentMap().get(p)));
+        }
+    }
+
+    public void onPutComponent(Point p, Component newValue) {
+        CliComponent newCliComponent = CliComponent.of(newValue);
+        cliComponentMap.put(p, newCliComponent);
+        setDirty();
+    }
+
+    public void onRemoveComponent(Point p) {
+        cliComponentMap.remove(p);
+        setDirty();
     }
 
     public void highlightPoints(Set<Point> points, Highlights color){
         for (Point point : points){
-            componentMap.get(point).highlight(color);
+            cliComponentMap.get(point).highlight(color);
         }
     }
 
     @Override
-    public List<String> getDescription(){
+    protected List<String> getNewDescription(){
 
         List<String> result = new ArrayList<>();
         List<String> rowDescription = new ArrayList<>();
@@ -55,27 +73,27 @@ public class CliShipBoard extends CliElement {
             rowDescription.addAll(List.of("",String.valueOf(y),""));
             for (int x = minX; x <= maxX; x++) {
                 List<String> newCell = new ArrayList<>();
-                if (!componentMap.containsKey(new Point(x, y))) {
-                    // empty space
-                    newCell = List.of("   ", "   ", "   ");
-                } else if (componentMap.get(new Point(x, y)) == null) {
-                    // empty area
-                    newCell = List.of("   ", " X ", "   ");
+                if (!shipBoard.getShipArea().contains(new Point(x, y))) {
+                    // empty-space
+                    newCell = List.of("     ", "     ", "     ");
+                } else if (cliComponentMap.containsKey(new Point(x, y))) {
+                    newCell = cliComponentMap.get(new Point(x, y)).getDescription();
                 } else {
-                    newCell = componentMap.get(new Point(x, y)).getDescription();
+                    // empty-area
+                    newCell = List.of("     ", "  X  ", "     ");
                 }
+                rowDescription = DescriptionUtils.sideBySide(rowDescription, newCell);
             }
             result.addAll(rowDescription);
         }
 
-        StringBuilder xIndexes = new StringBuilder(" ");
-        for (int x = minX; x < maxX; x++) {
-            xIndexes.append("   ").append(x).append("  ");
-            x++;
+        StringBuilder xIndexes = new StringBuilder("   ");
+        for (int x = minX; x <= maxX; x++) {
+            xIndexes.append("  ").append(x).append("   ");
         }
         result.add(xIndexes.toString());
 
-        DescriptionUtils.borderAndTitle(
+        result = DescriptionUtils.borderAndTitle(
                 result,
                 color.getDescription()+" "+nickname
         );

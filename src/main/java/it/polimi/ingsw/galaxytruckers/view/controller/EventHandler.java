@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.dto.states.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -40,7 +41,8 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
             case ActivateComponentEvent activateComponentEvent -> {
                 clientModel.notifyActivateComponent(
                         playerRegistry.getByNickname(activateComponentEvent.playerName()).getShipBoard(),
-                        activateComponentEvent.point());
+                        activateComponentEvent.point()
+                );
             }
             case FlightBoardUpdateEvent flightBoardUpdateEvent -> {
                 clientModel.notifyFlightBoardPosition(
@@ -101,14 +103,21 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
             case JoinLobbyEvent joinLobbyEvent -> {
                 Player player = playerRegistry.addPlayer(joinLobbyEvent.playerName());
                 //TODO: also send the player color
-                clientModel.addPlayer(player, GameColor.BLUE);
+                // Only add to model if the player is not already present
+                if(!clientModel.getPlayers().contains(player)) {
+                    clientModel.addPlayer(player, joinLobbyEvent.color());
+                }
             }
             case LobbyDetailsEvent lobbyDetailsEvent -> {
                 //TODO: update client state
+                clientModel.createGame(lobbyDetailsEvent.level(), lobbyDetailsEvent.playersN());
                 for (String name : lobbyDetailsEvent.playerColors().keySet()) {
                     Player player = playerRegistry.addPlayer(name);
-                    clientModel.addPlayer(player, lobbyDetailsEvent.playerColors().get(name));
+                    if(!clientModel.getPlayers().contains(player)) {
+                        clientModel.addPlayer(player, lobbyDetailsEvent.playerColors().get(name));
+                    }
                 }
+                clientModel.setMetaState(MetaState.INLOBBY);
             }
             case NewCardEvent newCardEvent -> {
                 clientModel.notifyDrawCard(
@@ -298,5 +307,6 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
             }
         }
         clientModel.notifyCurrentState(gameState);
+        clientModel.setMetaState(MetaState.INGAME);
     }
 }
