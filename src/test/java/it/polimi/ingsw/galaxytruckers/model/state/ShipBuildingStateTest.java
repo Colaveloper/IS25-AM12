@@ -41,6 +41,7 @@ class ShipBuildingStateTest {
         @BeforeEach
         void setUp() {
             game = new Game(Level.SECOND);
+            game.setEventListener(new GameEventListenerStub());
             shipBoards.add(game.addShipBoard(GameColor.BLUE));
             shipBoards.add(game.addShipBoard(GameColor.RED));
             game.setEventListener(new GameEventListenerStub());

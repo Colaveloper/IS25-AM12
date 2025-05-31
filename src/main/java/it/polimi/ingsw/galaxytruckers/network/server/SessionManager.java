@@ -56,13 +56,12 @@ public class SessionManager {
     }
 
     public void ping(Player player) {
-        Session session;
         synchronized (activeSessions) {
             if (activeSessions.containsKey(player)) {
-                session = activeSessions.get(player);
-            } else return;
+                Session session = activeSessions.get(player);
+                session.setLastPing(Instant.now());
+            }
         }
-        session.setLastPing(Instant.now());
     }
 
     public void shutDown() {
@@ -71,8 +70,8 @@ public class SessionManager {
 
     private void cleanup() {
         List<Player> expiredPlayers = new ArrayList<>();
-        Instant now = Instant.now();
         synchronized (activeSessions) {
+            Instant now = Instant.now();
             for (Player player : activeSessions.keySet()) {
                 if (activeSessions.get(player).isExpired(now)) {
                     expiredPlayers.add(player);

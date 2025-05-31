@@ -97,6 +97,7 @@ class HandleProjectileStateTest {
     @Test
     void goNextChangesAdventureStateToChooseShipPieceState(){
         game = new Game(Level.SECOND);
+        game.setEventListener(new GameEventListenerStub());
         testState.setGame(game);
         testState.goNext(ship1);
         assertEquals(ChooseShipPieceState.class, game.getCurrentState().getClass());
@@ -116,6 +117,7 @@ class HandleProjectileStateTest {
                 return deck;
             }
         };
+        game.setEventListener(new GameEventListenerStub());
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
@@ -148,6 +150,7 @@ class HandleProjectileStateTest {
                 return deck;
             }
         };
+        game.setEventListener(new GameEventListenerStub());
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {

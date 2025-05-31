@@ -103,6 +103,7 @@ class RemoveCrewStateTest {
                 return deck;
             }
         };
+        game.setEventListener(new GameEventListenerStub());
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
@@ -129,6 +130,7 @@ class RemoveCrewStateTest {
                 return deck;
             }
         };
+        game.setEventListener(new GameEventListenerStub());
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {

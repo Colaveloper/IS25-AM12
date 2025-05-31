@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -22,6 +23,7 @@ class GameStateTest {
     @BeforeEach
     void setup(){
         game = new Game(Level.SECOND);
+        game.setEventListener(new GameEventListenerStub());
         ship1 = new SecondShipBoard(GameColor.BLUE);
     }
 

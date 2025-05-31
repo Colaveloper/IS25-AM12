@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -33,6 +34,7 @@ class SecondShipCorrectionStateTest {
                 return new HashSet<>();
             }
         };
+        game.setEventListener(new GameEventListenerStub());
         testState.setGame(game);
         testState.shipPieces = new HashMap<>();
         testState.shipPieces.put(new SecondShipBoard(GameColor.RED), List.of(Set.of(new Point(7,7))));
