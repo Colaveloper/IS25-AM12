@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
@@ -62,10 +63,13 @@ public class ServerController implements ServerControllerInterface {
 
     @Override
     public void leaveLobby(Player player) {
-        System.out.println("Player " + player.getNickname() + " has left the lobby");
         player.getLobby().ifPresent(lobby -> {
+            System.out.println("Player " + player.getNickname() + " has left the lobby");
             lobby.notifyPlayerExit(player);
             idToLobby.remove(lobby.getId());
         });
     }
+
+    @VisibleForTesting
+    protected ConcurrentMap<UUID, Lobby> getIdToLobby(){ return idToLobby;}
 }

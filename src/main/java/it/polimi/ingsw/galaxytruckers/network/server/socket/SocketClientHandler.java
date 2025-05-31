@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.network.messages.Message;
 import it.polimi.ingsw.galaxytruckers.network.messages.Ping;
 import it.polimi.ingsw.galaxytruckers.network.messages.Request;
 import it.polimi.ingsw.galaxytruckers.network.messages.Response;
+import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
@@ -23,7 +24,7 @@ import java.util.UUID;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
-class SocketClientHandler implements VirtualClient, VirtualServer {
+class SocketClientHandler implements VirtualServer, ClientHandler {
     private Player player;
     private final ServerControllerInterface controller;
     private LobbyInterface lobby;
@@ -45,18 +46,23 @@ class SocketClientHandler implements VirtualClient, VirtualServer {
     }
 
     public void start() {
-        if (!isRunning) {
-            isRunning = true;
-            requestThread = new Thread(this::requestTask, "RequestThread");
-            requestThread.start();
-        }
-        if (!isUpdating) {
-            isUpdating = true;
-            updateThread = new Thread(this::updateTask, "UpdateThread");
-            updateThread.start();
-        }
+        isRunning = true;
+        requestThread = new Thread(this::requestTask, "RequestThread");
+        requestThread.start();
+        isUpdating = true;
+        updateThread = new Thread(this::updateTask, "UpdateThread");
+        updateThread.start();
         System.out.println("Started Socket Client Handler");
     }
+
+    @Override
+    public void stop() {
+        isRunning = false;
+        isUpdating = false;
+        requestThread.interrupt();
+        updateThread.interrupt();
+    }
+
 
     public void stopUpdateThread() {
         isUpdating = false;

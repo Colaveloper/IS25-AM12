@@ -45,15 +45,15 @@ class RmiClientHandlerTest {
     }
 
     @Test
-    void startUpdateThread() {
-        rmiClientHandler.startUpdateThread();
+    void start() {
+        rmiClientHandler.start();
         assertTrue(rmiClientHandler.isRunning());
     }
 
     @Test
-    void stopUpdateThread() {
-        rmiClientHandler.startUpdateThread();
-        rmiClientHandler.stopUpdateThread();
+    void stop() {
+        rmiClientHandler.start();
+        rmiClientHandler.stop();
         assertFalse(rmiClientHandler.isRunning());
     }
 
@@ -65,7 +65,7 @@ class RmiClientHandlerTest {
 
     @Test
     void notifyEvent() throws InterruptedException {
-        rmiClientHandler.startUpdateThread();
+        rmiClientHandler.start();
         Event event = new PlayerDisconnectionEvent("x");
         CountDownLatch  countDownLatch = new CountDownLatch(1);
         rmiClientHandler.setAfterEach(countDownLatch::countDown);
@@ -258,7 +258,7 @@ class RmiClientHandlerTest {
             rmiClientHandler.notifyEvent(new PlayerDisconnectionEvent("x"));
             CountDownLatch latch = new CountDownLatch(1);
             rmiClientHandler.setAfterEach(latch::countDown);
-            rmiClientHandler.startUpdateThread();
+            rmiClientHandler.start();
             if (latch.await(1, TimeUnit.SECONDS)) {
                 assertFalse(rmiClientHandler.isRunning());
             } else {
