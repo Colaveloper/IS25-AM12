@@ -28,4 +28,8 @@ public final class RemoveCrewState extends AdventureState {
         shipBoard.loseCrew(point);
         game.getObservers().forEach(observer -> observer.notifyLoseCrew(shipBoard, point));
     }
+
+    public ShipBoard getShipBoard() {
+        return shipBoard;
+    }
 }

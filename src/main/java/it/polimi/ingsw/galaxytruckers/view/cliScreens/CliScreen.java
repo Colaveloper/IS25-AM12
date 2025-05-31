@@ -124,11 +124,14 @@ public abstract class CliScreen extends Screen {
         return switch (input.substring(0, 1)) {
             case "P" -> (availableActions.contains(StateActions.PLACE_COMPONENT) ||
                         availableActions.contains(StateActions.INITIALIZE_CABIN))&& input.matches("P\\s+\\d+\\s+\\d+") ||
-                        availableActions.contains(StateActions.GRAB_REWARD)     && input.matches("P");
+                        availableActions.contains(StateActions.GRAB_REWARD)     && input.matches("P") ||
+                        availableActions.contains(StateActions.ADD_GOOD) && input.matches("P/\\s+\\d+\\s+\\d+\\s+[A-Z]+");
             case "H" -> availableActions.contains(StateActions.FLIP_HOURGLASS)  && input.matches("H");
             case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.matches("S") ||
                         availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.matches("S\\s+\\d+");
-            case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT)&& input.matches("R");
+            case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT)&& input.matches("R") ||
+                        availableActions.contains(StateActions.REMOVE_GOOD) && input.matches("R\\s+\\d+\\s+\\d+\\s+[A-Z]+") ||
+                        availableActions.contains(StateActions.REMOVE_COMPONENT) && input.matches("R\\s+\\d+\\s+\\d+");
             case "C" ->(availableActions.contains(StateActions.REQUEST_RAND_COMPONENT) ||
                         availableActions.contains(StateActions.GO_NEXT))        && input.matches("C");
             case "U" -> availableActions.contains(StateActions.REQUEST_COMPONENT)&& input.matches("U\\s+\\d+");
