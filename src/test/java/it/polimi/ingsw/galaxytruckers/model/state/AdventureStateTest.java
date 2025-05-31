@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.SecondFlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -30,6 +31,7 @@ class AdventureStateTest {
     @Test
     void giveUpThrowsExceptionWhenNotInSecondLevel(){
         game = new Game(Level.TEST);
+        game.setEventListener(new GameEventListenerStub());
         testAdventureState.setGame(game);
         assertThrows(UnsupportedOperationException.class, () -> testAdventureState.giveUp(ship1));
     }
@@ -42,6 +44,7 @@ class AdventureStateTest {
                 return Set.of(ship1);
             }
         };
+        game.setEventListener(new GameEventListenerStub());
         testAdventureState.setGame(game);
         assertThrows(IllegalStateException.class, () -> testAdventureState.giveUp(ship1));
     }
@@ -49,6 +52,7 @@ class AdventureStateTest {
     @Test
     void giveUpAddsShipToGivenUpShips() throws IOException {
         game = new Game(Level.SECOND);
+        game.setEventListener(new GameEventListenerStub());
         flightBoard = new SecondFlightBoard(1);
         game.setFlightBoard(flightBoard);
         //game.start();

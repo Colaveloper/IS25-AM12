@@ -27,6 +27,7 @@ class DrawCardStateTest {
     @BeforeEach
     void setup() throws IOException{
         game = new Game(Level.SECOND);
+        game.setEventListener(new GameEventListenerStub());
         ship1 = new SecondShipBoard(GameColor.RED);
         ship2 = new SecondShipBoard(GameColor.BLUE);
         flightBoard = new SecondFlightBoard(2){
