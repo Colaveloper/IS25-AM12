@@ -94,14 +94,16 @@ public class SecondShipBuildingState extends ShipBuildingState {
 
     @Override
     protected void endBuilding() {
-        Set<ShipBoard> unfinishedShipBoards = new HashSet<>(game.getShipBoards());
-        unfinishedShipBoards.removeAll(completedShipBoards);
-        for (ShipBoard shipBoard : unfinishedShipBoards) {
-            releaseForecast(shipBoard);
-            shipBoard.finishBuilding();
-            placeShipOnFlightBoard(shipBoard);
+        synchronized (game.getStateLock()) {
+            Set<ShipBoard> unfinishedShipBoards = new HashSet<>(game.getShipBoards());
+            unfinishedShipBoards.removeAll(completedShipBoards);
+            for (ShipBoard shipBoard : unfinishedShipBoards) {
+                releaseForecast(shipBoard);
+                shipBoard.finishBuilding();
+                placeShipOnFlightBoard(shipBoard);
+            }
+            game.setCurrentState(new SecondShipCorrectionState());
         }
-        game.setCurrentState(new SecondShipCorrectionState());
     }
 
     protected void notifyHourglassEnd() {

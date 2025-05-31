@@ -216,6 +216,10 @@ public class Game {
         return eventListener;
     }
 
+    public Object getStateLock() {
+        return stateLock;
+    }
+
     public void requestRandComponent(ShipBoard shipBoard) {
         synchronized (stateLock) {
             currentState.requestRandComponent(shipBoard);
