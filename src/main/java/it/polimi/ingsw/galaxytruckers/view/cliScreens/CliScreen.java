@@ -3,13 +3,18 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.view.Screen;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
+import it.polimi.ingsw.galaxytruckers.view.model.Player;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class CliScreen extends Screen {
 
@@ -18,13 +23,22 @@ public abstract class CliScreen extends Screen {
     protected ControllerToServer controller;
     protected List<StateActions> availableActions;
     protected CliFlightBoard cliFlightBoard;
+    protected ShipBoard myShipBoard;
+    protected CliAllShips cliAllShips;
+    protected Map<ShipBoard, CliShipHandAndStash> shipToCliShip;
 
 
     public CliScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         this.model = model;
         this.controller = controller;
         this.state = gameState;
-        availableActions = gameState.getAvailableActions();
+        this.availableActions = gameState.getAvailableActions();
+        this.myShipBoard = model.getMyShip();
+        this.shipToCliShip = new HashMap<>();
+        for (Player player : model.getPlayers()) {
+            shipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));
+        }
+        cliAllShips = new CliAllShips(shipToCliShip.values().stream().toList());
         this.cliFlightBoard = new CliFlightBoard(model.getGame().getFlightBoard());
     }
 
@@ -56,7 +70,7 @@ public abstract class CliScreen extends Screen {
                     case SPEND_BATTERIES ->         actions.add("B[x][y] Spend battery on component");
                     case GRAB_REWARD ->             actions.add("P       To pick reward            ");
                     case CHOOSE_SHIP_PIECE ->       actions.add("[i]   Choose piece of ship to keep");
-                    case GO_NEXT, RELEASE_FORECAST->actions.add("press any key to continue         ");
+                    case GO_NEXT, RELEASE_FORECAST->actions.add("press ENTER key to continue       ");
                     case LOSE_CREW ->               actions.add("L[x][y] Remove crew from component");
                     case LOSE_GOOD ->               actions.add("L[x][y] Remove good from cargo hold");
                     case REMOVE_GOOD ->             actions.add("R[x][y][color] Pick goods from cargo hold");
@@ -104,33 +118,36 @@ public abstract class CliScreen extends Screen {
     }
 
     protected boolean isFormatLegal(String input) {
-        String[] parts = input.split(" ");
-        return switch (parts[0]) {
-            case "P" -> availableActions.contains(StateActions.PLACE_COMPONENT) && input.trim().matches("(?i)P\\s+\\d+\\s+\\d+") ||
-                        availableActions.contains(StateActions.GRAB_REWARD)     && input.trim().matches("(?i)P");
-            case "H" -> availableActions.contains(StateActions.FLIP_HOURGLASS)  && input.trim().matches("(?i)H");
-            case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.trim().matches("(?i)S") ||
-                        availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.trim().matches("(?i)S\\s+\\d+");
-            case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT)&& input.trim().matches("(?i)R");
-            case "C" -> availableActions.contains(StateActions.REQUEST_RAND_COMPONENT)&& input.trim().matches("(?i)C") ||
-                        availableActions.contains(StateActions.GO_NEXT)         && input.trim().matches("(?i)C");
-            case "U" -> availableActions.contains(StateActions.REQUEST_COMPONENT)&& input.trim().matches("(?i)U\\s+\\d+");
-            case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST)&& input.trim().matches("(?i)F\\s+\\d+");
-            case "X" -> availableActions.contains(StateActions.FINISH_BUILDING) && input.trim().matches("(?i)X");
-            case "L" -> availableActions.contains(StateActions.LOSE_CREW)       && input.trim().matches("(?i)L\\s+\\d+\\s+\\d+") ||
-                        availableActions.contains(StateActions.LOSE_GOOD)       && input.trim().matches("(?i)L\\s+\\d+\\s+\\d+") ||
-                        availableActions.contains(StateActions.CHOOSE_PLANET)   && input.trim().matches("(?i)L");
-            case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.trim().matches("(?i)B\\s+\\d+\\s+\\d+");
-            case "K" -> availableActions.contains(StateActions.CHOOSE_SHIP_PIECE)&& input.trim().matches("(?i)K");
-            case "Y" -> availableActions.contains(StateActions.GIVE_UP)         && input.trim().matches("(?i)Y");
-            case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.trim().matches("(?i)A\\s+\\d+\\s+\\d+");
-            case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.trim().matches("(?i)E\\s+\\d+");
-            case "" -> (availableActions.contains(StateActions.GO_NEXT) ||
-                        availableActions.contains(StateActions.DRAW_CARD) ||
-                        availableActions.contains(StateActions.RELEASE_FORECAST)) && input.isEmpty();
+        input = input.toUpperCase().trim();
+        if(input.isEmpty()) input = " "; //to check last case of empty input
+        //String[] parts = input.split(" ");
+        return switch (input.substring(0, 1)) {
+            case "P" -> (availableActions.contains(StateActions.PLACE_COMPONENT) ||
+                        availableActions.contains(StateActions.INITIALIZE_CABIN))&& input.matches("P\\s+\\d+\\s+\\d+") ||
+                        availableActions.contains(StateActions.GRAB_REWARD)     && input.matches("P");
+            case "H" -> availableActions.contains(StateActions.FLIP_HOURGLASS)  && input.matches("H");
+            case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.matches("S") ||
+                        availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.matches("S\\s+\\d+");
+            case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT)&& input.matches("R");
+            case "C" ->(availableActions.contains(StateActions.REQUEST_RAND_COMPONENT) ||
+                        availableActions.contains(StateActions.GO_NEXT))        && input.matches("C");
+            case "U" -> availableActions.contains(StateActions.REQUEST_COMPONENT)&& input.matches("U\\s+\\d+");
+            case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST)&& input.matches("F\\s+\\d+");
+            case "X" -> availableActions.contains(StateActions.FINISH_BUILDING) && input.matches("X");
+            case "L" ->(availableActions.contains(StateActions.LOSE_CREW)   ||
+                        availableActions.contains(StateActions.LOSE_GOOD))      && input.matches("L\\s+\\d+\\s+\\d+") ||
+                        availableActions.contains(StateActions.CHOOSE_PLANET)   && input.matches("L");
+            case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("B\\s+\\d+\\s+\\d+");
+            case "K" -> availableActions.contains(StateActions.CHOOSE_SHIP_PIECE)&& input.matches("K");
+            case "Y" -> availableActions.contains(StateActions.GIVE_UP)         && input.matches("Y");
+            case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.matches("A\\s+\\d+\\s+\\d+");
+            case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.matches("E\\s+\\d+");
+            case " " -> (availableActions.contains(StateActions.GO_NEXT)    ||
+                        availableActions.contains(StateActions.DRAW_CARD)   ||
+                        availableActions.contains(StateActions.RELEASE_FORECAST));
 
             default -> {
-                System.out.println("invalid input");
+                //System.out.println("invalid input");
                 yield false;
             }
         };
