@@ -18,10 +18,10 @@ import java.util.Map;
 
 public abstract class CliScreen extends Screen {
 
-    protected ClientModel model;
-    private GameState state;
-    protected ControllerToServer controller;
-    protected List<StateActions> availableActions;
+    protected final ClientModel model;
+    protected final ControllerToServer controller;
+    protected final GameState state;
+    protected final List<StateActions> availableActions;
     protected CliFlightBoard cliFlightBoard;
     protected ShipBoard myShipBoard;
     protected CliAllShips cliAllShips;
@@ -32,19 +32,21 @@ public abstract class CliScreen extends Screen {
         this.model = model;
         this.controller = controller;
         this.state = gameState;
-        this.availableActions = gameState.getAvailableActions();
-        this.myShipBoard = model.getMyShip();
-        this.shipToCliShip = new HashMap<>();
-        for (Player player : model.getPlayers()) {
-            shipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));
+        this.availableActions = new ArrayList<>();
+        if (gameState != null) {
+            this.availableActions.addAll(gameState.getAvailableActions());
+            this.myShipBoard = model.getMyShip();
+            this.shipToCliShip = new HashMap<>();
+            for (Player player : model.getPlayers()) {
+                shipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));
+            }
+            this.cliAllShips = new CliAllShips(shipToCliShip.values().stream().toList());
+            this.cliFlightBoard = new CliFlightBoard(model.getGame().getFlightBoard());
         }
-        cliAllShips = new CliAllShips(shipToCliShip.values().stream().toList());
-        this.cliFlightBoard = new CliFlightBoard(model.getGame().getFlightBoard());
     }
 
     public CliScreen(ClientModel model, ControllerToServer controller) {
-        this.model = model;
-        this.controller = controller;
+        this(model, controller, null);
     }
 
     public GameState getState() {
@@ -63,7 +65,8 @@ public abstract class CliScreen extends Screen {
     protected void printActions() {
         if(!model.getGame().getGivenUpShips().contains(model.getClientPlayer().getShipBoard())) {
             List<String> actions = new ArrayList<>();
-            availableActions = state.getAvailableActions(); // refresh available actions
+            availableActions.clear(); // refreshing available actions
+            availableActions.addAll(state.getAvailableActions());
             for (StateActions action : availableActions) {
                 switch (action) {
                     case ACTIVATE_COMPONENT ->      actions.add("P[x][y] Activate component        ");

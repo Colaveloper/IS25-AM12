@@ -1,29 +1,89 @@
-//package it.polimi.ingsw.galaxytruckers.view.guiElements;
-//
-//import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-//import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-//import it.polimi.ingsw.galaxytruckers.view.model.Component;
-//import javafx.application.Platform;
-//import javafx.beans.property.ListProperty;
-//import javafx.beans.property.SimpleListProperty;
-//import javafx.collections.FXCollections;
-//import javafx.collections.ListChangeListener;
-//import javafx.collections.ObservableList;
-//import javafx.geometry.Pos;
-//import javafx.scene.Node;
-//import javafx.scene.control.Label;
-//import javafx.scene.layout.HBox;
-//import javafx.scene.layout.StackPane;
-//import javafx.scene.layout.VBox;
-//
-//import java.io.IOException;
-//
-//public class GuiComponentBank extends GuiElement {
-//
-//    public GuiComponentBank(ClientModel model, ClientController controller) {
-//        super(model, controller);
-//    }
-//
+package it.polimi.ingsw.galaxytruckers.view.guiElements;
+
+import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
+import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+
+import java.io.IOException;
+
+public class GuiComponentBank extends HBox {
+
+    private final Label subtitleLabel;
+    private int myIntValue = 0;
+    private final FlowPane rejectedContainer;
+
+    public GuiComponentBank(ComponentBank componentBank, ControllerToServer controller) {
+        setSpacing(20);
+        setPadding(new Insets(10));
+        setAlignment(Pos.TOP_LEFT);
+
+        // === Left container ===
+        VBox leftBox = new VBox(5);
+        leftBox.setAlignment(Pos.TOP_CENTER);
+        Label coveredLabel = new Label("Covered");
+
+        StackPane coveredSquare = new StackPane();
+        Rectangle square = new Rectangle(100, 100);
+        square.setFill(Color.BLACK);
+        Label question = new Label("?");
+        question.setTextFill(Color.WHITE);
+        question.setFont(Font.font(24));
+
+        subtitleLabel = new Label("0");
+        subtitleLabel.setFont(Font.font(14));
+        subtitleLabel.setTextFill(Color.GRAY);
+
+        coveredSquare.getChildren().addAll(square, question);
+        leftBox.getChildren().addAll(coveredLabel, coveredSquare, subtitleLabel);
+
+        // === Right container ===
+        VBox rightBox = new VBox(5);
+        rightBox.setAlignment(Pos.TOP_LEFT);
+        Label rejectedLabel = new Label("Rejected");
+
+        rejectedContainer = new FlowPane();
+        rejectedContainer.setHgap(5);
+        rejectedContainer.setVgap(5);
+        rejectedContainer.setPrefWrapLength(300); // Will wrap items when full width is reached
+
+        rightBox.getChildren().addAll(rejectedLabel, rejectedContainer);
+
+        // === Final layout ===
+        getChildren().addAll(leftBox, rightBox);
+    }
+
+    // === Method to increment the subtitle number ===
+    public void onAddOne() {
+        myIntValue++;
+        subtitleLabel.setText(String.valueOf(myIntValue));
+    }
+
+    // === Method to add a blue rejected square ===
+    public void onReject() {
+        Rectangle blueSquare = new Rectangle(20, 20);
+        blueSquare.setFill(Color.BLUE);
+        rejectedContainer.getChildren().add(blueSquare);
+    }
+}
+
 //    @Override
 //    public Node getNode() throws IOException {
 //        HBox box = new HBox(5);
@@ -90,4 +150,4 @@
 //
 //        return container;
 //    }
-//}
+

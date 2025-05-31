@@ -12,9 +12,8 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class Client {
-    private static ClientController controller = new ClientController();
-    private static ClientModel model = new ClientModel();
-    private VirtualServer server;
+    private static final ClientController controller = new ClientController();
+    private static final ClientModel model = new ClientModel();
     //TODO: add socket implementation
 
     public void start(String serverName, String serverAddress, int rmiPort, int socketPort) {
@@ -31,6 +30,7 @@ public class Client {
                     model.activateCheats(choice);
                     choice = Integer.parseInt(CheatCodes.cheat());
                 }
+                VirtualServer server;
                 if (choice == 0) {
                     chosen = true;
                     RmiClient rmiClient = new RmiClient();

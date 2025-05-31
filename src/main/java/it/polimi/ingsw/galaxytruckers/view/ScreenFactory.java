@@ -21,6 +21,12 @@ public class ScreenFactory {
             case INGAME -> {
                 GameState gameState = model.getGame().getCurrentState();
                 yield switch (gameState) {
+                    case ShipBuildingState shipBuildingState -> switch (shipBuildingState) {
+                        case SecondShipBuildingState secondShipBuildingState -> new CliSecondShipBuildingScreen(model, controller, secondShipBuildingState);
+                        case TestShipBuildingState testShipBuildingState -> new CliTestShipBuildingScreen(model, controller, testShipBuildingState);
+                    };
+                    case ShipCorrectionState shipCorrectionState -> new CliValidationScreen(model, controller, shipCorrectionState);
+                    case ShipInitializationState shipInitializationState -> new CliCrewInitializationScreen(model, controller, shipInitializationState);
                     case AdventureState s -> switch (s) {
                         case ActivateState activateState -> switch (activateState) {
                             case DeclareEnginePowerState declareEnginePowerState -> new CliDeclareEnginePowerScreen(model, controller, declareEnginePowerState);
@@ -35,12 +41,6 @@ public class ScreenFactory {
                         case RemoveCrewState removeCrewState -> new CliRemoveCrewScreen(model, controller, removeCrewState);
                         case RemoveGoodsState removeGoodsState -> new CliLoseGoodsScreen(model, controller, removeGoodsState);
                     };
-                    case ShipBuildingState shipBuildingState -> switch (shipBuildingState) {
-                        case SecondShipBuildingState secondShipBuildingState -> new CliSecondShipBuildingScreen(model, controller, secondShipBuildingState);
-                        case TestShipBuildingState testShipBuildingState -> new CliTestShipBuildingScreen(model, controller, testShipBuildingState);
-                    };
-                    case ShipCorrectionState shipCorrectionState -> new CliValidationScreen(model, controller, shipCorrectionState);
-                    case ShipInitializationState shipInitializationState -> new CliCrewInitializationScreen(model, controller, shipInitializationState);
                 };
             }
         };

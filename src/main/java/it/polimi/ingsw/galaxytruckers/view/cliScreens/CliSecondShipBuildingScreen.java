@@ -5,16 +5,13 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.*;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CliSecondShipBuildingScreen extends CliScreen {
 
@@ -40,8 +37,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     public void render() {
         if(hasForecastDeck) {
             cliForecastCards.getDescription().forEach(System.out::println);
-        }
-        else {
+        } else {
             cliComponentBank.getDescription().forEach(System.out::println);
             cliForecast.getDescription().forEach(System.out::println);
             cliFlightBoard.getDescription().forEach(System.out::println);
@@ -261,7 +257,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     @Override
     public void notifyFlightBoardPosition(FlightBoard flightBoard) {
         // Update the flight board position and mark it as dirty
-        cliFlightBoard = new CliFlightBoard(flightBoard);
+        cliFlightBoard.updatePositions(flightBoard);
         cliFlightBoard.setDirty();
     }
 

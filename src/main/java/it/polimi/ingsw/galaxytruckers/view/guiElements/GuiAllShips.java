@@ -1,30 +1,53 @@
-//package it.polimi.ingsw.galaxytruckers.view.guiElements;
-//
-//
-//import it.polimi.ingsw.galaxytruckers.model.enumTypes.FourColors;
-//import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-//import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-//import it.polimi.ingsw.galaxytruckers.view.model.Component;
-//import javafx.application.Platform;
-//import javafx.beans.property.ObjectProperty;
-//import javafx.geometry.Pos;
-//import javafx.scene.Node;
-//import javafx.scene.control.Label;
-//import javafx.scene.layout.HBox;
-//import javafx.scene.layout.StackPane;
-//import javafx.scene.layout.VBox;
-//import javafx.scene.shape.Circle;
-//import javafx.scene.text.Text;
-//
-//import java.util.Map;
-//
-//public class GuiAllShips extends GuiElement {
-//
-//    public GuiAllShips(ClientModel model, ClientController controller) {
-//        super(model, controller);
-//    }
-//
-//    public Node getNode() {
+package it.polimi.ingsw.galaxytruckers.view.guiElements;
+
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.model.Player;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
+import javafx.geometry.Pos;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+
+import java.util.Map;
+
+public class GuiAllShips extends HBox {
+
+    public GuiAllShips(Player mainPlayer, Map<ShipBoard, Player> shipToPlayer, ControllerToServer controller) {
+        setSpacing(20);
+        setPrefHeight(Region.USE_COMPUTED_SIZE);
+        setPrefWidth(Region.USE_COMPUTED_SIZE);
+
+        // Main player's large ship view
+        ShipBoard mainBoard = shipToPlayer.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(mainPlayer))
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Main player's ship not found"));
+
+        GuiShipHandAndStash mainView = new GuiShipHandAndStash(mainBoard, controller);
+        mainView.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(mainView, Priority.ALWAYS);
+
+        // VBox for other players
+        VBox othersColumn = new VBox(10);
+        othersColumn.setAlignment(Pos.CENTER);
+
+        for (Map.Entry<ShipBoard, Player> entry : shipToPlayer.entrySet()) {
+            if (!entry.getValue().equals(mainPlayer)) {
+                GuiShipHandAndStash otherView = new GuiShipHandAndStash(entry.getKey(), controller);
+                othersColumn.getChildren().add(otherView);
+            }
+        }
+
+        // Style layout proportions
+        mainView.setPrefWidth(2 * 300);     // Replace 300 with the estimated width of one view
+        othersColumn.setPrefWidth(300);
+
+        this.getChildren().addAll(mainView, othersColumn);
+    }
+}
+
 //        HBox handBox = new HBox(10);
 //        handBox.setAlignment(Pos.CENTER);
 //
@@ -77,6 +100,3 @@
 //        }
 //
 //        return handBox;
-//    }
-//
-//}

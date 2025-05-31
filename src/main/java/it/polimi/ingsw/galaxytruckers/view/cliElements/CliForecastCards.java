@@ -1,8 +1,6 @@
-package it.polimi.ingsw.galaxytruckers.view.cliScreens;
+package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliElement;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAdventureCard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +12,7 @@ public class CliForecastCards extends CliElement {
     protected List<String> getNewDescription() {
         List<String> newDescription = new ArrayList<>();
         newDescription.add("Cards in the forecast deck:\n");
-        for (AdventureCard card : forecastDeck){
+        for (AdventureCard card : forecastDeck) {
             newDescription.addAll(new CliAdventureCard(card).getDescription());
         }
         return newDescription;

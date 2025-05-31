@@ -19,8 +19,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     private ClientModel model;
     private VirtualServer server;
     private View view;
-    private ConfigFactory config;
-    private PlayerRegistry playerRegistry = new PlayerRegistry();
+    private final PlayerRegistry playerRegistry = new PlayerRegistry();
 
     private EventHandler eventHandler;
 

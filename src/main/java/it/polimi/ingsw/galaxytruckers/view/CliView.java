@@ -27,6 +27,8 @@ public class CliView implements View {
     CliScreen currentScreen;
     MetaState metaState;
 
+
+
     public CliView(ClientController controller, ClientModel model) {
         startInputLoop();
         this.controller = controller;

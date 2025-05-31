@@ -33,4 +33,9 @@ public class CliFlightBoard extends CliElement {
 
         return result;
     }
+
+    // todo: make incremental
+    public void updatePositions(FlightBoard flightBoard) {
+        this.flightBoard = flightBoard;
+    }
 }

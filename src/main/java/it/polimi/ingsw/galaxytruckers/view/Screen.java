@@ -30,6 +30,7 @@ public abstract class Screen {
 
     public void notifyHourglassEnd(){}
 
+    // todo: make incremental: substitute with notifyFlightBoardPlacement
     public void notifyFlightBoardPosition(FlightBoard flightBoard){}
 
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex){}

@@ -46,7 +46,7 @@ public class GuiView extends Application implements View {
         this.primaryStage = stage;
         currentScreen = new GuiNicknameChoiceScreen(model, controller);
         stage.setScene(new Scene(currentScreen.getNode()));
-        stage.setTitle("Screen Switcher");
+        stage.setTitle("Galaxy Truckers");
         stage.show();
     }
 
@@ -54,17 +54,13 @@ public class GuiView extends Application implements View {
     @Override
     public void notifyMetaState(MetaState metaState) {
         currentScreen = screenFactory.createGuiScreen(model, controller);
-        Platform.runLater(()->{
-            primaryStage.setScene(new Scene(currentScreen.getNode()));
-        });
+        Platform.runLater(()-> primaryStage.setScene(new Scene(currentScreen.getNode())));
     }
 
     @Override
     public void notifyCurrentState(GameState gameState) {
         currentScreen = screenFactory.createGuiScreen(model, controller);
-        Platform.runLater(()->{
-            primaryStage.setScene(new Scene(currentScreen.getNode()));
-        });
+        Platform.runLater(()-> primaryStage.setScene(new Scene(currentScreen.getNode())));
     }
 
     @Override
