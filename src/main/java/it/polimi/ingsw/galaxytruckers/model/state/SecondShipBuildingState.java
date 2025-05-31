@@ -4,7 +4,6 @@ import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -94,7 +93,7 @@ public class SecondShipBuildingState extends ShipBuildingState {
 
     @Override
     protected void endBuilding() {
-        synchronized (game.getStateLock()) {
+        synchronized (game.getLock()) {
             Set<ShipBoard> unfinishedShipBoards = new HashSet<>(game.getShipBoards());
             unfinishedShipBoards.removeAll(completedShipBoards);
             for (ShipBoard shipBoard : unfinishedShipBoards) {

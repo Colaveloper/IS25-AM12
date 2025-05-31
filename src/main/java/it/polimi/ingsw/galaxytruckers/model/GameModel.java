@@ -15,8 +15,8 @@ import java.io.IOException;
 
 public class GameModel implements GameModelInterface {
     @Override
-    public Game createGame(Level level) {
-        return new Game(level);
+    public Game createGame(Level level, Object lock) {
+        return new Game(level, lock);
     }
 
     @Override
