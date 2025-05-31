@@ -3,13 +3,18 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.view.Screen;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
+import it.polimi.ingsw.galaxytruckers.view.model.Player;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class CliScreen extends Screen {
 
@@ -18,13 +23,22 @@ public abstract class CliScreen extends Screen {
     protected ControllerToServer controller;
     protected List<StateActions> availableActions;
     protected CliFlightBoard cliFlightBoard;
+    protected ShipBoard myShipBoard;
+    protected CliAllShips cliAllShips;
+    protected Map<ShipBoard, CliShipHandAndStash> shipToCliShip;
 
 
     public CliScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         this.model = model;
         this.controller = controller;
         this.state = gameState;
-        availableActions = gameState.getAvailableActions();
+        this.availableActions = gameState.getAvailableActions();
+        this.myShipBoard = model.getMyShip();
+        this.shipToCliShip = new HashMap<>();
+        for (Player player : model.getPlayers()) {
+            shipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));
+        }
+        cliAllShips = new CliAllShips(shipToCliShip.values().stream().toList());
         this.cliFlightBoard = new CliFlightBoard(model.getGame().getFlightBoard());
     }
 

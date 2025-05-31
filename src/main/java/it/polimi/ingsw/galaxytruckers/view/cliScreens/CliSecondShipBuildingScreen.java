@@ -21,23 +21,16 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     private final CliComponentBank cliComponentBank;
     private final CliForecast cliForecast;
     private final CliForecastCards cliForecastCards;
-    private final CliAllShips cliAllShips;
-    private final Map<ShipBoard, CliShipHandAndStash> shipToCliShip;
+
     private boolean hasStashed;
     private final SecondShipBuildingState gameState;
     private boolean hasForecastDeck = false;
-    private ShipBoard myShipBoard;
+
 
     public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
         this.gameState = gameState;
         hasStashed = false;
-        this.myShipBoard = model.getMyShip();
-        this.shipToCliShip = new HashMap<>();
-        for (Player player : model.getPlayers()) {
-            shipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));
-        }
-        cliAllShips = new CliAllShips(shipToCliShip.values().stream().toList());
         cliComponentBank = new CliComponentBank(gameState.getComponentBank());
         cliForecast = new CliForecast(gameState.getBlockedForecasts());
         cliForecastCards = new CliForecastCards();

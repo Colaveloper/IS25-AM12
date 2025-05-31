@@ -54,5 +54,9 @@ public final class ShipCorrectionState extends GameState {
         return validShipBoards;
     }
 
+    public Map<ShipBoard, List<Set<Point>>> getShipPieces() {
+        return shipPieces;
+    }
+
     //TODO: notify ship is valid, notify shipPieces
 }
