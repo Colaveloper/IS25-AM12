@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
@@ -116,11 +117,11 @@ class ServerControllerTest {
         // player 1 creates game
         Player p1 = new Player("player1");
         testController.newGame(p1, Level.SECOND, 2);
-        ConcurrentMap<UUID, Lobby> lobby1 = testController.getIdToLobby();
+        Map<UUID, Lobby> lobby1 = testController.getIdToLobby();
 
         Player p2 = new Player("player2");
         testController.leaveLobby(p2);
-        ConcurrentMap<UUID, Lobby> lobby2 = testController.getIdToLobby();
+        Map<UUID, Lobby> lobby2 = testController.getIdToLobby();
 
         assertFalse(testController.getIdToLobby().isEmpty());
         assertEquals(lobby1, lobby2);

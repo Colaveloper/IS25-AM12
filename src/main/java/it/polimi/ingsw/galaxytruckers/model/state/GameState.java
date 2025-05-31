@@ -13,6 +13,7 @@ public abstract sealed class GameState permits AdventureState, GameStateStub, Sh
 
     public void setGame(Game game) {
         this.game = game;
+        game.getEventListener().notifyGameStateUpdateEvent(this);
     }
 
     public void activateComponent(ShipBoard shipBoard, Point position) {

@@ -2,12 +2,15 @@ package it.polimi.ingsw.galaxytruckers.model;
 
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.factory.GameFactory;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.EndGameState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,6 +18,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Game {
+    private final Object stateLock = new Object();
+
     private final GameFactory gameFactory;
     private final Set<ShipBoard> shipBoards = new HashSet<>();
     private FlightBoard flightBoard;
@@ -210,4 +215,149 @@ public class Game {
     public GameEventListener getEventListener() {
         return eventListener;
     }
+
+    public void requestRandComponent(ShipBoard shipBoard) {
+        synchronized (stateLock) {
+            currentState.requestRandComponent(shipBoard);
+        }
+    }
+
+    public void requestComponent(ShipBoard shipBoard, int componentID) {
+        synchronized (stateLock) {
+            currentState.requestComponent(shipBoard, componentID);
+        }
+    }
+
+    public void rejectComponent(ShipBoard shipBoard) {
+        synchronized (stateLock) {
+            currentState.rejectComponent(shipBoard);
+        }
+    }
+
+    public void stashComponent(ShipBoard shipBoard) {
+        synchronized (stateLock) {
+            currentState.stashComponent(shipBoard);
+        }
+    }
+
+    public void grabStashedComponent(ShipBoard shipBoard, int index) {
+        synchronized (stateLock) {
+            currentState.grabStashedComponent(shipBoard, index);
+        }
+    }
+
+    public void placeComponent(ShipBoard shipBoard, Point point, int orientation) {
+        synchronized (stateLock) {
+            currentState.placeComponent(shipBoard, point, orientation);
+        }
+    }
+
+    public void flipHourglass(ShipBoard shipBoard) {
+        synchronized (stateLock) {
+            currentState.flipHourglass(shipBoard);
+        }
+    }
+
+    public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
+        synchronized (stateLock) {
+            currentState.placeShipOnFlightBoard(shipBoard, startingPosition);
+        }
+    }
+
+    public void acquireForecast(ShipBoard shipBoard, int deckIndex) {
+        synchronized (stateLock) {
+            currentState.acquireForecast(shipBoard, deckIndex);
+        }
+    }
+
+    public void releaseForecast(ShipBoard shipBoard) {
+        synchronized (stateLock) {
+            currentState.releaseForecast(shipBoard);
+        }
+    }
+
+    public void removeComponent(ShipBoard shipBoard, Point point) {
+        synchronized (stateLock) {
+            currentState.removeComponent(shipBoard, point);
+        }
+    }
+
+    public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
+        synchronized (stateLock) {
+            currentState.chooseShipPiece(shipBoard, pieceIndex);
+        }
+    }
+
+    public void initializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
+        synchronized (stateLock) {
+            currentState.initializeCabin(shipBoard, point, crewType);
+        }
+    }
+
+    public void activateComponent(ShipBoard shipBoard, Point point) {
+        synchronized (stateLock) {
+            currentState.activateComponent(shipBoard, point);
+        }
+    }
+
+    public void loseCrew(ShipBoard shipBoard, Point point) {
+        synchronized (stateLock) {
+            currentState.loseCrew(shipBoard, point);
+        }
+    }
+
+    public void grabReward(ShipBoard shipBoard, boolean rewardGrabbed) {
+        synchronized (stateLock) {
+            currentState.grabReward(shipBoard);
+        }
+    }
+
+    public void placeGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+        synchronized (stateLock) {
+            currentState.addGood(shipBoard, point, goodsType);
+        }
+    }
+
+    public void removeGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+        synchronized (stateLock) {
+            currentState.removeGood(shipBoard, point, goodsType);
+        }
+    }
+
+    public void useBattery(ShipBoard shipBoard, Point point) {
+        synchronized (stateLock) {
+            currentState.spendBatteries(shipBoard, point, 1);
+        }
+    }
+
+    public void choosePlanet(ShipBoard shipBoard, int choice) {
+        synchronized (stateLock) {
+            currentState.choosePlanet(shipBoard, choice);
+        }
+    }
+
+    public void giveUp(ShipBoard shipBoard) {
+        synchronized (stateLock) {
+            currentState.giveUp(shipBoard);
+        }
+    }
+
+    public void drawCard(ShipBoard shipBoard) {
+        synchronized (stateLock) {
+            currentState.drawCard(shipBoard);
+        }
+    }
+
+    public void loseGood(ShipBoard shipBoard, Point point) {
+        synchronized (stateLock) {
+            currentState.loseGood(shipBoard, point);
+        }
+    }
+
+    public void goNext(ShipBoard shipBoard) {
+        synchronized (stateLock) {
+            currentState.goNext(shipBoard);
+        }
+    }
+
 }

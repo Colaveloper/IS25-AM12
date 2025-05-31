@@ -42,121 +42,121 @@ public class GameModel implements GameModelInterface {
 
     @Override
     public void requestRandComponent(Game game, ShipBoard shipBoard) {
-        game.getCurrentState().requestRandComponent(shipBoard);
+        game.requestRandComponent(shipBoard);
     }
 
     @Override
     public void requestComponent(Game game, ShipBoard shipBoard, int componentID) {
-        game.getCurrentState().requestComponent(shipBoard, componentID);
+        game.requestComponent(shipBoard, componentID);
     }
 
     @Override
     public void rejectComponent(Game game, ShipBoard shipBoard) {
-        game.getCurrentState().rejectComponent(shipBoard);
+        game.rejectComponent(shipBoard);
     }
 
     @Override
     public void stashComponent(Game game, ShipBoard shipBoard) {
-        game.getCurrentState().stashComponent(shipBoard);
+        game.stashComponent(shipBoard);
     }
 
     @Override
     public void grabStashedComponent(Game game, ShipBoard shipBoard, int index) {
-        game.getCurrentState().grabStashedComponent(shipBoard, index);
+        game.grabStashedComponent(shipBoard, index);
     }
 
     @Override
     public void placeComponent(Game game, ShipBoard shipBoard, Point point, int orientation) {
-        game.getCurrentState().placeComponent(shipBoard, point, orientation);
+        game.placeComponent(shipBoard, point, orientation);
     }
 
     @Override
     public void flipHourglass(Game game, ShipBoard shipBoard) {
-        game.getCurrentState().flipHourglass(shipBoard);
+        game.flipHourglass(shipBoard);
     }
 
     @Override
     public void placeShipOnFlightBoard(Game game, ShipBoard shipBoard, int startingPosition) {
-        game.getCurrentState().placeShipOnFlightBoard(shipBoard, startingPosition);
+        game.placeShipOnFlightBoard(shipBoard, startingPosition);
     }
 
     @Override
     public void acquireForecast(Game game, ShipBoard shipBoard, int deckIndex) {
-        game.getCurrentState().acquireForecast(shipBoard, deckIndex);
+        game.acquireForecast(shipBoard, deckIndex);
     }
 
     @Override
     public void releaseForecast(Game game, ShipBoard shipBoard) {
-        game.getCurrentState().releaseForecast(shipBoard);
+        game.releaseForecast(shipBoard);
     }
 
     @Override
     public void removeComponent(Game game, ShipBoard shipBoard, Point point) {
-        game.getCurrentState().removeComponent(shipBoard, point);
+        game.removeComponent(shipBoard, point);
     }
 
     @Override
     public void chooseShipPiece(Game game, ShipBoard shipBoard, int pieceIndex) {
-        game.getCurrentState().chooseShipPiece(shipBoard, pieceIndex);
+        game.chooseShipPiece(shipBoard, pieceIndex);
     }
 
     @Override
     public void initializeCabin(Game game, ShipBoard shipBoard, Point point, CrewType crewType) {
-        game.getCurrentState().initializeCabin(shipBoard, point, crewType);
+        game.initializeCabin(shipBoard, point, crewType);
     }
 
     @Override
     public void activateComponent(Game game, ShipBoard shipBoard, Point point) {
-        game.getCurrentState().activateComponent(shipBoard, point);
+        game.activateComponent(shipBoard, point);
     }
 
     @Override
     public void loseCrew(Game game, ShipBoard shipBoard, Point point) {
-        game.getCurrentState().loseCrew(shipBoard, point);
+        game.loseCrew(shipBoard, point);
     }
 
     @Override
     public void grabReward(Game game, ShipBoard shipBoard, boolean rewardGrabbed) {
-        game.getCurrentState().grabReward(shipBoard);
+        game.grabReward(shipBoard, rewardGrabbed);
     }
 
     @Override
     public void placeGoods(Game game, ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        game.getCurrentState().addGood(shipBoard, point, goodsType);
+        game.placeGoods(shipBoard, point, goodsType);
     }
 
     @Override
     public void removeGoods(Game game, ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        game.getCurrentState().removeGood(shipBoard, point, goodsType);
+        game.removeGoods(shipBoard, point, goodsType);
     }
 
     @Override
     public void useBattery(Game game, ShipBoard shipBoard, Point point) {
-        game.getCurrentState().spendBatteries(shipBoard,point,1);
+        game.useBattery(shipBoard,point);
     }
 
     @Override
     public void choosePlanet(Game game, ShipBoard shipBoard, int choice) {
-        game.getCurrentState().choosePlanet(shipBoard, choice);
+        game.choosePlanet(shipBoard, choice);
     }
 
     @Override
     public void giveUp(Game game, ShipBoard shipBoard) {
-        game.getCurrentState().giveUp(shipBoard);
+        game.giveUp(shipBoard);
     }
 
     @Override
     public void drawCard(Game game, ShipBoard shipBoard) {
-        game.getCurrentState().drawCard(shipBoard);
+        game.drawCard(shipBoard);
     }
 
     @Override
     public void loseGood(Game game, ShipBoard shipBoard, Point point) {
-        game.getCurrentState().loseGood(shipBoard, point);
+        game.loseGood(shipBoard, point);
     }
 
     @Override
     public void goNext(Game game, ShipBoard shipBoard) {
-        game.getCurrentState().goNext(shipBoard);
+        game.goNext(shipBoard);
     }
 }
