@@ -70,7 +70,7 @@ public abstract class CliScreen extends Screen {
                     case SPEND_BATTERIES ->         actions.add("B[x][y] Spend battery on component");
                     case GRAB_REWARD ->             actions.add("P       To pick reward            ");
                     case CHOOSE_SHIP_PIECE ->       actions.add("[i]   Choose piece of ship to keep");
-                    case GO_NEXT, RELEASE_FORECAST->actions.add("press any key to continue         ");
+                    case GO_NEXT, RELEASE_FORECAST->actions.add("press ENTER key to continue       ");
                     case LOSE_CREW ->               actions.add("L[x][y] Remove crew from component");
                     case LOSE_GOOD ->               actions.add("L[x][y] Remove good from cargo hold");
                     case REMOVE_GOOD ->             actions.add("R[x][y][color] Pick goods from cargo hold");
@@ -122,7 +122,8 @@ public abstract class CliScreen extends Screen {
         if(input.isEmpty()) input = " "; //to check last case of empty input
         //String[] parts = input.split(" ");
         return switch (input.substring(0, 1)) {
-            case "P" -> availableActions.contains(StateActions.PLACE_COMPONENT) && input.matches("P\\s+\\d+\\s+\\d+") ||
+            case "P" -> (availableActions.contains(StateActions.PLACE_COMPONENT) ||
+                        availableActions.contains(StateActions.INITIALIZE_CABIN))&& input.matches("P\\s+\\d+\\s+\\d+") ||
                         availableActions.contains(StateActions.GRAB_REWARD)     && input.matches("P");
             case "H" -> availableActions.contains(StateActions.FLIP_HOURGLASS)  && input.matches("H");
             case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.matches("S") ||

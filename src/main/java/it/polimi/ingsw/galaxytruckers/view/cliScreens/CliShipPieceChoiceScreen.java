@@ -20,15 +20,15 @@ public class CliShipPieceChoiceScreen extends CliScreen {
 
     private boolean shipBroken;
     private int numPieces;
-    private ChooseShipPieceState gameState;
-    private ShipBoard currentShip;
+    private final ShipBoard currentShip;
+    private final List<Set<Point>> points;
 
     public CliShipPieceChoiceScreen(ClientModel model, ControllerToServer controller, ChooseShipPieceState gameState) {
         super(model, controller, gameState);
         currentShip = gameState.getShipBoard();
         shipBroken = currentShip.equals(model.getMyShip());
         numPieces =  gameState.getShipPieces().size();
-        this.gameState = gameState;
+        points = gameState.getShipPieces();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CliShipPieceChoiceScreen extends CliScreen {
     public void render() {
         List<Highlights> colors= Highlights.getSomeColors(numPieces);
         for(int i = 0; i < numPieces; i++){
-            shipToCliShip.get(currentShip).highlightPoints(gameState.getShipPieces().get(i), colors.get(i));  //color ship pieces with list of colors
+            shipToCliShip.get(currentShip).highlightPoints(points.get(i), colors.get(i));  //color ship pieces with list of colors
         }
 
         cliFlightBoard.getDescription().forEach(System.out::println);
