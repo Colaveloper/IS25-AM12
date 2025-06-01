@@ -85,7 +85,7 @@ public class CliComponent extends CliElement {
 
         List<String> lines = new ArrayList<>();
             lines.add(0, open+"╭─" + getConnector(0) + "─╮"+close);
-            lines.add(1, open + getConnector(3) + middle + getConnector(1)+close);
+            lines.add(1, open+ getConnector(3) + middle + getConnector(1)+close);
             lines.add(2, open+"╰─" + getConnector(2) + "─╯"+close);
         return lines;
     }

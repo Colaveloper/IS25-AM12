@@ -41,11 +41,11 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
     }
 
     @Override
-    public void notifyRequestRandComponent(ShipBoard shipBoard, Component component)
-//    {
-//        guiComponentBank.notifyRequestRandComponent(shipBoard, component);
-//    }
-    {}
+    public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
+        guiComponentBank.notifyRequestRandComponent();
+    }
+
+
     @Override
     public void notifyRequestComponent(ShipBoard shipBoard, Component component)
 //    {
@@ -73,14 +73,12 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
     {}
     @Override
     public void notifyRejectComponent(ShipBoard shipBoard, Component component)
-//    {
-//        //can t reject component picked from stashed
+    {
+        //todo: can t reject component picked from stashed
 //        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
 //        ship.clearHand();
-//        cliComponentBank.addUncovered(component);
-//        cliAllShips.setDirty();
-//
-//    }
+        guiComponentBank.addUncovered(component);
+    }
     {}
     @Override
     public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition)

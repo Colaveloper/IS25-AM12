@@ -1,18 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
 import javafx.application.Platform;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -22,15 +15,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
-import java.io.IOException;
-
 public class GuiComponentBank extends HBox {
 
-    private final Label subtitleLabel;
-    private int myIntValue = 0;
+    private final ControllerToServer controller;
+    private final Label coveredNLabel;
     private final FlowPane rejectedContainer;
 
     public GuiComponentBank(ComponentBank componentBank, ControllerToServer controller) {
+        this.controller = controller;
+
         setSpacing(20);
         setPadding(new Insets(10));
         setAlignment(Pos.TOP_LEFT);
@@ -47,12 +40,12 @@ public class GuiComponentBank extends HBox {
         question.setTextFill(Color.WHITE);
         question.setFont(Font.font(24));
 
-        subtitleLabel = new Label("0");
-        subtitleLabel.setFont(Font.font(14));
-        subtitleLabel.setTextFill(Color.GRAY);
+        coveredNLabel = new Label(Integer.toString(componentBank.getCoveredComponentsN()));
+        coveredNLabel.setFont(Font.font(14));
+        coveredNLabel.setTextFill(Color.GRAY);
 
         coveredSquare.getChildren().addAll(square, question);
-        leftBox.getChildren().addAll(coveredLabel, coveredSquare, subtitleLabel);
+        leftBox.getChildren().addAll(coveredLabel, coveredSquare, coveredNLabel);
 
         // === Right container ===
         VBox rightBox = new VBox(5);
@@ -64,23 +57,29 @@ public class GuiComponentBank extends HBox {
         rejectedContainer.setVgap(5);
         rejectedContainer.setPrefWrapLength(300); // Will wrap items when full width is reached
 
+        componentBank.getUncoveredComponents().forEach(component -> {
+
+        });
+
         rightBox.getChildren().addAll(rejectedLabel, rejectedContainer);
 
         // === Final layout ===
         getChildren().addAll(leftBox, rightBox);
     }
 
-    // === Method to increment the subtitle number ===
-    public void onAddOne() {
-        myIntValue++;
-        subtitleLabel.setText(String.valueOf(myIntValue));
+    public void notifyRequestRandComponent() {
+        Platform.runLater(()-> {
+            coveredNLabel.setText(Integer.toString(
+                    Integer.parseInt(coveredNLabel.getText()) - 1)
+            );
+        });
     }
 
-    // === Method to add a blue rejected square ===
-    public void onReject() {
-        Rectangle blueSquare = new Rectangle(20, 20);
-        blueSquare.setFill(Color.BLUE);
-        rejectedContainer.getChildren().add(blueSquare);
+    public void addUncovered(Component component) {
+        Platform.runLater(()-> {
+            GuiComponent newComponent = new GuiComponent(component, controller);
+            rejectedContainer.getChildren().add(newComponent);
+        });
     }
 }
 

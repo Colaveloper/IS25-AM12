@@ -20,7 +20,7 @@ public sealed abstract class ShipBuildingState extends GameState permits
 
     public ShipBuildingState() {
         this.completedShipBoards = new HashSet<>();
-        this.componentBank = new ComponentBank(ComponentRegistry.getInstance().getComponentNumber());
+        this.componentBank = new ComponentBank(ComponentRegistry.getInstance().getSize());
     }
 
     @Override

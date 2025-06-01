@@ -10,10 +10,12 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ComponentRegistry {
     private static ComponentRegistry instance;
@@ -47,16 +49,24 @@ public class ComponentRegistry {
         }
     }
 
-    public int getComponentNumber() {
+    public Map<Integer, Path> getIdToPath() {
+        return components.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> Path.of(e.getValue().get("path").asText())
+                ));
+    }
+
+    public int getSize() {
         return components.size();
     }
 
     private void loadComponents() throws IOException {
-        //reading from json file and returning the list of components
+        //reading from the JSON file and returning the list of components
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(componentJson);
 
-        //iterating through nodes and adding each as a component to list
+        //iterating through nodes and adding each as a component to the list
         for (JsonNode node : rootNode){
             int id = node.get("id").asInt();
             components.put(id, node);
@@ -64,7 +74,6 @@ public class ComponentRegistry {
     }
 
     private Component parseComponent(int id, JsonNode node) throws IOException{
-        ObjectMapper objectMapper = new ObjectMapper();
 
         String type = node.get("type").asText();
         Component component;

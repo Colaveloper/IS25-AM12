@@ -21,8 +21,6 @@ public class GuiLobbyScreen extends GuiScreen {
         super(model, controller);
     }
 
-
-
     @Override
     public Parent getNode() {
         FlowPane lobbyPane = new FlowPane();
