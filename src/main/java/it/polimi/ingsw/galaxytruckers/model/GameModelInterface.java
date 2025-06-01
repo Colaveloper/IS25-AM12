@@ -10,7 +10,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.EventListener;
 import java.awt.*;
 
 public interface GameModelInterface {
-    Game createGame(Level level);
+    Game createGame(Level level, Object lock);
     ShipBoard addShip(Game game, GameColor color);
     void setEventListener(Game game, EventListener listener);
     void startGame(Game game);

@@ -18,7 +18,7 @@ public sealed abstract class AdventureState extends GameState permits ActivateSt
         game.forceShipToGiveUp(shipBoard);
     }
 
-    protected GameState getNextState() {
+    public GameState getNextState() {
         return game.getDeck().getCurrentCard().getNextState();
     }
 }

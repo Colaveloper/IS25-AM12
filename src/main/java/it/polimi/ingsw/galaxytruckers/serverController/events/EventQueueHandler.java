@@ -9,9 +9,10 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class EventQueueHandler implements EventHandler {
-    private final List<Player> players;
+    private final Supplier<List<Player>> supplier;
     private final EventQueue eventQueue;
     private Thread thread;
     private Runnable afterEach = () -> {};
@@ -21,8 +22,8 @@ public class EventQueueHandler implements EventHandler {
         this.afterEach = afterEach;
     }
 
-    public EventQueueHandler(List<Player> players, EventQueue eventQueue) {
-        this.players = players;
+    public EventQueueHandler(Supplier<List<Player>> supplier, EventQueue eventQueue) {
+        this.supplier = supplier;
         this.eventQueue = eventQueue;
     }
 
@@ -154,9 +155,7 @@ public class EventQueueHandler implements EventHandler {
     }
 
     private List<Player> getPlayers() {
-        synchronized (players) {
-            return new ArrayList<>(players);
-        }
+        return supplier.get();
     }
 
     private void broadcastEvent(Event event) {

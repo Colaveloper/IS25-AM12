@@ -60,6 +60,7 @@ class ChoosePlanetStateTest {
                 return deck;
             }
         };
+        game.setEventListener(new GameEventListenerStub());
         adventureCard = new AdventureCard(game, Level.SECOND,1) {
             @Override
             public AdventureState getNextState() {
@@ -75,7 +76,7 @@ class ChoosePlanetStateTest {
         game.setEventListener(new GameEventListenerStub());
         testChoosePlanetState.setGame(game);
         testChoosePlanetState.choosePlanet(ship1, 2);
-        assertNotEquals(AdventureState.class, game.getCurrentState());
+        assertNotEquals(testChoosePlanetState, game.getCurrentState());
     }
 
     @Test
@@ -91,6 +92,7 @@ class ChoosePlanetStateTest {
                 return deck;
             }
         };
+        game.setEventListener(new GameEventListenerStub());
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
