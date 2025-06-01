@@ -60,6 +60,7 @@
                     <release>23</release>  <!-- Ensure Java 23 compatibility -->
                     <source>23</source>
                     <target>23</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

@@ -73,6 +73,9 @@ public class SecondShipBuildingState extends ShipBuildingState {
         game.getFlightBoard().placeShipOnFlightBoard(shipBoard, startingPosition);
         completedShipBoards.add(shipBoard);
         game.getEventListener().notifyFlightBoardUpdateEvent(shipBoard, startingPosition);
+        if (completedShipBoards.size() == game.getShipBoards().size()) {
+            endBuilding();
+        }
     }
 
     @Override

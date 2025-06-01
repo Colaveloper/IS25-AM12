@@ -46,7 +46,7 @@ class CombatZoneCardTest {
         ShipBoard shipBoard1 = new ShipBoard(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
-                return false;
+                return true;
             }
 
             @Override
@@ -67,7 +67,7 @@ class CombatZoneCardTest {
         ShipBoard shipBoard2 = new ShipBoard(GameColor.RED) {
             @Override
             protected boolean containsPoint(Point point) {
-                return false;
+                return true;
             }
 
             @Override
@@ -88,7 +88,7 @@ class CombatZoneCardTest {
         ShipBoard shipBoard3 = new ShipBoard(GameColor.GREEN) {
             @Override
             protected boolean containsPoint(Point point) {
-                return false;
+                return true;
             }
 
             @Override

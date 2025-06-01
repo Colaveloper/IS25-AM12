@@ -34,7 +34,7 @@ class EventQueueHandlerTest {
         SessionManager.getInstance().registerClient(p1,client1);
         SessionManager.getInstance().registerClient(p2,client2);
         eventQueue = new EventQueue();
-        eventQueueHandler = new EventQueueHandler(List.of(p1,p2), eventQueue);
+        eventQueueHandler = new EventQueueHandler(() -> List.of(p1,p2), eventQueue);
         eventQueueHandler.start();
     }
 
