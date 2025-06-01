@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
@@ -78,12 +79,14 @@ public class CliValidationScreen extends CliScreen {
 
     }
 
+    @Override
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point){
         CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
         ship.onRemoveComponent(point);
         cliAllShips.setDirty();
     }
 
+    @Override
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List<Point> removed){
         CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
         for(Point point : removed){
@@ -93,6 +96,7 @@ public class CliValidationScreen extends CliScreen {
         cliAllShips.setDirty();
     }
 
+    @Override
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces){
         if(myShipBoard == shipBoard) {
             shipBroken = true;
@@ -101,9 +105,17 @@ public class CliValidationScreen extends CliScreen {
         cliAllShips.setDirty();
     }
 
+    @Override
     public void notifyShipValidated(ShipBoard shipBoard){
         if(myShipBoard == shipBoard) shipNotValid = false;
         cliAllShips.setDirty();
+    }
+
+    @Override
+    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
+        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+
+        //todo
     }
 
 }

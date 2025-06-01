@@ -23,21 +23,6 @@ public class CliProjectilesScreen extends CliScreen {
         this.isMyTurn = currentShip.equals(model.getMyShip());
     }
 
-    @Override
-    public boolean isInputLegal(String input) {
-        if (!isMyTurn) {
-            System.out.println("It's not your turn to handle projectiles");
-            return false;
-        }
-
-        if (!isFormatLegal(input)) {
-            return false;
-        }
-
-        Point p = getPoint(input);
-        return currentShip.getActivatables().containsKey(p) ||
-               currentShip.getBatteries().containsKey(p);
-    }
 
     @Override
     public void render() {
@@ -45,15 +30,16 @@ public class CliProjectilesScreen extends CliScreen {
         cliAllShips.getDescription().forEach(System.out::println);
 
         String direction = switch (gameState.getProjectile().direction()) {
-            case 0 -> "front on column";
-            case 1 -> "right or left on row";
-            case 2 -> "back on column";
-            case 3 -> "right or left on row";
-            default -> "unknown direction";
+            case 0 -> "front on column ";
+            case 1 -> "right or left on row ";
+            case 2 -> "back on column ";
+            case 3 -> "right or left on row ";
+            default -> "unknown direction ";
         };
 
         System.out.println("A " + gameState.getProjectile().type() +
-                " is approaching from " + direction + " " + gameState.getProjectile().roll());
+                " is approaching from " + direction + gameState.getProjectile().roll()
+        );
 
         if (isMyTurn) {
             System.out.println("Your turn to handle the projectile");
@@ -73,32 +59,35 @@ public class CliProjectilesScreen extends CliScreen {
             System.out.println("It's not your turn to handle projectiles");
             return;
         }
-
-        if (input.equalsIgnoreCase("Y")) {
-            controller.giveUp();
-            return;
-        }
-
-        Point p = getPoint(input);
-
-        if (currentShip.getBatteries().containsKey(p)) {
-            controller.useBattery(p);
-        } else if (currentShip.getActivatables().containsKey(p)) {
-            controller.activateComponent(p);
-        } else {
-            System.out.println("Invalid position. Please select a component or battery.");
+        String[] parts = input.split("\\s+");
+        switch (parts[0].toUpperCase()) {
+            case "Y"-> controller.giveUp();
+            case "A"-> {
+                Point p = getPoint(input);
+                if (!currentShip.getBatteries().containsKey(p) && !currentShip.getActivatables().containsKey(p)) {
+                    System.out.println("Invalid position. Please select a component or battery.");
+                    return;
+                }
+                if (currentShip.getBatteries().containsKey(p)) {
+                    controller.useBattery(p);
+                } else if (currentShip.getActivatables().containsKey(p)) {
+                    controller.activateComponent(p);
+                }
+            }
         }
     }
 
     @Override
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
         CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        ship.highlightPoints(Set.of(point), Highlights.CYAN);
         cliAllShips.setDirty();
     }
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
         CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        ship.highlightPoints(Set.of(point), Highlights.GREEN);
         cliAllShips.setDirty();
     }
 

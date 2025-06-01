@@ -72,11 +72,7 @@ public class CliCrewInitializationScreen extends CliScreen {
                 }
                 controller.initializeCabin(getPoint(input), currentCrewType);
             case "":
-                for (CrewType currentCrewType : crewtypeToPoints.get(myShipBoard).keySet()) {
-                    for (Point points : crewtypeToPoints.get(myShipBoard).get(currentCrewType)) {
-                        controller.initializeCabin(points, CrewType.HUMAN);
-                    }
-                }
+                controller.goNext();
                 break;
         }
     }

@@ -33,16 +33,16 @@ public class CliShipPieceChoiceScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        if (input.equalsIgnoreCase("Y")) {
-            controller.giveUp();
-            return;
-        }
-
-        if(shipBroken) {
-            controller.chooseShipPiece(Integer.parseInt(input));
-        }
-        else {
-            System.out.println("Your ship is valid");
+        String[] parts = input.split("\\s+");
+        switch (parts[0].toUpperCase()){
+            case "Y" -> controller.giveUp();
+            case "K" -> {
+                if(!shipBroken) {
+                    System.out.println("Your ship is valid");
+                }
+                int choice = Integer.parseInt(parts[1]);
+                controller.chooseShipPiece(choice);
+            }
         }
     }
 

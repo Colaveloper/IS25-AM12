@@ -17,19 +17,19 @@ public class CliNewCardScreen extends CliScreen {
         super(model, controller, gameState);
         imLeader = gameState.getShipBoard() == model.getMyShip();
         hasDrown = false;
-        adventureCard = null;
         adventureCard = new CliAdventureCard(gameState.getGame().getCurrentAdventureCard());
     }
 
     @Override
     public void render() {
-        printShips();
+        cliFlightBoard.getDescription().forEach(System.out::println);
+        cliAllShips.getDescription().forEach(System.out::println);
         if(!hasDrown && !imLeader){
             System.out.println("Wait for leader to draw");
         }
-        if (adventureCard != null) {
+        if (hasDrown) {
             System.out.println("A new card has been drawn:\n");
-            System.out.println(new CliAdventureCard(model).getDescription());
+            System.out.println(adventureCard.getDescription());
         }
         printActions();
     }

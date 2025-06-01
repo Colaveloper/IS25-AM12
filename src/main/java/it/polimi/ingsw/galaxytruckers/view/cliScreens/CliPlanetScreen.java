@@ -20,26 +20,6 @@ public class CliPlanetScreen extends CliScreen {
     }
 
     @Override
-    public boolean isInputLegal(String input) {
-        if (!isMyTurn) {
-            System.out.println("It's not your turn to choose a planet");
-            return false;
-        }
-
-        if (!isFormatLegal(input)) {
-            return false;
-        }
-
-        try {
-            int choice = Integer.parseInt(input);
-            return choice >= 0 && choice < numPlanets;
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter a number between 0 and " + (numPlanets - 1));
-            return false;
-        }
-    }
-
-    @Override
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
@@ -61,21 +41,17 @@ public class CliPlanetScreen extends CliScreen {
             System.out.println("It's not your turn to choose a planet");
             return;
         }
-
-        if (input.equalsIgnoreCase("Y")) {
-            controller.giveUp();
-            return;
-        }
-
-        try {
-            int choice = Integer.parseInt(input);
-            if (choice < 0 || choice >= numPlanets) {
-                System.out.println("Invalid planet choice. Please enter a number between 0 and " + (numPlanets - 1));
-                return;
+        String[] parts = input.split("\\s+");
+        switch (parts[0].toUpperCase()){
+            case "Y" -> controller.giveUp();
+            case "L" -> {
+                int choice = Integer.parseInt(parts[1]);
+                if (choice < 0 || choice >= numPlanets) {
+                    System.out.println("Invalid planet choice. Please enter a number between 0 and " + (numPlanets - 1));
+                    return;
+                }
+                controller.choosePlanet(choice);
             }
-            controller.choosePlanet(choice);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter a number.");
         }
     }
 
