@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
+import it.polimi.ingsw.galaxytruckers.utils.JsonUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -119,13 +120,7 @@ public class ComponentRegistry {
     }
 
     private static List<Connector> parseConnectors(JsonNode connectorNode){
-        List<Connector> connectors = new ArrayList<>();
-        if(connectorNode != null && connectorNode.isArray()){
-            for (JsonNode conn : connectorNode){
-                connectors.add(Connector.valueOf(conn.asText().toUpperCase())); //convert string to enum
-            }
-        }
-        return connectors;
+        return JsonUtils.nodeToConnector(connectorNode);
     }
 
     private static CrewType parseCrewType(JsonNode crewTypeNode) throws JsonParseException {

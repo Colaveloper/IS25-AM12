@@ -1,17 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
 
+import it.polimi.ingsw.galaxytruckers.view.controller.ComponentRegistry;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
 
 import java.awt.*;
 import java.util.List;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public abstract class ShipBoard {
@@ -57,6 +54,10 @@ public abstract class ShipBoard {
         this.cargoHolds = new HashMap<>();
         this.cabins = new HashMap<>();
         this.activatables = new HashMap<>();
+
+        offerComponent(ComponentRegistry.getInstance().getStartingCabin(color));
+        placeComponent(new Point(7,7),0);
+        weldLastComponent();
     }
 
     public abstract Set<Point> getShipArea();

@@ -3,6 +3,8 @@ package it.polimi.ingsw.galaxytruckers.view.controller;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.utils.JsonUtils;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -20,6 +22,7 @@ public class ComponentRegistry {
     private static final File componentJson = new File("src/main/resources/tiles.json");
 
     private final Map<Integer, JsonNode> components;
+    private final Map<GameColor, JsonNode> startingCabins;
 
     public static ComponentRegistry getInstance() {
         if (instance == null) {
@@ -30,6 +33,7 @@ public class ComponentRegistry {
 
     private ComponentRegistry() {
         this.components = new HashMap<>();
+        this.startingCabins = new HashMap<>();
         try {
             loadComponents();
         } catch (IOException e) {
@@ -42,6 +46,14 @@ public class ComponentRegistry {
             throw new IllegalArgumentException("No component with id " + id);
         try {
             return parseComponent(id, components.get(id));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Component getStartingCabin(GameColor color) {
+        try {
+            return parseComponent(startingCabins.get(color));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -60,11 +72,14 @@ public class ComponentRegistry {
         for (JsonNode node : rootNode){
             int id = node.get("id").asInt();
             components.put(id, node);
+            String type = node.get("type").asText();
+            if (type.equals("cabin") && node.get("color") != null) {
+                startingCabins.put(GameColor.valueOf(node.get("color").asText().toUpperCase()), node);
+            }
         }
     }
 
     private Component parseComponent(int id, JsonNode node) throws IOException{
-        ObjectMapper objectMapper = new ObjectMapper();
 
         String type = node.get("type").asText();
         Component component;
@@ -105,14 +120,12 @@ public class ComponentRegistry {
         return component;
     }
 
-    private static List<Connector> parseConnectors(JsonNode connectorNode){
-        List<Connector> connectors = new ArrayList<>();
-        if(connectorNode != null && connectorNode.isArray()){
-            for (JsonNode conn : connectorNode){
-                connectors.add(Connector.valueOf(conn.asText().toUpperCase())); //convert string to enum
-            }
-        }
-        return connectors;
+    private Component parseComponent(JsonNode node) throws IOException {
+        return parseComponent(node.get("id").asInt(),node);
+    }
+
+    private List<Connector> parseConnectors(JsonNode connectorNode){
+        return JsonUtils.nodeToConnector(connectorNode);
     }
 
     private static CrewType parseCrewType(JsonNode crewTypeNode) throws JsonParseException {
