@@ -1,14 +1,11 @@
-package it.polimi.ingsw.galaxytruckers.view.controller;
+package it.polimi.ingsw.galaxytruckers.model;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.utils.JsonUtils;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,36 +16,35 @@ import java.util.Map;
 
 public class ComponentRegistry {
     private static ComponentRegistry instance;
-    private static final File componentJson = new File("src/main/resources/tiles.json");
 
-    private final Map<Integer, JsonNode> components;
-    private final Map<GameColor, JsonNode> startingCabins;
+    private final File componentJson = new File("src/main/resources/tiles.json");
+
+    private final List<JsonNode> bankComponents = new ArrayList<>();
+    private final Map<GameColor, JsonNode> startingCabins = new HashMap<>();
 
     public static ComponentRegistry getInstance() {
-        if (instance == null) {
-            instance = new ComponentRegistry();
-        }
+        if (instance == null) instance = new ComponentRegistry();
         return instance;
     }
 
     private ComponentRegistry() {
-        this.components = new HashMap<>();
-        this.startingCabins = new HashMap<>();
         try {
-            loadComponents();
+            loadFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Component getComponent(int id) {
-        if (!components.containsKey(id))
-            throw new IllegalArgumentException("No component with id " + id);
-        try {
-            return parseComponent(id, components.get(id));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public List<Component> getBankComponents() {
+        List<Component> res = new ArrayList<>();
+        for (JsonNode node: bankComponents) {
+            try {
+                res.add(parseComponent(node));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+        return res;
     }
 
     public Component getStartingCabin(GameColor color) {
@@ -59,45 +55,48 @@ public class ComponentRegistry {
         }
     }
 
-    public int getComponentNumber() {
-        return components.size();
-    }
-
-    private void loadComponents() throws IOException {
+    private void loadFile() throws IOException {
         //reading from json file and returning the list of components
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(componentJson);
 
-        //iterating through nodes and adding each as a component to list
-        for (JsonNode node : rootNode){
-            int id = node.get("id").asInt();
-            components.put(id, node);
+        for (JsonNode node : rootNode) {
             String type = node.get("type").asText();
-            if (type.equals("cabin") && node.get("color") != null) {
-                startingCabins.put(GameColor.valueOf(node.get("color").asText().toUpperCase()), node);
+            if (type.equals("cabin")) {
+                if (node.get("color") != null) {
+                    GameColor cabinColor = GameColor.valueOf(node.get("color").asText().toUpperCase());
+                    startingCabins.put(cabinColor, node);
+                } else {
+                    bankComponents.add(node);
+                }
+            } else {
+                bankComponents.add(node);
             }
         }
     }
 
-    private Component parseComponent(int id, JsonNode node) throws IOException{
-
+    protected Component parseComponent(JsonNode node) throws IOException {
+        //iterating through nodes and adding each as a component to list
         String type = node.get("type").asText();
         Component component;
         List<Connector> connectors = parseConnectors(node.get("connectors"));
-
-        switch (type) {
-            case "shield" -> {
+        int id = node.get("id").asInt();
+        switch(type){
+            case "shield" ->
                 component = new Shield(connectors, id);
-            }
             case "life_support" -> {
                 CrewType crewType = parseCrewType(node.get("crewtype"));
                 component = new LifeSupport(connectors, id, crewType);
             }
             case "double_cannon" ->
+                component = new DoubleCannon(connectors);
+            case "double cannon" ->
                 component = new DoubleCannon(connectors, id);
             case "cannon" ->
                 component = new Cannon(connectors, id);
             case "double_engine" ->
+                component = new DoubleEngine(connectors);
+            case "double engine" ->
                 component = new DoubleEngine(connectors, id);
             case "engine" ->
                 component = new Engine(connectors, id);
@@ -113,18 +112,14 @@ public class ComponentRegistry {
                 component = new Battery(connectors, id, numBatteries);
             }
             case "cabin" ->
-                component = new Cabin(connectors, id);
+                component = new Cabin(connectors,id);
             default ->
                 throw new IllegalArgumentException("Unknown component type: " + type);
         }
         return component;
     }
 
-    private Component parseComponent(JsonNode node) throws IOException {
-        return parseComponent(node.get("id").asInt(),node);
-    }
-
-    private List<Connector> parseConnectors(JsonNode connectorNode){
+    private static List<Connector> parseConnectors(JsonNode connectorNode){
         return JsonUtils.nodeToConnector(connectorNode);
     }
 

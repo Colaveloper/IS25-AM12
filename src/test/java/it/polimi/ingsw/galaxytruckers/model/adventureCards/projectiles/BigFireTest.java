@@ -21,7 +21,7 @@ class BigFireTest {
         shipBoard = new ShipBoard(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
-                return false;
+                return true;
             }
 
         };

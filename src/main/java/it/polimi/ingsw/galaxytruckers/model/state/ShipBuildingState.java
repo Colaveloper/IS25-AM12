@@ -19,11 +19,7 @@ public non-sealed abstract class ShipBuildingState extends GameState {
     public ShipBuildingState() {
         this.completedShipBoards = new HashSet<>();
         this.componentBank = new ComponentBank();
-        try {
-            componentBank.initialize();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        this.componentBank.initialize();
     }
 
     @Override
@@ -98,10 +94,9 @@ public non-sealed abstract class ShipBuildingState extends GameState {
                 .mapToInt(x -> x)
                 .min().orElseThrow(() -> new IllegalStateException("There are no more available positions"));
         completedShipBoards.add(shipBoard);
-        if (game.getFlightBoard().placeShipOnFlightBoard(shipBoard, position)) {
-            endBuilding();
-        }
+        game.getFlightBoard().placeShipOnFlightBoard(shipBoard, position);
         game.getEventListener().notifyFlightBoardUpdateEvent(shipBoard,position);
+        if (completedShipBoards.size() == game.getShipBoards().size()) endBuilding();
     }
 
     @Override
@@ -130,10 +125,6 @@ public non-sealed abstract class ShipBuildingState extends GameState {
     protected ShipBuildingState(ComponentBank testBank) {
         this.completedShipBoards = new HashSet<>();
         this.componentBank = testBank;
-        try {
-            componentBank.initialize();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        this.componentBank.initialize();
     }
 }

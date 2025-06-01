@@ -1,5 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import it.polimi.ingsw.galaxytruckers.model.ComponentRegistry;
+import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,24 +11,24 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CliComponentBankTest {
-    ComponentBank componentBank;
+class ComponentRegistryTest {
+    ComponentRegistry componentRegistry;
 
     @BeforeEach
     void setUp() {
-        componentBank = new ComponentBank();
+        componentRegistry = ComponentRegistry.getInstance();
     }
 
     @Test
     void loadComponentSizes() throws IOException {
-        List<Component> components = ComponentBank.loadComponents();
+        List<Component> components = componentRegistry.getBankComponents();
 
         // ensure list is not null and at least one component was loaded
         assertNotNull(components);
         assertFalse(components.isEmpty());
 
         //ensure that all 156 components have been loaded
-        assertEquals(156, components.size());
+        assertEquals(152, components.size());
 
         //checking first and last component of each type in list
         assertEquals("Shield", components.get(0).getClass().getSimpleName());
@@ -63,9 +66,12 @@ class CliComponentBankTest {
         //normal cabins
         assertEquals("Cabin", components.get(135).getClass().getSimpleName());
         assertEquals("Cabin", components.get(151).getClass().getSimpleName());
+    }
 
-        //4 main cabins
-        assertEquals("Cabin", components.get(152).getClass().getSimpleName());
-        assertEquals("Cabin", components.get(155).getClass().getSimpleName());
+    @Test
+    void getStartingCabin() {
+        for (GameColor color : GameColor.values()) {
+            assertDoesNotThrow(() -> componentRegistry.getStartingCabin(color));
+        }
     }
 }

@@ -22,6 +22,7 @@ class ShipBoardTest {
         @BeforeEach
         void setup() {
             shipBoard = new SecondShipBoard(GameColor.BLUE);
+            shipBoard.removeComponent(new Point(7,7));
             componentToAdd = new Component(Arrays.asList(Connector.UNIVERSAL, Connector.SINGLE, Connector.DOUBLE, Connector.NONE));
         }
 
@@ -134,6 +135,7 @@ class ShipBoardTest {
         @BeforeEach
         void setup() {
             shipBoard = new SecondShipBoard(GameColor.BLUE);
+            shipBoard.removeComponent(new Point(7,7));
         }
 
         @Nested
@@ -822,6 +824,7 @@ class ShipBoardTest {
         void setUp() {
             component = new Component(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
             shipBoard = new SecondShipBoard(GameColor.BLUE);
+            shipBoard.removeComponent(new Point(7,7));
             for (int i = 5; i <= 9; i++) {
                 shipBoard.offerComponent(component);
                 shipBoard.placeComponent(new Point(i,7),0);
