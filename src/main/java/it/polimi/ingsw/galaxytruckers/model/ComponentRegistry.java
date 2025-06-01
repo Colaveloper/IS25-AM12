@@ -89,14 +89,10 @@ public class ComponentRegistry {
                 component = new LifeSupport(connectors, id, crewType);
             }
             case "double_cannon" ->
-                component = new DoubleCannon(connectors);
-            case "double cannon" ->
                 component = new DoubleCannon(connectors, id);
             case "cannon" ->
                 component = new Cannon(connectors, id);
             case "double_engine" ->
-                component = new DoubleEngine(connectors);
-            case "double engine" ->
                 component = new DoubleEngine(connectors, id);
             case "engine" ->
                 component = new Engine(connectors, id);
