@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
@@ -72,7 +73,7 @@ public class CliShipPieceChoiceScreen extends CliScreen {
     }
 
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List<Point> removed){
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipBoard ship = shipToCliShip.get(shipBoard);
         for(Point point : removed){
             ship.onRemoveComponent(point);
         }

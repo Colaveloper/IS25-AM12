@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -81,7 +82,7 @@ public class CliRemoveCrewScreen extends CliScreen {
 
     @Override
     public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipBoard ship = shipToCliShip.get(shipBoard);
         // Update the ship's crew display
         cliAllShips.setDirty();
     }

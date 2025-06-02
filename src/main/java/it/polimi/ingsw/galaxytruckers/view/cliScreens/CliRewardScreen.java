@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -60,7 +61,7 @@ public class CliRewardScreen extends CliScreen {
 
     @Override
     public void notifyGrabReward(ShipBoard shipBoard, boolean grabbed) {
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipBoard ship = shipToCliShip.get(shipBoard);
         cliAllShips.setDirty();
         cliFlightBoard.setDirty();
     }

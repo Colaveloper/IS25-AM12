@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
@@ -24,23 +25,6 @@ public class CliDeclareEnginePowerScreen extends CliScreen {
     }
 
     @Override
-    public boolean isInputLegal(String input) {
-        if (!isMyTurn) {
-            System.out.println("It's not your turn to declare engine power");
-            return false;
-        }
-
-        if (!isFormatLegal(input)) {
-            return false;
-        }
-
-        Point p = getPoint(input);
-        Set<Point> availablePositions = gameState.getAvailablePositions();
-
-        return availablePositions.contains(p) || currentShip.getBatteries().containsKey(p);
-    }
-
-    @Override
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
@@ -59,36 +43,44 @@ public class CliDeclareEnginePowerScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        if (!isMyTurn) {
-            System.out.println("It's not your turn to declare engine power");
-            return;
-        }
-
-        if (input.equalsIgnoreCase("Y")) {
-            controller.giveUp();
-            return;
-        }
-
-        Point p = getPoint(input);
-
-        if (currentShip.getBatteries().containsKey(p)) {
-            controller.useBattery(p);
-        } else if (gameState.getAvailablePositions().contains(p)) {
-            controller.activateComponent(p);
-        } else {
-            System.out.println("Invalid position. Please select an engine or battery.");
+        String[] parts = input.split("\\s+");
+        switch (parts[0].toUpperCase()) {
+            case "Y"-> controller.giveUp();
+            case "A"-> {
+                Point p = getPoint(input);
+                if(!isMyTurn){
+                    System.out.println("It's not your turn to handle projectiles");
+                    return;
+                }
+                if (!currentShip.getBatteries().containsKey(p) && !currentShip.getActivatables().containsKey(p)) {
+                    System.out.println("Invalid position. Please select a component or battery.");
+                    return;
+                }
+                if (currentShip.getBatteries().containsKey(p)) {
+                    controller.useBattery(p);
+                } else if (currentShip.getActivatables().containsKey(p)) {
+                    controller.activateComponent(p);
+                }
+            }
+            case "" -> {
+                if (!isMyTurn) {
+                    System.out.println("It's not your turn to handle projectiles");
+                    return;
+                }
+                controller.goNext();
+            }
         }
     }
 
     @Override
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipBoard ship = shipToCliShip.get(shipBoard);
         cliAllShips.setDirty();
     }
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipBoard ship = shipToCliShip.get(shipBoard);
         cliAllShips.setDirty();
     }
 }

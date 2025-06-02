@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.CargoHold;
@@ -149,13 +150,13 @@ public class CliGoodsScreen extends CliScreen {
 
     @Override
     public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipBoard ship = shipToCliShip.get(shipBoard);
         cliAllShips.setDirty();
     }
 
     @Override
     public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipBoard ship = shipToCliShip.get(shipBoard);
         cliAllShips.setDirty();
     }
 }
