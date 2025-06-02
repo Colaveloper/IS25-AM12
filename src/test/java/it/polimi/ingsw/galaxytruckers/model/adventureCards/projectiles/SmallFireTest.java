@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Shield;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -22,10 +23,10 @@ class SmallFireTest {
     @Test
     void getActivatablePoints() {
         fakeShields = new HashMap<>();
-        shipBoard = new ShipBoard(null) {
+        shipBoard = new ShipBoard(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
-                return false;
+                return true;
             }
 
             @Override
@@ -42,10 +43,10 @@ class SmallFireTest {
         firstFoundComponentPosition = new Point();
         for (int i = 0; i < 4; i++) {
             int finalI = i;
-            shipBoard = new ShipBoard(null) {
+            shipBoard = new ShipBoard(GameColor.BLUE) {
                 @Override
                 protected boolean containsPoint(Point point) {
-                    return false;
+                    return true;
                 }
 
                 @Override

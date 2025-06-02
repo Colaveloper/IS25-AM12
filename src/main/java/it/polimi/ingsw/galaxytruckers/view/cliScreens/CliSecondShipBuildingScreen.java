@@ -22,6 +22,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     private boolean hasStashed;
     private final SecondShipBuildingState gameState;
     private boolean hasForecastDeck = false;
+    private final Map<ShipBoard, CliShipHandAndStash> buildingShipToCliShip;
 
 
     public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
@@ -31,6 +32,11 @@ public class CliSecondShipBuildingScreen extends CliScreen {
         cliComponentBank = new CliComponentBank(gameState.getComponentBank());
         cliForecast = new CliForecast(gameState.getBlockedForecasts());
         cliForecastCards = new CliForecastCards();
+        this.buildingShipToCliShip = new HashMap<>();
+        for (Player player : model.getPlayers()) {
+            buildingShipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));
+        }
+        cliAllShips = new CliAllShips(buildingShipToCliShip.values().stream().toList());
     }
 
     @Override
@@ -175,7 +181,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
         hasStashed = false;
         cliComponentBank.removeCovered();
-        shipToCliShip.get(shipBoard).setHand(component);
+        buildingShipToCliShip.get(shipBoard).setHand(component);
         cliAllShips.setDirty();
     }
 
@@ -183,13 +189,13 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
         hasStashed = false;
         cliComponentBank.removeUncovered(component);
-        shipToCliShip.get(shipBoard).setHand(component);
+        buildingShipToCliShip.get(shipBoard).setHand(component);
         cliAllShips.setDirty();
     }
 
     @Override
     public void notifyStashComponent(ShipBoard shipBoard, Component component) {
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
         ship.clearHand();
         ship.onStash(component);
         cliAllShips.setDirty();
@@ -197,7 +203,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     @Override
     public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
         ship.onRemoveComponent(oldPosition);
         ship.onStash(component);
         cliAllShips.setDirty();
@@ -206,7 +212,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     @Override
     public void notifyRejectComponent(ShipBoard shipBoard, Component component) {
         //can t reject component picked from stashed
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
         ship.clearHand();
         cliComponentBank.addUncovered(component);
         cliAllShips.setDirty();
@@ -216,7 +222,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     @Override
     public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
         //can t reject component picked from stashed
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
         ship.onRemoveComponent(oldPosition);
         cliComponentBank.addUncovered(component);
         cliAllShips.setDirty();
@@ -225,7 +231,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     @Override
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
         hasStashed = true;
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
         ship.setHand(component);
         ship.onGrabStashed(index);
         cliAllShips.setDirty();
@@ -235,7 +241,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
         Component placedComponent = shipBoard.getComponentMap().get(point);
         if (placedComponent != null) {
-            CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+            CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
             ship.onPutComponent(point, placedComponent);
             ship.clearHand();
             cliAllShips.setDirty();
@@ -286,7 +292,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     @Override
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
         ship.onRemoveComponent(point);
         cliAllShips.setDirty();
     }

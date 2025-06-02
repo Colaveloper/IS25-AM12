@@ -1004,24 +1004,28 @@
     "type": "cabin",
     "connectors": ["universal","universal","universal","universal"],
     "path": "src/main/resources/textures/tiles/GT-new_tiles_16_for web61.jpg",
+    "color": "yellow",
     "id": 61
   },
   {
     "type": "cabin",
     "connectors": ["universal","universal","universal","universal"],
     "path": "src/main/resources/textures/tiles/GT-new_tiles_16_for web52.jpg",
+    "color": "red",
     "id": 52
   },
   {
     "type": "cabin",
     "connectors": ["universal","universal","universal","universal"],
     "path": "src/main/resources/textures/tiles/GT-new_tiles_16_for web34.jpg",
+    "color": "green",
     "id": 34
   },
   {
     "type": "cabin",
     "connectors": ["universal","universal","universal","universal"],
     "path": "src/main/resources/textures/tiles/GT-new_tiles_16_for web33.jpg",
+    "color": "blue",
     "id": 33
   }
 ]

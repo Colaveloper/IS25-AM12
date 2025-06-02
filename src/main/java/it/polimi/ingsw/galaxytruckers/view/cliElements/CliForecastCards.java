@@ -22,27 +22,4 @@ public class CliForecastCards extends CliElement {
         forecastDeck = cards;
         setDirty();
     }
-//    private final List<AdventureCard> forecastDeck;
-//    private SecondShipBuildingState gameState;
-//
-//    public CliForecastScreen(ClientModel model, ClientController controller, SecondShipBuildingState gameState) {
-//        super(model, controller, gameState);
-//        this.gameState = gameState;
-//        this.forecastDeck = gameState.getForecastDeck();
-//    }
-//
-//    @Override
-//    public void parseAndInvoke(String input) {
-//        controller.releaseForecast();
-//    }
-//
-//    @Override
-//    public void render() {
-//        printShips();
-//        printActions();
-//        System.out.println("Cards in the forecast deck:\n");
-//        for (AdventureCard card : forecastDeck){
-////            System.out.println(new CliAdventureCard(model).getDescription());
-//        }
-//    }
 }

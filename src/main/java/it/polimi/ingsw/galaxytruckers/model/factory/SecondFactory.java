@@ -12,7 +12,9 @@ import java.io.IOException;
 public class SecondFactory extends GameFactory{
     @Override
     public Deck createDeck(Game game) throws IOException {
-        return new SecondDeck(game);
+        SecondDeck deck = new SecondDeck(game);
+        deck.initMasterDeck();
+        return deck;
     }
 
     @Override

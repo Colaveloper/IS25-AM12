@@ -37,6 +37,9 @@ class ShipCorrectionStateTest {
             shipBoards.add(game.addShipBoard(GameColor.BLUE));
             shipBoards.add(game.addShipBoard(GameColor.RED));
             shipBoards.add(game.addShipBoard(GameColor.GREEN));
+            for (ShipBoard shipBoard : shipBoards) {
+                shipBoard.removeComponent(new Point(7,7));
+            }
             game.setEventListener(new GameEventListenerStub());
             game.start();
             for (ShipBoard shipBoard : shipBoards) {
@@ -138,6 +141,9 @@ class ShipCorrectionStateTest {
             shipBoards.add(game.addShipBoard(GameColor.BLUE));
             shipBoards.add(game.addShipBoard(GameColor.RED));
             shipBoards.add(game.addShipBoard(GameColor.GREEN));
+            for (ShipBoard shipBoard : shipBoards) {
+                shipBoard.removeComponent(new Point(7,7));
+            }
             game.setEventListener(new GameEventListenerStub());
             game.start();
             for (ShipBoard shipBoard : shipBoards) {

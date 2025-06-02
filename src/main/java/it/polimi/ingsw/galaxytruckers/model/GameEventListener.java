@@ -46,7 +46,7 @@ public class GameEventListener {
     }
 
     public void notifyGameStateUpdateEvent(GameState gameState) {
-        System.out.println("Game state update");
+        System.out.println("Game state update: " + gameState.getClass().getSimpleName());
         controllerListener.notifyEvent(new GameStateUpdateEvent(
                 StateDTOConverter.convert(gameState)
         ));

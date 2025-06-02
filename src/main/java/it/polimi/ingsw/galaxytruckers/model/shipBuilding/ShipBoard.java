@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import it.polimi.ingsw.galaxytruckers.model.ComponentRegistry;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 
@@ -55,6 +56,9 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         this.cabins = new HashMap<>();
         this.activatables = new HashMap<>();
 
+        offerComponent(ComponentRegistry.getInstance().getStartingCabin(color));
+        placeComponent(new Point(7,7),0);
+        weldLastComponent();
     }
 
     protected abstract boolean containsPoint(Point point);

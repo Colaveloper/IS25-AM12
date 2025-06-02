@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
@@ -56,6 +57,12 @@ public final class ShipCorrectionState extends GameState {
 
     public Map<ShipBoard, List<Set<Point>>> getShipPieces() {
         return shipPieces;
+    }
+
+    @Override
+    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
+        int numResidents = shipBoard.initializeCabin(point, crewType);
+        game.getObservers().forEach(observer -> observer.notifyInitializeCabin(shipBoard, point, crewType, numResidents));
     }
 
     //TODO: notify ship is valid, notify shipPieces
