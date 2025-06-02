@@ -1,17 +1,5 @@
 [
   {
-  "type": "empty_area",
-  "connectors": ["none","none","none","none"],
-  "path": "src/main/resources/textures/tiles/empty_area.png",
-  "id": 0
-  },
-  {
-    "type": "empty_space",
-    "connectors": ["none","none","none","none"],
-    "path": "src/main/resources/textures/tiles/empty_space.png",
-    "id": 1
-  },
-  {
     "type": "shield",
     "connectors": ["none","universal","double","double"],
     "path": "src/main/resources/textures/tiles/GT-new_tiles_16_for web156.jpg",

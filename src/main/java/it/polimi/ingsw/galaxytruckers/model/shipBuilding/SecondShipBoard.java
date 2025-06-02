@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.util.*;
@@ -142,14 +143,14 @@ public class SecondShipBoard extends ShipBoard {
         }
         res.add(CrewType.HUMAN);
 
-        // aliens are not allowed on the starting cabin
+        // aliens are not allowed in the starting cabin
         if(!position.equals(new Point(7, 7))) {
-            List<Point> neighbours = getNeighbours(position);
-            for (int i = 0; i < neighbours.size(); i++) {
-                Point neighbour = neighbours.get(i);
+            Map<Direction, Point> neighbours = getNeighbours(position);
+            for (Direction direction : Direction.values()) {
+                Point neighbour = neighbours.get(direction);
                 if (lifeSupports.containsKey(neighbour) &&
                         !aliens.contains(lifeSupports.get(neighbour).getAlienType()) &&
-                        componentMap.get(position).getConnectors().get(i) != Connector.NONE) {
+                        componentMap.get(position).getConnectors().get(direction) != Connector.NONE) {
                     res.add(lifeSupports.get(neighbour).getAlienType());
                 }
             }
@@ -179,7 +180,7 @@ public class SecondShipBoard extends ShipBoard {
     @Override
     public void remove(LifeSupport lifeSupport) {
         this.lifeSupports.remove(this.lastPosition);
-        Set<Point> adjacentCabins = getNeighbours(lastPosition).stream()
+        Set<Point> adjacentCabins = getNeighbours(lastPosition).values().stream()
                 .filter(cabins.keySet()::contains)
                 .filter(p -> cabins.get(p).getCrewType() != CrewType.HUMAN)
                 .filter(p -> cabins.get(p).getNumResidents()>0)

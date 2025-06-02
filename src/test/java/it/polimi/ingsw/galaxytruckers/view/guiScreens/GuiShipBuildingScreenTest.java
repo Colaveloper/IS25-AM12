@@ -34,8 +34,8 @@ class GuiShipBuildingScreenTest {
         screen = new GuiSecondShipBuildingScreen(model, null, state);
     }
 
-    @Test
-    void notifyRequestRandComponent() {
+//    @Test
+//    void notifyRequestRandComponent() {
 
 //        screen.render();
 //        model.notifyRequestRandComponent(player1.getShipBoard(), new Component(
@@ -43,5 +43,5 @@ class GuiShipBuildingScreenTest {
 //                10
 //        ));
 //        screen.render();
-    }
+//    }
 }

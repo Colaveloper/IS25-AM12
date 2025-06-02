@@ -6,12 +6,12 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteController;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteServer;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.UUID;
 
@@ -130,8 +130,8 @@ class RmiClientTest {
 
         @Test
         void placeComponent(){
-            rmiClient.placeComponent(new Point(0, 0), 0);
-           verify(checker).placeComponent(new Point(0, 0), 0);
+            rmiClient.placeComponent(new Point(0, 0), Direction.UP);
+           verify(checker).placeComponent(new Point(0, 0), Direction.UP);
         }
 
         @Test
@@ -317,7 +317,7 @@ class RemoteControllerStub implements RemoteController {
     }
 
     @Override
-    public void placeComponent(Point point, int orientation){
+    public void placeComponent(Point point, Direction orientation){
         checker.placeComponent(point, orientation);
     }
 

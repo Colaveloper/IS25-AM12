@@ -1,13 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.util.List;
+import java.util.Map;
 
 public class Battery extends Component{
     int numBatteries;
 
-    public Battery(List<Connector> connectors, int id, int numBatteries) {
+    public Battery(Map<Direction, Connector> connectors, int id, int numBatteries) {
         super(connectors,id);
         if (numBatteries != 2 && numBatteries != 3) {
             throw new IllegalArgumentException("Number of batteries must be 2 or 3");
@@ -16,7 +18,7 @@ public class Battery extends Component{
     }
 
     @VisibleForTesting
-    public Battery(List<Connector> connectors, int numBatteries) {
+    public Battery(Map<Direction, Connector> connectors, int numBatteries) {
         super(connectors);
         if (numBatteries != 2 && numBatteries != 3) {
             throw new IllegalArgumentException("Number of batteries must be 2 or 3");

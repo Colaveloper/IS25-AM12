@@ -1,17 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public abstract sealed class GameState permits
@@ -57,7 +55,7 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         System.err.println("6This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
     }

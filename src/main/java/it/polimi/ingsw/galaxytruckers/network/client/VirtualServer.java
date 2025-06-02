@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public interface VirtualServer {
     void rejectComponent();
     void stashComponent();
     void grabStashedComponent(int index);
-    void placeComponent(Point point, int orientation);
+    void placeComponent(Point point, Direction orientation);
     void flipHourglass();
     void placeShipOnFlightBoard(int startingPosition);
     void acquireForecast(int deckIndex);

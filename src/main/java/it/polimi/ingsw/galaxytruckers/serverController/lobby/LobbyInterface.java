@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 
@@ -29,7 +30,7 @@ public interface LobbyInterface {
     void rejectComponent(Player player);
     void stashComponent(Player player);
     void grabStashedComponent(Player player, int index);
-    void placeComponent(Player player, Point point, int orientation);
+    void placeComponent(Player player, Point point, Direction orientation);
     void flipHourglass(Player player);
     void placeShipOnFlightBoard(Player player, int startingPosition);
     void acquireForecast(Player player, int deckIndex);

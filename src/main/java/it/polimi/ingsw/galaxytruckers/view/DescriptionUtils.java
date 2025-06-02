@@ -14,21 +14,26 @@ public class DescriptionUtils {
     @Pure
     @CheckReturnValue
     public static List<String> sideBySide(List<String> a, List<String> b) {
+        return sideBySide(a, b, 1); // default spacing = 1
+    }
+
+    @Pure
+    @CheckReturnValue
+    public static List<String> sideBySide(List<String> a, List<String> b, int spacing) {
         if (a.isEmpty()) return new ArrayList<>(b);
         if (b.isEmpty()) return new ArrayList<>(a);
 
         List<String> c = new ArrayList<>(a);
-
         int leftWidth = 1;
+
         for (String s : a) {
             leftWidth = Math.max(leftWidth, getRealWidth(s));
         }
 
         int maxSize = Math.max(a.size(), b.size());
+        while (c.size() < maxSize) c.add("");
 
-        while (c.size() < maxSize) {
-            c.add("");
-        }
+        String space = " ".repeat(Math.max(0, spacing));
 
         for (int i = 0; i < maxSize; i++) {
             String left = c.get(i);
@@ -36,9 +41,7 @@ public class DescriptionUtils {
 
             StringBuilder line = new StringBuilder(left);
             int padding = leftWidth - getRealWidth(left);
-            line.append(" ".repeat(Math.max(0, padding)));
-
-            line.append(' ').append(right);
+            line.append(" ".repeat(Math.max(0, padding))).append(space).append(right);
             c.set(i, line.toString());
         }
 

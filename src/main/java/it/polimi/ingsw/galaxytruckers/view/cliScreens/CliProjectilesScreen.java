@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
@@ -31,11 +32,10 @@ public class CliProjectilesScreen extends CliScreen {
         cliAllShips.getDescription().forEach(System.out::println);
 
         String direction = switch (gameState.getProjectile().direction()) {
-            case 0 -> "front on column ";
-            case 1 -> "right or left on row ";
-            case 2 -> "back on column ";
-            case 3 -> "right or left on row ";
-            default -> "unknown direction ";
+            case Direction.UP -> "front on column ";
+            case Direction.RIGHT -> "right on row ";
+            case Direction.DOWN -> "back on column ";
+            case Direction.LEFT -> "left on row ";
         };
 
         System.out.println("A " + gameState.getProjectile().type() +

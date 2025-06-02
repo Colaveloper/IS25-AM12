@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,19 +37,31 @@ class EpidemicCardTest {
         ships = new ArrayList<>();
 
         testCabins = new HashMap<>();
-        cabinAtRisk = new Cabin(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)) {
+        cabinAtRisk = new Cabin(Map.of(
+                Direction.UP, Connector.UNIVERSAL,
+                Direction.LEFT, Connector.UNIVERSAL,
+                Direction.DOWN, Connector.UNIVERSAL,
+                Direction.RIGHT, Connector.UNIVERSAL)) {
             @Override
             public int getNumResidents () {
                 return 2;
             }
         };
-        emptyCabin = new Cabin(Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)) {
+        emptyCabin = new Cabin(Map.of(
+                Direction.UP, Connector.UNIVERSAL,
+                Direction.LEFT, Connector.UNIVERSAL,
+                Direction.DOWN, Connector.UNIVERSAL,
+                Direction.RIGHT, Connector.UNIVERSAL)) {
             @Override
             public int getNumResidents () {
                 return 0;
             }
         };
-        unconnectedCabin = new Cabin(Arrays.asList(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE)) {
+        unconnectedCabin = new Cabin(Map.of(
+                Direction.UP, Connector.NONE,
+                Direction.LEFT, Connector.NONE,
+                Direction.DOWN, Connector.NONE,
+                Direction.RIGHT, Connector.NONE)) {
             @Override
             public int getNumResidents () {
                 return 2;

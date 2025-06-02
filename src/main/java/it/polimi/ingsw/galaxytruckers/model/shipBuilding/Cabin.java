@@ -1,15 +1,17 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.util.List;
+import java.util.Map;
 
 public class Cabin extends Component {
     private boolean initialized;
     private CrewType crewType;
     private int numResidents;
 
-    public Cabin(List<Connector> connectors, int id) {
+    public Cabin(Map<Direction, Connector> connectors, int id) {
         super(connectors,id);
         this.crewType = CrewType.HUMAN;
         this.numResidents = 0;
@@ -17,7 +19,7 @@ public class Cabin extends Component {
     }
 
     @VisibleForTesting
-    public Cabin(List<Connector> connectors) {
+    public Cabin(Map<Direction, Connector> connectors) {
         super(connectors);
         this.crewType = CrewType.HUMAN;
         this.numResidents = 0;

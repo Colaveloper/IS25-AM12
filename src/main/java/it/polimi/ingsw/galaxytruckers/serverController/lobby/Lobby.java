@@ -9,6 +9,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.util.*;
@@ -181,7 +182,7 @@ public class Lobby implements LobbyInterface {
     }
 
     @Override
-    public void placeComponent(Player player, Point point, int orientation) {
+    public void placeComponent(Player player, Point point, Direction orientation) {
         synchronized (lock){
             checkLobbyState(LobbyState.INGAME);
             model.placeComponent(game, player.getShipBoard().orElseThrow(), point, orientation);

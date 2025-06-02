@@ -1,17 +1,21 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.*;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CliSecondShipBuildingScreen extends CliScreen {
 
@@ -135,7 +139,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                         System.out.println("This point is already occupied");
                         break;
                     }
-                    controller.placeComponent(getPoint(input), 0); //todo add orientation
+                    controller.placeComponent(getPoint(input), Direction.UP); //todo add orientation
                 }
                 break;
 
@@ -238,7 +242,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     }
 
     @Override
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         Component placedComponent = shipBoard.getComponentMap().get(point);
         if (placedComponent != null) {
             CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);

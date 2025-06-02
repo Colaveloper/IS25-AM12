@@ -123,7 +123,7 @@ public class CliView implements View {
     }
 
     @Override
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         currentScreen.notifyPlaceComponent(shipBoard, point, orientation);
         currentScreen.render();
     }
@@ -267,7 +267,7 @@ public class CliView implements View {
     }
 
     @Override
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, int orientation, Point oldPosition) {
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {
         currentScreen.notifyPlaceComponent(shipBoard, newPoint, orientation, oldPosition);
         currentScreen.render();
     }

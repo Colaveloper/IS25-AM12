@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.CliView;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 
@@ -78,7 +79,7 @@ class ClientControllerTest {
             }
 
             @Override
-            public void placeComponent(Point point, int orientation) {
+            public void placeComponent(Point point, Direction orientation) {
                 System.out.println("FAKE SERVER EVENT: the current component was successfully positioned where requested");
                 controller.notifyEvent(new PlaceComponentEvent(myNickname, point, orientation));
             }

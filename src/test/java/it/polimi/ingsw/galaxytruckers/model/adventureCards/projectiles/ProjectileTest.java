@@ -3,12 +3,13 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -23,10 +24,10 @@ class ProjectileTest {
 
     @BeforeEach
     void setUp() {
-        up = new Component(null);
-        right = new Component(null);
-        down = new Component(null);
-        left = new Component(null);
+        up = new Component(new EnumMap<>(Direction.class));
+        right = new Component(new EnumMap<>(Direction.class));
+        down = new Component(new EnumMap<>(Direction.class));
+        left = new Component(new EnumMap<>(Direction.class));
         upp = new Point(0, -1);
         rightp = new Point(1, 0);
         downp = new Point(0, 1);
@@ -55,7 +56,7 @@ class ProjectileTest {
     void getFirstFoundComponentPosition() {
         // makes getFirstFoundComponent public for testing
         class TransparentProjectile extends Projectile {
-            public TransparentProjectile(IntSupplier dice, int direction) {
+            public TransparentProjectile(IntSupplier dice, Direction direction) {
                 super(dice, direction);
             }
 
@@ -84,21 +85,14 @@ class ProjectileTest {
             }
 
             @Override
-            public int getDirection() {
+            public Direction getDirection() {
                 return super.getDirection();
             }
         }
-        assertEquals(Optional.of(upp), new TransparentProjectile(()->0, 0).getFirstFoundComponentPosition(myShipBoard));
-        assertEquals(Optional.of(rightp), new TransparentProjectile(()->0, 1).getFirstFoundComponentPosition(myShipBoard));
-        assertEquals(Optional.of(downp), new TransparentProjectile(()->0, 2).getFirstFoundComponentPosition(myShipBoard));
-        assertEquals(Optional.of(leftp), new TransparentProjectile(()->0, 3).getFirstFoundComponentPosition(myShipBoard));
-
-        Projectile badProjectile = new TransparentProjectile(()->0, 4);
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> badProjectile.getFirstFoundComponentPosition(myShipBoard)
-        );
+        assertEquals(Optional.of(upp), new TransparentProjectile(()->0, Direction.UP).getFirstFoundComponentPosition(myShipBoard));
+        assertEquals(Optional.of(rightp), new TransparentProjectile(()->0, Direction.RIGHT).getFirstFoundComponentPosition(myShipBoard));
+        assertEquals(Optional.of(downp), new TransparentProjectile(()->0, Direction.DOWN).getFirstFoundComponentPosition(myShipBoard));
+        assertEquals(Optional.of(leftp), new TransparentProjectile(()->0, Direction.LEFT).getFirstFoundComponentPosition(myShipBoard));
     }
 
     @Test
@@ -107,7 +101,7 @@ class ProjectileTest {
         final boolean[] getsRemoved = {false};
 
         class TargetedProjectile extends Projectile{
-            public TargetedProjectile(int direction) {
+            public TargetedProjectile(Direction direction) {
                 super(direction);
             }
 
@@ -122,7 +116,7 @@ class ProjectileTest {
             }
 
             @Override
-            public int getDirection() {
+            public Direction getDirection() {
                 return super.getDirection();
             }
 
@@ -149,7 +143,7 @@ class ProjectileTest {
             }
         };
 
-        TargetedProjectile targetedProjectile = new TargetedProjectile(0);
+        TargetedProjectile targetedProjectile = new TargetedProjectile(Direction.UP);
 
         assertTrue(targetedProjectile.fireAt(myShipBoard));
         assertTrue(getsRemoved[0]);

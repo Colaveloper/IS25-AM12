@@ -82,7 +82,7 @@ public class CliShipBoard extends CliElement {
                     // empty-area
                     newCell = List.of("     ", "  X  ", "     ");
                 }
-                rowDescription = DescriptionUtils.sideBySide(rowDescription, newCell);
+                rowDescription = DescriptionUtils.sideBySide(rowDescription, newCell, 0);
             }
             result.addAll(rowDescription);
         }

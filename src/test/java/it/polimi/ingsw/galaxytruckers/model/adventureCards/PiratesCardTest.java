@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,7 +92,7 @@ class PiratesCardTest {
         };
         projectiles = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
-            projectiles.add(new Projectile(0) {
+            projectiles.add(new Projectile(Direction.UP) {
 
                 @Override
                 public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
@@ -119,7 +120,7 @@ class PiratesCardTest {
                 }
 
                 @Override
-                public int getDirection() {
+                public Direction getDirection() {
                     return super.getDirection();
                 }
             });

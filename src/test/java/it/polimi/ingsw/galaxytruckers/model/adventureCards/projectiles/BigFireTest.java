@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,7 @@ class BigFireTest {
 
     @Test
     void getActivatablePointsReturnsEmptySet() {
-        bigFire = new BigFire(0);
+        bigFire = new BigFire(Direction.UP);
 
         assertTrue(bigFire.getActivatablePoints(shipBoard).isEmpty());
     }
@@ -38,7 +39,7 @@ class BigFireTest {
     @Test
     void getComponentToRemoveReturnsFirstFoundComponentPosition() {
         class RiggedProjectile extends BigFire {
-            public RiggedProjectile(IntSupplier dice, int direction) {
+            public RiggedProjectile(IntSupplier dice, Direction direction) {
                 super(dice, direction);
             }
 
@@ -48,7 +49,7 @@ class BigFireTest {
             }
         };
 
-        Projectile projectile = new RiggedProjectile(()->0, 0);
+        Projectile projectile = new RiggedProjectile(()->0, Direction.UP);
 
         assertEquals(Optional.of(position), projectile.getComponentPositionToRemove(shipBoard));
     }

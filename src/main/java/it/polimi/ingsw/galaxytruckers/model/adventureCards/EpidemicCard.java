@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.util.Map;
@@ -28,13 +29,10 @@ public class EpidemicCard extends AdventureCard {
             // check currentShipboard for cabins
             Map<Point, Cabin> cabins = shipBoard.getCabins();
             for (Map.Entry<Point, Cabin> cabinEntry : cabins.entrySet()) {
-                for (int i = 0; i < 4; i++) {
-                    Point infectionOrigin = new Point(
-                            cabinEntry.getKey().x + (i % 2 * 2 - 1),
-                            cabinEntry.getKey().y + (1 - abs(i % 2 * 2 - 1))
-                    );
+                for (Direction direction : Direction.values()) {
+                    Point infectionOrigin = Direction.getNeighbour(cabinEntry.getKey(), direction);
                     if (cabins.containsKey(infectionOrigin) // infectionOrigin is a cabin
-                            && cabinEntry.getValue().getConnectors().get(i) != Connector.NONE // they are connected
+                            && cabinEntry.getValue().getConnectors().get(direction) != Connector.NONE // they are connected
                             && shipBoard.getCabins().get(infectionOrigin).getNumResidents() > 0 // somebody infecting
                             && shipBoard.getCabins().get(cabinEntry.getKey()).getNumResidents() > 0 // somebody to infect
                         ) {

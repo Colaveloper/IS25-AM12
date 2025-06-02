@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 import it.polimi.ingsw.galaxytruckers.model.ComponentRegistry;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.util.*;
@@ -21,7 +22,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     protected int crewSize;
     protected int credits;
     protected int losses;
-    protected final int[] shieldDirections;
+    protected final Set<Direction> shieldDirections;
     protected final Map<GoodsType, Integer> goods;
     // We might need this attribute to handle meteors and cannon hits better
     // protected List<Map<Integer, Integer>> cannonDirections;
@@ -45,7 +46,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         this.crewSize = 0;
         this.credits = 0;
         this.losses = 0;
-        this.shieldDirections = new int[]{0,0,0,0};
+        this.shieldDirections = new HashSet<>();
         this.color = color;
         this.goods = new HashMap<>();
         this.cannons = new HashMap<>();
@@ -57,7 +58,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         this.activatables = new HashMap<>();
 
         offerComponent(ComponentRegistry.getInstance().getStartingCabin(color));
-        placeComponent(new Point(7,7),0);
+        placeComponent(new Point(7,7),Direction.UP);
         weldLastComponent();
     }
 
@@ -83,7 +84,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     //Ship building methods
 
-    public void placeComponent(Point newPosition, int orientation) {
+    public void placeComponent(Point newPosition, Direction orientation) {
         if (lastComponent == null) {
             throw new IllegalStateException("There is no component to place");
         } else if (componentMap.containsKey(newPosition)) {
@@ -167,10 +168,10 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     public int getExposedConnectorsNumber() {
         int exposedConnectorsNumber = 0;
         for (Point point : componentMap.keySet()) {
-            List<Point> neighbours = getNeighbours(point);
-            for (int i = 0; i < neighbours.size(); i++) {
-                if (!componentMap.containsKey(neighbours.get(i)) &&
-                        componentMap.get(point).getConnectors().get(i) != Connector.NONE) {
+            Map<Direction, Point> neighbours = getNeighbours(point);
+            for (Direction direction : Direction.values()) {
+                if (!componentMap.containsKey(neighbours.get(direction)) &&
+                        componentMap.get(point).getConnectors().get(direction) != Connector.NONE) {
                     exposedConnectorsNumber++;
                 }
             }
@@ -178,12 +179,8 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         return exposedConnectorsNumber;
     }
 
-    public boolean[] getShieldDirections() {
-        boolean[] res = new boolean[this.shieldDirections.length];
-        for (int i = 0; i <  this.shieldDirections.length; i++) {
-            res[i] = this.shieldDirections[i] > 0;
-        }
-        return res;
+    public Set<Direction> getShieldDirections() {
+        return shieldDirections;
     }
 
     // Components Observers
@@ -330,12 +327,12 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     public boolean checkValidity() {
         for (Point point : componentMap.keySet()) {
-            List<Point> neighbours = getNeighbours(point);
-            for (int i = 0; i < neighbours.size(); i++) {
-                if (componentMap.containsKey(neighbours.get(i))) {
+            Map<Direction, Point> neighbours = getNeighbours(point);
+            for (Direction direction : Direction.values()) {
+                if (componentMap.containsKey(neighbours.get(direction))) {
                     Component currentComponent = componentMap.get(point);
-                    Component neighbourComponent = componentMap.get(neighbours.get(i));
-                    if (!currentComponent.getConnectors().get(i).matches(neighbourComponent.getConnectors().get((i+2)%4))) {
+                    Component neighbourComponent = componentMap.get(neighbours.get(direction));
+                    if (!currentComponent.getConnectors().get(direction).matches(neighbourComponent.getConnectors().get(direction))) {
                         return false;
                     }
                 }
@@ -348,7 +345,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
         for (Point point : engines.keySet()) {
             if (!engines.get(point).isValid() ||
-                componentMap.containsKey(getNeighbours(point).get((engines.get(point).getOrientation()+2)%4))) {
+                componentMap.containsKey(getNeighbours(point).get((engines.get(point).getOrientation().getOpposite())))) {
                 return false;
             }
         }
@@ -367,13 +364,13 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
                 while (!connectedPoints.isEmpty()) {
                     Point currentPoint = connectedPoints.removeLast();
                     res.getLast().add(currentPoint);
-                    List<Point> neighbours = getNeighbours(currentPoint);
-                    for (int i = 0; i < neighbours.size(); i++) {
-                        if (componentMap.containsKey(neighbours.get(i)) &&
-                                componentMap.get(currentPoint).getConnectors().get(i) != Connector.NONE &&
-                                toVisit.contains(neighbours.get(i))) {
-                            connectedPoints.add(neighbours.get(i));
-                            toVisit.remove(neighbours.get(i));
+                    Map<Direction, Point> neighbours = getNeighbours(currentPoint);
+                    for (Direction direction : Direction.values()) {
+                        if (componentMap.containsKey(neighbours.get(direction)) &&
+                                componentMap.get(currentPoint).getConnectors().get(direction) != Connector.NONE &&
+                                toVisit.contains(neighbours.get(direction))) {
+                            connectedPoints.add(neighbours.get(direction));
+                            toVisit.remove(neighbours.get(direction));
                         }
                     }
                 }
@@ -385,12 +382,12 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     //Utilities methods
 
     //  Not a very elegant solution, consider extending Point / defining utilities / creating an abstraction for orientation
-    protected List<Point> getNeighbours(Point position) {
-        List<Point> res = new ArrayList<>();
-        res.add(new Point(position.x, position.y-1));
-        res.add(new Point(position.x-1, position.y));
-        res.add(new Point(position.x, position.y+1));
-        res.add(new Point(position.x+1, position.y));
+    protected Map<Direction, Point> getNeighbours(Point position) {
+        Map<Direction, Point> res = new HashMap<>();
+        res.put(Direction.UP, new Point(position.x, position.y-1));
+        res.put(Direction.LEFT, new Point(position.x-1, position.y));
+        res.put(Direction.DOWN,new Point(position.x, position.y+1));
+        res.put(Direction.RIGHT, new Point(position.x+1, position.y));
         return res;
     }
 
@@ -408,9 +405,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     @Override
     public void activate(Shield shield) {
-        for (int direction : shield.getDefensibleDirections()) {
-            this.shieldDirections[direction] += 1;
-        }
+        this.shieldDirections.addAll(shield.getDefensibleDirections());
     }
 
     @Override
@@ -425,8 +420,8 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     @Override
     public void deactivate(Shield shield) {
-        for (int direction : shield.getDefensibleDirections()) {
-            this.shieldDirections[direction] -= 1;
+        for (Direction direction : shield.getDefensibleDirections()) {
+            this.shieldDirections.remove(direction);
         }
     }
 

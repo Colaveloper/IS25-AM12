@@ -4,13 +4,12 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Shield;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import javafx.scene.image.Image;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,15 +33,14 @@ class SmallFireTest {
                 return fakeShields;
             }
         };
-        smallFire = new SmallFire(()->0, 0);
+        smallFire = new SmallFire(()->0, Direction.UP);
         assertEquals(fakeShields.keySet(), smallFire.getActivatablePoints(shipBoard));
     }
 
     @Test
     void getComponentPositionToRemoveReturnsEmptyIfProjectileComesFromShieldDirectionElseFirstFound() {
         firstFoundComponentPosition = new Point();
-        for (int i = 0; i < 4; i++) {
-            int finalI = i;
+        for (Direction defendedDirection : Direction.values()) {
             shipBoard = new ShipBoard(GameColor.BLUE) {
                 @Override
                 protected boolean containsPoint(Point point) {
@@ -50,20 +48,18 @@ class SmallFireTest {
                 }
 
                 @Override
-                public boolean[] getShieldDirections() {
-                    boolean[] directions = new boolean[4]; // Default values are false
-                    directions[finalI] = true;
-                    return directions;
+                public Set<Direction> getShieldDirections() {
+                    return new HashSet<>(Set.of(defendedDirection));
                 }
             };
-            for (int j=0; j<4; j++) {
-                smallFire = new SmallFire(j) {
+            for (Direction originDirection : Direction.values()) {
+                smallFire = new SmallFire(originDirection) {
                     @Override
                     protected Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
                         return Optional.of(firstFoundComponentPosition);
                     }
                 };
-                if (i==j) {
+                if (originDirection == defendedDirection) {
                     assertTrue(smallFire.getComponentPositionToRemove(shipBoard).isEmpty());
                 } else {
                     assertEquals(firstFoundComponentPosition, smallFire.getComponentPositionToRemove(shipBoard).get());

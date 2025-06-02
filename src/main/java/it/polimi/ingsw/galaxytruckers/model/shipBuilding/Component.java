@@ -1,48 +1,44 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Component {
-    private final List<Connector> connectors;
-    // TODO: consider whether to make it an enum for clarity
-    private int orientation;
+    private final Map<Direction, Connector> connectors;
+    private Direction orientation;
     private final int id;
 
-    public Component(List<Connector> connectors, int id) {
-        this.connectors = connectors;
-        this.orientation = 0;
+    public Component(Map<Direction, Connector> connectors, int id) {
+        this.connectors = new EnumMap<>(connectors);
+        this.orientation = Direction.UP;
         this.id = id;
     }
 
     @VisibleForTesting
-    public Component(List<Connector> connectors) {
-        this.connectors = connectors;
-        this.orientation = 0;
+    public Component(Map<Direction, Connector> connectors) {
+        this.connectors = new EnumMap<>(connectors);
+        this.orientation = Direction.UP;
         this.id = 0;
     }
 
-    public List<Connector> getConnectors() {
-        List<Connector> res = new ArrayList<>();
-        for (int i = 0; i < connectors.size(); i++) {
-            res.add(connectors.get((i-orientation+connectors.size())%connectors.size()));
-        }
-        return res;
+    public Map<Direction, Connector> getConnectors() {
+        return connectors;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getOrientation() {
+    public Direction getOrientation() {
         return orientation;
     }
 
-    public void setOrientation(int orientation) {
+    public void setOrientation(Direction orientation) {
+        Map<Direction, Connector> rotatedConnectors = Direction.rotateDirectionMap(connectors, this.orientation, orientation);
         this.orientation = orientation;
+        this.connectors.putAll(rotatedConnectors);
     }
 
     public void addToVisitor(ComponentVisitor visitor) {

@@ -1,14 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
 import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.serverController.events.*;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -66,7 +64,7 @@ public non-sealed abstract class ShipBuildingState extends GameState {
     }
 
     @Override
-    public void placeComponent(ShipBoard shipBoard, Point point, int orientation) {
+    public void placeComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         if (completedShipBoards.contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }

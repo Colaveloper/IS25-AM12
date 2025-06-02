@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Cannon;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 
 import java.awt.*;
@@ -13,11 +14,11 @@ import java.util.function.IntSupplier;
 import java.util.stream.Collectors;
 
 public class BigMeteor extends Projectile {
-    public BigMeteor(IntSupplier dice, int direction) {
+    public BigMeteor(IntSupplier dice, Direction direction) {
         super(dice, direction);
     }
 
-    public BigMeteor(int direction) {
+    public BigMeteor(Direction direction) {
         super(direction);
     }
 
@@ -49,10 +50,9 @@ public class BigMeteor extends Projectile {
     @VisibleForTesting
     protected boolean cannonPositionIsEffective(Map.Entry<Point, Cannon> e) {
         return e.getValue().getOrientation() == direction && switch (direction) {
-            case 0 -> e.getKey().x == diceRoll;
-            case 1, 3 ->  Math.abs(e.getKey().y - diceRoll) < 2;
-            case 2 ->  Math.abs(e.getKey().x - diceRoll) < 2;
-            default -> throw new IllegalArgumentException("Nonexistent direction");
+            case Direction.UP -> e.getKey().x == diceRoll;
+            case Direction.LEFT, Direction.RIGHT ->  Math.abs(e.getKey().y - diceRoll) < 2;
+            case Direction.DOWN ->  Math.abs(e.getKey().x - diceRoll) < 2;
         };
     }
 

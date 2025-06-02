@@ -24,7 +24,7 @@ public abstract class Screen {
 
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component){}
 
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation){}
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation){}
 
     public void notifyFlipHourglass(ShipBoard shipBoard){}
 
@@ -73,7 +73,7 @@ public abstract class Screen {
 
     public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {}
 
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, int orientation, Point oldPosition) {
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {
 
     }
 }

@@ -28,7 +28,7 @@ public class GuiComponentRegistry {
 
     private void loadImages() {
         ComponentRegistry componentRegistry = ComponentRegistry.getInstance();
-        Map<Integer, Path> idToPath = componentRegistry.getIdToPath();
+        Map<Integer, Path> idToPath = componentRegistry.getIdToImagePath();
 
         for (int i = 0; i < componentRegistry.getSize(); i++) {
             try (InputStream is = Files.newInputStream(idToPath.get(i))) {

@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,27 +46,47 @@ class ShipCorrectionStateTest {
             game.start();
             for (ShipBoard shipBoard : shipBoards) {
                 shipBoard.offerComponent(new Cabin(
-                        List.of(Connector.UNIVERSAL,
-                                Connector.UNIVERSAL,
-                                Connector.UNIVERSAL,
-                                Connector.UNIVERSAL)));
-                shipBoard.placeComponent(new Point(7, 7), 0);
+                        Map.of(
+                                Direction.UP, Connector.UNIVERSAL,
+
+Direction.LEFT,                                 Connector.UNIVERSAL,
+
+Direction.DOWN,                                 Connector.UNIVERSAL,
+
+Direction.RIGHT,                                 Connector.UNIVERSAL
+                        )));
+                shipBoard.placeComponent(new Point(7, 7), Direction.UP);
                 shipBoard.weldLastComponent();
             }
             shipBoards.get(1).offerComponent(new Component(
-                    List.of(Connector.NONE, Connector.NONE, Connector.NONE,  Connector.NONE)
+                    Map.of(
+                            Direction.UP, Connector.NONE,
+                            Direction.LEFT, Connector.NONE,
+                            Direction.DOWN, Connector.NONE,
+                            Direction.RIGHT, Connector.NONE
+                    )
             ));
-            shipBoards.get(1).placeComponent(new Point(8,7),0);
+            shipBoards.get(1).placeComponent(new Point(8,7),Direction.UP);
             shipBoards.get(1).weldLastComponent();
             shipBoards.get(2).offerComponent(new Component(
-                    List.of(Connector.NONE, Connector.NONE, Connector.NONE,  Connector.NONE)
+                    Map.of(
+                            Direction.UP, Connector.NONE,
+                            Direction.LEFT, Connector.NONE,
+                            Direction.DOWN, Connector.NONE,
+                            Direction.RIGHT, Connector.NONE
+                    )
             ));
-            shipBoards.get(2).placeComponent(new Point(8,7),0);
+            shipBoards.get(2).placeComponent(new Point(8,7),Direction.UP);
             shipBoards.get(2).weldLastComponent();
             shipBoards.get(2).offerComponent(new Component(
-                    List.of(Connector.NONE, Connector.NONE, Connector.NONE,  Connector.NONE)
+                    Map.of(
+                            Direction.UP, Connector.NONE,
+                            Direction.LEFT, Connector.NONE,
+                            Direction.DOWN, Connector.NONE,
+                            Direction.RIGHT, Connector.NONE
+                    )
             ));
-            shipBoards.get(2).placeComponent(new Point(9,7),0);
+            shipBoards.get(2).placeComponent(new Point(9,7),Direction.UP);
             shipBoards.get(2).weldLastComponent();
             game.getCurrentState().placeShipOnFlightBoard(shipBoards.getFirst());
             game.setCurrentState(shipCorrectionState);
@@ -148,38 +170,66 @@ class ShipCorrectionStateTest {
             game.start();
             for (ShipBoard shipBoard : shipBoards) {
                 shipBoard.offerComponent(new Component(
-                        List.of(Connector.UNIVERSAL,
-                                Connector.UNIVERSAL,
-                                Connector.UNIVERSAL,
-                                Connector.UNIVERSAL)));
-                shipBoard.placeComponent(new Point(7, 7), 0);
+                        Map.of(
+                                Direction.UP, Connector.UNIVERSAL,
+                                Direction.LEFT, Connector.UNIVERSAL,
+                                Direction.DOWN, Connector.UNIVERSAL,
+                                Direction.RIGHT, Connector.UNIVERSAL
+                        )
+                ));
+                shipBoard.placeComponent(new Point(7, 7), Direction.UP);
                 shipBoard.weldLastComponent();
             }
             shipBoards.get(1).offerComponent(new Component(
-                    List.of(Connector.NONE, Connector.NONE, Connector.NONE,  Connector.NONE)
+                    Map.of(
+                            Direction.UP, Connector.NONE,
+                            Direction.LEFT, Connector.NONE,
+                            Direction.DOWN, Connector.NONE,
+                            Direction.RIGHT, Connector.NONE
+                    )
             ));
-            shipBoards.get(1).placeComponent(new Point(8,7),0);
+            shipBoards.get(1).placeComponent(new Point(8,7),Direction.UP);
             shipBoards.get(1).weldLastComponent();
             shipBoards.get(2).offerComponent(new Component(
-                    List.of(Connector.NONE, Connector.NONE, Connector.NONE,  Connector.NONE)
+                    Map.of(
+                            Direction.UP, Connector.NONE,
+                            Direction.LEFT, Connector.NONE,
+                            Direction.DOWN, Connector.NONE,
+                            Direction.RIGHT, Connector.NONE
+                    )
             ));
-            shipBoards.get(2).placeComponent(new Point(8,7),0);
+            shipBoards.get(2).placeComponent(new Point(8,7),Direction.UP);
             shipBoards.get(2).weldLastComponent();
             shipBoards.get(2).offerComponent(new Component(
-                    List.of(Connector.NONE, Connector.NONE, Connector.NONE,  Connector.NONE)
+                    Map.of(
+                            Direction.UP, Connector.NONE,
+                            Direction.LEFT, Connector.NONE,
+                            Direction.DOWN, Connector.NONE,
+                            Direction.RIGHT, Connector.NONE
+                    )
             ));
-            shipBoards.get(2).placeComponent(new Point(9,7),0);
+            shipBoards.get(2).placeComponent(new Point(9,7),Direction.UP);
             shipBoards.get(2).weldLastComponent();
             game.getCurrentState().placeShipOnFlightBoard(shipBoards.getFirst());  // prevent exceptions from following states
             shipBoards.getFirst().offerComponent(new LifeSupport(
-                    List.of(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL),
+                    Map.of(
+                            Direction.UP, Connector.UNIVERSAL,
+                            Direction.LEFT, Connector.UNIVERSAL,
+                            Direction.DOWN, Connector.UNIVERSAL,
+                            Direction.RIGHT, Connector.UNIVERSAL
+                    ),
                     CrewType.BROWN
             ));
-            shipBoards.getFirst().placeComponent(new Point(6,7),0);
+            shipBoards.getFirst().placeComponent(new Point(6,7),Direction.UP);
             shipBoards.getFirst().offerComponent(new Cabin(
-                    List.of(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)
+                    Map.of(
+                            Direction.UP, Connector.UNIVERSAL,
+                            Direction.LEFT, Connector.UNIVERSAL,
+                            Direction.DOWN, Connector.UNIVERSAL,
+                            Direction.RIGHT, Connector.UNIVERSAL
+                    )
             ));
-            shipBoards.getFirst().placeComponent(new Point(5,7),0);
+            shipBoards.getFirst().placeComponent(new Point(5,7),Direction.UP);
             game.setCurrentState(shipCorrectionState);
         }
 

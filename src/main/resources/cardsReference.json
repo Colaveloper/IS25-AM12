@@ -99,9 +99,9 @@
             "type": "meteors",
             "level": "TEST",
             "meteors": [
-                  ["big meteor",0],
-                  ["small meteor",3],
-                  ["small meteor",1]
+                  ["big meteor", "up"],
+                  ["small meteor", "right"],
+                  ["small meteor","left"]
             ],
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_019.jpg",
             "id": 8
@@ -110,11 +110,11 @@
             "type": "meteors",
             "level": "FIRST",
             "meteors": [
-                  ["small meteor",0],
-                  ["small meteor",0],
-                  ["small meteor",3],
-                  ["small meteor",1],
-                  ["small meteor",2]
+                  ["small meteor","up"],
+                  ["small meteor","up"],
+                  ["small meteor","right"],
+                  ["small meteor","left"],
+                  ["small meteor","down"]
             ],
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_0110.jpg",
             "id": 9
@@ -123,9 +123,9 @@
             "type": "meteors",
             "level": "FIRST",
             "meteors": [
-                  ["big meteor",0],
-                  ["small meteor",0],
-                  ["big meteor",0]
+                  ["big meteor","up"],
+                  ["small meteor","up"],
+                  ["big meteor","up"]
             ],
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_0111.jpg",
             "id": 10
@@ -134,11 +134,11 @@
             "type": "meteors",
             "level": "SECOND",
             "meteors": [
-                  ["small meteor",0],
-                  ["small meteor",0],
-                  ["big meteor",3],
-                  ["small meteor",3],
-                  ["small meteor",3]
+                  ["small meteor","up"],
+                  ["small meteor","up"],
+                  ["big meteor","right"],
+                  ["small meteor","right"],
+                  ["small meteor","right"]
             ],
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_019.jpg",
             "id": 11
@@ -147,10 +147,10 @@
             "type": "meteors",
             "level": "SECOND",
             "meteors": [
-                  ["big meteor",0],
-                  ["big meteor",3],
-                  ["small meteor",2],
-                  ["small meteor",2]
+                  ["big meteor","up"],
+                  ["big meteor","right"],
+                  ["small meteor","down"],
+                  ["small meteor","down"]
             ],
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_110.jpg",
             "id": 12
@@ -159,11 +159,11 @@
             "type": "meteors",
             "level": "SECOND",
             "meteors": [
-                  ["small meteor",0],
-                  ["small meteor",0],
-                  ["big meteor",1],
-                  ["small meteor",1],
-                  ["small meteor",1]
+                  ["small meteor","up"],
+                  ["small meteor", "up"],
+                  ["big meteor","left"],
+                  ["small meteor","left"],
+                  ["small meteor","left"]
             ],
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0111.jpg",
             "id": 13
@@ -173,9 +173,9 @@
             "level": "FIRST",
             "firePowerThreshold": 5,
             "shoots": [
-                  ["small fire",0],
-                  ["big fire",0],
-                  ["small fire",0]
+                  ["small fire", "up"],
+                  ["big fire", "up"],
+                  ["small fire", "up"]
             ],
             "flight day loss": 1,
             "credits": 4,
@@ -187,9 +187,9 @@
             "level": "SECOND",
             "firePowerThreshold": 6,
             "shoots": [
-                  ["big fire",0],
-                  ["small fire",0],
-                  ["big fire",0]
+                  ["big fire", "up"],
+                  ["small fire", "up"],
+                  ["big fire", "up"]
             ],
             "flight day loss": 2,
             "credits": 7,
@@ -546,8 +546,8 @@
                   "gets shot"
             ],
             "shoots": [
-                  ["small fire",2],
-                  ["big fire",2]
+                  ["small fire", "down"],
+                  ["big fire", "down"]
             ],
             "crew loss": 2,
             "flight day loss": 3,
@@ -570,10 +570,10 @@
             "storage": 3,
             "flight day loss": 4,
             "shoots": [
-                  ["small fire",0],
-                  ["small fire",3],
-                  ["small fire",1],
-                  ["big fire",2]
+                  ["small fire", "up"],
+                  ["small fire", "right"],
+                  ["small fire", "left"],
+                  ["big fire", "down"]
             ],
             "level": "SECOND",
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0116.jpg",

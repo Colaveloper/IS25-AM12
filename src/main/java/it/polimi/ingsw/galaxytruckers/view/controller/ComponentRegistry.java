@@ -3,8 +3,9 @@ package it.polimi.ingsw.galaxytruckers.view.controller;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.utils.JsonUtils;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -13,9 +14,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -53,7 +52,7 @@ public class ComponentRegistry {
         }
     }
 
-    public Map<Integer, Path> getIdToPath() {
+    public Map<Integer, Path> getIdToImagePath() {
         return components.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
@@ -93,7 +92,7 @@ public class ComponentRegistry {
 
         String type = node.get("type").asText();
         Component component;
-        List<Connector> connectors = parseConnectors(node.get("connectors"));
+        Map<Direction, Connector> connectors = parseConnectors(node.get("connectors"));
 
         switch (type) {
             case "shield" -> {
@@ -134,7 +133,7 @@ public class ComponentRegistry {
         return parseComponent(node.get("id").asInt(),node);
     }
 
-    private List<Connector> parseConnectors(JsonNode connectorNode){
+    private Map<Direction, Connector> parseConnectors(JsonNode connectorNode){
         return JsonUtils.nodeToConnector(connectorNode);
     }
 

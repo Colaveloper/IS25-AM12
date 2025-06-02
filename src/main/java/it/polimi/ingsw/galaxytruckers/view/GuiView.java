@@ -99,12 +99,12 @@ public class GuiView extends Application implements View {
     }
 
     @Override
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, int orientation) {
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation) {
         currentScreen.notifyPlaceComponent(shipBoard,newPoint,orientation);
     }
 
     @Override
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, int orientation, Point oldPosition) {
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {
         currentScreen.notifyPlaceComponent(shipBoard,newPoint,orientation,oldPosition);
     }
 

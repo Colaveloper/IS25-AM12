@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.rmi.Remote;
@@ -23,7 +24,7 @@ public interface RemoteController extends Remote {
     void rejectComponent() throws RemoteException;
     void stashComponent() throws RemoteException;
     void grabStashedComponent(int index) throws RemoteException;
-    void placeComponent(Point point, int orientation) throws RemoteException;
+    void placeComponent(Point point, Direction orientation) throws RemoteException;
     void flipHourglass() throws RemoteException;
     void placeShipOnFlightBoard(int startingPosition) throws RemoteException;
     void acquireForecast(int deckIndex) throws RemoteException;

@@ -8,7 +8,6 @@ import it.polimi.ingsw.galaxytruckers.utils.Logger;
 import it.polimi.ingsw.galaxytruckers.view.*;
 import it.polimi.ingsw.galaxytruckers.view.controller.EventHandler;
 import it.polimi.ingsw.galaxytruckers.view.controller.PlayerRegistry;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
@@ -222,7 +221,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     }
 
     @Override
-    public void placeComponent(Point point, int orientation) {
+    public void placeComponent(Point point, Direction orientation) {
         try {
             server.placeComponent(point, orientation);
         } catch (IllegalArgumentException e) {

@@ -1,23 +1,16 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
-import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameModel;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
-import it.polimi.ingsw.galaxytruckers.network.client.rmi.RmiClient;
-import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiClientHandler;
-import it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;
-import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
-import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.states.ShipBuildingDTO;
 import it.polimi.ingsw.galaxytruckers.serverController.events.GameStateUpdateEvent;
 import it.polimi.ingsw.galaxytruckers.serverController.events.JoinLobbyEvent;
 import it.polimi.ingsw.galaxytruckers.serverController.events.LobbyDetailsEvent;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.view.CliView;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.awt.*;
@@ -25,8 +18,6 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import static org.mockito.Mockito.*;
 
 public class ShipBuildingTest {
 
@@ -91,7 +82,7 @@ public class ShipBuildingTest {
             }
 
             @Override
-            public void placeComponent(Point point, int orientation) {
+            public void placeComponent(Point point, Direction orientation) {
 
             }
 

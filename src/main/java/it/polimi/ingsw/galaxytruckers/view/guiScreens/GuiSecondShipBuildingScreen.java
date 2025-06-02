@@ -1,10 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
-import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiAllShips;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
@@ -12,7 +9,6 @@ import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
@@ -101,7 +97,7 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 //    }
     {}
     @Override
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation)
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation)
 //    {
 //        Component placedComponent = shipBoard.getComponentMap().get(point);
 //        if (placedComponent != null) {

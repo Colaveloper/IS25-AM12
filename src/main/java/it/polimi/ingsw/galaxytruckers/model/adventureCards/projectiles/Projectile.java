@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 import it.polimi.ingsw.galaxytruckers.model.Dice;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 
 import java.awt.*;
@@ -15,16 +16,16 @@ import java.util.stream.Stream;
 
 public abstract class Projectile {
 
-    protected final int direction;
+    protected final Direction direction;
     protected int diceRoll;
     private static final Dice dice = new Dice() {};
 
-    public Projectile( IntSupplier dice, int direction) {
+    public Projectile(IntSupplier dice, Direction direction) {
         this.direction = direction;
         this.diceRoll = dice.getAsInt();
     }
 
-    public Projectile(int direction) {
+    public Projectile(Direction direction) {
         this(dice, direction);
     }
 
@@ -51,23 +52,19 @@ public abstract class Projectile {
      */
     protected Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
         Stream<Map.Entry<Point, Component>> line = shipBoard.getComponentMap().entrySet().stream()
-                .filter(e -> (direction % 2 == 0 ? e.getKey().x : e.getKey().y) == diceRoll);
+                .filter(e -> (
+                        (direction==Direction.UP || direction==Direction.DOWN)
+                                ? e.getKey().x
+                                : e.getKey().y) == diceRoll);
 
-        if (direction == 0) {
-            return line.min(Comparator.comparingInt(e -> e.getKey().y))
-                    .map(Map.Entry::getKey); // Min y
-        } else if (direction == 1) {
-            return line.max(Comparator.comparingInt(e -> e.getKey().x))
-                    .map(Map.Entry::getKey); // Max x
-        } else if (direction == 2) {
-            return line.max(Comparator.comparingInt(e -> e.getKey().y))
-                    .map(Map.Entry::getKey); // Max y
-        } else if (direction == 3) {
-            return line.min(Comparator.comparingInt(e -> e.getKey().x))
-                    .map(Map.Entry::getKey); // Min x
-        } else {
-            throw new IllegalArgumentException("Invalid direction");
-        }
+
+
+        return switch (direction) {
+            case UP    -> line.min(Comparator.comparingInt(e -> e.getKey().y)).map(Map.Entry::getKey); // Min y
+            case RIGHT -> line.max(Comparator.comparingInt(e -> e.getKey().x)).map(Map.Entry::getKey); // Max x
+            case DOWN  -> line.max(Comparator.comparingInt(e -> e.getKey().y)).map(Map.Entry::getKey); // Max y
+            case LEFT  -> line.min(Comparator.comparingInt(e -> e.getKey().x)).map(Map.Entry::getKey); // Min x
+        };
     }
 
     protected abstract Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard);
@@ -78,7 +75,7 @@ public abstract class Projectile {
         return diceRoll;
     }
 
-    public int getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 }
