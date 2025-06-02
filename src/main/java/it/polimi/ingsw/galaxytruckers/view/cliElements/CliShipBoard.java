@@ -87,9 +87,9 @@ public class CliShipBoard extends CliElement {
             result.addAll(rowDescription);
         }
 
-        StringBuilder xIndexes = new StringBuilder("   ");
+        StringBuilder xIndexes = new StringBuilder(" ");
         for (int x = minX; x <= maxX; x++) {
-            xIndexes.append("  ").append(x).append("   ");
+            xIndexes.append("  ").append(x).append("  ");
         }
         result.add(xIndexes.toString());
 
