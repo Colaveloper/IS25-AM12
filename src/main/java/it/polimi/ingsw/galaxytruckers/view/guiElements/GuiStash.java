@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiElements;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import javafx.application.Platform;
+import javafx.scene.input.Dragboard;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
@@ -22,14 +23,14 @@ public class GuiStash extends HBox {
             for (Component c : stashedComponents) {
                 GuiComponent guiComponent = new GuiComponent(c);
                 guiStashedComponents.add(guiComponent);
-                if (controller != null) {
-                    guiComponent.setOnMouseClicked((_)->{
-                        controller.grabStashedComponent(guiStashedComponents.indexOf(guiComponent));
-                    });
-                }
+                guiComponent.setOnMouseClicked((_)->{
+                    controller.grabStashedComponent(guiStashedComponents.indexOf(guiComponent));
+                });
                 getChildren().add(guiComponent);
             }
         }
+
+        setOnMouseClicked(_->controller.stashComponent());
     }
 
     public void notifyStash(Component component) {

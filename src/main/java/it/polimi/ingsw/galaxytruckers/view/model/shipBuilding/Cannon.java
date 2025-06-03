@@ -15,5 +15,4 @@ public sealed class Cannon extends Component permits DoubleCannon {
     public int getFirePower() {
         return (getOrientation() == Direction.UP) ? 2 : 1;
     }
-
 }
