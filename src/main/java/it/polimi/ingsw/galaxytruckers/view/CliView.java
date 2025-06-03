@@ -43,7 +43,7 @@ public class CliView implements View {
             Scanner scanner = new Scanner(System.in);
             String input;
             while (true) {
-                if(model.isCheatOn() && !CheatCodes.cheatEmpty()){
+                if(CheatCodes.isCheatOn() && !CheatCodes.cheatEmpty()){
                     try {
                         input = CheatCodes.cheat();
                     } catch (InterruptedException e) {

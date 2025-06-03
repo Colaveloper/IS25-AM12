@@ -59,6 +59,7 @@ public class CliShipBoard extends CliElement {
     public void highlightPoints(Set<Point> points, Highlights color){
         for (Point point : points){
             cliComponentMap.get(point).highlight(color);
+            cliComponentMap.get(point).setDirty();
         }
     }
 
@@ -87,9 +88,9 @@ public class CliShipBoard extends CliElement {
             result.addAll(rowDescription);
         }
 
-        StringBuilder xIndexes = new StringBuilder("   ");
+        StringBuilder xIndexes = new StringBuilder(" ");
         for (int x = minX; x <= maxX; x++) {
-            xIndexes.append("  ").append(x).append("   ");
+            xIndexes.append("  ").append(x).append("  ");
         }
         result.add(xIndexes.toString());
 

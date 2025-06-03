@@ -26,7 +26,6 @@ public class ClientModel {
     private Game game = null;
     private final Set<Player> players = new HashSet<>();
     private final Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
-    private boolean cheatOn = false;
 
     private MetaState metaState = MetaState.REGISTER;
 
@@ -73,7 +72,6 @@ public class ClientModel {
     }
 
     public void activateCheats(int input) {
-        cheatOn = true;
         CheatCodes.activateCheats(input);
     }
 
@@ -123,10 +121,6 @@ public class ClientModel {
         synchronized (gameLock) {
             return finalScores;
         }
-    }
-
-    public boolean isCheatOn() {
-        return cheatOn;
     }
     //endregion
 

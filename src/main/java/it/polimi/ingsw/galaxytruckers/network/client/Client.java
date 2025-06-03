@@ -74,7 +74,7 @@ public class Client {
 
         System.out.println("Enter \"G\" to switch to the Graphical Interface, or press any other key to continue here");
         String command;
-        if(model.isCheatOn()){
+        if(CheatCodes.isCheatOn()){
             command = CheatCodes.cheat();
         }
         else{

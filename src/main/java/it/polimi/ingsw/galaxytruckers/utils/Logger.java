@@ -11,7 +11,7 @@ public class Logger {
 //        Logger.debug = flag;
 //    }
 
-    public static void println(Object... params) {
+    public static void println(int n, Object... params) {
 
         if (!debug) {
             return;
@@ -23,6 +23,6 @@ public class Logger {
             res.append(params[i].toString());
         }
 
-        System.out.println(Highlights.CYAN.getHighlight() + res.toString() + Highlights.RESET.getHighlight());
+        System.out.println(Highlights.getSomeColors(n).getLast().getHighlight() + res.toString() + Highlights.RESET.getHighlight());
     }
 }
