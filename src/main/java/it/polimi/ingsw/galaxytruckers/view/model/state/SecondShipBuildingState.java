@@ -76,7 +76,7 @@ public final class SecondShipBuildingState extends ShipBuildingState {
     @Override
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
         game.getFlightBoard().setShipPosition(shipBoard, position);
-        game.getObservers().forEach(observer -> observer.notifyFlightBoardPosition(game.getFlightBoard()));
+        game.getObservers().forEach(observer -> observer.notifyFlightBoardPosition(shipBoard, position));
     }
 
     @Override

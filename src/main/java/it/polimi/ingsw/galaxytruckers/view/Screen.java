@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
@@ -30,12 +29,11 @@ public abstract class Screen {
 
     public void notifyHourglassEnd(){}
 
-    // todo: make incremental: substitute with notifyFlightBoardPlacement
-    public void notifyFlightBoardPosition(FlightBoard flightBoard){}
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position){}
 
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex){}
 
-    public void setForecastDeck(java.util.List<AdventureCard> adventureCards){}
+    public void setForecastDeck(List<AdventureCard> adventureCards){}
 
     public void notifyReleaseForecast(ShipBoard shipBoard, int index){}
 

@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
@@ -39,7 +38,7 @@ public interface ModelObserver {
 
     void notifyHourglassEnd();
 
-    void notifyFlightBoardPosition(FlightBoard flightBoard);
+    void notifyFlightBoardPosition(ShipBoard shipBoard, int position);
 
     void notifyPeekForecast(ShipBoard shipBoard, int deckIndex);
 

@@ -1,80 +1,177 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
+import javafx.application.Platform;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.Set;
 
 public class GuiShipHandAndStash extends VBox {
 
+    private final ControllerToServer controller;
+
+    Image emptyAreaImage = null;
+
+    private final GridPane shipGrid;
+    private final int minX;
+    private final int minY;
+    private final GuiHand guiHand;
+    private final GuiStash guiStash;
+
+    public final static Path emptyAreaImagePath = Path.of("src/main/resources/textures/tiles/empty_area.png");
+
     public GuiShipHandAndStash(ShipBoard shipBoard, ControllerToServer controller) {
-        Rectangle placeholder = new Rectangle(300, 300); // Adjust size as needed
-        placeholder.setFill(Color.BLACK);
-        this.getChildren().add(placeholder);
+        this.controller = controller;
+
+        Set<Point> shipArea = shipBoard.getShipArea();
+        Map<Point, Component> componentMap = shipBoard.getComponentMap();
+
+
+        minX = shipArea.stream().mapToInt(p -> p.x).min().orElse(0);
+        minY = shipArea.stream().mapToInt(p -> p.y).min().orElse(0);
+        int maxX = shipArea.stream().mapToInt(p -> p.x).max().orElse(0);
+        int maxY = shipArea.stream().mapToInt(p -> p.y).max().orElse(0);
+
+        int rows = maxY - minY + 1;
+        int cols = maxX - minX + 1;
+
+        shipGrid = new GridPane();
+        shipGrid.setHgap(0);
+        shipGrid.setVgap(0);
+
+        try (InputStream is = Files.newInputStream(emptyAreaImagePath)) {
+            emptyAreaImage = new Image(is);
+        } catch (IOException e) {
+            System.err.println("Path not found: " + emptyAreaImagePath);
+        }
+
+        for (int x = 0; x < cols; x++) {
+            Label colLabel = new Label(String.valueOf(minX + x));
+            shipGrid.add(colLabel, x + 1, 0);
+        }
+
+        for (int y = 0; y < rows; y++) {
+            Label rowLabel = new Label(String.valueOf(minY + y));
+            shipGrid.add(rowLabel, 0, y + 1);
+
+            for (int x = 0; x < cols; x++) {
+                Point currentPoint = new Point(minX + x, minY + y);
+                if (shipArea.contains(currentPoint)) {
+                    ImageView areaView;
+                    if (componentMap.containsKey(currentPoint)) {
+                        areaView = new GuiComponent(componentMap.get(currentPoint));
+                    } else {
+                        areaView = new ImageView();
+                        areaView.setFitWidth(50);
+                        areaView.setFitHeight(50);
+                        areaView.setImage(emptyAreaImage);
+                        areaView.setOnMouseClicked((_)->
+                                controller.placeComponent(currentPoint, Direction.UP)
+                                // TODO: use real direction
+                        );
+                    }
+                    shipGrid.add(areaView, x + 1, y + 1);
+                }
+            }
+        }
+
+        HBox handAndStashBox = new HBox();
+
+        guiHand = new GuiHand(
+                shipBoard.getLastPosition()==null ? shipBoard.getLastComponent() : null,
+                controller
+        );
+
+        guiStash = new GuiStash(shipBoard.getStashedComponents(), controller);
+
+        handAndStashBox.getChildren().addAll(guiHand, guiStash);
+
+        this.getChildren().addAll(shipGrid, handAndStashBox);
+    }
+
+    public void notifyPlaceComponent(int componentId, Point point, Direction orientation) {
+        shipGrid.getChildren().stream()
+                .filter(node -> node instanceof ImageView)
+                .filter(node -> {
+                    int col = GridPane.getColumnIndex(node) - 1;
+                    int row = GridPane.getRowIndex(node) - 1;
+                    return col+minX == point.x && row+minY == point.y;
+                })
+                .findFirst()
+                .ifPresent(node ->
+                        Platform.runLater(() -> {
+                                    shipGrid.getChildren().remove(node);
+                                    shipGrid.add(
+                                            new GuiComponent(componentId),
+                                            GridPane.getColumnIndex(node),
+                                            GridPane.getRowIndex(node)
+                                    );
+                                }
+                        )
+                );
+    }
+
+    public void notifyRemoveComponent(Point oldPosition) {
+            shipGrid.getChildren().stream()
+                    .filter(node -> {
+                        int col = GridPane.getColumnIndex(node) - 1;
+                        int row = GridPane.getRowIndex(node) - 1;
+                        return col + minX == oldPosition.x && row + minY == oldPosition.y;
+                    })
+                    .findFirst()
+                    .ifPresent(node ->
+                            Platform.runLater(() -> {
+                                        shipGrid.getChildren().remove(node);
+                                ImageView areaView = getEmptyAreaImageView(oldPosition);
+                                shipGrid.add(
+                                                areaView,
+                                                GridPane.getColumnIndex(node),
+                                                GridPane.getRowIndex(node)
+                                        );
+                                    }
+                            )
+                    );
+    }
+
+    private ImageView getEmptyAreaImageView(Point oldPosition) {
+        ImageView areaView = new ImageView();
+        areaView.setFitWidth(50);
+        areaView.setFitHeight(50);
+        areaView.setImage(emptyAreaImage);
+        areaView.setOnMouseClicked((_)->
+                        controller.placeComponent(oldPosition, Direction.UP)
+                // TODO: use real direction
+        );
+        return areaView;
+    }
+
+    public void notifyClearHand() {
+        guiHand.notifyClearHand();
+    }
+
+    public void notifySetHand(Component component) {
+        guiHand.notifySetHand(component);
+    }
+
+    public void notifyStash(Component component) {
+        guiStash.notifyStash(component);
+    }
+
+    public void notifyGrabStashed(int index) {
+        guiStash.notifyGrab(index);
     }
 }
-
-//    @Override
-//    public Node getNode() {
-//        List<List<ObjectProperty<Component>>> ship = model.getShips().get(color);
-//        Point upLeft = model.getUpLeft();
-//        int height = ship.size();
-//        int width = ship.getFirst().size();
-//
-//        GridPane grid = new GridPane();
-//        grid.setHgap(0);
-//        grid.setVgap(0);
-//
-//        // Components in the grid
-//        for (int row = 0; row < height; row++) {
-//            for (int col = 0; col < width; col++) {
-//                ObjectProperty<Component> prop = ship.get(row).get(col);
-//                StackPane cell = new StackPane();
-//                cell.setPrefSize(50, 50); // adjusted size
-//
-//                // Initial content
-//                Component comp = prop.get();
-//                Node node = (comp != null) ? new GuiComponent(model, controller, comp).getNode() : new Label("?");
-//
-//                cell.getChildren().add(node);
-//
-//                // Update on change
-//                prop.addListener((obs, oldVal, newVal) -> {
-//                    Platform.runLater(() -> {
-//                        cell.getChildren().setAll(
-//                                newVal != null
-//                                        ? new GuiComponent(model, controller, newVal).getNode()
-//                                        : new Label("?"));
-//                    });
-//                });
-//
-//                grid.add(cell, col + 1, row + 1); // shift right and down to make room for labels
-//            }
-//        }
-//
-//        // Y-axis labels (row indices)
-//        for (int row = 0; row < height; row++) {
-//            Label yLabel = new Label(String.valueOf(upLeft.y + row));
-//            yLabel.setMinSize(25, 50);  // changed from 30x60 to 25x50
-//            yLabel.setAlignment(Pos.CENTER_RIGHT);
-//            grid.add(yLabel, 0, row + 1);
-//        }
-//
-//        // X-axis labels (column indices)
-//        for (int col = 0; col < width; col++) {
-//            Label xLabel = new Label(String.valueOf(upLeft.x + col));
-//            xLabel.setMinSize(50, 25); // changed from 60x30 to 50x25
-//            xLabel.setAlignment(Pos.TOP_CENTER);
-//            grid.add(xLabel, col + 1, 0);
-//        }
-//
-//        // Add corner label (empty)
-//        Label corner = new Label();
-//        corner.setMinSize(25, 25);  // changed from 30x30 to 25x25
-//        grid.add(corner, 0, 0);
-//
-//        return grid;
-//    }
-//
-//}

@@ -15,22 +15,30 @@ public class GuiComponent extends ImageView {
 
 //    private boolean isRotatable = false;
 
-    public GuiComponent(Component component, ControllerToServer controller) {
-        GuiComponentRegistry registry = GuiComponentRegistry.getInstance();
-        super.setImage(registry.getImage(component.getId()));
-        super.setFitWidth(50);
-        super.setFitHeight(50);
+    private final int id;
+
+    public GuiComponent(Component component) {
+        this(component.getId());
     }
 
+    public GuiComponent(int id) {
+        super(GuiComponentRegistry.getInstance().getImage(id));
+        this.id = id;
+        setFitWidth(50);
+        setFitHeight(50);
+    }
 
+    public boolean equals(GuiComponent other) {
+        return this.id == other.id;
+    }
 
 //    @Override
 //    public Node getNode() {
 //
-////            Region square = new Region();
-////            square.setPrefSize(20, 20);
-////            square.setStyle("-fx-background-color: gray; -fx-border-color: black;");
-////            return square;
+//            Region square = new Region();
+//            square.setPrefSize(20, 20);
+//            square.setStyle("-fx-background-color: gray; -fx-border-color: black;");
+//            return square;
 
 //        imageView.setRotate(0); // initial rotation
 //

@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiNicknameChoiceScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
@@ -119,8 +118,8 @@ public class GuiView extends Application implements View {
     }
 
     @Override
-    public void notifyFlightBoardPosition(FlightBoard flightBoard) {
-        currentScreen.notifyFlightBoardPosition(flightBoard);
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+        currentScreen.notifyFlightBoardPosition(shipBoard, position);
     }
 
     @Override

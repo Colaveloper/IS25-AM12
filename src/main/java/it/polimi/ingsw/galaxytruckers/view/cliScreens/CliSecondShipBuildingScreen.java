@@ -5,7 +5,6 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.*;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
@@ -265,9 +264,9 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     }
 
     @Override
-    public void notifyFlightBoardPosition(FlightBoard flightBoard) {
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
         // Update the flight board position and mark it as dirty
-        cliFlightBoard.updatePositions(flightBoard);
+        cliFlightBoard.updatePositions(shipBoard, position);
         cliFlightBoard.setDirty();
     }
 

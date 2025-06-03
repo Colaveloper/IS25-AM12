@@ -26,7 +26,7 @@ public interface ControllerToServer {
 
     void requestRandComponent();
 
-    void requestComponent(int index);
+    void requestComponent(int componentId);
 
     void stashComponent();
 

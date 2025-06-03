@@ -10,8 +10,8 @@ public abstract class GuiGameScreen extends GuiScreen {
 
     protected GuiFlightBoard guiFlightBoard;
     protected GuiAllShips guiAllShips;
-//    protected ShipBoard myShipBoard; //?
 //    protected Map<ShipBoard, CliShipHandAndStash> shipToCliShip; //?
+//    protected ShipBoard myShipBoard; //?
 
     public GuiGameScreen(ClientModel model, ControllerToServer controller, GameState state) {
         super(model, controller, state);
@@ -23,4 +23,6 @@ public abstract class GuiGameScreen extends GuiScreen {
         this.guiAllShips = new GuiAllShips(model.getClientPlayer(), model.getShipToPlayer(), controller);
         this.guiFlightBoard = new GuiFlightBoard(model.getGame().getFlightBoard(), controller);
     }
+
+
 }

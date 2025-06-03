@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
@@ -37,20 +36,6 @@ public class CliView implements View {
         this.currentScreen = screenFactory.createCliScreen(model, controller);
         this.model.addObserver(this);
         currentScreen.render();
-    }
-
-    public void updateScreen() {
-        if (isToUpdate()) {
-            this.metaState = model.getMetaState();
-            currentScreen = screenFactory.createCliScreen(model, controller);
-        }
-        currentScreen.render();
-    }
-
-    private boolean isToUpdate() {
-        if (model.getMetaState() != metaState) return true;
-        return model.getGame().getCurrentState() != null &&
-                model.getGame().getCurrentState().getClass() != currentScreen.getState().getClass();
     }
 
     private void startInputLoop() {
@@ -141,8 +126,8 @@ public class CliView implements View {
     }
 
     @Override
-    public void notifyFlightBoardPosition(FlightBoard flightBoard) {
-        currentScreen.notifyFlightBoardPosition(flightBoard);
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+        currentScreen.notifyFlightBoardPosition(shipBoard, position);
         currentScreen.render();
     }
 

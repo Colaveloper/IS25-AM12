@@ -1,31 +1,36 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.model.Player;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.*;
 
 public class CliFlightBoard extends CliElement {
-    FlightBoard flightBoard;
+    private final int loopLength;
+    private final List<Integer> startingPositions;
+    private final Map<ShipBoard, Integer> shipToPlace;
 
     public CliFlightBoard(FlightBoard flightBoard) {
-        this.flightBoard = flightBoard;
+        shipToPlace = new HashMap<>(flightBoard.getShipToPlace());
+        startingPositions = new ArrayList<>(flightBoard.getStartingPositions());
+        loopLength = flightBoard.getLoopLength();
     }
 
     @Override
     protected List<String> getNewDescription() {
-        String[] asArray = new String[flightBoard.getLoopLength()];
+        String[] asArray = new String[loopLength];
         Arrays.fill(asArray, "_");
 
         // Place '□' at the starting positions
-        flightBoard.getStartingPositions().forEach(pos -> asArray[pos] = "□");
+        startingPositions.forEach(pos -> asArray[pos] = "□");
 
         // Place emojis from colorToPlace
-        flightBoard.getShipToPlace().entrySet().stream()
+        shipToPlace.entrySet().stream()
                 .map(e -> Map.entry(
                         e.getKey().getColor(),
-                        e.getValue()%flightBoard.getLoopLength()))
+                        e.getValue()%loopLength))
                 .forEach((e) -> asArray[e.getValue()] = e.getKey().getDescription());
 
         List<String> result = new ArrayList<>(List.of(String.join("", asArray)));
@@ -34,8 +39,7 @@ public class CliFlightBoard extends CliElement {
         return result;
     }
 
-    // todo: make incremental
-    public void updatePositions(FlightBoard flightBoard) {
-        this.flightBoard = flightBoard;
+    public void updatePositions(ShipBoard shipBoard, int position) {
+        shipToPlace.put(shipBoard, position);
     }
 }

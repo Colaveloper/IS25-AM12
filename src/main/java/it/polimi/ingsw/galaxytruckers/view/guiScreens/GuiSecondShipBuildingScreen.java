@@ -23,91 +23,60 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 
     public GuiSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState state) {
         super(model, controller, state);
-
         guiComponentBank = new GuiComponentBank(state.getComponentBank(), controller);
-        guiFlightBoard = new GuiFlightBoard(model.getGame().getFlightBoard(), controller);
     }
 
     @Override
     public Parent getNode() {
         VBox root = new VBox();
         root.getChildren().addAll(guiComponentBank, guiFlightBoard, guiAllShips);
-//        root.getChildren().add(new GuiAllShips(model, controller).getNode());
         return root;
     }
 
     @Override
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
         guiComponentBank.notifyRequestRandComponent();
+        guiAllShips.notifySetHand(shipBoard, component);
     }
 
 
     @Override
-    public void notifyRequestComponent(ShipBoard shipBoard, Component component)
-//    {
-//        guiComponentBank.notifyRequestComponent(shipBoard, component);
-//    }
-    {}
+    public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
+        guiComponentBank.notifyRequestComponent(component);
+        guiAllShips.notifySetHand(shipBoard, component);
+    }
 
     @Override
-    public void notifyStashComponent(ShipBoard shipBoard, Component component)
-//    {
-//        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
-//        ship.clearHand();
-//        ship.onStash(component);
-//        cliAllShips.setDirty();
-//    }
-    {}
-    @Override
-    public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition)
-//    {
-//        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
-//        ship.onRemoveComponent(oldPosition);
-//        ship.onStash(component);
-//        cliAllShips.setDirty();
-//    }
-    {}
-    @Override
-    public void notifyRejectComponent(ShipBoard shipBoard, Component component)
-    {
-        //todo: can t reject component picked from stashed
-//        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
-//        ship.clearHand();
-        guiComponentBank.addUncovered(component);
+    public void notifyStashComponent(ShipBoard shipBoard, Component component) {
+        guiAllShips.notifyStashComponent(shipBoard, component);
     }
-    {}
+
     @Override
-    public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition)
-//    {
-//        //can t reject component picked from stashed
-//        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
-//        ship.onRemoveComponent(oldPosition);
-//        cliComponentBank.addUncovered(component);
-//        cliAllShips.setDirty();
-//    }
-    {}
+    public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
+        guiAllShips.notifyStashComponent(shipBoard, component, oldPosition);
+    }
+
     @Override
-    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component)
-//    {
-//        hasStashed = true;
-//        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
-//        ship.setHand(component);
-//        ship.onGrabStashed(index);
-//        cliAllShips.setDirty();
-//    }
-    {}
+    public void notifyRejectComponent(ShipBoard shipBoard, Component component) {
+        guiComponentBank.notifyRejectComponent(component);
+        guiAllShips.notifyClearHand(shipBoard);
+    }
+
     @Override
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation)
-//    {
-//        Component placedComponent = shipBoard.getComponentMap().get(point);
-//        if (placedComponent != null) {
-//            CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
-//            ship.onPutComponent(point, placedComponent);
-//            ship.clearHand();
-//            cliAllShips.setDirty();
-//        }
-//    }
-    {}
+    public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
+        guiComponentBank.notifyRejectComponent(component);
+        guiAllShips.notifyRemoveComponent(shipBoard, oldPosition);
+    }
+    @Override
+    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
+        guiAllShips.notifyGrabStashedComponent(shipBoard, index, component);
+    }
+
+    @Override
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
+        int placedComponentId = shipBoard.getComponentMap().get(point).getId();
+        guiAllShips.notifyPlaceComponent(shipBoard, placedComponentId, point, orientation);
+    }
     @Override
     public void notifyFlipHourglass(ShipBoard shipBoard)
     {
@@ -123,13 +92,9 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
     }
 
     @Override
-    public void notifyFlightBoardPosition(FlightBoard flightBoard)
-//    {
-//        // Update the flight board position and mark it as dirty
-//        cliFlightBoard = new CliFlightBoard(flightBoard);
-//        cliFlightBoard.setDirty();
-//    }
-    {}
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+        guiFlightBoard.notifyFlightBoardPosition(shipBoard, position);
+    }
     @Override
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex)
 //    {
@@ -156,16 +121,9 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 //        cliForecast.setDirty();
 //    }
     {}
+
     @Override
-    public void notifyRemoveComponent(ShipBoard shipBoard, Point point)
-//    {
-//        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
-//        ship.onRemoveComponent(point);
-//        cliAllShips.setDirty();
-//    }
-    {}
-//    private boolean componentInHand()
-////    {
-////        return myShipBoard.getLastComponent() != null && myShipBoard.getLastPosition() == null;
-//    {}//    }
+    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
+        guiAllShips.notifyRemoveComponent(shipBoard, point);
+    }
 }

@@ -15,19 +15,23 @@ import javafx.scene.shape.Polygon;
 import java.util.*;
 
 public class GuiFlightBoard extends HBox {
-    private static final int SLOT_SIZE = 30;
-    private static final double SPACING = 5.0;
+    private final ControllerToServer controller;
+    private final List<Integer> startingPositions;
+    private final int loopLength;
+    private final Map<ShipBoard, Integer> shipToPlace;
 
-    private final FlightBoard flightBoard;
+    private static final int SLOT_SIZE = 30;
+
     private final List<StackPane> slots;
 
     public GuiFlightBoard(FlightBoard flightBoard, ControllerToServer controller) {
-        super(SPACING);
-        this.flightBoard = flightBoard;
+        this.controller = controller;
+        this.loopLength = flightBoard.getLoopLength();
+        this.startingPositions = flightBoard.getStartingPositions();
+        this.shipToPlace = flightBoard.getShipToPlace();
         this.slots = new ArrayList<>();
-        setAlignment(Pos.CENTER);
 
-        int loopLength = flightBoard.getLoopLength();
+        // each slot has either a triangle (empty) or a circle (ship)
         for (int i = 0; i < loopLength; i++) {
             StackPane slot = new StackPane();
             slot.setPrefSize(SLOT_SIZE, SLOT_SIZE);
@@ -35,48 +39,58 @@ public class GuiFlightBoard extends HBox {
             getChildren().add(slot);
         }
 
-        // Initial rendering and register observer
-        updateSlots();
-        flightBoard.addObserver(this::updateSlots);
+        for (int i = 0; i < loopLength; i++) {
+            int pos = i; // effectively final
+            shipToPlace.entrySet().stream()
+                    .filter(e -> e.getValue() == pos)
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .ifPresentOrElse(
+                            (s)-> putShip(s, pos),
+                            () -> removeShip(null, pos)
+                    );
+        }
+
+        setSpacing(5);
+        setAlignment(Pos.CENTER);
     }
 
-    private void updateSlots() {
-        Set<Integer> startingPositions = new HashSet<>(flightBoard.getStartingPositions());
-        Map<ShipBoard, Integer> shipPositions = new HashMap<>(flightBoard.getShipToPlace());
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+        removeShip(shipBoard, shipToPlace.get(shipBoard));
+        putShip(shipBoard, position);
+    }
 
-        // Update UI on JavaFX Application Thread
-        Platform.runLater(() -> {
-            int loopLength = flightBoard.getLoopLength();
-            for (int i = 0; i < loopLength; i++) {
-                StackPane slot = slots.get(i);
-                slot.getChildren().clear();
+    private void putShip(ShipBoard shipBoard, int position) {
+        Platform.runLater(()-> {
+            slots.get(position).getChildren().clear();
+            Circle circle = new Circle(SLOT_SIZE / 2.0);
+            circle.setFill(shipBoard.getColor().getJfxColor());
+            slots.get(position).getChildren().add(circle);
+            shipToPlace.put(shipBoard, position);
+        });
+    }
 
-                int pos = i;
-                Optional<GameColor> maybeColor = shipPositions.entrySet().stream()
-                        .filter(e -> e.getValue() == pos)
-                        .map(Map.Entry::getKey)
-                        .findFirst()
-                        .map(ShipBoard::getColor);
-
-                if (maybeColor.isPresent()) {
-                    Circle circle = new Circle(SLOT_SIZE / 2.0);
-                    circle.setFill(maybeColor.get().getJfxColor());
-                    slot.getChildren().add(circle);
-                } else {
-                    Polygon triangle = new Polygon(
-                            0.0, 0.0,
-                            0.0, SLOT_SIZE,
-                            SLOT_SIZE, SLOT_SIZE / 2.0
-                    );
-                    if (startingPositions.contains(pos)) {
-                        triangle.setFill(Color.BLACK);
-                        triangle.setStroke(null);
-                    } else {
-                        triangle.setFill(Color.TRANSPARENT);
-                        triangle.setStroke(Color.BLACK);
-                    }
-                    slot.getChildren().add(triangle);
-                }
+    private void removeShip(ShipBoard shipBoard, int position) {
+        Platform.runLater(()-> {
+            slots.get(position).getChildren().clear();
+            Polygon triangle = new Polygon(
+                    0.0, 0.0,
+                    0.0, SLOT_SIZE,
+                    SLOT_SIZE, SLOT_SIZE / 2.0
+            );
+            if (startingPositions.contains(position)) {
+                triangle.setFill(Color.BLACK);
+                triangle.setStroke(null);
+                triangle.onMouseClickedProperty().set(event -> {
+                    controller.placeShipOnFlightboard(position);
+                });
+            } else {
+                triangle.setFill(Color.TRANSPARENT);
+                triangle.setStroke(Color.BLACK);
+            }
+            slots.get(position).getChildren().add(triangle);
+            if (shipBoard != null) {
+                shipToPlace.remove(shipBoard);
             }
         });
     }

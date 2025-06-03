@@ -38,12 +38,12 @@ public class SecondShipBoard extends ShipBoard {
             new Point(10, 9)
     ));
 
-    private final ObservableList<Component> stashedComponents;
+    private final List<Component> stashedComponents;
     private int numStashed;
 
     public SecondShipBoard(GameColor color) {
         super(color);
-        this.stashedComponents = new ObservableList<>();
+        this.stashedComponents = new ArrayList<>();
         numStashed = 0;
     }
 
@@ -67,6 +67,6 @@ public class SecondShipBoard extends ShipBoard {
 
     @Override
     public List<Component> getStashedComponents() {
-        return stashedComponents.getUnmodifiableView();
+        return stashedComponents;
     }
 }

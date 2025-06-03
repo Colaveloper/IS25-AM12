@@ -29,8 +29,9 @@ public class GuiComponentBank extends HBox {
         setAlignment(Pos.TOP_LEFT);
 
         // === Left container ===
-        VBox leftBox = new VBox(5);
-        leftBox.setAlignment(Pos.TOP_CENTER);
+        VBox coveredBox = new VBox(5);
+        coveredBox.setAlignment(Pos.TOP_CENTER);
+        coveredBox.setOnMouseClicked(_ -> controller.requestRandComponent());
         Label coveredLabel = new Label("Covered");
 
         StackPane coveredSquare = new StackPane();
@@ -45,11 +46,11 @@ public class GuiComponentBank extends HBox {
         coveredNLabel.setTextFill(Color.GRAY);
 
         coveredSquare.getChildren().addAll(square, question);
-        leftBox.getChildren().addAll(coveredLabel, coveredSquare, coveredNLabel);
+        coveredBox.getChildren().addAll(coveredLabel, coveredSquare, coveredNLabel);
 
         // === Right container ===
-        VBox rightBox = new VBox(5);
-        rightBox.setAlignment(Pos.TOP_LEFT);
+        VBox uncoveredBox = new VBox(5);
+        uncoveredBox.setAlignment(Pos.TOP_LEFT);
         Label rejectedLabel = new Label("Rejected");
 
         rejectedContainer = new FlowPane();
@@ -61,10 +62,10 @@ public class GuiComponentBank extends HBox {
 
         });
 
-        rightBox.getChildren().addAll(rejectedLabel, rejectedContainer);
+        uncoveredBox.getChildren().addAll(rejectedLabel, rejectedContainer);
 
         // === Final layout ===
-        getChildren().addAll(leftBox, rightBox);
+        getChildren().addAll(coveredBox, uncoveredBox);
     }
 
     public void notifyRequestRandComponent() {
@@ -75,78 +76,17 @@ public class GuiComponentBank extends HBox {
         });
     }
 
-    public void addUncovered(Component component) {
+    public void notifyRejectComponent(Component component) {
         Platform.runLater(()-> {
-            GuiComponent newComponent = new GuiComponent(component, controller);
+            GuiComponent newComponent = new GuiComponent(component);
             rejectedContainer.getChildren().add(newComponent);
+            newComponent.setOnMouseClicked(_ ->
+                    controller.requestComponent(component.getId())
+            );
         });
     }
+
+    public void notifyRequestComponent(Component component) {
+        Platform.runLater(()-> rejectedContainer.getChildren().remove(new GuiComponent(component)));
+    }
 }
-
-//    @Override
-//    public Node getNode() throws IOException {
-//        HBox box = new HBox(5);
-//        box.setAlignment(Pos.CENTER);
-//        ObservableList<Node> squares = box.getChildren();
-//        squares.add(covered());
-//        squares.add(revealedComponents());
-//
-//        model.revealedComponentsProperty().addListener((ListChangeListener<Component>) change -> {
-//            while (change.next()) {
-//                Platform.runLater(() -> {
-//                    if (change.wasRemoved()) {
-//                        squares.remove(change.getFrom(), change.getFrom() + change.getRemovedSize());
-//                    }
-//                    if (change.wasAdded()) {
-//                        int index = change.getFrom();
-//                        for (Component component : change.getAddedSubList()) {
-//                            squares.add(index++, new GuiComponent(model, controller, component).getNode());
-//                        }
-//                    }
-//                });
-//            }
-//        });
-//
-//        return box;
-//    }
-//
-//    private Node covered() {
-//        StackPane square = new StackPane();
-//        square.setPrefSize(50, 50);
-//        square.setStyle("-fx-background-color: lightgray; -fx-border-color: black;");
-//
-//        Label label = new Label();
-//        label.textProperty().bind(model.coveredComponentNProperty().asString());
-//
-//        square.getChildren().add(label);
-//
-//        square.setOnMouseClicked(event -> {
-//            controller.requestRandComponent();
-//        });
-//
-//        return square;
-//    }
-//
-//    private Node revealedComponents() {
-//        VBox container = new VBox(10); // Spacing between components
-//        container.setAlignment(Pos.TOP_LEFT); // Optional alignment
-//        ListProperty<Component> componentList = model.revealedComponentsProperty();
-//        componentList.addListener((ListChangeListener<Component>) change -> {
-//            Platform.runLater(() -> {
-//                container.getChildren().clear();
-//                for (Component component : componentList) {
-//                    GuiComponent guiComponent = new GuiComponent(model, controller, component);
-//                    container.getChildren().add(guiComponent.getNode());
-//                }
-//            });
-//        });
-//
-//        // Initial population
-//        for (Component component : componentList) {
-//            GuiComponent guiComponent = new GuiComponent(model, controller, component);
-//            container.getChildren().add(guiComponent.getNode());
-//        }
-//
-//        return container;
-//    }
-

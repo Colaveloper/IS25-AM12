@@ -28,7 +28,7 @@ public class GameEventListener {
     }
 
     public void notifyFlightBoardUpdateEvent(ShipBoard shipBoard, int position) {
-        controllerListener.notifyEvent(FlightBoardUpdateEvent.from(shipBoard,position));
+        controllerListener.notifyEvent(FlightBoardUpdateEvent.from(shipBoard, position));
     }
 
     public void notifyFlipHourglassEvent(ShipBoard shipBoard) {
