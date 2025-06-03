@@ -56,7 +56,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 
     @Override
     public void notifyEvent(Event event) {
-        Logger.println(event);//debug
+        Logger.println(7, event);//debug
         eventHandler.handleEvent(event);
     }
 

@@ -5,17 +5,17 @@ import java.util.List;
 
 public enum Highlights {
 
-            RESET   ("\u001b[0m"),
-            RED     ("\u001b[31m"),
-            BLUE    ("\u001b[34m"),
-            YELLOW  ("\u001b[33m"),
-            GREEN   ("\u001b[32m"),
-            BLACK   ("\u001b[30m"),
-            WHITE   ("\u001b[37m"),
-            CYAN    ("\u001b[36m"),
-            MAGENTA ("\u001b[35m"),
-            GRAY    ("\u001b[90m"),
-            PURPLE  ("\u001B[45m");
+       /*0*/RESET   ("\u001b[0m"),
+       /*1*/RED     ("\u001b[31m"),
+       /*2*/BLUE    ("\u001b[34m"),
+       /*3*/YELLOW  ("\u001b[33m"),
+       /*4*/GREEN   ("\u001b[32m"),
+       /*5*/BLACK   ("\u001b[30m"),
+       /*6*/WHITE   ("\u001b[37m"),
+       /*7*/CYAN    ("\u001b[36m"),
+       /*8*/MAGENTA ("\u001b[35m"),
+       /*9*/GRAY    ("\u001b[90m"),
+      /*10*/PURPLE  ("\u001B[45m");
 
 
 

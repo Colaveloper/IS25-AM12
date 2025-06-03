@@ -10,7 +10,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.ChoosePlanetState;
 public class CliPlanetScreen extends CliScreen {
 
     private final boolean isMyTurn;
-    private final ShipBoard currentShip;
+    private ShipBoard currentShip;
     private final int numPlanets;
 
     public CliPlanetScreen(ClientModel model, ControllerToServer controller, ChoosePlanetState gameState) {
@@ -53,13 +53,15 @@ public class CliPlanetScreen extends CliScreen {
                 }
                 controller.choosePlanet(choice);
             }
+            case "" -> controller.goNext();
         }
     }
 
     @Override
     public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
-        cliAllShips.setDirty();
-        cliFlightBoard.setDirty();
+        currentShip = shipBoard;
+//        CliShipBoard ship = shipToCliShip.get(shipBoard);
+//        cliAllShips.setDirty();
+//        cliFlightBoard.setDirty();
     }
 }

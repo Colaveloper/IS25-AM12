@@ -38,7 +38,6 @@ public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverContro
      */
     @Override
     public void handleEvent(Event event) {
-        Logger.println(event);
         switch (event) {
             case ActivateComponentEvent activateComponentEvent -> {
                 clientModel.notifyActivateComponent(

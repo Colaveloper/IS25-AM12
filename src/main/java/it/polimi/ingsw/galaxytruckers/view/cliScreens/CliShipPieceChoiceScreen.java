@@ -60,9 +60,8 @@ public class CliShipPieceChoiceScreen extends CliScreen {
         if (shipBroken) {
             System.out.println("your ship is broken, choose a piece of ship to keep");
             System.out.println("choose from one of the following pieces: \n");
-            List<Highlights> highlights = Highlights.getSomeColors(numPieces);
             for(int i = 1; i <= numPieces; i++) {
-                System.out.println(highlights.get(i).getHighlight() + i + "\t" + highlights.get(i) + Highlights.RESET.getHighlight() + "\n");
+                System.out.println(colors.get(i).getHighlight() + i + "\t" + colors.get(i) + Highlights.RESET.getHighlight() + "\n");
             }
         }
         else{

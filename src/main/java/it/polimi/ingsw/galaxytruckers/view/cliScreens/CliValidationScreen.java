@@ -101,8 +101,13 @@ public class CliValidationScreen extends CliScreen {
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces){
         if(myShipBoard == shipBoard) {
             shipBroken = true;
-            numPieces = shipPieces.size();
         }
+        numPieces = shipPieces.size();
+        List<Highlights> highlights = Highlights.getSomeColors(numPieces);
+        for(int i = 0; i < numPieces; i++){
+            shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i));
+        }
+        shipToCliShip.get(shipBoard).setDirty();
         cliAllShips.setDirty();
     }
 
@@ -114,8 +119,9 @@ public class CliValidationScreen extends CliScreen {
 
     @Override
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
-
+        shipBoard.getCabins().get(point).initialize(crewType);
+        shipToCliShip.get(shipBoard).setDirty();
+        cliAllShips.setDirty();
         //todo
     }
 
