@@ -22,8 +22,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class EventHandler implements it.polimi.ingsw.galaxytruckers.serverController.events.EventHandler {
-    private ClientModel clientModel;
-    private PlayerRegistry playerRegistry;
+    private final ClientModel clientModel;
+    private final PlayerRegistry playerRegistry;
 
     public EventHandler(ClientModel clientModel, PlayerRegistry playerRegistry) {
         this.clientModel = clientModel;

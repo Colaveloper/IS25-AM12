@@ -4,6 +4,8 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiForecast;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiHourglass;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
@@ -19,17 +21,20 @@ import java.util.List;
 public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 
     private final GuiComponentBank guiComponentBank;
-//    GuiForecast guiForecast;
+    private final GuiForecast guiForecast;
+    private final GuiHourglass guiHourglass;
 
     public GuiSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState state) {
         super(model, controller, state);
         guiComponentBank = new GuiComponentBank(state.getComponentBank(), controller);
+        guiForecast = new GuiForecast(state.getBlockedForecasts(), controller);
+        guiHourglass = new GuiHourglass(controller);
     }
 
     @Override
     public Parent getNode() {
         VBox root = new VBox();
-        root.getChildren().addAll(guiComponentBank, guiFlightBoard, guiAllShips);
+        root.getChildren().addAll(guiComponentBank, guiForecast, guiHourglass, guiFlightBoard, guiAllShips);
         return root;
     }
 
@@ -96,13 +101,9 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
         guiFlightBoard.notifyFlightBoardPosition(shipBoard, position);
     }
     @Override
-    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex)
-//    {
-//        // Mark the forecast display as dirty to update it
-//        cliForecast.setBlockedForecasts(deckIndex, shipBoard.getColor());
-//        cliForecast.setDirty();
-//    }
-    {}
+    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
+        guiForecast.notifyPeekForecast(shipBoard, deckIndex);
+    }
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards)
 //    {
@@ -112,15 +113,9 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 //    }
     {}
     @Override
-    public void notifyReleaseForecast(ShipBoard shipBoard, int index)
-//    {
-//        // Update the forecast display when a forecast is released
-//        if(myShipBoard == shipBoard) {
-//            hasForecastDeck = false;
-//        }
-//        cliForecast.setDirty();
-//    }
-    {}
+    public void notifyReleaseForecast(ShipBoard shipBoard, int deckIndex) {
+        guiForecast.notifyReleaseForecast(shipBoard, deckIndex);
+    }
 
     @Override
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {

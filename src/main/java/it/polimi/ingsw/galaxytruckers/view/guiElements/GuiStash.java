@@ -10,11 +10,13 @@ import javafx.scene.layout.Region;
 import java.util.ArrayList;
 import java.util.List;
 public class GuiStash extends HBox {
-
+    private final ControllerToServer controller;
     private final List<GuiComponent> guiStashedComponents = new ArrayList<>();
     private final Region placeholder = createPlaceholder();
 
     public GuiStash(List<Component> stashedComponents, ControllerToServer controller) {
+        this.controller = controller;
+
         setSpacing(5);
 
         if (stashedComponents.isEmpty()) {
@@ -41,6 +43,9 @@ public class GuiStash extends HBox {
 
             GuiComponent guiComponent = new GuiComponent(component);
             guiStashedComponents.add(guiComponent);
+            guiComponent.setOnMouseClicked((_)->{
+                controller.grabStashedComponent(guiStashedComponents.indexOf(guiComponent));
+            });
             getChildren().add(guiComponent);
         });
     }
