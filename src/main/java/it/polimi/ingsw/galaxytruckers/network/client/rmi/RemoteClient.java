@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.client.rmi;
 
-import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
