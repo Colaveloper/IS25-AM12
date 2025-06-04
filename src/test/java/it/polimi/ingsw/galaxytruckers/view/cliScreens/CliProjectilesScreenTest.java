@@ -4,10 +4,6 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
 import it.polimi.ingsw.galaxytruckers.view.model.state.HandleProjectileState;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CliProjectilesScreenTest extends CliScreenSetup {
     static CliProjectilesScreen screen;
