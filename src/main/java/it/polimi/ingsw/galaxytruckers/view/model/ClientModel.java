@@ -61,6 +61,16 @@ public class ClientModel {
         }
     }
 
+    public void notifyNewLobby(Lobby lobby) {
+        activeLobbies.put(lobby.getId(), lobby);
+        observers.forEach(o -> o.notifyNewLobby(lobby));
+    }
+
+    public void notifyRemoveLobby(UUID uuid) {
+        activeLobbies.remove(uuid);
+        observers.forEach(o -> o.notifyRemoveLobby(uuid));
+    }
+
     public void addPlayer(Player player, GameColor color) {
         synchronized (playersLock) {
             synchronized (gameLock) {

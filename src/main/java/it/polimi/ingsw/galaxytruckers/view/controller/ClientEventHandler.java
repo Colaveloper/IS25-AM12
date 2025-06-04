@@ -2,12 +2,14 @@ package it.polimi.ingsw.galaxytruckers.view.controller;
 
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.LobbyDTO;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.states.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventHandler;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import it.polimi.ingsw.galaxytruckers.utils.Logger;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.Lobby;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
@@ -222,13 +224,17 @@ public class ClientEventHandler implements EventHandler<Event> {
                 );
             }
             case AddActiveLobbyEvent addActiveLobbyEvent -> {
-
+                LobbyDTO lobby = addActiveLobbyEvent.newLobby();
+                clientModel.notifyNewLobby(new Lobby(lobby.id(), lobby.numPlayers(), lobby.level(), lobby.host()));
             }
             case RemoveActiveLobbyEvent removeActiveLobbyEvent -> {
-
+                clientModel.notifyRemoveLobby(removeActiveLobbyEvent.lobbyId());
             }
             case SetActiveLobbiesEvent setActiveLobbyEvent -> {
-
+                for(LobbyDTO lobby : setActiveLobbyEvent.activeLobbies()) {
+                    clientModel.notifyNewLobby(new Lobby(lobby.id(), lobby.numPlayers(), lobby.level(), lobby.host()));
+                }
+                clientModel.setMetaState(MetaState.JOINORCREATE);
             }
         }
     }

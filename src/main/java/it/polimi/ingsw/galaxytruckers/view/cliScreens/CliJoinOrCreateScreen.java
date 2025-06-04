@@ -20,8 +20,6 @@ public class CliJoinOrCreateScreen extends CliScreen {
         ids.addAll(model.getActiveLobbies().keySet());
     }
 
-
-
     @Override
     public boolean isInputLegal(String input) {
         if (input.isEmpty()) return false;
