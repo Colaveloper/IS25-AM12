@@ -27,10 +27,8 @@ public sealed abstract class ShipBuildingState extends GameState permits
     @Override
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
-        actions.add(StateActions.REQUEST_RAND_COMPONENT);
-        if (!componentBank.getUncoveredComponents().isEmpty()) {
-            actions.add(StateActions.REQUEST_COMPONENT);
-        }
+        if(componentBank.getCoveredComponentsN() != 0) actions.add(StateActions.REQUEST_RAND_COMPONENT);
+        if (!componentBank.getUncoveredComponents().isEmpty()) actions.add(StateActions.REQUEST_COMPONENT);
         actions.add(StateActions.REJECT_COMPONENT);
         actions.add(StateActions.PLACE_COMPONENT);
         actions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);

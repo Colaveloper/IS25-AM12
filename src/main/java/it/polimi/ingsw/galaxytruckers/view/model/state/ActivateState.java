@@ -12,12 +12,6 @@ public sealed abstract class ActivateState extends AdventureState permits
         DeclareEnginePowerState,
         HandleProjectileState
 {
-    private static final List<StateActions> availableActions = List.of(
-            StateActions.ACTIVATE_COMPONENT,
-            StateActions.SPEND_BATTERIES,
-            StateActions.GO_NEXT
-    );
-
     protected final Set<Point> availablePositions;
     protected final ShipBoard shipBoard;
     protected int batteriesToSpend;
@@ -29,7 +23,10 @@ public sealed abstract class ActivateState extends AdventureState permits
     }
 
     public List<StateActions> getAvailableActions() {
-        List<StateActions> actions = new ArrayList<>(availableActions);
+        List<StateActions> actions = new ArrayList<>();
+        if(!shipBoard.getBatteries().isEmpty()) actions.add(StateActions.SPEND_BATTERIES);
+        if(!shipBoard.getActivatables().isEmpty()) actions.add(StateActions.ACTIVATE_COMPONENT);
+        actions.add(StateActions.GO_NEXT);
         actions.addAll(super.getAvailableActions());
         return actions;
     }

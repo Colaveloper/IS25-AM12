@@ -7,12 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public final class ChoosePlanetState extends AdventureState {
-    private static final List<StateActions> availableActions = List.of(
-            StateActions.CHOOSE_PLANET,
-            StateActions.GO_NEXT
-    );
-
-    private final ShipBoard shipBoard;
+     private final ShipBoard shipBoard;
     private final Set<Integer> options;
 
     public ChoosePlanetState(ShipBoard shipBoard, Set<Integer> options) {
@@ -22,7 +17,9 @@ public final class ChoosePlanetState extends AdventureState {
 
     @Override
     public List<StateActions> getAvailableActions() {
-        List<StateActions> actions = new ArrayList<>(availableActions);
+        List<StateActions> actions = new ArrayList<>();
+        if(!options.isEmpty()) actions.add(StateActions.CHOOSE_PLANET);
+        actions.add(StateActions.GO_NEXT);
         actions.addAll(super.getAvailableActions());
         return actions;
     }

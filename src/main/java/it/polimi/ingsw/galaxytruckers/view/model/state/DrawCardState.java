@@ -20,7 +20,9 @@ public final class DrawCardState extends AdventureState {
 
     @Override
     public List<StateActions> getAvailableActions() {
-        List<StateActions> actions = new ArrayList<>(availableActions);
+        List<StateActions> actions = new ArrayList<>();
+        if(hasDrawn) actions.add(StateActions.GO_NEXT);
+        else actions.add(StateActions.DRAW_CARD);
         actions.addAll(super.getAvailableActions());
         return actions;
     }

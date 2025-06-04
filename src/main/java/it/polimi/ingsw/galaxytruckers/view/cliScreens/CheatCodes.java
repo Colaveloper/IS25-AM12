@@ -26,7 +26,7 @@ public class CheatCodes {
     }
 
     public static String cheat() throws InterruptedException {
-        Thread.sleep(100);//da togliere dopo aver sistemato la syn perchè ora non funziona senza
+        Thread.sleep(200);//da togliere dopo aver sistemato la syn perchè ora non funziona senza
         Logger.println(4, cheatString.getFirst());
         return cheatString.removeFirst();
     }
