@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
-import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

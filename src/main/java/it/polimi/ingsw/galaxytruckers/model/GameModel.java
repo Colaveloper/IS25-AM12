@@ -9,6 +9,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventListener;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyEvent;
 
 import java.awt.*;
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public void setEventListener(Game game, EventListener listener) {
+    public void setEventListener(Game game, EventListener<LobbyEvent> listener) {
         GameEventListener gameEventListener = new GameEventListener();
         gameEventListener.setControllerListener(listener);
         game.setEventListener(gameEventListener);

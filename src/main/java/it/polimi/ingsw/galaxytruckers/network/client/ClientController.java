@@ -3,9 +3,9 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import it.polimi.ingsw.galaxytruckers.view.*;
-import it.polimi.ingsw.galaxytruckers.view.controller.EventHandler;
+import it.polimi.ingsw.galaxytruckers.view.controller.ClientEventHandler;
 import it.polimi.ingsw.galaxytruckers.view.controller.PlayerRegistry;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
@@ -22,7 +22,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     private ConfigFactory config;
     private PlayerRegistry playerRegistry = new PlayerRegistry();
 
-    private EventHandler eventHandler;
+    private ClientEventHandler eventHandler;
 
     public void setModel(ClientModel model) {
         this.model = model;
@@ -37,7 +37,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     }
 
     public void initEventHandler() {
-        this.eventHandler = new EventHandler(model, playerRegistry);
+        this.eventHandler = new ClientEventHandler(model, playerRegistry);
     }
 
 //---------------------------------------INTERNAL CALLS------------------------------------------

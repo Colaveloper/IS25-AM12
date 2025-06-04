@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model;
 
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
@@ -9,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.StateDTOConverter;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.awt.*;
@@ -17,9 +17,9 @@ import java.util.Set;
 import java.util.List;
 
 public class GameEventListener {
-    private EventListener controllerListener;
+    private EventListener<LobbyEvent> controllerListener;
 
-    public void setControllerListener(EventListener controllerListener) {
+    public void setControllerListener(EventListener<LobbyEvent> controllerListener) {
         this.controllerListener = controllerListener;
     }
 
