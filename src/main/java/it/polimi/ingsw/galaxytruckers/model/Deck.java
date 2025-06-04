@@ -15,6 +15,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.factory.SecondFactory;
 import it.polimi.ingsw.galaxytruckers.model.factory.TestFactory;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.io.File;
 import java.io.IOException;
@@ -195,8 +196,8 @@ public abstract class Deck {
      * */
     public static List<Projectile> parseProjectiles(JsonNode projectilesNode) {
         List<Projectile> projectiles = new ArrayList<>();
-        int direction = projectilesNode.get(1).asInt();
         for (JsonNode node : projectilesNode) {
+            Direction direction = Direction.valueOf(node.get(1).asText().toUpperCase());
             switch (node.get(0).asText()) {
                 case "small fire":
                     projectiles.add(new SmallFire(direction));

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.*;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.penalty.*;
@@ -55,20 +56,20 @@ public class AdventureCardRegistry {
      * */
     private List<Projectile> parseProjectiles(JsonNode projectilesNode) {
         List<Projectile> projectiles = new ArrayList<>();
-        int direction = projectilesNode.get(1).asInt();
         for (JsonNode node : projectilesNode) {
+            Direction direction = Direction.valueOf(node.get(1).asText().toUpperCase());
             switch (node.get(0).asText()) {
                 case "small fire":
-                    projectiles.add(new Projectile(0,direction, ProjectileType.SMALLFIRE));
+                    projectiles.add(new Projectile(0, direction, ProjectileType.SMALLFIRE));
                     break;
                 case "big fire":
-                    projectiles.add(new Projectile(0,direction, ProjectileType.BIGFIRE));
+                    projectiles.add(new Projectile(0, direction, ProjectileType.BIGFIRE));
                     break;
                 case  "big meteor":
-                    projectiles.add(new Projectile(0,direction, ProjectileType.BIGMETEOR));
+                    projectiles.add(new Projectile(0, direction, ProjectileType.BIGMETEOR));
                     break;
                 case "small meteor":
-                    projectiles.add(new Projectile(0,direction, ProjectileType.SMALLMETEOR));
+                    projectiles.add(new Projectile(0, direction, ProjectileType.SMALLMETEOR));
                     break;
             }
         }

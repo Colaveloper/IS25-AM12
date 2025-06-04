@@ -1,15 +1,17 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class LifeSupport extends Component{
     private final CrewType crewType;
 
-    public LifeSupport(List<Connector> connectors, int id, CrewType crewType) {
+    public LifeSupport(Map<Direction, Connector> connectors, int id, CrewType crewType) {
         super(connectors, id);
         this.crewType = crewType;
         if (crewType == CrewType.HUMAN) {
@@ -22,7 +24,7 @@ public class LifeSupport extends Component{
     }
 
     @VisibleForTesting
-    public LifeSupport(List<Connector> connectors, CrewType crewType) throws IllegalArgumentException {
+    public LifeSupport(Map<Direction, Connector> connectors, CrewType crewType) throws IllegalArgumentException {
         super(connectors);
         this.crewType = crewType;
         if (crewType == CrewType.HUMAN) {

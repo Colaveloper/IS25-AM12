@@ -3,6 +3,8 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.view.Screen;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -18,33 +20,35 @@ import java.util.Map;
 
 public abstract class CliScreen extends Screen {
 
-    protected ClientModel model;
-    private GameState state;
-    protected ControllerToServer controller;
-    protected List<StateActions> availableActions;
+    protected final ClientModel model;
+    protected final ControllerToServer controller;
+    protected final GameState state;
+    protected final List<StateActions> availableActions;
     protected CliFlightBoard cliFlightBoard;
     protected ShipBoard myShipBoard;
     protected CliAllShips cliAllShips;
-    protected Map<ShipBoard, CliShipHandAndStash> shipToCliShip;
+    protected Map<ShipBoard, CliShipBoard> shipToCliShip;
 
 
     public CliScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         this.model = model;
         this.controller = controller;
         this.state = gameState;
-        this.availableActions = gameState.getAvailableActions();
-        this.myShipBoard = model.getMyShip();
-        this.shipToCliShip = new HashMap<>();
-        for (Player player : model.getPlayers()) {
-            shipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));
+        this.availableActions = new ArrayList<>();
+        if (gameState != null) {
+            this.availableActions.addAll(gameState.getAvailableActions());
+            this.myShipBoard = model.getMyShip();
+            this.shipToCliShip = new HashMap<>();
+            for (Player player : model.getPlayers()) {
+                shipToCliShip.put(player.getShipBoard(), new CliShipBoard(player.getShipBoard(), player.getNickname()));
+            }
+            this.cliAllShips = new CliAllShips(shipToCliShip.values().stream().toList());
+            this.cliFlightBoard = new CliFlightBoard(model.getGame().getFlightBoard());
         }
-        cliAllShips = new CliAllShips(shipToCliShip.values().stream().toList());
-        this.cliFlightBoard = new CliFlightBoard(model.getGame().getFlightBoard());
     }
 
     public CliScreen(ClientModel model, ControllerToServer controller) {
-        this.model = model;
-        this.controller = controller;
+        this(model, controller, null);
     }
 
     public GameState getState() {
@@ -63,7 +67,8 @@ public abstract class CliScreen extends Screen {
     protected void printActions() {
         if(!model.getGame().getGivenUpShips().contains(model.getClientPlayer().getShipBoard())) {
             List<String> actions = new ArrayList<>();
-            availableActions = state.getAvailableActions(); // refresh available actions
+            availableActions.clear(); // refreshing available actions
+            availableActions.addAll(state.getAvailableActions());
             for (StateActions action : availableActions) {
                 switch (action) {
                     case ACTIVATE_COMPONENT ->      actions.add("P[x][y] Activate component        ");
@@ -86,7 +91,7 @@ public abstract class CliScreen extends Screen {
                     case PLACE_SHIP_ON_FLIGHTBOARD->actions.add("E [i] End and place on flightboard");
                     case FINISH_BUILDING ->         actions.add("X  To finish building             ");
                     case ACQUIRE_FORECAST ->        actions.add("F [i]  Pick i-th forecast deck    ");
-                    case DRAW_CARD ->               actions.add("  Press any key to draw a card    ");
+                    case DRAW_CARD ->               actions.add("  Press ENTER to draw a card      ");
                     case REMOVE_COMPONENT ->        actions.add("P[x][y]  Remove component in x, y ");
                     case INITIALIZE_CABIN ->        actions.add("P[x][y]  Initialize cabin in x, y ");
                     case GIVE_UP ->                 actions.add("Y  To give up and stop playing    ");
@@ -122,13 +127,16 @@ public abstract class CliScreen extends Screen {
         if(input.isEmpty()) input = " "; //to check last case of empty input
         //String[] parts = input.split(" ");
         return switch (input.substring(0, 1)) {
-            case "P" -> (availableActions.contains(StateActions.PLACE_COMPONENT) ||
+            case "P" ->(availableActions.contains(StateActions.PLACE_COMPONENT) ||
                         availableActions.contains(StateActions.INITIALIZE_CABIN))&& input.matches("P\\s+\\d+\\s+\\d+") ||
-                        availableActions.contains(StateActions.GRAB_REWARD)     && input.matches("P");
+                        availableActions.contains(StateActions.GRAB_REWARD)     && input.matches("P") ||
+                        availableActions.contains(StateActions.ADD_GOOD) && input.matches("P/\\s+\\d+\\s+\\d+\\s+[A-Z]+");
             case "H" -> availableActions.contains(StateActions.FLIP_HOURGLASS)  && input.matches("H");
             case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.matches("S") ||
                         availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.matches("S\\s+\\d+");
-            case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT)&& input.matches("R");
+            case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT)&& input.matches("R") ||
+                        availableActions.contains(StateActions.REMOVE_GOOD) && input.matches("R\\s+\\d+\\s+\\d+\\s+[A-Z]+") ||
+                        availableActions.contains(StateActions.REMOVE_COMPONENT) && input.matches("R\\s+\\d+\\s+\\d+");
             case "C" ->(availableActions.contains(StateActions.REQUEST_RAND_COMPONENT) ||
                         availableActions.contains(StateActions.GO_NEXT))        && input.matches("C");
             case "U" -> availableActions.contains(StateActions.REQUEST_COMPONENT)&& input.matches("U\\s+\\d+");
@@ -136,13 +144,13 @@ public abstract class CliScreen extends Screen {
             case "X" -> availableActions.contains(StateActions.FINISH_BUILDING) && input.matches("X");
             case "L" ->(availableActions.contains(StateActions.LOSE_CREW)   ||
                         availableActions.contains(StateActions.LOSE_GOOD))      && input.matches("L\\s+\\d+\\s+\\d+") ||
-                        availableActions.contains(StateActions.CHOOSE_PLANET)   && input.matches("L");
+                        availableActions.contains(StateActions.CHOOSE_PLANET)   && input.matches("L\\s+\\d+");
             case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("B\\s+\\d+\\s+\\d+");
             case "K" -> availableActions.contains(StateActions.CHOOSE_SHIP_PIECE)&& input.matches("K");
             case "Y" -> availableActions.contains(StateActions.GIVE_UP)         && input.matches("Y");
             case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.matches("A\\s+\\d+\\s+\\d+");
-            case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.matches("E\\s+\\d+");
-            case " " -> (availableActions.contains(StateActions.GO_NEXT)    ||
+            case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.matches("E\\s*\\d+");
+            case " " ->(availableActions.contains(StateActions.GO_NEXT)    ||
                         availableActions.contains(StateActions.DRAW_CARD)   ||
                         availableActions.contains(StateActions.RELEASE_FORECAST));
 

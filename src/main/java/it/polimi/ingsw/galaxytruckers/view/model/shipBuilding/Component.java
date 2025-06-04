@@ -1,10 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
-import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 public sealed class Component permits
         Battery,
@@ -15,33 +14,29 @@ public sealed class Component permits
         LifeSupport,
         Shield {
 
-    private final List<Connector> connectors;
-    private int orientation;
+    private final Map<Direction, Connector> connectors;
+    private Direction orientation;
     private final int id;
 
-    public Component(List<Connector> connectors, int id) {
+    public Component(Map<Direction, Connector> connectors, int id) {
         this.connectors = connectors;
-        this.orientation = 0;
+        this.orientation = Direction.UP;
         this.id = id;
     }
 
-    public List<Connector> getConnectors() {
-        List<Connector> res = new ArrayList<>();
-        for (int i = 0; i < connectors.size(); i++) {
-            res.add(connectors.get((i-orientation+connectors.size())%connectors.size()));
-        }
-        return res;
+    public Map<Direction, Connector> getConnectors() {
+        return connectors;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getOrientation() {
+    public Direction getOrientation() {
         return orientation;
     }
 
-    public void setOrientation(int orientation) {
+    public void setOrientation(Direction orientation) {
         this.orientation = orientation;
     }
 }

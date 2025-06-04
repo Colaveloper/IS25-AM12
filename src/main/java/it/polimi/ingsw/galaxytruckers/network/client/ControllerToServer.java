@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.util.UUID;
@@ -13,7 +14,7 @@ public interface ControllerToServer {
 
     void flipHourglass();
 
-    void setMyNickname(String nickname);
+    void setMyNickname(String nickname); // TODO: REMOVE! THIS DOES NOT CALL THE SERVER, registerNickname DOES!
 
     void releaseForecast();
 
@@ -35,7 +36,7 @@ public interface ControllerToServer {
 
     void rejectComponent();
 
-    void placeComponent(Point point, int orientation);
+    void placeComponent(Point point, Direction orientation);
 
     void reportError(String details);
 

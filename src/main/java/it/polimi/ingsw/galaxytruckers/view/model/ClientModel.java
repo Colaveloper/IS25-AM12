@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.ModelObserver;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -163,7 +164,7 @@ public class ClientModel {
         safeGetCurrentState().notifyGrabStashedComponent(shipBoard, index);
     }
 
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         safeGetCurrentState().notifyPlaceComponent(shipBoard, point, orientation);
     }
 

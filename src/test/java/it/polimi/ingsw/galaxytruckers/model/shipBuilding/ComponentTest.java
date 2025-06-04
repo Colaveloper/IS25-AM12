@@ -1,29 +1,28 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.ShipBoardStub;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ComponentTest {
 
     protected Component myComponent;
-    protected List<Connector> myConnectors;
+    protected Map<Direction, Connector> myConnectors;
     protected ShipBoardStub myShipBoard;
 
     @BeforeEach
     void setUp() {
-        myConnectors = new ArrayList<>(Arrays.asList(
-                Connector.NONE,
-                Connector.UNIVERSAL,
-                Connector.SINGLE,
-                Connector.DOUBLE
+        myConnectors = new HashMap<>(Map.of(
+                Direction.UP, Connector.NONE,
+                Direction.LEFT, Connector.UNIVERSAL,
+                Direction.DOWN, Connector.SINGLE,
+                Direction.RIGHT, Connector.DOUBLE
         ));
         myComponent = new Component(myConnectors);
         myShipBoard = new ShipBoardStub();
@@ -36,12 +35,11 @@ class ComponentTest {
 
     @Test
     void setOrientationUpdatesConnectorsOrder() {
-        assertEquals(0, myComponent.getOrientation());
+        assertEquals(Direction.UP, myComponent.getOrientation());
+        Map<Direction, Connector> rotatedConnectors = Direction.rotateDirectionMap(myConnectors, Direction.UP, Direction.LEFT);
 
-        myComponent.setOrientation(1);
-        assertEquals(1, myComponent.getOrientation());
-        List<Connector> expConnectors = new ArrayList<>(myConnectors);
-        Collections.rotate(expConnectors,1);
-        assertEquals(expConnectors, myComponent.getConnectors());
+        myComponent.setOrientation(Direction.LEFT); // 1
+        assertEquals(Direction.LEFT, myComponent.getOrientation());
+        assertEquals(rotatedConnectors, myComponent.getConnectors());
     }
 }

@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteServer;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteController;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 
 import java.awt.*;
@@ -109,7 +110,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
-    public void placeComponent(Point point, int orientation) {
+    public void placeComponent(Point point, Direction orientation) {
         runRemoteMethod(() -> remoteController.placeComponent(point, orientation));
     }
 

@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,14 +51,22 @@ class ShipBuildingStateTest {
             // Make the first ship invalid so that it does not automatically change state
             ShipBoard invalidShip = shipBoards.getFirst();
             invalidShip.offerComponent(new Component(
-                    List.of(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)
+                    Map.of(
+                            Direction.UP, Connector.UNIVERSAL,
+                            Direction.LEFT, Connector.UNIVERSAL,
+                            Direction.DOWN, Connector.UNIVERSAL,
+                            Direction.RIGHT, Connector.UNIVERSAL)
             ));
-            invalidShip.placeComponent(new Point(5,9), 0);
+            invalidShip.placeComponent(new Point(5,9), Direction.UP);
             invalidShip.weldLastComponent();
             invalidShip.offerComponent(new Component(
-                    List.of(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE)
+                    Map.of(
+                            Direction.UP, Connector.NONE,
+                            Direction.LEFT, Connector.NONE,
+                            Direction.DOWN, Connector.NONE,
+                            Direction.RIGHT, Connector.NONE)
             ));
-            invalidShip.placeComponent(new Point(6,9), 0);
+            invalidShip.placeComponent(new Point(6,9), Direction.UP);
             invalidShip.weldLastComponent();
 
             try {
@@ -135,7 +145,7 @@ class ShipBuildingStateTest {
         @Test
         void placeComponentSetsLastPositionAndComponentOrientation() {
             Point componentPosition = new Point(7, 8);
-            int orientation = 1;
+            Direction orientation = Direction.LEFT;
             Component placedComponent = shipBuildingState.getComponentBank().getCoveredComponents().getLast();
             shipBuildingState.requestRandComponent(shipBoards.getFirst());
             shipBuildingState.placeComponent(shipBoards.getFirst(), componentPosition, orientation);
@@ -238,7 +248,7 @@ class ShipBuildingStateTest {
 
             @Test
             void placeComponentThrowsException() {
-                assertThrows(IllegalStateException.class, () -> shipBuildingState.placeComponent(shipBoards.getFirst(), null, 0));
+                assertThrows(IllegalStateException.class, () -> shipBuildingState.placeComponent(shipBoards.getFirst(), null, Direction.UP));
             }
 
             @Test
@@ -284,14 +294,22 @@ class ShipBuildingStateTest {
             // Make the first ship invalid so that it does not automatically change state
             ShipBoard invalidShip = shipBoards.getFirst();
             invalidShip.offerComponent(new Component(
-                    List.of(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL)
+                    Map.of(
+                            Direction.UP, Connector.UNIVERSAL,
+                            Direction.LEFT, Connector.UNIVERSAL,
+                            Direction.DOWN, Connector.UNIVERSAL,
+                            Direction.RIGHT, Connector.UNIVERSAL)
             ));
-            invalidShip.placeComponent(new Point(5,9), 0);
+            invalidShip.placeComponent(new Point(5,9), Direction.UP);
             invalidShip.weldLastComponent();
             invalidShip.offerComponent(new Component(
-                    List.of(Connector.NONE, Connector.NONE, Connector.NONE, Connector.NONE)
+                    Map.of(
+                            Direction.UP, Connector.NONE,
+                            Direction.LEFT, Connector.NONE,
+                            Direction.DOWN, Connector.NONE,
+                            Direction.RIGHT, Connector.NONE)
             ));
-            invalidShip.placeComponent(new Point(6,9), 0);
+            invalidShip.placeComponent(new Point(6,9), Direction.UP);
             invalidShip.weldLastComponent();
 
             try {
@@ -351,7 +369,7 @@ class ShipBuildingStateTest {
         @Test
         void placeComponentSetsLastPositionAndComponentOrientation() {
             Point componentPosition = new Point(7, 8);
-            int orientation = 1;
+            Direction orientation = Direction.LEFT;
             Component placedComponent = shipBuildingState.getComponentBank().getCoveredComponents().getLast();
             shipBuildingState.requestRandComponent(shipBoards.getFirst());
             shipBuildingState.placeComponent(shipBoards.getFirst(), componentPosition, orientation);
@@ -420,7 +438,7 @@ class ShipBuildingStateTest {
 
             @Test
             void placeComponentThrowsException() {
-                assertThrows(IllegalStateException.class, () -> shipBuildingState.placeComponent(shipBoards.getFirst(), null, 0));
+                assertThrows(IllegalStateException.class, () -> shipBuildingState.placeComponent(shipBoards.getFirst(), null, Direction.UP));
             }
 
             @Test

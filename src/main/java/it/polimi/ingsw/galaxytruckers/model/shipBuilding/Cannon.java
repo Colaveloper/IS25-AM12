@@ -1,22 +1,24 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.util.List;
+import java.util.Map;
 
 public class Cannon extends Component {
 
-    public Cannon(List<Connector> connectors, int id) {
+    public Cannon(Map<Direction, Connector> connectors, int id) {
         super(connectors, id);
     }
 
     @VisibleForTesting
-    public Cannon(List<Connector> connectors) {
+    public Cannon(Map<Direction, Connector> connectors) {
         super(connectors);
     }
 
     public int getFirePower() {
-        return (getOrientation() == 0) ? 2 : 1;
+        return (getOrientation() == Direction.UP) ? 2 : 1;
     }
 
     @Override

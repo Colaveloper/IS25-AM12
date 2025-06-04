@@ -1,29 +1,20 @@
-//package it.polimi.ingsw.galaxytruckers.view.guiElements;
-//
-//import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-//import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-//import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-//import it.polimi.ingsw.galaxytruckers.view.model.Component;
-//import javafx.application.Platform;
-//import javafx.beans.property.ObjectProperty;
-////import javafx.geometry.Pos;
-//import javafx.scene.Node;
-//import javafx.scene.control.Label;
-//import javafx.scene.layout.GridPane;
-//import javafx.scene.layout.StackPane;
-//
-//
-//import java.awt.*;
-//import java.util.List;
-//
-//public class GuiShipBoard extends GuiElement {
-//    GameColor color;
-//
-//    GuiShipBoard(ClientModel model, ClientController controller, GameColor color) {
-//        super(model, controller);
-//        this.color = color;
-//    }
-//
+package it.polimi.ingsw.galaxytruckers.view.guiElements;
+
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
+public class GuiShipHandAndStash extends VBox {
+
+    public GuiShipHandAndStash(ShipBoard shipBoard, ControllerToServer controller) {
+        Rectangle placeholder = new Rectangle(300, 300); // Adjust size as needed
+        placeholder.setFill(Color.BLACK);
+        this.getChildren().add(placeholder);
+    }
+}
+
 //    @Override
 //    public Node getNode() {
 //        List<List<ObjectProperty<Component>>> ship = model.getShips().get(color);

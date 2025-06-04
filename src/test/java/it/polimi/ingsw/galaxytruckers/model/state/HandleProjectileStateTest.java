@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +52,7 @@ class HandleProjectileStateTest {
             }
         };
         dice = new Dice(){};
-        projectile = new SmallMeteor(dice, 1){
+        projectile = new SmallMeteor(dice, Direction.LEFT){ // 1
             @Override
             public boolean fireAt(ShipBoard ship){
                 return true;
@@ -105,7 +106,7 @@ class HandleProjectileStateTest {
 
     @Test
     void goNextChangesAdventureStateWithNextStep() throws IOException {
-        projectile = new SmallMeteor(dice, 1){
+        projectile = new SmallMeteor(dice, Direction.LEFT){ // 1
             @Override
             public boolean fireAt(ShipBoard ship){
                 return false;

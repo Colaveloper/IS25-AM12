@@ -15,13 +15,13 @@ public abstract class CliElement {
 
     public List<String> getDescription() {
         if (dirty) {
-            System.out.println("REDESCRIBE "+toString());
+            //System.out.println("REDESCRIBE "+toString());
             descriptionCache.clear();
             descriptionCache.addAll(getNewDescription());
             dirty = false;
         }
         else {
-            System.out.println("USE CACHED DESCRIPTION "+toString());
+            //System.out.println("USE CACHED DESCRIPTION "+toString());
         }
         return descriptionCache;
     }

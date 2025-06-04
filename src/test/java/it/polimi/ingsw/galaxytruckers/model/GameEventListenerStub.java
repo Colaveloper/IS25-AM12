@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventListener;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyEvent;
 
 import java.awt.*;
@@ -72,7 +73,7 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifyPlaceComponentEvent(ShipBoard shipBoard, int orientation, Point position) {
+    public void notifyPlaceComponentEvent(ShipBoard shipBoard, Direction orientation, Point position) {
     }
 
     @Override

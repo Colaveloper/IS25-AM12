@@ -1,29 +1,88 @@
-//package it.polimi.ingsw.galaxytruckers.view.guiElements;
-//
-//import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-//import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-//import it.polimi.ingsw.galaxytruckers.view.model.Component;
-//import javafx.application.Platform;
-//import javafx.beans.property.ListProperty;
-//import javafx.beans.property.SimpleListProperty;
-//import javafx.collections.FXCollections;
-//import javafx.collections.ListChangeListener;
-//import javafx.collections.ObservableList;
-//import javafx.geometry.Pos;
-//import javafx.scene.Node;
-//import javafx.scene.control.Label;
-//import javafx.scene.layout.HBox;
-//import javafx.scene.layout.StackPane;
-//import javafx.scene.layout.VBox;
-//
-//import java.io.IOException;
-//
-//public class GuiComponentBank extends GuiElement {
-//
-//    public GuiComponentBank(ClientModel model, ClientController controller) {
-//        super(model, controller);
-//    }
-//
+package it.polimi.ingsw.galaxytruckers.view.guiElements;
+
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+
+public class GuiComponentBank extends HBox {
+
+    private final ControllerToServer controller;
+    private final Label coveredNLabel;
+    private final FlowPane rejectedContainer;
+
+    public GuiComponentBank(ComponentBank componentBank, ControllerToServer controller) {
+        this.controller = controller;
+
+        setSpacing(20);
+        setPadding(new Insets(10));
+        setAlignment(Pos.TOP_LEFT);
+
+        // === Left container ===
+        VBox leftBox = new VBox(5);
+        leftBox.setAlignment(Pos.TOP_CENTER);
+        Label coveredLabel = new Label("Covered");
+
+        StackPane coveredSquare = new StackPane();
+        Rectangle square = new Rectangle(100, 100);
+        square.setFill(Color.BLACK);
+        Label question = new Label("?");
+        question.setTextFill(Color.WHITE);
+        question.setFont(Font.font(24));
+
+        coveredNLabel = new Label(Integer.toString(componentBank.getCoveredComponentsN()));
+        coveredNLabel.setFont(Font.font(14));
+        coveredNLabel.setTextFill(Color.GRAY);
+
+        coveredSquare.getChildren().addAll(square, question);
+        leftBox.getChildren().addAll(coveredLabel, coveredSquare, coveredNLabel);
+
+        // === Right container ===
+        VBox rightBox = new VBox(5);
+        rightBox.setAlignment(Pos.TOP_LEFT);
+        Label rejectedLabel = new Label("Rejected");
+
+        rejectedContainer = new FlowPane();
+        rejectedContainer.setHgap(5);
+        rejectedContainer.setVgap(5);
+        rejectedContainer.setPrefWrapLength(300); // Will wrap items when full width is reached
+
+        componentBank.getUncoveredComponents().forEach(component -> {
+
+        });
+
+        rightBox.getChildren().addAll(rejectedLabel, rejectedContainer);
+
+        // === Final layout ===
+        getChildren().addAll(leftBox, rightBox);
+    }
+
+    public void notifyRequestRandComponent() {
+        Platform.runLater(()-> {
+            coveredNLabel.setText(Integer.toString(
+                    Integer.parseInt(coveredNLabel.getText()) - 1)
+            );
+        });
+    }
+
+    public void addUncovered(Component component) {
+        Platform.runLater(()-> {
+            GuiComponent newComponent = new GuiComponent(component, controller);
+            rejectedContainer.getChildren().add(newComponent);
+        });
+    }
+}
+
 //    @Override
 //    public Node getNode() throws IOException {
 //        HBox box = new HBox(5);
@@ -90,4 +149,4 @@
 //
 //        return container;
 //    }
-//}
+

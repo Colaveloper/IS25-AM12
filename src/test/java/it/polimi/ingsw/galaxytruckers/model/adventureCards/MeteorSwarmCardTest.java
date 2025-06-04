@@ -10,6 +10,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -64,12 +65,12 @@ class MeteorSwarmCardTest {
             }
         };
         safeProjectiles = new ArrayList<>(List.of(
-                new SmallMeteor(()->6,0),
-                new SmallMeteor(()->9,0),
-                new BigMeteor(()->8, 1),
-                new BigMeteor(()->5, 2)
+                new SmallMeteor(()->6, Direction.UP),
+                new SmallMeteor(()->9,Direction.UP),
+                new BigMeteor(()->8, Direction.RIGHT), // 1
+                new BigMeteor(()->5, Direction.DOWN)
         ));
-        damagingProjectile = new SmallMeteor(()->1,0) {
+        damagingProjectile = new SmallMeteor(()->1,Direction.UP) {
             @Override
             public boolean fireAt(ShipBoard shipBoard) {
                 return true;

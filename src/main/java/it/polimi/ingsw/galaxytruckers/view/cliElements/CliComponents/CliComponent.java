@@ -1,24 +1,27 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliElement;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CliComponent extends CliElement {
 
     private final Component component;
+    private final Map<Direction, Connector> connectors;
     private String open;
     private String close;
-
 
     private String crewColorOpen;
 
     protected CliComponent(Component component) {
         this.component = component;
+        this.connectors = component.getConnectors();
     }
 
     public static CliComponent of(Component component) {
@@ -34,36 +37,36 @@ public class CliComponent extends CliElement {
         };
     }
 
-    public String getConnector(int connectorDirection) {
-        List<Connector> connectors = component.getConnectors();
-        return switch (connectorDirection) {
-            case 0 -> switch (connectors.get(component.getOrientation()% 4)) {
-                case Connector.NONE -> "─";
-                case Connector.SINGLE -> "┴";
-                case Connector.DOUBLE -> "╨";
-                case Connector.UNIVERSAL -> "╩";
+    public String getConnector(Direction direction) {
+        Connector connector = connectors.get(direction);
+        return switch (direction) {
+            case UP -> switch (connector) {
+                case NONE -> "─";
+                case SINGLE -> "┴";
+                case DOUBLE -> "╨";
+                case UNIVERSAL -> "╩";
             };
-            case 1 -> switch (connectors.get((1 + component.getOrientation()) % 4)) {
-                case Connector.NONE -> "│";
-                case Connector.SINGLE -> "├";
-                case Connector.DOUBLE -> "╞";
-                case Connector.UNIVERSAL -> "╠";
+            case LEFT -> switch (connector) {
+                case NONE -> "│";
+                case SINGLE -> "┤";
+                case DOUBLE -> "╡";
+                case UNIVERSAL -> "╣";
             };
-            case 2 -> switch (connectors.get((2 + component.getOrientation()) % 4)) {
-                case Connector.NONE -> "─";
-                case Connector.SINGLE -> "┬";
-                case Connector.DOUBLE -> "╥";
-                case Connector.UNIVERSAL -> "╦";
+            case DOWN -> switch (connector) {
+                case NONE -> "─";
+                case SINGLE -> "┬";
+                case DOUBLE -> "╥";
+                case UNIVERSAL -> "╦";
             };
-            case 3 -> switch (connectors.get((3 + component.getOrientation()) % 4)) {
-                case Connector.NONE -> "│";
-                case Connector.SINGLE -> "┤";
-                case Connector.DOUBLE -> "╡";
-                case Connector.UNIVERSAL -> "╣";
+            case RIGHT -> switch (connector) {
+                case NONE -> "│";
+                case SINGLE -> "├";
+                case DOUBLE -> "╞";
+                case UNIVERSAL -> "╠";
             };
-            default -> "error";
         };
     }
+
 
     public int getId() {
         return component.getId();
@@ -84,9 +87,9 @@ public class CliComponent extends CliElement {
         close = Highlights.RESET.getHighlight();
 
         List<String> lines = new ArrayList<>();
-            lines.add(0, open+"╭─" + getConnector(0) + "─╮"+close);
-            lines.add(1, open + getConnector(3) + middle + getConnector(1)+close);
-            lines.add(2, open+"╰─" + getConnector(2) + "─╯"+close);
+            lines.add(0, open+"╭─" + getConnector(Direction.UP) + "─╮"+close);
+            lines.add(1, open+ getConnector(Direction.LEFT) + middle + getConnector(Direction.RIGHT)+close);
+            lines.add(2, open+"╰─" + getConnector(Direction.DOWN) + "─╯"+close);
         return lines;
     }
 }

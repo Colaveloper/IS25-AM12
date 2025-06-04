@@ -5,7 +5,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.ScreenFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
@@ -27,6 +26,8 @@ public class CliView implements View {
     ScreenFactory screenFactory;
     CliScreen currentScreen;
     MetaState metaState;
+
+
 
     public CliView(ClientController controller, ClientModel model) {
         startInputLoop();
@@ -122,7 +123,7 @@ public class CliView implements View {
     }
 
     @Override
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         currentScreen.notifyPlaceComponent(shipBoard, point, orientation);
         currentScreen.render();
     }
@@ -266,7 +267,7 @@ public class CliView implements View {
     }
 
     @Override
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, int orientation, Point oldPosition) {
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {
         currentScreen.notifyPlaceComponent(shipBoard, newPoint, orientation, oldPosition);
         currentScreen.render();
     }

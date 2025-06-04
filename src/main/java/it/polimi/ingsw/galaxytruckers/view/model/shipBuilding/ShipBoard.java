@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
 
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.controller.ComponentRegistry;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -56,7 +57,7 @@ public abstract class ShipBoard {
         this.activatables = new HashMap<>();
 
         offerComponent(ComponentRegistry.getInstance().getStartingCabin(color));
-        placeComponent(new Point(7,7),0);
+        placeComponent(new Point(7,7),Direction.UP);
         weldLastComponent();
     }
 
@@ -91,7 +92,7 @@ public abstract class ShipBoard {
 
     //Ship building methods
 
-    public void placeComponent(Point newPosition, int orientation) {
+    public void placeComponent(Point newPosition, Direction orientation) {
         if (lastPosition != null) {
             componentMap.remove(lastPosition);
         }

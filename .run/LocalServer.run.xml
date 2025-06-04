@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="LocalServer" type="Application" factoryName="Application" folderName="System2Clients">
-    <option name="ALTERNATIVE_JRE_PATH" value="JDK 24" />
+    <option name="ALTERNATIVE_JRE_PATH" value="openjdk-23" />
     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.network.server.Server" />
-    <module name="Galaxy_Truckers" />
+    <module name="GalaxyTruckers" />
     <option name="PROGRAM_PARAMETERS" value="Galaxy-Truckers-Server 12345 12346" />
     <method v="2">
       <option name="Make" enabled="true" />

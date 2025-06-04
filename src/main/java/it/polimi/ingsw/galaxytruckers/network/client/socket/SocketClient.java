@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.messages.*;
 import it.polimi.ingsw.galaxytruckers.network.messages.requests.*;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 
 import java.awt.*;
@@ -157,7 +158,7 @@ public class SocketClient implements VirtualServer, VirtualClient {
     }
 
     @Override
-    public void placeComponent(Point point, int orientation) {
+    public void placeComponent(Point point, Direction orientation) {
         sendRequest(new PlaceComponent(point, orientation));
     }
 

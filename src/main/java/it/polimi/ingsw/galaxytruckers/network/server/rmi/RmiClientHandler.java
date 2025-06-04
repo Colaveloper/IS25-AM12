@@ -11,6 +11,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.rmi.NoSuchObjectException;
@@ -158,7 +159,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
     }
 
     @Override
-    public void placeComponent(Point point, int orientation) throws RemoteException {
+    public void placeComponent(Point point, Direction orientation) throws RemoteException {
         checkLobby();
         lobby.placeComponent(player, point, orientation);
     }

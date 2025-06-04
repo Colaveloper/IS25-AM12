@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.TestShipBuildingState;
@@ -61,7 +62,7 @@ public class CliTestShipBuildingScreen extends CliScreen {
 
             case "P":
                 if (parts.length == 3) {
-                    controller.placeComponent(getPoint(input), 0); //todo add orientation
+                    controller.placeComponent(getPoint(input), Direction.UP); //todo add orientation
                 }
                 break;
 

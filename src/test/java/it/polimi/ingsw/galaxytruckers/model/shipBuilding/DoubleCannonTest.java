@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +28,7 @@ class DoubleCannonTest extends CannonTest {
     void firePowerConformsWithDirection() {
         myDoubleCannon.activate(myShipBoard);
         assertEquals(4, myDoubleCannon.getFirePower());
-        myDoubleCannon.setOrientation(1);
+        myDoubleCannon.setOrientation(Direction.LEFT);
         assertEquals(2, myDoubleCannon.getFirePower());
     }
 }

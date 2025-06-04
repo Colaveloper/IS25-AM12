@@ -1,92 +1,109 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
+import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.HandleProjectileState;
 
 import java.awt.*;
-import java.util.List;
+import java.util.Set;
 
 public class CliProjectilesScreen extends CliScreen {
 
-    private HandleProjectileState gameState;
+    private final HandleProjectileState gameState;
+    private final boolean isMyTurn;
+    private final ShipBoard currentShip;
 
     public CliProjectilesScreen(ClientModel model, ControllerToServer controller, HandleProjectileState gameState) {
         super(model, controller, gameState);
         this.gameState = gameState;
+        this.currentShip = gameState.getShipBoard();
+        this.isMyTurn = currentShip.equals(model.getMyShip());
     }
+
 
     @Override
     public void render() {
-        Player player = model.getShipToPlayer().get(gameState.getShipBoard());
-//        allShips.highlightPoints(player, gameState.getAvailablePositions(), Highlights.RED);                    //color activatable red
-//        allShips.highlightPoints(player, gameState.getShipBoard().getBatteries().keySet(), Highlights.GREEN);   //color batteries green
-
-        printShips();
+        cliFlightBoard.getDescription().forEach(System.out::println);
+        cliAllShips.getDescription().forEach(System.out::println);
 
         String direction = switch (gameState.getProjectile().direction()) {
-            case 0 -> "front on column";
-            case 1 -> "right or left on row";//todo
-            case 2 -> "back on column";
-            case 3 -> "right or left on row";
-            default -> "error";
+            case Direction.UP -> "front on column ";
+            case Direction.RIGHT -> "right on row ";
+            case Direction.DOWN -> "back on column ";
+            case Direction.LEFT -> "left on row ";
         };
 
-        System.out.println("a" + gameState.getProjectile().type() +
-                "is approaching from" + direction + gameState.getProjectile().roll());
+        System.out.println("A " + gameState.getProjectile().type() +
+                " is approaching from " + direction + gameState.getProjectile().roll()
+        );
 
-        if(model.getMyShip().equals(gameState.getShipBoard())) {
-            System.out.println("select component to activate");
-        }
-        else {
-            System.out.println("it's not your turn");
+        if (isMyTurn) {
+            System.out.println("Your turn to handle the projectile");
+            System.out.println("Select a component to activate or a battery to use");
+            System.out.println("Available components: " + currentShip.getActivatables().size());
+            System.out.println("Available batteries: " + currentShip.getBatteries().size());
+        } else {
+            System.out.println("Waiting for " + currentShip.getColor() + " ship to handle the projectile");
         }
 
         printActions();
     }
 
-//
-//    @Override
-//    public boolean isFormatLegal(String input) {
-//        // check if input = number + space + number
-//        if (!input.matches("\\d+ \\d+") || !input.matches("C")) return false;
-//
-//        // check if the point made from those numbers is selectable
-//        String[] parts = input.split(" ");
-//        int x = Integer.parseInt(parts[0]);
-//        int y = Integer.parseInt(parts[1]);
-//        Point p = new Point(x, y);
-//        return model.getSelectablePoints().contains(p) && model.getSelectableBatteries().contains(p);
-//    }
-
     @Override
     public void parseAndInvoke(String input) {
-        if(input.equalsIgnoreCase("X")){
-            controller.giveUp();
-        }
-        if (model.getMyShip().equals(gameState.getShipBoard())) {
-            Point p = getPoint(input);
-            if (model.getMyShip().getBatteries().containsKey(p)) {
-                controller.useBattery(p);
+        String[] parts = input.split("\\s+");
+        switch (parts[0].toUpperCase()) {
+            case "Y"-> controller.giveUp();
+            case "A"-> {
+                Point p = getPoint(input);
+                if(!isMyTurn){
+                    System.out.println("It's not your turn to handle projectiles");
+                    return;
+                }
+                if (!currentShip.getBatteries().containsKey(p) && !currentShip.getActivatables().containsKey(p)) {
+                    System.out.println("Invalid position. Please select a component or battery.");
+                    return;
+                }
+                if (currentShip.getBatteries().containsKey(p)) {
+                    controller.useBattery(p);
+                } else if (currentShip.getActivatables().containsKey(p)) {
+                    controller.activateComponent(p);
+                }
             }
-            else {
-                controller.activateComponent(p);
+            case "" -> {
+                if (!isMyTurn) {
+                    System.out.println("It's not your turn to handle projectiles");
+                    return;
+                }
+                controller.goNext();
             }
         }
     }
 
     @Override
-    public boolean isInputLegal(String input) {
-        if (!isFormatLegal(input)) return false;
-        Point p = getPoint(input);
-        return
-                model.getMyShip().getActivatables().containsKey(p) ||
-                model.getMyShip().getBatteries().containsKey(p);
+    public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
+        CliShipBoard ship = shipToCliShip.get(shipBoard);
+        ship.highlightPoints(Set.of(point), Highlights.CYAN);
+        cliAllShips.setDirty();
     }
 
-    public void notifyRemoveComponent(ShipBoard shipBoard, Point point){}
+    @Override
+    public void notifyUseBattery(ShipBoard shipBoard, Point point) {
+        CliShipBoard ship = shipToCliShip.get(shipBoard);
+        ship.highlightPoints(Set.of(point), Highlights.GREEN);
+        cliAllShips.setDirty();
+    }
 
-    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List<Point> removed){}
+    @Override
+    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
+        CliShipBoard ship = shipToCliShip.get(shipBoard);
+        ship.onRemoveComponent(point);
+        cliAllShips.setDirty();
+    }
+
 }

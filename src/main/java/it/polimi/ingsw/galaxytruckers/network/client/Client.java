@@ -4,7 +4,6 @@ import it.polimi.ingsw.galaxytruckers.network.client.rmi.RmiClient;
 import it.polimi.ingsw.galaxytruckers.network.client.socket.SocketClient;
 import it.polimi.ingsw.galaxytruckers.view.CliView;
 import it.polimi.ingsw.galaxytruckers.view.GuiView;
-import it.polimi.ingsw.galaxytruckers.view.JavaFxApp;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.application.Application;
@@ -13,9 +12,8 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class Client {
-    private static ClientController controller = new ClientController();
-    private static ClientModel model = new ClientModel();
-    private VirtualServer server;
+    private static final ClientController controller = new ClientController();
+    private static final ClientModel model = new ClientModel();
     //TODO: add socket implementation
 
     public void start(String serverName, String serverAddress, int rmiPort, int socketPort) {
@@ -32,6 +30,7 @@ public class Client {
                     model.activateCheats(choice);
                     choice = Integer.parseInt(CheatCodes.cheat());
                 }
+                VirtualServer server;
                 if (choice == 0) {
                     chosen = true;
                     RmiClient rmiClient = new RmiClient();
@@ -39,7 +38,6 @@ public class Client {
                     controller.setServer(server);
                     rmiClient.setClientController(controller);
                     rmiClient.start(serverName, serverAddress, rmiPort);
-                    this.server = rmiClient;
                 } else if (choice == 1) {
                     chosen = true;
                     SocketClient socketClient = new SocketClient();
@@ -85,7 +83,9 @@ public class Client {
         }
 
         if (command.trim().equalsIgnoreCase("G")) {
-            controller.setView(new GuiView(controller, model));
+            GuiView.setModel(model);
+            GuiView.setController(controller);
+            controller.setView(new GuiView());
             Application.launch(GuiView.class);
         } else {
             controller.setView(new CliView(controller, model));

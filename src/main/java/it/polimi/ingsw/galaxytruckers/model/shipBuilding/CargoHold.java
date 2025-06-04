@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,7 @@ public class CargoHold extends Component{
     private final Map<GoodsType, Integer> goods;
     private final Boolean isSpecial;
 
-    public CargoHold(List<Connector> connectors, int id, Boolean isSpecial, int size) {
+    public CargoHold(Map<Direction, Connector> connectors, int id, Boolean isSpecial, int size) {
         super(connectors, id);
         this.isSpecial = isSpecial;
         this.size = size;
@@ -22,7 +23,7 @@ public class CargoHold extends Component{
     }
 
     @VisibleForTesting
-    public CargoHold(List<Connector> connectors, int size, Boolean isSpecial) {
+    public CargoHold(Map<Direction, Connector> connectors, int size, Boolean isSpecial) {
         super(connectors);
         this.size = size;
         this.numGoods = 0;

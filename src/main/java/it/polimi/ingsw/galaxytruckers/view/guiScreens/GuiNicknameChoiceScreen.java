@@ -1,11 +1,13 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
+import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,12 +18,27 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 public class GuiNicknameChoiceScreen extends GuiScreen {
-    public GuiNicknameChoiceScreen(ClientModel model, ClientController controller, GameState gameState) {
-        super(model, controller, gameState);
+
+
+
+    public GuiNicknameChoiceScreen(ClientModel model, ControllerToServer controller) {
+        super(model, controller);
+    }
+
+    private void submitNickname(TextField field) {
+        String nickname = field.getText().trim();
+        if (!nickname.isEmpty()) {
+            try {
+                controller.registerNickname(nickname);
+                controller.setMyNickname(nickname);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     @Override
-    public void attachContentToRoot(VBox root) {
+    public Parent getNode() {
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(40));
@@ -56,19 +73,7 @@ public class GuiNicknameChoiceScreen extends GuiScreen {
 
         layout.getChildren().addAll(prompt, nicknameField, submitButton);
 
-        root.setAlignment(Pos.CENTER);
-        root.getChildren().add(layout);
         Platform.runLater(nicknameField::requestFocus);
-    }
-
-    private void submitNickname(TextField field) {
-        String nickname = field.getText().trim();
-        if (!nickname.isEmpty()) {
-            try {
-                controller.registerNickname(nickname);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        }
+        return layout;
     }
 }

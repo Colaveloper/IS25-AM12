@@ -10,6 +10,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.dto.StateDTOConverter;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class GameEventListener {
     }
 
     public void notifyGameStateUpdateEvent(GameState gameState) {
-        System.out.println("Game state update");
+        System.out.println("Game state update: " + gameState.getClass().getSimpleName());
         controllerListener.notifyEvent(new GameStateUpdateEvent(
                 StateDTOConverter.convert(gameState)
         ));
@@ -90,7 +91,7 @@ public class GameEventListener {
                 deckIndex));
     }
 
-    public void notifyPlaceComponentEvent(ShipBoard shipBoard, int orientation, Point position) {
+    public void notifyPlaceComponentEvent(ShipBoard shipBoard, Direction orientation, Point position) {
         controllerListener.notifyEvent(new PlaceComponentEvent(
                 Player.getPlayer(shipBoard).getNickname(),
                 position,

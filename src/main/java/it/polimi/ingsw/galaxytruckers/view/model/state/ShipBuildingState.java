@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.controller.ComponentRegistry;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
@@ -20,7 +21,7 @@ public sealed abstract class ShipBuildingState extends GameState permits
 
     public ShipBuildingState() {
         this.completedShipBoards = new HashSet<>();
-        this.componentBank = new ComponentBank(ComponentRegistry.getInstance().getComponentNumber());
+        this.componentBank = new ComponentBank(ComponentRegistry.getInstance().getSize());
     }
 
     @Override
@@ -64,7 +65,7 @@ public sealed abstract class ShipBuildingState extends GameState permits
     }
 
     @Override
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, int orientation) {
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         Point prevPos = shipBoard.getLastPosition();
         shipBoard.placeComponent(point, orientation);
         if (prevPos != null) {

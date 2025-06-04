@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 
@@ -80,7 +81,7 @@ public abstract sealed class GameState permits AdventureState, GameStateStub, Sh
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void placeComponent(ShipBoard shipBoard, Point point, int orientation){
+    public void placeComponent(ShipBoard shipBoard, Point point, Direction orientation){
         throw new IllegalStateException("This action is unsupported in this state");
     }
 

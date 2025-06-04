@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.utils.Logger;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import it.polimi.ingsw.galaxytruckers.view.*;
 import it.polimi.ingsw.galaxytruckers.view.controller.ClientEventHandler;
@@ -19,8 +20,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     private ClientModel model;
     private VirtualServer server;
     private View view;
-    private ConfigFactory config;
-    private PlayerRegistry playerRegistry = new PlayerRegistry();
+    private final PlayerRegistry playerRegistry = new PlayerRegistry();
 
     private ClientEventHandler eventHandler;
 
@@ -46,21 +46,27 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         model.setMetaState(MetaState.CREATION);
     }
 
-//--------------------------------------UPDATES FROM THE SERVER----------------------------------
-
-    @Override
-    public void notifyEvent(Event event) {
-        eventHandler.handleEvent(event);
-    }
-
-    @Override
-    public void setMyNickname(String nickname) { // gets called only after legal registration
+    public void setMyNickname(String nickname) {
         Player player = playerRegistry.addPlayer(nickname);
         model.setPlayer(player);
         model.setMetaState(MetaState.JOINORCREATE);
     }
 
+//--------------------------------------UPDATES FROM THE SERVER----------------------------------
+
+    @Override
+    public void notifyEvent(Event event) {
+        Logger.println(event);//debug
+        eventHandler.handleEvent(event);
+    }
+
+
 //----------------------------------------REQUESTS TO THE SERVER----------------------------------
+
+    @Override
+    public void registerNickname(String nickname) throws IllegalArgumentException {
+        server.registerNickname(nickname);
+    }
 
     @Override
     public void joinLobby(UUID lobbyID) {
@@ -143,11 +149,6 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     }
 
     @Override
-    public void registerNickname(String nickname) throws IllegalArgumentException {
-        server.registerNickname(nickname);
-    }
-
-    @Override
     public void flipHourglass() {
         try {
             server.flipHourglass();
@@ -220,7 +221,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     }
 
     @Override
-    public void placeComponent(Point point, int orientation) {
+    public void placeComponent(Point point, Direction orientation) {
         try {
             server.placeComponent(point, orientation);
         } catch (IllegalArgumentException e) {

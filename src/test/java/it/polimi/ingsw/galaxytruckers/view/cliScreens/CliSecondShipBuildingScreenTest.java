@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,6 +32,7 @@ class CliSecondShipBuildingScreenTest {
     void setUp() {
 
         model.createGame(Level.SECOND, 4);
+        model.setPlayer(player1);
         model.addPlayer(player1, GameColor.BLUE);
 //        model.addPlayer(player2, GameColor.RED);
 //        model.addPlayer(player3, GameColor.GREEN);
@@ -46,7 +49,12 @@ class CliSecondShipBuildingScreenTest {
     void notifyRequestRandComponent() {
         screen.render();
         model.notifyRequestRandComponent(player1.getShipBoard(), new Component(
-                List.of(Connector.NONE,Connector.NONE,Connector.NONE,Connector.NONE),
+                Map.of(
+                        Direction.RIGHT, Connector.NONE,
+                        Direction.DOWN, Connector.NONE,
+                        Direction.LEFT, Connector.NONE,
+                        Direction.UP, Connector.NONE
+                ),
                 10
         ));
         screen.render();
@@ -56,12 +64,22 @@ class CliSecondShipBuildingScreenTest {
     void notifyRejectComponent() {
         screen.render();
         model.notifyRequestRandComponent(player1.getShipBoard(), new Component(
-                List.of(Connector.NONE,Connector.NONE,Connector.NONE,Connector.NONE),
+                Map.of(
+                        Direction.RIGHT, Connector.NONE,
+                        Direction.DOWN, Connector.NONE,
+                        Direction.LEFT, Connector.NONE,
+                        Direction.UP, Connector.NONE
+                ),
                 10
         ));
         model.notifyRejectComponent(player1.getShipBoard());
         model.notifyRequestRandComponent(player1.getShipBoard(), new Component(
-                List.of(Connector.NONE,Connector.NONE,Connector.NONE,Connector.NONE),
+                Map.of(
+                        Direction.RIGHT, Connector.NONE,
+                        Direction.DOWN, Connector.NONE,
+                        Direction.LEFT, Connector.NONE,
+                        Direction.UP, Connector.NONE
+                ),
                 10
         ));
         model.notifyRejectComponent(player1.getShipBoard());
@@ -73,12 +91,22 @@ class CliSecondShipBuildingScreenTest {
     void notifyStashComponent() {
         screen.render();
         model.notifyRequestRandComponent(player1.getShipBoard(), new Component(
-                List.of(Connector.NONE,Connector.NONE,Connector.NONE,Connector.NONE),
+                Map.of(
+                        Direction.RIGHT, Connector.NONE,
+                        Direction.DOWN, Connector.NONE,
+                        Direction.LEFT, Connector.NONE,
+                        Direction.UP, Connector.NONE
+                ),
                 10
         ));
         model.notifyStashComponent(player1.getShipBoard());
         model.notifyRequestRandComponent(player1.getShipBoard(), new Component(
-                List.of(Connector.NONE,Connector.NONE,Connector.NONE,Connector.NONE),
+                Map.of(
+                        Direction.RIGHT, Connector.NONE,
+                        Direction.DOWN, Connector.NONE,
+                        Direction.LEFT, Connector.NONE,
+                        Direction.UP, Connector.NONE
+                ),
                 70
         ));
         model.notifyStashComponent(player1.getShipBoard());
@@ -89,10 +117,15 @@ class CliSecondShipBuildingScreenTest {
     void notifyPlaceComponent() {
         screen.render();
         model.notifyRequestRandComponent(player1.getShipBoard(), new Component(
-                List.of(Connector.NONE,Connector.NONE,Connector.NONE,Connector.NONE),
+                Map.of(
+                        Direction.RIGHT, Connector.NONE,
+                        Direction.DOWN, Connector.NONE,
+                        Direction.LEFT, Connector.NONE,
+                        Direction.UP, Connector.NONE
+                ),
                 10
         ));
-        model.notifyPlaceComponent(player1.getShipBoard(), new Point(7, 7), 3);
+        model.notifyPlaceComponent(player1.getShipBoard(), new Point(7, 7), Direction.LEFT);
         screen.render();
     }
 

@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -146,7 +147,7 @@ class GameStateTest {
 
         @Test
         void placeComponentThrowsExceptionWhenUsingInvalidState() {
-            assertThrows(IllegalStateException.class, () -> testState.placeComponent(ship1, new Point(3, 3), 0));
+            assertThrows(IllegalStateException.class, () -> testState.placeComponent(ship1, new Point(3, 3), Direction.UP));
         }
 
         @Test

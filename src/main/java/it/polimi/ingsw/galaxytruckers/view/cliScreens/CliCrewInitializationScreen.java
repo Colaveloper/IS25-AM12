@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -72,18 +73,14 @@ public class CliCrewInitializationScreen extends CliScreen {
                 }
                 controller.initializeCabin(getPoint(input), currentCrewType);
             case "":
-                for (CrewType currentCrewType : crewtypeToPoints.get(myShipBoard).keySet()) {
-                    for (Point points : crewtypeToPoints.get(myShipBoard).get(currentCrewType)) {
-                        controller.initializeCabin(points, CrewType.HUMAN);
-                    }
-                }
+                controller.goNext();
                 break;
         }
     }
 
     @Override
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
-        CliShipHandAndStash ship = shipToCliShip.get(shipBoard);
+        CliShipBoard ship = shipToCliShip.get(shipBoard);
 
         //todo
     }

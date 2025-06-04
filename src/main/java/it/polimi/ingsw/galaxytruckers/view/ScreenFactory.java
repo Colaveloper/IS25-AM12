@@ -1,9 +1,10 @@
-package it.polimi.ingsw.galaxytruckers.view.cliScreens;
+package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiScreen;
-//import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipBuildingScreen;
-//import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiShipBuildingScreen;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.*;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.*;
+//import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiSecondShipBuildingScreen;
+//import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiSecondShipBuildingScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
@@ -20,6 +21,12 @@ public class ScreenFactory {
             case INGAME -> {
                 GameState gameState = model.getGame().getCurrentState();
                 yield switch (gameState) {
+                    case ShipBuildingState shipBuildingState -> switch (shipBuildingState) {
+                        case SecondShipBuildingState secondShipBuildingState -> new CliSecondShipBuildingScreen(model, controller, secondShipBuildingState);
+                        case TestShipBuildingState testShipBuildingState -> new CliTestShipBuildingScreen(model, controller, testShipBuildingState);
+                    };
+                    case ShipCorrectionState shipCorrectionState -> new CliValidationScreen(model, controller, shipCorrectionState);
+                    case ShipInitializationState shipInitializationState -> new CliCrewInitializationScreen(model, controller, shipInitializationState);
                     case AdventureState s -> switch (s) {
                         case ActivateState activateState -> switch (activateState) {
                             case DeclareEnginePowerState declareEnginePowerState -> new CliDeclareEnginePowerScreen(model, controller, declareEnginePowerState);
@@ -34,12 +41,6 @@ public class ScreenFactory {
                         case RemoveCrewState removeCrewState -> new CliRemoveCrewScreen(model, controller, removeCrewState);
                         case RemoveGoodsState removeGoodsState -> new CliLoseGoodsScreen(model, controller, removeGoodsState);
                     };
-                    case ShipBuildingState shipBuildingState -> switch (shipBuildingState) {
-                        case SecondShipBuildingState secondShipBuildingState -> new CliSecondShipBuildingScreen(model, controller, secondShipBuildingState);
-                        case TestShipBuildingState testShipBuildingState -> new CliTestShipBuildingScreen(model, controller, testShipBuildingState);
-                    };
-                    case ShipCorrectionState shipCorrectionState -> new CliValidationScreen(model, controller, shipCorrectionState);
-                    case ShipInitializationState shipInitializationState -> new CliCrewInitializationScreen(model, controller, shipInitializationState);
                 };
             }
         };
@@ -49,17 +50,22 @@ public class ScreenFactory {
 
         MetaState metaState = model.getMetaState();
         return switch (metaState) {
-            case REGISTER -> null;
-//                    new GuiNicknameChoiceScreen(model, controller);
-            case JOINORCREATE -> null;
-//                    new GuiJoinOrCreateScreen(model, controller);
-            case CREATION -> null;
-//                    new GuiGameCreationScreen(model, controller);
-            case INLOBBY -> null;
-//                    new GuiLobbyScreen(model, controller);
+            case REGISTER -> new GuiNicknameChoiceScreen(model, controller);
+            case JOINORCREATE -> new GuiJoinOrCreateScreen(model, controller);
+            case CREATION -> new GuiGameCreationScreen(model, controller);
+            case INLOBBY -> new GuiLobbyScreen(model, controller);
             case INGAME -> {
                 GameState gameState = model.getGame().getCurrentState();
                 yield switch (gameState) {
+                    case ShipBuildingState shipBuildingState -> switch (shipBuildingState) {
+                        case SecondShipBuildingState secondShipBuildingState -> new GuiSecondShipBuildingScreen(model, controller, secondShipBuildingState);
+                        case TestShipBuildingState testShipBuildingState -> null;
+//                                new GuiTestShipBuildingScreen(model, controller, testShipBuildingState);
+                    };
+                    case ShipCorrectionState shipCorrectionState -> null;
+//                            new GuiValidationScreen(model, controller, shipCorrectionState);
+                    case ShipInitializationState shipInitializationState -> null;
+//                            new GuiCrewInitializationScreen(model, controller, shipInitializationState);
                     case AdventureState s -> switch (s) {
                         case ActivateState activateState -> switch (activateState) {
                             case DeclareEnginePowerState declareEnginePowerState -> null;
@@ -84,16 +90,6 @@ public class ScreenFactory {
                         case RemoveGoodsState removeGoodsState -> null;
 //                                new GuiLoseGoodsScreen(model, controller, removeGoodsState);
                     };
-                    case ShipBuildingState shipBuildingState -> switch (shipBuildingState) {
-                        case SecondShipBuildingState secondShipBuildingState -> null;
-//                                new GuiSecondShipBuildingScreen(model, controller, secondShipBuildingState);
-                        case TestShipBuildingState testShipBuildingState -> null;
-//                                new GuiTestShipBuildingScreen(model, controller, testShipBuildingState);
-                    };
-                    case ShipCorrectionState shipCorrectionState -> null;
-//                            new GuiValidationScreen(model, controller, shipCorrectionState);
-                    case ShipInitializationState shipInitializationState -> null;
-//                            new GuiCrewInitializationScreen(model, controller, shipInitializationState);
                 };
             }
         };

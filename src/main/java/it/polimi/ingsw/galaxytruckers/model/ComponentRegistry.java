@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.utils.JsonUtils;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,7 +80,7 @@ public class ComponentRegistry {
         //iterating through nodes and adding each as a component to list
         String type = node.get("type").asText();
         Component component;
-        List<Connector> connectors = parseConnectors(node.get("connectors"));
+        Map<Direction, Connector> connectors = parseConnectors(node.get("connectors"));
         int id = node.get("id").asInt();
         switch(type){
             case "shield" ->
@@ -115,7 +116,7 @@ public class ComponentRegistry {
         return component;
     }
 
-    private static List<Connector> parseConnectors(JsonNode connectorNode){
+    private static Map<Direction, Connector> parseConnectors(JsonNode connectorNode){
         return JsonUtils.nodeToConnector(connectorNode);
     }
 

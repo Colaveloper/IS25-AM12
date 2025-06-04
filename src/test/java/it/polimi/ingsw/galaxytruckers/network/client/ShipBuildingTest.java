@@ -10,6 +10,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.types.GameStateUpd
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.JoinLobbyEvent;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyDetailsEvent;
 import it.polimi.ingsw.galaxytruckers.view.CliView;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.awt.*;
@@ -81,7 +82,7 @@ public class ShipBuildingTest {
             }
 
             @Override
-            public void placeComponent(Point point, int orientation) {
+            public void placeComponent(Point point, Direction orientation) {
 
             }
 

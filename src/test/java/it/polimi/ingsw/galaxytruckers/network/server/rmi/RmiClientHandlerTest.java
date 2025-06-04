@@ -10,6 +10,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.PlayerDisconnectionEvent;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -128,8 +129,8 @@ class RmiClientHandlerTest {
 
     @Test
     void placeComponent() throws RemoteException {
-        rmiClientHandler.placeComponent(new Point(0,0),0);
-        verify(lobby).placeComponent(player,new Point(0,0),0);
+        rmiClientHandler.placeComponent(new Point(0,0), Direction.UP);
+        verify(lobby).placeComponent(player,new Point(0,0),Direction.UP);
     }
 
     @Test

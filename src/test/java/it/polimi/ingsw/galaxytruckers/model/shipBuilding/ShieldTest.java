@@ -1,7 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,9 +21,9 @@ class ShieldTest extends ComponentTest {
     @Test
     void protectedDirectionChangesWithRotation() {
         myShield.activate(myShipBoard);
-        for (int i = 0; i < 4; i++) {
-            myShield.setOrientation(i);
-            assertArrayEquals(new int[]{i%4, (i+1)%4}, myShield.getDefensibleDirections());
+        for (Direction direction : Direction.values()) {
+            myShield.setOrientation(direction);
+            assertEquals(Set.of(direction, direction.getRight()), myShield.getDefensibleDirections());
         }
     }
 }

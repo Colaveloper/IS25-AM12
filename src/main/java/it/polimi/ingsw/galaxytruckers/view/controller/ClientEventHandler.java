@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.dto.states.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventHandler;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
+import it.polimi.ingsw.galaxytruckers.utils.Logger;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
@@ -37,6 +38,7 @@ public class ClientEventHandler implements EventHandler<Event> {
      */
     @Override
     public void handleEvent(Event event) {
+        Logger.println(event);
         switch (event) {
             case ActivateComponentEvent activateComponentEvent -> {
                 clientModel.notifyActivateComponent(

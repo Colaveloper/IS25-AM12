@@ -14,6 +14,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.io.IOException;
@@ -210,9 +211,9 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
     }
 
     @Override
-    public void placeComponent(Point point, int orientation) {
+    public void placeComponent(Point point, Direction orientation) {
         checkInLobby();
-        lobby.placeComponent(player,point,orientation);
+        lobby.placeComponent(player, point, orientation);
     }
 
     @Override

@@ -2,23 +2,16 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliSecondShipBuildingScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class GuiShipBuildingScreenTest {
 
-    GuiShipBuildingScreen screen;
+    GuiSecondShipBuildingScreen screen;
     ClientModel model = new ClientModel();
     Player player1 = new Player("player1");
 //    Player player2 = new Player("player2");
@@ -38,11 +31,11 @@ class GuiShipBuildingScreenTest {
         SecondShipBuildingState state = new SecondShipBuildingState();
         model.notifyCurrentState(state);
 
-        screen = new GuiShipBuildingScreen(model, null, state);
+        screen = new GuiSecondShipBuildingScreen(model, null, state);
     }
 
-    @Test
-    void notifyRequestRandComponent() {
+//    @Test
+//    void notifyRequestRandComponent() {
 
 //        screen.render();
 //        model.notifyRequestRandComponent(player1.getShipBoard(), new Component(
@@ -50,5 +43,5 @@ class GuiShipBuildingScreenTest {
 //                10
 //        ));
 //        screen.render();
-    }
+//    }
 }

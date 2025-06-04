@@ -9,6 +9,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.EndGameState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.io.IOException;
@@ -256,7 +257,7 @@ public class Game {
         }
     }
 
-    public void placeComponent(ShipBoard shipBoard, Point point, int orientation) {
+    public void placeComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         synchronized (lock) {
             currentState.placeComponent(shipBoard, point, orientation);
         }

@@ -14,6 +14,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +39,7 @@ class CombatZoneCardTest {
                 EnginePowerCheck.getInstance(),
                 FirePowerCheck.getInstance(),
                 CrewSizeCheck.getInstance());
-        projectiles = List.of(new BigFire(0), new BigFire(0));
+        projectiles = List.of(new BigFire(Direction.UP), new BigFire(Direction.UP));
         penalties = List.of(new FlightDaysLoss(1),
                 new CrewLoss(1),
                 new GoodsLoss(1),

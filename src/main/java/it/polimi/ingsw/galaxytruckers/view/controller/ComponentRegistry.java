@@ -3,8 +3,9 @@ package it.polimi.ingsw.galaxytruckers.view.controller;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.utils.JsonUtils;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -12,10 +13,10 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ComponentRegistry {
     private static ComponentRegistry instance;
@@ -51,6 +52,14 @@ public class ComponentRegistry {
         }
     }
 
+    public Map<Integer, Path> getIdToImagePath() {
+        return components.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> Path.of(e.getValue().get("path").asText())
+                ));
+    }
+
     public Component getStartingCabin(GameColor color) {
         try {
             return parseComponent(startingCabins.get(color));
@@ -59,16 +68,16 @@ public class ComponentRegistry {
         }
     }
 
-    public int getComponentNumber() {
+    public int getSize() {
         return components.size();
     }
 
     private void loadComponents() throws IOException {
-        //reading from json file and returning the list of components
+        //reading from the JSON file and returning the list of components
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(componentJson);
 
-        //iterating through nodes and adding each as a component to list
+        //iterating through nodes and adding each as a component to the list
         for (JsonNode node : rootNode){
             int id = node.get("id").asInt();
             components.put(id, node);
@@ -83,7 +92,7 @@ public class ComponentRegistry {
 
         String type = node.get("type").asText();
         Component component;
-        List<Connector> connectors = parseConnectors(node.get("connectors"));
+        Map<Direction, Connector> connectors = parseConnectors(node.get("connectors"));
 
         switch (type) {
             case "shield" -> {
@@ -124,7 +133,7 @@ public class ComponentRegistry {
         return parseComponent(node.get("id").asInt(),node);
     }
 
-    private List<Connector> parseConnectors(JsonNode connectorNode){
+    private Map<Direction, Connector> parseConnectors(JsonNode connectorNode){
         return JsonUtils.nodeToConnector(connectorNode);
     }
 

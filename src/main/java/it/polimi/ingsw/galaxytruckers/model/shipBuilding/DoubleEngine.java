@@ -1,19 +1,22 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 
+import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 public class DoubleEngine extends Engine implements Activatable{
     private boolean active;
 
-    public DoubleEngine(List<Connector> connectors, int id) {
+    public DoubleEngine(Map<Direction, Connector> connectors, int id) {
         super(connectors, id);
         this.active = false;
     }
 
     @VisibleForTesting
-    public DoubleEngine(List<Connector> connectors) {
+    public DoubleEngine(Map<Direction, Connector> connectors) {
         super(connectors);
         this.active = false;
     }
