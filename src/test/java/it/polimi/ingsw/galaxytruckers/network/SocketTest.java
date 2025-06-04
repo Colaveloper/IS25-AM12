@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
 import it.polimi.ingsw.galaxytruckers.network.client.socket.SocketClient;
 import it.polimi.ingsw.galaxytruckers.network.server.socket.SocketServer;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,26 +47,27 @@ public class SocketTest {
     @Test
     void registerNickname() {
         socketClient.registerNickname("x");
-        verify(serverController).registerNickname("x");
+        verify(serverController).registerPlayer(Player.getPlayer("x"));
     }
 
     @Test
     void requestNewGame() {
         socketClient.registerNickname("x");
         socketClient.requestNewGame(Level.SECOND, 2);
-        verify(serverController).newGame(null,Level.SECOND,2);
+        verify(serverController).newGame(Player.getPlayer("x"),Level.SECOND,2);
     }
 
     @Test
     void joinLobby() {
-        UUID userUUID = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
         socketClient.registerNickname("x");
-        socketClient.joinLobby(userUUID);
-        verify(serverController).joinLobby(null,userUUID);
+        socketClient.joinLobby(id);
+        verify(serverController).joinLobby(Player.getPlayer("x"),id);
     }
 
     @AfterEach
     void cleanup() {
         socketServer.stop();
+        Player.removePlayer("x");
     }
 }
