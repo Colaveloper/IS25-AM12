@@ -32,11 +32,11 @@ public class RmiServer extends UnicastRemoteObject implements RemoteServer {
 
     @Override
     public RemoteController registerNickname(RemoteClient client, String nickname) throws RemoteException {
-        Player player = controller.registerNickname(nickname);
+        Player player = Player.addPlayer(nickname);
         RmiClientHandler clientHandler = new RmiClientHandler(client, player, controller);
         SessionManager.getInstance().registerClient(player, clientHandler);
         clientHandler.start();
-        System.out.println("A player has registered with the nickname " + nickname);
+
         return clientHandler;
     }
 

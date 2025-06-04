@@ -4,5 +4,5 @@ import it.polimi.ingsw.galaxytruckers.serverController.dto.LobbyDTO;
 
 import java.util.List;
 
-public record SetActiveLobbiesEvent(List<LobbyDTO> activeLobbies) implements ControllerEvent {
+public record SetActiveLobbiesEvent(String playerName, List<LobbyDTO> activeLobbies) implements ControllerEvent {
 }

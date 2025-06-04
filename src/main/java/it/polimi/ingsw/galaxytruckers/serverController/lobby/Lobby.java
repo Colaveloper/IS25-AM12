@@ -21,6 +21,7 @@ public class Lobby implements LobbyInterface {
     private final UUID id;
     private final Level level;
     private final int numPlayers;
+    private final Player host;
 
     private LobbyState state;
     private final Object lock = new Object();
@@ -37,6 +38,7 @@ public class Lobby implements LobbyInterface {
         this.id = UUID.randomUUID();
         this.level = level;
         this.numPlayers = numPlayers;
+        this.host = creator;
 
         this.state = LobbyState.PREPARATION;
         this.game = null;
@@ -49,6 +51,10 @@ public class Lobby implements LobbyInterface {
 
         lobbyEventHandler.start();
         addPlayer(creator);
+    }
+
+    public Player getHost() {
+        return host;
     }
 
     public UUID getId() {
@@ -75,7 +81,7 @@ public class Lobby implements LobbyInterface {
      * otherwise calls {@link #startGame()}
      * @param player the player to add
      */
-    public void addPlayer(Player player) {
+    public boolean addPlayer(Player player) {
         synchronized (lock) {
             checkLobbyState(LobbyState.PREPARATION);
             GameColor chosenColor = Arrays.stream(GameColor.values())
@@ -101,7 +107,9 @@ public class Lobby implements LobbyInterface {
             eventQueue.notifyEvent(new JoinLobbyEvent(player.getNickname(), playerColors.get(player)));
             if (players.size() == numPlayers) {
                 startGame();
+                return true;
             }
+            return false;
         }
     }
 
