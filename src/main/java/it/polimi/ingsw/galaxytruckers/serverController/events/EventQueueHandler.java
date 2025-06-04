@@ -1,176 +1,49 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
-import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
-import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
-import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
-
-public class EventQueueHandler implements EventHandler {
-    private final Supplier<List<Player>> supplier;
-    private final EventQueue eventQueue;
+public abstract class EventQueueHandler<T extends Event> implements EventHandler<T> {
+    private final EventQueue<T> eventQueue;
     private Thread thread;
     private Runnable afterEach = () -> {};
+    private boolean isRunning = false;
 
-    @VisibleForTesting
-    protected void setAfterEach(Runnable afterEach) {
-        this.afterEach = afterEach;
+    public EventQueueHandler(EventQueue<T> queue) {
+        this.eventQueue = queue;
     }
 
-    public EventQueueHandler(Supplier<List<Player>> supplier, EventQueue eventQueue) {
-        this.supplier = supplier;
-        this.eventQueue = eventQueue;
+    public void setAfterEach(Runnable afterEach) {
+        this.afterEach = afterEach;
     }
 
     public void start() {
         if (this.thread == null) {
-            this.thread = new Thread(this::processQueue, "ModelEvent-handler-thread");
+            this.thread = new Thread(this::threadTask, this.getClass().getSimpleName()+"-thread");
         }
+        isRunning = true;
         this.thread.start();
     }
 
     public void stop() {
-        if (this.thread != null) {
+        this.isRunning = false;
+        try {
+            this.thread.join(100);
             this.thread.interrupt();
-            this.thread = null;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void processQueue() {
+    private void threadTask() {
         try {
-            while (true) {
-                Event event = eventQueue.dequeue();
+            while (isRunning) {
+                T event = eventQueue.poll();
                 handleEvent(event);
                 afterEach.run();
             }
         } catch (InterruptedException e) {
-            System.out.println("EventQueueHandler interrupted");
-        }
-    }
-
-    @Override
-    public void handleEvent(Event event) {
-        switch (event) {
-            case ActivateComponentEvent activateComponentEvent -> {
-                broadcastEvent(activateComponentEvent);
-            }
-            case FlightBoardUpdateEvent flightBoardUpdateEvent -> {
-                broadcastEvent(flightBoardUpdateEvent);
-            }
-            case FlipHourglassEvent flipHourglassEvent -> {
-                broadcastEvent(flipHourglassEvent);
-            }
-            case ForecastDetailsEvent forecastDetailsEvent -> {
-                sendEvent(forecastDetailsEvent.playerName(), forecastDetailsEvent);
-            }
-            case GameEndEvent gameEndEvent -> {
-                broadcastEvent(gameEndEvent);
-            }
-            case GoodsUpdateEvent goodsUpdateEvent -> {
-                broadcastEvent(goodsUpdateEvent);
-            }
-            case GrabStashedComponentEvent grabStashedComponentEvent -> {
-                broadcastEvent(grabStashedComponentEvent);
-            }
-            case HourglassEndEvent hourglassEndEvent -> {
-                broadcastEvent(hourglassEndEvent);
-            }
-            case InitializeCabinEvent initializeCabinEvent -> {
-                broadcastEvent(initializeCabinEvent);
-            }
-            case JoinLobbyEvent joinLobbyEvent -> {
-                broadcastEvent(joinLobbyEvent);
-            }
-            case LobbyDetailsEvent lobbyDetailsEvent -> {
-                sendEvent(lobbyDetailsEvent.playerName(), lobbyDetailsEvent);
-            }
-            case NewCardEvent newCardEvent -> {
-                broadcastEvent(newCardEvent);
-            }
-            case PeekForecastEvent peekForecastEvent -> {
-                broadcastEvent(peekForecastEvent);
-            }
-            case PlaceComponentEvent placeComponentEvent -> {
-                broadcastEvent(placeComponentEvent);
-            }
-            case PlanetChoiceEvent planetChoiceEvent -> {
-                broadcastEvent(planetChoiceEvent);
-            }
-            case PlayerDisconnectionEvent playerDisconnectionEvent -> {
-                broadcastEvent(playerDisconnectionEvent);
-                stop();
-            }
-            case PlayerExitEvent playerExitEvent -> {
-                broadcastEvent(playerExitEvent);
-                stop();
-            }
-            case RejectComponentEvent rejectComponentEvent -> {
-                broadcastEvent(rejectComponentEvent);
-            }
-            case ReleaseForecastEvent releaseForecastEvent -> {
-                broadcastEvent(releaseForecastEvent);
-            }
-            case RemoveComponentEvent removeComponentEvent -> {
-                broadcastEvent(removeComponentEvent);
-            }
-            case RequestFaceDownComponentEvent requestFaceDownComponentEvent -> {
-                broadcastEvent(requestFaceDownComponentEvent);
-            }
-            case RequestFaceUpComponentEvent requestFaceUpComponentEvent -> {
-                broadcastEvent(requestFaceUpComponentEvent);
-            }
-            case ShipNotConnectedEvent shipNotConnectedEvent -> {
-                broadcastEvent(shipNotConnectedEvent);
-            }
-            case ShipPieceRemoveEvent shipPieceRemoveEvent -> {
-                broadcastEvent(shipPieceRemoveEvent);
-            }
-            case ShipStatUpdateEvent shipStatUpdateEvent -> {
-                broadcastEvent(shipStatUpdateEvent);
-            }
-            case StashComponentEvent stashComponentEvent -> {
-                broadcastEvent(stashComponentEvent);
-            }
-            case SurrenderEvent surrenderEvent -> {
-                broadcastEvent(surrenderEvent);
-            }
-            case UseBatteryEvent useBatteryEvent -> {
-                broadcastEvent(useBatteryEvent);
-            }
-            case ValidateShipEvent validateShipEvent -> {
-                broadcastEvent(validateShipEvent);
-            }
-            case GameStateUpdateEvent gameStateUpdateEvent -> {
-                broadcastEvent(gameStateUpdateEvent);
-            }
-            case LoseCrewEvent loseCrewEvent -> {
-                broadcastEvent(loseCrewEvent);
-            }
-        }
-    }
-
-    private List<Player> getPlayers() {
-        return supplier.get();
-    }
-
-    private void broadcastEvent(Event event) {
-        for (Player player : getPlayers()) {
-            ClientHandler virtualClient = SessionManager.getInstance().getClient(player);
-            if (virtualClient != null) {
-                virtualClient.notifyEvent(event);
-            }
-        }
-    }
-
-    private void sendEvent(String playerName, Event event) {
-        ClientHandler virtualClient = SessionManager.getInstance().getClient(Player.getPlayer(playerName));
-        if (virtualClient != null) {
-            virtualClient.notifyEvent(event);
+            System.out.println(this.getClass().toString() + ": thread interrupted");
+            Thread.currentThread().interrupt();
         }
     }
 }

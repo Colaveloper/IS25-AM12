@@ -1,10 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
-public interface EventHandler {
-    /**
-     * Handles the {@code ModelEvent} passed as the argument, updating all
-     * affected classes
-     * @param event the event to be handled
-     */
-    void handleEvent(Event event);
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
+
+public interface EventHandler<T extends Event> {
+    void handleEvent(T event);
 }

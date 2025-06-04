@@ -7,13 +7,8 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import java.util.UUID;
 
 public interface ServerControllerInterface {
-    /**
-     * Creates a new player with the given nickname
-     * @param nickname the nickname of the new player
-     * @throws IllegalArgumentException if there is already a player
-     * with the given nickname
-     */
-    Player registerNickname(String nickname);
+
+    void registerPlayer(Player player);
 
     /**
      * Creates a new lobby for a game of the chosen level and with

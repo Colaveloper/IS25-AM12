@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
+import it.polimi.ingsw.galaxytruckers.view.model.*;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -21,6 +22,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class GuiView extends Application implements View {
     private static ClientModel model;
@@ -60,6 +62,16 @@ public class GuiView extends Application implements View {
     public void notifyCurrentState(GameState gameState) {
         currentScreen = screenFactory.createGuiScreen(model, controller);
         Platform.runLater(()-> primaryStage.setScene(new Scene(currentScreen.getNode())));
+    }
+
+    @Override
+    public void notifyNewLobby(Lobby lobby) {
+
+    }
+
+    @Override
+    public void notifyRemoveLobby(UUID uuid) {
+
     }
 
     @Override

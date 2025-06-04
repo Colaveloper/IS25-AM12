@@ -24,7 +24,6 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     private boolean hasStashed;
     private final SecondShipBuildingState gameState;
-    private boolean hasForecastDeck = false;
     private final Map<ShipBoard, CliShipHandAndStash> buildingShipToCliShip;
 
 
@@ -44,7 +43,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     @Override
     public void render() {
-        if(hasForecastDeck) {
+        if(gameState.getHasForecastDeck()) {
             cliForecastCards.getDescription().forEach(System.out::println);
         } else {
             cliComponentBank.getDescription().forEach(System.out::println);
@@ -58,6 +57,14 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     @Override
     public void parseAndInvoke(String input) {
         String[] parts = input.split("\\s+");
+        if(parts[0].isEmpty()) {
+            if (gameState.getHasForecastDeck()) {
+                controller.releaseForecast();
+                return;
+            }
+            else System.out.println("Invalid input");
+        }
+
         switch (parts[0].toUpperCase()) {
             case "C":
                 if(componentInHand()) {
@@ -169,9 +176,6 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                     controller.placeShipOnFlightboard(index);
                 }
                 break;
-            case "":
-                controller.releaseForecast();
-                break;
             default:
                 // should be impossible
                 System.out.println("Invalid command.");
@@ -280,7 +284,6 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards) {
         cliForecastCards.setCards(adventureCards);
-        hasForecastDeck = true;
         cliForecastCards.setDirty();
     }
 
@@ -288,8 +291,9 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
         // Update the forecast display when a forecast is released
         if(myShipBoard == shipBoard) {
-            hasForecastDeck = false;
+            gameState.hasForecastDeck(false);
         }
+        cliForecast.removeBlockedForecast(index);
         cliForecast.setDirty();
     }
 

@@ -8,8 +8,8 @@ import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.messages.*;
 import it.polimi.ingsw.galaxytruckers.network.messages.requests.*;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
-import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 
 import java.awt.*;
 import java.io.IOException;

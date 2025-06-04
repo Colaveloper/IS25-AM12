@@ -9,9 +9,16 @@ import java.util.UUID;
 
 public class CheatCodes {
     private static List<String> startToBuild = new ArrayList<>(List.of("0", "", "player1", "C", ""));
-    private static List<String> secondToBuild =new ArrayList<>(List.of("0", "", "player2"));
+    private static List<String> secondToBuild =new ArrayList<>(List.of("0", "", "player2", "0"));
     private static List<String> cheatString;
     private static boolean isCheatOn;
+
+    static {
+        for(int i = 0; i < 10; i++){
+            secondToBuild.add("C");
+            secondToBuild.add("R");
+        }
+    }
 
     public static void activateCheats(int input) {
         isCheatOn = true;
@@ -26,7 +33,7 @@ public class CheatCodes {
     }
 
     public static String cheat() throws InterruptedException {
-        Thread.sleep(100);//da togliere dopo aver sistemato la syn perchè ora non funziona senza
+        Thread.sleep(200);//da togliere dopo aver sistemato la syn perchè ora non funziona senza
         Logger.println(4, cheatString.getFirst());
         return cheatString.removeFirst();
     }

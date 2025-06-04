@@ -71,13 +71,14 @@ public class NotRegisteredSocketHandler {
 
     private void registerNickname(RegisterNickname message) throws IOException{
         try {
-            Player player = controller.registerNickname(message.getNickname());
+            Player player = Player.addPlayer(message.getNickname());
             SocketClientHandler clientHandler = new SocketClientHandler(inputStream,outputStream,player,controller);
             Response response = new Response(message.getUuid());
             outputStream.writeObject(response);
             outputStream.flush();
             SessionManager.getInstance().registerClient(player, clientHandler);
             clientHandler.start();
+            controller.registerPlayer(player);
             stop();
         } catch (RuntimeException e) {
             outputStream.writeObject(new Response(message.getUuid(),e));

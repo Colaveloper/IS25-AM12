@@ -7,13 +7,14 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventListener;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyEvent;
 
 import java.awt.*;
 
 public interface GameModelInterface {
     Game createGame(Level level, Object lock);
     ShipBoard addShip(Game game, GameColor color);
-    void setEventListener(Game game, EventListener listener);
+    void setEventListener(Game game, EventListener<LobbyEvent> listener);
     void startGame(Game game);
 
     //Ship building

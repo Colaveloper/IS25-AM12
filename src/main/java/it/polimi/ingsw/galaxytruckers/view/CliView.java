@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
+import it.polimi.ingsw.galaxytruckers.view.model.*;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
@@ -14,10 +15,8 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
 
 public class CliView implements View {
     ClientModel model;
@@ -74,6 +73,18 @@ public class CliView implements View {
     @Override
     public void notifyCurrentState(GameState gameState) {
         currentScreen = screenFactory.createCliScreen(model, controller);
+        currentScreen.render();
+    }
+
+    @Override
+    public void notifyNewLobby(Lobby lobby) {
+        currentScreen.notifyNewLobby(lobby);
+        currentScreen.render();
+    }
+
+    @Override
+    public void notifyRemoveLobby(UUID uuid) {
+        currentScreen.notifyRemoveLobby(uuid);
         currentScreen.render();
     }
 

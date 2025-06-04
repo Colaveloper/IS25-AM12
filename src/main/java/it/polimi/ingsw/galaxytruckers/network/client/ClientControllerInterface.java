@@ -1,17 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
-import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
-
-import java.awt.*;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 
 /**
  * Interface for client-side controller used to receive updates from the server

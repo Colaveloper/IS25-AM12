@@ -3,10 +3,7 @@ package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Player {
@@ -41,6 +38,12 @@ public class Player {
                 throw new IllegalArgumentException("Nickname does not exist");
             }
             return nicknameToPlayer.get(nickname);
+        }
+    }
+
+    public static Set<Player> getAllPlayers() {
+        synchronized (nicknameToPlayer) {
+            return new HashSet<>(nicknameToPlayer.values());
         }
     }
 
