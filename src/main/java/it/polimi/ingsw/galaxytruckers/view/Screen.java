@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.model.Lobby;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
@@ -12,6 +13,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public abstract class Screen {
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {}
@@ -73,7 +75,9 @@ public abstract class Screen {
 
     public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {}
 
-    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {}
 
-    }
+    public void notifyNewLobby(Lobby lobby){}
+
+    public void notifyRemoveLobby(UUID LobbyId){}
 }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.model.Lobby;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
@@ -14,11 +15,16 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public interface ModelObserver {
     //region Event update methods
     void notifyMetaState(MetaState metaState);
     void notifyCurrentState(GameState gameState);
+
+    void notifyNewLobby(Lobby lobby);
+
+    void notifyRemoveLobby(UUID uuid);
 
     void notifyRequestRandComponent(ShipBoard shipBoard, Component component);
 

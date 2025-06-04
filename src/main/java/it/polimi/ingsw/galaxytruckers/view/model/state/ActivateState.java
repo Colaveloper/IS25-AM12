@@ -24,8 +24,10 @@ public sealed abstract class ActivateState extends AdventureState permits
 
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
-        if(!shipBoard.getBatteries().isEmpty()) actions.add(StateActions.SPEND_BATTERIES);
-        if(!shipBoard.getActivatables().isEmpty()) actions.add(StateActions.ACTIVATE_COMPONENT);
+        if(!shipBoard.getBatteries().isEmpty() && !shipBoard.getActivatables().isEmpty()) {
+            actions.add(StateActions.SPEND_BATTERIES);
+            actions.add(StateActions.ACTIVATE_COMPONENT);
+        }
         actions.add(StateActions.GO_NEXT);
         actions.addAll(super.getAvailableActions());
         return actions;
