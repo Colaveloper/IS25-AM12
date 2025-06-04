@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
-import it.polimi.ingsw.galaxytruckers.serverController.events.Event;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
