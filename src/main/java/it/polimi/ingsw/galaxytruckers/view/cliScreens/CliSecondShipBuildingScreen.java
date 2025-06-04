@@ -58,11 +58,14 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     @Override
     public void parseAndInvoke(String input) {
         String[] parts = input.split("\\s+");
-        if(parts[0].isEmpty() && gameState.getHasForecastDeck()) {
-            controller.releaseForecast();
-            return;
+        if(parts[0].isEmpty()) {
+            if (gameState.getHasForecastDeck()) {
+                controller.releaseForecast();
+                return;
+            }
+            else System.out.println("Invalid input");
         }
-        else System.out.println("Invalid input");
+
         switch (parts[0].toUpperCase()) {
             case "C":
                 if(componentInHand()) {
@@ -291,6 +294,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
         if(myShipBoard == shipBoard) {
             gameState.hasForecastDeck(false);
         }
+        cliForecast.removeBlockedForecast(index);
         cliForecast.setDirty();
     }
 
