@@ -49,7 +49,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void setMyNickname(String nickname) {
         Player player = playerRegistry.addPlayer(nickname);
         model.setPlayer(player);
-        model.setMetaState(MetaState.JOINORCREATE);
+        //model.setMetaState(MetaState.JOINORCREATE);
     }
 
 //--------------------------------------UPDATES FROM THE SERVER----------------------------------

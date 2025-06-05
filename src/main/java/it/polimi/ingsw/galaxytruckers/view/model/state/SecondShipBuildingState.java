@@ -15,8 +15,8 @@ public final class SecondShipBuildingState extends ShipBuildingState {
             StateActions.STASH_COMPONENT,
             StateActions.GRAB_STASHED_COMPONENT,
             StateActions.FLIP_HOURGLASS,
-            StateActions.ACQUIRE_FORECAST,
-            StateActions.RELEASE_FORECAST
+            StateActions.ACQUIRE_FORECAST
+            //StateActions.RELEASE_FORECAST
     );
 
     private List<AdventureCard> forecastDeck;
@@ -25,11 +25,16 @@ public final class SecondShipBuildingState extends ShipBuildingState {
     private final ShipBoard[] blockedForecasts = new ShipBoard[]{null,null,null};
     private final Map<ShipBoard,Integer> shipToForecast = new HashMap<>();
     private final Hourglass hourglass = new Hourglass(3);
+    private boolean forecastAcquired = false;
 
     @Override
     public List<StateActions> getAvailableActions() {
-        List<StateActions> actions = new ArrayList<>(super.getAvailableActions());
-        actions.addAll(availableActions);
+        List<StateActions> actions = new ArrayList<>();
+        if(forecastAcquired) actions.add(StateActions.RELEASE_FORECAST);
+        else {
+            actions.addAll(availableActions);
+            actions.addAll(super.getAvailableActions());
+        }
         //TODO: implement conditional available action if needed
         return actions;
     }
@@ -81,8 +86,17 @@ public final class SecondShipBuildingState extends ShipBuildingState {
 
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards) {
+        forecastAcquired = true;
         this.forecastDeck = adventureCards;
         game.getObservers().forEach(observer -> observer.setForecastDeck(adventureCards));
+    }
+
+    public void hasForecastDeck(boolean hasForecastDeck) {
+        forecastAcquired = hasForecastDeck;
+    }
+
+    public boolean getHasForecastDeck() {
+        return forecastAcquired;
     }
 
 

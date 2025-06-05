@@ -36,7 +36,7 @@ public class RmiServer extends UnicastRemoteObject implements RemoteServer {
         RmiClientHandler clientHandler = new RmiClientHandler(client, player, controller);
         SessionManager.getInstance().registerClient(player, clientHandler);
         clientHandler.start();
-
+        controller.registerPlayer(player);
         return clientHandler;
     }
 

@@ -51,7 +51,7 @@ public class ScreenFactory {
         MetaState metaState = model.getMetaState();
         return switch (metaState) {
             case REGISTER -> new GuiNicknameChoiceScreen(model, controller);
-            case JOINORCREATE -> new GuiJoinOrCreateScreen(model, controller);
+            case JOINORCREATE -> new GuiJoinOrCreateScreen(model, model.getActiveLobbies().keySet(), controller);
             case CREATION -> new GuiGameCreationScreen(model, controller);
             case INLOBBY -> new GuiLobbyScreen(model, controller);
             case INGAME -> {
