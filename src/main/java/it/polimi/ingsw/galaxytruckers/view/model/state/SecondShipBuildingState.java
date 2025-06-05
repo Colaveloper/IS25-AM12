@@ -14,24 +14,29 @@ public final class SecondShipBuildingState extends ShipBuildingState {
     private static final List<StateActions> availableActions = List.of(
             StateActions.STASH_COMPONENT,
             StateActions.GRAB_STASHED_COMPONENT,
-            StateActions.FLIP_HOURGLASS,
+            //StateActions.FLIP_HOURGLASS,
             StateActions.ACQUIRE_FORECAST
             //StateActions.RELEASE_FORECAST
     );
 
-    private List<AdventureCard> forecastDeck;
 
     // if there is a color, then that player has taken the forecast
     private final ShipBoard[] blockedForecasts = new ShipBoard[]{null,null,null};
     private final Map<ShipBoard,Integer> shipToForecast = new HashMap<>();
     private final Hourglass hourglass = new Hourglass(3);
     private boolean forecastAcquired = false;
+    private boolean hasFinished = false;
 
     @Override
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
+        if(hasFinished) {
+            actions.add(StateActions.FLIP_HOURGLASS);
+            return actions;
+        }
         if(forecastAcquired) actions.add(StateActions.RELEASE_FORECAST);
         else {
+            actions.add(StateActions.FLIP_HOURGLASS);
             actions.addAll(availableActions);
             actions.addAll(super.getAvailableActions());
         }
@@ -79,7 +84,8 @@ public final class SecondShipBuildingState extends ShipBuildingState {
     }
 
     @Override
-    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position, boolean isMyShip) {
+        if(isMyShip) hasFinished = true;
         game.getFlightBoard().setShipPosition(shipBoard, position);
         game.getObservers().forEach(observer -> observer.notifyFlightBoardPosition(shipBoard, position));
     }
@@ -87,29 +93,20 @@ public final class SecondShipBuildingState extends ShipBuildingState {
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards) {
         forecastAcquired = true;
-        this.forecastDeck = adventureCards;
         game.getObservers().forEach(observer -> observer.setForecastDeck(adventureCards));
-    }
-
-    public void hasForecastDeck(boolean hasForecastDeck) {
-        forecastAcquired = hasForecastDeck;
     }
 
     public boolean getHasForecastDeck() {
         return forecastAcquired;
     }
 
-
     @Override
-    public void notifyReleaseForecast(ShipBoard shipBoard) {
+    public void notifyReleaseForecast(ShipBoard shipBoard, boolean isMyShip) {
+        if(isMyShip) forecastAcquired = false;
         int index = shipToForecast.get(shipBoard);
         blockedForecasts[index] = null;
         shipToForecast.remove(shipBoard);
         game.getObservers().forEach(observer -> observer.notifyReleaseForecast(shipBoard, index));
-    }
-
-    public List<AdventureCard> getForecastDeck() {
-        return forecastDeck;
     }
 
     public ShipBoard[] getBlockedForecasts() {

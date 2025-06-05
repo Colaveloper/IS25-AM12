@@ -16,7 +16,7 @@ public class ComponentBank {
     }
 
     public void removeUncoveredComponent(Component component) {
-        uncoveredComponents.remove(component);
+        uncoveredComponents.removeIf(uncoveredComponent -> uncoveredComponent.getId() == component.getId());
     }
 
     public void addUncoveredComponent(Component component) {

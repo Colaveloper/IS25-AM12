@@ -70,7 +70,7 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
-    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position, boolean isMyShip) {
         game.getFlightBoard().setShipPosition(shipBoard, position);
     }
 
@@ -84,7 +84,7 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
-    public void notifyReleaseForecast(ShipBoard shipBoard) {
+    public void notifyReleaseForecast(ShipBoard shipBoard, boolean isMyShip) {
         System.err.println("11This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
     }
@@ -149,7 +149,7 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
-    public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
+    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, boolean isMyShip) {
         System.err.println("24This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
     }

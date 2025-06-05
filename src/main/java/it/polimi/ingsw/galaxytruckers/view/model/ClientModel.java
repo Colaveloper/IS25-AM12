@@ -181,7 +181,7 @@ public class ClientModel {
     }
 
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
-        safeGetCurrentState().notifyFlightBoardPosition(shipBoard, position);
+        safeGetCurrentState().notifyFlightBoardPosition(shipBoard, position, shipBoard == getMyShip());
     }
 
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
@@ -193,7 +193,7 @@ public class ClientModel {
     }
 
     public void notifyReleaseForecast(ShipBoard shipBoard) {
-        safeGetCurrentState().notifyReleaseForecast(shipBoard);
+        safeGetCurrentState().notifyReleaseForecast(shipBoard, shipBoard == getMyShip());
     }
 
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
@@ -245,7 +245,7 @@ public class ClientModel {
     }
 
     public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
-        safeGetCurrentState().notifyChoosePlanet(shipBoard, choice);
+        safeGetCurrentState().notifyChoosePlanet(shipBoard, choice, getMyShip() == shipBoard);
     }
 
     public void notifyGiveUp(ShipBoard shipBoard) {

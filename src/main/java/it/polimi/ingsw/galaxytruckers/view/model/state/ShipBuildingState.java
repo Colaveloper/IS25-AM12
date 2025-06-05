@@ -46,7 +46,7 @@ public sealed abstract class ShipBuildingState extends GameState permits
     @Override
     public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
         shipBoard.offerComponent(component);
-        componentBank.removeCoveredComponent();
+        componentBank.removeUncoveredComponent(component);
         game.getObservers().forEach(observer -> observer.notifyRequestComponent(shipBoard, component));
     }
 
