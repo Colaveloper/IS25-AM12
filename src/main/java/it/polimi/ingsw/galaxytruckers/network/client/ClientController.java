@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.utils.Logger;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import it.polimi.ingsw.galaxytruckers.view.*;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 import it.polimi.ingsw.galaxytruckers.view.controller.ClientEventHandler;
 import it.polimi.ingsw.galaxytruckers.view.controller.PlayerRegistry;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
@@ -19,7 +20,7 @@ import java.util.*;
 public class ClientController implements ClientControllerInterface, ControllerToServer {
     private ClientModel model;
     private VirtualServer server;
-    private View view;
+//    private View<?> view;
     private final PlayerRegistry playerRegistry = new PlayerRegistry();
 
     private ClientEventHandler eventHandler;
@@ -32,9 +33,9 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         this.server = server;
     }
 
-    public void setView(View view) {
-        this.view = view;
-    }
+//    public void setView(View<?> view) {
+//        this.view = view;
+//    }
 
     public void initEventHandler() {
         this.eventHandler = new ClientEventHandler(model, playerRegistry);
@@ -81,7 +82,6 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     @Override
     public void reportError(String details) {
         System.out.println("Error: " + details);
-        // view.show(ChosenStrategy)
     }
 
     @Override

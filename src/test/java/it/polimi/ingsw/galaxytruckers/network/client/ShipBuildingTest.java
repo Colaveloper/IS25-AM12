@@ -183,7 +183,7 @@ public class ShipBuildingTest {
         controller.setServer(server);
         controller.setModel(model);
         cliView = new CliView(controller, model);
-        controller.setView(cliView);
+//        controller.setView(cliView);
 //        controller.registerNickname("Roborbio");
 //        controller.requestNewGame(Level.SECOND, 1);
         controller.initEventHandler();

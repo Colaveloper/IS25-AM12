@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.view.GuiView;
 import it.polimi.ingsw.galaxytruckers.view.JFXApp;
 import it.polimi.ingsw.galaxytruckers.view.View;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.application.Application;
 
@@ -87,7 +88,7 @@ public class Client {
             command = scanner.nextLine();
         }
 
-        View view;
+        View<?> view;
         if (command.trim().equalsIgnoreCase("G")) {
             GuiView guiView = new GuiView(controller, model);
             view = guiView;
@@ -96,6 +97,7 @@ public class Client {
         } else {
             view = new CliView(controller, model);
         }
-        controller.setView(view);
+//        controller.setView(view);
+        // views start rendering autonomously at creation
     }
 }

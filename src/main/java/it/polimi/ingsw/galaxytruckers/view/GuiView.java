@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiNicknameChoiceScreen;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
@@ -17,7 +17,6 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -29,31 +28,23 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class GuiView implements View {
-    private final ClientModel model;
-    private final ClientController controller;
-    private final ScreenFactory screenFactory;
+public class GuiView extends View<GuiScreen> {
 
     private GuiScreen currentScreen;
-    private StackPane rootPane;
     private StackPane contentPane;
 
     public GuiView(ClientController controller, ClientModel model) {
-        this.model = model;
-        this.model.addObserver(this);
-        this.controller = controller;
-        this.screenFactory = new ScreenFactory();
-        this.currentScreen = new GuiNicknameChoiceScreen(model, controller);
+        super(model, controller, new GuiScreenFactory());
+        this.currentScreen = screenFactory.createScreen(MetaState.REGISTER, model, controller);
     }
 
     // called by JFXApp thread, no need of runLater()
     public void setStage(Stage stage) {
-
         this.contentPane = new StackPane();
         this.contentPane.getChildren().setAll(currentScreen.getNode());
 
-        this.rootPane = createRootWithBackground();
-        this.rootPane.getChildren().add(contentPane);
+        StackPane rootPane = createRootWithBackground();
+        rootPane.getChildren().add(contentPane);
 
         stage.setTitle("Galaxy Truckers");
         stage.setScene(new Scene(rootPane, 1280, 720));
@@ -63,14 +54,12 @@ public class GuiView implements View {
     //region State-Notify methods
     @Override
     public void notifyMetaState(MetaState metaState) {
-        currentScreen = screenFactory.createGuiScreen(model, controller);
-        Platform.runLater(()-> contentPane.getChildren().setAll((currentScreen.getNode())));
+        Platform.runLater(() -> switchToScreen(screenFactory.createScreen(metaState, model, controller)));
     }
 
     @Override
     public void notifyCurrentState(GameState gameState) {
-        currentScreen = screenFactory.createGuiScreen(model, controller);
-        Platform.runLater(()-> contentPane.getChildren().setAll((currentScreen.getNode())));
+        Platform.runLater(() -> switchToScreen(screenFactory.createScreen(gameState, model, controller)));
     }
     //endregion
 
@@ -235,6 +224,11 @@ public class GuiView implements View {
         currentScreen.setFinalScores(finalScores);
     }
     //endregion
+
+    private void switchToScreen(GuiScreen newScreen) {
+        this.currentScreen = newScreen;
+        contentPane.getChildren().setAll(currentScreen.getNode());
+    }
 
     private StackPane createRootWithBackground() {
         StackPane pane = new StackPane();

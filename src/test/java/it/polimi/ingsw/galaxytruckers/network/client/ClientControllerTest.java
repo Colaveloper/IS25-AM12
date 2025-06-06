@@ -202,7 +202,7 @@ class ClientControllerTest {
         controller = new ClientController();
         controller.setServer(server);
         controller.setModel(model);
-        controller.setView(new CliView(controller, model));
+//        controller.setView(new CliView(controller, model));
     }
 
     public static void lobbySequence() {
