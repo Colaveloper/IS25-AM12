@@ -8,7 +8,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.Comparator;
 
-public final class RemoveGoodsState extends AdventureState {
+public final class RemoveGoodsState extends AdventureState implements GameStateInterface{
     int goodsToLose;
     ShipBoard shipBoard;
     GoodsType mostValuableGood;

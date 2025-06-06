@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public final class ChoosePlanetState extends AdventureState {
+public final class ChoosePlanetState extends AdventureState implements GameStateInterface{
     ShipBoard shipBoard;
     Consumer<Integer> choosePlanetMethod;
     Set<Integer> options;

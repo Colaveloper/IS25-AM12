@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
-public final class DrawCardState extends AdventureState {
+public final class DrawCardState extends AdventureState implements GameStateInterface{
     ShipBoard shipBoard;
 
     @Override
@@ -29,10 +29,15 @@ public final class DrawCardState extends AdventureState {
         }
         if(game.getDeck().tryDrawCard()) {
             game.getDeck().getCurrentCard().initialize();
-            game.setCurrentState(super.getNextState());
+            game.getEventListener().notifyNewCardEvent(game.getDeck().getCurrentCard());
         } else {
             game.endGame();
         }
+    }
+
+    @Override
+    public void goNext(ShipBoard shipBoard) {
+        game.setCurrentState(getNextState());
     }
 
     public ShipBoard getShipBoard() {

@@ -8,7 +8,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.*;
 
-public final class ShipInitializationState extends GameState {
+public non-sealed class ShipInitializationState extends GameState implements GameStateInterface {
     private final Map<ShipBoard, Map<CrewType, Set<Point>>> shipRelevantCabins = new HashMap<>();
 
     @Override

@@ -43,7 +43,7 @@ class GameStateTest {
 
     @Test
     void giveUpThrowsExceptionWhenUsingInvalidState() {
-        testState = new GameStateStub() {
+        testState = new GameState() {
         };
         assertThrows(IllegalStateException.class, () -> testState.giveUp(ship1));
     }
@@ -116,7 +116,7 @@ class GameStateTest {
 
         @BeforeEach
         void setup() {
-            testState = new GameStateStub() {
+            testState = new GameState() {
             };
         }
 

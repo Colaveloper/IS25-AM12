@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 
-public final class RemoveCrewState extends AdventureState {
+public final class RemoveCrewState extends AdventureState implements GameStateInterface {
     int crewSacrifice;
     ShipBoard shipBoard;
 

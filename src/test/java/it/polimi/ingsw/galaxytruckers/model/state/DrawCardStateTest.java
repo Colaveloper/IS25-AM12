@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +25,16 @@ class DrawCardStateTest {
 
     @BeforeEach
     void setup() throws IOException{
-        game = new Game(Level.SECOND);
+        game = new Game(Level.SECOND) {
+            /**
+             * Sets game state to the end game state if there are no
+             * more ships playing
+             */
+            @Override
+            public void endGameIfAllShipsHaveGivenUp() {
+                //mock
+            }
+        };
         game.setEventListener(new GameEventListenerStub());
         ship1 = new SecondShipBoard(GameColor.RED);
         ship2 = new SecondShipBoard(GameColor.BLUE);
@@ -38,7 +46,7 @@ class DrawCardStateTest {
         };
         game.setFlightBoard(flightBoard);
         testState = new DrawCardState();
-        testState.setGame(game);
+        game.setCurrentState(testState);
     }
 
     @Test
@@ -60,15 +68,15 @@ class DrawCardStateTest {
     }
 
     @Test
-    void drawCardDrawsCardAndChangesState() throws IOException{
+    void goNextChangesState() throws IOException{
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public void initialize(){
                 // mock
             }
             @Override
-            public AdventureState getNextState(){
-                return new AdventureStateStub();
+            public AdventureState getNextState() {
+                return new DeclareFirePowerState(ship1);
             }
         };
         deck = new SecondDeck(game){
@@ -83,7 +91,8 @@ class DrawCardStateTest {
         };
         game.setDeck(deck);
         testState.drawCard(ship1);
-        assertNotEquals(testState, game.getCurrentState());
+        testState.goNext(ship1);
+        assertInstanceOf(DeclareFirePowerState.class,game.getCurrentState());
     }
 
 }
