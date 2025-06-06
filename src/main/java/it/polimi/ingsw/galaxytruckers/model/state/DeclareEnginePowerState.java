@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.HashSet;
 
-public final class DeclareEnginePowerState extends ActivateState {
+public final class DeclareEnginePowerState extends ActivateState implements GameStateInterface {
     int enginePower;
 
     public DeclareEnginePowerState(ShipBoard shipBoard) {

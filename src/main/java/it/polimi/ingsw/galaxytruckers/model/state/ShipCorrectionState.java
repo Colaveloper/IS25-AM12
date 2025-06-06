@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public non-sealed abstract class ShipCorrectionState extends GameState {
+public non-sealed abstract class ShipCorrectionState extends GameState implements GameStateInterface{
     Set<ShipBoard> validShipBoards;
     Map<ShipBoard, List<Set<Point>>> shipPieces;
 

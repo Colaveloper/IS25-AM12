@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Set;
 
-public non-sealed class HandleProjectileState extends ActivateState{
+public non-sealed class HandleProjectileState extends ActivateState implements GameStateInterface{
     Projectile projectile;
 
     public HandleProjectileState(ShipBoard shipBoard, Projectile projectile) {

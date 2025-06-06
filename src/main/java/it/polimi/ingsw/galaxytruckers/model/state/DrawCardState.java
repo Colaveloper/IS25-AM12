@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
-public final class DrawCardState extends AdventureState {
+public final class DrawCardState extends AdventureState implements GameStateInterface{
     ShipBoard shipBoard;
 
     @Override

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public final class ChooseShipPieceState extends AdventureState {
+public final class ChooseShipPieceState extends AdventureState implements GameStateInterface {
     private final ShipBoard shipBoard;
     private final List<Set<Point>> shipPieces;
 
