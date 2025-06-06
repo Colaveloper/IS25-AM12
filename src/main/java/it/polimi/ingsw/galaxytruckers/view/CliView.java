@@ -23,18 +23,16 @@ public class CliView implements View {
     ClientController controller;
     ScreenFactory screenFactory;
     CliScreen currentScreen;
-    MetaState metaState;
-
 
 
     public CliView(ClientController controller, ClientModel model) {
-        startInputLoop();
+        this.startInputLoop();
         this.controller = controller;
         this.model = model;
         this.screenFactory = new ScreenFactory();
         this.currentScreen = screenFactory.createCliScreen(model, controller);
         this.model.addObserver(this);
-        currentScreen.render();
+        this.currentScreen.render();
     }
 
     private void startInputLoop() {

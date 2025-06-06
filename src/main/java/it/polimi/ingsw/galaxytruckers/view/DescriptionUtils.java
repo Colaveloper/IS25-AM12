@@ -64,7 +64,7 @@ public class DescriptionUtils {
 
         int totalWidth = contentWidth + 4; // 2 padding + 2 border
 
-        // Calculate start position to center the title
+        // Calculate connect position to center the title
         int titleStart = Math.max(0, (totalWidth - 2 - titleDisplayWidth) / 2);
 
         StringBuilder topBorder = new StringBuilder("╭");

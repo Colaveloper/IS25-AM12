@@ -32,7 +32,7 @@ class RmiClientTest {
     }
 
     @Test
-    void startWithNoServerThrowsException() {
+    void connectWithNoServerThrowsException() {
         assertThrows(RuntimeException.class, () -> rmiClient.start("", "127.0.0.1", 12345));
     }
 

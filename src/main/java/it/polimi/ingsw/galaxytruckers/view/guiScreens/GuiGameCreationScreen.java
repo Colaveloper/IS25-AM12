@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -22,6 +23,8 @@ public class GuiGameCreationScreen extends GuiScreen {
     @Override
     public Parent getNode() {
         VBox layout = new VBox(20);
+        layout.setMinHeight(Region.USE_PREF_SIZE);
+        layout.setMaxHeight(Region.USE_PREF_SIZE);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(40));
         layout.setMaxWidth(400);

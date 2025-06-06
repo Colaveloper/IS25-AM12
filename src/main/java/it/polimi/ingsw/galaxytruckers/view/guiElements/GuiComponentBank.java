@@ -36,7 +36,7 @@ public class GuiComponentBank extends HBox {
 
         StackPane coveredSquare = new StackPane();
         Rectangle square = new Rectangle(100, 100);
-        square.setFill(Color.BLACK);
+        square.setFill(Color.BLUEVIOLET);
         Label question = new Label("?");
         question.setTextFill(Color.WHITE);
         question.setFont(Font.font(24));

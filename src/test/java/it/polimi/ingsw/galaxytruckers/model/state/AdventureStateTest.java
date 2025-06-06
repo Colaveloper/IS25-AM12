@@ -55,7 +55,7 @@ class AdventureStateTest {
         game.setEventListener(new GameEventListenerStub());
         flightBoard = new SecondFlightBoard(1);
         game.setFlightBoard(flightBoard);
-        //game.start();
+        //game.connect();
         testAdventureState.setGame(game);
         testAdventureState.giveUp(ship1);
         assertEquals(Set.of(ship1), game.getGivenUpShips());

@@ -23,7 +23,7 @@ public class SecondFlightBoard extends FlightBoard{
     public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
         // TODO: consider concurrent access to startingPositionsLeft !!!
         if (!startingPositionsLeft.contains(startingPosition)) {
-            throw new IllegalArgumentException("Position not available for start");
+            throw new IllegalArgumentException("Position not available for connect");
         } else {
             startingPositionsLeft.remove((Integer) startingPosition);
             shipToPlace.put(shipBoard, startingPosition);
