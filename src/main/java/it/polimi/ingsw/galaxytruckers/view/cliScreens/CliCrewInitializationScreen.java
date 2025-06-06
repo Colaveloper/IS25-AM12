@@ -80,6 +80,8 @@ public class CliCrewInitializationScreen extends CliScreen {
 
     @Override
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
-        //cliAllShips.setDirty();
+        cliAllShips.setDirty();
+        shipToCliShip.get(shipBoard).setDirty();
+        shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
     }
 }

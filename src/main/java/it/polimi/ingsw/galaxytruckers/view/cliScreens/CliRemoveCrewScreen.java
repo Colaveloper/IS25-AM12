@@ -59,10 +59,10 @@ public class CliRemoveCrewScreen extends CliScreen {
         }
     }
 
-    @Override
-    public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
-        // Update the ship's crew display
-        cliAllShips.setDirty();
-    }
+//    @Override
+//    public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
+//        CliShipBoard ship = shipToCliShip.get(shipBoard);
+//        // Update the ship's crew display
+//        cliAllShips.setDirty();
+//    }
 }

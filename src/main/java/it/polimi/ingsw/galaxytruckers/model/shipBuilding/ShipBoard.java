@@ -381,7 +381,6 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     //Utilities methods
 
-    //  Not a very elegant solution, consider extending Point / defining utilities / creating an abstraction for orientation
     protected Map<Direction, Point> getNeighbours(Point position) {
         Map<Direction, Point> res = new HashMap<>();
         res.put(Direction.UP, new Point(position.x, position.y-1));

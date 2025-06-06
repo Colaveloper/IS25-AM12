@@ -69,6 +69,4 @@ public class CliPlanetScreen extends CliScreen {
         isMyTurn = shipBoard == myShipBoard;
         planets.set(choice, shipBoard);
     }
-
-
 }

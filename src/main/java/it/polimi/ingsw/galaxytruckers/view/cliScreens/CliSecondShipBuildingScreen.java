@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.*;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
@@ -47,8 +48,9 @@ public class CliSecondShipBuildingScreen extends CliScreen {
             cliForecastCards.getDescription().forEach(System.out::println);
         } else {
             cliComponentBank.getDescription().forEach(System.out::println);
-            cliForecast.getDescription().forEach(System.out::println);
-            cliFlightBoard.getDescription().forEach(System.out::println);
+            DescriptionUtils.sideBySide(cliFlightBoard.getDescription(), cliForecast.getDescription()).forEach(System.out::println);
+//            cliForecast.getDescription().forEach(System.out::println);
+//            cliFlightBoard.getDescription().forEach(System.out::println);
             cliAllShips.getDescription().forEach(System.out::println);
         }
         printActions();

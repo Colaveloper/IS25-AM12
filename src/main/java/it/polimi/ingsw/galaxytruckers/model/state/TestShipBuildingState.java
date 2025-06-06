@@ -1,5 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+
 public final class TestShipBuildingState extends ShipBuildingState implements GameStateInterface{
     public TestShipBuildingState() {
         super();
@@ -7,6 +9,7 @@ public final class TestShipBuildingState extends ShipBuildingState implements Ga
 
     @Override
     protected void endBuilding() {
+        game.getShipBoards().forEach(ShipBoard::finishBuilding);
         game.setCurrentState(new TestShipCorrectionState());
     }
 }

@@ -48,11 +48,9 @@ public class CliLoseGoodsScreen extends CliScreen {
             System.out.println("Your turn to lose goods");
             System.out.println("Select cargo holds to discard goods from");
             System.out.println("Cargo holds with goods: " + countCargoHoldsWithGoods());
-            System.out.println("Use L x y to discard goods from cargo hold");
         } else {
             System.out.println("Waiting for " + currentShip.getColor() + " ship to lose goods");
         }
-
         printActions();
     }
 
@@ -68,35 +66,34 @@ public class CliLoseGoodsScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        if (!isMyTurn) {
-            System.out.println("It's not your turn to lose goods");
-            return;
-        }
-
-        if (input.equalsIgnoreCase("Y")) {
+        if(input.equalsIgnoreCase("Y")) {
             controller.giveUp();
             return;
         }
-
-        Point p = getPoint(input);
-
-        if (!currentShip.getCargoHolds().containsKey(p)) {
-            System.out.println("No cargo hold at this position");
+        String[] parts = input.split("\\s+");
+        if (!isMyTurn) {
+            System.out.println("It's not your turn, this line should never be reached");
             return;
         }
+        if (parts[0].equalsIgnoreCase("R")) {
+            Point p = getPoint(input);
+            if (!currentShip.getCargoHolds().containsKey(p)) {
+                System.out.println("No cargo hold at this position");
+                return;
+            }
 
-        CargoHold cargoHold = currentShip.getCargoHolds().get(p);
-        if (cargoHold.getGoods().isEmpty()) {
-            System.out.println("No goods in this cargo hold");
-            return;
+            if (currentShip.getCargoHolds().get(p).getGoods().isEmpty()) {
+                System.out.println("No goods in this cargo hold");
+                return;
+            }
+
+            controller.loseGoods(p);
         }
-
-        controller.loseGoods(p);
     }
 
-    @Override
-    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
-        cliAllShips.setDirty();
-    }
+//    @Override
+//    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+//        CliShipBoard ship = shipToCliShip.get(shipBoard);
+//        cliAllShips.setDirty();
+//    }
 }

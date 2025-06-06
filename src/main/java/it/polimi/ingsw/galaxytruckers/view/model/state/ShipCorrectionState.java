@@ -8,22 +8,25 @@ import java.util.List;
 import java.util.*;
 
 public final class ShipCorrectionState extends GameState {
-    Set<ShipBoard> validShipBoards;
-    Map<ShipBoard, List<Set<Point>>> shipPieces;
+    private final Set<ShipBoard> validShipBoards;
+    private final Map<ShipBoard, List<Set<Point>>> shipPieces;
+    private final ShipBoard myShipBoard;
+    private boolean isConnected;
+    private boolean isValid;
 
-    public ShipCorrectionState() {
-        this.validShipBoards = new HashSet<>();
-        this.shipPieces = new HashMap<>();
+    public ShipCorrectionState(ShipBoard myShipBoard, Set<ShipBoard> validShipBoards, Map<ShipBoard, List<Set<Point>>> shipPieces) {
+        isValid = validShipBoards.contains(myShipBoard);
+        isConnected = !shipPieces.containsKey(myShipBoard);
+        this.myShipBoard = myShipBoard;
+        this.validShipBoards = validShipBoards;
+        this.shipPieces = shipPieces;
     }
 
     @Override
     public List<StateActions> getAvailableActions() {
-        //TODO: logic for retrieving the client's shipboard and checking if
-        // they should remove or choose ship piece
-        return List.of(
-                StateActions.REMOVE_COMPONENT,
-                StateActions.CHOOSE_SHIP_PIECE
-        );
+        if(!isValid) return List.of(StateActions.REMOVE_COMPONENT);
+        if(!isConnected) return List.of(StateActions.CHOOSE_SHIP_PIECE);
+        return List.of();
     }
 
     @Override
@@ -34,12 +37,17 @@ public final class ShipCorrectionState extends GameState {
 
     @Override
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
+        if(myShipBoard == shipBoard) isConnected = true;
         List<Point> removedPoints = shipBoard.removeShipPiece(shipPieces.get(shipBoard), pieceIndex);
         game.getObservers().forEach(observer -> observer.notifyChooseShipPiece(shipBoard, pieceIndex, removedPoints));
     }
 
     @Override
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
+        if(myShipBoard == shipBoard) {
+            isConnected = false;
+            isValid = true;
+        }
         validShipBoards.add(shipBoard);
         this.shipPieces.put(shipBoard, shipPieces);
         game.getObservers().forEach(observer -> observer.notifyShipNotConnected(shipBoard, shipPieces));
@@ -47,6 +55,10 @@ public final class ShipCorrectionState extends GameState {
 
     @Override
     public void notifyShipValidated(ShipBoard shipBoard) {
+        if(myShipBoard == shipBoard) {
+            isConnected = true;
+            isValid = true;
+        }
         shipPieces.remove(shipBoard);
         game.getObservers().forEach(observer -> observer.notifyShipValidated(shipBoard));
     }

@@ -19,13 +19,15 @@ import java.util.Set;
 
 public class CliValidationScreen extends CliScreen {
 
-    private boolean shipNotValid;
+    private boolean shipValid;
     private boolean shipBroken;
     private int numPieces;
 
     public CliValidationScreen(ClientModel model, ControllerToServer controller, ShipCorrectionState gameState) {
         super(model, controller, gameState);
-        shipNotValid = gameState.getValidShipBoards().contains(myShipBoard);
+        shipValid = gameState.getValidShipBoards().contains(myShipBoard);
+        shipBroken = false;
+        if (shipValid) shipBroken = gameState.getShipPieces().containsKey(myShipBoard);
     }
 
     @Override
@@ -40,10 +42,10 @@ public class CliValidationScreen extends CliScreen {
                 System.out.println(highlights.get(i).getHighlight() + i + " " + highlights.get(i) + Highlights.RESET.getHighlight() + "\t");
             }
         }
-        if (shipNotValid) {//add else if to separate validation and ship piece choice
+        if (!shipValid) {//add else if to separate validation and ship piece choice
             System.out.println("\nyour ship has invalid component positioning, choose a component to remove");
         }
-        if(!shipBroken && !shipNotValid) {
+        if(!shipBroken && shipValid) {
             System.out.println("someone else has an invalid ship, wait while they correct them");
         }
 
@@ -52,32 +54,42 @@ public class CliValidationScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input)  {
-        if (!shipNotValid && !shipBroken) {
+        if (shipValid && !shipBroken) {
             System.out.println("your ship is valid, wait for other players");
             return;
         }
         String[] parts = input.split("\\s+");
-        if(parts.length == 2 && shipNotValid) {
-            Point point = getPoint(input);
-            if (!myShipBoard.getShipArea().contains(point)) {
-                System.out.println("Cannot place component outside of the ship");
-                return;
+        switch (parts[0].toUpperCase()){
+            case "R" -> {
+                if(shipValid) {
+                    System.out.println("ship is valid, wait for other players, unreachable");
+                    return;
+                }
+                Point point = getPoint(input);
+                if (!myShipBoard.getShipArea().contains(point)) {
+                    System.out.println("Cannot place component outside of the ship");
+                    return;
+                }
+                if (!myShipBoard.getComponentMap().containsKey(point)) {
+                    System.out.println("There's no component in that point");
+                    return;
+                }
+                controller.removeComponent(point);
             }
-            if (!myShipBoard.getComponentMap().containsKey(point)) {
-                System.out.println("There's no component in that point");
-                return;
-            }
-            controller.removeComponent(point);
-        }
-        if (parts.length == 1 && shipBroken) {
-            int pos = Integer.parseInt(parts[0]);
-            if(pos >= numPieces || pos < 0){
-                System.out.println("invalid ship piece choice");
-                return;
-            }
-            controller.chooseShipPiece(Integer.parseInt(input));
-        }
 
+            case "K" -> {
+                if(!shipBroken) {
+                    System.out.println("unreachable statement");
+                    return;
+                }
+                int pos = Integer.parseInt(parts[0]);
+                if(pos >= numPieces || pos < 0){
+                    System.out.println("invalid ship piece choice");
+                    return;
+                }
+                controller.chooseShipPiece(Integer.parseInt(input));
+            }
+        }
     }
 
     @Override
@@ -91,15 +103,19 @@ public class CliValidationScreen extends CliScreen {
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List<Point> removed){
         CliShipBoard ship = shipToCliShip.get(shipBoard);
         for(Point point : removed){
-        ship.onRemoveComponent(point);
+            ship.onRemoveComponent(point);
         }
-        if(myShipBoard == shipBoard) shipBroken = false;
+        if(myShipBoard == shipBoard) {
+            shipBroken = false;
+            shipValid = true;
+        }
         cliAllShips.setDirty();
     }
 
     @Override
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces){
         if(myShipBoard == shipBoard) {
+            shipValid = true;
             shipBroken = true;
         }
         numPieces = shipPieces.size();
@@ -113,15 +129,18 @@ public class CliValidationScreen extends CliScreen {
 
     @Override
     public void notifyShipValidated(ShipBoard shipBoard){
-        if(myShipBoard == shipBoard) shipNotValid = false;
+        if(myShipBoard == shipBoard) {
+            shipBroken = false;
+            shipValid = true;
+        }
         cliAllShips.setDirty();
     }
-
-    @Override
-    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
-//        shipToCliShip.get(shipBoard).setDirty();
-//        cliAllShips.setDirty();
-        //todo
-    }
+//
+//    @Override
+//    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
+////        shipToCliShip.get(shipBoard).setDirty();
+////        cliAllShips.setDirty();
+//        //todo
+//    }
 
 }
