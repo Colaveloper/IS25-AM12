@@ -11,7 +11,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.DeclareEnginePowerState;
 import java.awt.*;
 import java.util.Set;
 
-public class CliDeclareEnginePowerScreen extends CliScreen {
+public class CliDeclareEnginePowerScreen extends CliActivationScreen {
 
     private final DeclareEnginePowerState gameState;
     private final boolean isMyTurn;
@@ -37,50 +37,6 @@ public class CliDeclareEnginePowerScreen extends CliScreen {
         } else {
             System.out.println("Waiting for " + currentShip.getColor() + " ship to declare engine power");
         }
-
         printActions();
-    }
-
-    @Override
-    public void parseAndInvoke(String input) {
-        String[] parts = input.split("\\s+");
-        switch (parts[0].toUpperCase()) {
-            case "Y"-> controller.giveUp();
-            case "A"-> {
-                Point p = getPoint(input);
-                if(!isMyTurn){
-                    System.out.println("It's not your turn to handle projectiles");
-                    return;
-                }
-                if (!currentShip.getBatteries().containsKey(p) && !currentShip.getActivatables().containsKey(p)) {
-                    System.out.println("Invalid position. Please select a component or battery.");
-                    return;
-                }
-                if (currentShip.getBatteries().containsKey(p)) {
-                    controller.useBattery(p);
-                } else if (currentShip.getActivatables().containsKey(p)) {
-                    controller.activateComponent(p);
-                }
-            }
-            case "" -> {
-                if (!isMyTurn) {
-                    System.out.println("It's not your turn to handle projectiles");
-                    return;
-                }
-                controller.goNext();
-            }
-        }
-    }
-
-    @Override
-    public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-        //shipToCliShip.get(shipBoard).highlightPoints(Set.of(point));
-        cliAllShips.setDirty();
-    }
-
-    @Override
-    public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
-        cliAllShips.setDirty();
     }
 }

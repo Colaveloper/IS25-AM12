@@ -119,9 +119,8 @@ public class CliValidationScreen extends CliScreen {
 
     @Override
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
-        shipBoard.getCabins().get(point).initialize(crewType);
-        shipToCliShip.get(shipBoard).setDirty();
-        cliAllShips.setDirty();
+//        shipToCliShip.get(shipBoard).setDirty();
+//        cliAllShips.setDirty();
         //todo
     }
 

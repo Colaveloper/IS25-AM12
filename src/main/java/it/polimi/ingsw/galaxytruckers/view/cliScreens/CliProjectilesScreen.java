@@ -12,7 +12,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.HandleProjectileState;
 import java.awt.*;
 import java.util.Set;
 
-public class CliProjectilesScreen extends CliScreen {
+public class CliProjectilesScreen extends CliActivationScreen {
 
     private final HandleProjectileState gameState;
     private final boolean isMyTurn;
@@ -32,8 +32,8 @@ public class CliProjectilesScreen extends CliScreen {
         cliAllShips.getDescription().forEach(System.out::println);
 
         String direction = switch (gameState.getProjectile().direction()) {
-            case Direction.UP -> "front on column ";
-            case Direction.RIGHT -> "right on row ";
+            case Direction.UP   -> "front on column ";
+            case Direction.RIGHT-> "right on row ";
             case Direction.DOWN -> "back on column ";
             case Direction.LEFT -> "left on row ";
         };
@@ -52,51 +52,6 @@ public class CliProjectilesScreen extends CliScreen {
         }
 
         printActions();
-    }
-
-    @Override
-    public void parseAndInvoke(String input) {
-        String[] parts = input.split("\\s+");
-        switch (parts[0].toUpperCase()) {
-            case "Y"-> controller.giveUp();
-            case "A"-> {
-                Point p = getPoint(input);
-                if(!isMyTurn){
-                    System.out.println("It's not your turn to handle projectiles");
-                    return;
-                }
-                if (!currentShip.getBatteries().containsKey(p) && !currentShip.getActivatables().containsKey(p)) {
-                    System.out.println("Invalid position. Please select a component or battery.");
-                    return;
-                }
-                if (currentShip.getBatteries().containsKey(p)) {
-                    controller.useBattery(p);
-                } else if (currentShip.getActivatables().containsKey(p)) {
-                    controller.activateComponent(p);
-                }
-            }
-            case "" -> {
-                if (!isMyTurn) {
-                    System.out.println("It's not your turn to handle projectiles");
-                    return;
-                }
-                controller.goNext();
-            }
-        }
-    }
-
-    @Override
-    public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
-        ship.highlightPoints(Set.of(point), Highlights.CYAN);
-        cliAllShips.setDirty();
-    }
-
-    @Override
-    public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
-        ship.highlightPoints(Set.of(point), Highlights.GREEN);
-        cliAllShips.setDirty();
     }
 
     @Override
