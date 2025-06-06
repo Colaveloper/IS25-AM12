@@ -11,7 +11,7 @@ class CliProjectilesScreenTest extends CliScreenSetup {
 
     static void setUp() {
         CliScreenSetup.shipSetUp();
-        state = new HandleProjectileState(shipBoard, new Projectile(7, Direction.UP, ProjectileType.BIGMETEOR), shipBoard.getActivatables().keySet());
+        state = new HandleProjectileState(shipBoard, new Projectile(7, Direction.UP, ProjectileType.BIGMETEOR), shipBoard.getActivatables().keySet(), true);
         screen = new CliProjectilesScreen(model, controller, state);
     }
 
