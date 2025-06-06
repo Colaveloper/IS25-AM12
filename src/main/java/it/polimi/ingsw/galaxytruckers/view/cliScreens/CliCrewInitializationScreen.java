@@ -51,8 +51,6 @@ public class CliCrewInitializationScreen extends CliScreen {
         else {
             System.out.println("empty cabins will be filled with humans, waiting for other players to finish");
         }
-
-
     }
 
     @Override

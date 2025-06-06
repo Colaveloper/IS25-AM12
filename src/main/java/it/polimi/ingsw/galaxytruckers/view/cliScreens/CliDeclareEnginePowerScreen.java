@@ -74,7 +74,7 @@ public class CliDeclareEnginePowerScreen extends CliScreen {
 
     @Override
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
+        //shipToCliShip.get(shipBoard).highlightPoints(Set.of(point));
         cliAllShips.setDirty();
     }
 

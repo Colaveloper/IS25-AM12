@@ -17,7 +17,7 @@ public class CliNewCardScreen extends CliScreen {
         super(model, controller, gameState);
         imLeader = gameState.getShipBoard() == model.getMyShip();
         hasDrown = false;
-        adventureCard = new CliAdventureCard(gameState.getGame().getCurrentAdventureCard());
+        //adventureCard = new CliAdventureCard(gameState.getGame().getCurrentAdventureCard());
     }
 
     @Override
