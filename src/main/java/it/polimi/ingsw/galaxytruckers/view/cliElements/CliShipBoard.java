@@ -2,10 +2,13 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliBattery;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliCabin;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliCargoHold;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 import java.util.*;
@@ -20,6 +23,10 @@ public class CliShipBoard extends CliElement {
     protected final Map<Point, CliComponent> cliComponentMap;
     private final GameColor color;
     private final String nickname;
+    private Map<Point, CliCabin> cabins;
+    private Map<Point, CliCargoHold> cargoHolds;
+    private Map<Point, CliBattery> batteries;
+
     int minX;
     int maxX;
     int minY;
@@ -55,6 +62,22 @@ public class CliShipBoard extends CliElement {
         cliComponentMap.remove(p);
         setDirty();
     }
+
+    public CliComponent getCliComponent(Point p) {
+        return cliComponentMap.get(p);
+    }
+//
+//    public Map<Point, CliCabin> getCabins() {
+//        return cabins;
+//    }
+//
+//    public Map<Point, CliCargoHold> getCargoHolds() {
+//        return cargoHolds;
+//    }
+//
+//    public Map<Point, CliBattery> getBatteries() {
+//        return batteries;
+//    }
 
     public void highlightPoints(Set<Point> points, Highlights color){
         for (Point point : points){

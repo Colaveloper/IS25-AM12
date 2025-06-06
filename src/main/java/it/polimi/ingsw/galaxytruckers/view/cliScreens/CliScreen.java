@@ -59,6 +59,12 @@ public abstract class CliScreen extends Screen {
 
     public abstract void parseAndInvoke(String input);
 
+    public void notifyComponentChange(ShipBoard shipBoard, Point point) {
+        cliAllShips.setDirty();
+        shipToCliShip.get(shipBoard).setDirty();
+        shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
+    }
+
     protected void printShips() {
 //        flightBoard.getNewDescription().forEach(System.out::println);
 //        allShips.getNewDescription().forEach(System.out::println);//todo sistemare altri tipi di allships

@@ -284,7 +284,15 @@ public class ClientEventHandler implements EventHandler<Event> {
                 gameState = clientModel.getGame().getGameFactory().createShipBuildingState();
             }
             case ShipCorrectionDTO shipCorrectionDTO -> {
-                gameState = new ShipCorrectionState();
+                gameState = new ShipCorrectionState(clientModel.getMyShip(),
+                        shipCorrectionDTO.validShips().stream()
+                                .map(name -> playerRegistry.getByNickname(name).getShipBoard())
+                                .collect(Collectors.toSet()),
+                        shipCorrectionDTO.shipPieces().entrySet().stream()
+                                .collect(Collectors.toMap(
+                                        e -> playerRegistry.getByNickname(e.getKey()).getShipBoard(),
+                                        Map.Entry::getValue
+                                )));
             }
             case ShipInitializationDTO shipInitializationDTO -> {
                 Map<ShipBoard, Map<CrewType, Set<Point>>> setMap = shipInitializationDTO.crewTypeToCabins()
