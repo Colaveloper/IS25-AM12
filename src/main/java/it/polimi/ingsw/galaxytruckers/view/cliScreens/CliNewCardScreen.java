@@ -65,7 +65,8 @@ public class CliNewCardScreen extends CliScreen {
 
     @Override
     public void notifyDrawCard(AdventureCard adventureCard) {
-        hasDrown = true;
-        this.adventureCard = new CliAdventureCard(adventureCard);
+        hasDrown = adventureCard != null;
+        if(adventureCard == null) this.adventureCard = null;
+        else this.adventureCard = new CliAdventureCard(adventureCard);
     }
 }

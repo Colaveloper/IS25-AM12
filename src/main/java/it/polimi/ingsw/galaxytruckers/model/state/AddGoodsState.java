@@ -1,13 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 import java.util.Map;
 
-public final class AddGoodsState extends AdventureState {
+public final class AddGoodsState extends AdventureState implements GameStateInterface{
     Map<GoodsType, Integer> goodsBuffer;
     ShipBoard shipBoard;
 

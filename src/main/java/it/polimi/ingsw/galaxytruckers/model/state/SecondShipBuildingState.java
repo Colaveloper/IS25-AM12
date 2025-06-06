@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class SecondShipBuildingState extends ShipBuildingState {
+public non-sealed class SecondShipBuildingState extends ShipBuildingState implements GameStateInterface{
     private final Hourglass hourglass;
     private final Map<ShipBoard, Integer> shipToForecasts = new HashMap<>();
         private final Set<Integer> blockedForecasts = new HashSet<>();

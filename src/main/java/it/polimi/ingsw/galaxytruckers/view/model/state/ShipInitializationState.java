@@ -16,6 +16,8 @@ public final class ShipInitializationState extends GameState {
 
     @Override
     public List<StateActions> getAvailableActions() {
+
+        //no need to check for conditional actions, it's not possible to check if it's my turn so the check is in the screen
         return List.of(
                 StateActions.INITIALIZE_CABIN,
                 StateActions.GO_NEXT

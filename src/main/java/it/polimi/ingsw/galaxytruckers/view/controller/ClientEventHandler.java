@@ -264,7 +264,8 @@ public class ClientEventHandler implements EventHandler<Event> {
                 gameState = new HandleProjectileState(
                         playerRegistry.getByNickname(handleProjectileDTO.playerName()).getShipBoard(),
                         new Projectile(handleProjectileDTO.diceRoll(), handleProjectileDTO.direction(), handleProjectileDTO.projectileType()),
-                        handleProjectileDTO.availablePoints()
+                        handleProjectileDTO.availablePoints(),
+                        clientModel.getMyShip() == playerRegistry.getByNickname(handleProjectileDTO.playerName()).getShipBoard()
                 );
             }
             case RemoveCrewDTO removeCrewDTO -> {
@@ -308,10 +309,10 @@ public class ClientEventHandler implements EventHandler<Event> {
                 ShipBoard shipBoard = playerRegistry.getByNickname(simpleStateDTO.playerName()).getShipBoard();
                 switch (simpleStateDTO.type()) {
                     case DECLARE_ENGINE_POWER -> {
-                        gameState = new DeclareEnginePowerState(shipBoard);
+                        gameState = new DeclareEnginePowerState(shipBoard, clientModel.getMyShip() == shipBoard);
                     }
                     case DECLARE_FIRE_POWER -> {
-                        gameState = new DeclareFirePowerState(shipBoard);
+                        gameState = new DeclareFirePowerState(shipBoard, clientModel.getMyShip() == shipBoard);
                     }
                     case DRAW_CARD -> {
                         gameState = new DrawCardState(shipBoard);

@@ -8,15 +8,76 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StateDTOConverter {
-    public static StateDTO convert(GameState gameState) {
+    public static StateDTO convert(GameStateInterface gameState) {
         switch (gameState) {
-            case AdventureState adventureState -> {
-                return convert(adventureState);
+            case AddGoodsState addGoodsState -> {
+                return new AddGoodsDTO(
+                        Player.getPlayer(addGoodsState.getShipBoard()).getNickname(),
+                        addGoodsState.getGoodsBuffer()
+                );
             }
-            case GameStateStub gameStateStub -> {
-                throw new IllegalStateException("This state is meant for test only");
+            case ChoosePlanetState choosePlanetState -> {
+                return new ChoosePlanetDTO(
+                        Player.getPlayer(choosePlanetState.getShipBoard()).getNickname(),
+                        choosePlanetState.getOptions()
+                );
             }
-            case ShipBuildingState shipBuildingState -> {
+            case ChooseShipPieceState chooseShipPieceState -> {
+                return new ChooseShipPieceDTO(
+                        Player.getPlayer(chooseShipPieceState.getShipBoard()).getNickname(),
+                        chooseShipPieceState.getShipPieces()
+                );
+            }
+            case DeclareEnginePowerState declareEnginePowerState -> {
+                return new SimpleStateDTO(
+                        Player.getPlayer(declareEnginePowerState.getShipBoard()).getNickname(),
+                        StateDTOType.DECLARE_ENGINE_POWER
+                );
+            }
+            case DeclareFirePowerState declareFirePowerState -> {
+                return new SimpleStateDTO(
+                        Player.getPlayer(declareFirePowerState.getShipBoard()).getNickname(),
+                        StateDTOType.DECLARE_FIRE_POWER
+                );
+            }
+            case DrawCardState drawCardState -> {
+                return new SimpleStateDTO(
+                        Player.getPlayer(drawCardState.getShipBoard()).getNickname(),
+                        StateDTOType.DRAW_CARD
+                );
+            }
+            case EndGameState endGameState -> {
+                //TODO: decide whether to implement this method
+                return null;
+            }
+            case GrabRewardState grabRewardState -> {
+                return new SimpleStateDTO(
+                        Player.getPlayer(grabRewardState.getShipBoard()).getNickname(),
+                        StateDTOType.GRAB_REWARD
+                );
+            }
+            case HandleProjectileState handleProjectileState -> {
+                return new HandleProjectileDTO(
+                        Player.getPlayer(handleProjectileState.getShipBoard()).getNickname(),
+                        handleProjectileState.getProjectile().getProjectileType(),
+                        handleProjectileState.getProjectile().getDiceRoll(),
+                        handleProjectileState.getProjectile().getDirection(),
+                        handleProjectileState.getAvailablePositions()
+                );
+            }
+            case RemoveCrewState removeCrewState -> {
+                return new RemoveCrewDTO(
+                        Player.getPlayer(removeCrewState.getShipBoard()).getNickname(),
+                        removeCrewState.getCrewSacrifice()
+                );
+            }
+            case RemoveGoodsState removeGoodsState -> {
+                return new RemoveGoodsDTO(
+                        Player.getPlayer(removeGoodsState.getShipBoard()).getNickname(),
+                        removeGoodsState.getGoodsToLose()
+                );
+            }
+            case SecondShipBuildingState secondShipBuildingState -> {
                 return new ShipBuildingDTO();
             }
             case ShipCorrectionState shipCorrectionState -> {
@@ -36,87 +97,11 @@ public class StateDTOConverter {
                                 e -> Player.getPlayer(e.getKey()).getNickname(),
                                 Map.Entry::getValue)));
             }
-        }
-    }
-
-    private static StateDTO convert(AdventureState adventureState) {
-        switch (adventureState) {
-            case ActivateState activateState -> {
-                switch (activateState) {
-                    case ActivateStateStub activateStateStub -> {
-                        throw new IllegalStateException("This test is meant for test only");
-                    }
-                    case DeclareEnginePowerState declareEnginePowerState -> {
-                        return new SimpleStateDTO(
-                                Player.getPlayer(declareEnginePowerState.getShipBoard()).getNickname(),
-                                StateDTOType.DECLARE_ENGINE_POWER
-                        );
-                    }
-                    case DeclareFirePowerState declareFirePowerState -> {
-                        return new SimpleStateDTO(
-                                Player.getPlayer(declareFirePowerState.getShipBoard()).getNickname(),
-                                StateDTOType.DECLARE_FIRE_POWER
-                        );
-                    }
-                    case HandleProjectileState handleProjectileState -> {
-                        return new HandleProjectileDTO(
-                                Player.getPlayer(handleProjectileState.getShipBoard()).getNickname(),
-                                handleProjectileState.getProjectile().getProjectileType(),
-                                handleProjectileState.getProjectile().getDiceRoll(),
-                                handleProjectileState.getProjectile().getDirection(),
-                                handleProjectileState.getAvailablePositions()
-                        );
-                    }
-                }
+            case TestShipBuildingState testShipBuildingState -> {
+                return new ShipBuildingDTO();
             }
-            case AddGoodsState addGoodsState -> {
-                return new AddGoodsDTO(
-                        Player.getPlayer(addGoodsState.getShipBoard()).getNickname(),
-                        addGoodsState.getGoodsBuffer()
-                );
-            }
-            case ChoosePlanetState choosePlanetState -> {
-                return new ChoosePlanetDTO(
-                        Player.getPlayer(choosePlanetState.getShipBoard()).getNickname(),
-                        choosePlanetState.getOptions()
-                );
-            }
-            case ChooseShipPieceState chooseShipPieceState -> {
-                return new ChooseShipPieceDTO(
-                        Player.getPlayer(chooseShipPieceState.getShipBoard()).getNickname(),
-                        chooseShipPieceState.getShipPieces()
-                );
-            }
-            case DrawCardState drawCardState -> {
-                return new SimpleStateDTO(
-                        Player.getPlayer(drawCardState.getShipBoard()).getNickname(),
-                        StateDTOType.DRAW_CARD
-                );
-            }
-            case EndGameState endGameState -> {
-                //TODO: decide whether to implement this method
-                return null;
-            }
-            case GrabRewardState grabRewardState -> {
-                return new SimpleStateDTO(
-                        Player.getPlayer(grabRewardState.getShipBoard()).getNickname(),
-                        StateDTOType.GRAB_REWARD
-                );
-            }
-            case RemoveCrewState removeCrewState -> {
-                return new RemoveCrewDTO(
-                        Player.getPlayer(removeCrewState.getShipBoard()).getNickname(),
-                        removeCrewState.getCrewSacrifice()
-                );
-            }
-            case RemoveGoodsState removeGoodsState -> {
-                return new RemoveGoodsDTO(
-                        Player.getPlayer(removeGoodsState.getShipBoard()).getNickname(),
-                        removeGoodsState.getGoodsToLose()
-                );
-            }
-            case AdventureStateStub adventureStateStub -> {
-                throw new IllegalStateException("This state is meant for test only");
+            case GameState state -> {
+                throw new RuntimeException("Invalid state");
             }
         }
     }

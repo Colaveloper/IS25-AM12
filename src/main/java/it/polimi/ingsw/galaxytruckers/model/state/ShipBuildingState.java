@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public non-sealed abstract class ShipBuildingState extends GameState {
+public abstract class ShipBuildingState extends GameState{
     private final ComponentBank componentBank;
     protected final Set<ShipBoard> completedShipBoards;
 

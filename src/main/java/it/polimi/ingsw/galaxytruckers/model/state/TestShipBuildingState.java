@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-public class TestShipBuildingState extends ShipBuildingState{
+public final class TestShipBuildingState extends ShipBuildingState implements GameStateInterface{
     public TestShipBuildingState() {
         super();
     }

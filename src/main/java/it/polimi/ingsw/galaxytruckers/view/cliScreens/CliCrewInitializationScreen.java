@@ -2,8 +2,10 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
+import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ShipInitializationState;
@@ -31,10 +33,10 @@ public class CliCrewInitializationScreen extends CliScreen {
         cliAllShips.getDescription().forEach(System.out::println);
 
         if(shipNotValid) {
-            if(crewtypeToPoints.containsKey(CrewType.PURPLE)) {
+            if(crewtypeToPoints.get(myShipBoard).containsKey(CrewType.PURPLE)) {
                 System.out.println("choose position for purple alien in one of the highlighted cabins");
                 currentCrewType = CrewType.PURPLE;
-            } else if (crewtypeToPoints.containsKey(CrewType.BROWN)) {
+            } else if (crewtypeToPoints.get(myShipBoard).containsKey(CrewType.BROWN)) {
                 System.out.println("choose position for purple alien in one of the highlighted cabins");
                 currentCrewType = CrewType.BROWN;
             }
@@ -42,14 +44,15 @@ public class CliCrewInitializationScreen extends CliScreen {
                 System.out.println("all aliens places, other cabins will be filled with humans, ");
                 currentCrewType = CrewType.HUMAN;
             }
-            //todo: highlight components
+
             //model.setSelectablePoints(model.getMyNickname(), model.getUnplacedCrew().get(currentCrewType));
+            printActions();
         }
         else {
             System.out.println("empty cabins will be filled with humans, waiting for other players to finish");
         }
 
-        printActions();
+
     }
 
     @Override
@@ -80,8 +83,7 @@ public class CliCrewInitializationScreen extends CliScreen {
 
     @Override
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
-
-        //todo
+        shipBoard.getCabins().get(point).initialize(crewType);
+        cliAllShips.setDirty();
     }
 }

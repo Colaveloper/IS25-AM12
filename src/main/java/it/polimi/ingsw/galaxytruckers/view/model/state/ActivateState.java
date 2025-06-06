@@ -15,8 +15,10 @@ public sealed abstract class ActivateState extends AdventureState permits
     protected final Set<Point> availablePositions;
     protected final ShipBoard shipBoard;
     protected int batteriesToSpend;
+    protected final boolean isMyTurn;
 
-    ActivateState(ShipBoard shipBoard, Set<Point> availablePositions) {
+    ActivateState(ShipBoard shipBoard, Set<Point> availablePositions, boolean isMyTurn) {
+        this.isMyTurn = isMyTurn;
         this.shipBoard = shipBoard;
         this.batteriesToSpend = 0;
         this.availablePositions = availablePositions;
@@ -24,11 +26,13 @@ public sealed abstract class ActivateState extends AdventureState permits
 
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
-        if(!shipBoard.getBatteries().isEmpty() && !shipBoard.getActivatables().isEmpty()) {
-            actions.add(StateActions.SPEND_BATTERIES);
-            actions.add(StateActions.ACTIVATE_COMPONENT);
+        if (isMyTurn) {
+            if (!shipBoard.getBatteries().isEmpty() && !shipBoard.getActivatables().isEmpty()) {
+                actions.add(StateActions.SPEND_BATTERIES);
+                actions.add(StateActions.ACTIVATE_COMPONENT);
+            }
+            actions.add(StateActions.GO_NEXT);
         }
-        actions.add(StateActions.GO_NEXT);
         actions.addAll(super.getAvailableActions());
         return actions;
     }

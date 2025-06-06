@@ -9,8 +9,8 @@ import java.util.Set;
 public final class HandleProjectileState extends ActivateState {
     private final Projectile projectile;
 
-    public HandleProjectileState(ShipBoard shipBoard, Projectile projectile, Set<Point> availablePositions) {
-        super(shipBoard, availablePositions);
+    public HandleProjectileState(ShipBoard shipBoard, Projectile projectile, Set<Point> availablePositions, boolean isMyTurn) {
+        super(shipBoard, availablePositions, isMyTurn);
         this.projectile = projectile;
     }
 

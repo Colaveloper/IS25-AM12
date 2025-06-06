@@ -8,8 +8,7 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 
-public abstract sealed class GameState permits AdventureState, GameStateStub, ShipBuildingState, ShipCorrectionState,
-                                               ShipInitializationState {
+public non-sealed class GameState implements GameStateInterface {
     protected Game game;
 
     public void setGame(Game game) {

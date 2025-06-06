@@ -290,9 +290,6 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     @Override
     public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
         // Update the forecast display when a forecast is released
-        if(myShipBoard == shipBoard) {
-            gameState.hasForecastDeck(false);
-        }
         cliForecast.removeBlockedForecast(index);
         cliForecast.setDirty();
     }
