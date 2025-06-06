@@ -11,7 +11,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.DeclareFirePowerState;
 import java.awt.*;
 import java.util.Set;
 
-public class CliDeclareFirePowerScreen extends CliScreen {
+public class CliDeclareFirePowerScreen extends CliActivationScreen {
 
     private final DeclareFirePowerState gameState;
     private final boolean isMyTurn;
@@ -39,49 +39,5 @@ public class CliDeclareFirePowerScreen extends CliScreen {
         }
 
         printActions();
-    }
-
-    @Override
-    public void parseAndInvoke(String input) {
-
-        String[] parts = input.split("\\s+");
-        switch (parts[0].toUpperCase()) {
-            case "Y"-> controller.giveUp();
-            case "A"-> {
-                Point p = getPoint(input);
-                if(!isMyTurn){
-                    System.out.println("It's not your turn to activate component");
-                    return;
-                }
-                if (!currentShip.getBatteries().containsKey(p) && !currentShip.getActivatables().containsKey(p)) {
-                    System.out.println("Invalid position. Please select a component or battery.");
-                    return;
-                }
-                if (currentShip.getBatteries().containsKey(p)) {
-                    controller.useBattery(p);
-                } else if (currentShip.getActivatables().containsKey(p)) {
-                    controller.activateComponent(p);
-                }
-            }
-            case "" -> {
-                if (!isMyTurn) {
-                    System.out.println("It's not your turn to activate component");
-                    return;
-                }
-                controller.goNext();
-            }
-        }
-    }
-
-    @Override
-    public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
-        cliAllShips.setDirty();
-    }
-
-    @Override
-    public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
-        cliAllShips.setDirty();
     }
 }

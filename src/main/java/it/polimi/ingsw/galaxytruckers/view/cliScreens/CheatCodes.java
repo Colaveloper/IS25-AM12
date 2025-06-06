@@ -18,7 +18,7 @@ public class CheatCodes {
             secondToBuild.add("C");
             secondToBuild.add("R");
         }
-        secondToBuild.add("e 6");
+        //secondToBuild.add("e 6");
     }
 
     public static void activateCheats(int input) {

@@ -22,22 +22,6 @@ public class CliRemoveCrewScreen extends CliScreen {
     }
 
     @Override
-    public boolean isInputLegal(String input) {
-        if (!isMyTurn) {
-            System.out.println("It's not your turn to remove crew");
-            return false;
-        }
-
-        if (!isFormatLegal(input)) {
-            return false;
-        }
-
-        Point p = getPoint(input);
-        return currentShip.getCabins().containsKey(p) &&
-               currentShip.getCabins().get(p).getNumResidents() > 0;
-    }
-
-    @Override
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
@@ -45,7 +29,6 @@ public class CliRemoveCrewScreen extends CliScreen {
         if (isMyTurn) {
             System.out.println("Your turn to remove crew members");
             System.out.println("Select cabins to remove crew from");
-            System.out.println("Use L x y to remove crew from cabin");
         } else {
             System.out.println("Waiting for " + currentShip.getColor() + " ship to remove crew members");
         }
@@ -55,29 +38,25 @@ public class CliRemoveCrewScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        if (!isMyTurn) {
-            System.out.println("It's not your turn to remove crew");
-            return;
+        String[] parts = input.split("\\s+");
+        switch (parts[0].toUpperCase()) {
+            case "Y"-> controller.giveUp();
+            case "L" -> {
+                if (!isMyTurn) {
+                    System.out.println("It's not your turn to remove crew");
+                }
+                Point p = getPoint(input);
+                if (!currentShip.getCabins().containsKey(p)) {
+                    System.out.println("No cabin at this position");
+                    return;
+                }
+                if (currentShip.getCabins().get(p).getNumResidents() <= 0) {
+                    System.out.println("No crew members in this cabin");
+                    return;
+                }
+                controller.loseCrew(p);
+            }
         }
-
-        if (input.equalsIgnoreCase("Y")) {
-            controller.giveUp();
-            return;
-        }
-
-        Point p = getPoint(input);
-
-        if (!currentShip.getCabins().containsKey(p)) {
-            System.out.println("No cabin at this position");
-            return;
-        }
-
-        if (currentShip.getCabins().get(p).getNumResidents() <= 0) {
-            System.out.println("No crew members in this cabin");
-            return;
-        }
-
-        controller.loseCrew(p);
     }
 
     @Override

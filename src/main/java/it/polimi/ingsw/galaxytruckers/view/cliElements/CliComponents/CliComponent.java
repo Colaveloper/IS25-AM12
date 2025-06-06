@@ -17,8 +17,6 @@ public class CliComponent extends CliElement {
     private String open;
     private String close;
 
-    private String crewColorOpen;
-
     protected CliComponent(Component component) {
         this.component = component;
         this.connectors = component.getConnectors();
@@ -80,7 +78,7 @@ public class CliComponent extends CliElement {
     @Override
     protected List<String> getNewDescription() {
         return addBorders("   ");
-    };
+    }
 
     protected List<String> addBorders(String middle) {
         open = Highlights.RESET.getHighlight();

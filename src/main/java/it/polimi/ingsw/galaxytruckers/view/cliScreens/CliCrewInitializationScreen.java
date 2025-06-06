@@ -51,13 +51,10 @@ public class CliCrewInitializationScreen extends CliScreen {
         else {
             System.out.println("empty cabins will be filled with humans, waiting for other players to finish");
         }
-
-
     }
 
     @Override
     public void parseAndInvoke(String input) {
-
         if(!shipNotValid) {
             System.out.println("your ship is valid, wait for other players to finish");
             return;
@@ -83,7 +80,6 @@ public class CliCrewInitializationScreen extends CliScreen {
 
     @Override
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
-        shipBoard.getCabins().get(point).initialize(crewType);
-        cliAllShips.setDirty();
+        //cliAllShips.setDirty();
     }
 }
