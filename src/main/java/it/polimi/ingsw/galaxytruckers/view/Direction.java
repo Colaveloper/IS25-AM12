@@ -14,7 +14,7 @@ public enum Direction {
     }
 
     public Direction getLeft() {
-        return VALUES[(this.ordinal() + 3) % Direction.values().length];
+        return VALUES[(this.ordinal() + (values().length-1)) % Direction.values().length];
     }
 
     public Direction getOpposite() {
@@ -41,13 +41,9 @@ public enum Direction {
     }
 
     private static int computeSteps(Direction from, Direction to) {
-        int count = 0;
-        Direction cur = from;
-        while (cur != to) {
-            cur = cur.getRight();
-            count++;
-        }
-        return count;
+        int dist = to.ordinal() - from.ordinal();
+        if (dist < 0) dist += Direction.values().length;
+        return dist;
     }
 
     public static Point getNeighbour(Point p, Direction direction) {

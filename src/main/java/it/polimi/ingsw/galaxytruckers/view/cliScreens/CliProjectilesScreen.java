@@ -50,7 +50,6 @@ public class CliProjectilesScreen extends CliActivationScreen {
         } else {
             System.out.println("Waiting for " + currentShip.getColor() + " ship to handle the projectile");
         }
-
         printActions();
     }
 

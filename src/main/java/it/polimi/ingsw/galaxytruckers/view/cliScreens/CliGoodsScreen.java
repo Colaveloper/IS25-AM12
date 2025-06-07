@@ -28,44 +28,6 @@ public class CliGoodsScreen extends CliScreen {
     }
 
     @Override
-    public boolean isInputLegal(String input) {
-        if (!isMyTurn) {
-            System.out.println("It's not your turn to manage goods");
-            return false;
-        }
-
-        if (!isFormatLegal(input)) {
-            return false;
-        }
-
-        String[] parts = input.split("\\s+");
-        if (parts.length < 4) {
-            return false;
-        }
-
-        try {
-            Point p = getPoint(input);
-            GoodsType goodsType = GoodsType.valueOf(parts[3].toUpperCase());
-
-            if (parts[0].equalsIgnoreCase("P")) {
-                boolean hasGoodInBuffer = goodsBuffer.getGoodsBuffer().getOrDefault(goodsType, 0) > 0;
-                boolean hasCargoBay = currentShip.getCargoHolds().containsKey(p);
-
-                return hasGoodInBuffer && hasCargoBay;
-            } else if (parts[0].equalsIgnoreCase("R")) {
-                boolean hasCargoBay = currentShip.getCargoHolds().containsKey(p);
-                boolean hasGoodInCargo = hasCargoBay && currentShip.getCargoHolds().get(p).getGoods().containsKey(goodsType);
-
-                return hasCargoBay && hasGoodInCargo;
-            }
-            return false;
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid goods type");
-            return false;
-        }
-    }
-
-    @Override
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
@@ -80,8 +42,8 @@ public class CliGoodsScreen extends CliScreen {
                 }
             }
             System.out.println("Cargo holds with goods: " + countCargoHoldsWithGoods());
-            System.out.println("Use P x y TYPE to place goods or R x y TYPE to remove goods");
-            System.out.println("Goods types: RED, GREEN, BLUE, YELLOW");
+//            System.out.println("Use P x y TYPE to place goods or R x y TYPE to remove goods");
+//            System.out.println("Goods types: RED, GREEN, BLUE, YELLOW");
         } else {
             System.out.println("Waiting for " + currentShip.getColor() + " ship to manage goods");
         }
@@ -101,27 +63,32 @@ public class CliGoodsScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        if (!isMyTurn) {
-            System.out.println("It's not your turn to manage goods");
-            return;
-        }
-
-        if (input.equalsIgnoreCase("Y")) {
+        if(input.equalsIgnoreCase("Y")) {
             controller.giveUp();
             return;
         }
-
         String[] parts = input.split("\\s+");
         if (parts.length < 4) {
-            System.out.println("Invalid input format. Use: P x y TYPE or R x y TYPE");
+            System.out.println("unreachable statement");
             return;
         }
+        if (!isMyTurn) {
+            System.out.println("It's not your turn, this line should never be reached");
+            return;
+        }
+        switch (parts[0].toUpperCase()) {
+            case "P" -> {
+                GoodsType goodsType = GoodsType.valueOf(parts[3].toUpperCase());
+                Point p = getPoint(input);
 
-        try {
-            Point p = getPoint(input);
-            GoodsType goodsType = GoodsType.valueOf(parts[3].toUpperCase());
-
-            if (parts[0].equalsIgnoreCase("P")) {
+                if(!(goodsBuffer.getGoodsBuffer().getOrDefault(goodsType, 0) > 0)) {
+                    System.out.println("no goods of that type");
+                    return;
+                }
+                if(!currentShip.getCargoHolds().containsKey(p)){
+                    System.out.println("no cargo holds in that position");
+                    return;
+                }
                 if (goodsBuffer.getGoodsBuffer().getOrDefault(goodsType, 0) <= 0) {
                     System.out.println("No " + goodsType + " goods available in buffer");
                     return;
@@ -131,11 +98,16 @@ public class CliGoodsScreen extends CliScreen {
                     return;
                 }
                 controller.placeGoods(p, goodsType);
-            } else if (parts[0].equalsIgnoreCase("R")) {
-                if (!currentShip.getCargoHolds().containsKey(p)) {
-                    System.out.println("No cargo hold at this position");
+            }
+            case "R" -> {
+                GoodsType goodsType = GoodsType.valueOf(parts[3].toUpperCase());
+                Point p = getPoint(input);
+
+                if(!currentShip.getCargoHolds().containsKey(p)){
+                    System.out.println("no cargo holds in that position");
                     return;
                 }
+
                 CargoHold cargoHold = currentShip.getCargoHolds().get(p);
                 if (!cargoHold.getGoods().containsKey(goodsType)) {
                     System.out.println("No " + goodsType + " goods at this position");
@@ -143,20 +115,20 @@ public class CliGoodsScreen extends CliScreen {
                 }
                 controller.removeGoods(p, goodsType);
             }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid goods type. Use: RED, GREEN, BLUE, YELLOW");
         }
     }
 
-    @Override
-    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
-        cliAllShips.setDirty();
-    }
-
-    @Override
-    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        CliShipBoard ship = shipToCliShip.get(shipBoard);
-        cliAllShips.setDirty();
-    }
+//    @Override
+//    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+//        shipToCliShip.get(shipBoard).setDirty();
+//        shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
+//        cliAllShips.setDirty();
+//    }
+//
+//    @Override
+//    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+//        shipToCliShip.get(shipBoard).setDirty();
+//        shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
+//        cliAllShips.setDirty();
+//    }
 }

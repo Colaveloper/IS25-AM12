@@ -29,13 +29,16 @@ public abstract class CliActivationScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
+        if(input.equalsIgnoreCase("Y")) {
+            controller.giveUp();
+            return;
+        }
         if(!isMyTurn) {
             System.out.println("It's not your turn");
             return;
         }
         String[] parts = input.split("\\s+");
         switch (parts[0].toUpperCase()) {
-            case "Y"-> controller.giveUp();
             case "A"-> {
                 Point p = getPoint(input);
                 if (!currentShip.getBatteries().containsKey(p) && !currentShip.getActivatables().containsKey(p)) {
@@ -51,9 +54,7 @@ public abstract class CliActivationScreen extends CliScreen {
                     controller.activateComponent(p);
                 }
             }
-            case "" -> {
-                controller.goNext();
-            }
+            case "" -> controller.goNext();
         }
     }
 

@@ -150,7 +150,8 @@ public class CliView extends View<CliScreen> {
 
     @Override
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents) {
-        currentScreen.notifyInitializeCabin(shipBoard, point, crewType, numResidents);
+        currentScreen.notifyComponentChange(shipBoard, point);
+        //currentScreen.notifyInitializeCabin(shipBoard, point, crewType, numResidents);
         currentScreen.render();
     }
 
@@ -162,13 +163,15 @@ public class CliView extends View<CliScreen> {
 
     @Override
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-        currentScreen.notifyActivateComponent(shipBoard, point);
+
+        //currentScreen.notifyActivateComponent(shipBoard, point);
         currentScreen.render();
     }
 
     @Override
     public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
-        currentScreen.notifyLoseCrew(shipBoard, point);
+        currentScreen.notifyComponentChange(shipBoard, point);
+//        currentScreen.notifyLoseCrew(shipBoard, point);
         currentScreen.render();
     }
 
@@ -180,19 +183,22 @@ public class CliView extends View<CliScreen> {
 
     @Override
     public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        currentScreen.notifyPlaceGoods(shipBoard, point, goodsType);
+        currentScreen.notifyComponentChange(shipBoard, point);
+        //currentScreen.notifyPlaceGoods(shipBoard, point, goodsType);
         currentScreen.render();
     }
 
     @Override
     public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        currentScreen.notifyRemoveGoods(shipBoard, point, goodsType);
+        currentScreen.notifyComponentChange(shipBoard, point);
+        //currentScreen.notifyRemoveGoods(shipBoard, point, goodsType);
         currentScreen.render();
     }
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        currentScreen.notifyUseBattery(shipBoard, point);
+        currentScreen.notifyComponentChange(shipBoard, point);
+        //currentScreen.notifyUseBattery(shipBoard, point);
         currentScreen.render();
     }
 
