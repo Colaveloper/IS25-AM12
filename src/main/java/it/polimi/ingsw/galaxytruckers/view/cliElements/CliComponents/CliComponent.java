@@ -91,7 +91,7 @@ public class CliComponent extends CliElement {
 
         List<String> lines = new ArrayList<>();
             lines.add(0, open+"╭─" + getConnector(Direction.UP) + "─╮"+close);
-            lines.add(1, open+ getConnector(Direction.LEFT) + middle + getConnector(Direction.RIGHT)+close);
+            lines.add(1, open+ getConnector(Direction.LEFT) + close + middle + open + getConnector(Direction.RIGHT)+close);
             lines.add(2, open+"╰─" + getConnector(Direction.DOWN) + "─╯"+close);
         return lines;
     }
