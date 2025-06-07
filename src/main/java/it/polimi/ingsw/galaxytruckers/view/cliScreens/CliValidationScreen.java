@@ -93,7 +93,7 @@ public class CliValidationScreen extends CliScreen {
     }
 
     @Override
-    public void notifyRemoveComponent(ShipBoard shipBoard, Point point){
+    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
         CliShipBoard ship = shipToCliShip.get(shipBoard);
         ship.onRemoveComponent(point);
         cliAllShips.setDirty();

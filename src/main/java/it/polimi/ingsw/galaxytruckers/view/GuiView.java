@@ -14,6 +14,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
@@ -42,6 +43,7 @@ public class GuiView extends View<GuiScreen> {
     // called by JFXApp thread, no need of runLater()
     public void setStage(Stage stage) {
         this.contentPane = new StackPane();
+        contentPane.setPadding(new Insets(10));
         this.contentPane.getChildren().setAll(currentScreen.getNode());
 
         StackPane rootPane = createRootWithBackground();
@@ -52,6 +54,7 @@ public class GuiView extends View<GuiScreen> {
         stage.show();
     }
 
+    // TODO: move overrides upwards in view
     //region State-Notify methods
     @Override
     public void notifyMetaState(MetaState metaState) {
@@ -152,17 +155,17 @@ public class GuiView extends View<GuiScreen> {
 
     @Override
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        currentScreen.notifyRemoveComponent(shipBoard,point);
+        currentScreen.notifyRemoveComponent(shipBoard, point);
     }
 
     @Override
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List<Point> removed) {
-        currentScreen.notifyChooseShipPiece(shipBoard,pieceIndex,removed);
+        currentScreen.notifyChooseShipPiece(shipBoard, pieceIndex, removed);
     }
 
     @Override
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
-        currentScreen.notifyShipNotConnected(shipBoard,shipPieces);
+        currentScreen.notifyShipNotConnected(shipBoard, shipPieces);
     }
 
     @Override
@@ -172,7 +175,7 @@ public class GuiView extends View<GuiScreen> {
 
     @Override
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents) {
-        currentScreen.notifyInitializeCabin(shipBoard,point,crewType,numResidents);
+        currentScreen.notifyInitializeCabin(shipBoard, point, crewType, numResidents);
     }
 
     @Override

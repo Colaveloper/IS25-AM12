@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.PointPressHandler;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import javafx.application.Platform;
@@ -22,7 +23,7 @@ import java.util.Set;
 
 public class GuiShipHandAndStash extends VBox {
 
-    private final ControllerToServer controller;
+    private final PointPressHandler pointPressHandler;
 
     Image emptyAreaImage = null;
 
@@ -35,7 +36,10 @@ public class GuiShipHandAndStash extends VBox {
     public final static Path emptyAreaImagePath = Path.of("src/main/resources/textures/tiles/empty_area.png");
 
     public GuiShipHandAndStash(ShipBoard shipBoard, ControllerToServer controller) {
-        this.controller = controller;
+        this(shipBoard, controller, (Point point)->{});
+    }
+    public GuiShipHandAndStash(ShipBoard shipBoard, ControllerToServer controller, PointPressHandler pointPressHandler) {
+        this.pointPressHandler = pointPressHandler;
 
         Set<Point> shipArea = shipBoard.getShipArea();
         Map<Point, Component> componentMap = shipBoard.getComponentMap();
@@ -79,10 +83,7 @@ public class GuiShipHandAndStash extends VBox {
                         areaView.setFitWidth(50);
                         areaView.setFitHeight(50);
                         areaView.setImage(emptyAreaImage);
-                        areaView.setOnMouseClicked((_)->
-                                controller.placeComponent(currentPoint, Direction.UP)
-                                // TODO: use real direction
-                        );
+                        areaView.setOnMouseClicked(_->pointPressHandler.handlePointPress(currentPoint));
                     }
                     shipGrid.add(areaView, x + 1, y + 1);
                 }
@@ -152,10 +153,7 @@ public class GuiShipHandAndStash extends VBox {
         areaView.setFitWidth(50);
         areaView.setFitHeight(50);
         areaView.setImage(emptyAreaImage);
-        areaView.setOnMouseClicked((_)->
-                        controller.placeComponent(oldPosition, Direction.UP)
-                // TODO: use real direction
-        );
+        areaView.setOnMouseClicked(_-> pointPressHandler.handlePointPress(oldPosition));
         return areaView;
     }
 

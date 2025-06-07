@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliValidationScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.*;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
@@ -29,10 +30,8 @@ public class GuiScreenFactory implements ScreenFactory<GuiScreen> {
                 case TestShipBuildingState testShipBuildingState -> null;
 //                                new GuiTestShipBuildingScreen(model, controller, testShipBuildingState);
             };
-            case ShipCorrectionState shipCorrectionState -> null;
-//                            new GuiValidationScreen(model, controller, shipCorrectionState);
-            case ShipInitializationState shipInitializationState -> null;
-//                            new GuiCrewInitializationScreen(model, controller, shipInitializationState);
+            case ShipCorrectionState shipCorrectionState -> new GuiValidationScreen(model, controller, shipCorrectionState);
+            case ShipInitializationState shipInitializationState -> new GuiCrewInitializationScreen(model, controller, shipInitializationState);
             case AdventureState s -> switch (s) {
                 case ActivateState activateState -> switch (activateState) {
                     case DeclareEnginePowerState declareEnginePowerState -> null;
@@ -48,8 +47,7 @@ public class GuiScreenFactory implements ScreenFactory<GuiScreen> {
 //                                new GuiPlanetScreen(model, controller, choosePlanetState);
                 case ChooseShipPieceState chooseShipPieceState -> null;
 //                                new GuiShipPieceChoiceScreen(model, controller, chooseShipPieceState);
-                case DrawCardState drawCardState -> null;
-//                                new GuiNewCardScreen(model, controller, drawCardState);
+                case DrawCardState drawCardState -> new GuiNewCardScreen(model, controller, drawCardState);
                 case GrabRewardState grabRewardState -> null;
 //                                new GuiRewardScreen(model, controller, grabRewardState);
                 case RemoveCrewState removeCrewState -> null;

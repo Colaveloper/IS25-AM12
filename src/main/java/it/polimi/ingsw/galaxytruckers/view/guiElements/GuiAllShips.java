@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.PointPressHandler;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -19,7 +20,7 @@ public class GuiAllShips extends HBox {
 
     Map<ShipBoard, GuiShipHandAndStash> shipMap = new HashMap<>();
 
-    public GuiAllShips(Player mainPlayer, Map<ShipBoard, Player> shipToPlayer, ControllerToServer controller) {
+    public GuiAllShips(Player mainPlayer, Map<ShipBoard, Player> shipToPlayer, ControllerToServer controller, PointPressHandler pointPressHandler) {
         setSpacing(20);
         setPrefHeight(Region.USE_COMPUTED_SIZE);
         setPrefWidth(Region.USE_COMPUTED_SIZE);
@@ -31,7 +32,7 @@ public class GuiAllShips extends HBox {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Main player's ship not found"));
 
-        GuiShipHandAndStash mainView = new GuiShipHandAndStash(mainBoard, controller);
+        GuiShipHandAndStash mainView = new GuiShipHandAndStash(mainBoard, controller, pointPressHandler);
         shipMap.put(mainBoard, mainView);
         mainView.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(mainView, Priority.ALWAYS);
@@ -87,56 +88,3 @@ public class GuiAllShips extends HBox {
         shipMap.get(shipBoard).notifySetHand(component);
     }
 }
-
-//        HBox handBox = new HBox(10);
-//        handBox.setAlignment(Pos.CENTER);
-//
-//        Map<FourColors, ObjectProperty<Component>> hand = model.getHand();
-//
-//        for (Map.Entry<FourColors, ObjectProperty<Component>> entry : hand.entrySet()) {
-//            FourColors color = entry.getKey();
-//            ObjectProperty<Component> componentProperty = entry.getValue();
-//
-//            VBox cardBox = new VBox(5);
-//            cardBox.setAlignment(Pos.CENTER);
-//
-//            // HBox for circle + text side-by-side
-//            HBox colorBox = new HBox(5);
-//            colorBox.setAlignment(Pos.CENTER);
-//
-//            // Circle with color
-//            Circle colorCircle = new Circle(20, color.getJfxColor());
-//            colorBox.getChildren().add(colorCircle);
-//
-//            // Text next to circle with player name from inverse map
-//            String playerName = model.getPlayerToColor().inverse().get(color);
-//            Text playerText = new Text(playerName);
-//            colorBox.getChildren().add(playerText);
-//
-//            cardBox.getChildren().add(colorBox);
-//
-//            // Placeholder for the component Node
-//            StackPane componentContainer = new StackPane();
-//            componentContainer.setPrefSize(60, 60); // Or adjust size as needed
-//            // Listener to update on property change
-//            componentProperty.addListener((obs, oldVal, newVal) -> {
-//                Platform.runLater(() -> {
-//                    componentContainer.getChildren().setAll(
-//                            newVal != null
-//                                    ? new GuiComponent(model, controller, newVal).getNode()
-//                                    : new Label("?"));
-//                });
-//            });
-//
-//            // Initial content
-//            GuiComponent initial = new GuiComponent(model, controller, componentProperty.get());
-//            componentContainer.getChildren().add(initial != null ? initial.getNode() : new Label("?"));
-//
-//            GuiShipBoard shipBoard = new GuiShipBoard(model, controller, color);
-//
-//            handBox.getChildren().add(cardBox);
-//            cardBox.getChildren().add(componentContainer);
-//            cardBox.getChildren().add(shipBoard.getNode());
-//        }
-//
-//        return handBox;

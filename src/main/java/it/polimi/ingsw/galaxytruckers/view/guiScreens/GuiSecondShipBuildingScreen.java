@@ -3,11 +3,9 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiComponentBank;
-import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiForecast;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiHourglass;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -24,6 +22,8 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
     private final GuiComponentBank guiComponentBank;
     private final GuiForecast guiForecast;
     private final GuiHourglass guiHourglass;
+
+    private Direction lastComponentDirection = Direction.UP;
 
     public GuiSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState state) {
         super(model, controller, state);
@@ -122,5 +122,14 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
     @Override
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
         guiAllShips.notifyRemoveComponent(shipBoard, point);
+    }
+
+    @Override
+    public void handlePointPress(Point point) {
+        if (model.getMyShip().getComponentMap().containsKey(point)) {
+            lastComponentDirection = lastComponentDirection.getLeft();
+        } else if (model.getMyShip().getShipArea().contains(point)) {
+            controller.placeComponent(point, lastComponentDirection);
+        }
     }
 }
