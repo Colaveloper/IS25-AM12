@@ -20,6 +20,8 @@ public class CliComponent extends CliElement {
     protected CliComponent(Component component) {
         this.component = component;
         this.connectors = component.getConnectors();
+        open = Highlights.RESET.getHighlight();
+        close = Highlights.RESET.getHighlight();
     }
 
     public static CliComponent of(Component component) {
@@ -75,6 +77,7 @@ public class CliComponent extends CliElement {
     public void highlight(Highlights color) {
         open = color.getHighlight();
         close = Highlights.RESET.getHighlight();
+        setDirty();
     }
 
     @Override
@@ -83,7 +86,7 @@ public class CliComponent extends CliElement {
     }
 
     protected List<String> addBorders(String middle) {
-        open = Highlights.RESET.getHighlight();
+        //open = Highlights.RESET.getHighlight();
         close = Highlights.RESET.getHighlight();
 
         List<String> lines = new ArrayList<>();

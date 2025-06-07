@@ -251,7 +251,8 @@ public class ClientEventHandler implements EventHandler<Event> {
             case ChoosePlanetDTO choosePlanetDTO -> {
                 gameState = new ChoosePlanetState(
                         playerRegistry.getByNickname(choosePlanetDTO.playerName()).getShipBoard(),
-                        choosePlanetDTO.availablePlanets()
+                        choosePlanetDTO.availablePlanets(),
+                        playerRegistry.getByNickname(choosePlanetDTO.playerName()).getShipBoard() == clientModel.getMyShip()
                 );
             }
             case ChooseShipPieceDTO chooseShipPieceDTO -> {

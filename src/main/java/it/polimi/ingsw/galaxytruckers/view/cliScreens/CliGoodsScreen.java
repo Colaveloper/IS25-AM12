@@ -63,22 +63,18 @@ public class CliGoodsScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        if(input.equalsIgnoreCase("Y")) {
+        if(input.trim().equalsIgnoreCase("Y")) {
             controller.giveUp();
             return;
         }
         String[] parts = input.split("\\s+");
-        if (parts.length < 4) {
-            System.out.println("unreachable statement");
-            return;
-        }
         if (!isMyTurn) {
-            System.out.println("It's not your turn, this line should never be reached");
+            System.out.println("It's not your turn, unreachable statement");
             return;
         }
         switch (parts[0].toUpperCase()) {
             case "P" -> {
-                GoodsType goodsType = GoodsType.valueOf(parts[3].toUpperCase());
+                GoodsType goodsType = GoodsType.valueOf(parts[3].trim().toUpperCase());
                 Point p = getPoint(input);
 
                 if(!(goodsBuffer.getGoodsBuffer().getOrDefault(goodsType, 0) > 0)) {
@@ -118,17 +114,5 @@ public class CliGoodsScreen extends CliScreen {
         }
     }
 
-//    @Override
-//    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-//        shipToCliShip.get(shipBoard).setDirty();
-//        shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
-//        cliAllShips.setDirty();
-//    }
-//
-//    @Override
-//    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-//        shipToCliShip.get(shipBoard).setDirty();
-//        shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
-//        cliAllShips.setDirty();
-//    }
+    // place/remove goods are done in state, cli is updated in cliScreen
 }

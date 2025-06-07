@@ -52,8 +52,6 @@ public class CliSecondShipBuildingScreen extends CliScreen {
         } else {
             cliComponentBank.getDescription().forEach(System.out::println);
             DescriptionUtils.sideBySide(cliFlightBoard.getDescription(), cliForecast.getDescription()).forEach(System.out::println);
-//            cliForecast.getDescription().forEach(System.out::println);
-//            cliFlightBoard.getDescription().forEach(System.out::println);
             cliAllShips.getDescription().forEach(System.out::println);
         }
         printActions();

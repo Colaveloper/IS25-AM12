@@ -13,9 +13,10 @@ public final class ChoosePlanetState extends AdventureState {
     private final Set<Integer> options;
     private boolean isMyTurn;
 
-    public ChoosePlanetState(ShipBoard shipBoard, Set<Integer> options) {
+    public ChoosePlanetState(ShipBoard shipBoard, Set<Integer> options, boolean isMyTurn) {
         this.options = options;
         this.shipBoard = shipBoard;
+        this.isMyTurn = isMyTurn;
     }
 
     @Override
@@ -35,13 +36,6 @@ public final class ChoosePlanetState extends AdventureState {
         options.remove(choice);
         game.getObservers().forEach(observer -> observer.notifyChoosePlanet(shipBoard,choice));
     }
-
-//    @Override
-//    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-//        shipBoard.placeGoods(point, goodsType);
-//        game.getObservers().forEach(observer -> observer.notifyPlaceGoods(shipBoard,point,goodsType));
-//        //todo remove from buffer
-//    }
 
     public ShipBoard getShipBoard() {
         return shipBoard;
