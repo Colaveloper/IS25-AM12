@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class CheatCodes {
-    private static List<String> startToBuild = new ArrayList<>(List.of("0", "", "player1", "C", ""));
-    private static List<String> secondToBuild =new ArrayList<>(List.of("0", "", "player2", "0"));
+    private static final List<String> startToBuild = new ArrayList<>(List.of("0", "", "player1", "C", ""));
+    private static final List<String> secondToBuild =new ArrayList<>(List.of("0", "", "player2", "0"));
     private static List<String> cheatString;
     private static boolean isCheatOn;
 

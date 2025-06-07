@@ -24,6 +24,8 @@ public class CliComponent extends CliElement {
 
     public static CliComponent of(Component component) {
         return switch (component) {
+            case DoubleCannon doubleCannon-> new CliDoubleCannon(doubleCannon);
+            case DoubleEngine doubleEngine -> new CliDoubleEngine(doubleEngine);
             case Battery battery -> new CliBattery(battery);
             case Cabin cabin -> new CliCabin(cabin);
             case Cannon cannon -> new CliCannon(cannon);

@@ -13,9 +13,8 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 
 import java.awt.*;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class CliSecondShipBuildingScreen extends CliScreen {
 
@@ -39,7 +38,11 @@ public class CliSecondShipBuildingScreen extends CliScreen {
         for (Player player : model.getPlayers()) {
             buildingShipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));
         }
-        cliAllShips = new CliAllShips(buildingShipToCliShip.values().stream().toList());
+        List<CliShipHandAndStash> list = new ArrayList<>(buildingShipToCliShip.values().stream().toList());
+        list.sort(Comparator.comparing(CliShipHandAndStash::getNickname));
+        list.remove(buildingShipToCliShip.get(myShipBoard));
+        list.addFirst(buildingShipToCliShip.get(myShipBoard));
+        cliAllShips = new CliAllShips(list);
     }
 
     @Override

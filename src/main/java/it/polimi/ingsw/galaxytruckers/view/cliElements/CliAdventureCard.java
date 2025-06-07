@@ -12,11 +12,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.*;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.penalty.Penalty;
 
 public class CliAdventureCard extends CliElement{
-    ClientModel model;
     AdventureCard card;
-    public CliAdventureCard(ClientModel model){
-        this.model = model;
-    }
 
     public CliAdventureCard(AdventureCard card) {
         this.card = card;
@@ -172,16 +168,13 @@ public class CliAdventureCard extends CliElement{
     private static String describeProjectiles(List<Projectile> projectiles) {
         if(projectiles.isEmpty()) return "No projectiles.";
 
-        Map<Integer, String> directionMap = Map.of(
-                0, "front",
-                1, "left",
-                2, "back",
-                3, "right"
-        );
-
-        return projectiles.stream()
-                .map(p -> p.type() + " coming from the " +
-                        directionMap.getOrDefault(p.direction(), "unknown"))
-                .collect(Collectors.joining("\n"));
+        StringBuilder result = new StringBuilder();
+        for(Projectile projectile : projectiles) {
+            result.append(projectile.type())
+                    .append(" coming from ")
+                    .append(projectile.direction())
+                    .append("\n");
+        }
+        return result.toString();
     }
 }

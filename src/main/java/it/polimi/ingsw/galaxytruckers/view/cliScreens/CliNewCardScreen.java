@@ -29,7 +29,7 @@ public class CliNewCardScreen extends CliScreen {
         }
         if (hasDrown) {
             System.out.println("A new card has been drawn:\n");
-            System.out.println(adventureCard.getDescription());
+            adventureCard.getDescription().forEach(System.out::println);
         }
         printActions();
     }

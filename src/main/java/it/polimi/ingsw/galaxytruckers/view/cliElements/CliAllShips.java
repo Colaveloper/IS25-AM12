@@ -10,20 +10,19 @@ import java.util.*;
 import java.util.List;
 
 public class CliAllShips extends CliElement {
-    private final List<CliShipBoard> playerToCliShip;
+    private final List<CliShipBoard> cliShips;
 
     public CliAllShips(List<? extends CliShipBoard> ships) {
         //posso mettere una cliShipBoard qualsiasi invece di specificare se ha stash o no
         //togliendo anche la necessità di specificare quando uso CliAllShipsHandAndStash
-        this.playerToCliShip = new ArrayList<>();
-        playerToCliShip.addAll(ships);
+        this.cliShips = new ArrayList<>(ships);
     }
 
     @Override
     protected List<String> getNewDescription() {
         List<String> description = new ArrayList<>();
 
-        for (CliShipBoard cliShipBoard : playerToCliShip) {
+        for (CliShipBoard cliShipBoard : cliShips) {
             description = DescriptionUtils.sideBySide(
                     description,
                     cliShipBoard.getDescription()

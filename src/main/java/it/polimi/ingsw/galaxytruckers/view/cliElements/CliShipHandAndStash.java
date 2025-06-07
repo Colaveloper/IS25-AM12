@@ -23,6 +23,10 @@ public class CliShipHandAndStash extends CliShipBoard {
         cliStash = new CliStash(shipBoard.getStashedComponents());
     }
 
+    public String getNickname() {
+        return "Cli Ship Hand and Stash";
+    }
+
     public void onStash(Component component) {
         cliStash.onStash(component);
         setDirty();

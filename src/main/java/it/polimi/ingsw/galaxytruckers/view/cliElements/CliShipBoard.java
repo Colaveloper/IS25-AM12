@@ -86,6 +86,10 @@ public class CliShipBoard extends CliElement {
         }
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
     @Override
     protected List<String> getNewDescription(){
 

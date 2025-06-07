@@ -13,10 +13,8 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public abstract class CliScreen extends Screen {
 
@@ -42,7 +40,11 @@ public abstract class CliScreen extends Screen {
             for (Player player : model.getPlayers()) {
                 shipToCliShip.put(player.getShipBoard(), new CliShipBoard(player.getShipBoard(), player.getNickname()));
             }
-            this.cliAllShips = new CliAllShips(shipToCliShip.values().stream().toList());
+            List<CliShipBoard> list = new ArrayList<>(shipToCliShip.values().stream().toList());
+            list.sort(Comparator.comparing(CliShipBoard::getNickname));
+            list.remove(shipToCliShip.get(myShipBoard));
+            list.addFirst(shipToCliShip.get(myShipBoard));
+            this.cliAllShips = new CliAllShips(list);
             this.cliFlightBoard = new CliFlightBoard(model.getGame().getFlightBoard());
         }
     }
