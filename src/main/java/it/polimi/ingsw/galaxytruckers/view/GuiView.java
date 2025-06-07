@@ -15,6 +15,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -224,6 +225,18 @@ public class GuiView extends View<GuiScreen> {
         currentScreen.setFinalScores(finalScores);
     }
     //endregion
+
+
+    @Override
+    public void reportError(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
+    }
 
     private void switchToScreen(GuiScreen newScreen) {
         this.currentScreen = newScreen;

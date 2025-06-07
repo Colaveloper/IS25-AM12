@@ -97,7 +97,7 @@ public class Client {
         } else {
             view = new CliView(controller, model);
         }
-//        controller.setView(view);
+        controller.setView(view);
         // views start rendering autonomously at creation
     }
 }

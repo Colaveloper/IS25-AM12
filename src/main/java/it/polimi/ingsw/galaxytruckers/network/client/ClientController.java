@@ -20,7 +20,7 @@ import java.util.*;
 public class ClientController implements ClientControllerInterface, ControllerToServer {
     private ClientModel model;
     private VirtualServer server;
-//    private View<?> view;
+    private ErrorReporter view;
     private final PlayerRegistry playerRegistry = new PlayerRegistry();
 
     private ClientEventHandler eventHandler;
@@ -33,9 +33,9 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         this.server = server;
     }
 
-//    public void setView(View<?> view) {
-//        this.view = view;
-//    }
+    public void setView(ErrorReporter view) {
+        this.view = view;
+    }
 
     public void initEventHandler() {
         this.eventHandler = new ClientEventHandler(model, playerRegistry);
@@ -61,6 +61,10 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         eventHandler.handleEvent(event);
     }
 
+    @Override
+    public void reportError(String details) {
+        view.reportError(details);
+    }
 
 //----------------------------------------REQUESTS TO THE SERVER----------------------------------
 
@@ -77,11 +81,6 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     @Override
     public void requestNewGame(Level level, int playersN) {
         server.requestNewGame(level, playersN);
-    }
-
-    @Override
-    public void reportError(String details) {
-        System.out.println("Error: " + details);
     }
 
     @Override

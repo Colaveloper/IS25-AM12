@@ -10,11 +10,13 @@ import java.util.UUID;
 
 public interface ControllerToServer {
 
+    void setMyNickname(String nickname); // TODO: REMOVE! THIS DOES NOT CALL THE SERVER, registerNickname DOES!
+
+    void reportError(String details); // TODO: REMOVE! THIS DOES NOT CALL THE SERVER
+
     void registerNickname(String input);
 
     void flipHourglass();
-
-    void setMyNickname(String nickname); // TODO: REMOVE! THIS DOES NOT CALL THE SERVER, registerNickname DOES!
 
     void releaseForecast();
 
@@ -37,8 +39,6 @@ public interface ControllerToServer {
     void rejectComponent();
 
     void placeComponent(Point point, Direction orientation);
-
-    void reportError(String details);
 
     void goNext();
 

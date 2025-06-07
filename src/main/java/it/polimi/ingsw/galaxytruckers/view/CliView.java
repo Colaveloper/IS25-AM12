@@ -265,4 +265,9 @@ public class CliView extends View<CliScreen> {
             }
         }).start();
     }
+
+    @Override
+    public void reportError(String message) {
+        System.out.println("\u001B[31mError: " + message + "\u001B[0m");
+    }
 }

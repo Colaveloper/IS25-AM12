@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
-public abstract class View<S extends Screen> implements ModelObserver {
+public abstract class View<S extends Screen> implements ModelObserver, ErrorReporter {
     protected final ClientModel model;
     protected final ClientController controller;
     protected final ScreenFactory<S> screenFactory;
