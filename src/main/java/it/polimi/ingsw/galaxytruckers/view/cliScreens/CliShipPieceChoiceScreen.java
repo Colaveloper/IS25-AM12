@@ -27,23 +27,39 @@ public class CliShipPieceChoiceScreen extends CliScreen {
     public CliShipPieceChoiceScreen(ClientModel model, ControllerToServer controller, ChooseShipPieceState gameState) {
         super(model, controller, gameState);
         currentShip = gameState.getShipBoard();
-        shipBroken = currentShip.equals(model.getMyShip());
+        shipBroken = currentShip.equals(myShipBoard);
         numPieces =  gameState.getShipPieces().size();
         points = gameState.getShipPieces();
+        shipNotConnected(currentShip, gameState.getShipPieces());
+    }
+
+    private void shipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
+        int numPieces = shipPieces.size();
+        List<Highlights> highlights = Highlights.getSomeColors(numPieces);
+        for(int i = 0; i < numPieces; i++){
+            shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i));
+        }
+        cliAllShips.setDirty();
     }
 
     @Override
     public void parseAndInvoke(String input) {
+        if(input.equalsIgnoreCase("Y")) {
+            controller.giveUp();
+            return;
+        }
+        if (!myShipBoard.equals(currentShip)) {
+            System.out.println("It's not your turn");
+            return;
+        }
         String[] parts = input.split("\\s+");
-        switch (parts[0].toUpperCase()){
-            case "Y" -> controller.giveUp();
-            case "K" -> {
-                if(!shipBroken) {
-                    System.out.println("Your ship is valid");
-                }
-                int choice = Integer.parseInt(parts[1]);
-                controller.chooseShipPiece(choice);
+        if (parts[0].equalsIgnoreCase("K")) {
+            int pos = Integer.parseInt(parts[1]);
+            if(pos >= numPieces || pos < 0){
+                System.out.println("invalid ship piece choice");
+                return;
             }
+            controller.chooseShipPiece(Integer.parseInt(parts[1]));
         }
     }
 
@@ -59,7 +75,6 @@ public class CliShipPieceChoiceScreen extends CliScreen {
 
         if (shipBroken) {
             System.out.println("your ship is broken, choose a piece of ship to keep");
-            System.out.println("choose from one of the following pieces: \n");
             for(int i = 1; i <= numPieces; i++) {
                 System.out.println(colors.get(i).getHighlight() + i + "\t" + colors.get(i) + Highlights.RESET.getHighlight() + "\n");
             }
@@ -67,7 +82,6 @@ public class CliShipPieceChoiceScreen extends CliScreen {
         else{
             System.out.println("someone else has a broken ship, wait while they choose what piece to keep");
         }
-
         printActions();
     }
 

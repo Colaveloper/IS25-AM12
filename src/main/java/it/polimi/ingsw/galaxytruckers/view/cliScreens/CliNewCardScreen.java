@@ -15,7 +15,7 @@ public class CliNewCardScreen extends CliScreen {
     private boolean hasDrown;
     public CliNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState gameState){
         super(model, controller, gameState);
-        imLeader = gameState.getShipBoard() == model.getMyShip();
+        imLeader = gameState.getImLeader();
         hasDrown = false;
         //adventureCard = new CliAdventureCard(gameState.getGame().getCurrentAdventureCard());
     }

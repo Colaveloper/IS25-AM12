@@ -324,7 +324,7 @@ public class ClientEventHandler implements EventHandler<Event> {
                         gameState = new DeclareFirePowerState(shipBoard, clientModel.getMyShip() == shipBoard);
                     }
                     case DRAW_CARD -> {
-                        gameState = new DrawCardState(shipBoard);
+                        gameState = new DrawCardState(clientModel.getMyShip() == shipBoard);
                     }
                     case GRAB_REWARD -> {
                         gameState = new GrabRewardState(shipBoard);

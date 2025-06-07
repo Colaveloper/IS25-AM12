@@ -44,13 +44,16 @@ public class CliPlanetScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
+        if(input.equalsIgnoreCase("Y")) {
+            controller.giveUp();
+            return;
+        }
         if (!isMyTurn) {
             System.out.println("It's not your turn to choose a planet");
             return;
         }
         String[] parts = input.split("\\s+");
         switch (parts[0].toUpperCase()){
-            case "Y" -> controller.giveUp();
             case "L" -> {
                 int choice = Integer.parseInt(parts[1]);
                 if (choice < 0 || planets.get(choice) != null) {

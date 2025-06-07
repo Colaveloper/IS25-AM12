@@ -7,22 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DrawCardState extends AdventureState {
-    private final static List<StateActions> availableActions = List.of(
-            StateActions.DRAW_CARD,
-            StateActions.GO_NEXT
-    );
-    private final ShipBoard shipBoard;
+
+    private final boolean imLeader;
     private boolean hasDrawn = false;
 
-    public DrawCardState(ShipBoard shipBoard) {
-        this.shipBoard = shipBoard;
+    public DrawCardState(boolean imLeader) {
+        this.imLeader = imLeader;
     }
 
     @Override
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
-        if(hasDrawn) actions.add(StateActions.GO_NEXT);
-        else actions.add(StateActions.DRAW_CARD);
+        if(imLeader) {
+            if (hasDrawn) actions.add(StateActions.GO_NEXT);
+            else actions.add(StateActions.DRAW_CARD);
+        }
         actions.addAll(super.getAvailableActions());
         return actions;
     }
@@ -34,11 +33,8 @@ public final class DrawCardState extends AdventureState {
         game.getObservers().forEach(observer -> observer.notifyDrawCard(adventureCard));
     }
 
-    public ShipBoard getShipBoard() {
-        return shipBoard;
+    public boolean getImLeader() {
+        return imLeader;
     }
 
-    public boolean isHasDrawn() {
-        return hasDrawn;
-    }
 }

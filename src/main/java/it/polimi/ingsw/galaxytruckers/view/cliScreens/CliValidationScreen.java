@@ -21,7 +21,6 @@ public class CliValidationScreen extends CliScreen {
 
     private boolean shipValid;
     private boolean shipBroken;
-    private int numPieces;
     private int myShipPieces;
 
     public CliValidationScreen(ClientModel model, ControllerToServer controller, ShipCorrectionState gameState) {
@@ -129,7 +128,7 @@ public class CliValidationScreen extends CliScreen {
     }
 
     private void shipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
-        numPieces = shipPieces.size();
+        int numPieces = shipPieces.size();
         List<Highlights> highlights = Highlights.getSomeColors(numPieces);
         for(int i = 0; i < numPieces; i++){
             shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i));
