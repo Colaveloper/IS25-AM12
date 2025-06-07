@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiNicknameChoiceScreen;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
@@ -13,57 +13,57 @@ import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class GuiView extends Application implements View {
-    private static ClientModel model;
-    private static ClientController controller;
-    private final ScreenFactory screenFactory = new ScreenFactory();
+public class GuiView extends View<GuiScreen> {
 
     private GuiScreen currentScreen;
-    private Stage primaryStage;
+    private StackPane contentPane;
 
-    public static void setModel(ClientModel model) {
-        GuiView.model = model;
+    public GuiView(ClientController controller, ClientModel model) {
+        super(model, controller, new GuiScreenFactory());
+        this.currentScreen = screenFactory.createScreen(MetaState.REGISTER, model, controller);
     }
 
-    public static void setController(ClientController controller) {
-        GuiView.controller = controller;
-    }
+    // called by JFXApp thread, no need of runLater()
+    public void setStage(Stage stage) {
+        this.contentPane = new StackPane();
+        this.contentPane.getChildren().setAll(currentScreen.getNode());
 
-    @Override
-    public void start(Stage stage) {
-        model.addObserver(this);
+        StackPane rootPane = createRootWithBackground();
+        rootPane.getChildren().add(contentPane);
 
-        this.primaryStage = stage;
-        currentScreen = new GuiNicknameChoiceScreen(model, controller);
-        stage.setScene(new Scene(currentScreen.getNode()));
         stage.setTitle("Galaxy Truckers");
+        stage.setScene(new Scene(rootPane, 1280, 720));
         stage.show();
     }
 
-    //region Update methods
+    //region State-Notify methods
     @Override
     public void notifyMetaState(MetaState metaState) {
-        currentScreen = screenFactory.createGuiScreen(model, controller);
-        Platform.runLater(()-> primaryStage.setScene(new Scene(currentScreen.getNode())));
+        Platform.runLater(() -> switchToScreen(screenFactory.createScreen(metaState, model, controller)));
     }
 
     @Override
     public void notifyCurrentState(GameState gameState) {
-        currentScreen = screenFactory.createGuiScreen(model, controller);
-        Platform.runLater(()-> primaryStage.setScene(new Scene(currentScreen.getNode())));
+        Platform.runLater(() -> switchToScreen(screenFactory.createScreen(gameState, model, controller)));
     }
+    //endregion
 
+    //region Event-Notify methods
     @Override
     public void notifyNewLobby(Lobby lobby) {
 
@@ -224,4 +224,32 @@ public class GuiView extends Application implements View {
         currentScreen.setFinalScores(finalScores);
     }
     //endregion
+
+    private void switchToScreen(GuiScreen newScreen) {
+        this.currentScreen = newScreen;
+        contentPane.getChildren().setAll(currentScreen.getNode());
+    }
+
+    private StackPane createRootWithBackground() {
+        StackPane pane = new StackPane();
+
+        try {
+            URL bgUrl = getClass().getResource("/textures/background.png");
+            if (bgUrl == null) {
+                throw new FileNotFoundException("Resource not found: /textures/background.png");
+            }
+            Image bgImage = new Image(bgUrl.toExternalForm(), true);
+            ImageView bgView = new ImageView(bgImage);
+            bgView.setPreserveRatio(false);
+            bgView.setSmooth(true);
+            bgView.fitWidthProperty().bind(pane.widthProperty());
+            bgView.fitHeightProperty().bind(pane.heightProperty());
+            pane.getChildren().addAll(bgView);
+        } catch (Exception e) {
+            System.err.println("Failed to load background image: " + e.getMessage());
+            pane.setStyle("-fx-background-color: black;");
+        }
+
+        return pane;
+    }
 }

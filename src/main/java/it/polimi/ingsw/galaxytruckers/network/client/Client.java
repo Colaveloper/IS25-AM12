@@ -4,7 +4,10 @@ import it.polimi.ingsw.galaxytruckers.network.client.rmi.RmiClient;
 import it.polimi.ingsw.galaxytruckers.network.client.socket.SocketClient;
 import it.polimi.ingsw.galaxytruckers.view.CliView;
 import it.polimi.ingsw.galaxytruckers.view.GuiView;
+import it.polimi.ingsw.galaxytruckers.view.JFXApp;
+import it.polimi.ingsw.galaxytruckers.view.View;
 import it.polimi.ingsw.galaxytruckers.view.cliScreens.CheatCodes;
+import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import javafx.application.Application;
 
@@ -12,11 +15,21 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class Client {
-    private static final ClientController controller = new ClientController();
-    private static final ClientModel model = new ClientModel();
+    private final ClientController controller = new ClientController();
+    private final ClientModel model = new ClientModel();
     //TODO: add socket implementation
 
-    public void start(String serverName, String serverAddress, int rmiPort, int socketPort) {
+    public static void main(String[] args) {
+        Client client = new Client();
+        if (args.length != 4) {
+            System.out.println("Please enter the address of the server");
+            return;
+        }
+        client.connect(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+        client.launchUI();
+    }
+
+    public void connect(String serverName, String serverAddress, int rmiPort, int socketPort) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Do you wish to use RMI (0) or Socket (1) for communication with the server?");
         System.out.println("create and skip to building (2) or join and skip to building (3)");
@@ -56,39 +69,35 @@ public class Client {
                 throw new RuntimeException(e);
             }
         } while (!chosen);
-    }
-
-    public ClientController getClientController() {
-        return controller;
-    }
-
-
-    public static void main(String[] args) throws InterruptedException {//todo togliere exc dopo aver risolto sync
-        Client client = new Client();
-        if (args.length != 4) {
-            System.out.println("Please enter the address of the server");
-            return;
-        }
-        client.start(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
         System.out.println("Successfully connected to the server");
+    }
 
+    public void launchUI() {
         System.out.println("Enter \"G\" to switch to the Graphical Interface, or press any other key to continue here");
+
         String command;
         if(CheatCodes.isCheatOn()){
-            command = CheatCodes.cheat();
-        }
-        else{
+            try {
+                command = CheatCodes.cheat();
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+                command = " ";
+            }
+        } else {
             Scanner scanner = new Scanner(System.in);
             command = scanner.nextLine();
         }
 
+        View<?> view;
         if (command.trim().equalsIgnoreCase("G")) {
-            GuiView.setModel(model);
-            GuiView.setController(controller);
-            controller.setView(new GuiView());
-            Application.launch(GuiView.class);
+            GuiView guiView = new GuiView(controller, model);
+            view = guiView;
+            JFXApp.setGuiView(guiView);
+            Application.launch(JFXApp.class);
         } else {
-            controller.setView(new CliView(controller, model));
+            view = new CliView(controller, model);
         }
+//        controller.setView(view);
+        // views start rendering autonomously at creation
     }
 }

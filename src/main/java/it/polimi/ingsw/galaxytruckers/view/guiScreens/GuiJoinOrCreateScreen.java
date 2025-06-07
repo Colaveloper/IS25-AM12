@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -50,17 +51,19 @@ public class GuiJoinOrCreateScreen extends GuiScreen {
         );
         createButton.setOnAction(e -> controller.showGameCreation());
 
-        VBox contentBox = new VBox(20, title, createButton, lobbiesBox);
-        contentBox.setAlignment(Pos.CENTER);
-        contentBox.setPadding(new Insets(40));
-        contentBox.setMaxWidth(400);
-        contentBox.setStyle(
+        VBox layout = new VBox(20, title, createButton, lobbiesBox);
+        layout.setMinHeight(Region.USE_PREF_SIZE);
+        layout.setMaxHeight(Region.USE_PREF_SIZE);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(40));
+        layout.setMaxWidth(400);
+        layout.setStyle(
                 "-fx-background-color: rgba(0, 0, 50, 0.4); -fx-background-radius: 20;"
         );
 
         updateLobbyButtons();
 
-        return contentBox;
+        return layout;
     }
 
     private void updateLobbyButtons() {

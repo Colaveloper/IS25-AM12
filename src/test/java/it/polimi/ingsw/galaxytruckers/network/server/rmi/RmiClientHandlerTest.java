@@ -46,7 +46,7 @@ class RmiClientHandlerTest {
     }
 
     @Test
-    void start() {
+    void connect() {
         rmiClientHandler.start();
         assertTrue(rmiClientHandler.isRunning());
     }

@@ -160,7 +160,7 @@ class OpenSpaceCardTest {
 //    @Test
 //    void shipWithNoEnginePowerIsForcedToGiveUp() throws IOException {
 //        setupShipWithNoEnginePower();
-//        game.start();
+//        game.connect();
 //        openSpaceCard.setNextState();
 //        openSpaceCard.setNextState();
 //        openSpaceCard.setNextState();

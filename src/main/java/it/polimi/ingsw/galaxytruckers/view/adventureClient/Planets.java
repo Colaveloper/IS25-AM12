@@ -28,7 +28,7 @@
 //    /**
 //     * Attempts to land the given player on the specified planet.
 //     * <p>
-//     * Planet indices start at 1 (not 0), so passing 1 refers to the first planet.
+//     * Planet indices connect at 1 (not 0), so passing 1 refers to the first planet.
 //     *
 //     * @param planetIndex the 1-based index of the planet to land on
 //     * @param nickname the player attempting to land

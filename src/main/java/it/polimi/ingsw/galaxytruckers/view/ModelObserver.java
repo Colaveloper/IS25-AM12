@@ -20,6 +20,7 @@ import java.util.UUID;
 public interface ModelObserver {
     //region Event update methods
     void notifyMetaState(MetaState metaState);
+
     void notifyCurrentState(GameState gameState);
 
     void notifyNewLobby(Lobby lobby);

@@ -18,61 +18,25 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class CliView implements View {
-    ClientModel model;
-    ClientController controller;
-    ScreenFactory screenFactory;
+public class CliView extends View<CliScreen> {
     CliScreen currentScreen;
-    MetaState metaState;
-
-
 
     public CliView(ClientController controller, ClientModel model) {
+        super(model, controller, new CliScreenFactory());
         startInputLoop();
-        this.controller = controller;
-        this.model = model;
-        this.screenFactory = new ScreenFactory();
-        this.currentScreen = screenFactory.createCliScreen(model, controller);
-        this.model.addObserver(this);
-        currentScreen.render();
+        notifyMetaState(MetaState.REGISTER);
     }
 
-    private void startInputLoop() {
-        new Thread(() -> {
-            Scanner scanner = new Scanner(System.in);
-            String input;
-            while (true) {
-                if(CheatCodes.isCheatOn() && !CheatCodes.cheatEmpty()){
-                    try {
-                        input = CheatCodes.cheat();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                else {
-                    input = scanner.nextLine();
-                }
-
-                // letting the user correct format errors
-                while (!currentScreen.isInputLegal(input)) {
-                    System.out.println("Invalid format, please check your input");
-                    input = scanner.nextLine();
-                }
-
-                currentScreen.parseAndInvoke(input);
-            }
-        }).start();
-    }
-
+    //region event-notify methods
     @Override
     public void notifyMetaState(MetaState metaState) {
-        currentScreen = screenFactory.createCliScreen(model, controller);
+        currentScreen = screenFactory.createScreen(metaState, model, controller);
         currentScreen.render();
     }
 
     @Override
     public void notifyCurrentState(GameState gameState) {
-        currentScreen = screenFactory.createCliScreen(model, controller);
+        currentScreen = screenFactory.createScreen(gameState, model, controller);
         currentScreen.render();
     }
 
@@ -270,5 +234,33 @@ public class CliView implements View {
     public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {
         currentScreen.notifyPlaceComponent(shipBoard, newPoint, orientation, oldPosition);
         currentScreen.render();
+    }
+    //endregion
+
+    private void startInputLoop() {
+        new Thread(() -> {
+            Scanner scanner = new Scanner(System.in);
+            String input;
+            while (true) {
+                if(CheatCodes.isCheatOn() && !CheatCodes.cheatEmpty()){
+                    try {
+                        input = CheatCodes.cheat();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else {
+                    input = scanner.nextLine();
+                }
+
+                // letting the user correct format errors
+                while (!currentScreen.isInputLegal(input)) {
+                    System.out.println("Invalid format, please check your input");
+                    input = scanner.nextLine();
+                }
+
+                currentScreen.parseAndInvoke(input);
+            }
+        }).start();
     }
 }

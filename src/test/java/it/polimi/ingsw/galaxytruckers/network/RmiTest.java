@@ -62,7 +62,7 @@ public class RmiTest {
         }
 
         @Test
-        public void startRmiClientTest() {
+        public void connectRmiClientTest() {
             assertDoesNotThrow(() -> rmiClient.start(name, "127.0.0.1",port));
         }
 

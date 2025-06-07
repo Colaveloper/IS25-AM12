@@ -79,14 +79,14 @@ public class GuiFlightBoard extends HBox {
                     SLOT_SIZE, SLOT_SIZE / 2.0
             );
             if (startingPositions.contains(position)) {
-                triangle.setFill(Color.BLACK);
+                triangle.setFill(Color.WHITE);
                 triangle.setStroke(null);
                 triangle.onMouseClickedProperty().set(event -> {
                     controller.placeShipOnFlightboard(position);
                 });
             } else {
                 triangle.setFill(Color.TRANSPARENT);
-                triangle.setStroke(Color.BLACK);
+                triangle.setStroke(Color.WHITE);
             }
             slots.get(position).getChildren().add(triangle);
             if (shipBoard != null) {

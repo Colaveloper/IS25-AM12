@@ -12,6 +12,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 
@@ -33,9 +34,10 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 
     @Override
     public Parent getNode() {
-        VBox root = new VBox();
-        root.getChildren().addAll(guiComponentBank, guiForecast, guiHourglass, guiFlightBoard, guiAllShips);
-        return root;
+        VBox layout = new VBox();
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(guiComponentBank, guiForecast, guiHourglass, guiFlightBoard, guiAllShips);
+        return layout;
     }
 
     @Override

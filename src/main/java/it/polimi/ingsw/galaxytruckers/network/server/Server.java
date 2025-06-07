@@ -26,14 +26,14 @@ public class Server {
             RmiServer rmiServer = new RmiServer(controller);
             rmiServer.start(name, rmiPort);
         } catch (RemoteException e) {
-            System.err.println("Failed to start RMI server: ");
+            System.err.println("Failed to connect RMI server: ");
             e.printStackTrace(System.err);
         }
         try {
             SocketServer socketServer = new SocketServer(controller);
             socketServer.start(socketPort);
         } catch (IOException e) {
-            System.err.println("Failed to start socket server: ");
+            System.err.println("Failed to connect socket server: ");
             e.printStackTrace(System.err);
         }
         SessionManager.getInstance().shutDown();
