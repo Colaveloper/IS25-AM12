@@ -332,7 +332,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
                 if (componentMap.containsKey(neighbours.get(direction))) {
                     Component currentComponent = componentMap.get(point);
                     Component neighbourComponent = componentMap.get(neighbours.get(direction));
-                    if (!currentComponent.getConnectors().get(direction).matches(neighbourComponent.getConnectors().get(direction))) {
+                    if (!currentComponent.getConnectors().get(direction).matches(neighbourComponent.getConnectors().get(direction.getOpposite()))) {
                         return false;
                     }
                 }

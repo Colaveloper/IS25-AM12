@@ -163,8 +163,7 @@ public class CliView extends View<CliScreen> {
 
     @Override
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-
-        //currentScreen.notifyActivateComponent(shipBoard, point);
+        currentScreen.notifyActivateComponent(shipBoard, point);
         currentScreen.render();
     }
 
@@ -197,8 +196,7 @@ public class CliView extends View<CliScreen> {
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        currentScreen.notifyComponentChange(shipBoard, point);
-        //currentScreen.notifyUseBattery(shipBoard, point);
+        currentScreen.notifyUseBattery(shipBoard, point);
         currentScreen.render();
     }
 

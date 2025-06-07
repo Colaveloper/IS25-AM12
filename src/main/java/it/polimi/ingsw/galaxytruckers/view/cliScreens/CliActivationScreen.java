@@ -15,11 +15,13 @@ public abstract class CliActivationScreen extends CliScreen {
 
     private final boolean isMyTurn;
     private final ShipBoard currentShip;
+    private int batteriesToSpend;
 
     public CliActivationScreen(ClientModel model, ControllerToServer controller, ActivateState activateState) {
         super(model, controller, activateState);
         this.currentShip = activateState.getShipBoard();
         this.isMyTurn = currentShip.equals(model.getMyShip());
+        batteriesToSpend = 0;
     }
 
     @Override
@@ -54,20 +56,29 @@ public abstract class CliActivationScreen extends CliScreen {
                     controller.activateComponent(p);
                 }
             }
-            case "" -> controller.goNext();
+            case "" -> {
+                if(batteriesToSpend > 0) System.out.println("Your need to activate " + batteriesToSpend + " batteries");
+                if(batteriesToSpend < 0) System.out.println("Your need to activate " + batteriesToSpend + " components");
+                controller.goNext();
+            }
         }
     }
 
     @Override
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
+        batteriesToSpend ++;
         shipToCliShip.get(shipBoard).highlightPoints(Set.of(point), Highlights.BLUE);
         cliAllShips.setDirty();
+        shipToCliShip.get(shipBoard).setDirty();
+        shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
     }
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
+        batteriesToSpend --;
         shipToCliShip.get(shipBoard).highlightPoints(Set.of(point), Highlights.GREEN);
-        //shipToCliShip.get(shipBoard).setDirty();
         cliAllShips.setDirty();
+        shipToCliShip.get(shipBoard).setDirty();
+        shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
     }
 }
