@@ -156,7 +156,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     public int getLosses() { return losses; }
 
     public Map<GoodsType, Integer> getGoods() {
-        return goods;
+        return new HashMap<>(goods);
     }
 
     public int getGoodsValue() {
@@ -180,37 +180,37 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     }
 
     public Set<Direction> getShieldDirections() {
-        return shieldDirections;
+        return new HashSet<>(shieldDirections);
     }
 
     // Components Observers
 
     public Map<Point, Component> getComponentMap() {
-        return componentMap;
+        return new HashMap<>(componentMap);
     }
 
     public Map<Point, Cannon> getCannons() {
-        return cannons;
+        return new HashMap<>(cannons);
     }
 
     public Map<Point, Engine> getEngines() {
-        return engines;
+        return new HashMap<>(engines);
     }
 
     public Map<Point, Battery> getBatteries() {
-        return batteries;
+        return new HashMap<>(batteries);
     }
 
     public Map<Point, Shield> getShields() {
-        return shields;
+        return new HashMap<>(shields);
     }
 
     public Map<Point, Cabin> getCabins() {
-        return cabins;
+        return new HashMap<>(cabins);
     }
 
     public Map<Point, CargoHold> getCargoHolds() {
-        return cargoHolds;
+        return new HashMap<>(cargoHolds);
     }
 
     public Map<Point, LifeSupport> getLifeSupports() {
@@ -218,7 +218,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     }
 
     public Map<Point, Activatable> getActivatables() {
-        return activatables;
+        return new HashMap<>(activatables);
     }
 
     public Optional<Component> getLastComponent() {
