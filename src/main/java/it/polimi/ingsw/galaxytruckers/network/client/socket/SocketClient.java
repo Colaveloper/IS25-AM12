@@ -56,6 +56,11 @@ public class SocketClient implements VirtualServer, VirtualClient {
     public void stop() {
         isRunning = false;
         inputThread.interrupt();
+        try {
+            socket.close();
+        } catch (IOException e) {
+            handleIOException(e);
+        }
     }
 
     private void inputThreadTask() {
@@ -93,6 +98,7 @@ public class SocketClient implements VirtualServer, VirtualClient {
             outputStream.writeObject(request);
             outputStream.flush();
             Response response = responses.get(request.getUuid()).get();
+            responses.remove(response.getUuid());
             if (response.isError()) throw new RuntimeException(response.getError());
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
