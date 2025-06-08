@@ -52,6 +52,12 @@ public class SecondShipBoard extends ShipBoard {
         return shipArea;
     }
 
+    @Override
+    public void finishBuilding() {
+        super.finishBuilding();
+        stashedComponents.clear();
+    }
+
     //Stashing methods
 
     public void stashComponent() {

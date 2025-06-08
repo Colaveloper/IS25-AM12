@@ -111,6 +111,7 @@ public class CliGoodsScreen extends CliScreen {
                 }
                 controller.removeGoods(p, goodsType);
             }
+            case "" -> controller.goNext();
         }
     }
 

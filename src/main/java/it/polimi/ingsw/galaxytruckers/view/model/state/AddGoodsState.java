@@ -39,12 +39,14 @@ public final class AddGoodsState extends AdventureState {
     @Override
     public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
         goodsBuffer.removeFromBuffer(goodsType);
+        shipBoard.placeGoods(point,goodsType);
         game.getObservers().forEach(observer -> observer.notifyPlaceGoods(shipBoard, point, goodsType));
     }
 
     @Override
     public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
         goodsBuffer.addToBuffer(goodsType);
+        shipBoard.removeGoods(point,goodsType);
         game.getObservers().forEach(observer -> observer.notifyRemoveGoods(shipBoard, point, goodsType));
     }
 

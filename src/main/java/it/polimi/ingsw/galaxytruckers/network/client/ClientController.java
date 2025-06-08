@@ -258,11 +258,11 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 
     @Override
     public void choosePlanet(int choice){
-        try{
+//        try{
             server.choosePlanet(choice);
-        } catch(IllegalArgumentException e){
-            reportError("Cannot land on planet");
-        }
+//        } catch(IllegalArgumentException e){
+//            reportError("Cannot land on planet");
+//        }2
     }
 
     @Override

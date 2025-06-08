@@ -32,6 +32,8 @@ public abstract sealed class GameState permits
 
     public abstract List<StateActions> getAvailableActions();
 
+    public void leave() {}
+
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
         System.err.println("1This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");

@@ -52,6 +52,7 @@ public class Game {
      * @param state the {@code GameState} to be set
      */
     public void setCurrentState(GameState state) {
+        if (this.currentState != null) this.currentState.leave();
         this.currentState = state;
         state.setGame(this);
     }

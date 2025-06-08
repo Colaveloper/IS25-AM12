@@ -25,6 +25,11 @@ public sealed abstract class ShipBuildingState extends GameState permits
     }
 
     @Override
+    public void leave() {
+        game.getShipBoards().forEach(ShipBoard::finishBuilding);
+    }
+
+    @Override
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
         if(componentBank.getCoveredComponentsN() != 0) actions.add(StateActions.REQUEST_RAND_COMPONENT);

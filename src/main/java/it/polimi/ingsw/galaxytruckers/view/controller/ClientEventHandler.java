@@ -203,6 +203,7 @@ public class ClientEventHandler implements EventHandler<Event> {
             }
             case SurrenderEvent surrenderEvent -> {
                 //TODO: handle player surrender
+                //clientModel.notifySurrender(Set<ShipBoard>)
             }
             case UseBatteryEvent useBatteryEvent -> {
                 clientModel.notifyUseBattery(
