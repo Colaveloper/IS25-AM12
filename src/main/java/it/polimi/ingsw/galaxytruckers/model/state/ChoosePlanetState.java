@@ -4,20 +4,19 @@ import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public final class ChoosePlanetState extends AdventureState implements GameStateInterface{
     private int shipIndex;
     private final int numPlanets;
     private final List<ShipBoard> orderedShipBoards;
-    private final Consumer<Integer> choosePlanetMethod;
-    private final Map<ShipBoard, Integer> shipToChoice;
+    private final BiConsumer<ShipBoard, Integer> choosePlanetMethod;
     private final boolean[] chosenPlanets;
 
-    public ChoosePlanetState(Consumer<Integer> choosePlanetMethod, int numPlanets) {
+    public ChoosePlanetState(BiConsumer<ShipBoard,Integer> choosePlanetMethod, int numPlanets) {
         this.choosePlanetMethod = choosePlanetMethod;
         this.numPlanets = numPlanets;
-        this.shipToChoice = new HashMap<>();
         this.orderedShipBoards = new ArrayList<>();
         this.chosenPlanets = new boolean[numPlanets];
         this.shipIndex = 0;
@@ -32,14 +31,13 @@ public final class ChoosePlanetState extends AdventureState implements GameState
 
     @Override
     public void choosePlanet(ShipBoard shipBoard, int choice) {
-        if (!shipBoard.equals(orderedShipBoards.get(shipIndex))) {
+        if (!shipBoard.equals(getCurrentShip())) {
             throw new IllegalStateException("It's not your turn");
         }
         if (choice < 0 || choice > this.numPlanets || chosenPlanets[choice]) {
             throw new IllegalArgumentException("Invalid choice: " + choice);
         }
-        choosePlanetMethod.accept(choice);
-        shipToChoice.put(shipBoard,choice);
+        choosePlanetMethod.accept(getCurrentShip(),choice);
         chosenPlanets[choice] = true;
         ShipBoard nextShipBoard = nextShip();
         if (nextShipBoard != null) {
@@ -66,5 +64,9 @@ public final class ChoosePlanetState extends AdventureState implements GameState
 
     public ShipBoard getCurrentShip() {
         return orderedShipBoards.get(shipIndex);
+    }
+
+    public boolean[] getChosenPlanets() {
+        return chosenPlanets;
     }
 }

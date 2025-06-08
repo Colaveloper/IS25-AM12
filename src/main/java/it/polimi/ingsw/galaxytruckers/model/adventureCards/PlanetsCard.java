@@ -50,19 +50,14 @@ public class PlanetsCard extends AdventureCard {
         }
     }
 
-    void choosePlanet(int index) {
-        planetChoices.put(currentShipBoard, index);
-        landedShips.add(currentShipBoard);
+    void choosePlanet(ShipBoard shipBoard, int index) {
+        planetChoices.put(shipBoard, index);
+        landedShips.add(shipBoard);
     }
 
     @VisibleForTesting
     public ShipBoard getCurrentShipBoard() {
         return currentShipBoard;
-    }
-
-    @VisibleForTesting
-    public List<Map<GoodsType, Integer>> getPlanets() {
-        return planets;
     }
 
     @VisibleForTesting
