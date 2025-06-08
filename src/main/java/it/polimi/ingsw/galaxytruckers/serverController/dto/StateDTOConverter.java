@@ -17,9 +17,9 @@ public class StateDTOConverter {
                 );
             }
             case ChoosePlanetState choosePlanetState -> {
-                return new SimpleStateDTO(
+                return new ChoosePlanetDTO(
                         Player.getPlayer(choosePlanetState.getCurrentShip()).getNickname(),
-                        StateDTOType.CHOOSE_PLANET
+                        choosePlanetState.getNumPlanets()
                 );
             }
             case ChooseShipPieceState chooseShipPieceState -> {

@@ -9,21 +9,20 @@ import java.util.Set;
 
 
 public final class ChooseShipPieceState extends AdventureState {
-    private static final List<StateActions> availableActions = List.of(
-            StateActions.CHOOSE_SHIP_PIECE
-    );
 
     private final ShipBoard shipBoard;
     private final List<Set<Point>> shipPieces;
 
-    public ChooseShipPieceState(List<Set<Point>> shipPieces, ShipBoard shipBoard) {
+    public ChooseShipPieceState(ShipBoard myShip, List<Set<Point>> shipPieces, ShipBoard shipBoard) {
+        this.myShip = myShip;
         this.shipPieces = shipPieces;
         this.shipBoard = shipBoard;
     }
 
     @Override
     public List<StateActions> getAvailableActions() {
-        List<StateActions> actions = new ArrayList<>(availableActions);
+        List<StateActions> actions = new ArrayList<>();
+        if(myShip.equals(shipBoard)) actions.add(StateActions.CHOOSE_SHIP_PIECE);
         actions.addAll(super.getAvailableActions());
         return actions;
     }

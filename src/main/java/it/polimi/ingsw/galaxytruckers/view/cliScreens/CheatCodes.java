@@ -14,7 +14,7 @@ public class CheatCodes {
     private static boolean isCheatOn;
 
     static {
-//        for(int i = 0; i < 10; i++){
+//        for(int i = 0; i < 5; i++){
 //            secondToBuild.add("C");
 //            secondToBuild.add("R");
 //        }

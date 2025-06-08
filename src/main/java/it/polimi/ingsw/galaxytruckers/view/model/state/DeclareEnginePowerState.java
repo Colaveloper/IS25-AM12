@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 
 public final class DeclareEnginePowerState extends ActivateState {
 
-    public DeclareEnginePowerState(ShipBoard shipBoard, boolean isMyTurn) {
-        super(shipBoard, shipBoard.getEngines().keySet().stream()
+    public DeclareEnginePowerState(ShipBoard myShip, ShipBoard shipBoard) {
+        super(myShip, shipBoard, shipBoard.getEngines().keySet().stream()
                 .filter(p -> shipBoard.getActivatables().containsKey(p))
-                .collect(Collectors.toSet()), isMyTurn);
+                .collect(Collectors.toSet()));
     }
 }

@@ -64,7 +64,7 @@ public abstract class Screen {
 
     public void notifyUseBattery(ShipBoard shipBoard, Point point){}
 
-    public void notifyChoosePlanet(ShipBoard shipBoard, int choice){}
+    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard){}
 
     public void notifyGiveUp(ShipBoard shipBoard){}
 

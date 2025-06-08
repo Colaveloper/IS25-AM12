@@ -7,20 +7,21 @@ import java.util.List;
 import java.util.Set;
 
 public final class GrabRewardState extends AdventureState {
-    private static final List<StateActions> availableActions = List.of(
-            StateActions.GRAB_REWARD,
-            StateActions.GO_NEXT
-    );
 
     private final ShipBoard shipBoard;
 
-    public GrabRewardState(ShipBoard shipBoard) {
+    public GrabRewardState(ShipBoard myShip, ShipBoard shipBoard) {
+        this.myShip = myShip;
         this.shipBoard = shipBoard;
     }
 
     @Override
     public List<StateActions> getAvailableActions() {
-        List<StateActions> actions = new ArrayList<>(availableActions);
+        List<StateActions> actions = new ArrayList<>();
+        if(shipBoard.equals(myShip)) {
+            actions.add(StateActions.GRAB_REWARD);
+            actions.add(StateActions.GO_NEXT);
+        }
         actions.addAll(super.getAvailableActions());
         return actions;
     }

@@ -64,6 +64,10 @@ public final class ChoosePlanetState extends AdventureState implements GameState
         return orderedShipBoards.get(shipIndex);
     }
 
+    public int getNumPlanets() {
+        return numPlanets;
+    }
+
     public ShipBoard getCurrentShip() {
         return orderedShipBoards.get(shipIndex);
     }

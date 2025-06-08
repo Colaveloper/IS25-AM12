@@ -21,7 +21,7 @@ public class CliDeclareFirePowerScreen extends CliActivationScreen {
         super(model, controller, gameState);
         this.gameState = gameState;
         this.currentShip = gameState.getShipBoard();
-        this.isMyTurn = currentShip.equals(model.getMyShip());
+        this.isMyTurn = currentShip.equals(myShipBoard);
     }
 
     @Override

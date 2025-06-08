@@ -139,7 +139,7 @@ public class CliAdventureCard extends CliElement{
         List<GoodsType> orderedGoods = List.of(GoodsType.BLUE, GoodsType.GREEN, GoodsType.YELLOW, GoodsType.RED);
 
         for (int i = 0; i < planets.size(); i++) {
-            sb.append("planet ").append(i + 1).append(": ");
+            sb.append("planet ").append(i).append(": ");
 
             int finalI = i;
             String goods = orderedGoods.stream()

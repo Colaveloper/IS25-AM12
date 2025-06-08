@@ -11,15 +11,17 @@ public final class RemoveGoodsState extends AdventureState {
     private int goodsToLose;
     private final ShipBoard shipBoard;
 
-    public RemoveGoodsState(int goodsToLose, ShipBoard shipBoard) {
+    public RemoveGoodsState(ShipBoard myShip, int goodsToLose, ShipBoard shipBoard) {
+        this.myShip = myShip;
         this.goodsToLose = goodsToLose;
         this.shipBoard = shipBoard;
     }
 
     @Override
     public List<StateActions> getAvailableActions() {
-        List<StateActions> actions = new ArrayList<>(super.getAvailableActions());
-        actions.add(StateActions.LOSE_GOOD);
+        List<StateActions> actions = new ArrayList<>();
+        if(shipBoard.equals(myShip)) actions.add(StateActions.LOSE_GOOD);
+        actions.addAll(super.getAvailableActions());
         return actions;
     }
 

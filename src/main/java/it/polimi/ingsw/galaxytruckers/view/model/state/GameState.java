@@ -28,6 +28,8 @@ public abstract sealed class GameState permits
         this.game = game;
     }
 
+    protected ShipBoard myShip;
+
     public abstract List<StateActions> getAvailableActions();
 
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
@@ -149,7 +151,7 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
-    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, boolean isMyShip) {
+    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipboard) {
         System.err.println("24This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
     }

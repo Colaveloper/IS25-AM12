@@ -11,15 +11,17 @@ public final class RemoveCrewState extends AdventureState {
     int crewSacrifice;
     ShipBoard shipBoard;
 
-    public RemoveCrewState(int crewSacrifice, ShipBoard shipBoard) {
+    public RemoveCrewState(ShipBoard myShip, int crewSacrifice, ShipBoard shipBoard) {
+        this.myShip = myShip;
         this.crewSacrifice = crewSacrifice;
         this.shipBoard = shipBoard;
     }
 
     @Override
     public List<StateActions> getAvailableActions() {
-        List<StateActions> actions = new ArrayList<>(super.getAvailableActions());
-        actions.add(StateActions.LOSE_CREW);
+        List<StateActions> actions = new ArrayList<>();
+        if(shipBoard.equals(myShip)) actions.add(StateActions.LOSE_CREW);
+        actions.addAll(super.getAvailableActions());
         return actions;
     }
 

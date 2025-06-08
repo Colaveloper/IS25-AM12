@@ -10,19 +10,20 @@ import java.util.Set;
 
 public final class ChoosePlanetState extends AdventureState {
     private final ShipBoard shipBoard;
-    private final Set<Integer> options;
+    private final ShipBoard[] options;
     private boolean isMyTurn;
 
-    public ChoosePlanetState(ShipBoard shipBoard, Set<Integer> options, boolean isMyTurn) {
-        this.options = options;
+    public ChoosePlanetState(ShipBoard myShip, ShipBoard shipBoard, int numPlanets) {
+        this.myShip = myShip;
+        options = new ShipBoard[numPlanets];
         this.shipBoard = shipBoard;
-        this.isMyTurn = isMyTurn;
+        this.isMyTurn = myShip.equals(shipBoard);
     }
 
     @Override
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
-        if(!options.isEmpty() && isMyTurn) {
+        if(isMyTurn) {
             actions.add(StateActions.CHOOSE_PLANET);
             actions.add(StateActions.GO_NEXT);
         }
@@ -31,17 +32,21 @@ public final class ChoosePlanetState extends AdventureState {
     }
 
     @Override
-    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, boolean isMyTurn) {
-        this.isMyTurn = isMyTurn;
-        options.remove(choice);
-        game.getObservers().forEach(observer -> observer.notifyChoosePlanet(shipBoard,choice));
+    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard) {
+        isMyTurn = myShip.equals(nextShipBoard);
+        options[choice] = shipBoard;
+        game.getObservers().forEach(observer -> observer.notifyChoosePlanet(shipBoard,choice,nextShipBoard));
     }
 
     public ShipBoard getShipBoard() {
         return shipBoard;
     }
 
-    public Set<Integer> getOptions() {
+    public boolean isMyTurn() {
+        return isMyTurn;
+    }
+
+    public ShipBoard[] getOptions() {
         return options;
     }
 }

@@ -26,8 +26,6 @@ public class Game {
     private final FlightBoard flightBoard;
     private GameState currentState = null;
 
-    private AdventureCard currentAdventureCard;
-
     public Game(Level level, int playersNumber) {
         this.level = level;
         this.playersNumber = playersNumber;
@@ -104,11 +102,4 @@ public class Game {
         return gameFactory;
     }
 
-    public AdventureCard getCurrentAdventureCard() {
-        return currentAdventureCard;
-    }
-
-    public void setCurrentAdventureCard(AdventureCard currentAdventureCard) {
-        this.currentAdventureCard = currentAdventureCard;
-    }
 }

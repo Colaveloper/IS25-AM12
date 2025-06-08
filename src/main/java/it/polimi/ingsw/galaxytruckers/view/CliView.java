@@ -201,8 +201,8 @@ public class CliView extends View<CliScreen> {
     }
 
     @Override
-    public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
-        currentScreen.notifyChoosePlanet(shipBoard, choice);
+    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipboard) {
+        currentScreen.notifyChoosePlanet(shipBoard, choice, nextShipboard);
         currentScreen.render();
     }
 

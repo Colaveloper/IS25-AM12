@@ -8,6 +8,8 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.RemoveGoodsState;
 
+import java.util.List;
+
 public class CliNewCardScreen extends CliScreen {
 
     private CliAdventureCard adventureCard;
@@ -29,18 +31,10 @@ public class CliNewCardScreen extends CliScreen {
         }
         if (hasDrown) {
             System.out.println("A new card has been drawn:\n");
-            adventureCard.getDescription().forEach(System.out::println);
+            List<String> descriptions = adventureCard.getDescription();
+            descriptions.forEach(System.out::println);
         }
         printActions();
-    }
-
-    @Override
-    public boolean isInputLegal(String input) {
-        if(!imLeader){
-            System.out.println("wait for leader");
-            return false;
-        }
-        return isFormatLegal(input);
     }
 
     @Override

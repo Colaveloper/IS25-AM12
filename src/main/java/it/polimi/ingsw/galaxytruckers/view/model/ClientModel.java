@@ -244,8 +244,8 @@ public class ClientModel {
         safeGetCurrentState().notifyUseBattery(shipBoard,point);
     }
 
-    public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
-        safeGetCurrentState().notifyChoosePlanet(shipBoard, choice, getMyShip() == shipBoard);
+    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard) {
+        safeGetCurrentState().notifyChoosePlanet(shipBoard, choice, nextShipBoard);
     }
 
     public void notifyGiveUp(ShipBoard shipBoard) {

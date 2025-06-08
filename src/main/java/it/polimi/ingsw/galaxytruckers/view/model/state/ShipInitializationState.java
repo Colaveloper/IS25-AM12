@@ -10,7 +10,8 @@ import java.util.Map;
 public final class ShipInitializationState extends GameState {
     private final Map<ShipBoard, Map<CrewType,List<Point>>> crewtypeToPoints;
 
-    public ShipInitializationState(Map<ShipBoard, Map<CrewType, List<Point>>> crewtypeToPoints) {
+    public ShipInitializationState(ShipBoard myShip, Map<ShipBoard, Map<CrewType, List<Point>>> crewtypeToPoints) {
+        this.myShip = myShip;
         this.crewtypeToPoints = crewtypeToPoints;
     }
 

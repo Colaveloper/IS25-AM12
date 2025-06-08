@@ -16,8 +16,9 @@ public sealed abstract class ActivateState extends AdventureState permits
     protected final ShipBoard shipBoard;
     protected final boolean isMyTurn;
 
-    ActivateState(ShipBoard shipBoard, Set<Point> availablePositions, boolean isMyTurn) {
-        this.isMyTurn = isMyTurn;
+    ActivateState(ShipBoard myShip, ShipBoard shipBoard, Set<Point> availablePositions) {
+        this.myShip = myShip;
+        this.isMyTurn = shipBoard.equals(myShip);
         this.shipBoard = shipBoard;
         this.availablePositions = availablePositions;
     }

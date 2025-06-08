@@ -78,7 +78,7 @@ public interface ModelObserver {
 
     void notifyUseBattery(ShipBoard shipBoard, Point point);
 
-    void notifyChoosePlanet(ShipBoard shipBoard, int choice);
+    void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard);
 
     void notifyGiveUp(ShipBoard shipBoard);
 
