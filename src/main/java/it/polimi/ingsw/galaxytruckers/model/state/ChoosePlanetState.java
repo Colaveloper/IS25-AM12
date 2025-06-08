@@ -1,47 +1,70 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 public final class ChoosePlanetState extends AdventureState implements GameStateInterface{
-    ShipBoard shipBoard;
-    Consumer<Integer> choosePlanetMethod;
-    Set<Integer> options;
+    private int shipIndex;
+    private final int numPlanets;
+    private final List<ShipBoard> orderedShipBoards;
+    private final Consumer<Integer> choosePlanetMethod;
+    private final Map<ShipBoard, Integer> shipToChoice;
+    private final boolean[] chosenPlanets;
 
-    public ChoosePlanetState(ShipBoard shipBoard, Consumer<Integer> choosePlanetMethod, Set<Integer> options) {
+    public ChoosePlanetState(Consumer<Integer> choosePlanetMethod, int numPlanets) {
         this.choosePlanetMethod = choosePlanetMethod;
-        this.options = options;
-        this.shipBoard = shipBoard;
+        this.numPlanets = numPlanets;
+        this.shipToChoice = new HashMap<>();
+        this.orderedShipBoards = new ArrayList<>();
+        this.chosenPlanets = new boolean[numPlanets];
+        this.shipIndex = 0;
+    }
+
+    @Override
+    public void setGame(Game game) {
+        this.game = game;
+        this.orderedShipBoards.addAll(game.getFlightBoard().getOrderedShips());
+        game.getEventListener().notifyGameStateUpdateEvent(this);
     }
 
     @Override
     public void choosePlanet(ShipBoard shipBoard, int choice) {
-        if (!shipBoard.equals(this.shipBoard)) {
+        if (!shipBoard.equals(orderedShipBoards.get(shipIndex))) {
             throw new IllegalStateException("It's not your turn");
         }
-        if (!options.contains(choice)) {
+        if (choice < 0 || choice > this.numPlanets || chosenPlanets[choice]) {
             throw new IllegalArgumentException("Invalid choice: " + choice);
         }
         choosePlanetMethod.accept(choice);
-        game.getEventListener().notifyPlanetChoiceEvent(shipBoard,choice);
-        game.setCurrentState(getNextState());
+        shipToChoice.put(shipBoard,choice);
+        chosenPlanets[choice] = true;
+        ShipBoard nextShipBoard = nextShip();
+        if (nextShipBoard != null) {
+            game.getEventListener().notifyPlanetChoiceEvent(shipBoard,choice, nextShipBoard);
+        }
     }
 
     @Override
     public void goNext(ShipBoard shipBoard) {
-        if (!shipBoard.equals(this.shipBoard)) {
+        if (!shipBoard.equals(orderedShipBoards.get(shipIndex))) {
             throw new IllegalStateException("It's not your turn");
         }
-        game.setCurrentState(getNextState());
+        nextShip();
     }
 
-    public ShipBoard getShipBoard() {
-        return shipBoard;
+    private ShipBoard nextShip() {
+        shipIndex++;
+        if (shipIndex >= orderedShipBoards.size()) {
+            game.setCurrentState(getNextState());
+            return null;
+        }
+        return orderedShipBoards.get(shipIndex);
     }
 
-    public Set<Integer> getOptions() {
-        return options;
+    public ShipBoard getCurrentShip() {
+        return orderedShipBoards.get(shipIndex);
     }
 }

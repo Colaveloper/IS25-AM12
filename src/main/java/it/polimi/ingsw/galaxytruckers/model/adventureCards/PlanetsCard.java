@@ -8,17 +8,14 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class PlanetsCard extends AdventureCard {
-    private ShipBoard currentShipBoard;
     private final List<Map<GoodsType, Integer>> planets;
-    private Set<Integer> remainingChoices;
-    private Map<ShipBoard, Integer> planetChoices;
-    private List<ShipBoard> landedShips;
     private final int flightDaysLoss;
     private boolean planetChoiceAllowed;
+    private ShipBoard currentShipBoard;
+    private Map<ShipBoard, Integer> planetChoices;
+    private List<ShipBoard> landedShips;
 
     public PlanetsCard(Game game, Level level, List<Map<GoodsType, Integer>> planets, int flightDaysLoss, int id) {
         super(game, level, id);
@@ -32,23 +29,14 @@ public class PlanetsCard extends AdventureCard {
         this.planetChoiceAllowed = true;
         this.planetChoices = new HashMap<>();
         this.landedShips = new ArrayList<>();
-        this.remainingChoices = IntStream.range(0, planets.size())
-                .boxed()
-                .collect(Collectors.toSet());
     }
 
     @Override
     public AdventureState getNextState() {
         if (planetChoiceAllowed) {
-            if (currentPlayerIndex >= flightBoard.getShipToPlace().size()) {
-                planetChoiceAllowed = false;
-                currentPlayerIndex = 0;
-                currentShipBoard = null;
-                return getNextState();
-            }
-            currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
-            currentPlayerIndex++;
-            return new ChoosePlanetState(currentShipBoard, this::choosePlanet, remainingChoices);
+            AdventureState state = new ChoosePlanetState(this::choosePlanet, this.planets.size());
+            planetChoiceAllowed = false;
+            return state;
         } else {
             if (currentShipBoard != null) {
                 flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
@@ -65,7 +53,6 @@ public class PlanetsCard extends AdventureCard {
     void choosePlanet(int index) {
         planetChoices.put(currentShipBoard, index);
         landedShips.add(currentShipBoard);
-        remainingChoices.remove(index);
     }
 
     @VisibleForTesting
@@ -76,11 +63,6 @@ public class PlanetsCard extends AdventureCard {
     @VisibleForTesting
     public List<Map<GoodsType, Integer>> getPlanets() {
         return planets;
-    }
-
-    @VisibleForTesting
-    public Set<Integer> getRemainingChoices() {
-        return remainingChoices;
     }
 
     @VisibleForTesting

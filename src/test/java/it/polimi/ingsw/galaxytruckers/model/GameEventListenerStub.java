@@ -69,7 +69,7 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifyPlanetChoiceEvent(ShipBoard shipBoard, int planetId) {
+    public void notifyPlanetChoiceEvent(ShipBoard shipBoard, int planetId, ShipBoard nextShip) {
     }
 
     @Override
