@@ -7,16 +7,21 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public non-sealed abstract class ShipCorrectionState extends GameState implements GameStateInterface{
-    Set<ShipBoard> validShipBoards;
-    Map<ShipBoard, List<Set<Point>>> shipPieces;
+public non-sealed class ShipCorrectionState extends GameState implements GameStateInterface {
+    private final Set<ShipBoard> validShipBoards;
+    private final Map<ShipBoard, List<Set<Point>>> shipPieces;
+    private final boolean shouldDiscard;
 
-    public ShipCorrectionState() {
+    public ShipCorrectionState(boolean shouldDiscard) {
+        this.shouldDiscard = shouldDiscard;
         this.validShipBoards = new HashSet<>();
         this.shipPieces = new HashMap<>();
     }
 
-    protected abstract void removeAt(ShipBoard shipBoard, Point point);
+    protected void removeAt(ShipBoard shipBoard, Point point) {
+        if (shouldDiscard) shipBoard.discardComponent(point);
+        else shipBoard.removeComponent(point);
+    }
 
     @Override
     public void setGame(Game game) {
@@ -30,7 +35,11 @@ public non-sealed abstract class ShipCorrectionState extends GameState implement
         tryStateTransition();
     }
 
-    protected abstract void tryStateTransition();
+    protected void tryStateTransition() {
+        if (validShipBoards.size() == game.getShipBoards().size()) {
+            game.setCurrentState(new ShipInitializationState());
+        }
+    }
 
     private boolean checkShipValidity(ShipBoard shipBoard) {
         if (shipBoard.checkValidity()) {
@@ -90,5 +99,9 @@ public non-sealed abstract class ShipCorrectionState extends GameState implement
 
     public Map<ShipBoard, List<Set<Point>>> getShipPieces() {
         return new HashMap<>(shipPieces);
+    }
+
+    public boolean getShouldDiscard() {
+        return shouldDiscard;
     }
 }

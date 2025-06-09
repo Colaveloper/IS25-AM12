@@ -65,7 +65,7 @@ public class Game {
         this.flightBoard = gameFactory.createFlightBoard(shipBoards.size());
         this.flightBoard.setGameEventListener(eventListener);
         this.deck = gameFactory.createDeck(this);
-        setCurrentState(gameFactory.createFirstGameState());
+        setCurrentState(gameFactory.createShipBuildingState());
     }
 
     /**

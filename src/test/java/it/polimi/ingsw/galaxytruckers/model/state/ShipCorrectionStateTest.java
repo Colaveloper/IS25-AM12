@@ -4,6 +4,8 @@ import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.model.factory.SecondFactory;
+import it.polimi.ingsw.galaxytruckers.model.factory.TestFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
@@ -21,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ShipCorrectionStateTest {
     List<ShipBoard> shipBoards;
+    ShipCorrectionState shipCorrectionState;
+    Game game;
 
     @BeforeEach
     void setup() {
@@ -28,19 +32,17 @@ class ShipCorrectionStateTest {
     }
 
     @Nested
-    class TestShipCorrectionStateTest {
-        TestShipCorrectionState shipCorrectionState;
-        Game game;
+    class GeneralTests {
 
         @BeforeEach
         void setup() throws IOException {
-            shipCorrectionState = new TestShipCorrectionState();
+            shipCorrectionState = new TestFactory().createShipCorrectionState();
             game = new Game(Level.TEST);
             shipBoards.add(game.addShipBoard(GameColor.BLUE));
             shipBoards.add(game.addShipBoard(GameColor.RED));
             shipBoards.add(game.addShipBoard(GameColor.GREEN));
             for (ShipBoard shipBoard : shipBoards) {
-                shipBoard.removeComponent(new Point(7,7));
+                shipBoard.removeComponent(new Point(7, 7));
             }
             game.setEventListener(new GameEventListenerStub());
             game.start();
@@ -48,12 +50,9 @@ class ShipCorrectionStateTest {
                 shipBoard.offerComponent(new Cabin(
                         Map.of(
                                 Direction.UP, Connector.UNIVERSAL,
-
-Direction.LEFT,                                 Connector.UNIVERSAL,
-
-Direction.DOWN,                                 Connector.UNIVERSAL,
-
-Direction.RIGHT,                                 Connector.UNIVERSAL
+                                Direction.LEFT, Connector.UNIVERSAL,
+                                Direction.DOWN, Connector.UNIVERSAL,
+                                Direction.RIGHT, Connector.UNIVERSAL
                         )));
                 shipBoard.placeComponent(new Point(7, 7), Direction.UP);
                 shipBoard.weldLastComponent();
@@ -66,7 +65,7 @@ Direction.RIGHT,                                 Connector.UNIVERSAL
                             Direction.RIGHT, Connector.NONE
                     )
             ));
-            shipBoards.get(1).placeComponent(new Point(8,7),Direction.UP);
+            shipBoards.get(1).placeComponent(new Point(8, 7), Direction.UP);
             shipBoards.get(1).weldLastComponent();
             shipBoards.get(2).offerComponent(new Component(
                     Map.of(
@@ -76,7 +75,7 @@ Direction.RIGHT,                                 Connector.UNIVERSAL
                             Direction.RIGHT, Connector.NONE
                     )
             ));
-            shipBoards.get(2).placeComponent(new Point(8,7),Direction.UP);
+            shipBoards.get(2).placeComponent(new Point(8, 7), Direction.UP);
             shipBoards.get(2).weldLastComponent();
             shipBoards.get(2).offerComponent(new Component(
                     Map.of(
@@ -86,7 +85,7 @@ Direction.RIGHT,                                 Connector.UNIVERSAL
                             Direction.RIGHT, Connector.NONE
                     )
             ));
-            shipBoards.get(2).placeComponent(new Point(9,7),Direction.UP);
+            shipBoards.get(2).placeComponent(new Point(9, 7), Direction.UP);
             shipBoards.get(2).weldLastComponent();
             game.getCurrentState().placeShipOnFlightBoard(shipBoards.getFirst());
             game.setCurrentState(shipCorrectionState);
@@ -94,12 +93,12 @@ Direction.RIGHT,                                 Connector.UNIVERSAL
 
         @Test
         void removeComponentWithCorrectShipThrowsException() {
-            assertThrows(IllegalStateException.class, () -> shipCorrectionState.removeComponent(shipBoards.getFirst(), new Point(7,7)));
+            assertThrows(IllegalStateException.class, () -> shipCorrectionState.removeComponent(shipBoards.getFirst(), new Point(7, 7)));
         }
 
         @Test
         void removeComponentWithIncorrectShipUpdatesValidity() {
-            shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7,7));
+            shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
             assertEquals(1, shipBoards.get(1).getComponentMap().size());
             assertTrue(shipCorrectionState.getValidShipBoards().contains(shipBoards.get(1)));
         }
@@ -117,6 +116,12 @@ Direction.RIGHT,                                 Connector.UNIVERSAL
         }
 
         @Test
+        void shipRemainsInvalidAfterRemoval() {
+            shipCorrectionState.removeComponent(shipBoards.get(2), new Point(9,7));
+            assertFalse(shipCorrectionState.getValidShipBoards().contains(shipBoards.get(2)));
+        }
+
+        @Test
         void removeComponentWithAllValidShipsChangesState() {
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
             shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
@@ -135,6 +140,7 @@ Direction.RIGHT,                                 Connector.UNIVERSAL
         void chooseShipPieceWithInvalidIndexThrowsException() {
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
             assertThrows(IllegalArgumentException.class, () -> shipCorrectionState.chooseShipPiece(shipBoards.get(2), -1));
+            assertThrows(IllegalArgumentException.class, () -> shipCorrectionState.chooseShipPiece(shipBoards.get(2), 20));
         }
 
         @Test
@@ -152,34 +158,16 @@ Direction.RIGHT,                                 Connector.UNIVERSAL
     }
 
     @Nested
-    class SecondShipCorrectionStateTest {
-        SecondShipCorrectionState shipCorrectionState;
-        Game game;
-
+    class SecondShipCorrectionTest {
         @BeforeEach
         void setup() throws IOException {
-            shipCorrectionState = new SecondShipCorrectionState();
-            game = new Game(Level.TEST);
+            shipCorrectionState = new SecondFactory().createShipCorrectionState();
+            game = new Game(Level.SECOND);
+            game.setEventListener(new GameEventListenerStub());
             shipBoards.add(game.addShipBoard(GameColor.BLUE));
             shipBoards.add(game.addShipBoard(GameColor.RED));
-            shipBoards.add(game.addShipBoard(GameColor.GREEN));
-            for (ShipBoard shipBoard : shipBoards) {
-                shipBoard.removeComponent(new Point(7,7));
-            }
-            game.setEventListener(new GameEventListenerStub());
             game.start();
-            for (ShipBoard shipBoard : shipBoards) {
-                shipBoard.offerComponent(new Component(
-                        Map.of(
-                                Direction.UP, Connector.UNIVERSAL,
-                                Direction.LEFT, Connector.UNIVERSAL,
-                                Direction.DOWN, Connector.UNIVERSAL,
-                                Direction.RIGHT, Connector.UNIVERSAL
-                        )
-                ));
-                shipBoard.placeComponent(new Point(7, 7), Direction.UP);
-                shipBoard.weldLastComponent();
-            }
+            game.placeShipOnFlightBoard(shipBoards.getFirst(), game.getFlightBoard().getStartingPositionsLeft().getFirst());
             shipBoards.get(1).offerComponent(new Component(
                     Map.of(
                             Direction.UP, Connector.NONE,
@@ -188,9 +176,9 @@ Direction.RIGHT,                                 Connector.UNIVERSAL
                             Direction.RIGHT, Connector.NONE
                     )
             ));
-            shipBoards.get(1).placeComponent(new Point(8,7),Direction.UP);
+            shipBoards.get(1).placeComponent(new Point(8, 7), Direction.UP);
             shipBoards.get(1).weldLastComponent();
-            shipBoards.get(2).offerComponent(new Component(
+            shipBoards.get(1).offerComponent(new Component(
                     Map.of(
                             Direction.UP, Connector.NONE,
                             Direction.LEFT, Connector.NONE,
@@ -198,98 +186,15 @@ Direction.RIGHT,                                 Connector.UNIVERSAL
                             Direction.RIGHT, Connector.NONE
                     )
             ));
-            shipBoards.get(2).placeComponent(new Point(8,7),Direction.UP);
-            shipBoards.get(2).weldLastComponent();
-            shipBoards.get(2).offerComponent(new Component(
-                    Map.of(
-                            Direction.UP, Connector.NONE,
-                            Direction.LEFT, Connector.NONE,
-                            Direction.DOWN, Connector.NONE,
-                            Direction.RIGHT, Connector.NONE
-                    )
-            ));
-            shipBoards.get(2).placeComponent(new Point(9,7),Direction.UP);
-            shipBoards.get(2).weldLastComponent();
-            game.getCurrentState().placeShipOnFlightBoard(shipBoards.getFirst());  // prevent exceptions from following states
-            shipBoards.getFirst().offerComponent(new LifeSupport(
-                    Map.of(
-                            Direction.UP, Connector.UNIVERSAL,
-                            Direction.LEFT, Connector.UNIVERSAL,
-                            Direction.DOWN, Connector.UNIVERSAL,
-                            Direction.RIGHT, Connector.UNIVERSAL
-                    ),
-                    CrewType.BROWN
-            ));
-            shipBoards.getFirst().placeComponent(new Point(6,7),Direction.UP);
-            shipBoards.getFirst().offerComponent(new Cabin(
-                    Map.of(
-                            Direction.UP, Connector.UNIVERSAL,
-                            Direction.LEFT, Connector.UNIVERSAL,
-                            Direction.DOWN, Connector.UNIVERSAL,
-                            Direction.RIGHT, Connector.UNIVERSAL
-                    )
-            ));
-            shipBoards.getFirst().placeComponent(new Point(5,7),Direction.UP);
+            shipBoards.get(1).placeComponent(new Point(6, 7), Direction.UP);
+            shipBoards.get(1).weldLastComponent();
             game.setCurrentState(shipCorrectionState);
         }
 
         @Test
-        void removeComponentWithCorrectShipThrowsException() {
-            assertThrows(IllegalStateException.class, () -> shipCorrectionState.removeComponent(shipBoards.getFirst(), new Point(7,7)));
-        }
-
-        @Test
-        void removeComponentWithIncorrectShipUpdatesValidity() {
-            shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7,7));
-            assertEquals(1, shipBoards.get(1).getComponentMap().size());
-            assertTrue(shipCorrectionState.getValidShipBoards().contains(shipBoards.get(1)));
-        }
-
-        @Test
-        void removeComponentDoesUpdateLosses() {
-            shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
+        void removeIncrementsLosses() {
+            shipCorrectionState.removeComponent(shipBoards.get(1), new Point(8, 7));
             assertEquals(1, shipBoards.get(1).getLosses());
-        }
-
-        @Test
-        void removeComponentUpdatesShipPiecesWhenShipIsSplit() {
-            shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
-            assertTrue(shipCorrectionState.getShipPieces().containsKey(shipBoards.get(2)));
-        }
-
-        @Test
-        void removeComponentWithAllValidShipsChangesState() {
-            shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
-            shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
-            shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
-            assertNotEquals(shipCorrectionState, game.getCurrentState());
-        }
-
-        @Test
-        void chooseShipPieceUpdatesShipPieces() {
-            shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
-            shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
-            assertFalse(shipCorrectionState.getShipPieces().containsKey(shipBoards.get(2)));
-        }
-
-        @Test
-        void chooseShipPieceWithInvalidIndexThrowsException() {
-            shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
-            assertThrows(IllegalArgumentException.class, () -> shipCorrectionState.chooseShipPiece(shipBoards.get(2), -1));
-            assertThrows(IllegalArgumentException.class, () -> shipCorrectionState.chooseShipPiece(shipBoards.get(2), 2));
-        }
-
-        @Test
-        void chooseShipPieceOnValidShipThrowsException() {
-            assertThrows(IllegalStateException.class, () -> shipCorrectionState.chooseShipPiece(shipBoards.getFirst(), 0));
-        }
-
-        @Test
-        void chooseShipPieceWithAllValidShipsChangesState() {
-            shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
-            shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
-            shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
-            assertNotEquals(shipCorrectionState, game.getCurrentState());
         }
     }
 }

@@ -10,6 +10,6 @@ public final class TestShipBuildingState extends ShipBuildingState implements Ga
     @Override
     protected void endBuilding() {
         game.getShipBoards().forEach(ShipBoard::finishBuilding);
-        game.setCurrentState(new TestShipCorrectionState());
+        game.setCurrentState(game.getGameFactory().createShipCorrectionState());
     }
 }

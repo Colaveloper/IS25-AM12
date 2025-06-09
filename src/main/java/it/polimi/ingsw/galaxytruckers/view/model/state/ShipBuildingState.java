@@ -37,7 +37,6 @@ public sealed abstract class ShipBuildingState extends GameState permits
         actions.add(StateActions.REJECT_COMPONENT);
         actions.add(StateActions.PLACE_COMPONENT);
         actions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
-        //TODO: implement conditional available actions if needed
         return actions;
     }
 

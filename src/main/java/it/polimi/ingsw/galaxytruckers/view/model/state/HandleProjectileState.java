@@ -17,6 +17,7 @@ public final class HandleProjectileState extends ActivateState {
     @Override
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
         shipBoard.removeComponent(point);
+        shipBoard.incrementLosses(1);
         game.getObservers().forEach(observer -> observer.notifyRemoveComponent(shipBoard, point));
     }
 

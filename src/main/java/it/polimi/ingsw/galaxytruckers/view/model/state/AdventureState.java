@@ -3,26 +3,27 @@ package it.polimi.ingsw.galaxytruckers.view.model.state;
 import it.polimi.ingsw.galaxytruckers.view.model.Game;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Set;
 
 public sealed abstract class AdventureState extends GameState permits
-        ActivateState,
-        AddGoodsState,
-        ChoosePlanetState,
-        ChooseShipPieceState,
-        DrawCardState,
-        GrabRewardState,
-        RemoveCrewState,
-        RemoveGoodsState
-{
-
+                                                              ActivateState,
+                                                              AddGoodsState,
+                                                              ChoosePlanetState,
+                                                              ChooseShipPieceState,
+                                                              DrawCardState,
+                                                              GrabRewardState,
+                                                              RemoveCrewState,
+                                                              RemoveGoodsState {
 
 
     protected boolean imOut;
     protected ShipBoard currentShip;
 
-    public boolean getImOut() { return imOut; }
+    public boolean getImOut() {
+        return imOut;
+    }
 
     @Override
     public List<StateActions> getAvailableActions() {
@@ -34,6 +35,12 @@ public sealed abstract class AdventureState extends GameState permits
     public void setGame(Game game) {
         super.setGame(game);
         imOut = game.getGivenUpShips().contains(myShip);
+    }
+
+    @Override
+    public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
+        shipBoard.loseCrew(point);
+        game.getObservers().forEach(observer -> observer.notifyLoseCrew(shipBoard, point));
     }
 
     public ShipBoard getShipBoard() {

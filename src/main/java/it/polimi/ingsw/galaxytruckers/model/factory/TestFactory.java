@@ -4,7 +4,8 @@ import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.TestShipBoard;
-import it.polimi.ingsw.galaxytruckers.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.model.state.ShipBuildingState;
+import it.polimi.ingsw.galaxytruckers.model.state.ShipCorrectionState;
 import it.polimi.ingsw.galaxytruckers.model.state.TestShipBuildingState;
 
 import java.io.IOException;
@@ -26,7 +27,12 @@ public class TestFactory extends GameFactory{
     }
 
     @Override
-    public GameState createFirstGameState() {
+    public ShipBuildingState createShipBuildingState() {
         return new TestShipBuildingState();
+    }
+
+    @Override
+    public ShipCorrectionState createShipCorrectionState() {
+        return new ShipCorrectionState(false);
     }
 }

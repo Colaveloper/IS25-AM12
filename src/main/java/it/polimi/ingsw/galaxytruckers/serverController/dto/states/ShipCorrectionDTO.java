@@ -5,6 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public record ShipCorrectionDTO(Set<String> validShips, Map<String, List<Set<Point>>> shipPieces) implements
+public record ShipCorrectionDTO(Set<String> validShips, Map<String, List<Set<Point>>> shipPieces, boolean shouldDiscard) implements
                                                                                                     StateDTO {
 }

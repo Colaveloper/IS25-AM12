@@ -88,7 +88,8 @@ public class StateDTOConverter {
                                 .map(e -> Map.entry(
                                         Player.getPlayer(e.getKey()).getNickname(),
                                         e.getValue()
-                                )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                                )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
+                        shipCorrectionState.getShouldDiscard()
                 );
             }
             case ShipInitializationState shipInitializationState -> {

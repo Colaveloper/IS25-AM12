@@ -37,6 +37,7 @@ public class EpidemicCard extends AdventureCard {
                             && shipBoard.getCabins().get(cabinEntry.getKey()).getNumResidents() > 0 // somebody to infect
                         ) {
                             shipBoard.loseCrew(cabinEntry.getKey(), 1);
+                            game.getEventListener().notifyLoseCrewEvent(shipBoard, cabinEntry.getKey());
                             break;
                         }
                     }

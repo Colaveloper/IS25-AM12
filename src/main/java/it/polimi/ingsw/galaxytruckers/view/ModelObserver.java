@@ -83,5 +83,6 @@ public interface ModelObserver {
     void notifyGiveUp(ShipBoard shipBoard);
 
     void setFinalScores(Map<Player, Integer> finalScores);
+
     //endregion
 }
