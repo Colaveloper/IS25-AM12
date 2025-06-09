@@ -7,26 +7,21 @@ import java.util.List;
 import java.util.Set;
 
 public final class GrabRewardState extends AdventureState {
-    private static final List<StateActions> availableActions = List.of(
-            StateActions.GRAB_REWARD,
-            StateActions.GO_NEXT
-    );
 
-    private final ShipBoard shipBoard;
-
-    public GrabRewardState(ShipBoard shipBoard) {
-        this.shipBoard = shipBoard;
+    public GrabRewardState(ShipBoard myShip, ShipBoard currentShip) {
+        this.myShip = myShip;
+        this.currentShip = currentShip;
     }
 
     @Override
     public List<StateActions> getAvailableActions() {
-        List<StateActions> actions = new ArrayList<>(availableActions);
+        List<StateActions> actions = new ArrayList<>();
+        if(currentShip.equals(myShip)) {
+            actions.add(StateActions.GRAB_REWARD);
+            actions.add(StateActions.GO_NEXT);
+        }
         actions.addAll(super.getAvailableActions());
         return actions;
-    }
-
-    public ShipBoard getShipBoard() {
-        return shipBoard;
     }
 
     public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed){}

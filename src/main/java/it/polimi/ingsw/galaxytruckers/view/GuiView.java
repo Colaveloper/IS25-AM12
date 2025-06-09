@@ -214,8 +214,8 @@ public class GuiView extends View<GuiScreen> {
     }
 
     @Override
-    public void notifyChoosePlanet(ShipBoard shipBoard, int choice) {
-        currentScreen.notifyChoosePlanet(shipBoard,choice);
+    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard) {
+        currentScreen.notifyChoosePlanet(shipBoard,choice, nextShipBoard);
     }
 
     @Override

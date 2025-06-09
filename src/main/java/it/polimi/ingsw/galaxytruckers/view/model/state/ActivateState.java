@@ -13,21 +13,20 @@ public sealed abstract class ActivateState extends AdventureState permits
         HandleProjectileState
 {
     protected final Set<Point> availablePositions;
-    protected final ShipBoard shipBoard;
-    protected int batteriesToSpend;
     protected final boolean isMyTurn;
 
-    ActivateState(ShipBoard shipBoard, Set<Point> availablePositions, boolean isMyTurn) {
-        this.isMyTurn = isMyTurn;
-        this.shipBoard = shipBoard;
-        this.batteriesToSpend = 0;
+    ActivateState(ShipBoard myShip, ShipBoard currentShip, Set<Point> availablePositions) {
+        this.myShip = myShip;
+        this.isMyTurn = currentShip.equals(myShip);
+        this.currentShip = currentShip;
         this.availablePositions = availablePositions;
     }
 
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
+        if(imOut) return actions;
         if (isMyTurn) {
-            if (!shipBoard.getBatteries().isEmpty() && !shipBoard.getActivatables().isEmpty()) {
+            if (!currentShip.getBatteries().isEmpty() && !currentShip.getActivatables().isEmpty()) {
                 actions.add(StateActions.SPEND_BATTERIES);
                 actions.add(StateActions.ACTIVATE_COMPONENT);
             }
@@ -40,23 +39,16 @@ public sealed abstract class ActivateState extends AdventureState permits
     @Override
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
         shipBoard.activateComponent(point);
-        batteriesToSpend++;
         game.getObservers().forEach(observer -> observer.notifyActivateComponent(shipBoard, point));
     }
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
         shipBoard.useBattery(point);
-        batteriesToSpend--;
         game.getObservers().forEach(observer -> observer.notifyUseBattery(shipBoard, point));
     }
 
     public Set<Point> getAvailablePositions() {
         return availablePositions;
     }
-
-    public ShipBoard getShipBoard() {
-        return shipBoard;
-    }
-
 }

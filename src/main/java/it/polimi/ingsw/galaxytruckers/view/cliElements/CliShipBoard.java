@@ -82,8 +82,12 @@ public class CliShipBoard extends CliElement {
     public void highlightPoints(Set<Point> points, Highlights color){
         for (Point point : points){
             cliComponentMap.get(point).highlight(color);
-            cliComponentMap.get(point).setDirty();
         }
+        setDirty();
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     @Override

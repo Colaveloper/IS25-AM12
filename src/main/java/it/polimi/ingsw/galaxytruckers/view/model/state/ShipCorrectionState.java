@@ -10,14 +10,13 @@ import java.util.*;
 public final class ShipCorrectionState extends GameState {
     private final Set<ShipBoard> validShipBoards;
     private final Map<ShipBoard, List<Set<Point>>> shipPieces;
-    private final ShipBoard myShipBoard;
     private boolean isConnected;
     private boolean isValid;
 
-    public ShipCorrectionState(ShipBoard myShipBoard, Set<ShipBoard> validShipBoards, Map<ShipBoard, List<Set<Point>>> shipPieces) {
-        isValid = validShipBoards.contains(myShipBoard);
-        isConnected = !shipPieces.containsKey(myShipBoard);
-        this.myShipBoard = myShipBoard;
+    public ShipCorrectionState(ShipBoard myShip, Set<ShipBoard> validShipBoards, Map<ShipBoard, List<Set<Point>>> shipPieces) {
+        this.myShip = myShip;
+        isValid = validShipBoards.contains(myShip);
+        isConnected = !shipPieces.containsKey(myShip);
         this.validShipBoards = validShipBoards;
         this.shipPieces = shipPieces;
     }
@@ -37,14 +36,14 @@ public final class ShipCorrectionState extends GameState {
 
     @Override
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
-        if(myShipBoard == shipBoard) isConnected = true;
+        if(myShip == shipBoard) isConnected = true;
         List<Point> removedPoints = shipBoard.removeShipPiece(shipPieces.get(shipBoard), pieceIndex);
         game.getObservers().forEach(observer -> observer.notifyChooseShipPiece(shipBoard, pieceIndex, removedPoints));
     }
 
     @Override
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
-        if(myShipBoard == shipBoard) {
+        if(myShip == shipBoard) {
             isConnected = false;
             isValid = true;
         }
@@ -55,7 +54,7 @@ public final class ShipCorrectionState extends GameState {
 
     @Override
     public void notifyShipValidated(ShipBoard shipBoard) {
-        if(myShipBoard == shipBoard) {
+        if(myShip == shipBoard) {
             isConnected = true;
             isValid = true;
         }

@@ -16,8 +16,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public abstract class Screen {
-    public void notifyModifyComponent(ShipBoard shipBoard, Point point) {}
-
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {}
 
     public void notifyRequestComponent(ShipBoard shipBoard, Component component){}
@@ -66,7 +64,7 @@ public abstract class Screen {
 
     public void notifyUseBattery(ShipBoard shipBoard, Point point){}
 
-    public void notifyChoosePlanet(ShipBoard shipBoard, int choice){}
+    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard){}
 
     public void notifyGiveUp(ShipBoard shipBoard){}
 

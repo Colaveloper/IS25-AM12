@@ -21,13 +21,17 @@ public class CliValidationScreen extends CliScreen {
 
     private boolean shipValid;
     private boolean shipBroken;
-    private int numPieces;
+    private int myShipPieces;
 
     public CliValidationScreen(ClientModel model, ControllerToServer controller, ShipCorrectionState gameState) {
         super(model, controller, gameState);
         shipValid = gameState.getValidShipBoards().contains(myShipBoard);
         shipBroken = false;
         if (shipValid) shipBroken = gameState.getShipPieces().containsKey(myShipBoard);
+        if (shipBroken) myShipPieces = gameState.getShipPieces().get(myShipBoard).size();
+        for(ShipBoard ship : gameState.getShipPieces().keySet()) {
+            shipNotConnected(ship, gameState.getShipPieces().get(ship));
+        }
     }
 
     @Override
@@ -37,9 +41,10 @@ public class CliValidationScreen extends CliScreen {
 
         if(shipBroken) {
             System.out.println("your ship is broken, choose a piece to keep from these");
-            List<Highlights> highlights = Highlights.getSomeColors(numPieces);
-            for(int i = 1; i <= numPieces; i++) {
-                System.out.println(highlights.get(i).getHighlight() + i + " " + highlights.get(i) + Highlights.RESET.getHighlight() + "\t");
+            List<Highlights> highlights = Highlights.getSomeColors(myShipPieces);
+            for(int i = 0; i < myShipPieces; i++) {
+                String colorChoice = highlights.get(i) == Highlights.RESET ? "WHITE" : highlights.get(i).toString();
+                System.out.println(highlights.get(i).getHighlight() + i + " " + colorChoice + Highlights.RESET.getHighlight() + "\t");
             }
         }
         if (!shipValid) {//add else if to separate validation and ship piece choice
@@ -82,12 +87,12 @@ public class CliValidationScreen extends CliScreen {
                     System.out.println("unreachable statement");
                     return;
                 }
-                int pos = Integer.parseInt(parts[0]);
-                if(pos >= numPieces || pos < 0){
+                int pos = Integer.parseInt(parts[1]);
+                if(pos >= myShipPieces || pos < 0){
                     System.out.println("invalid ship piece choice");
                     return;
                 }
-                controller.chooseShipPiece(Integer.parseInt(input));
+                controller.chooseShipPiece(Integer.parseInt(parts[1]));
             }
         }
     }
@@ -115,15 +120,19 @@ public class CliValidationScreen extends CliScreen {
     @Override
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces){
         if(myShipBoard == shipBoard) {
-            shipValid = true;
+            myShipPieces = shipPieces.size();
             shipBroken = true;
+            shipValid = true;
         }
-        numPieces = shipPieces.size();
+        shipNotConnected(shipBoard, shipPieces);
+    }
+
+    private void shipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
+        int numPieces = shipPieces.size();
         List<Highlights> highlights = Highlights.getSomeColors(numPieces);
         for(int i = 0; i < numPieces; i++){
             shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i));
         }
-        shipToCliShip.get(shipBoard).setDirty();
         cliAllShips.setDirty();
     }
 
@@ -135,12 +144,4 @@ public class CliValidationScreen extends CliScreen {
         }
         cliAllShips.setDirty();
     }
-//
-//    @Override
-//    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
-////        shipToCliShip.get(shipBoard).setDirty();
-////        cliAllShips.setDirty();
-//        //todo
-//    }
-
 }

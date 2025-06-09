@@ -86,78 +86,41 @@ class PlanetsCardTest {
 
     @Test
     void choosePlanetUpdatesPlanetChoicesRelatedAttributes() {
-        planetsCard.getNextState();
-        ShipBoard expCurrentShipBoard = planetsCard.getCurrentShipBoard();
+        planetsCard.choosePlanet(ships.getFirst(),0);
 
-        List<Map<GoodsType, Integer>> expPlanets = new ArrayList<>(planetsCard.getPlanets());
-
-        Set<Integer> expRemainingChoices = new HashSet<>(planetsCard.getRemainingChoices());
-        expRemainingChoices.remove(0);
-
-        Map<ShipBoard, Integer> expPlanetChoices = new HashMap<>(planetsCard.getPlanetChoices());
-        expPlanetChoices.put(expCurrentShipBoard, 0);
-
-        List<ShipBoard> expLandedShips = new ArrayList<>(planetsCard.getLandedShips());
-        expLandedShips.add(expCurrentShipBoard);
-
-        planetsCard.choosePlanet(0);
-
-        assertEquals(expCurrentShipBoard, planetsCard.getCurrentShipBoard());
-        assertEquals(expPlanets, planetsCard.getPlanets());
-        assertEquals(expRemainingChoices, planetsCard.getRemainingChoices());
-        assertEquals(expPlanetChoices, planetsCard.getPlanetChoices());
-        assertEquals(expLandedShips, planetsCard.getLandedShips());
+        assertTrue(planetsCard.getPlanetChoices().entrySet().contains(Map.entry(ships.getFirst(), 0)));
+        assertEquals(1,planetsCard.getPlanetChoices().size());
+        assertTrue(planetsCard.getLandedShips().contains(ships.getFirst()));
+        assertEquals(1,planetsCard.getLandedShips().size());
     }
 
     @Test
     void getNextStateReturnsChoiceStateWhenPlanetsCanBeChosen() {
-        for (ShipBoard ship : ships) {
-            Set<Integer> expRemainingChoices = new HashSet<>(planetsCard.getRemainingChoices());
-            GameState testState = planetsCard.getNextState();
-            assertInstanceOf(ChoosePlanetState.class, testState);
-            assertTrue(planetsCard.isPlanetChoiceAllowed());
-            assertEquals(ship, planetsCard.getCurrentShipBoard());
-            assertTrue(planetsCard.getLandedShips().isEmpty());
-            assertTrue(planetsCard.getPlanetChoices().isEmpty());
-            assertEquals(expRemainingChoices, planetsCard.getRemainingChoices());
-        }
+        GameState testState = planetsCard.getNextState();
+        assertInstanceOf(ChoosePlanetState.class, testState);
+        assertFalse(planetsCard.isPlanetChoiceAllowed());
     }
 
     @Test
     void getNextStateWhenNoOneLandedReturnsDrawState() {
-        for (int i = 0; i < ships.size(); i++) {
-            planetsCard.getNextState();
-        }
+        planetsCard.getNextState();
         GameState testState = planetsCard.getNextState();
         assertInstanceOf(DrawCardState.class, testState);
-        assertFalse(planetsCard.isPlanetChoiceAllowed());
-        // Once drawState is returned, the card internal state
-        // is not relevant
     }
 
     @Test
     void getNextStateWhenSomeoneLandedReturnsGoodsState() {
-        for (int i = 0; i < ships.size(); i++) {
-            planetsCard.getNextState();
-        }
-        planetsCard.choosePlanet(0);
-        ShipBoard expCurrentShipBoard = planetsCard.getCurrentShipBoard();
-        Set<Integer> expRemainingChoices = new HashSet<>(planetsCard.getRemainingChoices());
+        planetsCard.getNextState();
+        planetsCard.choosePlanet(ships.getFirst(),0);
         GameState testState = planetsCard.getNextState();
         assertInstanceOf(AddGoodsState.class, testState);
-        assertFalse(planetsCard.isPlanetChoiceAllowed());
-        assertEquals(expCurrentShipBoard, planetsCard.getCurrentShipBoard());
-        assertEquals(List.of(expCurrentShipBoard), planetsCard.getLandedShips());
-        assertEquals(Map.of(expCurrentShipBoard, 0), planetsCard.getPlanetChoices());
-        assertEquals(expRemainingChoices, planetsCard.getRemainingChoices());
+        assertEquals(ships.getFirst(), planetsCard.getCurrentShipBoard());
     }
 
     @Test
     void getNextStateUpdatesLandedShipPositions() {
-        for (int i = 0; i < ships.size(); i++) {
-            planetsCard.getNextState();
-        }
-        planetsCard.choosePlanet(0);
+        planetsCard.getNextState();
+        planetsCard.choosePlanet(ships.getFirst(),0);
         planetsCard.getNextState();
         testDisplacement = 0;
         testShip = null;

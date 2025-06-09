@@ -135,6 +135,14 @@ public abstract class ShipBoard {
         }
     }
 
+    public void finishBuilding() {
+        if (lastComponent != null && lastPosition != null) {
+            weldLastComponent();
+        } else {
+            lastComponent = null;
+        }
+    }
+
     public void removeComponent(Point position) {
         Component removedComponent = componentMap.remove(position);
         switch (removedComponent) {

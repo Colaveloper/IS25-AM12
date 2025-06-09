@@ -1,0 +1,40 @@
+#per usarlo fatelo girare da un file da qualche altra parte e incollate il risulato in cardsReference
+
+import json
+
+base_node = {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+        {"blue": 0, "green": 0, "yellow": 1, "red": 1},
+        {"blue": 1, "green": 1, "yellow": 1, "red": 0},
+        {"blue": 0, "green": 0, "yellow": 1, "red": 1},
+        {"blue": 0, "green": 0, "yellow": 1, "red": 0}
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg"
+}
+
+# Definizione livelli
+total_nodes = 39
+test_ids = list(range(8))
+first_ids = list(range(8, 19))
+second_ids = list(range(19, total_nodes))
+
+nodes = []
+for i in range(total_nodes):
+    node = base_node.copy()
+    node["id"] = i
+
+    if i in test_ids:
+        node["level"] = "TEST"
+    elif i in first_ids:
+        node["level"] = "FIRST"
+    else:
+        node["level"] = "SECOND"
+
+    nodes.append(node.copy())
+
+with open("planets_nodes.json", "w") as f:
+    json.dump(nodes, f, indent=2)
+
+print("File 'planets_nodes.json' creato con successo.")

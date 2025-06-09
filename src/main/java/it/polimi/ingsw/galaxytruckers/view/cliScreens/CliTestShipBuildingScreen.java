@@ -20,7 +20,6 @@ public class CliTestShipBuildingScreen extends CliScreen {
     @Override
     public void render() {
         componentBank.getDescription().forEach(System.out::println);
-//        printShips();
         printActions();
     }
 

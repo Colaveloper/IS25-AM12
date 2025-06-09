@@ -10,9 +10,14 @@ import java.util.stream.Collectors;
 public abstract class FlightBoard {
     protected final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
     protected List<Integer> startingPositionsLeft;
+    protected GameEventListener gameEventListener = null;
 
     public FlightBoard() {
         this.shipToPlace = new HashMap<>();
+    }
+
+    public void setGameEventListener(GameEventListener gameEventListener) {
+        this.gameEventListener = gameEventListener;
     }
 
     /**
@@ -86,6 +91,7 @@ public abstract class FlightBoard {
             }
         }
         shipToPlace.put(shipBoard, newPosition);
+        if (gameEventListener != null) gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,newPosition);
     }
 
     /**

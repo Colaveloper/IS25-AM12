@@ -20,10 +20,14 @@ public class CliComponent extends CliElement {
     protected CliComponent(Component component) {
         this.component = component;
         this.connectors = component.getConnectors();
+        open = Highlights.RESET.getHighlight();
+        close = Highlights.RESET.getHighlight();
     }
 
     public static CliComponent of(Component component) {
         return switch (component) {
+            case DoubleCannon doubleCannon-> new CliDoubleCannon(doubleCannon);
+            case DoubleEngine doubleEngine -> new CliDoubleEngine(doubleEngine);
             case Battery battery -> new CliBattery(battery);
             case Cabin cabin -> new CliCabin(cabin);
             case Cannon cannon -> new CliCannon(cannon);
@@ -73,6 +77,7 @@ public class CliComponent extends CliElement {
     public void highlight(Highlights color) {
         open = color.getHighlight();
         close = Highlights.RESET.getHighlight();
+        setDirty();
     }
 
     @Override
@@ -81,12 +86,12 @@ public class CliComponent extends CliElement {
     }
 
     protected List<String> addBorders(String middle) {
-        open = Highlights.RESET.getHighlight();
+        //open = Highlights.RESET.getHighlight();
         close = Highlights.RESET.getHighlight();
 
         List<String> lines = new ArrayList<>();
             lines.add(0, open+"╭─" + getConnector(Direction.UP) + "─╮"+close);
-            lines.add(1, open+ getConnector(Direction.LEFT) + middle + getConnector(Direction.RIGHT)+close);
+            lines.add(1, open+ getConnector(Direction.LEFT) + close + middle + open + getConnector(Direction.RIGHT)+close);
             lines.add(2, open+"╰─" + getConnector(Direction.DOWN) + "─╯"+close);
         return lines;
     }

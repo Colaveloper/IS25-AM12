@@ -9,19 +9,20 @@ import java.util.List;
 import java.util.Set;
 
 public final class ChoosePlanetState extends AdventureState {
-    private final ShipBoard shipBoard;
-    private final Set<Integer> options;
+    private final ShipBoard[] options;
     private boolean isMyTurn;
 
-    public ChoosePlanetState(ShipBoard shipBoard, Set<Integer> options) {
-        this.options = options;
-        this.shipBoard = shipBoard;
+    public ChoosePlanetState(ShipBoard myShip, ShipBoard currentShip, int numPlanets) {
+        this.myShip = myShip;
+        options = new ShipBoard[numPlanets];
+        this.currentShip = currentShip;
+        this.isMyTurn = myShip.equals(currentShip);
     }
 
     @Override
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
-        if(!options.isEmpty() && isMyTurn) {
+        if(isMyTurn) {
             actions.add(StateActions.CHOOSE_PLANET);
             actions.add(StateActions.GO_NEXT);
         }
@@ -30,24 +31,17 @@ public final class ChoosePlanetState extends AdventureState {
     }
 
     @Override
-    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, boolean isMyTurn) {
-        this.isMyTurn = isMyTurn;
-        options.remove(choice);
-        game.getObservers().forEach(observer -> observer.notifyChoosePlanet(shipBoard,choice));
+    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard) {
+        isMyTurn = myShip.equals(nextShipBoard);
+        options[choice] = shipBoard;
+        game.getObservers().forEach(observer -> observer.notifyChoosePlanet(shipBoard,choice,nextShipBoard));
     }
 
-//    @Override
-//    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-//        shipBoard.placeGoods(point, goodsType);
-//        game.getObservers().forEach(observer -> observer.notifyPlaceGoods(shipBoard,point,goodsType));
-//        //todo remove from buffer
-//    }
-
-    public ShipBoard getShipBoard() {
-        return shipBoard;
+    public boolean isMyTurn() {
+        return isMyTurn;
     }
 
-    public Set<Integer> getOptions() {
+    public ShipBoard[] getOptions() {
         return options;
     }
 }

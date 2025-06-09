@@ -10,22 +10,21 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.RemoveCrewState;
 
 import java.awt.*;
 
-public class CliRemoveCrewScreen extends CliScreen {
+public class CliRemoveCrewScreen extends CliAdventureScreen {
 
-    private final boolean isMyTurn;
-    private final ShipBoard currentShip;
 
     public CliRemoveCrewScreen(ClientModel model, ControllerToServer controller, RemoveCrewState gameState) {
         super(model, controller, gameState);
-        this.currentShip = gameState.getShipBoard();
-        this.isMyTurn = currentShip.equals(model.getMyShip());
     }
 
     @Override
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
-
+        if(imOut) {
+            System.out.println("you surrendered");
+            return;
+        }
         if (isMyTurn) {
             System.out.println("Your turn to remove crew members");
             System.out.println("Select cabins to remove crew from");

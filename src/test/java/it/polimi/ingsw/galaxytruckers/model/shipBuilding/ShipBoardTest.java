@@ -967,6 +967,36 @@ class ShipBoardTest {
         }
     }
 
+    @Nested
+    class ShipValidityTests {
+        @BeforeEach
+        void setup() {
+            shipBoard = new SecondShipBoard(GameColor.BLUE);
+        }
+
+        void placeCannon(Point point) {
+            shipBoard.offerComponent(new Cannon(
+                    Map.of(Direction.UP,Connector.UNIVERSAL,
+                            Direction.RIGHT,Connector.UNIVERSAL,
+                            Direction.LEFT,Connector.UNIVERSAL,
+                            Direction.DOWN,Connector.UNIVERSAL)
+            ));
+            shipBoard.placeComponent(point, Direction.UP);
+            shipBoard.weldLastComponent();
+        }
+
+        @Test
+        void shipIsValid() {
+            placeCannon(new Point(6,7));
+            assertTrue(shipBoard.checkValidity());
+        }
+
+        @Test
+        void shipIsNotValidWithWrongCannon() {
+            placeCannon(new Point(7,8));
+            assertFalse(shipBoard.checkValidity());
+        }
+    }
 
 
 

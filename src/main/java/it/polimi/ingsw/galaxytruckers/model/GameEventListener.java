@@ -99,8 +99,8 @@ public class GameEventListener {
         ));
     }
 
-    public void notifyPlanetChoiceEvent(ShipBoard shipBoard, int planetId) {
-        controllerListener.notifyEvent(PlanetChoiceEvent.from(shipBoard,planetId));
+    public void notifyPlanetChoiceEvent(ShipBoard shipBoard, int planetId, ShipBoard nextShip) {
+        controllerListener.notifyEvent(PlanetChoiceEvent.from(shipBoard,planetId, nextShip));
     }
 
     public void notifyRejectComponentEvent(ShipBoard shipBoard) {
@@ -162,5 +162,9 @@ public class GameEventListener {
 
     public void notifyValidateShipEvent(ShipBoard shipBoard) {
         controllerListener.notifyEvent(ValidateShipEvent.from(shipBoard));
+    }
+
+    public void notifyCurrentPlayerUpdateEvent(ShipBoard shipBoard) {
+        controllerListener.notifyEvent(new CurrentPlayerUpdateEvent(Player.getPlayer(shipBoard).getNickname()));
     }
 }

@@ -13,10 +13,8 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public abstract class CliScreen extends Screen {
 
@@ -42,7 +40,11 @@ public abstract class CliScreen extends Screen {
             for (Player player : model.getPlayers()) {
                 shipToCliShip.put(player.getShipBoard(), new CliShipBoard(player.getShipBoard(), player.getNickname()));
             }
-            this.cliAllShips = new CliAllShips(shipToCliShip.values().stream().toList());
+            List<CliShipBoard> list = new ArrayList<>(shipToCliShip.values().stream().toList());
+            list.sort(Comparator.comparing(CliShipBoard::getNickname));
+            list.remove(shipToCliShip.get(myShipBoard));
+            list.addFirst(shipToCliShip.get(myShipBoard));
+            this.cliAllShips = new CliAllShips(list);
             this.cliFlightBoard = new CliFlightBoard(model.getGame().getFlightBoard());
         }
     }
@@ -80,7 +82,7 @@ public abstract class CliScreen extends Screen {
                     case ACTIVATE_COMPONENT ->      actions.add("P[x][y] Activate component        ");
                     case SPEND_BATTERIES ->         actions.add("B[x][y] Spend battery on component");
                     case GRAB_REWARD ->             actions.add("P       To pick reward            ");
-                    case CHOOSE_SHIP_PIECE ->       actions.add("[i]   Choose piece of ship to keep");
+                    case CHOOSE_SHIP_PIECE ->       actions.add("K [i] Choose piece of ship to keep");
                     case GO_NEXT, RELEASE_FORECAST->actions.add("press ENTER key to continue       ");
                     case LOSE_CREW ->               actions.add("L[x][y] Remove crew from component");
                     case LOSE_GOOD ->               actions.add("L[x][y] Remove good from cargo hold");
@@ -136,7 +138,7 @@ public abstract class CliScreen extends Screen {
             case "P" ->(availableActions.contains(StateActions.PLACE_COMPONENT) ||
                         availableActions.contains(StateActions.INITIALIZE_CABIN))&& input.matches("P\\s+\\d+\\s+\\d+") ||
                         availableActions.contains(StateActions.GRAB_REWARD)     && input.matches("P") ||
-                        availableActions.contains(StateActions.ADD_GOOD)        && input.matches("P/\\s+\\d+\\s+\\d+\\s+[A-Z]+");
+                        availableActions.contains(StateActions.ADD_GOOD)        && input.matches("P\\s+\\d+\\s+\\d+\\s+[A-Z]+");
             case "H" -> availableActions.contains(StateActions.FLIP_HOURGLASS)  && input.matches("H");
             case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.matches("S") ||
                         availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.matches("S\\s+\\d+");
@@ -151,7 +153,7 @@ public abstract class CliScreen extends Screen {
                         availableActions.contains(StateActions.LOSE_GOOD))      && input.matches("L\\s+\\d+\\s+\\d+") ||
                         availableActions.contains(StateActions.CHOOSE_PLANET)   && input.matches("L\\s+\\d+");
             case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("B\\s+\\d+\\s+\\d+");
-            case "K" -> availableActions.contains(StateActions.CHOOSE_SHIP_PIECE)&& input.matches("K");
+            case "K" -> availableActions.contains(StateActions.CHOOSE_SHIP_PIECE)&& input.matches("K\\s+\\d+");
             case "Y" -> availableActions.contains(StateActions.GIVE_UP)         && input.matches("Y");
             case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.matches("A\\s+\\d+\\s+\\d+");
             case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.matches("E\\s*\\d+");

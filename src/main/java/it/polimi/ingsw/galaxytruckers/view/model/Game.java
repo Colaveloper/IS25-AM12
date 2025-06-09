@@ -26,8 +26,6 @@ public class Game {
     private final FlightBoard flightBoard;
     private GameState currentState = null;
 
-    private AdventureCard currentAdventureCard;
-
     public Game(Level level, int playersNumber) {
         this.level = level;
         this.playersNumber = playersNumber;
@@ -54,6 +52,7 @@ public class Game {
      * @param state the {@code GameState} to be set
      */
     public void setCurrentState(GameState state) {
+        if (this.currentState != null) this.currentState.leave();
         this.currentState = state;
         state.setGame(this);
     }
@@ -79,7 +78,13 @@ public class Game {
         return shipBoards;
     }
 
-    public Set<ShipBoard> getGivenUpShips(){return givenUpShips;}
+    public void setGivenUpShips(Set<ShipBoard> givenUpShips) {
+        this.givenUpShips.addAll(givenUpShips);
+    }
+
+    public Set<ShipBoard> getGivenUpShips(){
+        return givenUpShips;
+    }
 
     public Set<GameColor> getShipColors(){
         Set<GameColor> colors = new HashSet<>();
@@ -104,11 +109,4 @@ public class Game {
         return gameFactory;
     }
 
-    public AdventureCard getCurrentAdventureCard() {
-        return currentAdventureCard;
-    }
-
-    public void setCurrentAdventureCard(AdventureCard currentAdventureCard) {
-        this.currentAdventureCard = currentAdventureCard;
-    }
 }

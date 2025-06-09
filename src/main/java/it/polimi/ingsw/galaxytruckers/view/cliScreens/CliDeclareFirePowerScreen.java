@@ -15,20 +15,25 @@ public class CliDeclareFirePowerScreen extends CliActivationScreen {
 
     private final DeclareFirePowerState gameState;
     private final boolean isMyTurn;
+    private final boolean imOut;
     private final ShipBoard currentShip;
 
     public CliDeclareFirePowerScreen(ClientModel model, ControllerToServer controller, DeclareFirePowerState gameState) {
         super(model, controller, gameState);
         this.gameState = gameState;
         this.currentShip = gameState.getShipBoard();
-        this.isMyTurn = currentShip.equals(model.getMyShip());
+        this.isMyTurn = currentShip.equals(myShipBoard);
+        imOut = gameState.getImOut();
     }
 
     @Override
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
-
+        if(imOut) {
+            System.out.println("you surrendered");
+            return;
+        }
         if (isMyTurn) {
             System.out.println("Your turn to declare fire power");
             System.out.println("Select cannon components to activate or batteries to use");

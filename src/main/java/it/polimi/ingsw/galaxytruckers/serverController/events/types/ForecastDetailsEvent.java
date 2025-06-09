@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.util.List;
+import java.util.Optional;
 
 public record ForecastDetailsEvent(String playerName, List<Integer> forecastDeckIds) implements LobbyEvent {
     public static ForecastDetailsEvent from(ShipBoard shipBoard, List<AdventureCard> forecastDeck) {
@@ -14,4 +15,8 @@ public record ForecastDetailsEvent(String playerName, List<Integer> forecastDeck
         );
     }
 
+    @Override
+    public Optional<String> getReceiverName() {
+        return Optional.of(playerName);
+    }
 }

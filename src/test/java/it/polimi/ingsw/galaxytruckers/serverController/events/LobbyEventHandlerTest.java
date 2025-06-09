@@ -3,10 +3,7 @@ package it.polimi.ingsw.galaxytruckers.serverController.events;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.ForecastDetailsEvent;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.JoinLobbyEvent;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyEvent;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,7 +83,14 @@ class VirtualClientStub implements ClientHandler {
 
     @Override
     public void notifyEvent(Event event) {
-        receivedEvents.add(event);
+        switch (event) {
+            case ControllerEvent controllerEvent -> {
+                //mock
+            }
+            case LobbyEvent lobbyEvent -> {
+                receivedEvents.add(event);
+            }
+        }
     }
 
     @Override

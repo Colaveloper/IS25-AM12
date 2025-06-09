@@ -69,7 +69,7 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifyPlanetChoiceEvent(ShipBoard shipBoard, int planetId) {
+    public void notifyPlanetChoiceEvent(ShipBoard shipBoard, int planetId, ShipBoard nextShip) {
     }
 
     @Override
@@ -126,5 +126,9 @@ public class GameEventListenerStub extends GameEventListener{
 
     @Override
     public void setControllerListener(EventListener<LobbyEvent> controllerListener) {
+    }
+
+    @Override
+    public void notifyCurrentPlayerUpdateEvent(ShipBoard shipBoard) {
     }
 }

@@ -30,7 +30,10 @@ public class CliProjectilesScreen extends CliActivationScreen {
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
-
+        if(imOut) {
+            System.out.println("you surrendered");
+            return;
+        }
         String direction = switch (gameState.getProjectile().direction()) {
             case Direction.UP   -> "front on column ";
             case Direction.RIGHT-> "right on row ";

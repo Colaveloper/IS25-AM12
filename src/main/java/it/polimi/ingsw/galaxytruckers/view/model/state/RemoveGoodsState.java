@@ -9,17 +9,18 @@ import java.util.List;
 
 public final class RemoveGoodsState extends AdventureState {
     private int goodsToLose;
-    private final ShipBoard shipBoard;
 
-    public RemoveGoodsState(int goodsToLose, ShipBoard shipBoard) {
+    public RemoveGoodsState(ShipBoard myShip, int goodsToLose, ShipBoard currentShip) {
+        this.myShip = myShip;
         this.goodsToLose = goodsToLose;
-        this.shipBoard = shipBoard;
+        this.currentShip = currentShip;
     }
 
     @Override
     public List<StateActions> getAvailableActions() {
-        List<StateActions> actions = new ArrayList<>(super.getAvailableActions());
-        actions.add(StateActions.LOSE_GOOD);
+        List<StateActions> actions = new ArrayList<>();
+        if(currentShip.equals(myShip)) actions.add(StateActions.LOSE_GOOD);
+        actions.addAll(super.getAvailableActions());
         return actions;
     }
 
@@ -39,9 +40,5 @@ public final class RemoveGoodsState extends AdventureState {
 
     public int getGoodsToLose() {
         return goodsToLose;
-    }
-
-    public ShipBoard getShipBoard() {
-        return shipBoard;
     }
 }

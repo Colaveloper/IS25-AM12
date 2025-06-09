@@ -11,16 +11,21 @@ import java.util.Set;
 
 public final class AddGoodsState extends AdventureState {
     private final GoodsBuffer goodsBuffer;
-    private final ShipBoard shipBoard;
+    private final boolean isMyTurn;
 
-    public AddGoodsState(Map<GoodsType, Integer> goodsBuffer, ShipBoard shipBoard) {
+    public AddGoodsState(ShipBoard myShip, Map<GoodsType, Integer> goodsBuffer, ShipBoard currentShip) {
+        this.myShip = myShip;
+        this.isMyTurn = currentShip.equals(myShip);
         this.goodsBuffer = new GoodsBuffer(goodsBuffer);
-        this.shipBoard = shipBoard;
+        this.currentShip = currentShip;
     }
 
     @Override
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
+        if(!isMyTurn) {
+            return super.getAvailableActions();
+        }
         if (!goodsBuffer.isEmpty()) {
             actions.add(StateActions.ADD_GOOD);
         }
@@ -32,23 +37,19 @@ public final class AddGoodsState extends AdventureState {
 
     @Override
     public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        shipBoard.placeGoods(point, goodsType);
         goodsBuffer.removeFromBuffer(goodsType);
+        shipBoard.placeGoods(point,goodsType);
         game.getObservers().forEach(observer -> observer.notifyPlaceGoods(shipBoard, point, goodsType));
     }
 
     @Override
     public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        shipBoard.removeGoods(point, goodsType);
         goodsBuffer.addToBuffer(goodsType);
+        shipBoard.removeGoods(point,goodsType);
         game.getObservers().forEach(observer -> observer.notifyRemoveGoods(shipBoard, point, goodsType));
     }
 
     public GoodsBuffer getGoodsBuffer() {
         return goodsBuffer;
-    }
-
-    public ShipBoard getShipBoard() {
-        return shipBoard;
     }
 }

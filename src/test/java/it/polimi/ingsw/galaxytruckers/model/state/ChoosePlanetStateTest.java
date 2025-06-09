@@ -1,9 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-import it.polimi.ingsw.galaxytruckers.model.Deck;
-import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
-import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -14,8 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,11 +21,13 @@ class ChoosePlanetStateTest {
     ShipBoard ship1;
     ShipBoard ship2;
     ChoosePlanetState testChoosePlanetState;
-    Consumer<Integer> choosePlanetMethod;
+    BiConsumer<ShipBoard,Integer> choosePlanetMethod;
     Set<Integer> options;
     Game game;
     AdventureCard adventureCard;
     Deck deck;
+    int choice;
+    ShipBoard methodShipBoard;
 
     @BeforeEach
     void setup(){
@@ -36,10 +36,29 @@ class ChoosePlanetStateTest {
         options = new HashSet<>();
         options.add(1);
         options.add(2);
-        choosePlanetMethod = (num) ->{
-            // mock
+        choosePlanetMethod = (ship,num) ->{
+            methodShipBoard = ship;
+            choice = num;
         };
-        testChoosePlanetState = new ChoosePlanetState(ship1, choosePlanetMethod, options);
+        this.game = new Game(Level.SECOND);
+        this.game.setFlightBoard(new FlightBoard() {
+            @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+
+            /**
+             * @return a {@link List} of shipboards in the order that they appear
+             * on the flightboard
+             */
+            @Override
+            public List<ShipBoard> getOrderedShips() {
+                return List.of(ship1, ship2);
+            }
+        });
+        game.setEventListener(new GameEventListenerStub());
+        testChoosePlanetState = new ChoosePlanetState(choosePlanetMethod, options.size());
+        game.setCurrentState(testChoosePlanetState);
     }
 
     @Test
@@ -48,19 +67,28 @@ class ChoosePlanetStateTest {
     }
 
     @Test
-    void choosePlanetThrowsExceptionIfInvalidChoise(){
+    void choosePlanetThrowsExceptionIfInvalidChoice(){
         assertThrows(IllegalArgumentException.class, () -> testChoosePlanetState.choosePlanet(ship1, 3));
+        assertThrows(IllegalArgumentException.class, () -> testChoosePlanetState.choosePlanet(ship1, -1));
     }
 
     @Test
-    void choosePlanetAcceptsChoiceAndChangesAdventureState() throws IOException {
-        game = new Game(Level.SECOND){
-            @Override
-            public Deck getDeck(){
-                return deck;
-            }
-        };
-        game.setEventListener(new GameEventListenerStub());
+    void choosePlanetAcceptsChoiceAndChangesShip() {
+        testChoosePlanetState.choosePlanet(ship1, 0);
+        assertEquals(0,choice);
+        assertEquals(ship1,methodShipBoard);
+        assertEquals(ship2, testChoosePlanetState.getCurrentShip());
+        assertEquals(testChoosePlanetState,game.getCurrentState());
+    }
+
+    @Test
+    void choosePlanetThrowsIfPlanerAlreadyChosen() {
+        testChoosePlanetState.choosePlanet(ship1, 0);
+        assertThrows(IllegalArgumentException.class, () -> testChoosePlanetState.choosePlanet(ship2, 0));
+    }
+
+    @Test
+    void lastChoosePlanetChangesState() throws IOException{
         adventureCard = new AdventureCard(game, Level.SECOND,1) {
             @Override
             public AdventureState getNextState() {
@@ -73,10 +101,10 @@ class ChoosePlanetStateTest {
                 return adventureCard;
             }
         };
-        game.setEventListener(new GameEventListenerStub());
-        testChoosePlanetState.setGame(game);
-        testChoosePlanetState.choosePlanet(ship1, 2);
-        assertNotEquals(testChoosePlanetState, game.getCurrentState());
+        game.setDeck(deck);
+        testChoosePlanetState.choosePlanet(ship1, 0);
+        testChoosePlanetState.choosePlanet(ship2,1);
+        assertInstanceOf(AdventureStateStub.class, game.getCurrentState());
     }
 
     @Test
@@ -86,13 +114,6 @@ class ChoosePlanetStateTest {
 
     @Test
     void goNextChangesAdventureState() throws IOException {
-        game = new Game(Level.SECOND){
-            @Override
-            public Deck getDeck(){
-                return deck;
-            }
-        };
-        game.setEventListener(new GameEventListenerStub());
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
@@ -105,8 +126,12 @@ class ChoosePlanetStateTest {
                 return adventureCard;
             }
         };
-        testChoosePlanetState.setGame(game);
+        game.setDeck(deck);
         testChoosePlanetState.goNext(ship1);
+        testChoosePlanetState.goNext(ship2);
+        for (int i = 0; i < testChoosePlanetState.getChosenPlanets().length; i++) {
+            assertFalse(testChoosePlanetState.getChosenPlanets()[i]);
+        }
         assertNotEquals(testChoosePlanetState, game.getCurrentState());
     }
 

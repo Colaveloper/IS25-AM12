@@ -2,28 +2,19 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.CargoHold;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.AddGoodsState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GoodsBuffer;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
-public class CliGoodsScreen extends CliScreen {
+public class CliGoodsScreen extends CliAdventureScreen {
 
-    private final boolean isMyTurn;
-    private final ShipBoard currentShip;
     private final GoodsBuffer goodsBuffer;
 
     public CliGoodsScreen(ClientModel model, ControllerToServer controller, AddGoodsState gameState) {
         super(model, controller, gameState);
-        this.currentShip = gameState.getShipBoard();
-        this.isMyTurn = currentShip.equals(model.getMyShip());
         this.goodsBuffer = gameState.getGoodsBuffer();
     }
 
@@ -31,7 +22,10 @@ public class CliGoodsScreen extends CliScreen {
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
-
+        if(imOut) {
+            System.out.println("you surrendered");
+            return;
+        }
         if (isMyTurn) {
             System.out.println("Your turn to manage goods");
             System.out.println("Goods in buffer:");
@@ -63,22 +57,18 @@ public class CliGoodsScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        if(input.equalsIgnoreCase("Y")) {
+        if(input.trim().equalsIgnoreCase("Y")) {
             controller.giveUp();
             return;
         }
         String[] parts = input.split("\\s+");
-        if (parts.length < 4) {
-            System.out.println("unreachable statement");
-            return;
-        }
         if (!isMyTurn) {
-            System.out.println("It's not your turn, this line should never be reached");
+            System.out.println("It's not your turn, unreachable statement");
             return;
         }
         switch (parts[0].toUpperCase()) {
             case "P" -> {
-                GoodsType goodsType = GoodsType.valueOf(parts[3].toUpperCase());
+                GoodsType goodsType = GoodsType.valueOf(parts[3].trim().toUpperCase());
                 Point p = getPoint(input);
 
                 if(!(goodsBuffer.getGoodsBuffer().getOrDefault(goodsType, 0) > 0)) {
@@ -115,20 +105,9 @@ public class CliGoodsScreen extends CliScreen {
                 }
                 controller.removeGoods(p, goodsType);
             }
+            case "" -> controller.goNext();
         }
     }
 
-//    @Override
-//    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-//        shipToCliShip.get(shipBoard).setDirty();
-//        shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
-//        cliAllShips.setDirty();
-//    }
-//
-//    @Override
-//    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-//        shipToCliShip.get(shipBoard).setDirty();
-//        shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
-//        cliAllShips.setDirty();
-//    }
+    // place/remove goods are done in state, cli is updated in cliScreen
 }

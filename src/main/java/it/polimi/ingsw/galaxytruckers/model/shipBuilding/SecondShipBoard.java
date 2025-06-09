@@ -125,12 +125,12 @@ public class SecondShipBoard extends ShipBoard {
 
     @Override
     public Map<Point, LifeSupport> getLifeSupports() {
-        return lifeSupports;
+        return new HashMap<>(lifeSupports);
     }
 
     @Override
     public List<Component> getStashedComponents() {
-        return stashedComponents;
+        return new ArrayList<>(stashedComponents);
     }
 
     //Cabin (and LifeSupport) methods

@@ -17,10 +17,8 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 
 import java.awt.*;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ClientEventHandler implements EventHandler<Event> {
@@ -143,7 +141,8 @@ public class ClientEventHandler implements EventHandler<Event> {
             case PlanetChoiceEvent planetChoiceEvent -> {
                 clientModel.notifyChoosePlanet(
                         playerRegistry.getByNickname(planetChoiceEvent.playerName()).getShipBoard(),
-                        planetChoiceEvent.planetId()
+                        planetChoiceEvent.planetId(),
+                        playerRegistry.getByNickname(planetChoiceEvent.nextPlayerName()).getShipBoard()
                 );
             }
             case PlayerDisconnectionEvent playerDisconnectionEvent -> {
@@ -202,6 +201,12 @@ public class ClientEventHandler implements EventHandler<Event> {
             }
             case SurrenderEvent surrenderEvent -> {
                 //TODO: handle player surrender
+                clientModel.notifySurrenderShip(
+                        surrenderEvent.playerNames().stream()
+                                .map(playerRegistry::getByNickname)
+                                .map(Player::getShipBoard)
+                                .collect(Collectors.toSet())
+                );
             }
             case UseBatteryEvent useBatteryEvent -> {
                 clientModel.notifyUseBattery(
@@ -236,46 +241,56 @@ public class ClientEventHandler implements EventHandler<Event> {
                 }
                 clientModel.setMetaState(MetaState.JOINORCREATE);
             }
+            case CurrentPlayerUpdateEvent currentPlayerUpdateEvent -> {
+                //TODO: define this method
+            }
         }
     }
 
     private void updateGameState(StateDTO stateDTO) {
         GameState gameState = null;
+        ShipBoard myShip = clientModel.getMyShip();
         switch (stateDTO) {
             case AddGoodsDTO addGoodsDTO -> {
                  gameState = new AddGoodsState(
+                         myShip,
                         addGoodsDTO.goodsBuffer(),
                         playerRegistry.getByNickname(addGoodsDTO.playerName()).getShipBoard()
                 );
             }
             case ChoosePlanetDTO choosePlanetDTO -> {
+                ShipBoard ship = playerRegistry.getByNickname(choosePlanetDTO.playerName()).getShipBoard();
                 gameState = new ChoosePlanetState(
-                        playerRegistry.getByNickname(choosePlanetDTO.playerName()).getShipBoard(),
-                        choosePlanetDTO.availablePlanets()
+                        myShip,
+                        ship,
+                        choosePlanetDTO.numPlanets()
                 );
             }
             case ChooseShipPieceDTO chooseShipPieceDTO -> {
                 gameState = new ChooseShipPieceState(
+                        myShip,
                         chooseShipPieceDTO.shipPieces(),
                         playerRegistry.getByNickname(chooseShipPieceDTO.playerName()).getShipBoard()
                 );
             }
             case HandleProjectileDTO handleProjectileDTO -> {
                 gameState = new HandleProjectileState(
+                        myShip,
                         playerRegistry.getByNickname(handleProjectileDTO.playerName()).getShipBoard(),
                         new Projectile(handleProjectileDTO.diceRoll(), handleProjectileDTO.direction(), handleProjectileDTO.projectileType()),
-                        handleProjectileDTO.availablePoints(),
-                        clientModel.getMyShip() == playerRegistry.getByNickname(handleProjectileDTO.playerName()).getShipBoard()
+                        handleProjectileDTO.availablePoints()
                 );
             }
             case RemoveCrewDTO removeCrewDTO -> {
                 gameState = new RemoveCrewState(
+                        myShip,
                         removeCrewDTO.crewLoss(),
                         playerRegistry.getByNickname(removeCrewDTO.playerName()).getShipBoard()
                 );
             }
             case RemoveGoodsDTO removeGoodsDTO -> {
                 gameState = new RemoveGoodsState(
+                        myShip,
                         removeGoodsDTO.goodsLoss(),
                         playerRegistry.getByNickname(removeGoodsDTO.playerName()).getShipBoard()
                 );
@@ -284,7 +299,8 @@ public class ClientEventHandler implements EventHandler<Event> {
                 gameState = clientModel.getGame().getGameFactory().createShipBuildingState();
             }
             case ShipCorrectionDTO shipCorrectionDTO -> {
-                gameState = new ShipCorrectionState(clientModel.getMyShip(),
+                gameState = new ShipCorrectionState(
+                        myShip,
                         shipCorrectionDTO.validShips().stream()
                                 .map(name -> playerRegistry.getByNickname(name).getShipBoard())
                                 .collect(Collectors.toSet()),
@@ -310,24 +326,17 @@ public class ClientEventHandler implements EventHandler<Event> {
                     }
                 }
                 gameState = new ShipInitializationState(
+                        myShip,
                         finalMap
                 );
             }
             case SimpleStateDTO simpleStateDTO -> {
                 ShipBoard shipBoard = playerRegistry.getByNickname(simpleStateDTO.playerName()).getShipBoard();
                 switch (simpleStateDTO.type()) {
-                    case DECLARE_ENGINE_POWER -> {
-                        gameState = new DeclareEnginePowerState(shipBoard, clientModel.getMyShip() == shipBoard);
-                    }
-                    case DECLARE_FIRE_POWER -> {
-                        gameState = new DeclareFirePowerState(shipBoard, clientModel.getMyShip() == shipBoard);
-                    }
-                    case DRAW_CARD -> {
-                        gameState = new DrawCardState(shipBoard);
-                    }
-                    case GRAB_REWARD -> {
-                        gameState = new GrabRewardState(shipBoard);
-                    }
+                    case DECLARE_ENGINE_POWER -> gameState = new DeclareEnginePowerState(myShip,shipBoard);
+                    case DECLARE_FIRE_POWER -> gameState = new DeclareFirePowerState(myShip,shipBoard);
+                    case DRAW_CARD -> gameState = new DrawCardState(myShip,shipBoard);
+                    case GRAB_REWARD -> gameState = new GrabRewardState(myShip,shipBoard);
                 }
             }
         }
