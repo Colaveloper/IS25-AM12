@@ -50,7 +50,9 @@ public final class ChoosePlanetState extends AdventureState implements GameState
         if (!shipBoard.equals(orderedShipBoards.get(shipIndex))) {
             throw new IllegalStateException("It's not your turn");
         }
-        nextShip();
+        ShipBoard nextShipBoard = nextShip();
+        if (nextShipBoard != null)
+            game.getEventListener().notifyCurrentPlayerUpdateEvent(nextShipBoard);
     }
 
     private ShipBoard nextShip() {

@@ -241,6 +241,9 @@ public class ClientEventHandler implements EventHandler<Event> {
                 }
                 clientModel.setMetaState(MetaState.JOINORCREATE);
             }
+            case CurrentPlayerUpdateEvent currentPlayerUpdateEvent -> {
+                //TODO: define this method
+            }
         }
     }
 

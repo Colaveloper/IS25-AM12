@@ -163,4 +163,8 @@ public class GameEventListener {
     public void notifyValidateShipEvent(ShipBoard shipBoard) {
         controllerListener.notifyEvent(ValidateShipEvent.from(shipBoard));
     }
+
+    public void notifyCurrentPlayerUpdateEvent(ShipBoard shipBoard) {
+        controllerListener.notifyEvent(new CurrentPlayerUpdateEvent(Player.getPlayer(shipBoard).getNickname()));
+    }
 }

@@ -50,6 +50,7 @@ public class Game {
      */
     public ShipBoard addShipBoard(GameColor color) {
         ShipBoard shipBoard = gameFactory.createShipBoard(color);
+        shipBoard.setGameEventListener(eventListener);
         shipBoards.add(shipBoard);
         return shipBoard;
     }
@@ -62,6 +63,7 @@ public class Game {
      */
     public void start() throws IOException{
         this.flightBoard = gameFactory.createFlightBoard(shipBoards.size());
+        this.flightBoard.setGameEventListener(eventListener);
         this.deck = gameFactory.createDeck(this);
         setCurrentState(gameFactory.createFirstGameState());
     }

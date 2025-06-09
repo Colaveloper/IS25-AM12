@@ -1,8 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.ComponentRegistry;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
@@ -10,6 +12,7 @@ import java.util.*;
 import java.util.List;
 
 public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor {
+    protected GameEventListener gameEventListener;
 
     protected final Map<Point, Component> componentMap;
     protected Component lastComponent;  // can be null
@@ -62,10 +65,15 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         weldLastComponent();
     }
 
+    public void setGameEventListener(GameEventListener gameEventListener) {
+        this.gameEventListener = gameEventListener;
+    }
+
     protected abstract boolean containsPoint(Point point);
 
     public void gainCredits (int credits) {
         this.credits += credits;
+        if (gameEventListener != null) gameEventListener.notifyShipStatUpdateEvent(this, StatType.CREDITS, credits);
     }
 
     //CliComponentBank interaction methods

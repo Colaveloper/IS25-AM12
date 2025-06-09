@@ -127,4 +127,8 @@ public class GameEventListenerStub extends GameEventListener{
     @Override
     public void setControllerListener(EventListener<LobbyEvent> controllerListener) {
     }
+
+    @Override
+    public void notifyCurrentPlayerUpdateEvent(ShipBoard shipBoard) {
+    }
 }
