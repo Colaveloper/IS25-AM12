@@ -188,9 +188,11 @@ public class ClientEventHandler implements EventHandler<Event> {
                 }
                 clientModel.setMetaState(MetaState.JOINORCREATE);
             }
-            case CurrentPlayerUpdateEvent currentPlayerUpdateEvent -> {
-                //TODO: define this method
-            }
+            case CurrentPlayerUpdateEvent currentPlayerUpdateEvent -> clientModel.notifyChoosePlanet(
+                    null,
+                    -1,
+                    playerRegistry.getByNickname(currentPlayerUpdateEvent.playerName()).getShipBoard()
+            );
         }
     }
 

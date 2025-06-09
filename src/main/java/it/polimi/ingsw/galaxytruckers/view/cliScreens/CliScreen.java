@@ -67,6 +67,20 @@ public abstract class CliScreen extends Screen {
         shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
     }
 
+    protected List<String> printShipFlightStats() {
+        List<String> description = new ArrayList<>();
+
+        description.addAll(cliFlightBoard.getDescription());
+        description.add(
+                "firepower: "   + myShipBoard.getFirePower()/2 +
+                "\tengine power: " + myShipBoard.getEnginePower() +
+                "\tbatteries: "   + myShipBoard.getNumBatteries() +
+                "\tcrewsize: "    + myShipBoard.getCrewSize()
+        );
+        description.addAll(cliAllShips.getDescription());
+        return description;
+    }
+
     protected void printShips() {
 //        flightBoard.getNewDescription().forEach(System.out::println);
 //        allShips.getNewDescription().forEach(System.out::println);//todo sistemare altri tipi di allships

@@ -29,8 +29,7 @@ public class CliCrewInitializationScreen extends CliScreen {
     @Override
     public void render() {
 
-        cliFlightBoard.getDescription().forEach(System.out::println);
-        cliAllShips.getDescription().forEach(System.out::println);
+        printShipFlightStats().forEach(System.out::println);
 
         if(shipNotValid) {
             if(crewtypeToPoints.get(myShipBoard).containsKey(CrewType.PURPLE)) {

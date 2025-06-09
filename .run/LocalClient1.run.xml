@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="LocalClient1" type="Application" factoryName="Application" folderName="System2Clients" singleton="false">
-    <option name="ALTERNATIVE_JRE_PATH" value="openjdk-23" />
+    <option name="ALTERNATIVE_JRE_PATH" value="JDK 24" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.network.client.Client" />
     <module name="GalaxyTruckers" />

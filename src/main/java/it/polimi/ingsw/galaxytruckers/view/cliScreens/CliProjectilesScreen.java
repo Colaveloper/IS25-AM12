@@ -28,8 +28,7 @@ public class CliProjectilesScreen extends CliActivationScreen {
 
     @Override
     public void render() {
-        cliFlightBoard.getDescription().forEach(System.out::println);
-        cliAllShips.getDescription().forEach(System.out::println);
+        printShipFlightStats();
         if(imOut) {
             System.out.println("you surrendered");
             return;

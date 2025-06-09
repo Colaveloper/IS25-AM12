@@ -19,9 +19,7 @@ public abstract class CliActivationScreen extends CliAdventureScreen {
     }
 
     @Override
-    public void render() {
-
-    }
+    public abstract void render();
 
     @Override
     public void parseAndInvoke(String input) {

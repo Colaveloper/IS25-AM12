@@ -52,6 +52,11 @@ public class CliSecondShipBuildingScreen extends CliScreen {
         } else {
             cliComponentBank.getDescription().forEach(System.out::println);
             DescriptionUtils.sideBySide(cliFlightBoard.getDescription(), cliForecast.getDescription()).forEach(System.out::println);
+            System.out.println(
+                    "firepower: "   + myShipBoard.getFirePower()/2 +
+                    "\tengine power: " + myShipBoard.getEnginePower() +
+                    "\tbatteries: "   + myShipBoard.getNumBatteries()
+            );
             cliAllShips.getDescription().forEach(System.out::println);
         }
         printActions();

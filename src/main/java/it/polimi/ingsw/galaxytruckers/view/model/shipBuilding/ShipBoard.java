@@ -162,6 +162,11 @@ public abstract class ShipBoard {
             }
             case Cabin cabin -> {
                 cabins.remove(position);
+                switch (cabin.getCrewType()) {
+                    case PURPLE -> firePower -= 2;
+                    case BROWN -> enginePower -= 2;
+                    case HUMAN -> {}
+                }
                 crewSize += cabin.getNumResidents();
             }
             case DoubleCannon _ -> {
@@ -218,6 +223,11 @@ public abstract class ShipBoard {
 
     public int initializeCabin(Point position, CrewType crewType) {
         cabins.get(position).initialize(crewType);
+        switch (crewType) {
+            case PURPLE -> firePower += 2;
+            case BROWN -> enginePower += 2;
+            case HUMAN -> {}
+        }
         return cabins.get(position).getNumResidents();
     }
 
