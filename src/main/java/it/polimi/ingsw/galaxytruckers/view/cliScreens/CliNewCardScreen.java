@@ -1,23 +1,19 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.view.model.state.DrawCardState;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
-import it.polimi.ingsw.galaxytruckers.view.model.state.RemoveGoodsState;
 
 import java.util.List;
 
-public class CliNewCardScreen extends CliScreen {
+public class CliNewCardScreen extends CliAdventureScreen {
 
     private CliAdventureCard adventureCard;
-    private final boolean imLeader;
     private boolean hasDrown;
     public CliNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState gameState){
         super(model, controller, gameState);
-        imLeader = gameState.getImLeader();
         hasDrown = false;
         //adventureCard = new CliAdventureCard(gameState.getGame().getCurrentAdventureCard());
     }
@@ -26,7 +22,11 @@ public class CliNewCardScreen extends CliScreen {
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
-        if(!hasDrown && !imLeader){
+        if(imOut) {
+            System.out.println("you surrendered");
+            return;
+        }
+        if(!hasDrown && !isMyTurn){
             System.out.println("Wait for leader to draw");
         }
         if (hasDrown) {
@@ -45,10 +45,10 @@ public class CliNewCardScreen extends CliScreen {
                 controller.giveUp();
                 break;
             case "":
-                if(imLeader && hasDrown){
+                if(isMyTurn && hasDrown){
                     controller.goNext();
                 }
-                else if(imLeader){
+                else if(isMyTurn){
                     controller.drawCard();
                 }
                 else{

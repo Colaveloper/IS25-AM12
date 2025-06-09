@@ -1,26 +1,20 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ActivateState;
-import it.polimi.ingsw.galaxytruckers.view.model.state.DeclareEnginePowerState;
 
 import java.awt.*;
 import java.util.Set;
 
-public abstract class CliActivationScreen extends CliScreen {
+public abstract class CliActivationScreen extends CliAdventureScreen {
 
-    private final boolean isMyTurn;
-    private final ShipBoard currentShip;
     private int batteriesToSpend;
 
     public CliActivationScreen(ClientModel model, ControllerToServer controller, ActivateState activateState) {
         super(model, controller, activateState);
-        this.currentShip = activateState.getShipBoard();
-        this.isMyTurn = currentShip.equals(model.getMyShip());
         batteriesToSpend = 0;
     }
 

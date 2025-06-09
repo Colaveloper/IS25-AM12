@@ -11,9 +11,10 @@ public final class DrawCardState extends AdventureState {
     private final boolean imLeader;
     private boolean hasDrawn = false;
 
-    public DrawCardState(ShipBoard myShip, ShipBoard shipBoard) {
+    public DrawCardState(ShipBoard myShip, ShipBoard currentShip) {
+        this.currentShip = currentShip;
         this.myShip = myShip;
-        this.imLeader = shipBoard.equals(myShip);
+        this.imLeader = currentShip.equals(myShip);
     }
 
     @Override
@@ -31,10 +32,6 @@ public final class DrawCardState extends AdventureState {
     public void notifyDrawCard(AdventureCard adventureCard) {
         hasDrawn = true;
         game.getObservers().forEach(observer -> observer.notifyDrawCard(adventureCard));
-    }
-
-    public boolean getImLeader() {
-        return imLeader;
     }
 
 }

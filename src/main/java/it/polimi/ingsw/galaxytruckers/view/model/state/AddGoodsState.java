@@ -11,14 +11,13 @@ import java.util.Set;
 
 public final class AddGoodsState extends AdventureState {
     private final GoodsBuffer goodsBuffer;
-    private final ShipBoard shipBoard;
     private final boolean isMyTurn;
 
-    public AddGoodsState(ShipBoard myShip, Map<GoodsType, Integer> goodsBuffer, ShipBoard shipBoard) {
+    public AddGoodsState(ShipBoard myShip, Map<GoodsType, Integer> goodsBuffer, ShipBoard currentShip) {
         this.myShip = myShip;
-        this.isMyTurn = shipBoard.equals(myShip);
+        this.isMyTurn = currentShip.equals(myShip);
         this.goodsBuffer = new GoodsBuffer(goodsBuffer);
-        this.shipBoard = shipBoard;
+        this.currentShip = currentShip;
     }
 
     @Override
@@ -52,9 +51,5 @@ public final class AddGoodsState extends AdventureState {
 
     public GoodsBuffer getGoodsBuffer() {
         return goodsBuffer;
-    }
-
-    public ShipBoard getShipBoard() {
-        return shipBoard;
     }
 }

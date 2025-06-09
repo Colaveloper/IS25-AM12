@@ -248,8 +248,14 @@ public class ClientModel {
         safeGetCurrentState().notifyChoosePlanet(shipBoard, choice, nextShipBoard);
     }
 
-    public void notifyGiveUp(ShipBoard shipBoard) {
+    public void notifyGiveUpMessage(ShipBoard shipBoard) {
         safeGetCurrentState().notifyGiveUp(shipBoard);
+    }
+
+    public void notifySurrenderShip(Set<ShipBoard> shipBoards) {
+        synchronized (gameLock) {
+            game.setGivenUpShips(shipBoards);
+        }
     }
 
     public void setFinalScores(Map<Player, Integer> finalScores) {

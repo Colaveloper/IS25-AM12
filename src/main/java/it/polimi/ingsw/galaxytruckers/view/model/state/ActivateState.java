@@ -13,20 +13,20 @@ public sealed abstract class ActivateState extends AdventureState permits
         HandleProjectileState
 {
     protected final Set<Point> availablePositions;
-    protected final ShipBoard shipBoard;
     protected final boolean isMyTurn;
 
-    ActivateState(ShipBoard myShip, ShipBoard shipBoard, Set<Point> availablePositions) {
+    ActivateState(ShipBoard myShip, ShipBoard currentShip, Set<Point> availablePositions) {
         this.myShip = myShip;
-        this.isMyTurn = shipBoard.equals(myShip);
-        this.shipBoard = shipBoard;
+        this.isMyTurn = currentShip.equals(myShip);
+        this.currentShip = currentShip;
         this.availablePositions = availablePositions;
     }
 
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
+        if(imOut) return actions;
         if (isMyTurn) {
-            if (!shipBoard.getBatteries().isEmpty() && !shipBoard.getActivatables().isEmpty()) {
+            if (!currentShip.getBatteries().isEmpty() && !currentShip.getActivatables().isEmpty()) {
                 actions.add(StateActions.SPEND_BATTERIES);
                 actions.add(StateActions.ACTIVATE_COMPONENT);
             }
@@ -51,9 +51,4 @@ public sealed abstract class ActivateState extends AdventureState permits
     public Set<Point> getAvailablePositions() {
         return availablePositions;
     }
-
-    public ShipBoard getShipBoard() {
-        return shipBoard;
-    }
-
 }

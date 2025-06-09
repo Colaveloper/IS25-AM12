@@ -2,28 +2,19 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.CargoHold;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.AddGoodsState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GoodsBuffer;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
-public class CliGoodsScreen extends CliScreen {
+public class CliGoodsScreen extends CliAdventureScreen {
 
-    private final boolean isMyTurn;
-    private final ShipBoard currentShip;
     private final GoodsBuffer goodsBuffer;
 
     public CliGoodsScreen(ClientModel model, ControllerToServer controller, AddGoodsState gameState) {
         super(model, controller, gameState);
-        this.currentShip = gameState.getShipBoard();
-        this.isMyTurn = currentShip.equals(model.getMyShip());
         this.goodsBuffer = gameState.getGoodsBuffer();
     }
 
@@ -31,7 +22,10 @@ public class CliGoodsScreen extends CliScreen {
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
-
+        if(imOut) {
+            System.out.println("you surrendered");
+            return;
+        }
         if (isMyTurn) {
             System.out.println("Your turn to manage goods");
             System.out.println("Goods in buffer:");

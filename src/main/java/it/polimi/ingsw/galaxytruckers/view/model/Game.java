@@ -78,7 +78,13 @@ public class Game {
         return shipBoards;
     }
 
-    public Set<ShipBoard> getGivenUpShips(){return givenUpShips;}
+    public void setGivenUpShips(Set<ShipBoard> givenUpShips) {
+        this.givenUpShips.addAll(givenUpShips);
+    }
+
+    public Set<ShipBoard> getGivenUpShips(){
+        return givenUpShips;
+    }
 
     public Set<GameColor> getShipColors(){
         Set<GameColor> colors = new HashSet<>();

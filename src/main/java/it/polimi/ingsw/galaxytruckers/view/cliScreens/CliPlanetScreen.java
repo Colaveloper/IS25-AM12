@@ -7,7 +7,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.ChoosePlanetState;
 
 import java.util.*;
 
-public class CliPlanetScreen extends CliScreen {
+public class CliPlanetScreen extends CliAdventureScreen {
+    // this screen does all players without stateChange unlike the others
+    // so currentShip and isMyTurn are not final
 
     private boolean isMyTurn;
     private ShipBoard currentShip;
@@ -24,7 +26,10 @@ public class CliPlanetScreen extends CliScreen {
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
-
+        if(imOut) {
+            System.out.println("you surrendered");
+            return;
+        }
         if (isMyTurn) {
             System.out.println("Your turn to choose a planet to land on");
             //System.out.println("Available planets: ");

@@ -159,7 +159,6 @@ public abstract sealed class GameState permits
     }
 
     public void notifyGiveUp(ShipBoard shipBoard) {
-        System.err.println("25This action is not permitted in this state, \n" +
-                "it seems the client and the server are out of sync");
+        System.err.println(shipBoard.getColor() + " is giving up");
     }
 }

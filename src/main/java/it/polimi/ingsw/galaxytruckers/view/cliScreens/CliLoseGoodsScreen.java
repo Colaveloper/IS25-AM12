@@ -1,49 +1,27 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.CargoHold;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.RemoveGoodsState;
 
 import java.awt.*;
-import java.util.Map;
 
-public class CliLoseGoodsScreen extends CliScreen {
+public class CliLoseGoodsScreen extends CliAdventureScreen {
 
-    private final boolean isMyTurn;
-    private final ShipBoard currentShip;
 
     public CliLoseGoodsScreen(ClientModel model, ControllerToServer controller, RemoveGoodsState gameState) {
         super(model, controller, gameState);
-        this.currentShip = gameState.getShipBoard();
-        this.isMyTurn = currentShip.equals(model.getMyShip());
-    }
-
-    @Override
-    public boolean isInputLegal(String input) {
-        if (!isMyTurn) {
-            System.out.println("It's not your turn to lose goods");
-            return false;
-        }
-
-        if (!isFormatLegal(input)) {
-            return false;
-        }
-
-        Point p = getPoint(input);
-        return currentShip.getCargoHolds().containsKey(p) &&
-               !currentShip.getCargoHolds().get(p).getGoods().isEmpty();
     }
 
     @Override
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
-
+        if(imOut) {
+            System.out.println("you surrendered");
+            return;
+        }
         if (isMyTurn) {
             System.out.println("Your turn to lose goods");
             System.out.println("Select cargo holds to discard goods from");
@@ -86,14 +64,7 @@ public class CliLoseGoodsScreen extends CliScreen {
                 System.out.println("No goods in this cargo hold");
                 return;
             }
-
             controller.loseGoods(p);
         }
     }
-
-//    @Override
-//    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-//        CliShipBoard ship = shipToCliShip.get(shipBoard);
-//        cliAllShips.setDirty();
-//    }
 }

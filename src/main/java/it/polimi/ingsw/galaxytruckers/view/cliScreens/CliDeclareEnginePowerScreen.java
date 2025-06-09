@@ -28,7 +28,10 @@ public class CliDeclareEnginePowerScreen extends CliActivationScreen {
     public void render() {
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
-
+        if(imOut) {
+            System.out.println("you surrendered");
+            return;
+        }
         if (isMyTurn) {
             System.out.println("Your turn to declare engine power");
             System.out.println("Select engine components to activate or batteries to use");

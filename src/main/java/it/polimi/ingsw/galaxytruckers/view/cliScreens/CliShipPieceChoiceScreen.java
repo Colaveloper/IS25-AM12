@@ -17,17 +17,15 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CliShipPieceChoiceScreen extends CliScreen {
+public class CliShipPieceChoiceScreen extends CliAdventureScreen {
 
     private boolean shipBroken;
     private int numPieces;
-    private final ShipBoard currentShip;
     private final List<Set<Point>> points;
 
     public CliShipPieceChoiceScreen(ClientModel model, ControllerToServer controller, ChooseShipPieceState gameState) {
         super(model, controller, gameState);
-        currentShip = gameState.getShipBoard();
-        shipBroken = currentShip.equals(myShipBoard);
+        shipBroken = isMyTurn;
         numPieces =  gameState.getShipPieces().size();
         points = gameState.getShipPieces();
         shipNotConnected(currentShip, gameState.getShipPieces());
@@ -72,7 +70,10 @@ public class CliShipPieceChoiceScreen extends CliScreen {
 
         cliFlightBoard.getDescription().forEach(System.out::println);
         cliAllShips.getDescription().forEach(System.out::println);
-
+        if(imOut) {
+            System.out.println("you surrendered");
+            return;
+        }
         if (shipBroken) {
             System.out.println("your ship is broken, choose a piece of ship to keep");
             for(int i = 0; i < numPieces; i++) {

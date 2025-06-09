@@ -17,10 +17,8 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 
 import java.awt.*;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ClientEventHandler implements EventHandler<Event> {
@@ -203,7 +201,12 @@ public class ClientEventHandler implements EventHandler<Event> {
             }
             case SurrenderEvent surrenderEvent -> {
                 //TODO: handle player surrender
-                //clientModel.notifySurrender(Set<ShipBoard>)
+                clientModel.notifySurrenderShip(
+                        surrenderEvent.playerNames().stream()
+                                .map(playerRegistry::getByNickname)
+                                .map(Player::getShipBoard)
+                                .collect(Collectors.toSet())
+                );
             }
             case UseBatteryEvent useBatteryEvent -> {
                 clientModel.notifyUseBattery(
