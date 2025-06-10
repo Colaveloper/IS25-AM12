@@ -24,5 +24,7 @@ public final class GrabRewardState extends AdventureState {
         return actions;
     }
 
-    public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed){}
+    public void notifyGrabReward(ShipBoard shipBoard, int credits){
+        currentShip.addCredits(credits);
+    }
 }

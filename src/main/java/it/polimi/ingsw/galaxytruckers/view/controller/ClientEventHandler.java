@@ -152,9 +152,10 @@ public class ClientEventHandler implements EventHandler<Event> {
                     playerRegistry.getByNickname(shipPieceRemoveEvent.playerName()).getShipBoard(),
                     shipPieceRemoveEvent.index()
             );
-            case ShipStatUpdateEvent shipStatUpdateEvent -> {
-                //TODO: decide whether this method is truly needed
-            }
+            case ShipStatUpdateEvent shipStatUpdateEvent -> clientModel.notifyGrabCredits(
+                    playerRegistry.getByNickname(shipStatUpdateEvent.playerName()).getShipBoard(),
+                    shipStatUpdateEvent.value()
+            );
             case StashComponentEvent stashComponentEvent -> clientModel.notifyStashComponent(
                     playerRegistry.getByNickname(stashComponentEvent.playerName()).getShipBoard()
             );

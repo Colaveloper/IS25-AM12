@@ -135,7 +135,7 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
-    public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed) {
+    public void notifyGrabReward(ShipBoard shipBoard, int credits) {
         System.err.println("20This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
     }

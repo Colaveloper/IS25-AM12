@@ -72,11 +72,13 @@ public abstract class CliScreen extends Screen {
 
         description.addAll(cliFlightBoard.getDescription());
         description.add(
-                "firepower: "   + myShipBoard.getFirePower()/2 +
-                "\tengine power: " + myShipBoard.getEnginePower() +
+                "firepower: "     + myShipBoard.getFirePower()/2 +
+                "\tengine power: "+ myShipBoard.getEnginePower() +
                 "\tbatteries: "   + myShipBoard.getNumBatteries() +
-                "\tcrewsize: "    + myShipBoard.getCrewSize()
+                "\tcrewsize: "    + myShipBoard.getCrewSize() +
+                "\tcredits: "     + myShipBoard.getCredits()
         );
+        if(myShipBoard.getLosses()!=0) description.add("losses: " + myShipBoard.getLosses());
         description.addAll(cliAllShips.getDescription());
         return description;
     }
