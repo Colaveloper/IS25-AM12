@@ -167,7 +167,7 @@ public abstract class ShipBoard {
                     case BROWN -> enginePower -= 2;
                     case HUMAN -> {}
                 }
-                crewSize += cabin.getNumResidents();
+                crewSize -= cabin.getNumResidents();
             }
             case DoubleCannon _ -> {
                 cannons.remove(position);
@@ -223,11 +223,18 @@ public abstract class ShipBoard {
     //Cabin (and LifeSupport) methods
 
     public int initializeCabin(Point position, CrewType crewType) {
-        cabins.get(position).initialize(crewType);
+        Cabin cabin = cabins.get(position);
+        cabin.initialize(crewType);
         switch (crewType) {
-            case PURPLE -> firePower += 2;
-            case BROWN -> enginePower += 2;
-            case HUMAN -> {}
+            case PURPLE -> {
+                firePower += 2;
+                crewSize += cabin.getNumResidents();
+            }
+            case BROWN -> {
+                enginePower += 2;
+                crewSize += cabin.getNumResidents();
+            }
+            case HUMAN -> crewSize += cabin.getNumResidents();
         }
         return cabins.get(position).getNumResidents();
     }
@@ -260,9 +267,7 @@ public abstract class ShipBoard {
 
     public void deactivateAll() {
         for (Point p : activatables.keySet()) {
-            if (activatables.get(p).isActive()) {
-                deactivateComponent(p);
-            }
+            if (activatables.get(p).isActive()) deactivateComponent(p);
         }
     }
 

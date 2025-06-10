@@ -67,6 +67,6 @@ public class SmugglersCard extends AdventureCard {
 
     public void getReward() {
         flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
-        currentShipBoard = null;
+        //currentShipBoard = null;//todo l'ho tolto, spero non fosse importante
     }
 }
