@@ -131,7 +131,39 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                 break;
 
             case "R":
-                controller.rejectComponent();
+                if (parts.length == 1) {
+                    controller.rejectComponent();
+                } else if (parts.length == 2 && parts[1].equalsIgnoreCase("LEFT")) {
+                    // Rotate component left
+                    if(myShipBoard.getLastComponent() == null) {
+                        System.out.println("Nothing to rotate");
+                        break;
+                    }
+                    Direction currentOrientation = myShipBoard.getLastComponent().getOrientation();
+                    Direction newOrientation = currentOrientation.getLeft();
+                    myShipBoard.getLastComponent().setOrientation(newOrientation);
+
+                    buildingShipToCliShip.get(myShipBoard).clearHand();
+                    buildingShipToCliShip.get(myShipBoard).setHand(myShipBoard.getLastComponent());
+                    cliAllShips.setDirty();
+                    render(); // render immediately because orientation is client-side only
+                } else if (parts.length == 2 && parts[1].equalsIgnoreCase("RIGHT")) {
+                    if(myShipBoard.getLastComponent() == null) {
+                        System.out.println("Nothing to rotate");
+                        break;
+                    }
+                    Direction currentOrientation = myShipBoard.getLastComponent().getOrientation();
+                    Direction newOrientation = currentOrientation.getRight();
+                    myShipBoard.getLastComponent().setOrientation(newOrientation);
+
+                    buildingShipToCliShip.get(myShipBoard).clearHand();
+                    buildingShipToCliShip.get(myShipBoard).setHand(myShipBoard.getLastComponent());
+                    cliAllShips.setDirty();
+                    render(); // render immediately because orientation is client-side only
+                }
+                else {
+                    System.out.println("Invalid command. Use 'R' to reject the component or 'R LEFT'/'R RIGHT' to rotate it.");
+                }
                 break;
 
             case "P":
@@ -145,17 +177,12 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                         System.out.println("This point is already occupied");
                         break;
                     }
-                    controller.placeComponent(getPoint(input), Direction.UP); //todo add orientation
+                    Direction orientation = Direction.UP;
+                    if (myShipBoard.getLastComponent() != null) {
+                        orientation = myShipBoard.getLastComponent().getOrientation();
+                    }
+                    controller.placeComponent(getPoint(input), orientation);
                 }
-                break;
-
-            case "L":
-                if(myShipBoard.getLastComponent() == null) {
-                    System.out.println("Nothing to rotate");
-                    break;
-                }
-                //model.rotateCurrentComponentLeft();
-                //todo rotate component in model
                 break;
 
             case "H":

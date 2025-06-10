@@ -113,6 +113,7 @@ public abstract class CliScreen extends Screen {
                     case STASH_COMPONENT ->         actions.add("S  To stash current component     ");
                     case GRAB_STASHED_COMPONENT ->  actions.add("S [i]  To grab i-th stashed       ");
                     case PLACE_COMPONENT ->         actions.add("P[x][y]  Place component in [x][y]");
+                    case ROTATE_COMPONENT ->        actions.add("R [LEFT|RIGHT] Rotate component   ");
                     case FLIP_HOURGLASS ->          actions.add("H  To Flip hourglass              ");
                     case PLACE_SHIP_ON_FLIGHTBOARD->actions.add("E [i] End and place on flightboard");
                     case FINISH_BUILDING ->         actions.add("X  To finish building             ");
@@ -162,7 +163,8 @@ public abstract class CliScreen extends Screen {
                         availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.matches("S\\s+\\d+");
             case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT)&& input.matches("R") ||
                         availableActions.contains(StateActions.REMOVE_GOOD)     && input.matches("R\\s+\\d+\\s+\\d+\\s+[A-Z]+") ||
-                        availableActions.contains(StateActions.REMOVE_COMPONENT)&& input.matches("R\\s+\\d+\\s+\\d+");
+                        availableActions.contains(StateActions.REMOVE_COMPONENT)&& input.matches("R\\s+\\d+\\s+\\d+") ||
+                        availableActions.contains(StateActions.ROTATE_COMPONENT)&& input.matches("R\\s+(?i)(LEFT|RIGHT)");
             case "C" -> availableActions.contains(StateActions.REQUEST_RAND_COMPONENT) && input.matches("C");
             case "U" -> availableActions.contains(StateActions.REQUEST_COMPONENT)&& input.matches("U\\s+\\d+");
             case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST)&& input.matches("F\\s+\\d+");

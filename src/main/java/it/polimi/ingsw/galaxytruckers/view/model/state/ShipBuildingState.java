@@ -40,6 +40,7 @@ public sealed abstract class ShipBuildingState extends GameState permits
             if (!componentBank.getUncoveredComponents().isEmpty()) actions.add(StateActions.REQUEST_COMPONENT);
             if ((componentInHand() || unweldedOnBoard()) && !hasStashed) actions.add(StateActions.REJECT_COMPONENT);
             if (componentInHand() || unweldedOnBoard()) actions.add(StateActions.PLACE_COMPONENT);
+            if (componentInHand()) actions.add(StateActions.ROTATE_COMPONENT);
             actions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
         }
         return actions;
