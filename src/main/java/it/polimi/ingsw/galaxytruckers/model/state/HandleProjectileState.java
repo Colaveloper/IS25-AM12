@@ -11,9 +11,8 @@ public non-sealed class HandleProjectileState extends ActivateState implements G
     Projectile projectile;
 
     public HandleProjectileState(ShipBoard shipBoard, Projectile projectile) {
-        super(shipBoard);
+        super(shipBoard, projectile.getActivatablePoints(shipBoard));
         this.projectile = projectile;
-        this.availablePositions = projectile.getActivatablePoints(shipBoard);
     }
 
     @Override

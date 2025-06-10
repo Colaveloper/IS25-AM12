@@ -265,12 +265,12 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     //Batteries methods
 
-    public void useBatteries(Point position, int amount) {
+    public void useBatteries(Point position) {
         if (!batteries.containsKey(position)) {
             throw new IllegalStateException("There is no battery for this position");
         }
-        batteries.get(position).useBatteries(amount);
-        numBatteries -= amount;
+        batteries.get(position).useBatteries();
+        numBatteries--;
     }
 
     //Cabin (and LifeSupport) methods

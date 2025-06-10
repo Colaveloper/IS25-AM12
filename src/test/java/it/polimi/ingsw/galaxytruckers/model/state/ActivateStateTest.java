@@ -41,7 +41,7 @@ class ActivateStateTest {
                 return true;
             }
             @Override
-            public void useBatteries(Point pos, int amount){
+            public void useBatteries(Point pos){
                 // mock
             }
         };
@@ -69,7 +69,6 @@ class ActivateStateTest {
         testActivateState = new ActivateStateStub(ship2) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
-                availablePositions = new HashSet<>();
                 availablePositions.add(position);
                 super.activateComponent(shipBoard, position);
             }
@@ -84,7 +83,6 @@ class ActivateStateTest {
         testActivateState = new ActivateStateStub(ship2) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
-                availablePositions = new HashSet<>();
                 super.activateComponent(shipBoard, position);
             }
         };
@@ -104,14 +102,13 @@ class ActivateStateTest {
                 return false;
             }
             @Override
-            public void useBatteries(Point pos, int amount){
+            public void useBatteries(Point pos){
                 // mock
             }
         };
         testActivateState = new ActivateStateStub(ship2) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
-                availablePositions = new HashSet<>();
                 availablePositions.add(position);
                 super.activateComponent(shipBoard, position);
             }
@@ -122,12 +119,7 @@ class ActivateStateTest {
 
     @Test
     void spendBatteriesThrowsExceptionWhenOutOfTurn() {
-        assertThrows(IllegalStateException.class, () -> testActivateState.spendBatteries(ship2, new Point(7,7), 1));
-    }
-
-    @Test
-    void spendBatteriesThrowsExceptionWhenSpendingMoreBatteriesThanRequired(){
-        assertThrows(IllegalArgumentException.class, () -> testActivateState.spendBatteries(ship1, new Point(7,7), 1));
+        assertThrows(IllegalStateException.class, () -> testActivateState.spendBatteries(ship2, new Point(7,7)));
     }
 
     @Test
@@ -135,14 +127,13 @@ class ActivateStateTest {
         testActivateState = new ActivateStateStub(ship2) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
-                availablePositions = new HashSet<>();
                 availablePositions.add(position);
                 super.activateComponent(shipBoard, position);
             }
         };
         testActivateState.setGame(game);
         testActivateState.activateComponent(ship2, new Point(7,7));
-        testActivateState.spendBatteries(ship2, new Point(7,7), 1);
+        testActivateState.spendBatteries(ship2, new Point(7,7));
         assertEquals(0, testActivateState.batteriesToSpend);
     }
 
@@ -156,7 +147,6 @@ class ActivateStateTest {
         testActivateState = new ActivateStateStub(ship2) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
-                availablePositions = new HashSet<>();
                 availablePositions.add(position);
                 super.activateComponent(shipBoard, position);
             }
@@ -190,14 +180,13 @@ class ActivateStateTest {
         testActivateState = new ActivateStateStub(ship2) {
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
-                availablePositions = new HashSet<>();
                 availablePositions.add(position);
                 super.activateComponent(shipBoard, position);
             }
         };
         testActivateState.setGame(game);
         testActivateState.activateComponent(ship2, new Point(7,7));
-        testActivateState.spendBatteries(ship2, new Point(7,7), 1);
+        testActivateState.spendBatteries(ship2, new Point(7,7));
         testActivateState.goNext(ship2);
         assertNotEquals(testActivateState, game.getCurrentState());
     }

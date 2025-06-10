@@ -20,7 +20,7 @@ public non-sealed class GameState implements GameStateInterface {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
-    public void spendBatteries(ShipBoard shipBoard, Point point, int amount) {
+    public void spendBatteries(ShipBoard shipBoard, Point point) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 

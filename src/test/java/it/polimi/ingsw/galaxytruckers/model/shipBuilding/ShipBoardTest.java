@@ -658,21 +658,6 @@ class ShipBoardTest {
             }
 
             @Test
-            void useTwoBatteries(){
-                battery = new Battery(Map.of(
-                        Direction.UP, Connector.UNIVERSAL,
-                        Direction.LEFT, Connector.UNIVERSAL,
-                        Direction.DOWN, Connector.UNIVERSAL,
-                        Direction.RIGHT, Connector.UNIVERSAL
-                ), 2);
-                component = battery;
-                addComponent(new Point(7,7));
-                assertTrue(restIsUnchanged());
-                shipBoard.useBatteries(new Point(7,7),2);
-                assertEquals(0, shipBoard.getBatteries().get(new Point(7,7)).getNumBatteries());
-            }
-
-            @Test
             void useThreeBatteries(){
                 battery = new Battery(Map.of(
                         Direction.UP, Connector.UNIVERSAL,
@@ -683,7 +668,10 @@ class ShipBoardTest {
                 component = battery;
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
-                shipBoard.useBatteries(new Point(7,7),3);
+                int numBatteries = battery.getNumBatteries();
+                for (int i = 0; i < numBatteries; i++) {
+                    shipBoard.useBatteries(new Point(7,7));
+                }
                 assertEquals(0, shipBoard.getBatteries().get(new Point(7,7)).getNumBatteries());
             }
 
@@ -695,7 +683,7 @@ class ShipBoardTest {
                         Direction.RIGHT, Connector.UNIVERSAL
                 ), 2);
                 component = battery;
-                assertThrows(IllegalStateException.class, () -> shipBoard.useBatteries(new Point(7,7), 2));
+                assertThrows(IllegalStateException.class, () -> shipBoard.useBatteries(new Point(7,7)));
                 assertTrue(restIsUnchanged());
             }
 
@@ -707,7 +695,7 @@ class ShipBoardTest {
                         Direction.RIGHT, Connector.UNIVERSAL
                 ), 3);
                 component = battery;
-                assertThrows(IllegalStateException.class, () -> shipBoard.useBatteries(new Point(7,7), 2));
+                assertThrows(IllegalStateException.class, () -> shipBoard.useBatteries(new Point(7,7)));
                 assertTrue(restIsUnchanged());
             }
         }
