@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import javafx.application.Platform;
 import javafx.scene.layout.HBox;
@@ -10,11 +11,12 @@ public class GuiHand extends HBox {
 
     private GuiComponent guiHandComponent;
 
-    public GuiHand(Component component, ControllerToServer controller) {
+    public GuiHand(Component component, GuiController controller) {
         if (component == null) {
             getChildren().add(createPlaceholder());
         } else {
             guiHandComponent = new GuiComponent(component);
+//            guiHandComponent.setOnMouseClicked(_->controller.rotateLeft());
             getChildren().add(guiHandComponent);
         }
     }

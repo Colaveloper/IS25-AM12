@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Button;
@@ -10,13 +10,13 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 public class GuiHourglass extends StackPane {
-    private final ControllerToServer controller;
+    private final GuiController controller;
     private final Label timerLabel = new Label("60");
     private final Button hourglassButton = new Button("⏳");
     private final Timeline timeline;
     private int secondsLeft = 60;
 
-    public GuiHourglass(ControllerToServer controller) {
+    public GuiHourglass(GuiController controller) {
         this.controller = controller;
 
         timerLabel.setStyle("-fx-font-size: 24px;");

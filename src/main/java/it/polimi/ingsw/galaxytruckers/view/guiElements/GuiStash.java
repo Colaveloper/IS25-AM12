@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
@@ -14,10 +14,10 @@ import javafx.scene.text.FontWeight;
 import java.util.ArrayList;
 import java.util.List;
 public class GuiStash extends HBox {
-    private final ControllerToServer controller;
+    private final GuiController controller;
     private final HBox stashBox;
 
-    public GuiStash(List<Component> stashedComponents, ControllerToServer controller) {
+    public GuiStash(List<Component> stashedComponents, GuiController controller) {
         this.controller = controller;
 
         Button stashButton = new Button("S");

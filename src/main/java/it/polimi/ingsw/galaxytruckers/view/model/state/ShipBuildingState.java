@@ -38,8 +38,8 @@ public sealed abstract class ShipBuildingState extends GameState permits
         if(!hasFinished) {
             if (componentBank.getCoveredComponentsN() != 0) actions.add(StateActions.REQUEST_RAND_COMPONENT);
             if (!componentBank.getUncoveredComponents().isEmpty()) actions.add(StateActions.REQUEST_COMPONENT);
-            if (componentInHand() && !hasStashed) actions.add(StateActions.REJECT_COMPONENT);
-            if (componentInHand()) actions.add(StateActions.PLACE_COMPONENT);
+            if ((componentInHand() || unweldedOnBoard()) && !hasStashed) actions.add(StateActions.REJECT_COMPONENT);
+            if (componentInHand() || unweldedOnBoard()) actions.add(StateActions.PLACE_COMPONENT);
             actions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
         }
         return actions;
@@ -93,6 +93,10 @@ public sealed abstract class ShipBuildingState extends GameState permits
 
     protected boolean componentInHand(){
         return myShip.getLastComponent() != null && myShip.getLastPosition() == null;
+    }
+
+    protected boolean unweldedOnBoard() {
+        return myShip.getLastComponent() != null && myShip.getLastPosition() != null;
     }
 
     public ComponentBank getComponentBank(){

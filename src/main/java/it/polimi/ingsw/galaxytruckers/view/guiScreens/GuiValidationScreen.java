@@ -53,14 +53,19 @@ public class GuiValidationScreen extends GuiGameScreen {
     }
 
     @Override
-    public void handlePointPress(Point point) {
-        if (shipPieces.isEmpty()) {
-            controller.removeComponent(point);
-        } else {
-            IntStream.range(0, shipPieces.size())
-                    .filter(i -> shipPieces.get(i).contains(point))
-                    .findFirst()
-                    .ifPresent(controller::chooseShipPiece);
-        }
+    protected GuiController getGuiController() {
+        return new GuiController() {
+            @Override
+            public void handlePointPress(Point point) {
+                if (shipPieces.isEmpty()) {
+                    controller.removeComponent(point);
+                } else {
+                    IntStream.range(0, shipPieces.size())
+                            .filter(i -> shipPieces.get(i).contains(point))
+                            .findFirst()
+                            .ifPresent(controller::chooseShipPiece);
+                }
+            }
+        };
     }
 }

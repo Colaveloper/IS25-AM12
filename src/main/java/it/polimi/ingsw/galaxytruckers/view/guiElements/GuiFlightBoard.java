@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import javafx.application.Platform;
@@ -15,7 +15,7 @@ import javafx.scene.shape.Polygon;
 import java.util.*;
 
 public class GuiFlightBoard extends HBox {
-    private final ControllerToServer controller;
+    private final GuiController controller;
     private final List<Integer> startingPositions;
     private final int loopLength;
     private final Map<ShipBoard, Integer> shipToPlace;
@@ -24,7 +24,7 @@ public class GuiFlightBoard extends HBox {
 
     private final List<StackPane> slots;
 
-    public GuiFlightBoard(FlightBoard flightBoard, ControllerToServer controller) {
+    public GuiFlightBoard(FlightBoard flightBoard, GuiController controller) {
         this.controller = controller;
         this.loopLength = flightBoard.getLoopLength();
         this.startingPositions = flightBoard.getStartingPositions();

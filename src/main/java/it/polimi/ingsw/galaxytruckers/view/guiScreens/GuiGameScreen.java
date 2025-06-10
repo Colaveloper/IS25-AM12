@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -16,7 +17,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class GuiGameScreen extends GuiScreen implements PointPressHandler {
+public abstract class GuiGameScreen extends GuiScreen {
 
     protected final GuiFlightBoard guiFlightBoard;
     protected final Map<ShipBoard, GuiShipBoard> guiShipBoards;
@@ -26,17 +27,14 @@ public abstract class GuiGameScreen extends GuiScreen implements PointPressHandl
         super(model, controller, state);
         gameState = state;
         this.guiShipBoards = new HashMap<>();
-        guiShipBoards.put(model.getMyShip(), new GuiShipBoard(model.getMyShip(), this));
+        guiShipBoards.put(model.getMyShip(), new GuiShipBoard(model.getMyShip(), getGuiController()));
         for (ShipBoard s : model.getGame().getShipBoards()) {
             if (!s.equals(model.getMyShip())) {
-                guiShipBoards.put(s, new GuiShipBoard(s));
+                guiShipBoards.put(s, new GuiShipBoard(s, new GuiController() {}));
             }
         };
-        this.guiFlightBoard = new GuiFlightBoard(model.getGame().getFlightBoard(), controller);
+        this.guiFlightBoard = new GuiFlightBoard(model.getGame().getFlightBoard(), getGuiController());
     }
-
-    @Override
-    public abstract void handlePointPress(Point point);
 
     // overridden for different levels and game-phases
     protected VBox getFullShip(ShipBoard shipBoard) {
@@ -71,4 +69,5 @@ public abstract class GuiGameScreen extends GuiScreen implements PointPressHandl
         layout.getChildren().addAll(mainView, othersColumn);
         return layout;
     }
+    protected abstract GuiController getGuiController();
 }

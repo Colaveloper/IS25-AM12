@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import javafx.application.Platform;
 import javafx.scene.layout.HBox;
@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GuiForecast extends HBox {
-    private final ControllerToServer controller;
+    private final GuiController controller;
     private ShipBoard[] blockedForecasts;
     private final List<StackPane> slots;
 
     private static final int SLOT_SIZE = 30;
 
 
-    public GuiForecast(ShipBoard[] blockedForecasts, ControllerToServer controller) {
+    public GuiForecast(ShipBoard[] blockedForecasts, GuiController controller) {
         this.controller = controller;
         this.blockedForecasts = blockedForecasts;
         this.slots = new ArrayList<>();

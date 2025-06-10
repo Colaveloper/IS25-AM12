@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
 import javafx.application.Platform;
@@ -20,11 +20,11 @@ import java.util.ArrayList;
 
 public class GuiComponentBank extends HBox {
 
-    private final ControllerToServer controller;
+    private final GuiController controller;
     private final Label coveredNLabel;
     private final HBox rejectedContainer;
 
-    public GuiComponentBank(ComponentBank componentBank, ControllerToServer controller) {
+    public GuiComponentBank(ComponentBank componentBank, GuiController controller) {
         this.controller = controller;
 
         setMaxWidth(Double.MAX_VALUE);

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
 import it.polimi.ingsw.galaxytruckers.view.Direction;
-import it.polimi.ingsw.galaxytruckers.view.guiScreens.PointPressHandler;
+import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import javafx.application.Platform;
@@ -23,17 +23,13 @@ import java.util.Set;
 public class GuiShipBoard extends GridPane {
     private final int minX;
     private final int minY;
-    private final PointPressHandler pointPressHandler;
+    private final GuiController controller;
 
     Image emptyAreaImage = null;
     public final static Path emptyAreaImagePath = Path.of("src/main/resources/textures/tiles/empty_area.png");
 
-    public GuiShipBoard(ShipBoard shipBoard) {
-        this(shipBoard, (_)->{});
-    }
-
-    public GuiShipBoard(ShipBoard shipBoard, PointPressHandler pointPressHandler) {
-        this.pointPressHandler = pointPressHandler;
+    public GuiShipBoard(ShipBoard shipBoard, GuiController controller) {
+        this.controller = controller;
 
         Set<Point> shipArea = shipBoard.getShipArea();
         Map<Point, Component> componentMap = shipBoard.getComponentMap();
@@ -77,7 +73,7 @@ public class GuiShipBoard extends GridPane {
                         areaView.setFitWidth(50);
                         areaView.setFitHeight(50);
                         areaView.setImage(emptyAreaImage);
-                        areaView.setOnMouseClicked(_->pointPressHandler.handlePointPress(currentPoint));
+                        areaView.setOnMouseClicked(_->controller.handlePointPress(currentPoint));
                     }
                     this.add(areaView, x + 1, y + 1);
                 }
@@ -103,7 +99,7 @@ public class GuiShipBoard extends GridPane {
                 this.getChildren().remove(node);
                 GuiComponent guiComponent = new GuiComponent(componentId);
                 guiComponent.setRotate(orientation.getAngle());
-                guiComponent.setOnMouseClicked(_ -> pointPressHandler.handlePointPress(point));
+                guiComponent.setOnMouseClicked(_ -> controller.handlePointPress(point));
                 this.add(guiComponent, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));
             });
         });
@@ -135,7 +131,7 @@ public class GuiShipBoard extends GridPane {
         areaView.setFitWidth(50);
         areaView.setFitHeight(50);
         areaView.setImage(emptyAreaImage);
-        areaView.setOnMouseClicked(_-> pointPressHandler.handlePointPress(position));
+        areaView.setOnMouseClicked(_-> controller.handlePointPress(position));
         return areaView;
     }
 

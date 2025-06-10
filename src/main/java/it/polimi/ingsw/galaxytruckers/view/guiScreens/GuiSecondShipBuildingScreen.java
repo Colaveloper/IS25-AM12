@@ -9,6 +9,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
@@ -30,19 +31,19 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 
     public GuiSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState state) {
         super(model, controller, state);
-        guiComponentBank = new GuiComponentBank(state.getComponentBank(), controller);
-        guiForecast = new GuiForecast(state.getBlockedForecasts(), controller);
-        guiHourglass = new GuiHourglass(controller);
+        guiComponentBank = new GuiComponentBank(state.getComponentBank(), getGuiController());
+        guiForecast = new GuiForecast(state.getBlockedForecasts(), getGuiController());
+        guiHourglass = new GuiHourglass(getGuiController());
         guiHands = new HashMap<>();
         for (ShipBoard shipBoard : model.getGame().getShipBoards()) {
             guiHands.put(shipBoard, new GuiHand(
                     shipBoard.getLastPosition()==null ? shipBoard.getLastComponent() : null,
-                    controller
+                    getGuiController()
             ));
         }
         guiStashes = new HashMap<>();
         for (ShipBoard shipBoard : model.getGame().getShipBoards()) {
-            guiStashes.put(shipBoard, new GuiStash(shipBoard.getStashedComponents(), controller));
+            guiStashes.put(shipBoard, new GuiStash(shipBoard.getStashedComponents(), getGuiController()));
         }
         resetLastComponentDirection();
     }
@@ -55,6 +56,7 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
         layout.getChildren().addAll(guiShipBoards.get(shipBoard), handAndStashBox);
         return layout;
     }
+
 
     @Override
     public Parent getNode() {
@@ -165,23 +167,93 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
         guiShipBoards.get(shipBoard).notifyRemoveComponent(point);
     }
 
-    @Override
-    public void handlePointPress(Point point) {
-        if (
-                model.getMyShip().getLastPosition() != null
-                && model.getMyShip().getLastPosition().equals(point)
-        ) {
-            lastComponentDirection = lastComponentDirection.getLeft();
-            guiShipBoards.get(model.getMyShip()).getGuiComponent(point).setRotate(lastComponentDirection.getAngle());
-        } else if (
-                model.getMyShip().getShipArea().contains(point)
-                && !model.getMyShip().getComponentMap().containsKey(point)
-        ) {
-            controller.placeComponent(point, lastComponentDirection);
-        }
-    }
-
     private void resetLastComponentDirection() {
         lastComponentDirection = Direction.UP;
+    }
+
+    @Override
+    protected GuiController getGuiController() {
+        return new GuiController() {
+            @Override
+            public void placeShipOnFlightboard(int position) {
+                if (state.getAvailableActions().contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD)) {
+                    controller.placeShipOnFlightboard(position);
+                }
+            }
+
+            @Override
+            public void requestRandComponent() {
+                if (state.getAvailableActions().contains(StateActions.REQUEST_RAND_COMPONENT)) {
+                    controller.requestRandComponent();
+                }
+            }
+
+            @Override
+            public void rejectComponent() {
+                if (state.getAvailableActions().contains(StateActions.REJECT_COMPONENT)) {
+                    controller.rejectComponent();
+                }
+            }
+
+            @Override
+            public void requestComponent(int id) {
+                if (state.getAvailableActions().contains(StateActions.REQUEST_COMPONENT)) {
+                    controller.requestComponent(id);
+                }
+            }
+
+            @Override
+            public void flipHourglass() {
+                if (state.getAvailableActions().contains(StateActions.FLIP_HOURGLASS)) {
+                    controller.flipHourglass();
+                }
+            }
+
+            @Override
+            public void stashComponent() {
+                if (state.getAvailableActions().contains(StateActions.STASH_COMPONENT)) {
+                    controller.stashComponent();
+                }
+            }
+
+            @Override
+            public void grabStashedComponent(int i) {
+                if (state.getAvailableActions().contains(StateActions.GRAB_STASHED_COMPONENT)) {
+                    controller.grabStashedComponent(i);
+                }
+            }
+
+            @Override
+            public void handlePointPress(Point point) {
+                if (
+                        model.getMyShip().getLastPosition() != null
+                        && model.getMyShip().getLastPosition().equals(point)
+                ) {
+                    lastComponentDirection = lastComponentDirection.getLeft();
+                    guiShipBoards.get(model.getMyShip()).getGuiComponent(point).setRotate(lastComponentDirection.getAngle());
+                } else if (
+                        model.getMyShip().getShipArea().contains(point)
+                        && !model.getMyShip().getComponentMap().containsKey(point)
+                ) {
+                    if (state.getAvailableActions().contains(StateActions.PLACE_COMPONENT)) {
+                        controller.placeComponent(point, lastComponentDirection);
+                    }
+                }
+            }
+
+            @Override
+            public void acquireForecast(int finalI) {
+                if (state.getAvailableActions().contains(StateActions.ACQUIRE_FORECAST)) {
+                    controller.acquireForecast(finalI);
+                }
+            }
+
+            @Override
+            public void releaseForecast() {
+                if (state.getAvailableActions().contains(StateActions.RELEASE_FORECAST)) {
+                    controller.releaseForecast();
+                }
+            }
+        };
     }
 }
