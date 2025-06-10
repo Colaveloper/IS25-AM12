@@ -94,7 +94,7 @@ public abstract class CliScreen extends Screen {
             for (StateActions action : availableActions) {
                 switch (action) {
                     case ACTIVATE_COMPONENT ->      actions.add("A[x][y] Activate component        ");
-                    case SPEND_BATTERIES ->         actions.add("A[x][y] Spend battery on component");
+                    case SPEND_BATTERIES ->         actions.add("B[x][y] Spend battery on component");
                     case GRAB_REWARD ->             actions.add("P       To pick reward            ");
                     case CHOOSE_SHIP_PIECE ->       actions.add("K [i] Choose piece of ship to keep");
                     case GO_NEXT, RELEASE_FORECAST->actions.add("press ENTER key to continue       ");
@@ -168,8 +168,8 @@ public abstract class CliScreen extends Screen {
                         availableActions.contains(StateActions.CHOOSE_PLANET)   && input.matches("L\\s+\\d+");
             case "K" -> availableActions.contains(StateActions.CHOOSE_SHIP_PIECE)&& input.matches("K\\s+\\d+");
             case "Y" -> availableActions.contains(StateActions.GIVE_UP)         && input.matches("Y");
-            case "A" ->(availableActions.contains(StateActions.ACTIVATE_COMPONENT) ||
-                        availableActions.contains(StateActions.SPEND_BATTERIES))&& input.matches("A\\s+\\d+\\s+\\d+");
+            case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("B\\s+\\d+\\s+\\d+");
+            case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.matches("A\\s+\\d+\\s+\\d+");
             case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.matches("E\\s*\\d+");
             case " " ->(availableActions.contains(StateActions.GO_NEXT)    ||
                         availableActions.contains(StateActions.DRAW_CARD)  ||
