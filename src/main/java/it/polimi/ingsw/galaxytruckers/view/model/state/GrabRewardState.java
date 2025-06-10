@@ -4,7 +4,6 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public final class GrabRewardState extends AdventureState {
 
@@ -25,6 +24,6 @@ public final class GrabRewardState extends AdventureState {
     }
 
     public void notifyGrabReward(ShipBoard shipBoard, int credits){
-        currentShip.addCredits(credits);
+        currentShip.setCredits(credits);
     }
 }

@@ -271,8 +271,8 @@ public abstract class ShipBoard {
         }
     }
 
-    public void addCredits(int credits) {
-        this.credits += credits;
+    public void setCredits(int credits) {
+        this.credits = credits;
     }
 
     public void incrementLosses(int amount) {

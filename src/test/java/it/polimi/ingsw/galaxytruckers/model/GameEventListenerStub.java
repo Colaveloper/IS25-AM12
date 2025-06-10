@@ -49,7 +49,7 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifyShipStatUpdateEvent(ShipBoard shipBoard, StatType statType, int value) {
+    public void notifyGrabCreditsEvent(ShipBoard shipBoard, int value) {
     }
 
     @Override

@@ -4,7 +4,6 @@ import it.polimi.ingsw.galaxytruckers.model.ComponentRegistry;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
@@ -73,7 +72,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     public void gainCredits (int credits) {
         this.credits += credits;
-        if (gameEventListener != null) gameEventListener.notifyShipStatUpdateEvent(this, StatType.CREDITS, credits);
+        //if (gameEventListener != null) gameEventListener.notifyGrabCreditsEvent(this, credits);
     }
 
     //CliComponentBank interaction methods

@@ -17,6 +17,7 @@ public final class GrabRewardState extends AdventureState implements GameStateIn
             throw new IllegalStateException("It's not your turn");
         }
         rewardMethod.run();
+        game.getEventListener().notifyGrabCreditsEvent(shipBoard, shipBoard.getCredits());
         game.setCurrentState(super.getNextState());
     }
 
