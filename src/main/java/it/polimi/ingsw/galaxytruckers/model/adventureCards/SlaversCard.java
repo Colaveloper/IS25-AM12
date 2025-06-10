@@ -44,15 +44,23 @@ public class SlaversCard extends AdventureCard {
                     return new RemoveCrewState(crewLoss, tempShipBoard);
                 }
             }
-            // Letting the currentPlayer activate double cannons
-            if (currentPlayerIndex < flightBoard.getShipToPlace().size()) { // There are other players to evaluate
-                currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
+            // currentPlayer activate double cannons
+            while (currentPlayerIndex < flightBoard.getOrderedShips().size()) { // find next player that hasn't given up
+                ShipBoard nextShip = flightBoard.getOrderedShips().get(currentPlayerIndex);
                 currentPlayerIndex++;
+
+                // skip players who have given up
+                if (game.getGivenUpShips().contains(nextShip)) {
+                    continue;
+                }
+
+                currentShipBoard = nextShip;
                 return new DeclareFirePowerState(currentShipBoard); // Let the player activate double cannons
-            } else {  // There are no more players and no one has defeated the enemy
-                defeated = true;
-                return new DrawCardState();
             }
+
+            // no more players and no one has defeated the enemy
+            defeated = false;
+            return new DrawCardState();
         }
         else {
             return new DrawCardState();
