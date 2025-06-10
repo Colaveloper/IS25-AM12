@@ -86,6 +86,14 @@ public class CliGoodsScreen extends CliAdventureScreen {
                     System.out.println("No cargo hold at this position");
                     return;
                 }
+
+                // Check if trying to add special cargo to regular cargo hold
+                CargoHold cargoHold = currentShip.getCargoHolds().get(p);
+                if (goodsType == GoodsType.RED && !cargoHold.isSpecial()) {
+                    System.out.println("Cannot add special cargo to a regular cargo hold. Use a special cargo hold (○) instead.");
+                    return;
+                }
+
                 controller.placeGoods(p, goodsType);
             }
             case "R" -> {
