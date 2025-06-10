@@ -12,7 +12,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.penalty.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AdventureCardRegistry {
     private static AdventureCardRegistry instance;
@@ -43,6 +45,18 @@ public class AdventureCardRegistry {
         for(JsonNode node : rootNode) {
             adventureCards.put(node.get("id").asInt(), node);
         }
+    }
+
+    public Map<Integer, Path> getIdToImagePath() {
+        return adventureCards.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> Path.of(e.getValue().get("path").asText())
+                ));
+    }
+
+    public int getSize() {
+        return adventureCards.size();
     }
 
     public AdventureCard getCard(int id) {

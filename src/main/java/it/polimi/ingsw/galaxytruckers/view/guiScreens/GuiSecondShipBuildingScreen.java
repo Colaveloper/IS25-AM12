@@ -150,13 +150,9 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
         guiForecast.notifyPeekForecast(shipBoard, deckIndex);
     }
     @Override
-    public void setForecastDeck(List<AdventureCard> adventureCards)
-//    {
-//        cliForecastCards.setCards(adventureCards);
-//        hasForecastDeck = true;
-//        cliForecastCards.setDirty();
-//    }
-    {}
+    public void setForecastDeck(List<AdventureCard> adventureCards) {
+        throw new RuntimeException("NOOOOOOOOO");
+    }
     @Override
     public void notifyReleaseForecast(ShipBoard shipBoard, int deckIndex) {
         guiForecast.notifyReleaseForecast(shipBoard, deckIndex);
