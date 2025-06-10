@@ -24,8 +24,7 @@ public class CliPlanetScreen extends CliAdventureScreen {
 
     @Override
     public void render() {
-        cliFlightBoard.getDescription().forEach(System.out::println);
-        cliAllShips.getDescription().forEach(System.out::println);
+        printShipFlightStats().forEach(System.out::println);
         if(imOut) {
             System.out.println("you surrendered");
             return;

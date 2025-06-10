@@ -1,7 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events.types;
 
-import java.util.Optional;
-
 public sealed interface LobbyEvent extends Event permits ActivateComponentEvent, CurrentPlayerUpdateEvent,
                                                          FlightBoardUpdateEvent, FlipHourglassEvent,
                                                          ForecastDetailsEvent, GameEndEvent, GameStateUpdateEvent,
@@ -13,6 +11,6 @@ public sealed interface LobbyEvent extends Event permits ActivateComponentEvent,
                                                          RejectComponentEvent, ReleaseForecastEvent,
                                                          RemoveComponentEvent, RequestFaceDownComponentEvent,
                                                          RequestFaceUpComponentEvent, ShipNotConnectedEvent,
-                                                         ShipPieceRemoveEvent, ShipStatUpdateEvent, StashComponentEvent,
+                                                         ShipPieceRemoveEvent, GrabCreditsEvent, StashComponentEvent,
                                                          SurrenderEvent, UseBatteryEvent, ValidateShipEvent {
 }

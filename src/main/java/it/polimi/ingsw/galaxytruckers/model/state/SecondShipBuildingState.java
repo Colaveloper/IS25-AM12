@@ -112,7 +112,7 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
                 placeShipOnFlightBoard(shipBoard);
             }
             game.getShipBoards().forEach(ShipBoard::finishBuilding);
-            game.setCurrentState(new SecondShipCorrectionState());
+            game.setCurrentState(game.getGameFactory().createShipCorrectionState());
         }
     }
 

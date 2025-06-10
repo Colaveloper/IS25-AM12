@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers.model;
 
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.StatType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
@@ -138,10 +137,9 @@ public class GameEventListener {
         ));
     }
 
-    public void notifyShipStatUpdateEvent(ShipBoard shipBoard, StatType statType, int value) {
-        controllerListener.notifyEvent(new ShipStatUpdateEvent(
+    public void notifyGrabCreditsEvent(ShipBoard shipBoard, int value) {
+        controllerListener.notifyEvent(new GrabCreditsEvent(
                 Player.getPlayer(shipBoard).getNickname(),
-                statType,
                 value
         ));
     }
@@ -156,7 +154,7 @@ public class GameEventListener {
         ));
     }
 
-    public void notifyUserBatteryEvent(ShipBoard shipBoard, Point point) {
+    public void notifyUseBatteryEvent(ShipBoard shipBoard, Point point) {
         controllerListener.notifyEvent(new UseBatteryEvent(Player.getPlayer(shipBoard).getNickname(), point));
     }
 

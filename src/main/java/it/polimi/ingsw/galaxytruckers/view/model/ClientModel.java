@@ -228,8 +228,8 @@ public class ClientModel {
         safeGetCurrentState().notifyLoseCrew(shipBoard, point);
     }
 
-    public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed) {
-        safeGetCurrentState().notifyGrabReward(shipBoard, rewardGrabbed);
+    public void notifyGrabCredits(ShipBoard shipBoard, int credits) {
+        safeGetCurrentState().notifyGrabReward(shipBoard, credits);
     }
 
     public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {

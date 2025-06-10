@@ -68,8 +68,7 @@ public class CliShipPieceChoiceScreen extends CliAdventureScreen {
             shipToCliShip.get(currentShip).highlightPoints(points.get(i), colors.get(i));  //color ship pieces with list of colors
         }
 
-        cliFlightBoard.getDescription().forEach(System.out::println);
-        cliAllShips.getDescription().forEach(System.out::println);
+        printShipFlightStats().forEach(System.out::println);
         if(imOut) {
             System.out.println("you surrendered");
             return;

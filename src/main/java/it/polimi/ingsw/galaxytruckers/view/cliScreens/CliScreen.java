@@ -1,11 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.view.Screen;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.*;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
@@ -26,6 +22,7 @@ public abstract class CliScreen extends Screen {
     protected ShipBoard myShipBoard;
     protected CliAllShips cliAllShips;
     protected Map<ShipBoard, CliShipBoard> shipToCliShip;
+    protected CliComponentLegend cliComponentLegend;
 
 
     public CliScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
@@ -33,6 +30,7 @@ public abstract class CliScreen extends Screen {
         this.controller = controller;
         this.state = gameState;
         this.availableActions = new ArrayList<>();
+        this.cliComponentLegend = new CliComponentLegend();
         if (gameState != null) {
             this.availableActions.addAll(gameState.getAvailableActions());
             this.myShipBoard = model.getMyShip();
@@ -67,6 +65,26 @@ public abstract class CliScreen extends Screen {
         shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
     }
 
+    protected List<String> printShipFlightStats() {
+        List<String> description = new ArrayList<>();
+
+        description.addAll(cliFlightBoard.getDescription());
+
+        description.addAll(cliComponentLegend.getDescription());
+
+        description.add(
+                "firepower: "     + myShipBoard.getFirePower()/2 +
+                "\tengine power: "+ myShipBoard.getEnginePower() +
+                "\tbatteries: "   + myShipBoard.getNumBatteries() +
+                "\tcrewsize: "    + myShipBoard.getCrewSize() +
+                "\tcredits: "     + myShipBoard.getCredits()
+        );
+        if(myShipBoard.getLosses()!=0) description.add("losses: " + myShipBoard.getLosses());
+
+        description.addAll(cliAllShips.getDescription());
+        return description;
+    }
+
     protected void printShips() {
 //        flightBoard.getNewDescription().forEach(System.out::println);
 //        allShips.getNewDescription().forEach(System.out::println);//todo sistemare altri tipi di allships
@@ -79,7 +97,7 @@ public abstract class CliScreen extends Screen {
             availableActions.addAll(state.getAvailableActions());
             for (StateActions action : availableActions) {
                 switch (action) {
-                    case ACTIVATE_COMPONENT ->      actions.add("P[x][y] Activate component        ");
+                    case ACTIVATE_COMPONENT ->      actions.add("A[x][y] Activate component        ");
                     case SPEND_BATTERIES ->         actions.add("B[x][y] Spend battery on component");
                     case GRAB_REWARD ->             actions.add("P       To pick reward            ");
                     case CHOOSE_SHIP_PIECE ->       actions.add("K [i] Choose piece of ship to keep");
@@ -152,9 +170,9 @@ public abstract class CliScreen extends Screen {
             case "L" ->(availableActions.contains(StateActions.LOSE_CREW)   ||
                         availableActions.contains(StateActions.LOSE_GOOD))      && input.matches("L\\s+\\d+\\s+\\d+") ||
                         availableActions.contains(StateActions.CHOOSE_PLANET)   && input.matches("L\\s+\\d+");
-            case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("B\\s+\\d+\\s+\\d+");
             case "K" -> availableActions.contains(StateActions.CHOOSE_SHIP_PIECE)&& input.matches("K\\s+\\d+");
             case "Y" -> availableActions.contains(StateActions.GIVE_UP)         && input.matches("Y");
+            case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("B\\s+\\d+\\s+\\d+");
             case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.matches("A\\s+\\d+\\s+\\d+");
             case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.matches("E\\s*\\d+");
             case " " ->(availableActions.contains(StateActions.GO_NEXT)    ||

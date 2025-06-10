@@ -16,8 +16,7 @@ public class CliRewardScreen extends CliAdventureScreen {
 
     @Override
     public void render() {
-        cliFlightBoard.getDescription().forEach(System.out::println);
-        cliAllShips.getDescription().forEach(System.out::println);
+        printShipFlightStats().forEach(System.out::println);
         if(imOut) {
             System.out.println("you surrendered");
             return;
@@ -41,7 +40,8 @@ public class CliRewardScreen extends CliAdventureScreen {
             System.out.println("It's not your turn to grab a reward");
             return;
         }
-        controller.grabReward(input.equalsIgnoreCase("P"));//todo doesn t work
+        if(input.equalsIgnoreCase("P")) controller.grabReward(true);//todo doesn t work
+        if(input.equalsIgnoreCase("")) controller.grabReward(false);
     }
 
 //    @Override

@@ -36,8 +36,7 @@ public class CliValidationScreen extends CliScreen {
 
     @Override
     public void render() {
-        cliFlightBoard.getDescription().forEach(System.out::println);
-        cliAllShips.getDescription().forEach(System.out::println);
+        printShipFlightStats().forEach(System.out::println);
 
         if(shipBroken) {
             System.out.println("your ship is broken, choose a piece to keep from these");

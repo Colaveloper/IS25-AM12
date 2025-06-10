@@ -9,8 +9,7 @@ public final class DeclareFirePowerState extends ActivateState implements GameSt
     int currentFirePower;
 
     public DeclareFirePowerState(ShipBoard shipBoard) {
-        super(shipBoard);
-        this.availablePositions = new HashSet<>(shipBoard.getActivatables().keySet());
+        super(shipBoard, new HashSet<>(shipBoard.getActivatables().keySet()));
         this.availablePositions.retainAll(shipBoard.getCannons().keySet());
         this.currentFirePower = shipBoard.getFirePower();
     }

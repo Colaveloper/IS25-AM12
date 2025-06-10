@@ -108,19 +108,29 @@ public abstract class ShipBoard {
     public void weldLastComponent() {
         if (lastComponent != null) {
             switch (lastComponent) {
-                case Battery c -> batteries.put(lastPosition, c);
-                case Cabin c -> cabins.put(lastPosition, c);
+                case Battery c -> {
+                    batteries.put(lastPosition, c);
+                    numBatteries += c.getNumBatteries();
+                }
+                case Cabin c -> {
+                    cabins.put(lastPosition, c);
+                    crewSize += c.getNumResidents();
+                }
                 case DoubleCannon c -> {
                     cannons.put(lastPosition,c);
                     activatables.put(lastPosition,c);
                 }
-                case Cannon c -> cannons.put(lastPosition,c);
+                case Cannon c -> {
+                    cannons.put(lastPosition, c);
+                    firePower += c.getFirePower();
+                }
                 case DoubleEngine c -> {
                     engines.put(lastPosition,c);
                     activatables.put(lastPosition,c);
                 }
                 case Engine c -> {
                     engines.put(lastPosition,c);
+                    enginePower += c.getEnginePower();
                 }
                 case CargoHold c -> {
                     cargoHolds.put(lastPosition,c);
@@ -146,19 +156,34 @@ public abstract class ShipBoard {
     public void removeComponent(Point position) {
         Component removedComponent = componentMap.remove(position);
         switch (removedComponent) {
-            case Battery _ -> batteries.remove(position);
-            case Cabin _ -> cabins.remove(position);
+            case Battery battery -> {
+                batteries.remove(position);
+                numBatteries -= battery.numBatteries;
+            }
+            case Cabin cabin -> {
+                cabins.remove(position);
+                switch (cabin.getCrewType()) {
+                    case PURPLE -> firePower -= 2;
+                    case BROWN -> enginePower -= 2;
+                    case HUMAN -> {}
+                }
+                crewSize -= cabin.getNumResidents();
+            }
             case DoubleCannon _ -> {
                 cannons.remove(position);
                 activatables.remove(position);
             }
-            case Cannon _ -> cannons.remove(position);
+            case Cannon cannon -> {
+                cannons.remove(position);
+                firePower -= cannon.getFirePower();
+            }
             case DoubleEngine _ -> {
                 engines.remove(position);
                 activatables.remove(position);
             }
-            case Engine _ -> {
+            case Engine engine -> {
                 engines.remove(position);
+                enginePower -= engine.getEnginePower();
             }
             case CargoHold _ -> {
                 cargoHolds.remove(position);
@@ -192,12 +217,25 @@ public abstract class ShipBoard {
 
     public void useBattery(Point position) {
         batteries.get(position).removeBattery();
+        numBatteries--;
     }
 
     //Cabin (and LifeSupport) methods
 
     public int initializeCabin(Point position, CrewType crewType) {
-        cabins.get(position).initialize(crewType);
+        Cabin cabin = cabins.get(position);
+        cabin.initialize(crewType);
+        switch (crewType) {
+            case PURPLE -> {
+                firePower += 2;
+                crewSize += cabin.getNumResidents();
+            }
+            case BROWN -> {
+                enginePower += 2;
+                crewSize += cabin.getNumResidents();
+            }
+            case HUMAN -> crewSize += cabin.getNumResidents();
+        }
         return cabins.get(position).getNumResidents();
     }
 
@@ -208,19 +246,37 @@ public abstract class ShipBoard {
     // Activatables methods
 
     public void activateComponent(Point position) {
-        activatables.get(position).setActive(true);
+        Activatable component = activatables.get(position);
+        component.setActive(true);
+        switch (component) {
+            case DoubleCannon doubleCannon -> firePower += doubleCannon.getFirePower();
+            case DoubleEngine doubleEngine -> enginePower += doubleEngine.getEnginePower();
+            case Shield shield -> {}
+        }
     }
 
     public void deactivateComponent(Point position) {
-        activatables.get(position).setActive(false);
+        Activatable component = activatables.get(position);
+        switch (component) {
+            case DoubleCannon doubleCannon -> firePower -= doubleCannon.getFirePower();
+            case DoubleEngine doubleEngine -> enginePower -= doubleEngine.getEnginePower();
+            case Shield shield -> {}
+        }
+        component.setActive(false);
     }
 
     public void deactivateAll() {
         for (Point p : activatables.keySet()) {
-            if (activatables.get(p).isActive()) {
-                deactivateComponent(p);
-            }
+            if (activatables.get(p).isActive()) deactivateComponent(p);
         }
+    }
+
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
+
+    public void incrementLosses(int amount) {
+        this.losses += amount;
     }
 
     public int getFirePower() {

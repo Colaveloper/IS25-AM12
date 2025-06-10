@@ -14,11 +14,11 @@ public class CheatCodes {
     private static boolean isCheatOn;
 
     static {
-//        for(int i = 0; i < 5; i++){
-//            secondToBuild.add("C");
-//            secondToBuild.add("R");
-//        }
-        //secondToBuild.add("e 6");
+        for(int i = 0; i < 5; i++){
+            secondToBuild.add("C");
+            secondToBuild.add("R");
+        }
+        secondToBuild.add("e 3");
     }
 
     public static void activateCheats(int input) {
@@ -34,7 +34,7 @@ public class CheatCodes {
     }
 
     public static String cheat() throws InterruptedException {
-        Thread.sleep(200);//da togliere dopo aver sistemato la syn perchè ora non funziona senza
+        Thread.sleep(200);
         Logger.println(4, cheatString.getFirst());
         return cheatString.removeFirst();
     }

@@ -18,6 +18,9 @@ public sealed abstract class ShipBuildingState extends GameState permits
 {
     private final ComponentBank componentBank;
     protected final Set<ShipBoard> completedShipBoards;
+    protected boolean hasStashed = false;
+    protected boolean hasFinished = false;
+
 
     public ShipBuildingState() {
         this.completedShipBoards = new HashSet<>();
@@ -32,17 +35,26 @@ public sealed abstract class ShipBuildingState extends GameState permits
     @Override
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
-        if(componentBank.getCoveredComponentsN() != 0) actions.add(StateActions.REQUEST_RAND_COMPONENT);
-        if (!componentBank.getUncoveredComponents().isEmpty()) actions.add(StateActions.REQUEST_COMPONENT);
-        actions.add(StateActions.REJECT_COMPONENT);
-        actions.add(StateActions.PLACE_COMPONENT);
-        actions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
-        //TODO: implement conditional available actions if needed
+        if(!hasFinished) {
+            if (componentBank.getCoveredComponentsN() != 0) actions.add(StateActions.REQUEST_RAND_COMPONENT);
+            if (!componentBank.getUncoveredComponents().isEmpty()) actions.add(StateActions.REQUEST_COMPONENT);
+            if (componentInHand() && !hasStashed) actions.add(StateActions.REJECT_COMPONENT);
+            if (componentInHand()) actions.add(StateActions.PLACE_COMPONENT);
+            actions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
+        }
         return actions;
     }
 
     @Override
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position, boolean isMyShip) {
+        if(isMyShip) hasFinished = true;
+        game.getFlightBoard().setShipPosition(shipBoard, position);
+        game.getObservers().forEach(observer -> observer.notifyFlightBoardPosition(shipBoard, position));
+    }
+
+    @Override
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
+        hasStashed = false;
         shipBoard.offerComponent(component);
         componentBank.removeCoveredComponent();
         game.getObservers().forEach(observer -> observer.notifyRequestRandComponent(shipBoard, component));
@@ -50,6 +62,7 @@ public sealed abstract class ShipBuildingState extends GameState permits
 
     @Override
     public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
+        hasStashed = false;
         shipBoard.offerComponent(component);
         componentBank.removeUncoveredComponent(component);
         game.getObservers().forEach(observer -> observer.notifyRequestComponent(shipBoard, component));
@@ -76,6 +89,10 @@ public sealed abstract class ShipBuildingState extends GameState permits
         } else {
             game.getObservers().forEach(observer -> observer.notifyPlaceComponent(shipBoard, point, orientation));
         }
+    }
+
+    protected boolean componentInHand(){
+        return myShip.getLastComponent() != null && myShip.getLastPosition() == null;
     }
 
     public ComponentBank getComponentBank(){

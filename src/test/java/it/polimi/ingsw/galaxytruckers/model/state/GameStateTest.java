@@ -62,7 +62,7 @@ class GameStateTest {
 
         @Test
         void spendBatteriesThrowsExceptionWhenUsingInvalidState() {
-            assertThrows(IllegalStateException.class, () -> testState.spendBatteries(ship1, new Point(7,7), 2));
+            assertThrows(IllegalStateException.class, () -> testState.spendBatteries(ship1, new Point(7,7)));
         }
 
         @Test

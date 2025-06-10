@@ -6,15 +6,16 @@ import java.awt.*;
 import java.util.Set;
 
 public abstract class ActivateState extends AdventureState {
-    Set<Point> availablePositions;
-    ShipBoard shipBoard;
+    protected final Set<Point> availablePositions;
+    protected final ShipBoard shipBoard;
     int batteriesToSpend;
     int activatedComponents;
 
-    protected ActivateState(ShipBoard shipBoard) {
+    protected ActivateState(ShipBoard shipBoard, Set<Point> availablePositions) {
         this.shipBoard = shipBoard;
         this.batteriesToSpend = 0;
         this.activatedComponents = 0;
+        this.availablePositions = availablePositions;
     }
 
     @Override
@@ -28,22 +29,23 @@ public abstract class ActivateState extends AdventureState {
         if (availablePositions.contains(position)) {
             if (shipBoard.activateComponent(position)) {
                 batteriesToSpend++;
+                activatedComponents++;
                 game.getEventListener().notifyActivateComponentEvent(shipBoard,position,true);
             }
         }
     }
 
     @Override
-    public void spendBatteries(ShipBoard shipBoard, Point point, int amount) {
+    public void spendBatteries(ShipBoard shipBoard, Point point) {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
-        if (amount > batteriesToSpend) {
-            throw new IllegalArgumentException("You are spending more batteries that required");
+        if (batteriesToSpend <= 0 && activatedComponents - batteriesToSpend >= availablePositions.size()) {
+            throw new IllegalStateException("You don't have components to spend that battery on");
         }
-        shipBoard.useBatteries(point, amount);
-        batteriesToSpend -= amount;
-        game.getEventListener().notifyUserBatteryEvent(shipBoard,point);
+        shipBoard.useBatteries(point);
+        batteriesToSpend--;
+        game.getEventListener().notifyUseBatteryEvent(shipBoard,point);
     }
 
     @Override
@@ -53,6 +55,8 @@ public abstract class ActivateState extends AdventureState {
         }
         if (batteriesToSpend > 0) {
             throw new IllegalStateException("You still have batteries to spend");
+        } else if (batteriesToSpend < 0) {
+            throw new IllegalStateException("You still have to activate components");
         }
         game.setCurrentState(super.getNextState());
     }

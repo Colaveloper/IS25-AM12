@@ -12,16 +12,18 @@ import java.util.Set;
 public abstract class CliActivationScreen extends CliAdventureScreen {
 
     private int batteriesToSpend;
+//    protected int activateablesComp;
+//    protected int numBatteriesComp;
 
     public CliActivationScreen(ClientModel model, ControllerToServer controller, ActivateState activateState) {
         super(model, controller, activateState);
         batteriesToSpend = 0;
+//        activateablesComp = activateState.getAvailablePositions().size();
+//        numBatteriesComp  = currentShip.getBatteries().size();
     }
 
     @Override
-    public void render() {
-
-    }
+    public abstract void render();
 
     @Override
     public void parseAndInvoke(String input) {
@@ -37,22 +39,33 @@ public abstract class CliActivationScreen extends CliAdventureScreen {
         switch (parts[0].toUpperCase()) {
             case "A"-> {
                 Point p = getPoint(input);
-                if (!currentShip.getBatteries().containsKey(p) && !currentShip.getActivatables().containsKey(p)) {
-                    System.out.println("Invalid position. Please select a component or battery.");
+                if (!currentShip.getActivatables().containsKey(p)) {
+                    System.out.println("Invalid position. Please select a component.");
                     return;
                 }
-                if (currentShip.getBatteries().containsKey(p) && currentShip.getBatteries().get(p).getNumBatteries() > 0) {
+                controller.activateComponent(p);
+            }
+            case "B" -> {
+                Point p = getPoint(input);
+                if (!currentShip.getBatteries().containsKey(p)) {
+                    System.out.println("Invalid position. Please select a battery.");
+                    return;
+                }
+                if (currentShip.getBatteries().containsKey(p) && currentShip.getBatteries().get(p).getNumBatteries() <= 0) {
                     System.out.println("That battery is empty");
+                    return;
                 }
-                if (currentShip.getBatteries().containsKey(p) && currentShip.getBatteries().get(p).getNumBatteries() > 0) {
-                    controller.useBattery(p);
-                } else if (currentShip.getActivatables().containsKey(p)) {
-                    controller.activateComponent(p);
-                }
+                controller.useBattery(p);
             }
             case "" -> {
-                if(batteriesToSpend > 0) System.out.println("Your need to activate " + batteriesToSpend + " batteries");
-                if(batteriesToSpend < 0) System.out.println("Your need to activate " + batteriesToSpend + " components");
+                if(batteriesToSpend > 0) {
+                    System.out.println("Your need to activate " + batteriesToSpend + " batteries");
+                    return;
+                }
+                if(batteriesToSpend < 0) {
+                    System.out.println("Your need to activate " + (batteriesToSpend * (-1)) + " components");
+                    return;
+                }
                 controller.goNext();
             }
         }

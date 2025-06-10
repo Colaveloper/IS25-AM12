@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -19,9 +20,14 @@ public abstract sealed class GameState permits
         ShipInitializationState
 {
     protected Game game;
+    protected ClientModel clientModel;
 
     public Game getGame() {
         return game;
+    }
+
+    public void setMyShip(ShipBoard shipBoard) {
+        this.myShip = shipBoard;
     }
 
     public void setGame(Game game) {
@@ -32,7 +38,9 @@ public abstract sealed class GameState permits
 
     public abstract List<StateActions> getAvailableActions();
 
-    public void leave() {}
+    public void leave() {
+        game.getShipBoards().forEach(ShipBoard::deactivateAll);
+    }
 
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
         System.err.println("1This action is not permitted in this state, \n" +
@@ -133,7 +141,7 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
-    public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed) {
+    public void notifyGrabReward(ShipBoard shipBoard, int credits) {
         System.err.println("20This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");
     }

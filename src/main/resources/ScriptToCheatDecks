@@ -1,4 +1,4 @@
-#per usarlo fatelo girare da un file da qualche altra parte e incollate il risulato in cardsReference
+#per usarlo fatelo girare da un file.py da qualche altra parte e incollate il risulato in cardsReference
 
 import json
 

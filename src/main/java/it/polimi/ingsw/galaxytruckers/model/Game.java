@@ -15,6 +15,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -65,7 +66,7 @@ public class Game {
         this.flightBoard = gameFactory.createFlightBoard(shipBoards.size());
         this.flightBoard.setGameEventListener(eventListener);
         this.deck = gameFactory.createDeck(this);
-        setCurrentState(gameFactory.createFirstGameState());
+        setCurrentState(gameFactory.createShipBuildingState());
     }
 
     /**
@@ -339,7 +340,7 @@ public class Game {
 
     public void useBattery(ShipBoard shipBoard, Point point) {
         synchronized (lock) {
-            currentState.spendBatteries(shipBoard, point, 1);
+            currentState.spendBatteries(shipBoard, point);
         }
     }
 

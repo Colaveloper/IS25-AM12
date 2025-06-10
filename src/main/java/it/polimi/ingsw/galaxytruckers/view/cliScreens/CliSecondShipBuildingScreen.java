@@ -21,8 +21,8 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     private final CliComponentBank cliComponentBank;
     private final CliForecast cliForecast;
     private final CliForecastCards cliForecastCards;
+    private final CliComponentLegend cliComponentLegend;
 
-    private boolean hasStashed;
     private final SecondShipBuildingState gameState;
     private final Map<ShipBoard, CliShipHandAndStash> buildingShipToCliShip;
 
@@ -30,10 +30,10 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
         this.gameState = gameState;
-        hasStashed = false;
         cliComponentBank = new CliComponentBank(gameState.getComponentBank());
         cliForecast = new CliForecast(gameState.getBlockedForecasts());
         cliForecastCards = new CliForecastCards();
+        cliComponentLegend = new CliComponentLegend();
         this.buildingShipToCliShip = new HashMap<>();
         for (Player player : model.getPlayers()) {
             buildingShipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));
@@ -51,7 +51,24 @@ public class CliSecondShipBuildingScreen extends CliScreen {
             cliForecastCards.getDescription().forEach(System.out::println);
         } else {
             cliComponentBank.getDescription().forEach(System.out::println);
-            DescriptionUtils.sideBySide(cliFlightBoard.getDescription(), cliForecast.getDescription()).forEach(System.out::println);
+
+            // First combine the forecast with the component legend
+            List<String> forecastWithLegend = DescriptionUtils.sideBySide(
+                cliForecast.getDescription(),
+                cliComponentLegend.getDescription()
+            );
+
+            // Then combine the flight board with the forecast+legend
+            DescriptionUtils.sideBySide(
+                cliFlightBoard.getDescription(),
+                forecastWithLegend
+            ).forEach(System.out::println);
+
+            System.out.println(
+                    "firepower: "   + myShipBoard.getFirePower()/2 +
+                    "\tengine power: " + myShipBoard.getEnginePower() +
+                    "\tbatteries: "   + myShipBoard.getNumBatteries()
+            );
             cliAllShips.getDescription().forEach(System.out::println);
         }
         printActions();
@@ -95,45 +112,25 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
             case "S":
                 if (parts.length == 1) {
-                    if(myShipBoard.getLastComponent() == null) {
-                        System.out.println("No component to stash");
-                        break;
-                    }
-                    if(myShipBoard.getStashedComponents().size() >= 2) {
-                        System.out.println("Your stash is full");
-                        break;
-                    }
                     controller.stashComponent();
                 } else if (parts.length == 2) {
-                    if(componentInHand()){
-                        System.out.println("Your hand is full");
+                    int index = Integer.parseInt(parts[1]);
+                    if(myShipBoard.getStashedComponents().size() <= index) {
+                        System.out.println("No stashed component found");
                         break;
                     }
-                    int index = Integer.parseInt(parts[1]);
                     controller.grabStashedComponent(index);
                 }
                 break;
 
             case "F":
                 if (parts.length == 2) {
-                    if(componentInHand()){
-                        System.out.println("Free your hand before picking forecast");
-                        break;
-                    }
                     int index = Integer.parseInt(parts[1]);
                     controller.acquireForecast(index);
                 }
                 break;
 
             case "R":
-                if(hasStashed){
-                    System.out.println("Cant reject stashed component in hand");
-                    break;
-                }
-                if(myShipBoard.getLastComponent() == null) {
-                    System.out.println("Nothing to reject");
-                    break;
-                }
                 controller.rejectComponent();
                 break;
 
@@ -189,7 +186,6 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     @Override
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
-        hasStashed = false;
         cliComponentBank.removeCovered();
         buildingShipToCliShip.get(shipBoard).setHand(component);
         cliAllShips.setDirty();
@@ -197,7 +193,6 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     @Override
     public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
-        hasStashed = false;
         cliComponentBank.removeUncovered(component);
         buildingShipToCliShip.get(shipBoard).setHand(component);
         cliAllShips.setDirty();
@@ -226,7 +221,6 @@ public class CliSecondShipBuildingScreen extends CliScreen {
         ship.clearHand();
         cliComponentBank.addUncovered(component);
         cliAllShips.setDirty();
-
     }
 
     @Override
@@ -240,7 +234,6 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     @Override
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
-        hasStashed = true;
         CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
         ship.setHand(component);
         ship.onGrabStashed(index);

@@ -12,11 +12,9 @@ import java.util.List;
 
 public final class SecondShipBuildingState extends ShipBuildingState {
     private static final List<StateActions> availableActions = List.of(
-            StateActions.STASH_COMPONENT,
-            StateActions.GRAB_STASHED_COMPONENT,
-            //StateActions.FLIP_HOURGLASS,
-            StateActions.ACQUIRE_FORECAST
-            //StateActions.RELEASE_FORECAST
+//            StateActions.STASH_COMPONENT,
+//            StateActions.GRAB_STASHED_COMPONENT,
+//            StateActions.ACQUIRE_FORECAST
     );
 
 
@@ -25,7 +23,6 @@ public final class SecondShipBuildingState extends ShipBuildingState {
     private final Map<ShipBoard,Integer> shipToForecast = new HashMap<>();
     private final Hourglass hourglass = new Hourglass(3);
     private boolean forecastAcquired = false;
-    private boolean hasFinished = false;
 
     @Override
     public List<StateActions> getAvailableActions() {
@@ -37,7 +34,10 @@ public final class SecondShipBuildingState extends ShipBuildingState {
         if(forecastAcquired) actions.add(StateActions.RELEASE_FORECAST);
         else {
             actions.add(StateActions.FLIP_HOURGLASS);
-            actions.addAll(availableActions);
+            if(!(myShip.getLastComponent() == null) && myShip.getStashedComponents().size() < 2) actions.add(StateActions.STASH_COMPONENT);
+            if(!componentInHand() && !myShip.getStashedComponents().isEmpty()) actions.add(StateActions.GRAB_STASHED_COMPONENT);
+            if(!componentInHand()) actions.add(StateActions.ACQUIRE_FORECAST);
+//            actions.addAll(availableActions);
             actions.addAll(super.getAvailableActions());
         }
         //TODO: implement conditional available action if needed
@@ -58,6 +58,7 @@ public final class SecondShipBuildingState extends ShipBuildingState {
 
     @Override
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index) {
+        hasStashed = true;
         shipBoard.grabStashedComponent(index);
         Component component = shipBoard.getLastComponent();
         game.getObservers().forEach(observer -> observer.notifyGrabStashedComponent(shipBoard, index, component));
@@ -81,13 +82,6 @@ public final class SecondShipBuildingState extends ShipBuildingState {
         shipToForecast.put(shipBoard,deckIndex);
         shipBoard.weldLastComponent();
         game.getObservers().forEach(observer -> observer.notifyPeekForecast(shipBoard, deckIndex));
-    }
-
-    @Override
-    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position, boolean isMyShip) {
-        if(isMyShip) hasFinished = true;
-        game.getFlightBoard().setShipPosition(shipBoard, position);
-        game.getObservers().forEach(observer -> observer.notifyFlightBoardPosition(shipBoard, position));
     }
 
     @Override

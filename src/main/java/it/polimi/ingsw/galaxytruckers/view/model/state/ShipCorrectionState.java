@@ -10,15 +10,17 @@ import java.util.*;
 public final class ShipCorrectionState extends GameState {
     private final Set<ShipBoard> validShipBoards;
     private final Map<ShipBoard, List<Set<Point>>> shipPieces;
+    private final boolean shouldDiscard;
     private boolean isConnected;
     private boolean isValid;
 
-    public ShipCorrectionState(ShipBoard myShip, Set<ShipBoard> validShipBoards, Map<ShipBoard, List<Set<Point>>> shipPieces) {
+    public ShipCorrectionState(ShipBoard myShip, Set<ShipBoard> validShipBoards, Map<ShipBoard, List<Set<Point>>> shipPieces, boolean shouldDiscard) {
         this.myShip = myShip;
         isValid = validShipBoards.contains(myShip);
         isConnected = !shipPieces.containsKey(myShip);
         this.validShipBoards = validShipBoards;
         this.shipPieces = shipPieces;
+        this.shouldDiscard = shouldDiscard;
     }
 
     @Override
@@ -31,6 +33,7 @@ public final class ShipCorrectionState extends GameState {
     @Override
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
         shipBoard.removeComponent(point);
+        if (shouldDiscard) shipBoard.incrementLosses(1);
         game.getObservers().forEach(observer -> observer.notifyRemoveComponent(shipBoard, point));
     }
 
@@ -38,6 +41,7 @@ public final class ShipCorrectionState extends GameState {
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
         if(myShip == shipBoard) isConnected = true;
         List<Point> removedPoints = shipBoard.removeShipPiece(shipPieces.get(shipBoard), pieceIndex);
+        if (shouldDiscard) shipBoard.incrementLosses(removedPoints.size());
         game.getObservers().forEach(observer -> observer.notifyChooseShipPiece(shipBoard, pieceIndex, removedPoints));
     }
 
