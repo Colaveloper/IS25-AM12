@@ -1,11 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.view.Screen;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
+import it.polimi.ingsw.galaxytruckers.view.cliElements.*;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
@@ -26,6 +22,7 @@ public abstract class CliScreen extends Screen {
     protected ShipBoard myShipBoard;
     protected CliAllShips cliAllShips;
     protected Map<ShipBoard, CliShipBoard> shipToCliShip;
+    protected CliComponentLegend cliComponentLegend;
 
 
     public CliScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
@@ -33,6 +30,7 @@ public abstract class CliScreen extends Screen {
         this.controller = controller;
         this.state = gameState;
         this.availableActions = new ArrayList<>();
+        this.cliComponentLegend = new CliComponentLegend();
         if (gameState != null) {
             this.availableActions.addAll(gameState.getAvailableActions());
             this.myShipBoard = model.getMyShip();
@@ -71,6 +69,9 @@ public abstract class CliScreen extends Screen {
         List<String> description = new ArrayList<>();
 
         description.addAll(cliFlightBoard.getDescription());
+
+        description.addAll(cliComponentLegend.getDescription());
+
         description.add(
                 "firepower: "     + myShipBoard.getFirePower()/2 +
                 "\tengine power: "+ myShipBoard.getEnginePower() +
@@ -79,6 +80,7 @@ public abstract class CliScreen extends Screen {
                 "\tcredits: "     + myShipBoard.getCredits()
         );
         if(myShipBoard.getLosses()!=0) description.add("losses: " + myShipBoard.getLosses());
+
         description.addAll(cliAllShips.getDescription());
         return description;
     }
