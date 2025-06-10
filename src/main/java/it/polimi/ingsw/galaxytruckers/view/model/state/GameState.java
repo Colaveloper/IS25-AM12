@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -19,9 +20,14 @@ public abstract sealed class GameState permits
         ShipInitializationState
 {
     protected Game game;
+    protected ClientModel clientModel;
 
     public Game getGame() {
         return game;
+    }
+
+    public void setMyShip(ShipBoard shipBoard) {
+        this.myShip = shipBoard;
     }
 
     public void setGame(Game game) {

@@ -235,7 +235,10 @@ public class ClientEventHandler implements EventHandler<Event> {
                     removeGoodsDTO.goodsLoss(),
                     playerRegistry.getByNickname(removeGoodsDTO.playerName()).getShipBoard()
             );
-            case ShipBuildingDTO shipBuildingDTO -> gameState = clientModel.getGame().getGameFactory().createShipBuildingState();
+            case ShipBuildingDTO shipBuildingDTO -> {
+                gameState = clientModel.getGame().getGameFactory().createShipBuildingState();
+                gameState.setMyShip(clientModel.getMyShip());
+            }
             case ShipCorrectionDTO shipCorrectionDTO -> gameState = new ShipCorrectionState(
                     myShip,
                     shipCorrectionDTO.validShips().stream()
