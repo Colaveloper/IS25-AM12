@@ -23,10 +23,9 @@ public class CliComponentLegend extends CliElement {
 
     @Override
     protected List<String> getNewDescription() {
-        // Create a map to organize components into columns
+        // map to organize components into columns
         Map<String, List<ComponentType>> columns = new LinkedHashMap<>();
 
-        // Define columns and their components
         columns.put("Column1", List.of(
             ComponentType.SHIELD,
             ComponentType.LIFE_SUPPORT
@@ -52,11 +51,9 @@ public class CliComponentLegend extends CliElement {
             ComponentType.CABIN
         ));
 
-        // Create the two rows of content
         List<String> row1 = new ArrayList<>();
         List<String> row2 = new ArrayList<>();
 
-        // Fill the rows with components from each column
         for (List<ComponentType> column : columns.values()) {
             if (column.size() > 0) {
                 ComponentType component1 = column.get(0);
@@ -71,12 +68,10 @@ public class CliComponentLegend extends CliElement {
                 String name2 = formatComponentName(component2.name());
                 row2.add(symbol2 + ":" + name2);
             } else {
-                // Add an empty placeholder to maintain column alignment
                 row2.add("");
             }
         }
 
-        // Combine the components in each row with spacing
         String row1Text = String.join("  ", row1);
         String row2Text = String.join("  ", row2).trim();
 
@@ -84,7 +79,6 @@ public class CliComponentLegend extends CliElement {
         result.add(row1Text);
         result.add(row2Text);
 
-        // Add a border with title
         return DescriptionUtils.borderAndTitle(result, "components");
     }
 
@@ -96,14 +90,12 @@ public class CliComponentLegend extends CliElement {
      * @return The formatted component name
      */
     private String formatComponentName(String name) {
-        // Replace underscores with spaces and convert to Title Case
         String[] words = name.split("_");
         StringBuilder result = new StringBuilder();
 
         for (String word : words) {
             if (word.isEmpty()) continue;
 
-            // Convert first letter to uppercase and the rest to lowercase
             result.append(word.charAt(0))
                   .append(word.substring(1).toLowerCase())
                   .append(" ");
