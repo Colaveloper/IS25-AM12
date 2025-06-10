@@ -93,11 +93,12 @@ public class Client {
             GuiView guiView = new GuiView(controller, model);
             view = guiView;
             JFXApp.setGuiView(guiView);
+            controller.setView(view);
             Application.launch(JFXApp.class);
         } else {
             view = new CliView(controller, model);
+            controller.setView(view);
         }
-        controller.setView(view);
         // views start rendering autonomously at creation
     }
 }

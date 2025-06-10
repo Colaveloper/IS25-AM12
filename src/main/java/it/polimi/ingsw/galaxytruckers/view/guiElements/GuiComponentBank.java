@@ -4,76 +4,78 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
+import java.util.ArrayList;
 
 public class GuiComponentBank extends HBox {
 
     private final ControllerToServer controller;
     private final Label coveredNLabel;
-    private final FlowPane rejectedContainer;
+    private final HBox rejectedContainer;
 
     public GuiComponentBank(ComponentBank componentBank, ControllerToServer controller) {
         this.controller = controller;
 
+        setMaxWidth(Double.MAX_VALUE);
         setSpacing(20);
         setPadding(new Insets(10));
         setAlignment(Pos.TOP_LEFT);
+        HBox.setHgrow(this, Priority.ALWAYS);
 
         // === Left container ===
         VBox coveredBox = new VBox(5);
-        coveredBox.setAlignment(Pos.TOP_CENTER);
-        coveredBox.setOnMouseClicked(_ -> controller.requestRandComponent());
-        Label coveredLabel = new Label("Covered");
 
-        StackPane coveredSquare = new StackPane();
-        Rectangle square = new Rectangle(100, 100);
-        square.setFill(Color.BLUEVIOLET);
-        Label question = new Label("?");
-        question.setTextFill(Color.WHITE);
-        question.setFont(Font.font(24));
+        Button plusButton = new Button("+");
+        plusButton.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        plusButton.setTextFill(Color.WHITE);
+        plusButton.setStyle("-fx-background-color: #2196F3;");
+        plusButton.setPrefSize(50, 50);
+        plusButton.setOnMouseClicked(_ -> controller.requestRandComponent());
 
         coveredNLabel = new Label(Integer.toString(componentBank.getCoveredComponentsN()));
         coveredNLabel.setFont(Font.font(14));
         coveredNLabel.setTextFill(Color.GRAY);
 
-        coveredSquare.getChildren().addAll(square, question);
-        coveredBox.getChildren().addAll(coveredLabel, coveredSquare, coveredNLabel);
+        coveredBox.getChildren().addAll(plusButton, coveredNLabel);
 
-        // === Right container ===
-        VBox uncoveredBox = new VBox(5);
-        uncoveredBox.setAlignment(Pos.TOP_LEFT);
-        Label rejectedLabel = new Label("Rejected");
+        HBox uncoveredBox = new HBox(10);
 
-        rejectedContainer = new FlowPane();
-        rejectedContainer.setHgap(5);
-        rejectedContainer.setVgap(5);
-        rejectedContainer.setPrefWrapLength(300); // Will wrap items when full width is reached
+        Button minusButton = new Button("-");
+        minusButton.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        minusButton.setTextFill(Color.WHITE);
+        minusButton.setStyle("-fx-background-color: #2196F3;");
+        minusButton.setPrefSize(50, 50);
+        minusButton.setOnMouseClicked(_ -> controller.rejectComponent());
 
+        rejectedContainer = new HBox();
         componentBank.getUncoveredComponents().forEach(component -> {
-
+            GuiComponent newComponent = new GuiComponent(component);
+            rejectedContainer.getChildren().add(newComponent);
+            newComponent.setOnMouseClicked(_ ->
+                    controller.requestComponent(component.getId())
+            );
         });
 
-        uncoveredBox.getChildren().addAll(rejectedLabel, rejectedContainer);
+        uncoveredBox.getChildren().addAll(minusButton, rejectedContainer);
 
-        // === Final layout ===
         getChildren().addAll(coveredBox, uncoveredBox);
     }
 
     public void notifyRequestRandComponent() {
-        Platform.runLater(()-> {
-            coveredNLabel.setText(Integer.toString(
-                    Integer.parseInt(coveredNLabel.getText()) - 1)
-            );
-        });
+        Platform.runLater(()-> coveredNLabel.setText(Integer.toString(
+                Integer.parseInt(coveredNLabel.getText()) - 1)
+        ));
     }
 
     public void notifyRejectComponent(Component component) {
@@ -87,6 +89,11 @@ public class GuiComponentBank extends HBox {
     }
 
     public void notifyRequestComponent(Component component) {
-        Platform.runLater(()-> rejectedContainer.getChildren().remove(new GuiComponent(component)));
+        Platform.runLater(() -> {
+            rejectedContainer.getChildren().stream()
+                    .filter(node -> node instanceof GuiComponent gui && gui.hasId(component.getId()))
+                    .findFirst()
+                    .ifPresent(node -> rejectedContainer.getChildren().remove(node));
+        });
     }
 }

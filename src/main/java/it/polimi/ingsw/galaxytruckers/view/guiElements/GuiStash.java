@@ -3,68 +3,49 @@ package it.polimi.ingsw.galaxytruckers.view.guiElements;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import javafx.application.Platform;
+import javafx.scene.control.Button;
 import javafx.scene.input.Dragboard;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.util.ArrayList;
 import java.util.List;
 public class GuiStash extends HBox {
     private final ControllerToServer controller;
-    private final List<GuiComponent> guiStashedComponents = new ArrayList<>();
-    private final Region placeholder = createPlaceholder();
+    private final HBox stashBox;
 
     public GuiStash(List<Component> stashedComponents, ControllerToServer controller) {
         this.controller = controller;
 
-        setSpacing(5);
+        Button stashButton = new Button("S");
+        stashButton.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        stashButton.setTextFill(Color.WHITE);
+        stashButton.setStyle("-fx-background-color: #2196F3;");
+        stashButton.setPrefSize(50, 50);
+        stashButton.setOnMouseClicked(_->controller.stashComponent());
 
-        if (stashedComponents.isEmpty()) {
-            getChildren().add(placeholder);
-        } else {
-            for (Component c : stashedComponents) {
-                GuiComponent guiComponent = new GuiComponent(c);
-                guiStashedComponents.add(guiComponent);
-                guiComponent.setOnMouseClicked((_)->{
-                    controller.grabStashedComponent(guiStashedComponents.indexOf(guiComponent));
-                });
-                getChildren().add(guiComponent);
-            }
+        stashBox = new HBox();
+        for (Component c : stashedComponents) {
+            GuiComponent guiComponent = new GuiComponent(c);
+            guiComponent.setOnMouseClicked((_)-> controller.grabStashedComponent(stashBox.getChildren().indexOf(guiComponent)));
+            stashBox.getChildren().add(guiComponent);
         }
 
-        setOnMouseClicked(_->controller.stashComponent());
+        getChildren().addAll(stashButton, stashBox);
     }
 
     public void notifyStash(Component component) {
         Platform.runLater(()->{
-            if (guiStashedComponents.isEmpty()) {
-                getChildren().remove(placeholder);
-            }
-
             GuiComponent guiComponent = new GuiComponent(component);
-            guiStashedComponents.add(guiComponent);
-            guiComponent.setOnMouseClicked((_)->{
-                controller.grabStashedComponent(guiStashedComponents.indexOf(guiComponent));
-            });
-            getChildren().add(guiComponent);
+            stashBox.getChildren().add(guiComponent);
+            guiComponent.setOnMouseClicked((_)-> controller.grabStashedComponent(stashBox.getChildren().indexOf(guiComponent)));
         });
     }
 
     public void notifyGrab(int index) {
-        Platform.runLater(()->{
-            guiStashedComponents.remove(index);
-            getChildren().remove(index);
-
-            if (guiStashedComponents.isEmpty()) {
-                getChildren().add(placeholder);
-            }
-        });
-    }
-
-    private Region createPlaceholder() {
-        Region region = new Region();
-        region.setPrefSize(50, 50);
-        region.setStyle("-fx-background-color: lightgray; -fx-border-color: gray;");
-        return region;
+        Platform.runLater(()-> stashBox.getChildren().remove(index));
     }
 }

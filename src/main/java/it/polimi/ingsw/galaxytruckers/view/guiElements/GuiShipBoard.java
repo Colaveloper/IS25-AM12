@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.view.guiScreens.PointPressHandler;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class GuiShipBoard extends GridPane {
@@ -84,50 +86,48 @@ public class GuiShipBoard extends GridPane {
     }
 
     public void notifyPlaceComponent(int componentId, Point point, Direction orientation) {
-        this.getChildren().stream()
-                .filter(node -> node instanceof ImageView)
-                .filter(node -> {
-                    int col = GridPane.getColumnIndex(node) - 1;
-                    int row = GridPane.getRowIndex(node) - 1;
-                    return col+minX == point.x && row+minY == point.y;
-                })
-                .findFirst()
-                .ifPresent(node ->
-                        Platform.runLater(() -> {
-                                    this.getChildren().remove(node);
-                                    GuiComponent guiComponent = new GuiComponent(componentId);
-                                    guiComponent.setRotate(orientation.getAngle());
-                                    guiComponent.setOnMouseClicked(_->pointPressHandler.handlePointPress(point));
-                                    this.add(
-                                            guiComponent,
-                                            GridPane.getColumnIndex(node),
-                                            GridPane.getRowIndex(node)
-                                    );
-                                }
-                        )
-                );
+        Platform.runLater(() -> {
+            Optional<Node> toReplace = this.getChildren().stream()
+                    .filter(node -> node instanceof ImageView)
+                    .filter(node -> {
+                        Integer col = GridPane.getColumnIndex(node);
+                        Integer row = GridPane.getRowIndex(node);
+                        if (col == null || row == null) return false;
+                        col -= 1;
+                        row -= 1;
+                        return col + minX == point.x && row + minY == point.y;
+                    })
+                    .findFirst();
+
+            toReplace.ifPresent(node -> {
+                this.getChildren().remove(node);
+                GuiComponent guiComponent = new GuiComponent(componentId);
+                guiComponent.setRotate(orientation.getAngle());
+                guiComponent.setOnMouseClicked(_ -> pointPressHandler.handlePointPress(point));
+                this.add(guiComponent, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));
+            });
+        });
     }
 
     public void notifyRemoveComponent(Point oldPosition) {
-        this.getChildren().stream()
-                .filter(node -> {
-                    int col = GridPane.getColumnIndex(node) - 1;
-                    int row = GridPane.getRowIndex(node) - 1;
-                    return col + minX == oldPosition.x && row + minY == oldPosition.y;
-                })
-                .findFirst()
-                .ifPresent(node ->
-                        Platform.runLater(() -> {
-                                    this.getChildren().remove(node);
-                                    ImageView areaView = getEmptyAreaImageView(oldPosition);
-                                    this.add(
-                                            areaView,
-                                            GridPane.getColumnIndex(node),
-                                            GridPane.getRowIndex(node)
-                                    );
-                                }
-                        )
-                );
+        Platform.runLater(() -> {
+            Optional<Node> toReplace = this.getChildren().stream()
+                    .filter(node -> {
+                        Integer col = GridPane.getColumnIndex(node);
+                        Integer row = GridPane.getRowIndex(node);
+                        if (col == null || row == null) return false;
+                        col -= 1;
+                        row -= 1;
+                        return col + minX == oldPosition.x && row + minY == oldPosition.y;
+                    })
+                    .findFirst();
+
+            toReplace.ifPresent(node -> {
+                this.getChildren().remove(node);
+                ImageView areaView = getEmptyAreaImageView(oldPosition);
+                this.add(areaView, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));
+            });
+        });
     }
 
     private ImageView getEmptyAreaImageView(Point position) {

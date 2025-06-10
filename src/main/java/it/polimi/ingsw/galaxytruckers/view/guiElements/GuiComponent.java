@@ -28,9 +28,10 @@ public class GuiComponent extends ImageView {
         setFitHeight(50);
     }
 
-    public boolean equals(GuiComponent other) {
-        return this.id == other.id;
+    public boolean hasId(int id) {
+        return this.id == id;
     }
+
 
 //    @Override
 //    public Node getNode() {
