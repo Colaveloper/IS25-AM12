@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -135,7 +134,7 @@ class RemoveGoodsStateTest {
                 return testGoods;
             }
             @Override
-            public void useBatteries(Point pos, int num){
+            public void useBatteries(Point pos){
                 // mock
             }
             @Override
@@ -194,7 +193,7 @@ class RemoveGoodsStateTest {
                 // mock
             }
             @Override
-            public void useBatteries(Point pos, int num){
+            public void useBatteries(Point pos){
                 // mock
             }
             @Override

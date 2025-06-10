@@ -43,7 +43,7 @@ class HandleProjectileStateTest {
                 return true;
             }
             @Override
-            public void useBatteries(Point pos, int amount){
+            public void useBatteries(Point pos){
                 // mock
             }
             @Override
@@ -61,7 +61,6 @@ class HandleProjectileStateTest {
         testState = new HandleProjectileState(ship1, projectile){
             @Override
             public void activateComponent(ShipBoard shipBoard, Point position) {
-                availablePositions = new HashSet<>();
                 availablePositions.add(position);
                 super.activateComponent(shipBoard, position);
             }

@@ -156,7 +156,7 @@ public class GameEventListener {
         ));
     }
 
-    public void notifyUserBatteryEvent(ShipBoard shipBoard, Point point) {
+    public void notifyUseBatteryEvent(ShipBoard shipBoard, Point point) {
         controllerListener.notifyEvent(new UseBatteryEvent(Player.getPlayer(shipBoard).getNickname(), point));
     }
 

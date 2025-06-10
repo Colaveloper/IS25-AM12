@@ -65,7 +65,7 @@ public class GameEventListenerStub extends GameEventListener{
     }
 
     @Override
-    public void notifyUserBatteryEvent(ShipBoard shipBoard, Point point) {
+    public void notifyUseBatteryEvent(ShipBoard shipBoard, Point point) {
     }
 
     @Override

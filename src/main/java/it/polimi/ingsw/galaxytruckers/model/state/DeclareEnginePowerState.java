@@ -9,8 +9,7 @@ public final class DeclareEnginePowerState extends ActivateState implements Game
     int enginePower;
 
     public DeclareEnginePowerState(ShipBoard shipBoard) {
-        super(shipBoard);
-        this.availablePositions = new HashSet<>(shipBoard.getActivatables().keySet());
+        super(shipBoard, new HashSet<>(shipBoard.getActivatables().keySet()));
         this.availablePositions.retainAll(shipBoard.getEngines().keySet());
         this.enginePower = shipBoard.getEnginePower();
     }

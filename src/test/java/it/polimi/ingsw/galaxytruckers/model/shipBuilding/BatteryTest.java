@@ -24,13 +24,16 @@ class BatteryTest extends ComponentTest {
     @Test
     void numBatteriesDecreasesIfPossibleOrThrowsException() {
         assertEquals(3, myBattery.getNumBatteries());
-        assertThrows(IllegalArgumentException.class, () -> myBattery.useBatteries(4));
-        assertEquals(3, myBattery.getNumBatteries());
-        assertThrows(IllegalArgumentException.class, () -> myBattery.useBatteries(0));
-        assertEquals(3, myBattery.getNumBatteries());
-        myBattery.useBatteries(2);
-        assertEquals(1, myBattery.getNumBatteries());
-        myBattery.useBatteries(1);
-        assertEquals(0, myBattery.getNumBatteries());
+        myBattery.useBatteries();
+        assertEquals(2, myBattery.getNumBatteries());
+    }
+
+    @Test
+    void useBatteriesThrowsExceptionForNotAllowedNumBatteries() {
+        int numBatteries = myBattery.getNumBatteries();
+        for (int i = 0; i < numBatteries; i++) {
+            myBattery.useBatteries();
+        }
+        assertThrows(IllegalArgumentException.class, () -> myBattery.useBatteries());
     }
 }
