@@ -16,9 +16,10 @@ public abstract class CliAdventureScreen extends CliScreen{
 
     public CliAdventureScreen(ClientModel model, ControllerToServer controller, AdventureState gameState) {
         super(model, controller, gameState);
-        imOut = gameState.getImOut();
-        isMyTurn = gameState.getShipBoard() == myShipBoard;
-        currentShip = gameState.getShipBoard();
+        imOut = gameState.getImOut();   //if player surrendered
+        currentShip = gameState.getShipBoard(); // ship of the current player playing
+        isMyTurn = currentShip == myShipBoard;
+
     }
 
 //    protected List<String> printShipFlightStats() {

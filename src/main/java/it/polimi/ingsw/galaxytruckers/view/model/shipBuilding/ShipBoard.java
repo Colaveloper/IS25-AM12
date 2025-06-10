@@ -217,6 +217,7 @@ public abstract class ShipBoard {
 
     public void useBattery(Point position) {
         batteries.get(position).removeBattery();
+        numBatteries--;
     }
 
     //Cabin (and LifeSupport) methods
@@ -239,12 +240,12 @@ public abstract class ShipBoard {
 
     public void activateComponent(Point position) {
         Activatable component = activatables.get(position);
+        component.setActive(true);
         switch (component) {
             case DoubleCannon doubleCannon -> firePower += doubleCannon.getFirePower();
             case DoubleEngine doubleEngine -> enginePower += doubleEngine.getEnginePower();
             case Shield shield -> {}
         }
-        component.setActive(true);
     }
 
     public void deactivateComponent(Point position) {

@@ -36,7 +36,7 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
     }
 
     protected void tryStateTransition() {
-        if (validShipBoards.size() == game.getShipBoards().size()) {
+        if (validShipBoards.size() == game.getShipBoards().size() && shipPieces.isEmpty()) {
             game.setCurrentState(new ShipInitializationState());
         }
     }

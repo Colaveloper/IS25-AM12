@@ -36,8 +36,8 @@ public class CliDeclareFirePowerScreen extends CliActivationScreen {
         if (isMyTurn) {
             System.out.println("Your turn to declare fire power");
             System.out.println("Select cannon components to activate or batteries to use");
-            System.out.println("Available cannons: " + gameState.getAvailablePositions().size());
-            System.out.println("Available batteries: " + currentShip.getBatteries().size());
+//            System.out.println("Available cannons: " + activateablesComp);
+//            System.out.println("Available batteries: " + numBatteriesComp);
         } else {
             System.out.println("Waiting for " + currentShip.getColor() + " ship to declare fire power");
         }
