@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.PointPressHandler;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
@@ -10,8 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import java.awt.*;
 import java.io.IOException;
@@ -21,29 +18,23 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;
 
-public class GuiShipHandAndStash extends VBox {
-
+public class GuiShipBoard extends GridPane {
+    private final int minX;
+    private final int minY;
     private final PointPressHandler pointPressHandler;
 
     Image emptyAreaImage = null;
-
-    private final GridPane shipGrid;
-    private final int minX;
-    private final int minY;
-    private final GuiHand guiHand;
-    private final GuiStash guiStash;
-
     public final static Path emptyAreaImagePath = Path.of("src/main/resources/textures/tiles/empty_area.png");
 
-    public GuiShipHandAndStash(ShipBoard shipBoard, ControllerToServer controller) {
-        this(shipBoard, controller, (Point point)->{});
+    public GuiShipBoard(ShipBoard shipBoard) {
+        this(shipBoard, (_)->{});
     }
-    public GuiShipHandAndStash(ShipBoard shipBoard, ControllerToServer controller, PointPressHandler pointPressHandler) {
+
+    public GuiShipBoard(ShipBoard shipBoard, PointPressHandler pointPressHandler) {
         this.pointPressHandler = pointPressHandler;
 
         Set<Point> shipArea = shipBoard.getShipArea();
         Map<Point, Component> componentMap = shipBoard.getComponentMap();
-
 
         minX = shipArea.stream().mapToInt(p -> p.x).min().orElse(0);
         minY = shipArea.stream().mapToInt(p -> p.y).min().orElse(0);
@@ -53,9 +44,8 @@ public class GuiShipHandAndStash extends VBox {
         int rows = maxY - minY + 1;
         int cols = maxX - minX + 1;
 
-        shipGrid = new GridPane();
-        shipGrid.setHgap(0);
-        shipGrid.setVgap(0);
+        this.setHgap(0);
+        this.setVgap(0);
 
         try (InputStream is = Files.newInputStream(emptyAreaImagePath)) {
             emptyAreaImage = new Image(is);
@@ -64,48 +54,37 @@ public class GuiShipHandAndStash extends VBox {
         }
 
         for (int x = 0; x < cols; x++) {
-            Label colLabel = new Label(String.valueOf(minX + x));
-            shipGrid.add(colLabel, x + 1, 0);
+            javafx.scene.control.Label colLabel = new javafx.scene.control.Label(String.valueOf(minX + x));
+            this.add(colLabel, x + 1, 0);
         }
 
         for (int y = 0; y < rows; y++) {
-            Label rowLabel = new Label(String.valueOf(minY + y));
-            shipGrid.add(rowLabel, 0, y + 1);
+            javafx.scene.control.Label rowLabel = new Label(String.valueOf(minY + y));
+            this.add(rowLabel, 0, y + 1);
 
             for (int x = 0; x < cols; x++) {
                 Point currentPoint = new Point(minX + x, minY + y);
                 if (shipArea.contains(currentPoint)) {
                     ImageView areaView;
                     if (componentMap.containsKey(currentPoint)) {
+                        // COMPONENT ALREADY PLACED AND WELDED
                         areaView = new GuiComponent(componentMap.get(currentPoint));
                     } else {
+                        // FREE AREA
                         areaView = new ImageView();
                         areaView.setFitWidth(50);
                         areaView.setFitHeight(50);
                         areaView.setImage(emptyAreaImage);
                         areaView.setOnMouseClicked(_->pointPressHandler.handlePointPress(currentPoint));
                     }
-                    shipGrid.add(areaView, x + 1, y + 1);
+                    this.add(areaView, x + 1, y + 1);
                 }
             }
         }
-
-        HBox handAndStashBox = new HBox();
-
-        guiHand = new GuiHand(
-                shipBoard.getLastPosition()==null ? shipBoard.getLastComponent() : null,
-                controller
-        );
-
-        guiStash = new GuiStash(shipBoard.getStashedComponents(), controller);
-
-        handAndStashBox.getChildren().addAll(guiHand, guiStash);
-
-        this.getChildren().addAll(shipGrid, handAndStashBox);
     }
 
     public void notifyPlaceComponent(int componentId, Point point, Direction orientation) {
-        shipGrid.getChildren().stream()
+        this.getChildren().stream()
                 .filter(node -> node instanceof ImageView)
                 .filter(node -> {
                     int col = GridPane.getColumnIndex(node) - 1;
@@ -115,9 +94,12 @@ public class GuiShipHandAndStash extends VBox {
                 .findFirst()
                 .ifPresent(node ->
                         Platform.runLater(() -> {
-                                    shipGrid.getChildren().remove(node);
-                                    shipGrid.add(
-                                            new GuiComponent(componentId),
+                                    this.getChildren().remove(node);
+                                    GuiComponent guiComponent = new GuiComponent(componentId);
+                                    guiComponent.setRotate(orientation.getAngle());
+                                    guiComponent.setOnMouseClicked(_->pointPressHandler.handlePointPress(point));
+                                    this.add(
+                                            guiComponent,
                                             GridPane.getColumnIndex(node),
                                             GridPane.getRowIndex(node)
                                     );
@@ -127,49 +109,46 @@ public class GuiShipHandAndStash extends VBox {
     }
 
     public void notifyRemoveComponent(Point oldPosition) {
-            shipGrid.getChildren().stream()
-                    .filter(node -> {
-                        int col = GridPane.getColumnIndex(node) - 1;
-                        int row = GridPane.getRowIndex(node) - 1;
-                        return col + minX == oldPosition.x && row + minY == oldPosition.y;
-                    })
-                    .findFirst()
-                    .ifPresent(node ->
-                            Platform.runLater(() -> {
-                                        shipGrid.getChildren().remove(node);
-                                ImageView areaView = getEmptyAreaImageView(oldPosition);
-                                shipGrid.add(
-                                                areaView,
-                                                GridPane.getColumnIndex(node),
-                                                GridPane.getRowIndex(node)
-                                        );
-                                    }
-                            )
-                    );
+        this.getChildren().stream()
+                .filter(node -> {
+                    int col = GridPane.getColumnIndex(node) - 1;
+                    int row = GridPane.getRowIndex(node) - 1;
+                    return col + minX == oldPosition.x && row + minY == oldPosition.y;
+                })
+                .findFirst()
+                .ifPresent(node ->
+                        Platform.runLater(() -> {
+                                    this.getChildren().remove(node);
+                                    ImageView areaView = getEmptyAreaImageView(oldPosition);
+                                    this.add(
+                                            areaView,
+                                            GridPane.getColumnIndex(node),
+                                            GridPane.getRowIndex(node)
+                                    );
+                                }
+                        )
+                );
     }
 
-    private ImageView getEmptyAreaImageView(Point oldPosition) {
+    private ImageView getEmptyAreaImageView(Point position) {
         ImageView areaView = new ImageView();
         areaView.setFitWidth(50);
         areaView.setFitHeight(50);
         areaView.setImage(emptyAreaImage);
-        areaView.setOnMouseClicked(_-> pointPressHandler.handlePointPress(oldPosition));
+        areaView.setOnMouseClicked(_-> pointPressHandler.handlePointPress(position));
         return areaView;
     }
 
-    public void notifyClearHand() {
-        guiHand.notifyClearHand();
-    }
-
-    public void notifySetHand(Component component) {
-        guiHand.notifySetHand(component);
-    }
-
-    public void notifyStash(Component component) {
-        guiStash.notifyStash(component);
-    }
-
-    public void notifyGrabStashed(int index) {
-        guiStash.notifyGrab(index);
+    public GuiComponent getGuiComponent(Point position) {
+        return getChildren().stream()
+                .filter(node -> node instanceof GuiComponent)
+                .map(node -> (GuiComponent) node)
+                .filter(node -> {
+                    int col = GridPane.getColumnIndex(node) - 1;
+                    int row = GridPane.getRowIndex(node) - 1;
+                    return col + minX == position.x && row + minY == position.y;
+                })
+                .findFirst()
+                .orElse(null); // or throw exception if needed
     }
 }

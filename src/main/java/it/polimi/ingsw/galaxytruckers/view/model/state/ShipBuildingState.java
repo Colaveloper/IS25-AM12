@@ -72,7 +72,7 @@ public sealed abstract class ShipBuildingState extends GameState permits
         Point prevPos = shipBoard.getLastPosition();
         shipBoard.placeComponent(point, orientation);
         if (prevPos != null) {
-            game.getObservers().forEach(observer -> observer.notifyPlaceComponent(shipBoard, prevPos, orientation, prevPos));
+            game.getObservers().forEach(observer -> observer.notifyPlaceComponent(shipBoard, point, orientation, prevPos));
         } else {
             game.getObservers().forEach(observer -> observer.notifyPlaceComponent(shipBoard, point, orientation));
         }

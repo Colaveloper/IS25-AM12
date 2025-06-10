@@ -1,13 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliValidationScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.*;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
-import javafx.scene.Parent;
-import javafx.scene.layout.HBox;
 
 public class GuiScreenFactory implements ScreenFactory<GuiScreen> {
 

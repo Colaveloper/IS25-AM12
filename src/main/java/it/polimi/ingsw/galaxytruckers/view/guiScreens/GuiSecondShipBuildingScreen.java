@@ -2,8 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
-import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiComponentBank;
-import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiForecast;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.*;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiHourglass;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
@@ -12,90 +11,132 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 
     private final GuiComponentBank guiComponentBank;
     private final GuiForecast guiForecast;
     private final GuiHourglass guiHourglass;
-
-    private Direction lastComponentDirection = Direction.UP;
+    protected final Map<ShipBoard, GuiHand> guiHands;
+    protected final Map<ShipBoard, GuiStash> guiStashes;
+    private Direction lastComponentDirection;
 
     public GuiSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState state) {
         super(model, controller, state);
         guiComponentBank = new GuiComponentBank(state.getComponentBank(), controller);
         guiForecast = new GuiForecast(state.getBlockedForecasts(), controller);
         guiHourglass = new GuiHourglass(controller);
+        guiHands = new HashMap<>();
+        for (ShipBoard shipBoard : model.getGame().getShipBoards()) {
+            guiHands.put(shipBoard, new GuiHand(
+                    shipBoard.getLastPosition()==null ? shipBoard.getLastComponent() : null,
+                    controller
+            ));
+        }
+        guiStashes = new HashMap<>();
+        for (ShipBoard shipBoard : model.getGame().getShipBoards()) {
+            guiStashes.put(shipBoard, new GuiStash(shipBoard.getStashedComponents(), controller));
+        }
+        resetLastComponentDirection();
+    }
+
+    @Override
+    protected VBox getFullShip(ShipBoard shipBoard) {
+        VBox layout = new VBox();
+        HBox handAndStashBox = new HBox();
+        handAndStashBox.getChildren().addAll(guiHands.get(shipBoard), guiStashes.get(shipBoard));
+        layout.getChildren().addAll(guiShipBoards.get(shipBoard), handAndStashBox);
+        return layout;
     }
 
     @Override
     public Parent getNode() {
         VBox layout = new VBox();
         layout.setAlignment(Pos.CENTER);
-        layout.getChildren().addAll(guiComponentBank, guiForecast, guiHourglass, guiFlightBoard, guiAllShips);
+        layout.getChildren().addAll(guiComponentBank, guiForecast, guiHourglass, guiFlightBoard, getAllShips());
         return layout;
     }
 
     @Override
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
+        resetLastComponentDirection();
         guiComponentBank.notifyRequestRandComponent();
-        guiAllShips.notifySetHand(shipBoard, component);
+        guiHands.get(shipBoard).notifySetHand(component);
     }
 
 
     @Override
     public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
+        resetLastComponentDirection();
         guiComponentBank.notifyRequestComponent(component);
-        guiAllShips.notifySetHand(shipBoard, component);
+        guiHands.get(shipBoard).notifySetHand(component);
     }
 
     @Override
     public void notifyStashComponent(ShipBoard shipBoard, Component component) {
-        guiAllShips.notifyStashComponent(shipBoard, component);
+        guiStashes.get(shipBoard).notifyStash(component);
+        guiHands.get(shipBoard).notifyClearHand();
+        resetLastComponentDirection();
     }
 
     @Override
     public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
-        guiAllShips.notifyStashComponent(shipBoard, component, oldPosition);
+        guiStashes.get(shipBoard).notifyStash(component);
+        guiShipBoards.get(shipBoard).notifyRemoveComponent(oldPosition);
+        resetLastComponentDirection();
     }
 
     @Override
     public void notifyRejectComponent(ShipBoard shipBoard, Component component) {
         guiComponentBank.notifyRejectComponent(component);
-        guiAllShips.notifyClearHand(shipBoard);
+        guiHands.get(shipBoard).notifyClearHand();
+        resetLastComponentDirection();
+
     }
 
     @Override
     public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
         guiComponentBank.notifyRejectComponent(component);
-        guiAllShips.notifyRemoveComponent(shipBoard, oldPosition);
+        guiShipBoards.get(shipBoard).notifyRemoveComponent(oldPosition);
+        resetLastComponentDirection();
     }
     @Override
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
-        guiAllShips.notifyGrabStashedComponent(shipBoard, index, component);
+        resetLastComponentDirection();
+        guiStashes.get(shipBoard).notifyGrab(index);
+        guiHands.get(shipBoard).notifySetHand(component);
     }
 
     @Override
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         int placedComponentId = shipBoard.getComponentMap().get(point).getId();
-        guiAllShips.notifyPlaceComponent(shipBoard, placedComponentId, point, orientation);
-    }
-    @Override
-    public void notifyFlipHourglass(ShipBoard shipBoard)
-    {
-//        {// Update the hourglass status in the UI
-        // cliFlightBoard.setDirty();
+        guiShipBoards.get(shipBoard).notifyPlaceComponent(placedComponentId, point, orientation);
+        guiHands.get(shipBoard).notifyClearHand();
     }
 
     @Override
-    public void notifyHourglassEnd()
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation, Point oldPosition) {
+        int placedComponentId = shipBoard.getComponentMap().get(point).getId();
+        guiShipBoards.get(shipBoard).notifyPlaceComponent(placedComponentId, point, orientation);
+        guiShipBoards.get(shipBoard).notifyRemoveComponent(oldPosition);
+    }
+
+    @Override
+    public void notifyFlipHourglass(ShipBoard shipBoard)
     {
-//        {// Mark the flight board as dirty to update the hourglass status
-        // cliFlightBoard.setDirty();
+        guiHourglass.notifyFlipHourglass();
+    }
+
+    @Override
+    public void notifyHourglassEnd() {
+        guiHourglass.notifyHourglassEnd();
     }
 
     @Override
@@ -121,15 +162,26 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 
     @Override
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        guiAllShips.notifyRemoveComponent(shipBoard, point);
+        guiShipBoards.get(shipBoard).notifyRemoveComponent(point);
     }
 
     @Override
     public void handlePointPress(Point point) {
-        if (model.getMyShip().getComponentMap().containsKey(point)) {
+        if (
+                model.getMyShip().getLastPosition() != null
+                && model.getMyShip().getLastPosition().equals(point)
+        ) {
             lastComponentDirection = lastComponentDirection.getLeft();
-        } else if (model.getMyShip().getShipArea().contains(point)) {
+            guiShipBoards.get(model.getMyShip()).getGuiComponent(point).setRotate(lastComponentDirection.getAngle());
+        } else if (
+                model.getMyShip().getShipArea().contains(point)
+                && !model.getMyShip().getComponentMap().containsKey(point)
+        ) {
             controller.placeComponent(point, lastComponentDirection);
         }
+    }
+
+    private void resetLastComponentDirection() {
+        lastComponentDirection = Direction.UP;
     }
 }

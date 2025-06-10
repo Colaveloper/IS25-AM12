@@ -1,56 +1,74 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.Direction;
-import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiAllShips;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiFlightBoard;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
-import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
+import javafx.geometry.Pos;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class GuiGameScreen extends GuiScreen implements PointPressHandler {
 
-    protected GuiFlightBoard guiFlightBoard;
-    protected GuiAllShips guiAllShips;
+    protected final GuiFlightBoard guiFlightBoard;
+    protected final Map<ShipBoard, GuiShipBoard> guiShipBoards;
     private GameState gameState;
 
     public GuiGameScreen(ClientModel model, ControllerToServer controller, GameState state) {
         super(model, controller, state);
         gameState = state;
-        this.guiAllShips = new GuiAllShips(model.getClientPlayer(), model.getShipToPlayer(), controller, this);
+        this.guiShipBoards = new HashMap<>();
+        guiShipBoards.put(model.getMyShip(), new GuiShipBoard(model.getMyShip(), this));
+        for (ShipBoard s : model.getGame().getShipBoards()) {
+            if (!s.equals(model.getMyShip())) {
+                guiShipBoards.put(s, new GuiShipBoard(s));
+            }
+        };
         this.guiFlightBoard = new GuiFlightBoard(model.getGame().getFlightBoard(), controller);
     }
 
     @Override
     public abstract void handlePointPress(Point point);
 
-    // TODO: remove this monstrosity
-    protected void parseComponentPress(Point point) {
-        if (!model.getGame().getGivenUpShips().contains(model.getClientPlayer().getShipBoard())) {
-            List<StateActions> availableActions = new ArrayList<>(state.getAvailableActions());
-            if (availableActions.contains(StateActions.ACTIVATE_COMPONENT)) {
-                controller.activateComponent(point);
-            } else if (availableActions.contains(StateActions.SPEND_BATTERIES)) {
-                controller.useBattery(point);
-            } else if (availableActions.contains(StateActions.LOSE_CREW)) {
-                controller.loseCrew(point);
-            } else if (availableActions.contains(StateActions.LOSE_GOOD)) {
-                controller.loseGoods(point);
-            } else if (availableActions.contains(StateActions.REMOVE_GOOD)) {
-//                controller.removeGoods();
-            } else if (availableActions.contains(StateActions.ADD_GOOD)) {
-//                controller.placeGoods();
-            } else if (availableActions.contains(StateActions.PLACE_COMPONENT)) {
-                controller.placeComponent(point, Direction.UP); // TODO: make dynamic
-            } else if (availableActions.contains(StateActions.REMOVE_COMPONENT)) {
-                controller.removeComponent(point);
-            } else if (availableActions.contains(StateActions.INITIALIZE_CABIN)) {
-//                controller.initializeCabin();
+    // overridden for different levels and game-phases
+    protected VBox getFullShip(ShipBoard shipBoard) {
+        VBox layout = new VBox();
+        layout.getChildren().add(guiShipBoards.get(shipBoard));
+        return layout;
+    }
+
+    protected HBox getAllShips() {
+        HBox layout = new HBox();
+        layout.setSpacing(20);
+        layout.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        layout.setPrefWidth(Region.USE_COMPUTED_SIZE);
+
+        // Main player's large ship view
+        VBox mainView = getFullShip(model.getMyShip());
+        mainView.setMaxWidth(Double.MAX_VALUE);
+        mainView.setPrefWidth(2 * 300);
+        HBox.setHgrow(mainView, Priority.ALWAYS); // todo remove ?
+
+        // VBox for other players
+        VBox othersColumn = new VBox(10);
+        othersColumn.setAlignment(Pos.CENTER);
+        othersColumn.setPrefWidth(300);
+        for (ShipBoard shipBoard : model.getGame().getShipBoards()) {
+            if (!shipBoard.equals(model.getMyShip())) {
+                VBox shipView = getFullShip(shipBoard);
+                othersColumn.getChildren().add(shipView);
             }
         }
+
+        layout.getChildren().addAll(mainView, othersColumn);
+        return layout;
     }
 }

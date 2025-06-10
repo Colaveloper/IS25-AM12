@@ -14,11 +14,20 @@ public enum Direction {
     }
 
     public Direction getLeft() {
-        return VALUES[(this.ordinal() + (values().length-1)) % Direction.values().length];
+        return VALUES[(this.ordinal() + (values().length - 1)) % Direction.values().length];
     }
 
     public Direction getOpposite() {
         return VALUES[(this.ordinal() + 2) % Direction.values().length];
+    }
+
+    public int getAngle() {
+        return switch (this) {
+            case UP -> 0;
+            case RIGHT -> 90;
+            case DOWN -> 180;
+            case LEFT -> 270;
+        };
     }
 
     public static <V> Map<Direction, V> rotateDirectionMap(
