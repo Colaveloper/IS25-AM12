@@ -21,6 +21,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     private final CliComponentBank cliComponentBank;
     private final CliForecast cliForecast;
     private final CliForecastCards cliForecastCards;
+    private final CliComponentLegend cliComponentLegend;
 
     private boolean hasStashed;
     private final SecondShipBuildingState gameState;
@@ -34,6 +35,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
         cliComponentBank = new CliComponentBank(gameState.getComponentBank());
         cliForecast = new CliForecast(gameState.getBlockedForecasts());
         cliForecastCards = new CliForecastCards();
+        cliComponentLegend = new CliComponentLegend();
         this.buildingShipToCliShip = new HashMap<>();
         for (Player player : model.getPlayers()) {
             buildingShipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));
@@ -51,7 +53,19 @@ public class CliSecondShipBuildingScreen extends CliScreen {
             cliForecastCards.getDescription().forEach(System.out::println);
         } else {
             cliComponentBank.getDescription().forEach(System.out::println);
-            DescriptionUtils.sideBySide(cliFlightBoard.getDescription(), cliForecast.getDescription()).forEach(System.out::println);
+
+            // First combine the forecast with the component legend
+            List<String> forecastWithLegend = DescriptionUtils.sideBySide(
+                cliForecast.getDescription(),
+                cliComponentLegend.getDescription()
+            );
+
+            // Then combine the flight board with the forecast+legend
+            DescriptionUtils.sideBySide(
+                cliFlightBoard.getDescription(),
+                forecastWithLegend
+            ).forEach(System.out::println);
+
             System.out.println(
                     "firepower: "   + myShipBoard.getFirePower()/2 +
                     "\tengine power: " + myShipBoard.getEnginePower() +

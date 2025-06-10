@@ -17,6 +17,8 @@ public enum ComponentType {
             List.of("⇓", "⇐", "⇑", "⇒")),
     CARGO_HOLD(
             List.of("■")),
+    SPECIAL_CARGO_HOLD(
+            List.of("○")),
     STRUCTURAL(
             List.of(" ")),
     BATTERY(
