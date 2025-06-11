@@ -165,9 +165,8 @@ public class SecondShipBoard extends ShipBoard {
         }
     }
 
-    public void loseCrew(Point position, int amount) {
-        super.loseCrew(position, amount);
-        aliens.remove(cabins.get(position).getCrewType());
+    public void loseCrew(Point position) {
+        super.loseCrew(position);
     }
 
     //Visitor pattern methods
@@ -192,5 +191,11 @@ public class SecondShipBoard extends ShipBoard {
                 this.aliens.remove(cabins.get(point).getCrewType());
             }
         }
+    }
+
+    @Override
+    public void remove(Cabin cabin) {
+        super.remove(cabin);
+        this.aliens.remove(cabin.getCrewType());
     }
 }

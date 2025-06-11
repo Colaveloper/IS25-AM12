@@ -103,6 +103,7 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
     @Override
     protected void endBuilding() {
         synchronized (game.getLock()) {
+            hourglass.stop();
             Set<ShipBoard> unfinishedShipBoards = new HashSet<>(game.getShipBoards());
             unfinishedShipBoards.removeAll(completedShipBoards);
             for (ShipBoard shipBoard : unfinishedShipBoards) {

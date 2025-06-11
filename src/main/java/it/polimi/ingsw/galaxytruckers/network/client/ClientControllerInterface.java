@@ -10,12 +10,4 @@ public interface ClientControllerInterface {
 
     void notifyEvent(Event event);
 
-       /**
-     * Reports an error to the client.
-     * //todo i don t know how exceptions are used for the connection but this had to be removed(?)
-     *
-     * @param details a message describing the error
-     */
-    void reportError(String details);
-
 }

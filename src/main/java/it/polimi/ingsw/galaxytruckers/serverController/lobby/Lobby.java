@@ -140,12 +140,12 @@ public class Lobby implements LobbyInterface {
      */
     private void startGame() {
         Game game = model.createGame(this.level, this.lock);
+        model.setEventListener(game,eventQueue);
         for (Player player : getPlayers()) {
             ShipBoard ship = model.addShip(game, playerColors.get(player));
             player.setShipBoard(ship);
         }
         setState(LobbyState.INGAME);
-        model.setEventListener(game,eventQueue);
         model.startGame(game);
         this.game = game;
     }

@@ -7,11 +7,13 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
-import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
 
@@ -27,21 +29,23 @@ public class EpidemicCard extends AdventureCard {
         for(ShipBoard shipBoard : flightBoard.getOrderedShips()) {
 
             // check currentShipboard for cabins
-            Map<Point, Cabin> cabins = shipBoard.getCabins();
-            for (Map.Entry<Point, Cabin> cabinEntry : cabins.entrySet()) {
-                for (Direction direction : Direction.values()) {
-                    Point infectionOrigin = Direction.getNeighbour(cabinEntry.getKey(), direction);
-                    if (cabins.containsKey(infectionOrigin) // infectionOrigin is a cabin
-                            && cabinEntry.getValue().getConnectors().get(direction) != Connector.NONE // they are connected
-                            && shipBoard.getCabins().get(infectionOrigin).getNumResidents() > 0 // somebody infecting
-                            && shipBoard.getCabins().get(cabinEntry.getKey()).getNumResidents() > 0 // somebody to infect
-                        ) {
-                            shipBoard.loseCrew(cabinEntry.getKey(), 1);
-                            game.getEventListener().notifyLoseCrewEvent(shipBoard, cabinEntry.getKey());
-                            break;
+            Map<Point, Cabin> cabins = shipBoard.getCabins().entrySet().stream()
+                    .filter(e -> {
+                        Cabin c = shipBoard.getCabins().get(e.getKey());
+                        List<Direction> connectedDirections = Arrays.stream(Direction.values())
+                                .filter(dir -> c.getConnectors().get(dir) != Connector.NONE)
+                                .toList();
+                        for (Direction direction : connectedDirections) {
+                            Point neighbour = Direction.getNeighbour(e.getKey(),direction);
+                            if (shipBoard.getCabins().containsKey(neighbour) &&
+                                    shipBoard.getCabins().get(neighbour).getNumResidents() > 0)
+                                return true;
                         }
-                    }
-                }
+                        return false;
+                    })
+                    .filter(e -> shipBoard.getCabins().get(e.getKey()).getNumResidents() > 0)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            cabins.keySet().forEach(p -> shipBoard.loseCrew(p));
         }
         return new DrawCardState();
     }

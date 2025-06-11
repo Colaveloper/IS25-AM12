@@ -6,6 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 public final class DrawCardState extends AdventureState implements GameStateInterface{
     ShipBoard shipBoard;
+    boolean hasDrawn = false;
 
     @Override
     public void setGame(Game game) {
@@ -27,6 +28,10 @@ public final class DrawCardState extends AdventureState implements GameStateInte
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
+        if (hasDrawn) {
+            throw new IllegalStateException("It's already drawn");
+        }
+        hasDrawn = true;
         if(game.getDeck().tryDrawCard()) {
             game.getDeck().getCurrentCard().initialize();
             game.getEventListener().notifyNewCardEvent(game.getDeck().getCurrentCard());
@@ -37,6 +42,9 @@ public final class DrawCardState extends AdventureState implements GameStateInte
 
     @Override
     public void goNext(ShipBoard shipBoard) {
+        if (!hasDrawn) {
+            throw new IllegalStateException("You need to draw first");
+        }
         game.setCurrentState(getNextState());
     }
 

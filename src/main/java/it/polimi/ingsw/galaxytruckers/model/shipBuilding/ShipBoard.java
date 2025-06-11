@@ -127,6 +127,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     public void removeComponent(Point position) {
         lastPosition = position;
         componentMap.remove(lastPosition).removeFromVisitor(this);
+        if (gameEventListener != null) gameEventListener.notifyRemoveComponentEvent(this,lastPosition);
         lastPosition = null;
     }
 
@@ -292,12 +293,13 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         crewSize += cabins.get(position).getNumResidents();
     }
 
-    public void loseCrew(Point position, int amount) {
+    public void loseCrew(Point position) {
         if (!cabins.containsKey(position)) {
             throw new IllegalStateException("There is no cabin for this position");
         }
-        cabins.get(position).loseResidents(amount);
-        crewSize -= amount;
+        cabins.get(position).loseResidents();
+        crewSize--;
+        if (gameEventListener != null) gameEventListener.notifyLoseCrewEvent(this,position);
     }
 
     // Activatables methods
@@ -506,7 +508,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     @Override
     public void remove(Cabin cabin) {
-        loseCrew(this.lastPosition, cabin.getNumResidents());
+        this.crewSize -= cabin.getNumResidents();
         this.cabins.remove(this.lastPosition);
     }
 

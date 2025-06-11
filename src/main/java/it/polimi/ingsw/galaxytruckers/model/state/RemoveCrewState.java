@@ -19,8 +19,7 @@ public final class RemoveCrewState extends AdventureState implements GameStateIn
             throw new IllegalStateException("It's not your turn");
         }
         if (shipBoard.getCrewSize() > 0 && crewSacrifice > 0) {
-            shipBoard.loseCrew(position,1);
-            game.getEventListener().notifyLoseCrewEvent(shipBoard, position);
+            shipBoard.loseCrew(position);
             crewSacrifice--;
         }
         if (crewSacrifice <= 0 || shipBoard.getCrewSize() <= 0) {

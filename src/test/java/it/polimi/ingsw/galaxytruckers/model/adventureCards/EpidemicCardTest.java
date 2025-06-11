@@ -80,7 +80,7 @@ class EpidemicCardTest {
             }
 
             @Override
-            public void loseCrew(Point position, int amount) {
+            public void loseCrew(Point position) {
                 plaguedCabins.add(position);
             }
         };
@@ -92,7 +92,7 @@ class EpidemicCardTest {
             }
 
             @Override
-            public void loseCrew(Point position, int amount) {
+            public void loseCrew(Point position) {
                 plaguedCabins.add(position);
             }
         };

@@ -64,7 +64,6 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
             throw new IllegalStateException("Ship Board is already valid");
         }
         removeAt(shipBoard, point);
-        game.getEventListener().notifyRemoveComponentEvent(shipBoard, point);
         if (checkShipValidity(shipBoard)) {
             if (!checkShipConnection(shipBoard)) {
                 game.getEventListener().notifyShipNotConnectedEvent(shipBoard, shipPieces.get(shipBoard));

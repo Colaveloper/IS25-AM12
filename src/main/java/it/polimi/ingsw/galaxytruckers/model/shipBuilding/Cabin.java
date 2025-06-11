@@ -3,7 +3,6 @@ package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
-import java.util.List;
 import java.util.Map;
 
 public class Cabin extends Component {
@@ -44,13 +43,11 @@ public class Cabin extends Component {
         return crewType;
     }
 
-    public void loseResidents(int numResidents) {
-        if (numResidents < 0) {
-            throw new IllegalArgumentException("Number of residents to remove is not positive");
-        } else if (numResidents > this.numResidents) {
-            throw new IllegalArgumentException("Number of residents to remove exceeds the current number of residents");
+    public void loseResidents() {
+        if (this.numResidents <= 0) {
+            throw new IllegalStateException("There are no more residents here");
         }
-        this.numResidents -= numResidents;
+        this.numResidents--;
     }
 
     @Override

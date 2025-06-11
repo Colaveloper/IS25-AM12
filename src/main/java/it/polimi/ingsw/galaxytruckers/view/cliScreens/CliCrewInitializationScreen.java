@@ -36,7 +36,7 @@ public class CliCrewInitializationScreen extends CliScreen {
                 System.out.println("choose position for purple alien in one of the highlighted cabins");
                 currentCrewType = CrewType.PURPLE;
             } else if (crewtypeToPoints.get(myShipBoard).containsKey(CrewType.BROWN)) {
-                System.out.println("choose position for purple alien in one of the highlighted cabins");
+                System.out.println("choose position for brown alien in one of the highlighted cabins");
                 currentCrewType = CrewType.BROWN;
             }
             else{
