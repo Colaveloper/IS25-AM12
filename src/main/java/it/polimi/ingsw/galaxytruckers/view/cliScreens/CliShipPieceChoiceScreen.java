@@ -34,8 +34,8 @@ public class CliShipPieceChoiceScreen extends CliAdventureScreen {
     private void shipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
         int numPieces = shipPieces.size();
         List<Highlights> highlights = Highlights.getSomeColors(numPieces);
-        for(int i = 1; i <= numPieces; i++){
-            shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i));
+        for(int i = 0; i < numPieces; i++){
+            shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i+1));
         }
         cliAllShips.setDirty();
     }
@@ -64,8 +64,8 @@ public class CliShipPieceChoiceScreen extends CliAdventureScreen {
     @Override
     public void render() {
         List<Highlights> colors= Highlights.getSomeColors(numPieces);
-//        for(int i = 1; i <= numPieces; i++){
-//            shipToCliShip.get(currentShip).highlightPoints(points.get(i), colors.get(i));  //color ship pieces with list of colors
+//        for(int i = 0; i < numPieces; i++){
+//            shipToCliShip.get(currentShip).highlightPoints(points.get(i), colors.get(i+1));  //color ship pieces with list of colors
 //        }
 
         printShipFlightStats().forEach(System.out::println);

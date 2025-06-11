@@ -294,6 +294,17 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     }
 
     @Override
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {
+        Component placedComponent = shipBoard.getComponentMap().get(newPoint);
+        if (placedComponent != null) {
+            CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
+            ship.onPutComponent(newPoint, placedComponent);
+            ship.onRemoveComponent(oldPosition);
+            cliAllShips.setDirty();
+        }
+    }
+
+    @Override
     public void notifyFlipHourglass(ShipBoard shipBoard) {
         Hourglass hourglass = gameState.getHourglass();
         if (hourglass != null) {

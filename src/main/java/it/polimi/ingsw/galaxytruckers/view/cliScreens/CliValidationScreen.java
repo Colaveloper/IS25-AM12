@@ -129,8 +129,8 @@ public class CliValidationScreen extends CliScreen {
     private void shipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
         int numPieces = shipPieces.size();
         List<Highlights> highlights = Highlights.getSomeColors(numPieces);
-        for(int i = 1; i <= numPieces; i++){
-            shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i));
+        for(int i = 0; i < numPieces; i++){
+            shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i + 1));
         }
         cliAllShips.setDirty();
     }
