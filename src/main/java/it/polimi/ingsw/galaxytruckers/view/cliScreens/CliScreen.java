@@ -133,7 +133,6 @@ public abstract class CliScreen extends Screen {
             System.out.println();
         }
         else{
-            //TODO: print something in place of actions
             System.out.println("You're out of the flight! - watch other players compete.");
         }
     }
