@@ -60,7 +60,7 @@ public class CliCrewInitializationScreen extends CliScreen {
         }
         String[] parts = input.split("\\s+");
         switch (parts[0].toUpperCase()) {
-            case "P":
+            case "P"-> {
                 Point point = getPoint(input);
                 if (!myShipBoard.getShipArea().contains(point)) {
                     System.out.println("Cannot place alien outside of the ship");
@@ -71,9 +71,8 @@ public class CliCrewInitializationScreen extends CliScreen {
                     return;
                 }
                 controller.initializeCabin(getPoint(input), currentCrewType);
-            case "":
-                controller.goNext();
-                break;
+            }
+            case ""-> controller.goNext();
         }
     }
 

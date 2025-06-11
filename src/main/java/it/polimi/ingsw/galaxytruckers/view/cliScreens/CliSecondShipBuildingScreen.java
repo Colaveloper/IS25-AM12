@@ -27,7 +27,6 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     private final SecondShipBuildingState gameState;
     private final Map<ShipBoard, CliShipHandAndStash> buildingShipToCliShip;
-    private boolean hourglassEndTriggered = false;
 
     public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
@@ -304,41 +303,11 @@ public class CliSecondShipBuildingScreen extends CliScreen {
             } else {
                 System.out.println("Hourglass flipped!");
             }
-
-            render();
         }
     }
 
     @Override
-    public void notifyHourglassEnd() {
-        if (hourglassEndTriggered) {
-            return; // prevent duplicate calls to this
-        }
-
-        hourglassEndTriggered = true;
-        System.out.println("TIME'S UP! The hourglass has run out!");
-
-        for (ShipBoard shipBoard : buildingShipToCliShip.keySet()) {
-            // weld all components that have been placed
-            if (shipBoard.getLastComponent() != null && shipBoard.getLastPosition() != null) {
-                shipBoard.weldLastComponent();
-            }
-
-            // count losses for stashed components
-            if (shipBoard.getStashedComponents() != null && !shipBoard.getStashedComponents().isEmpty()) {
-                int lossesFromStash = shipBoard.getStashedComponents().size();
-                shipBoard.incrementLosses(lossesFromStash);
-                System.out.println(model.getPlayerByShip(shipBoard).getNickname() +
-                                   " loses " + lossesFromStash + " points for stashed components!");
-            }
-        }
-
-        // players can only place on the flight board after the hourglass ends
-        availableActions.clear();
-        availableActions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
-
-        render();
-    }
+    public void notifyHourglassEnd() {}
 
     private boolean componentInHand(){
         return myShipBoard.getLastComponent() != null && myShipBoard.getLastPosition() == null;
