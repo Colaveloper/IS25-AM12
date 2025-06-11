@@ -54,11 +54,14 @@ public class ClientEventHandler implements EventHandler<Event> {
                             .map(id -> AdventureCardRegistry.getInstance().getCard(id))
                             .toList()
             );
-            case GameEndEvent gameEndEvent -> clientModel.setFinalScores(
-                    gameEndEvent.playerToScore().entrySet().stream()
-                            .collect(Collectors.toMap(
-                                    e -> playerRegistry.getByNickname(e.getKey()), Map.Entry::getValue))
-            );
+            case GameEndEvent gameEndEvent -> {
+                clientModel.setFinalScores(
+                        gameEndEvent.playerToScore().entrySet().stream()
+                                .collect(Collectors.toMap(
+                                        e -> playerRegistry.getByNickname(e.getKey()), Map.Entry::getValue))
+                );
+//                clientModel.setMetaState();//todo
+            }
             case GoodsUpdateEvent goodsUpdateEvent -> {
                 if (goodsUpdateEvent.add()) {
                     clientModel.notifyPlaceGoods(

@@ -16,6 +16,7 @@ public class GuiScreenFactory implements ScreenFactory<GuiScreen> {
             case CREATION -> new GuiGameCreationScreen(model, controller);
             case INLOBBY -> new GuiLobbyScreen(model, controller);
             case INGAME -> createScreen(model.getGame().getCurrentState(), model, controller);
+            case ENDGAME -> null;//todo add endgame screen
         };
     }
 

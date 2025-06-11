@@ -17,6 +17,7 @@ public class CliScreenFactory implements ScreenFactory<CliScreen> {
             case CREATION -> new CliGameCreationScreen(model, controller);
             case INLOBBY -> new CliLobbyScreen(model, controller);
             case INGAME -> createScreen(model.getGame().getCurrentState(), model, controller);
+            case ENDGAME -> new CliEndGameScreen(model, controller);
         };
     }
 

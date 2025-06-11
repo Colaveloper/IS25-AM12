@@ -34,6 +34,9 @@ public abstract class ShipBoard {
     protected final Map<Point, Cabin> cabins;
     protected final Map<Point, Activatable> activatables;
 
+    private boolean hasBrown = false;
+    private boolean hasPurple = false;
+
     public ShipBoard(GameColor color) { // (, Color color)
         this.color = color;
 
@@ -163,8 +166,8 @@ public abstract class ShipBoard {
             case Cabin cabin -> {
                 cabins.remove(position);
                 switch (cabin.getCrewType()) {
-                    case PURPLE -> firePower -= 2;
-                    case BROWN -> enginePower -= 2;
+                    case PURPLE -> hasPurple = false;
+                    case BROWN -> hasBrown = false;
                     case HUMAN -> {}
                 }
                 crewSize -= cabin.getNumResidents();
@@ -227,11 +230,11 @@ public abstract class ShipBoard {
         cabin.initialize(crewType);
         switch (crewType) {
             case PURPLE -> {
-                firePower += 2;
+                hasPurple = true;
                 crewSize += cabin.getNumResidents();
             }
             case BROWN -> {
-                enginePower += 2;
+                hasBrown = true;
                 crewSize += cabin.getNumResidents();
             }
             case HUMAN -> crewSize += cabin.getNumResidents();
@@ -280,11 +283,11 @@ public abstract class ShipBoard {
     }
 
     public int getFirePower() {
-        return firePower;
+        return hasBrown ? firePower + 4 : firePower;
     }
 
     public int getEnginePower() {
-        return enginePower;
+        return hasPurple ? enginePower + 4 : enginePower;
     }
 
     public int getNumBatteries() {

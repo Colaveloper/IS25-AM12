@@ -18,6 +18,10 @@ public class CliFlightBoard extends CliElement {
         loopLength = flightBoard.getLoopLength();
     }
 
+    public void setPosition(ShipBoard shipBoard, int position) {
+        shipToPlace.put(shipBoard, position);
+    }
+
     @Override
     protected List<String> getNewDescription() {
         String[] asArray = new String[loopLength];

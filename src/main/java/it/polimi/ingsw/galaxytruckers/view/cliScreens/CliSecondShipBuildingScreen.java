@@ -283,6 +283,12 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     }
 
     @Override
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+        cliFlightBoard.setPosition(shipBoard, position);
+        cliFlightBoard.setDirty();
+    }
+
+    @Override
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         Component placedComponent = shipBoard.getComponentMap().get(point);
         if (placedComponent != null) {
