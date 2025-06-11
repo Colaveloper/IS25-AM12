@@ -155,28 +155,28 @@ public abstract class CliScreen extends Screen {
         //String[] parts = input.split(" ");
         return switch (input.substring(0, 1)) {
             case "P" ->(availableActions.contains(StateActions.PLACE_COMPONENT) ||
-                        availableActions.contains(StateActions.INITIALIZE_CABIN))&& input.matches("P\\s+\\d+\\s+\\d+") ||
+                        availableActions.contains(StateActions.INITIALIZE_CABIN))&& input.matches("P\\s\\d+\\s\\d+") ||
                         availableActions.contains(StateActions.GRAB_REWARD)     && input.matches("P") ||
-                        availableActions.contains(StateActions.ADD_GOOD)        && input.matches("P\\s+\\d+\\s+\\d+\\s+[A-Z]+");
+                        availableActions.contains(StateActions.ADD_GOOD)        && input.matches("P\\s\\d+\\s\\d+\\s[A-Z]+");
             case "H" -> availableActions.contains(StateActions.FLIP_HOURGLASS)  && input.matches("H");
             case "S" -> availableActions.contains(StateActions.STASH_COMPONENT) && input.matches("S") ||
-                        availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.matches("S\\s+\\d+");
+                        availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) && input.matches("S\\s\\d+");
             case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT)&& input.matches("R") ||
-                        availableActions.contains(StateActions.REMOVE_GOOD)     && input.matches("R\\s+\\d+\\s+\\d+\\s+[A-Z]+") ||
-                        availableActions.contains(StateActions.REMOVE_COMPONENT)&& input.matches("R\\s+\\d+\\s+\\d+") ||
-                        availableActions.contains(StateActions.ROTATE_COMPONENT)&& input.matches("R\\s+(?i)(LEFT|RIGHT)");
+                        availableActions.contains(StateActions.REMOVE_GOOD)     && input.matches("R\\s\\d+\\s\\d+\\s[A-Z]+") ||
+                        availableActions.contains(StateActions.REMOVE_COMPONENT)&& input.matches("R\\s\\d+\\s\\d+") ||
+                        availableActions.contains(StateActions.ROTATE_COMPONENT)&& input.matches("R\\s(?i)(LEFT|RIGHT)");
             case "C" -> availableActions.contains(StateActions.REQUEST_RAND_COMPONENT) && input.matches("C");
-            case "U" -> availableActions.contains(StateActions.REQUEST_COMPONENT)&& input.matches("U\\s+\\d+");
-            case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST)&& input.matches("F\\s+\\d+");
+            case "U" -> availableActions.contains(StateActions.REQUEST_COMPONENT)&& input.matches("U\\s\\d+");
+            case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST)&& input.matches("F\\s\\d+");
             case "X" -> availableActions.contains(StateActions.FINISH_BUILDING) && input.matches("X");
             case "L" ->(availableActions.contains(StateActions.LOSE_CREW)   ||
-                        availableActions.contains(StateActions.LOSE_GOOD))      && input.matches("L\\s+\\d+\\s+\\d+") ||
-                        availableActions.contains(StateActions.CHOOSE_PLANET)   && input.matches("L\\s+\\d+");
-            case "K" -> availableActions.contains(StateActions.CHOOSE_SHIP_PIECE)&& input.matches("K\\s+\\d+");
+                        availableActions.contains(StateActions.LOSE_GOOD))      && input.matches("L\\s\\d+\\s\\d+") ||
+                        availableActions.contains(StateActions.CHOOSE_PLANET)   && input.matches("L\\s\\d+");
+            case "K" -> availableActions.contains(StateActions.CHOOSE_SHIP_PIECE)&& input.matches("K\\s\\d+");
             case "Y" -> availableActions.contains(StateActions.GIVE_UP)         && input.matches("Y");
-            case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("B\\s+\\d+\\s+\\d+");
-            case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.matches("A\\s+\\d+\\s+\\d+");
-            case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.matches("E\\s*\\d+");
+            case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("B\\s\\d+\\s\\d+");
+            case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.matches("A\\s\\d+\\s\\d+");
+            case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.matches("E\\s\\d+");
             case " " ->(availableActions.contains(StateActions.GO_NEXT)    ||
                         availableActions.contains(StateActions.DRAW_CARD)  ||
                         availableActions.contains(StateActions.RELEASE_FORECAST));

@@ -20,10 +20,10 @@ public class CliCabin extends CliComponent{
         String open;
         switch (cabin.getCrewType()){
             case CrewType.PURPLE -> {
-                open = Highlights.PURPLE.getHighlight();
+                open = Highlights.MAGENTA.getHighlight();
             }
             case CrewType.BROWN -> {
-                open = Highlights.RED.getHighlight();
+                open = Highlights.YELLOW.getHighlight();
             }
             case CrewType.HUMAN -> {
                 open = Highlights.WHITE.getHighlight();

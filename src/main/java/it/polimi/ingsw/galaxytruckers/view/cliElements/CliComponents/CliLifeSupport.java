@@ -18,8 +18,8 @@ public class CliLifeSupport extends CliComponent {
     protected List<String> getNewDescription() {
         String open;
         switch (lifeSupport.getAlienType()){
-            case CrewType.PURPLE -> open = Highlights.YELLOW.getHighlight();
-            case CrewType.BROWN -> open = Highlights.RED.getHighlight();
+            case CrewType.PURPLE -> open = Highlights.MAGENTA.getHighlight();
+            case CrewType.BROWN -> open = Highlights.YELLOW.getHighlight();
             case CrewType.HUMAN -> open = Highlights.WHITE.getHighlight();
             default -> open = Highlights.RESET.getHighlight();
         }

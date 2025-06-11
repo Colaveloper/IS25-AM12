@@ -24,14 +24,14 @@ public class CliFlightBoard extends CliElement {
         Arrays.fill(asArray, "_");
 
         // Place '□' at the starting positions
-        startingPositions.forEach(pos -> asArray[pos] = "□");
+        startingPositions.forEach(pos -> asArray[pos] = "▷");
 
         // Place emojis from colorToPlace
         shipToPlace.entrySet().stream()
-                .map(e -> Map.entry(
-                        e.getKey().getColor(),
-                        e.getValue()%loopLength))
-                .forEach((e) -> asArray[e.getValue()] = e.getKey().getDescription());
+                .map(pos -> Map.entry(
+                        pos.getKey().getColor(),
+                        Math.floorMod(pos.getValue(), loopLength)))
+                .forEach(e -> asArray[e.getValue()] = e.getKey().getDescription());
 
         List<String> result = new ArrayList<>(List.of(String.join("", asArray)));
         result = DescriptionUtils.borderAndTitle(result, "flight board");

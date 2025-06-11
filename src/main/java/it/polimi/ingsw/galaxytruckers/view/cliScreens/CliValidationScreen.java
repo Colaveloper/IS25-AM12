@@ -41,7 +41,7 @@ public class CliValidationScreen extends CliScreen {
         if(shipBroken) {
             System.out.println("your ship is broken, choose a piece to keep from these");
             List<Highlights> highlights = Highlights.getSomeColors(myShipPieces);
-            for(int i = 0; i < myShipPieces; i++) {
+            for(int i = 1; i <= myShipPieces; i++) {
                 String colorChoice = highlights.get(i) == Highlights.RESET ? "WHITE" : highlights.get(i).toString();
                 System.out.println(highlights.get(i).getHighlight() + i + " " + colorChoice + Highlights.RESET.getHighlight() + "\t");
             }
@@ -129,7 +129,7 @@ public class CliValidationScreen extends CliScreen {
     private void shipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
         int numPieces = shipPieces.size();
         List<Highlights> highlights = Highlights.getSomeColors(numPieces);
-        for(int i = 0; i < numPieces; i++){
+        for(int i = 1; i <= numPieces; i++){
             shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i));
         }
         cliAllShips.setDirty();
