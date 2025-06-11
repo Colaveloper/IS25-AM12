@@ -40,7 +40,6 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
     @Override
     public void setGame(Game game) {
         this.game = game;
-        hourglass.setDuration(3); //TODO: remove this line
         game.getEventListener().notifyGameStateUpdateEvent(this);
         game.getEventListener().notifyFlipHourglassEvent(game.getShipBoards().stream().findAny().orElseThrow());
         hourglass.flip(this::notifyHourglassEnd);

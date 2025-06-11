@@ -28,12 +28,34 @@ public final class SecondShipBuildingState extends ShipBuildingState {
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
         if(hasFinished) {
-            actions.add(StateActions.FLIP_HOURGLASS);
+            // only allow flipping the hourglass if it's not currently running
+            if (!hourglass.getIsRunning()) {
+                // If this is the last flip, only allow players with ships on the flightboard to flip it
+                if (hourglass.getFlipsLeft() == 1) {
+                    boolean shipOnFlightboard = game.getFlightBoard().getShipToPlace().containsKey(myShip);
+                    if (shipOnFlightboard) {
+                        actions.add(StateActions.FLIP_HOURGLASS);
+                    }
+                } else {
+                    actions.add(StateActions.FLIP_HOURGLASS);
+                }
+            }
             return actions;
         }
         if(forecastAcquired) actions.add(StateActions.RELEASE_FORECAST);
         else {
-            actions.add(StateActions.FLIP_HOURGLASS);
+            // only allow flipping the hourglass if it's not currently running
+            if (!hourglass.getIsRunning()) {
+                // If this is the last flip, only allow players with ships on the flightboard to flip it
+                if (hourglass.getFlipsLeft() == 1) {
+                    boolean shipOnFlightboard = game.getFlightBoard().getShipToPlace().containsKey(myShip);
+                    if (shipOnFlightboard) {
+                        actions.add(StateActions.FLIP_HOURGLASS);
+                    }
+                } else {
+                    actions.add(StateActions.FLIP_HOURGLASS);
+                }
+            }
             if(!(myShip.getLastComponent() == null) && myShip.getStashedComponents().size() < 2) actions.add(StateActions.STASH_COMPONENT);
             if(!componentInHand() && !myShip.getStashedComponents().isEmpty()) actions.add(StateActions.GRAB_STASHED_COMPONENT);
             if(!componentInHand()) actions.add(StateActions.ACQUIRE_FORECAST);
@@ -105,5 +127,9 @@ public final class SecondShipBuildingState extends ShipBuildingState {
 
     public ShipBoard[] getBlockedForecasts() {
         return blockedForecasts;
+    }
+
+    public Hourglass getHourglass() {
+        return hourglass;
     }
 }

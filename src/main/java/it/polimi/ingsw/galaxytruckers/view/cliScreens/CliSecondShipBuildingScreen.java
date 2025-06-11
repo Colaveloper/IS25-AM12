@@ -6,11 +6,13 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.*;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 
 import java.awt.*;
 import java.util.*;
@@ -25,7 +27,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     private final SecondShipBuildingState gameState;
     private final Map<ShipBoard, CliShipHandAndStash> buildingShipToCliShip;
-
+    private boolean hourglassEndTriggered = false;
 
     public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
@@ -69,6 +71,20 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                     "\tengine power: " + myShipBoard.getEnginePower() +
                     "\tbatteries: "   + myShipBoard.getNumBatteries()
             );
+
+            // Display hourglass status if it's running
+            Hourglass hourglass = gameState.getHourglass();
+            if (hourglass != null) {
+                if (hourglass.getIsRunning()) {
+                    System.out.println("HOURGLASS RUNNING - Time left: " + hourglass.getTimeLeft() + " seconds");
+                    if (hourglass.getFlipsLeft() == 0) {
+                        System.out.println("WARNING: This is the FINAL hourglass flip!");
+                    }
+                } else if (hourglass.getFlipsLeft() < 3) {
+                    System.out.println("Hourglass ended, ready for another flip. " + (hourglass.getFlipsLeft() == 1 ? "Final flip available once you place your ship on the flight board." : ""));
+                }
+            }
+
             cliAllShips.getDescription().forEach(System.out::println);
         }
         printActions();
@@ -280,48 +296,48 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     @Override
     public void notifyFlipHourglass(ShipBoard shipBoard) {
-        // Update the hourglass status in the UI
-        // cliFlightBoard.setDirty();
+        Hourglass hourglass = gameState.getHourglass();
+        if (hourglass != null) {
+            if (hourglass.getFlipsLeft() == 0) {
+                System.out.println("Hourglass flipped for the FINAL time!");
+                System.out.println("All players must complete their ships before the timer ends!");
+            } else {
+                System.out.println("Hourglass flipped!");
+            }
+
+            render();
+        }
     }
 
     @Override
     public void notifyHourglassEnd() {
-        // Mark the flight board as dirty to update the hourglass status
-        // cliFlightBoard.setDirty();
-    }
+        if (hourglassEndTriggered) {
+            return; // prevent duplicate calls to this
+        }
 
-    @Override
-    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
-        // Update the flight board position and mark it as dirty
-        cliFlightBoard.updatePositions(shipBoard, position);
-        cliFlightBoard.setDirty();
-    }
+        hourglassEndTriggered = true;
+        System.out.println("TIME'S UP! The hourglass has run out!");
 
-    @Override
-    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        // Mark the forecast display as dirty to update it
-        cliForecast.setBlockedForecasts(deckIndex, shipBoard.getColor());
-        cliForecast.setDirty();
-    }
+        for (ShipBoard shipBoard : buildingShipToCliShip.keySet()) {
+            // weld all components that have been placed
+            if (shipBoard.getLastComponent() != null && shipBoard.getLastPosition() != null) {
+                shipBoard.weldLastComponent();
+            }
 
-    @Override
-    public void setForecastDeck(List<AdventureCard> adventureCards) {
-        cliForecastCards.setCards(adventureCards);
-        cliForecastCards.setDirty();
-    }
+            // count losses for stashed components
+            if (shipBoard.getStashedComponents() != null && !shipBoard.getStashedComponents().isEmpty()) {
+                int lossesFromStash = shipBoard.getStashedComponents().size();
+                shipBoard.incrementLosses(lossesFromStash);
+                System.out.println(model.getPlayerByShip(shipBoard).getNickname() +
+                                   " loses " + lossesFromStash + " points for stashed components!");
+            }
+        }
 
-    @Override
-    public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
-        // Update the forecast display when a forecast is released
-        cliForecast.removeBlockedForecast(index);
-        cliForecast.setDirty();
-    }
+        // players can only place on the flight board after the hourglass ends
+        availableActions.clear();
+        availableActions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
 
-    @Override
-    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
-        ship.onRemoveComponent(point);
-        cliAllShips.setDirty();
+        render();
     }
 
     private boolean componentInHand(){
