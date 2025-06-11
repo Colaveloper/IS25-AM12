@@ -36,6 +36,3 @@ build/
 
 ### Mac OS ###
 .DS_Store
-
-## probs don't want this ##
-/.idea
