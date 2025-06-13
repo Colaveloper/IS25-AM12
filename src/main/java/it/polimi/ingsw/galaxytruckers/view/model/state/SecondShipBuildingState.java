@@ -11,12 +11,6 @@ import java.util.*;
 import java.util.List;
 
 public final class SecondShipBuildingState extends ShipBuildingState {
-    private static final List<StateActions> availableActions = List.of(
-//            StateActions.STASH_COMPONENT,
-//            StateActions.GRAB_STASHED_COMPONENT,
-//            StateActions.ACQUIRE_FORECAST
-    );
-
 
     // if there is a color, then that player has taken the forecast
     private final ShipBoard[] blockedForecasts = new ShipBoard[]{null,null,null};
