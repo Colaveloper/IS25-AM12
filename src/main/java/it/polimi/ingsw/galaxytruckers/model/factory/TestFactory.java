@@ -40,4 +40,9 @@ public class TestFactory implements GameFactory{
     public SurrenderPolicy createSurrenderPolicy() {
         return new NoSurrenderPolicy();
     }
+
+    @Override
+    public ScoresRegistry createScoresRegistry() {
+        return new ScoresRegistry(new int[]{4,3,2,1},2);
+    }
 }

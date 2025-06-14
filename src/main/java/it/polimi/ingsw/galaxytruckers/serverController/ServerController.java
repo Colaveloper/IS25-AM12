@@ -45,7 +45,7 @@ public class ServerController implements ServerControllerInterface {
     @Override
     public LobbyInterface newGame(Player creator, Level level, int numPlayers) {
         synchronized (idToLobby) {
-            Lobby newLobby = new Lobby(model, creator, level, numPlayers);
+            Lobby newLobby = new Lobby(model, creator, level, numPlayers, this::removeLobby);
             idToLobby.put(newLobby.getId(), newLobby);
             activeLobbies.add(newLobby);
             eventQueue.notifyEvent(new AddActiveLobbyEvent(LobbyDTO.from(newLobby)));
@@ -106,6 +106,16 @@ public class ServerController implements ServerControllerInterface {
                 }
                 idToLobby.remove(lobby.getId());
             });
+        }
+    }
+
+    private void removeLobby(Lobby lobby) {
+        synchronized (idToLobby) {
+            idToLobby.remove(lobby.getId());
+            if (activeLobbies.remove(lobby)) {
+                eventQueue.notifyEvent(new RemoveActiveLobbyEvent(lobby.getId()));
+            }
+            lobby.getPlayers().forEach(Player::leaveLobby);
         }
     }
 

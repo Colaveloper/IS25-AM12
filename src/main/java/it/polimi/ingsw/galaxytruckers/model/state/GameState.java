@@ -115,8 +115,4 @@ public non-sealed class GameState implements GameStateInterface {
     public void giveUp(ShipBoard shipBoard){
         throw new IllegalStateException("This action is unsupported in this state");
     }
-
-    public void endGame(){
-        throw new IllegalStateException("Game is not over");
-    } // TODO: properly override this
 }

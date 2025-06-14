@@ -13,19 +13,23 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 public class Game {
     private final Object lock;
 
+    private final Level level;
     private final GameFactory gameFactory;
+
     private final Set<ShipBoard> shipBoards = new HashSet<>();
+    private final SurrenderPolicy surrenderPolicy;
+    private final ScoresRegistry scoresRegistry;
     private FlightBoard flightBoard;
     private Deck deck;
+
     private GameState currentState;
     private final Map<ShipBoard, Integer> finalScores = new HashMap<>();
-    private final Level level;
 
-    private final SurrenderPolicy surrenderPolicy;
 
     private GameEventListener eventListener;
 
@@ -33,6 +37,7 @@ public class Game {
         this.level = level;
         this.gameFactory = GameFactory.getFactory(level);
         this.surrenderPolicy = this.gameFactory.createSurrenderPolicy();
+        this.scoresRegistry = this.gameFactory.createScoresRegistry();
         this.flightBoard = gameFactory.createFlightBoard(shipsN);
         try {
             this.deck = gameFactory.createDeck(this);
@@ -49,6 +54,7 @@ public class Game {
 
     /**
      * Adds shipboard of the given color to the game
+     *
      * @param color the color of the added shipboard
      * @return the added shipboard
      */
@@ -61,10 +67,11 @@ public class Game {
     /**
      * Instantiates the game's flightBoard and Deck and sets the
      * current state of the game to shipbuilding
+     *
      * @throws IOException if an error occurs when trying to load the deck's
-     * cards from disk
+     *                     cards from disk
      */
-    public void start() throws IOException{
+    public void start() throws IOException {
         this.flightBoard = gameFactory.createFlightBoard(shipBoards.size());
         this.flightBoard.setGameEventListener(eventListener);
         this.deck = gameFactory.createDeck(this);
@@ -81,6 +88,7 @@ public class Game {
 
     /**
      * Sets the game's current state to the given state
+     *
      * @param state the {@code GameState} to be set
      */
     public void setCurrentState(GameState state) {
@@ -129,36 +137,38 @@ public class Game {
 
     /**
      * Assigns ship rewards to be used in the final score and
-     * changes game state to the end game state*/
-    public void endGame(){
+     * changes game state to the end game state
+     */
+    public void endGame() {
         assignShipRewards();
         eventListener.notifyGameEndEvent(finalScores);
     }
 
     /**
      * Sets game state to the end game state if there are no
-     * more ships playing*/
-    public void endGameIfAllShipsHaveGivenUp(){
-        if(surrenderPolicy.getSurrenderedShips().size() == shipBoards.size()){
+     * more ships playing
+     */
+    public void endGameIfAllShipsHaveGivenUp() {
+        if (surrenderPolicy.getSurrenderedShips().size() == shipBoards.size()) {
             endGame();
         }
     }
 
-    private void assignShipRewards(){
-        // Best-looking ship reward
-        int minExposedConnectors = shipBoards.stream()// who gave up does not count!
-                .mapToInt(ShipBoard::getExposedConnectorsNumber)
-                .min()
-                .orElse(0); // no ship on board
+    private void assignShipRewards() {
+        Set<ShipBoard> shipsInPlay = new HashSet<>(shipBoards);
+        shipsInPlay.removeAll(surrenderPolicy.getSurrenderedShips());
 
-        shipBoards.forEach(s ->
-                finalScores.merge(s, s.getExposedConnectorsNumber() == minExposedConnectors ? 2 : 0, Integer::sum)
-        );
+        // Best-looking ship reward
+        shipsInPlay.stream()
+                .min(Comparator.comparingInt(ShipBoard::getExposedConnectorsNumber))
+                .ifPresent(bestLookingShip ->
+                        finalScores.merge(bestLookingShip, scoresRegistry.getBestLookingShipAward(), Integer::sum));
 
         // Finish order reward
-        shipBoards.forEach(s ->
-                finalScores.merge(s, 4 - flightBoard.getOrderedShips().indexOf(s), Integer::sum)
-        );
+        List<ShipBoard> orderedShips = flightBoard.getOrderedShips();
+        for (int i = 0; i < orderedShips.size(); i++) {
+            finalScores.merge(orderedShips.get(i), scoresRegistry.getPositionScores()[i], Integer::sum);
+        }
 
         // Credits reward (minus the losses)
         shipBoards.forEach(s ->
@@ -167,21 +177,22 @@ public class Game {
 
         // Goods reward
         shipBoards.forEach(s -> {
-            if (shipBoards.contains(s)) {
+            if (shipsInPlay.contains(s)) {
                 finalScores.merge(s, s.getGoodsValue(), Integer::sum);
             } else {
                 // given up ships receive 1/2 reward
-                finalScores.merge(s, (s.getGoodsValue()+1)/2, Integer::sum);
+                finalScores.merge(s, (s.getGoodsValue() + 1) / 2, Integer::sum);
             }
         });
     }
 
     @VisibleForTesting
-    public void setFlightBoard(FlightBoard flightBoard){
+    public void setFlightBoard(FlightBoard flightBoard) {
         this.flightBoard = flightBoard;
     }
+
     @VisibleForTesting
-    public void setDeck(Deck deck){
+    public void setDeck(Deck deck) {
         this.deck = deck;
     }
 

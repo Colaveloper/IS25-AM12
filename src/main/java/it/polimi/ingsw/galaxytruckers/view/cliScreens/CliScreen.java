@@ -180,7 +180,6 @@ public abstract class CliScreen extends Screen {
             case " " ->(availableActions.contains(StateActions.GO_NEXT)    ||
                         availableActions.contains(StateActions.DRAW_CARD)  ||
                         availableActions.contains(StateActions.RELEASE_FORECAST));
-
             default -> {
                 //System.out.println("invalid input");
                 yield false;

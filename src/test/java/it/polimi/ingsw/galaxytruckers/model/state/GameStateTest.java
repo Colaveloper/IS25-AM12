@@ -36,12 +36,6 @@ class GameStateTest {
     }
 
     @Test
-    void endGameThrowsExceptionWhenUsingInvalidState() {
-        testState = new AdventureStateStub();
-        assertThrows(IllegalStateException.class, () -> testState.endGame());
-    }
-
-    @Test
     void giveUpThrowsExceptionWhenUsingInvalidState() {
         testState = new GameState() {
         };

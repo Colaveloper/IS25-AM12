@@ -1,5 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events.types;
 
-public record PlayerExitEvent(String playerName) implements LobbyEvent {
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 
+public record PlayerExitEvent(String playerName) implements LobbyEvent {
+    @Override
+    public void runLobbyAction(Lobby lobby) {
+        lobby.remove();
+    }
 }

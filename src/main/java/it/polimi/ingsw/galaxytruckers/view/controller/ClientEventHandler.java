@@ -60,7 +60,7 @@ public class ClientEventHandler implements EventHandler<Event> {
                                 .collect(Collectors.toMap(
                                         e -> playerRegistry.getByNickname(e.getKey()), Map.Entry::getValue))
                 );
-//                clientModel.setMetaState();//todo
+                clientModel.setMetaState(MetaState.ENDGAME);
             }
             case GoodsUpdateEvent goodsUpdateEvent -> {
                 if (goodsUpdateEvent.add()) {

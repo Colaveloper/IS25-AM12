@@ -42,4 +42,9 @@ public class SecondFactory implements GameFactory{
     public SurrenderPolicy createSurrenderPolicy() {
         return new EnabledSurrenderPolicy();
     }
+
+    @Override
+    public ScoresRegistry createScoresRegistry() {
+        return new ScoresRegistry(new int[]{8,6,4,2},4);
+    }
 }

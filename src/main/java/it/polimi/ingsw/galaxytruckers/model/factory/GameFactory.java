@@ -1,9 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.factory;
 
-import it.polimi.ingsw.galaxytruckers.model.Deck;
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.SurrenderPolicy;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -19,6 +16,7 @@ public interface GameFactory {
     ShipBuildingState createShipBuildingState();
     ShipCorrectionState createShipCorrectionState();
     SurrenderPolicy createSurrenderPolicy();
+    ScoresRegistry createScoresRegistry();
 
 
     static GameFactory getFactory(Level level) {
