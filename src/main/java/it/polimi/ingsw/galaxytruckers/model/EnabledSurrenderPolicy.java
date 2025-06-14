@@ -28,6 +28,7 @@ public class EnabledSurrenderPolicy implements SurrenderPolicy {
             throw new IllegalStateException("Already surrendered");
         }
         requests.add(shipBoard);
+        if (listener != null) listener.notifySurrenderRequestEvent(shipBoard, cause);
     }
 
     @Override
@@ -36,15 +37,21 @@ public class EnabledSurrenderPolicy implements SurrenderPolicy {
         Set<ShipBoard> allShips = flightBoard.getShipToPlace().keySet();
         allShips.stream()
                 .filter(s -> s.getCrewSize() == 0)
-                .forEach(s -> this.requestSurrender(s,SurrenderCause.NOCREW));
-        flightBoard.getLappedShips().forEach(s -> this.requestSurrender(s,SurrenderCause.LAPPED));
+                .forEach(s -> forceSurrender(s,SurrenderCause.NOCREW));
+        flightBoard.getLappedShips().forEach(s -> forceSurrender(s,SurrenderCause.LAPPED));
 
         this.surrenderedShips.addAll(requests);
         Set<ShipBoard> newSurrenderedShips = new HashSet<>(this.requests);
         this.requests.clear();
         flightBoard.removeShips(newSurrenderedShips);
-
+        if (listener !=  null && !newSurrenderedShips.isEmpty()) listener.notifySurrenderEvent(newSurrenderedShips.stream().toList());
         return newSurrenderedShips;
+    }
+
+    private void forceSurrender(ShipBoard shipBoard, SurrenderCause surrenderCause) {
+        if (!this.requests.contains(shipBoard)) {
+            requestSurrender(shipBoard, surrenderCause);
+        }
     }
 
     @Override

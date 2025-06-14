@@ -29,16 +29,22 @@ public class Game {
 
     private GameEventListener eventListener;
 
-    public Game(Level level, Object lock) {
+    public Game(Level level, int shipsN, Object lock) {
         this.level = level;
         this.gameFactory = GameFactory.getFactory(level);
         this.surrenderPolicy = this.gameFactory.createSurrenderPolicy();
+        this.flightBoard = gameFactory.createFlightBoard(shipsN);
+        try {
+            this.deck = gameFactory.createDeck(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         this.lock = lock;
     }
 
     @VisibleForTesting
     public Game(Level level) {
-        this(level, new Object());
+        this(level, 4, new Object());
     }
 
     /**
@@ -48,7 +54,6 @@ public class Game {
      */
     public ShipBoard addShipBoard(GameColor color) {
         ShipBoard shipBoard = gameFactory.createShipBoard(color);
-        shipBoard.setGameEventListener(eventListener);
         shipBoards.add(shipBoard);
         return shipBoard;
     }
@@ -182,6 +187,9 @@ public class Game {
 
     public void setEventListener(GameEventListener eventListener) {
         this.eventListener = eventListener;
+        shipBoards.forEach(s -> s.setGameEventListener(eventListener));
+        surrenderPolicy.setEventListener(eventListener);
+        flightBoard.setGameEventListener(eventListener);
     }
 
     public GameEventListener getEventListener() {

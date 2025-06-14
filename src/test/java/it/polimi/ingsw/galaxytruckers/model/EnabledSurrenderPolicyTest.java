@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.SurrenderCause;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.mockito.Mockito;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -54,6 +56,22 @@ class EnabledSurrenderPolicyTest {
     }
 
     @Test
+    void requestSurrenderGeneratesEvent() {
+        ship.setCrewSize(0);
+        enabledSurrenderPolicy.setEventListener(gameEventListener);
+        enabledSurrenderPolicy.requestSurrender(ship, SurrenderCause.REQUEST);
+        Mockito.verify(gameEventListener, Mockito.times(1)).notifySurrenderRequestEvent(ship, SurrenderCause.REQUEST);
+    }
+
+    @Test
+    void requestSurrenderDoesNotGenerateEventIfNoSurrenders() {
+        ship.setCrewSize(1);
+        enabledSurrenderPolicy.setEventListener(gameEventListener);
+        enabledSurrenderPolicy.confirmSurrender(flightBoard);
+        Mockito.verifyNoInteractions(gameEventListener);
+    }
+
+    @Test
     void confirmSurrenderRemovesPlayerWhoRequestedToSurrender() {
         ship.setCrewSize(1);
         flightBoard.addShip(ship);
@@ -73,6 +91,14 @@ class EnabledSurrenderPolicyTest {
         ship.setCrewSize(1);
         flightBoard.addLappedShip(ship);
         checkSurrender();
+    }
+
+    @Test
+    void confirmSurrenderGeneratesEvent() {
+        enabledSurrenderPolicy.setEventListener(gameEventListener);
+        enabledSurrenderPolicy.requestSurrender(ship, SurrenderCause.REQUEST);
+        enabledSurrenderPolicy.confirmSurrender(flightBoard);
+        Mockito.verify(gameEventListener,Mockito.times(1)).notifySurrenderEvent(List.of(ship));
     }
 
     void checkSurrender() {

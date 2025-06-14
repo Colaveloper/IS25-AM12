@@ -22,7 +22,6 @@ public class OpenSpaceCard extends AdventureCard {
                 if (surrenderPolicy.isSurrenderEnabled()) {
                     surrenderPolicy.requestSurrender(currentShipBoard, SurrenderCause.NOENGINES);
                 }
-                currentPlayerIndex++;
             }
             else{
                 game.getFlightBoard().displaceShip(currentShipBoard, currentShipBoard.getEnginePower());

@@ -197,6 +197,9 @@ public class ClientEventHandler implements EventHandler<Event> {
                     -1,
                     playerRegistry.getByNickname(currentPlayerUpdateEvent.playerName()).getShipBoard()
             );
+            case SurrenderRequestEvent surrenderRequestEvent -> {
+                //TODO: show personalized message on the view
+            }
         }
     }
 

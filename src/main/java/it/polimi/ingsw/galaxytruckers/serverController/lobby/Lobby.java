@@ -139,13 +139,13 @@ public class Lobby implements LobbyInterface {
      * Sets the game of the lobby to a new instance of {@link Game} of the specified level
      */
     private void startGame() {
-        Game game = model.createGame(this.level, this.lock);
-        model.setEventListener(game,eventQueue);
+        Game game = model.createGame(this.level, this.numPlayers, this.lock);
         for (Player player : getPlayers()) {
             ShipBoard ship = model.addShip(game, playerColors.get(player));
             player.setShipBoard(ship);
         }
         setState(LobbyState.INGAME);
+        model.setEventListener(game,eventQueue);
         model.startGame(game);
         this.game = game;
     }

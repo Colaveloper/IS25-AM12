@@ -19,10 +19,7 @@ public final class DrawCardState extends AdventureState implements GameStateInte
         game.getEventListener().notifyGameStateUpdateEvent(this);
         SurrenderPolicy surrenderPolicy = game.getSurrenderPolicy();
         if (surrenderPolicy.isSurrenderEnabled()) {
-            Set<ShipBoard> givenUpShips = surrenderPolicy.confirmSurrender(game.getFlightBoard());
-            if (!givenUpShips.isEmpty()) {
-                game.getEventListener().notifySurrenderEvent(givenUpShips.stream().toList());
-            }
+            surrenderPolicy.confirmSurrender(game.getFlightBoard());
             game.endGameIfAllShipsHaveGivenUp();
         }
     }

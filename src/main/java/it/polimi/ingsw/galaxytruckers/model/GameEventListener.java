@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model;
 
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.SurrenderCause;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
@@ -152,6 +153,10 @@ public class GameEventListener {
         controllerListener.notifyEvent(new SurrenderEvent(
                 ships.stream().map(s -> Player.getPlayer(s).getNickname()).toList()
         ));
+    }
+
+    public void notifySurrenderRequestEvent(ShipBoard shipBoard, SurrenderCause cause) {
+        controllerListener.notifyEvent(new SurrenderRequestEvent(Player.getPlayer(shipBoard).getNickname(), cause));
     }
 
     public void notifyUseBatteryEvent(ShipBoard shipBoard, Point point) {
