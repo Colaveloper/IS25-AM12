@@ -11,10 +11,15 @@ public class CliEndGameScreen extends CliScreen {
     }
 
     @Override
+    public boolean isInputLegal(String input) {
+        return input.isEmpty();
+    }
+
+    @Override
     public void render() {
-        System.out.println("GAME OVER\n\n\n");
+        System.out.println("GAME OVER\n\n");
         model.getFinalScores().forEach((key, value) -> {
-            System.out.println(key + ": " + value);
+            System.out.println(key.getNickname() + ": " + value);
         });
         System.out.println("\n\n\n\n press ENTER to start new game");
     }
