@@ -283,11 +283,11 @@ public abstract class ShipBoard {
     }
 
     public int getFirePower() {
-        return hasBrown ? firePower + 4 : firePower;
+        return hasPurple  && firePower > 0? firePower + 4 : firePower;
     }
 
     public int getEnginePower() {
-        return hasPurple ? enginePower + 4 : enginePower;
+        return hasBrown && enginePower > 0? enginePower + 2 : enginePower;
     }
 
     public int getNumBatteries() {

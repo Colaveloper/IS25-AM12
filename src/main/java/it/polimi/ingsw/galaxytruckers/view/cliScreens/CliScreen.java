@@ -133,7 +133,6 @@ public abstract class CliScreen extends Screen {
             System.out.println();
         }
         else{
-            //TODO: print something in place of actions
             System.out.println("You're out of the flight! - watch other players compete.");
         }
     }
@@ -164,7 +163,7 @@ public abstract class CliScreen extends Screen {
             case "R" -> availableActions.contains(StateActions.REJECT_COMPONENT)&& input.matches("R") ||
                         availableActions.contains(StateActions.REMOVE_GOOD)     && input.matches("R\\s\\d+\\s\\d+\\s[A-Z]+") ||
                         availableActions.contains(StateActions.REMOVE_COMPONENT)&& input.matches("R\\s\\d+\\s\\d+") ||
-                        availableActions.contains(StateActions.ROTATE_COMPONENT)&& input.matches("R\\s(?i)(LEFT|RIGHT)");
+                        availableActions.contains(StateActions.ROTATE_COMPONENT)&& input.matches("R\\s(LEFT|RIGHT)");
             case "C" -> availableActions.contains(StateActions.REQUEST_RAND_COMPONENT) && input.matches("C");
             case "U" -> availableActions.contains(StateActions.REQUEST_COMPONENT)&& input.matches("U\\s\\d+");
             case "F" -> availableActions.contains(StateActions.ACQUIRE_FORECAST)&& input.matches("F\\s\\d+");

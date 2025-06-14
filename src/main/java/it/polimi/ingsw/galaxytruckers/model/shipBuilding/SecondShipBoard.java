@@ -2,6 +2,10 @@ package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Activatable;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.DoubleCannon;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.DoubleEngine;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Shield;
 
 import java.awt.*;
 import java.util.*;

@@ -11,12 +11,6 @@ import java.util.*;
 import java.util.List;
 
 public final class SecondShipBuildingState extends ShipBuildingState {
-    private static final List<StateActions> availableActions = List.of(
-//            StateActions.STASH_COMPONENT,
-//            StateActions.GRAB_STASHED_COMPONENT,
-//            StateActions.ACQUIRE_FORECAST
-    );
-
 
     // if there is a color, then that player has taken the forecast
     private final ShipBoard[] blockedForecasts = new ShipBoard[]{null,null,null};
@@ -102,25 +96,21 @@ public final class SecondShipBuildingState extends ShipBuildingState {
     @Override
     public void notifyHourglassEnd() {
         hourglass.end();
-//        if (hourglassEndTriggered) {
-//            return; // prevent duplicate calls to this
-//        }
-//
-//        hourglassEndTriggered = true;
-//        System.out.println("TIME'S UP! The hourglass has run out!");
-//
-//        for (ShipBoard shipBoard : game.getShipBoards()) {
-//            // weld all components that have been placed
+
+        System.out.println("TIME'S UP! The hourglass has run out!");
+
+        for (ShipBoard shipBoard : game.getShipBoards()) {
+            // weld all components that have been placed
 //            if (shipBoard.getLastComponent() != null && shipBoard.getLastPosition() != null) {
 //                shipBoard.weldLastComponent();
 //            }
-//
-//            // count losses for stashed components
-//            if (shipBoard.getStashedComponents() != null && !shipBoard.getStashedComponents().isEmpty()) {
-//                int lossesFromStash = shipBoard.getStashedComponents().size();
-//                shipBoard.incrementLosses(lossesFromStash);
-//            }
-//        }
+
+            // count losses for stashed components
+            if (shipBoard.getStashedComponents() != null && !shipBoard.getStashedComponents().isEmpty()) {
+                int lossesFromStash = shipBoard.getStashedComponents().size();
+                shipBoard.incrementLosses(lossesFromStash);
+            }
+        }
 
         // players can only place on the flight board after the hourglass ends
         game.getObservers().forEach(ModelObserver::notifyHourglassEnd);
