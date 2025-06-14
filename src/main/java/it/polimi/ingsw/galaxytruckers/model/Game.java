@@ -7,17 +7,12 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.model.state.EndGameState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class Game {
     private final Object lock;
@@ -25,17 +20,19 @@ public class Game {
     private final GameFactory gameFactory;
     private final Set<ShipBoard> shipBoards = new HashSet<>();
     private FlightBoard flightBoard;
-    private final Set<ShipBoard> givenUpShips = new HashSet<>();
     private Deck deck;
     private GameState currentState;
-    private Map<ShipBoard, Integer> finalScores;
-    Level level;
+    private final Map<ShipBoard, Integer> finalScores = new HashMap<>();
+    private final Level level;
+
+    private final SurrenderPolicy surrenderPolicy;
 
     private GameEventListener eventListener;
 
     public Game(Level level, Object lock) {
         this.level = level;
         this.gameFactory = GameFactory.getFactory(level);
+        this.surrenderPolicy = this.gameFactory.createSurrenderPolicy();
         this.lock = lock;
     }
 
@@ -121,60 +118,25 @@ public class Game {
         return level;
     }
 
-    /**
-     * Adds ships that have no crew or that have been lapped
-     * to the set of given up ships and removes them from the
-     * flightboard
-     * */
-    public void forceShipsToGiveUp(){
-        if(level != Level.TEST){ // TODO: avoid predicating directly on the instances of Level
-            // if ship has no crew -> force give up
-            givenUpShips.addAll(
-                    shipBoards.stream()
-                            .filter(s -> s.getCrewSize() == 0)
-                            .collect(Collectors.toSet())
-            );
-
-            // if you get lapped -> also force give up
-            givenUpShips.addAll(flightBoard.getLappedShips());
-            flightBoard.removeShips(givenUpShips);
-        }
+    public SurrenderPolicy getSurrenderPolicy() {
+        return surrenderPolicy;
     }
-
-    /**
-     * Adds a shipboard to the set of given up ships and
-     * removes that ship from the flightboard
-     * @param ship the ship to place in the set of given up ships
-     * */
-    public void forceShipToGiveUp(ShipBoard ship){
-        givenUpShips.add(ship);
-    }
-
-    /**
-     * @return the game's set of given up ships*/
-    public Set<ShipBoard> getGivenUpShips(){return givenUpShips;}
 
     /**
      * Assigns ship rewards to be used in the final score and
      * changes game state to the end game state*/
     public void endGame(){
         assignShipRewards();
-        setCurrentState(new EndGameState(finalScores));
+        eventListener.notifyGameEndEvent(finalScores);
     }
 
     /**
      * Sets game state to the end game state if there are no
      * more ships playing*/
     public void endGameIfAllShipsHaveGivenUp(){
-        if(givenUpShips.size() == shipBoards.size()){
+        if(surrenderPolicy.getSurrenderedShips().size() == shipBoards.size()){
             endGame();
         }
-    }
-
-    /**
-     * @return the game's final score*/
-    public Map<ShipBoard, Integer> getFinalScores(){
-        return finalScores;
     }
 
     private void assignShipRewards(){
@@ -373,5 +335,4 @@ public class Game {
             currentState.goNext(shipBoard);
         }
     }
-
 }
