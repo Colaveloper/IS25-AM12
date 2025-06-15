@@ -234,6 +234,11 @@ public class GuiView extends View<GuiScreen> {
     }
 
     @Override
+    public void notifyCurrentPlayerUpdate(ShipBoard shipBoard) {
+        currentScreen.notifyCurrentPlayerUpdate(shipBoard);
+    }
+
+    @Override
     public void notifyGiveUp(ShipBoard shipBoard) {
         currentScreen.notifyGiveUp(shipBoard);
     }

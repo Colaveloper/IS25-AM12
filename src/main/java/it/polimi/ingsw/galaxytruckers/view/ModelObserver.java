@@ -82,6 +82,8 @@ public interface ModelObserver {
 
     void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard);
 
+    void notifyCurrentPlayerUpdate(ShipBoard shipBoard);
+
     void notifyGiveUp(ShipBoard shipBoard);
 
     void setFinalScores(Map<Player, Integer> finalScores);

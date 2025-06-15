@@ -192,9 +192,7 @@ public class ClientEventHandler implements EventHandler<Event> {
                 }
                 clientModel.setMetaState(MetaState.JOINORCREATE);
             }
-            case CurrentPlayerUpdateEvent currentPlayerUpdateEvent -> clientModel.notifyChoosePlanet(
-                    null,
-                    -1,
+            case CurrentPlayerUpdateEvent currentPlayerUpdateEvent -> clientModel.notifyCurrentPlayerUpdate(
                     playerRegistry.getByNickname(currentPlayerUpdateEvent.playerName()).getShipBoard()
             );
             case SurrenderRequestEvent surrenderRequestEvent -> {

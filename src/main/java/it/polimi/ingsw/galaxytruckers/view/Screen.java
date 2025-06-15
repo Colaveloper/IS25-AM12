@@ -68,6 +68,8 @@ public abstract class Screen {
 
     public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard){}
 
+    public void notifyCurrentPlayerUpdate(ShipBoard shipBoard){}
+
     public void notifyGiveUp(ShipBoard shipBoard){}
 
     public void setFinalScores(Map<Player, Integer> finalScores){}

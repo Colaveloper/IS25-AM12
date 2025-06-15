@@ -74,4 +74,9 @@ public class CliPlanetScreen extends CliAdventureScreen {
         choiceToShip[choice] = shipBoardLanded;
     }
 
+    @Override
+    public void notifyCurrentPlayerUpdate(ShipBoard shipBoard) {
+        currentShip = shipBoard;
+        isMyTurn = currentShip.equals(myShipBoard);
+    }
 }

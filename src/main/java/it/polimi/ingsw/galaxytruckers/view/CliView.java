@@ -213,6 +213,12 @@ public class CliView extends View<CliScreen> {
     }
 
     @Override
+    public void notifyCurrentPlayerUpdate(ShipBoard shipBoard) {
+        currentScreen.notifyCurrentPlayerUpdate(shipBoard);
+        currentScreen.render();
+    }
+
+    @Override
     public void notifyGiveUp(ShipBoard shipBoard) {
         currentScreen.notifyGiveUp(shipBoard);
         currentScreen.render();
