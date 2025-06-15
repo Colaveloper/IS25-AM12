@@ -200,6 +200,11 @@ public class ClientEventHandler implements EventHandler<Event> {
             case SurrenderRequestEvent surrenderRequestEvent -> {
                 //TODO: show personalized message on the view
             }
+            case GrabPlacedComponentEvent grabPlacedComponentEvent -> {
+                clientModel.notifyGrabPlacedComponent(
+                        playerRegistry.getByNickname(grabPlacedComponentEvent.playerName()).getShipBoard()
+                );
+            }
         }
     }
 

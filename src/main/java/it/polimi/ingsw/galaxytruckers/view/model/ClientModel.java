@@ -164,6 +164,10 @@ public class ClientModel {
         safeGetCurrentState().notifyStashComponent(shipBoard);
     }
 
+    public void notifyGrabPlacedComponent(ShipBoard shipBoard) {
+        safeGetCurrentState().notifyGrabPlacedComponent(shipBoard);
+    }
+
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index) {
         safeGetCurrentState().notifyGrabStashedComponent(shipBoard, index);
     }

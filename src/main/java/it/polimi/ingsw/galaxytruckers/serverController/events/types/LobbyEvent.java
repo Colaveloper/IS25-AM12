@@ -14,6 +14,7 @@ public sealed interface LobbyEvent extends Event permits ActivateComponentEvent,
                                                          RemoveComponentEvent, RequestFaceDownComponentEvent,
                                                          RequestFaceUpComponentEvent, ShipNotConnectedEvent,
                                                          ShipPieceRemoveEvent, StashComponentEvent, SurrenderEvent,
-                                                         SurrenderRequestEvent, UseBatteryEvent, ValidateShipEvent {
+                                                         SurrenderRequestEvent, UseBatteryEvent, ValidateShipEvent,
+                                                         GrabPlacedComponentEvent {
     default void runLobbyAction(Lobby lobby) {}
 }
