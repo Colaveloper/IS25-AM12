@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events.types;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.util.Map;
@@ -16,4 +17,8 @@ public record GameEndEvent(Map<String, Integer> playerToScore) implements LobbyE
         );
     }
 
+    @Override
+    public void runLobbyAction(Lobby lobby) {
+        lobby.remove();
+    }
 }

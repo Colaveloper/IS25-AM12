@@ -6,11 +6,13 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.*;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 
 import java.awt.*;
 import java.util.*;
@@ -25,7 +27,6 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     private final SecondShipBuildingState gameState;
     private final Map<ShipBoard, CliShipHandAndStash> buildingShipToCliShip;
-
 
     public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
@@ -69,6 +70,20 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                     "\tengine power: " + myShipBoard.getEnginePower() +
                     "\tbatteries: "   + myShipBoard.getNumBatteries()
             );
+
+            // Display hourglass status if it's running
+            Hourglass hourglass = gameState.getHourglass();
+            if (hourglass != null) {
+                if (hourglass.getIsRunning()) {
+                    System.out.println("HOURGLASS RUNNING - Time left: " + hourglass.getTimeLeft() + " seconds");
+                    if (hourglass.getFlipsLeft() == 0) {
+                        System.out.println("WARNING: This is the FINAL hourglass flip!");
+                    }
+                } else if (hourglass.getFlipsLeft() < 3) {
+                    System.out.println("Hourglass ended, ready for another flip. " + (hourglass.getFlipsLeft() == 1 ? "Final flip available once you place your ship on the flight board." : ""));
+                }
+            }
+
             cliAllShips.getDescription().forEach(System.out::println);
         }
         printActions();
@@ -131,7 +146,58 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                 break;
 
             case "R":
-                controller.rejectComponent();
+                if (parts.length == 1) {
+                    controller.rejectComponent();
+                }
+                else if (parts.length == 2) {
+                    Component lastComponent = myShipBoard.getLastComponent();
+                    Point lastPosition = myShipBoard.getLastPosition();
+                    if(lastComponent == null) {
+                        System.out.println("Nothing to rotate");
+                        break;
+                    }
+                    Direction lastDirection = lastComponent.getOrientation();
+                    if(parts[1].equalsIgnoreCase("LEFT")) lastComponent.setOrientation(lastDirection.getLeft());
+                    else if(parts[1].equalsIgnoreCase("RIGHT")) lastComponent.setOrientation(lastDirection.getRight());
+
+                    cliAllShips.setDirty();
+                    buildingShipToCliShip.get(myShipBoard).setDirty();
+
+                    if(lastPosition != null) buildingShipToCliShip.get(myShipBoard).getCliComponent(lastPosition).setDirty();
+                    else {
+                        buildingShipToCliShip.get(myShipBoard).clearHand();
+                        buildingShipToCliShip.get(myShipBoard).setHand(lastComponent);
+                    }
+
+                    render();
+                }
+//                } else if (parts.length == 2 && parts[1].equalsIgnoreCase("LEFT")) {
+//                    // Rotate component left
+//                    if(myShipBoard.getLastComponent() == null) {
+//                        System.out.println("Nothing to rotate");
+//                        break;
+//                    }
+//                    myShipBoard.getLastComponent().setOrientation(myShipBoard.getLastComponent().getOrientation().getLeft());
+//
+//                    buildingShipToCliShip.get(myShipBoard).clearHand();
+//                    buildingShipToCliShip.get(myShipBoard).setHand(myShipBoard.getLastComponent());
+//                    cliAllShips.setDirty();
+//                    render(); // render immediately because orientation is client-side only
+//                } else if (parts.length == 2 && parts[1].equalsIgnoreCase("RIGHT")) {
+//                    if(myShipBoard.getLastComponent() == null) {
+//                        System.out.println("Nothing to rotate");
+//                        break;
+//                    }
+//                    myShipBoard.getLastComponent().setOrientation(myShipBoard.getLastComponent().getOrientation().getRight());
+//
+//                    buildingShipToCliShip.get(myShipBoard).clearHand();
+//                    buildingShipToCliShip.get(myShipBoard).setHand(myShipBoard.getLastComponent());
+//                    cliAllShips.setDirty();
+//                    render(); // render immediately because orientation is client-side only
+//                }
+                else {
+                    System.out.println("Invalid command. Use 'R' to reject the component or 'R LEFT'/'R RIGHT' to rotate it.");
+                }
                 break;
 
             case "P":
@@ -145,17 +211,12 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                         System.out.println("This point is already occupied");
                         break;
                     }
-                    controller.placeComponent(getPoint(input), Direction.UP); //todo add orientation
+                    Direction orientation = Direction.UP;
+                    if (myShipBoard.getLastComponent() != null) {
+                        orientation = myShipBoard.getLastComponent().getOrientation();
+                    }
+                    controller.placeComponent(getPoint(input), orientation);
                 }
-                break;
-
-            case "L":
-                if(myShipBoard.getLastComponent() == null) {
-                    System.out.println("Nothing to rotate");
-                    break;
-                }
-                //model.rotateCurrentComponentLeft();
-                //todo rotate component in model
                 break;
 
             case "H":
@@ -241,6 +302,12 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     }
 
     @Override
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+        cliFlightBoard.setPosition(shipBoard, position);
+        cliFlightBoard.setDirty();
+    }
+
+    @Override
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         Component placedComponent = shipBoard.getComponentMap().get(point);
         if (placedComponent != null) {
@@ -252,50 +319,31 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     }
 
     @Override
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {
+        Component placedComponent = shipBoard.getComponentMap().get(newPoint);
+        if (placedComponent != null) {
+            CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
+            ship.onPutComponent(newPoint, placedComponent);
+            ship.onRemoveComponent(oldPosition);
+            cliAllShips.setDirty();
+        }
+    }
+
+    @Override
     public void notifyFlipHourglass(ShipBoard shipBoard) {
-        // Update the hourglass status in the UI
-        // cliFlightBoard.setDirty();
+        Hourglass hourglass = gameState.getHourglass();
+        if (hourglass != null) {
+            if (hourglass.getFlipsLeft() == 0) {
+                System.out.println("Hourglass flipped for the FINAL time!");
+                System.out.println("All players must complete their ships before the timer ends!");
+            } else {
+                System.out.println("Hourglass flipped!");
+            }
+        }
     }
 
     @Override
-    public void notifyHourglassEnd() {
-        // Mark the flight board as dirty to update the hourglass status
-        // cliFlightBoard.setDirty();
-    }
-
-    @Override
-    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
-        // Update the flight board position and mark it as dirty
-        cliFlightBoard.updatePositions(shipBoard, position);
-        cliFlightBoard.setDirty();
-    }
-
-    @Override
-    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        // Mark the forecast display as dirty to update it
-        cliForecast.setBlockedForecasts(deckIndex, shipBoard.getColor());
-        cliForecast.setDirty();
-    }
-
-    @Override
-    public void setForecastDeck(List<AdventureCard> adventureCards) {
-        cliForecastCards.setCards(adventureCards);
-        cliForecastCards.setDirty();
-    }
-
-    @Override
-    public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
-        // Update the forecast display when a forecast is released
-        cliForecast.removeBlockedForecast(index);
-        cliForecast.setDirty();
-    }
-
-    @Override
-    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
-        ship.onRemoveComponent(point);
-        cliAllShips.setDirty();
-    }
+    public void notifyHourglassEnd() {}
 
     private boolean componentInHand(){
         return myShipBoard.getLastComponent() != null && myShipBoard.getLastPosition() == null;

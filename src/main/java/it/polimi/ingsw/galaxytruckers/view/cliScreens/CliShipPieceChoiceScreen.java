@@ -35,7 +35,7 @@ public class CliShipPieceChoiceScreen extends CliAdventureScreen {
         int numPieces = shipPieces.size();
         List<Highlights> highlights = Highlights.getSomeColors(numPieces);
         for(int i = 0; i < numPieces; i++){
-            shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i));
+            shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i+1));
         }
         cliAllShips.setDirty();
     }
@@ -64,9 +64,9 @@ public class CliShipPieceChoiceScreen extends CliAdventureScreen {
     @Override
     public void render() {
         List<Highlights> colors= Highlights.getSomeColors(numPieces);
-        for(int i = 0; i < numPieces; i++){
-            shipToCliShip.get(currentShip).highlightPoints(points.get(i), colors.get(i));  //color ship pieces with list of colors
-        }
+//        for(int i = 0; i < numPieces; i++){
+//            shipToCliShip.get(currentShip).highlightPoints(points.get(i), colors.get(i+1));  //color ship pieces with list of colors
+//        }
 
         printShipFlightStats().forEach(System.out::println);
         if(imOut) {
@@ -75,7 +75,7 @@ public class CliShipPieceChoiceScreen extends CliAdventureScreen {
         }
         if (shipBroken) {
             System.out.println("your ship is broken, choose a piece of ship to keep");
-            for(int i = 0; i < numPieces; i++) {
+            for(int i = 1; i <= numPieces; i++) {
                 System.out.println(colors.get(i).getHighlight() + i + "\t" + colors.get(i) + Highlights.RESET.getHighlight() + "\n");
             }
         }

@@ -46,10 +46,6 @@ public class StateDTOConverter {
                         StateDTOType.DRAW_CARD
                 );
             }
-            case EndGameState endGameState -> {
-                //TODO: decide whether to implement this method
-                return null;
-            }
             case GrabRewardState grabRewardState -> {
                 return new SimpleStateDTO(
                         Player.getPlayer(grabRewardState.getShipBoard()).getNickname(),

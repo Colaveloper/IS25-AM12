@@ -76,7 +76,7 @@ public class Player {
         return Optional.ofNullable(this.color.get());
     }
 
-    protected void setLobby(Lobby lobby) {
+    public void setLobby(Lobby lobby) {
         this.lobby.set(lobby);
     }
 

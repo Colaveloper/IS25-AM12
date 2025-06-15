@@ -68,7 +68,6 @@ public abstract class Deck {
             return false;
         } else {
             currentCard = masterDeck.removeLast();
-            currentCard.initialize();
             return true;
         }
     }

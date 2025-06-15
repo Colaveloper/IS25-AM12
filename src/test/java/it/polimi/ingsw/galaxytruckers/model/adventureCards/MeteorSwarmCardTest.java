@@ -83,7 +83,7 @@ class MeteorSwarmCardTest {
             }
         };
 
-        meteorSwarmCard = new MeteorSwarmCard(game,  Level.SECOND, safeProjectiles, 1);
+        meteorSwarmCard = new MeteorSwarmCard(game,  Level.SECOND, new ArrayList<>(safeProjectiles), 1);
         meteorSwarmCard.initialize();
     }
 
@@ -94,6 +94,7 @@ class MeteorSwarmCardTest {
                 testState = meteorSwarmCard.getNextState();
                 assertEquals(meteorSwarmCard.getCurrentShipBoard(), shipBoard);
                 assertInstanceOf(HandleProjectileState.class, testState);
+                assertEquals(projectile, ((HandleProjectileState) testState).getProjectile());
             }
         }
         testState = meteorSwarmCard.getNextState();

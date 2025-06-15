@@ -2,6 +2,10 @@ package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Activatable;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.DoubleCannon;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.DoubleEngine;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Shield;
 
 import java.awt.*;
 import java.util.*;
@@ -165,9 +169,8 @@ public class SecondShipBoard extends ShipBoard {
         }
     }
 
-    public void loseCrew(Point position, int amount) {
-        super.loseCrew(position, amount);
-        aliens.remove(cabins.get(position).getCrewType());
+    public void loseCrew(Point position) {
+        super.loseCrew(position);
     }
 
     //Visitor pattern methods
@@ -192,5 +195,11 @@ public class SecondShipBoard extends ShipBoard {
                 this.aliens.remove(cabins.get(point).getCrewType());
             }
         }
+    }
+
+    @Override
+    public void remove(Cabin cabin) {
+        super.remove(cabin);
+        this.aliens.remove(cabin.getCrewType());
     }
 }

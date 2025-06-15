@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 
 import java.util.concurrent.BlockingQueue;
@@ -17,5 +18,10 @@ public class EventQueue<T extends Event> implements EventListener<T> {
 
     public T poll() throws InterruptedException {
         return queue.take();
+    }
+
+    @VisibleForTesting
+    public void clear() {
+        this.queue.clear();
     }
 }

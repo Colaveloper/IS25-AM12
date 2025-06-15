@@ -7,51 +7,59 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.model.state.EndGameState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.List;
 
 public class Game {
     private final Object lock;
 
+    private final Level level;
     private final GameFactory gameFactory;
+
     private final Set<ShipBoard> shipBoards = new HashSet<>();
+    private final SurrenderPolicy surrenderPolicy;
+    private final ScoresRegistry scoresRegistry;
     private FlightBoard flightBoard;
-    private final Set<ShipBoard> givenUpShips = new HashSet<>();
     private Deck deck;
+
     private GameState currentState;
-    private Map<ShipBoard, Integer> finalScores;
-    Level level;
+    private final Map<ShipBoard, Integer> finalScores = new HashMap<>();
+
 
     private GameEventListener eventListener;
 
-    public Game(Level level, Object lock) {
+    public Game(Level level, int shipsN, Object lock) {
         this.level = level;
         this.gameFactory = GameFactory.getFactory(level);
+        this.surrenderPolicy = this.gameFactory.createSurrenderPolicy();
+        this.scoresRegistry = this.gameFactory.createScoresRegistry();
+        this.flightBoard = gameFactory.createFlightBoard(shipsN);
+        try {
+            this.deck = gameFactory.createDeck(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         this.lock = lock;
     }
 
     @VisibleForTesting
     public Game(Level level) {
-        this(level, new Object());
+        this(level, 4, new Object());
     }
 
     /**
      * Adds shipboard of the given color to the game
+     *
      * @param color the color of the added shipboard
      * @return the added shipboard
      */
     public ShipBoard addShipBoard(GameColor color) {
         ShipBoard shipBoard = gameFactory.createShipBoard(color);
-        shipBoard.setGameEventListener(eventListener);
         shipBoards.add(shipBoard);
         return shipBoard;
     }
@@ -59,10 +67,11 @@ public class Game {
     /**
      * Instantiates the game's flightBoard and Deck and sets the
      * current state of the game to shipbuilding
+     *
      * @throws IOException if an error occurs when trying to load the deck's
-     * cards from disk
+     *                     cards from disk
      */
-    public void start() throws IOException{
+    public void start() throws IOException {
         this.flightBoard = gameFactory.createFlightBoard(shipBoards.size());
         this.flightBoard.setGameEventListener(eventListener);
         this.deck = gameFactory.createDeck(this);
@@ -79,6 +88,7 @@ public class Game {
 
     /**
      * Sets the game's current state to the given state
+     *
      * @param state the {@code GameState} to be set
      */
     public void setCurrentState(GameState state) {
@@ -121,77 +131,44 @@ public class Game {
         return level;
     }
 
-    /**
-     * Adds ships that have no crew or that have been lapped
-     * to the set of given up ships and removes them from the
-     * flightboard
-     * */
-    public void forceShipsToGiveUp(){
-        if(level != Level.TEST){ // TODO: avoid predicating directly on the instances of Level
-            // if ship has no crew -> force give up
-            givenUpShips.addAll(
-                    shipBoards.stream()
-                            .filter(s -> s.getCrewSize() == 0)
-                            .collect(Collectors.toSet())
-            );
-
-            // if you get lapped -> also force give up
-            givenUpShips.addAll(flightBoard.getLappedShips());
-            flightBoard.removeShips(givenUpShips);
-        }
+    public SurrenderPolicy getSurrenderPolicy() {
+        return surrenderPolicy;
     }
-
-    /**
-     * Adds a shipboard to the set of given up ships and
-     * removes that ship from the flightboard
-     * @param ship the ship to place in the set of given up ships
-     * */
-    public void forceShipToGiveUp(ShipBoard ship){
-        givenUpShips.add(ship);
-    }
-
-    /**
-     * @return the game's set of given up ships*/
-    public Set<ShipBoard> getGivenUpShips(){return givenUpShips;}
 
     /**
      * Assigns ship rewards to be used in the final score and
-     * changes game state to the end game state*/
-    public void endGame(){
+     * changes game state to the end game state
+     */
+    public void endGame() {
         assignShipRewards();
-        setCurrentState(new EndGameState(finalScores));
+        eventListener.notifyGameEndEvent(finalScores);
     }
 
     /**
      * Sets game state to the end game state if there are no
-     * more ships playing*/
-    public void endGameIfAllShipsHaveGivenUp(){
-        if(givenUpShips.size() == shipBoards.size()){
+     * more ships playing
+     */
+    public void endGameIfAllShipsHaveGivenUp() {
+        if (surrenderPolicy.getSurrenderedShips().size() == shipBoards.size()) {
             endGame();
         }
     }
 
-    /**
-     * @return the game's final score*/
-    public Map<ShipBoard, Integer> getFinalScores(){
-        return finalScores;
-    }
+    private void assignShipRewards() {
+        Set<ShipBoard> shipsInPlay = new HashSet<>(shipBoards);
+        shipsInPlay.removeAll(surrenderPolicy.getSurrenderedShips());
 
-    private void assignShipRewards(){
         // Best-looking ship reward
-        int minExposedConnectors = shipBoards.stream()// who gave up does not count!
-                .mapToInt(ShipBoard::getExposedConnectorsNumber)
-                .min()
-                .orElse(0); // no ship on board
-
-        shipBoards.forEach(s ->
-                finalScores.merge(s, s.getExposedConnectorsNumber() == minExposedConnectors ? 2 : 0, Integer::sum)
-        );
+        shipsInPlay.stream()
+                .min(Comparator.comparingInt(ShipBoard::getExposedConnectorsNumber))
+                .ifPresent(bestLookingShip ->
+                        finalScores.merge(bestLookingShip, scoresRegistry.getBestLookingShipAward(), Integer::sum));
 
         // Finish order reward
-        shipBoards.forEach(s ->
-                finalScores.merge(s, 4 - flightBoard.getOrderedShips().indexOf(s), Integer::sum)
-        );
+        List<ShipBoard> orderedShips = flightBoard.getOrderedShips();
+        for (int i = 0; i < orderedShips.size(); i++) {
+            finalScores.merge(orderedShips.get(i), scoresRegistry.getPositionScores()[i], Integer::sum);
+        }
 
         // Credits reward (minus the losses)
         shipBoards.forEach(s ->
@@ -200,26 +177,30 @@ public class Game {
 
         // Goods reward
         shipBoards.forEach(s -> {
-            if (shipBoards.contains(s)) {
+            if (shipsInPlay.contains(s)) {
                 finalScores.merge(s, s.getGoodsValue(), Integer::sum);
             } else {
                 // given up ships receive 1/2 reward
-                finalScores.merge(s, (s.getGoodsValue()+1)/2, Integer::sum);
+                finalScores.merge(s, (s.getGoodsValue() + 1) / 2, Integer::sum);
             }
         });
     }
 
     @VisibleForTesting
-    public void setFlightBoard(FlightBoard flightBoard){
+    public void setFlightBoard(FlightBoard flightBoard) {
         this.flightBoard = flightBoard;
     }
+
     @VisibleForTesting
-    public void setDeck(Deck deck){
+    public void setDeck(Deck deck) {
         this.deck = deck;
     }
 
     public void setEventListener(GameEventListener eventListener) {
         this.eventListener = eventListener;
+        shipBoards.forEach(s -> s.setGameEventListener(eventListener));
+        surrenderPolicy.setEventListener(eventListener);
+        flightBoard.setGameEventListener(eventListener);
     }
 
     public GameEventListener getEventListener() {
@@ -373,5 +354,4 @@ public class Game {
             currentState.goNext(shipBoard);
         }
     }
-
 }

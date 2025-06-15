@@ -568,7 +568,7 @@ class ShipBoardTest {
             @Test
             void loseCrewThrowsException(){
                 //throw an exception when there is no cabin
-                assertThrows(IllegalStateException.class, () -> shipBoard.loseCrew(new Point(7,7), 1));
+                assertThrows(IllegalStateException.class, () -> shipBoard.loseCrew(new Point(7,7)));
             }
 
             @Test
@@ -576,8 +576,8 @@ class ShipBoardTest {
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
                 shipBoard.initializeCabin(new Point(7,7),CrewType.HUMAN);
-                shipBoard.loseCrew(new Point(7,7),2);
-                assertEquals(0,shipBoard.getCrewSize());
+                shipBoard.loseCrew(new Point(7,7));
+                assertEquals(1,shipBoard.getCrewSize());
             }
         }
 
@@ -895,7 +895,7 @@ class ShipBoardTest {
                 assertEquals(1,shipBoard.getCrewSize());
 
                 // losing the alien
-                shipBoard.loseCrew(new Point(8,7), 1);
+                shipBoard.loseCrew(new Point(8,7));
                 assertEquals(0, shipBoard.getCrewSize());
             }
         }

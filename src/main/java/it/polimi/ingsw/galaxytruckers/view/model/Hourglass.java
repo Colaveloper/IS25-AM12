@@ -5,6 +5,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Hourglass {
     private final static long DURATION = 60;
@@ -14,6 +15,8 @@ public class Hourglass {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture;
     private long duration = DURATION;
+    private final AtomicLong timeLeft = new AtomicLong(0);
+    private Runnable onEndCallback;
 
     public Hourglass(int rounds) {
         this.flipsLeft = rounds;
@@ -41,21 +44,32 @@ public class Hourglass {
      * @throws IllegalStateException if the hourglass is already running
      */
     public void flip() {
-        long timeLeft = duration;
+        if (isRunning.get()) {
+            throw new IllegalStateException("Hourglass is already running");
+        }
+
+        timeLeft.set(duration);
         isRunning.set(true);
         flipsLeft--;
+
         scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
-            if (timeLeft > 0) {
-                if (timeLeft%10 == 0) System.out.println("Time left: " + timeLeft + " seconds");
-            } else {
+            long currentTime = timeLeft.decrementAndGet();
+            if (currentTime < 0) {
                 end();
             }
         }, 0, 1, TimeUnit.SECONDS);
     }
 
     public void end() {
-        isRunning.set(false);
-        scheduledFuture.cancel(true);
+        if (isRunning.get()) {
+            isRunning.set(false);
+            if (scheduledFuture != null) {
+                scheduledFuture.cancel(true);
+            }
+            if (onEndCallback != null) {
+                onEndCallback.run();
+            }
+        }
     }
 
     public int getFlipsLeft() {
@@ -68,5 +82,9 @@ public class Hourglass {
 
     public long getDuration() {
         return duration;
+    }
+
+    public long getTimeLeft() {
+        return timeLeft.get();
     }
 }

@@ -29,7 +29,7 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
                 }
             }
             if (crewTypeCabin.isEmpty()) {
-                goNext(shipBoard);
+                initHumans(shipBoard);
             }
         }
         game.getEventListener().notifyGameStateUpdateEvent(this);
@@ -45,9 +45,10 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
             shipBoard.initializeCabin(point, crewType);
             shipRelevantCabins.get(shipBoard).remove(crewType);
             if (shipRelevantCabins.get(shipBoard).isEmpty()) {
-                goNext(shipBoard);
+                initHumans(shipBoard);
             }
             game.getEventListener().notifyCabinInitializationEvent(shipBoard,point,crewType);
+            tryStateTransition();
         } else {
             throw new IllegalArgumentException("The specified cabin does not need to be initialized");
         }
@@ -55,6 +56,11 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
 
     @Override
     public void goNext(ShipBoard shipBoard) {
+        initHumans(shipBoard);
+        tryStateTransition();
+    }
+
+    private void initHumans(ShipBoard shipBoard) {
         Map<Point, Cabin> cabins = shipBoard.getCabins();
         cabins.keySet().stream()
                 .filter(p -> cabins.get(p).getNumResidents() == 0)

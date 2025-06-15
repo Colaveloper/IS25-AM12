@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.serverController;
 
-import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameModel;
 import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -14,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,7 +44,7 @@ class ServerControllerTest {
     void joinLobbyWithInCorrectKey(){
         Player p1 = Player.addPlayer("player1");
         testController.newGame(p1, Level.SECOND, 2);
-        assertThrows(IllegalArgumentException.class, () -> testController.joinLobby(Player.addPlayer("player2"),new Lobby(model, p1, Level.SECOND, 2).getId()));
+        assertThrows(IllegalArgumentException.class, () -> testController.joinLobby(Player.addPlayer("player2"),new Lobby(model, p1, Level.SECOND, 2, null).getId()));
     }
 
     @Test

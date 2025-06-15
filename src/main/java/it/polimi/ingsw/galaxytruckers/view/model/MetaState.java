@@ -5,5 +5,6 @@ public enum MetaState {
     JOINORCREATE,
     INLOBBY,
     CREATION,
-    INGAME
+    INGAME,
+    ENDGAME
 }

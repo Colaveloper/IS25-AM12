@@ -1,0 +1,71 @@
+package it.polimi.ingsw.galaxytruckers.model;
+
+import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.SurrenderCause;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class EnabledSurrenderPolicy implements SurrenderPolicy {
+    private final Set<ShipBoard> requests = new HashSet<>();
+    private final Set<ShipBoard> surrenderedShips = new HashSet<>();
+    private GameEventListener listener;
+
+    @Override
+    public void setEventListener(GameEventListener gameEventListener) {
+        this.listener = gameEventListener;
+    }
+
+    @Override
+    public boolean isSurrenderEnabled() {
+        return true;
+    }
+
+    @Override
+    public void requestSurrender(ShipBoard shipBoard, SurrenderCause cause) {
+        if (requests.contains(shipBoard) || surrenderedShips.contains(shipBoard)) {
+            throw new IllegalStateException("Already surrendered");
+        }
+        requests.add(shipBoard);
+        if (listener != null) listener.notifySurrenderRequestEvent(shipBoard, cause);
+    }
+
+    @Override
+    public Set<ShipBoard> confirmSurrender(FlightBoard flightBoard) {
+
+        Set<ShipBoard> allShips = flightBoard.getShipToPlace().keySet();
+        allShips.stream()
+                .filter(s -> s.getCrewSize() == 0)
+                .forEach(s -> forceSurrender(s,SurrenderCause.NOCREW));
+        flightBoard.getLappedShips().forEach(s -> forceSurrender(s,SurrenderCause.LAPPED));
+
+        this.surrenderedShips.addAll(requests);
+        Set<ShipBoard> newSurrenderedShips = new HashSet<>(this.requests);
+        this.requests.clear();
+        flightBoard.removeShips(newSurrenderedShips);
+        if (listener !=  null && !newSurrenderedShips.isEmpty()) listener.notifySurrenderEvent(newSurrenderedShips.stream().toList());
+        return newSurrenderedShips;
+    }
+
+    private void forceSurrender(ShipBoard shipBoard, SurrenderCause surrenderCause) {
+        if (!this.requests.contains(shipBoard)) {
+            requestSurrender(shipBoard, surrenderCause);
+        }
+    }
+
+    @Override
+    public Set<ShipBoard> getSurrenderedShips() {
+        return new HashSet<>(surrenderedShips);
+    }
+
+    @VisibleForTesting
+    public Set<ShipBoard> getRequests() {
+        return new HashSet<>(requests);
+    }
+
+    @VisibleForTesting
+    protected GameEventListener getListener() {
+        return listener;
+    }
+}

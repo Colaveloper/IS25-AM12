@@ -15,6 +15,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Lobby implements LobbyInterface {
@@ -34,12 +35,15 @@ public class Lobby implements LobbyInterface {
     private final EventQueue<LobbyEvent> eventQueue;
     private final LobbyEventHandler lobbyEventHandler;
 
-    public Lobby(GameModelInterface model, Player creator, Level level, int numPlayers) {
+    private final Consumer<Lobby> removeLobby;
+
+    public Lobby(GameModelInterface model, Player creator, Level level, int numPlayers, Consumer<Lobby> removeLobby) {
         this.model = model;
         this.id = UUID.randomUUID();
         this.level = level;
         this.numPlayers = numPlayers;
         this.host = creator;
+        this.removeLobby = removeLobby;
 
         this.state = LobbyState.PREPARATION;
         this.game = null;
@@ -48,7 +52,7 @@ public class Lobby implements LobbyInterface {
         this.playerColors = new HashMap<>();
 
         this.eventQueue = new EventQueue<>();
-        this.lobbyEventHandler = new LobbyEventHandler(this.eventQueue, this::getPlayers);
+        this.lobbyEventHandler = new LobbyEventHandler(this.eventQueue, this);
 
         lobbyEventHandler.start();
         addPlayer(creator);
@@ -122,6 +126,11 @@ public class Lobby implements LobbyInterface {
         eventQueue.notifyEvent(new PlayerExitEvent(player.getNickname()));
     }
 
+    public void remove() {
+        this.removeLobby.accept(this);
+        this.lobbyEventHandler.stop();
+    }
+
     private void checkLobbyState(LobbyState lobbyState) {
         if (state != lobbyState) {
             throw new IllegalStateException("The lobby is not in " + lobbyState.toString());
@@ -139,7 +148,7 @@ public class Lobby implements LobbyInterface {
      * Sets the game of the lobby to a new instance of {@link Game} of the specified level
      */
     private void startGame() {
-        Game game = model.createGame(this.level, this.lock);
+        Game game = model.createGame(this.level, this.numPlayers, this.lock);
         for (Player player : getPlayers()) {
             ShipBoard ship = model.addShip(game, playerColors.get(player));
             player.setShipBoard(ship);

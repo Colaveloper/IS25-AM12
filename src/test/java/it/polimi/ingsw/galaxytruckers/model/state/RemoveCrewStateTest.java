@@ -33,7 +33,7 @@ class RemoveCrewStateTest {
                 return 1;
             }
             @Override
-            public void loseCrew(Point pos, int num){
+            public void loseCrew(Point pos){
                 // mock
             }
         };
@@ -92,7 +92,7 @@ class RemoveCrewStateTest {
                 return 0;
             }
             @Override
-            public void loseCrew(Point pos, int num){
+            public void loseCrew(Point pos){
                 // mock
             }
         };

@@ -49,11 +49,6 @@ public class SlaversCard extends AdventureCard {
                 ShipBoard nextShip = flightBoard.getOrderedShips().get(currentPlayerIndex);
                 currentPlayerIndex++;
 
-                // skip players who have given up
-                if (game.getGivenUpShips().contains(nextShip)) {
-                    continue;
-                }
-
                 currentShipBoard = nextShip;
                 return new DeclareFirePowerState(currentShipBoard); // Let the player activate double cannons
             }

@@ -8,7 +8,7 @@ import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.PlayerDisconnectionEvent;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
+import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ class RmiClientHandlerTest {
     RmiClientHandler rmiClientHandler;
     MethodChecker checker;
     ServerControllerInterface controller;
-    LobbyInterface lobby;
+    Lobby lobby;
     SessionManager sessionManager;
     Player player;
 
@@ -36,12 +36,12 @@ class RmiClientHandlerTest {
     void setUp() throws RemoteException{
         checker = mock(MethodChecker.class);
         controller = mock(ServerControllerInterface.class);
-        lobby = mock(LobbyInterface.class);
+        lobby = mock(Lobby.class);
         RemoteClient remoteClient = new RemoteClientStub(checker);
         sessionManager = mock(SessionManager.class);
         player = new Player("x");
         rmiClientHandler = new RmiClientHandler(remoteClient,player, controller);
-        rmiClientHandler.setLobby(lobby);
+        player.setLobby(lobby);
         rmiClientHandler.setSessionManager(sessionManager);
     }
 
@@ -243,7 +243,7 @@ class RmiClientHandlerTest {
 
     @Test
     void noLobbyException() {
-        rmiClientHandler.setLobby(null);
+        player.setLobby(null);
         assertThrows(IllegalStateException.class, () -> rmiClientHandler.goNext());
     }
 

@@ -26,12 +26,6 @@ public abstract class EventQueueHandler<T extends Event> implements EventHandler
 
     public void stop() {
         this.isRunning = false;
-        try {
-            this.thread.join(100);
-            this.thread.interrupt();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void threadTask() {
@@ -42,7 +36,7 @@ public abstract class EventQueueHandler<T extends Event> implements EventHandler
                 afterEach.run();
             }
         } catch (InterruptedException e) {
-            System.out.println(this.getClass().toString() + ": thread interrupted");
+            System.out.println(this.getClass() + ": thread interrupted");
             Thread.currentThread().interrupt();
         }
     }

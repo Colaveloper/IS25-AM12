@@ -27,12 +27,7 @@ public class GuiNicknameChoiceScreen extends GuiScreen {
     private void submitNickname(TextField field) {
         String nickname = field.getText().trim();
         if (!nickname.isEmpty()) {
-            try {
-                controller.registerNickname(nickname);
-                controller.setMyNickname(nickname);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
+            controller.registerNickname(nickname);
         }
     }
 

@@ -40,7 +40,7 @@ public class CliComponent extends CliElement {
     }
 
     public String getConnector(Direction direction) {
-        Connector connector = connectors.get(direction);
+        Connector connector = component.getRotatedConnector(direction);
         return switch (direction) {
             case UP -> switch (connector) {
                 case NONE -> "─";

@@ -10,7 +10,7 @@ import it.polimi.ingsw.galaxytruckers.model.state.ShipCorrectionState;
 
 import java.io.IOException;
 
-public class SecondFactory extends GameFactory{
+public class SecondFactory implements GameFactory{
     @Override
     public Deck createDeck(Game game) throws IOException {
         SecondDeck deck = new SecondDeck(game);
@@ -36,5 +36,15 @@ public class SecondFactory extends GameFactory{
     @Override
     public ShipCorrectionState createShipCorrectionState() {
         return new ShipCorrectionState(true);
+    }
+
+    @Override
+    public SurrenderPolicy createSurrenderPolicy() {
+        return new EnabledSurrenderPolicy();
+    }
+
+    @Override
+    public ScoresRegistry createScoresRegistry() {
+        return new ScoresRegistry(new int[]{8,6,4,2},4);
     }
 }

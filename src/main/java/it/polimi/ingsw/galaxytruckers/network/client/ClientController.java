@@ -41,7 +41,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         this.eventHandler = new ClientEventHandler(model, playerRegistry);
     }
 
-//---------------------------------------INTERNAL CALLS------------------------------------------
+    //---------------------------------------INTERNAL CALLS------------------------------------------
 
     public void showGameCreation() {
         model.setMetaState(MetaState.CREATION);
@@ -53,7 +53,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         //model.setMetaState(MetaState.JOINORCREATE);
     }
 
-//--------------------------------------UPDATES FROM THE SERVER----------------------------------
+    //--------------------------------------UPDATES FROM THE SERVER----------------------------------
 
     @Override
     public void notifyEvent(Event event) {
@@ -61,16 +61,16 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         eventHandler.handleEvent(event);
     }
 
-    @Override
-    public void reportError(String details) {
-        view.reportError(details);
-    }
-
-//----------------------------------------REQUESTS TO THE SERVER----------------------------------
+    //----------------------------------------REQUESTS TO THE SERVER----------------------------------
 
     @Override
     public void registerNickname(String nickname) throws IllegalArgumentException {
-        server.registerNickname(nickname);
+        try {
+            server.registerNickname(nickname);
+            setMyNickname(nickname);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
@@ -85,226 +85,226 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 
     @Override
     public void goNext() {
-//        try {
+        try {
             server.goNext();
-//        } catch (IllegalArgumentException e) {
-//            reportError("could not go on with card");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void chooseShipPiece(int choice) {
-//        try {
+        try {
             server.chooseShipPiece(choice);
-//        } catch (IllegalArgumentException e) {
-//            reportError("couldn't choose ship piece");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void activateComponent(Point point) {
-//        try {
+        try {
             server.activateComponent(point);
-//        } catch (IllegalArgumentException e) {
-//            reportError("couldn't activate component");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
 
     @Override
     public void removeComponent(Point point) {
-//        try {
+        try {
             server.removeComponent(point);
-//        } catch (IllegalArgumentException e) {
-//            reportError("couldn't remove ship piece");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void useBattery(Point point) {
-//        try {
+        try {
             server.useBattery(point);
-//        } catch (IllegalArgumentException e) {
-//            reportError("couldn't spend battery");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void initializeCabin(Point point, CrewType crewType) {
-//        try {
+        try {
             server.initializeCabin(point, crewType);
-//        } catch (IllegalArgumentException e) {
-//            reportError("couldn't initialize cabin");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void placeShipOnFlightboard(int startingPosition) {
-//        try {
+        try {
             server.placeShipOnFlightBoard(startingPosition);
-//        } catch (IllegalArgumentException e) {
-//            reportError("couldn't place on flightboard");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void flipHourglass() {
-//        try {
+        try {
             server.flipHourglass();
-//        } catch (IllegalArgumentException e) {
-//            reportError("cannot flip hourglass");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void requestRandComponent() {
-//        try {
+        try {
             server.requestRandComponent();
-//        } catch (IllegalArgumentException e) {
-//            reportError("random component not available");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void requestComponent(int componentId) {
-//        try {
+        try {
             server.requestComponent(componentId);
-//        } catch (IllegalArgumentException e) {
-//            reportError("component of id " + componentId + " not available");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void stashComponent() {
-//        try {
+        try {
             server.stashComponent();
-//        } catch (IllegalArgumentException e) {
-//            reportError("cannot stash component");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void grabStashedComponent(int index) {
-//        try {
+        try {
             server.grabStashedComponent(index);
-//        } catch (IllegalArgumentException e) {
-//            reportError("cannot grab stashed component");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void acquireForecast(int index) {
-//        try {
+        try {
             server.acquireForecast(index);
-//        } catch (IllegalArgumentException e) {
-//            reportError("cannot acquire forecast");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void releaseForecast() {
-//        try {
+        try {
             server.releaseForecast();
-//        } catch (IllegalArgumentException e) {
-//            reportError("cannot release forecast");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void rejectComponent() {
-//        try {
+        try {
             server.rejectComponent();
-//        } catch (IllegalArgumentException e) {
-//            reportError("cannot reject component");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
     public void placeComponent(Point point, Direction orientation) {
-//        try {
+        try {
             server.placeComponent(point, orientation);
-//        } catch (IllegalArgumentException e) {
-//            reportError("cannot place component");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
-    public void drawCard(){
-//        try{
+    public void drawCard() {
+        try {
             server.drawCard();
-//        } catch(IllegalArgumentException e){
-//            reportError("Cannot draw new card");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
-    public void placeGoods(Point point, GoodsType good){
-//        try{
+    public void placeGoods(Point point, GoodsType good) {
+        try {
             server.placeGoods(point, good);
-//        } catch(IllegalArgumentException e){
-//            reportError("Cannot place good");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
-    public void removeGoods(Point point, GoodsType good){
-//        try{
+    public void removeGoods(Point point, GoodsType good) {
+        try {
             server.removeGoods(point, good);
-//        } catch(IllegalArgumentException e){
-//            reportError("Cannot remove good");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
-    public void choosePlanet(int choice){
-//        try{
+    public void choosePlanet(int choice) {
+        try {
             server.choosePlanet(choice);
-//        } catch(IllegalArgumentException e){
-//            reportError("Cannot land on planet");
-//        }2
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
-    public void loseCrew(Point p){
-//        try{
+    public void loseCrew(Point p) {
+        try {
             server.loseCrew(p);
-//        } catch(IllegalArgumentException e){
-//            reportError("Cannot remove crew member");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
-    public void grabReward(boolean g){
-//        try{
+    public void grabReward(boolean g) {
+        try {
             server.grabReward(g);
-//        }catch (IllegalArgumentException e){
-//            reportError("Cannot grab reward");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
-    public void loseGoods(Point p){
-//        try{
+    public void loseGoods(Point p) {
+        try {
             server.loseGoods(p);
-//        } catch(IllegalArgumentException e){
-//            reportError("Cannot lose good");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override
-    public void giveUp(){
-//        try {
+    public void giveUp() {
+        try {
             server.giveUp();
-//        } catch(IllegalArgumentException e){
-//            reportError("Cannot give up");
-//        }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     private void runAndInterceptIOE(RunnableWithIOE action) {
         try {
             action.run();
         } catch (IOException e) {
-            reportError("IO Exception: " + e.getMessage());
+            view.reportError("IO Exception: " + e.getMessage());
         }
     }
 }

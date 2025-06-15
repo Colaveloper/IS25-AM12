@@ -1,13 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.SurrenderPolicy;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.SurrenderCause;
 import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.model.state.DeclareEnginePowerState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
-import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
 public class OpenSpaceCard extends AdventureCard {
+
     public OpenSpaceCard (Game game, Level level, int id) {
         super(game, level, id);
     }
@@ -15,9 +17,11 @@ public class OpenSpaceCard extends AdventureCard {
     @Override
     public AdventureState getNextState() {
         if (currentShipBoard != null) {
-            if(currentShipBoard.getEnginePower() == 0){
-                game.forceShipToGiveUp(currentShipBoard);
-                currentPlayerIndex++;
+            if(currentShipBoard.getEnginePower() == 0) {
+                SurrenderPolicy surrenderPolicy = game.getSurrenderPolicy();
+                if (surrenderPolicy.isSurrenderEnabled()) {
+                    surrenderPolicy.requestSurrender(currentShipBoard, SurrenderCause.NOENGINES);
+                }
             }
             else{
                 game.getFlightBoard().displaceShip(currentShipBoard, currentShipBoard.getEnginePower());

@@ -25,12 +25,7 @@ public class CliNicknameChoiceScreen extends CliScreen {
 
     @Override
     public void parseAndInvoke(String input) {
-        try {
-            controller.registerNickname(input);
-            controller.setMyNickname(input);
-        } catch (IllegalArgumentException e) {
-            controller.reportError(e.getMessage());
-        }
+        controller.registerNickname(input);
     }
 
     @Override
