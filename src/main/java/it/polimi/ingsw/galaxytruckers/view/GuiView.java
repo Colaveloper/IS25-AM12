@@ -110,6 +110,11 @@ public class GuiView extends View<GuiScreen> {
     }
 
     @Override
+    public void notifyGrabPlacedComponent(ShipBoard shipBoard) {
+        currentScreen.notifyGrabPlacedComponent(shipBoard);
+    }
+
+    @Override
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
         currentScreen.notifyGrabStashedComponent(shipBoard,index,component);
     }

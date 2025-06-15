@@ -83,6 +83,12 @@ public class CliView extends View<CliScreen> {
     }
 
     @Override
+    public void notifyGrabPlacedComponent(ShipBoard shipBoard) {
+        currentScreen.notifyGrabPlacedComponent(shipBoard);
+        currentScreen.render();
+    }
+
+    @Override
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         currentScreen.notifyPlaceComponent(shipBoard, point, orientation);
         currentScreen.render();

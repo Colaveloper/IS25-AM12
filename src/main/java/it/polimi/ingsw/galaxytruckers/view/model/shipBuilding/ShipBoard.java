@@ -83,6 +83,10 @@ public abstract class ShipBoard {
         lastPosition = null;
     }
 
+    public void grabPlacedComponent() {
+        lastPosition = null;
+    }
+
     public Component rejectComponent() {
         if (lastPosition != null) {
             componentMap.remove(lastPosition);

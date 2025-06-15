@@ -62,6 +62,11 @@ public abstract sealed class GameState permits
                 "it seems the client and the server are out of sync");
     }
 
+    public void notifyGrabPlacedComponent(ShipBoard shipBoard) {
+        System.err.println("3.5This action is not permitted in this state, \n" +
+                "it seems the client and the server are out of sync");
+    }
+
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index) {
         System.err.println("5This action is not permitted in this state, \n" +
                 "it seems the client and the server are out of sync");

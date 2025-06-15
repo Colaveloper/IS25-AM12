@@ -37,6 +37,8 @@ public interface ModelObserver {
     void notifyStashComponent(ShipBoard shipBoard, Component component);
     void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition);
 
+    void notifyGrabPlacedComponent(ShipBoard shipBoard);
+
     void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component);
 
     void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation);

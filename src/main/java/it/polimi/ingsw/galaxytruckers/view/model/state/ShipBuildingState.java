@@ -71,6 +71,12 @@ public sealed abstract class ShipBuildingState extends GameState permits
     }
 
     @Override
+    public void notifyGrabPlacedComponent(ShipBoard shipBoard) {
+        shipBoard.grabPlacedComponent();
+        game.getObservers().forEach(observer -> observer.notifyGrabPlacedComponent(shipBoard));
+    }
+
+    @Override
     public void notifyRejectComponent(ShipBoard shipBoard) {
         Point prevPos = shipBoard.getLastPosition();
         Component component = shipBoard.rejectComponent();

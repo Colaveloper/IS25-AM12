@@ -255,6 +255,14 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     }
 
     @Override
+    public void notifyGrabPlacedComponent(ShipBoard shipBoard) {
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
+        ship.onRemoveComponent(shipBoard.getLastPosition());
+        ship.setHand(shipBoard.getLastComponent());
+        cliAllShips.setDirty();
+    }
+
+    @Override
     public void notifyRejectComponent(ShipBoard shipBoard, Component component) {
         //can t reject component picked from stashed
         CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
