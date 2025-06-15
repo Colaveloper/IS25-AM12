@@ -192,6 +192,14 @@ public class Lobby implements LobbyInterface {
     }
 
     @Override
+    public void grabPlacedComponent(Player player) {
+        synchronized (lock){
+            checkLobbyState(LobbyState.INGAME);
+            model.grabPlacedComponent(game, player.getShipBoard().orElseThrow());
+        }
+    }
+
+    @Override
     public void grabStashedComponent(Player player, int index) {
         synchronized (lock){
             checkLobbyState(LobbyState.INGAME);

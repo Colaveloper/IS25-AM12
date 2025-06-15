@@ -36,11 +36,12 @@ public sealed abstract class ShipBuildingState extends GameState permits
     public List<StateActions> getAvailableActions() {
         List<StateActions> actions = new ArrayList<>();
         if(!hasFinished) {
-            if (componentBank.getCoveredComponentsN() != 0) actions.add(StateActions.REQUEST_RAND_COMPONENT);
-            if (!componentBank.getUncoveredComponents().isEmpty()) actions.add(StateActions.REQUEST_COMPONENT);
-            if ((myShip.getLastComponent() != null) && !hasStashed) actions.add(StateActions.REJECT_COMPONENT);
-            if (myShip.getLastComponent() != null) actions.add(StateActions.PLACE_COMPONENT);
-            if (myShip.getLastComponent() != null) actions.add(StateActions.ROTATE_COMPONENT);
+            if(componentBank.getCoveredComponentsN() != 0) actions.add(StateActions.REQUEST_RAND_COMPONENT);
+            if(!componentBank.getUncoveredComponents().isEmpty()) actions.add(StateActions.REQUEST_COMPONENT);
+            if((myShip.getLastComponent() != null) && !hasStashed) actions.add(StateActions.REJECT_COMPONENT);
+            if(myShip.getLastComponent() != null) actions.add(StateActions.PLACE_COMPONENT);
+            if(componentInHand()) actions.add(StateActions.ROTATE_COMPONENT);
+            if(myShip.getLastPosition() != null) actions.add(StateActions.GRAB_PLACED_COMPONENT);
             actions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
         }
         return actions;
@@ -94,10 +95,6 @@ public sealed abstract class ShipBuildingState extends GameState permits
 
     protected boolean componentInHand(){
         return myShip.getLastComponent() != null && myShip.getLastPosition() == null;
-    }
-
-    protected boolean unweldedOnBoard() {
-        return myShip.getLastComponent() != null && myShip.getLastPosition() != null;
     }
 
     public ComponentBank getComponentBank(){

@@ -159,6 +159,11 @@ public class SocketClient implements VirtualServer, VirtualClient {
     }
 
     @Override
+    public void grabPlacedComponent() {
+        sendRequest(new GrabPlacedComponent());
+    }
+
+    @Override
     public void grabStashedComponent(int index) {
         sendRequest(new GrabStashedComponent(index));
     }

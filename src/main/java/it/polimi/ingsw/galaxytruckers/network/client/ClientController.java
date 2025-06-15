@@ -184,6 +184,15 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     }
 
     @Override
+    public void grabPlacedComponent() {
+        try {
+            server.grabPlacedComponent();
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            view.reportError(e.getMessage());
+        }
+    }
+
+    @Override
     public void grabStashedComponent(int index) {
         try {
             server.grabStashedComponent(index);

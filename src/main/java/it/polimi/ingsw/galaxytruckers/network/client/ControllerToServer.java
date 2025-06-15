@@ -28,6 +28,8 @@ public interface ControllerToServer {
 
     void stashComponent();
 
+    void grabPlacedComponent();
+
     void grabStashedComponent(int index);
 
     void acquireForecast(int index);

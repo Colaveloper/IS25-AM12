@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
 public enum StateActions {
+    GRAB_PLACED_COMPONENT,
     ACTIVATE_COMPONENT,
     SPEND_BATTERIES,
     GRAB_REWARD,

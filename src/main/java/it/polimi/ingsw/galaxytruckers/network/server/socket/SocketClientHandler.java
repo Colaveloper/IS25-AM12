@@ -205,6 +205,12 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
     }
 
     @Override
+    public void grabPlacedComponent() {
+        checkInLobby();
+        lobby.grabPlacedComponent(player);
+    }
+
+    @Override
     public void grabStashedComponent(int index) {
         checkInLobby();
         lobby.grabStashedComponent(player,index);

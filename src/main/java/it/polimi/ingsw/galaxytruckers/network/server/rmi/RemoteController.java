@@ -23,6 +23,7 @@ public interface RemoteController extends Remote {
     void requestComponent(int componentID) throws RemoteException;
     void rejectComponent() throws RemoteException;
     void stashComponent() throws RemoteException;
+    void grabPlacedComponent() throws RemoteException;
     void grabStashedComponent(int index) throws RemoteException;
     void placeComponent(Point point, Direction orientation) throws RemoteException;
     void flipHourglass() throws RemoteException;

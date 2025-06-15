@@ -22,6 +22,7 @@ public interface GameModelInterface {
     void requestComponent(Game game, ShipBoard shipBoard, int componentID);
     void rejectComponent(Game game, ShipBoard shipBoard);
     void stashComponent(Game game, ShipBoard shipBoard);
+    void grabPlacedComponent(Game game, ShipBoard shipBoard);
     void grabStashedComponent(Game game, ShipBoard shipBoard, int index);
     void placeComponent(Game game, ShipBoard shipBoard, Point point, Direction orientation);
     void flipHourglass(Game game, ShipBoard shipBoard);

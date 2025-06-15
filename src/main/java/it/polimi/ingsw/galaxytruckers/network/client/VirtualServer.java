@@ -27,6 +27,7 @@ public interface VirtualServer {
     void requestComponent(int componentID);
     void rejectComponent();
     void stashComponent();
+    void grabPlacedComponent();
     void grabStashedComponent(int index);
     void placeComponent(Point point, Direction orientation);
     void flipHourglass();

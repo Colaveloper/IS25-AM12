@@ -97,6 +97,7 @@ public abstract class CliScreen extends Screen {
             availableActions.addAll(state.getAvailableActions());
             for (StateActions action : availableActions) {
                 switch (action) {
+                    case GRAB_PLACED_COMPONENT ->   actions.add("G Grab last placed Component");
                     case ACTIVATE_COMPONENT ->      actions.add("A[x][y] Activate component        ");
                     case SPEND_BATTERIES ->         actions.add("B[x][y] Spend battery on component");
                     case GRAB_REWARD ->             actions.add("P       To pick reward            ");
@@ -176,6 +177,7 @@ public abstract class CliScreen extends Screen {
             case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("B\\s\\d+\\s\\d+");
             case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.matches("A\\s\\d+\\s\\d+");
             case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.matches("E\\s\\d+");
+            case "G" -> availableActions.contains(StateActions.GRAB_PLACED_COMPONENT) && input.matches("G");
             case " " ->(availableActions.contains(StateActions.GO_NEXT)    ||
                         availableActions.contains(StateActions.DRAW_CARD)  ||
                         availableActions.contains(StateActions.RELEASE_FORECAST));

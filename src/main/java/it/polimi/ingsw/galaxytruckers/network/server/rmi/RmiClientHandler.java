@@ -142,6 +142,11 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
     }
 
     @Override
+    public void grabPlacedComponent() throws RemoteException {
+        getLobby().grabPlacedComponent(player);
+    }
+
+    @Override
     public void grabStashedComponent(int index) throws RemoteException {
         getLobby().grabStashedComponent(player, index);
     }

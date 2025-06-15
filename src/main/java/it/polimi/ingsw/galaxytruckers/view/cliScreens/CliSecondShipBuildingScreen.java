@@ -138,6 +138,9 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                 }
                 break;
 
+            case "G":
+                controller.grabPlacedComponent();
+
             case "F":
                 if (parts.length == 2) {
                     int index = Integer.parseInt(parts[1]);
@@ -163,38 +166,14 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                     cliAllShips.setDirty();
                     buildingShipToCliShip.get(myShipBoard).setDirty();
 
-                    if(lastPosition != null) buildingShipToCliShip.get(myShipBoard).getCliComponent(lastPosition).setDirty();
-                    else {
+//                    if(lastPosition != null) buildingShipToCliShip.get(myShipBoard).getCliComponent(lastPosition).setDirty();
+//                    else {
                         buildingShipToCliShip.get(myShipBoard).clearHand();
                         buildingShipToCliShip.get(myShipBoard).setHand(lastComponent);
-                    }
+//                    }
 
                     render();
                 }
-//                } else if (parts.length == 2 && parts[1].equalsIgnoreCase("LEFT")) {
-//                    // Rotate component left
-//                    if(myShipBoard.getLastComponent() == null) {
-//                        System.out.println("Nothing to rotate");
-//                        break;
-//                    }
-//                    myShipBoard.getLastComponent().setOrientation(myShipBoard.getLastComponent().getOrientation().getLeft());
-//
-//                    buildingShipToCliShip.get(myShipBoard).clearHand();
-//                    buildingShipToCliShip.get(myShipBoard).setHand(myShipBoard.getLastComponent());
-//                    cliAllShips.setDirty();
-//                    render(); // render immediately because orientation is client-side only
-//                } else if (parts.length == 2 && parts[1].equalsIgnoreCase("RIGHT")) {
-//                    if(myShipBoard.getLastComponent() == null) {
-//                        System.out.println("Nothing to rotate");
-//                        break;
-//                    }
-//                    myShipBoard.getLastComponent().setOrientation(myShipBoard.getLastComponent().getOrientation().getRight());
-//
-//                    buildingShipToCliShip.get(myShipBoard).clearHand();
-//                    buildingShipToCliShip.get(myShipBoard).setHand(myShipBoard.getLastComponent());
-//                    cliAllShips.setDirty();
-//                    render(); // render immediately because orientation is client-side only
-//                }
                 else {
                     System.out.println("Invalid command. Use 'R' to reject the component or 'R LEFT'/'R RIGHT' to rotate it.");
                 }

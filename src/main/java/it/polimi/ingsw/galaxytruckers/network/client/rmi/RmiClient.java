@@ -105,6 +105,11 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
+    public void grabPlacedComponent() {
+        runRemoteMethod(() -> remoteController.grabPlacedComponent());
+    }
+
+    @Override
     public void grabStashedComponent(int index) {
         runRemoteMethod(() -> remoteController.grabStashedComponent(index));
     }

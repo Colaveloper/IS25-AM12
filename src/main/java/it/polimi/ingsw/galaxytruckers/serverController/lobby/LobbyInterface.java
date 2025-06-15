@@ -29,6 +29,7 @@ public interface LobbyInterface {
     //TODO : add documentation for these game methods
     void rejectComponent(Player player);
     void stashComponent(Player player);
+    void grabPlacedComponent(Player player);
     void grabStashedComponent(Player player, int index);
     void placeComponent(Player player, Point point, Direction orientation);
     void flipHourglass(Player player);
