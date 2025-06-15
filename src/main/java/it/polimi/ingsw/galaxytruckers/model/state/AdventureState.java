@@ -9,7 +9,8 @@ public abstract class AdventureState extends GameState {
     public void giveUp(ShipBoard shipBoard) {
         SurrenderPolicy surrenderPolicy = game.getSurrenderPolicy();
         if (surrenderPolicy.isSurrenderEnabled()) {
-            surrenderPolicy.requestSurrender(shipBoard, SurrenderCause.REQUEST);
+            if (!surrenderPolicy.requestSurrender(shipBoard, SurrenderCause.REQUEST))
+                throw new IllegalStateException("You have already surrendered");
         } else {
             throw new UnsupportedOperationException("You cannot give up in this game");
         }

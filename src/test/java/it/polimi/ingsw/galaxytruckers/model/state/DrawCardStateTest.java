@@ -31,8 +31,9 @@ class DrawCardStateTest {
              * more ships playing
              */
             @Override
-            public void endGameIfAllShipsHaveGivenUp() {
+            public boolean endGameIfAllShipsHaveGivenUp() {
                 //mock
+                return false;
             }
         };
         game.setEventListener(new GameEventListenerStub());

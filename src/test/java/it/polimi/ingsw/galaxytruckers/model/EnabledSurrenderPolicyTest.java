@@ -43,16 +43,16 @@ class EnabledSurrenderPolicyTest {
 
     @Test
     void requestSurrender() {
-        enabledSurrenderPolicy.requestSurrender(ship, null);
+        assertTrue(enabledSurrenderPolicy.requestSurrender(ship, null));
         assertEquals(Set.of(ship), enabledSurrenderPolicy.getRequests());
     }
 
     @Test
     void requestSurrenderIfAlreadySurrenderedThrowsException() {
         enabledSurrenderPolicy.requestSurrender(ship, null);
-        assertThrows(IllegalStateException.class, () -> enabledSurrenderPolicy.requestSurrender(ship, null));
+        assertFalse(enabledSurrenderPolicy.requestSurrender(ship, null));
         enabledSurrenderPolicy.confirmSurrender(flightBoard);
-        assertThrows(IllegalStateException.class, () -> enabledSurrenderPolicy.requestSurrender(ship, null));
+        assertFalse(enabledSurrenderPolicy.requestSurrender(ship, null));
     }
 
     @Test

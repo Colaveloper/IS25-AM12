@@ -16,8 +16,9 @@ public class NoSurrenderPolicy implements SurrenderPolicy{
     }
 
     @Override
-    public void requestSurrender(ShipBoard shipBoard, SurrenderCause cause) {
+    public boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause) {
         System.err.println("Requesting surrender when surrender is disabled");
+        return false;
     }
 
     @Override

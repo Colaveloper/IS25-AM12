@@ -15,13 +15,13 @@ public final class DrawCardState extends AdventureState implements GameStateInte
     @Override
     public void setGame(Game game) {
         this.game = game;
-        this.shipBoard = game.getFlightBoard().getOrderedShips().getFirst();
-        game.getEventListener().notifyGameStateUpdateEvent(this);
         SurrenderPolicy surrenderPolicy = game.getSurrenderPolicy();
         if (surrenderPolicy.isSurrenderEnabled()) {
             surrenderPolicy.confirmSurrender(game.getFlightBoard());
-            game.endGameIfAllShipsHaveGivenUp();
+            if (game.endGameIfAllShipsHaveGivenUp()) return;
         }
+        this.shipBoard = game.getFlightBoard().getOrderedShips().getFirst();
+        game.getEventListener().notifyGameStateUpdateEvent(this);
     }
 
     @Override

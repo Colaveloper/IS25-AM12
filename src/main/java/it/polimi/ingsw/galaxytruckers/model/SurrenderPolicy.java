@@ -8,7 +8,7 @@ import java.util.Set;
 public interface SurrenderPolicy {
     void setEventListener(GameEventListener gameEventListener);
     boolean isSurrenderEnabled();
-    void requestSurrender(ShipBoard shipBoard, SurrenderCause cause);
+    boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause);
     Set<ShipBoard> confirmSurrender(FlightBoard flightBoard);
     Set<ShipBoard> getSurrenderedShips();
 }

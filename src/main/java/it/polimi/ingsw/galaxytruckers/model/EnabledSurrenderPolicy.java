@@ -23,12 +23,11 @@ public class EnabledSurrenderPolicy implements SurrenderPolicy {
     }
 
     @Override
-    public void requestSurrender(ShipBoard shipBoard, SurrenderCause cause) {
-        if (requests.contains(shipBoard) || surrenderedShips.contains(shipBoard)) {
-            throw new IllegalStateException("Already surrendered");
-        }
-        requests.add(shipBoard);
-        if (listener != null) listener.notifySurrenderRequestEvent(shipBoard, cause);
+    public boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause) {
+        if (surrenderedShips.contains(shipBoard)) return false;
+        boolean res = requests.add(shipBoard);
+        if (res && listener != null) listener.notifySurrenderRequestEvent(shipBoard, cause);
+        return res;
     }
 
     @Override
@@ -37,8 +36,8 @@ public class EnabledSurrenderPolicy implements SurrenderPolicy {
         Set<ShipBoard> allShips = flightBoard.getShipToPlace().keySet();
         allShips.stream()
                 .filter(s -> s.getCrewSize() == 0)
-                .forEach(s -> forceSurrender(s,SurrenderCause.NOCREW));
-        flightBoard.getLappedShips().forEach(s -> forceSurrender(s,SurrenderCause.LAPPED));
+                .forEach(s -> requestSurrender(s, SurrenderCause.NOCREW));
+        flightBoard.getLappedShips().forEach(s -> requestSurrender(s,SurrenderCause.LAPPED));
 
         this.surrenderedShips.addAll(requests);
         Set<ShipBoard> newSurrenderedShips = new HashSet<>(this.requests);
@@ -46,12 +45,6 @@ public class EnabledSurrenderPolicy implements SurrenderPolicy {
         flightBoard.removeShips(newSurrenderedShips);
         if (listener !=  null && !newSurrenderedShips.isEmpty()) listener.notifySurrenderEvent(newSurrenderedShips.stream().toList());
         return newSurrenderedShips;
-    }
-
-    private void forceSurrender(ShipBoard shipBoard, SurrenderCause surrenderCause) {
-        if (!this.requests.contains(shipBoard)) {
-            requestSurrender(shipBoard, surrenderCause);
-        }
     }
 
     @Override

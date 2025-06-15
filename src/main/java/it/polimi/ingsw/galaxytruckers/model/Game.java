@@ -148,10 +148,12 @@ public class Game {
      * Sets game state to the end game state if there are no
      * more ships playing
      */
-    public void endGameIfAllShipsHaveGivenUp() {
+    public boolean endGameIfAllShipsHaveGivenUp() {
         if (surrenderPolicy.getSurrenderedShips().size() == shipBoards.size()) {
             endGame();
+            return true;
         }
+        return false;
     }
 
     private void assignShipRewards() {
