@@ -135,4 +135,8 @@ public class GameEventListenerStub extends GameEventListener{
     @Override
     public void notifySurrenderRequestEvent(ShipBoard shipBoard, SurrenderCause cause) {
     }
+
+    @Override
+    public void notifyGrabPlacedComponentEvent(ShipBoard shipBoard) {
+    }
 }

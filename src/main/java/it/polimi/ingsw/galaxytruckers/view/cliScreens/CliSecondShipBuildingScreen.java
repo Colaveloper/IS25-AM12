@@ -8,11 +8,9 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponen
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
-import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
-import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 
 import java.awt.*;
 import java.util.*;
@@ -140,7 +138,7 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
             case "G":
                 controller.grabPlacedComponent();
-
+                break;
             case "F":
                 if (parts.length == 2) {
                     int index = Integer.parseInt(parts[1]);
@@ -255,9 +253,9 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     }
 
     @Override
-    public void notifyGrabPlacedComponent(ShipBoard shipBoard) {
+    public void notifyGrabPlacedComponent(ShipBoard shipBoard, Point prevPosition) {
         CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
-        ship.onRemoveComponent(shipBoard.getLastPosition());
+        ship.onRemoveComponent(prevPosition);
         ship.setHand(shipBoard.getLastComponent());
         cliAllShips.setDirty();
     }

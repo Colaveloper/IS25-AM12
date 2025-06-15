@@ -237,6 +237,12 @@ public class Game {
         }
     }
 
+    public void grabPlacedComponent(ShipBoard shipBoard) {
+        synchronized (lock) {
+            currentState.grabPlacedComponent(shipBoard);
+        }
+    }
+
     public void grabStashedComponent(ShipBoard shipBoard, int index) {
         synchronized (lock) {
             currentState.grabStashedComponent(shipBoard, index);

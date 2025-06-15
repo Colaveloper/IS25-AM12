@@ -90,6 +90,22 @@ class ShipBoardTest {
         }
 
         @Test
+        void grabPlacedComponentUpdatesLastPosition() {
+            shipBoard.offerComponent(componentToAdd);
+            shipBoard.placeComponent(new Point(7,7),Direction.UP);
+            shipBoard.grabPlacedComponent();
+            assertTrue(shipBoard.getLastPosition().isEmpty());
+            assertEquals(componentToAdd, shipBoard.getLastComponent().orElse(null));
+        }
+
+        @Test
+        void grabPlacedComponentThrowsIfThereIsNoPlacedComponentToGrab() {
+            assertThrows(IllegalStateException.class, () -> shipBoard.grabPlacedComponent());
+            shipBoard.offerComponent(componentToAdd);
+            assertThrows(IllegalStateException.class, () -> shipBoard.grabPlacedComponent());
+        }
+
+        @Test
         void componentIsStashed() {
             shipBoard.offerComponent(componentToAdd);
             shipBoard.stashComponent();

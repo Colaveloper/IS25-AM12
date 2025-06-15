@@ -312,6 +312,11 @@ class RemoteControllerStub implements RemoteController {
     }
 
     @Override
+    public void grabPlacedComponent() throws RemoteException {
+        checker.grabPlacedComponent();
+    }
+
+    @Override
     public void grabStashedComponent(int index){
         checker.grabStashedComponent(index);
     }

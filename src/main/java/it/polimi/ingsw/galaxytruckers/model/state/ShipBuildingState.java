@@ -59,6 +59,15 @@ public abstract class ShipBuildingState extends GameState{
     }
 
     @Override
+    public void grabPlacedComponent(ShipBoard shipBoard) {
+        if (completedShipBoards.contains(shipBoard)) {
+            throw new IllegalStateException("Ship Board already completed");
+        }
+        shipBoard.grabPlacedComponent();
+        game.getEventListener().notifyGrabPlacedComponentEvent(shipBoard);
+    }
+
+    @Override
     public void grabStashedComponent(ShipBoard shipBoard, int index) {
         throw new UnsupportedOperationException("This action is not available.");
     }
@@ -69,7 +78,6 @@ public abstract class ShipBuildingState extends GameState{
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.placeComponent(point, orientation);
-        Component component = shipBoard.getLastComponent().orElseThrow();
         game.getEventListener().notifyPlaceComponentEvent(shipBoard,orientation, point);
     }
 
