@@ -51,7 +51,7 @@ public interface ModelObserver {
 
     void notifyPeekForecast(ShipBoard shipBoard, int deckIndex);
 
-    void setForecastDeck(java.util.List<AdventureCard> adventureCards);
+    void setForecastDeck(List<AdventureCard> adventureCards);
 
     void notifyReleaseForecast(ShipBoard shipBoard, int index);
 
@@ -83,7 +83,7 @@ public interface ModelObserver {
 
     void notifyCurrentPlayerUpdate(ShipBoard shipBoard);
 
-    void notifyGiveUp(ShipBoard shipBoard);
+    void notifyGiveUp(Player player);
 
     void setFinalScores(Map<Player, Integer> finalScores);
 

@@ -23,6 +23,7 @@ public abstract class CliScreen extends Screen {
     protected CliAllShips cliAllShips;
     protected Map<ShipBoard, CliShipBoard> shipToCliShip;
     protected CliComponentLegend cliComponentLegend;
+    private String surrenderMessage;
 
 
     public CliScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
@@ -56,6 +57,11 @@ public abstract class CliScreen extends Screen {
     }
 
     public abstract void render();
+
+    @Override
+    public void notifyGiveUp(Player player) {
+        surrenderMessage = player.getNickname() + " has surrendered!";
+    }
 
     public abstract void parseAndInvoke(String input);
 
@@ -135,6 +141,10 @@ public abstract class CliScreen extends Screen {
         }
         else{
             System.out.println("You're out of the flight! - watch other players compete.");
+        }
+        if(surrenderMessage!=null) {
+            System.out.println(surrenderMessage);
+            surrenderMessage = null;
         }
     }
 

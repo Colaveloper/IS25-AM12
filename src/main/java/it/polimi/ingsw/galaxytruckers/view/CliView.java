@@ -219,8 +219,8 @@ public class CliView extends View<CliScreen> {
     }
 
     @Override
-    public void notifyGiveUp(ShipBoard shipBoard) {
-        currentScreen.notifyGiveUp(shipBoard);
+    public void notifyGiveUp(Player player) {
+        currentScreen.notifyGiveUp(player);
         currentScreen.render();
     }
 

@@ -267,6 +267,10 @@ public class ClientModel {
         safeGetCurrentState().notifySurrenderShip(shipBoards);
     }
 
+    public void notifySurrenderRequest(Player player) {
+        safeGetCurrentState().notifySurrenderRequest(player);
+    }
+
     public void setFinalScores(Map<Player, Integer> finalScores) {
         synchronized (gameLock) {
             this.finalScores = finalScores;

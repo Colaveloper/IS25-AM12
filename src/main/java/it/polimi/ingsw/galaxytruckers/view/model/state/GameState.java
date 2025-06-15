@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.model.state;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -89,6 +90,11 @@ public abstract sealed class GameState permits
 
     public void notifySurrenderShip(Set<ShipBoard> shipBoards) {
         for (ShipBoard shipBoard : shipBoards) game.getFlightBoard().removeShip(shipBoard);
+        //doesn't notify observers so it doesnt print anything, but there's an event for that
+    }
+
+    public void notifySurrenderRequest(Player player) {
+        game.getObservers().forEach(observer -> observer.notifyGiveUp(player));
     }
 
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position, boolean isMyShip) {

@@ -69,7 +69,7 @@ public abstract class Screen {
 
     public void notifyCurrentPlayerUpdate(ShipBoard shipBoard){}
 
-    public void notifyGiveUp(ShipBoard shipBoard){}
+    public void notifyGiveUp(Player player){}
 
     public void setFinalScores(Map<Player, Integer> finalScores){}
 

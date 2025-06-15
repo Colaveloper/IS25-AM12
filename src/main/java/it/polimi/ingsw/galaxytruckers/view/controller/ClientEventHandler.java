@@ -195,9 +195,9 @@ public class ClientEventHandler implements EventHandler<Event> {
             case CurrentPlayerUpdateEvent currentPlayerUpdateEvent -> clientModel.notifyCurrentPlayerUpdate(
                     playerRegistry.getByNickname(currentPlayerUpdateEvent.playerName()).getShipBoard()
             );
-            case SurrenderRequestEvent surrenderRequestEvent -> {
-                //TODO: show personalized message on the view
-            }
+            case SurrenderRequestEvent surrenderRequestEvent -> clientModel.notifySurrenderRequest(
+                    playerRegistry.getByNickname(surrenderRequestEvent.playerName()));
+
             case GrabPlacedComponentEvent grabPlacedComponentEvent -> {
                 clientModel.notifyGrabPlacedComponent(
                         playerRegistry.getByNickname(grabPlacedComponentEvent.playerName()).getShipBoard()
