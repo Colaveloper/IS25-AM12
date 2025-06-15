@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponen
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
@@ -329,6 +330,11 @@ public class CliSecondShipBuildingScreen extends CliScreen {
 
     @Override
     public void notifyHourglassEnd() {}
+
+    @Override
+    public void setForecastDeck(List<AdventureCard> adventureCards) {
+        cliForecastCards.setCards(adventureCards);
+    }
 
     private boolean componentInHand(){
         return myShipBoard.getLastComponent() != null && myShipBoard.getLastPosition() == null;
