@@ -62,6 +62,12 @@ public class GameEventListener {
         ));
     }
 
+    public void notifyGrabPlacedComponentEvent(ShipBoard shipBoard) {
+        controllerListener.notifyEvent(new GrabPlacedComponentEvent(
+                Player.getPlayer(shipBoard).getNickname()
+        ));
+    }
+
     public void notifyGrabStashedComponentEvent(ShipBoard shipBoard, int index) {
         controllerListener.notifyEvent(GrabStashedComponentEvent.from(shipBoard, index));
     }

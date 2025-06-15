@@ -77,6 +77,11 @@ public class ShipBuildingTest {
             }
 
             @Override
+            public void grabPlacedComponent() {
+
+            }
+
+            @Override
             public void grabStashedComponent(int index) {
 
             }

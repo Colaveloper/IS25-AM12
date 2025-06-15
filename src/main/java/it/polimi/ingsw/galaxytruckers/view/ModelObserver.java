@@ -2,7 +2,6 @@ package it.polimi.ingsw.galaxytruckers.view;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.Lobby;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
@@ -37,7 +36,7 @@ public interface ModelObserver {
     void notifyStashComponent(ShipBoard shipBoard, Component component);
     void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition);
 
-    void notifyGrabPlacedComponent(ShipBoard shipBoard);
+    void notifyGrabPlacedComponent(ShipBoard shipBoard, Point prevPosition);
 
     void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component);
 

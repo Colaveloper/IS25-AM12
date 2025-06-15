@@ -76,6 +76,10 @@ public non-sealed class GameState implements GameStateInterface {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
+    public void grabPlacedComponent(ShipBoard shipBoard) {
+        throw new IllegalStateException("This action is unsupported in this state");
+    }
+
     public void grabStashedComponent(ShipBoard shipBoard, int index){
         throw new IllegalStateException("This action is unsupported in this state");
     }

@@ -79,6 +79,12 @@ class ClientControllerTest {
             }
 
             @Override
+            public void grabPlacedComponent() {
+                System.out.println("FAKE SERVER EVENT: grab placed component");
+                controller.notifyEvent(new GrabPlacedComponentEvent(myNickname));
+            }
+
+            @Override
             public void placeComponent(Point point, Direction orientation) {
                 System.out.println("FAKE SERVER EVENT: the current component was successfully positioned where requested");
                 controller.notifyEvent(new PlaceComponentEvent(myNickname, point, orientation));

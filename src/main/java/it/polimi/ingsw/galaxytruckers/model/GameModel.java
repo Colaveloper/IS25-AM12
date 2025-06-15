@@ -64,7 +64,7 @@ public class GameModel implements GameModelInterface {
 
     @Override
     public void grabPlacedComponent(Game game, ShipBoard shipBoard) {
-        //todo
+        game.grabPlacedComponent(shipBoard);
     }
 
     @Override

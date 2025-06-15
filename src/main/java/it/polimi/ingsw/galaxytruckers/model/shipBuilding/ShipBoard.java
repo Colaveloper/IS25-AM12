@@ -107,6 +107,14 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     public void grabStashedComponent(int index) {}
 
+    public void grabPlacedComponent() {
+        if (lastComponent != null && lastPosition != null) {
+            lastPosition = null;
+        } else {
+            throw new IllegalStateException("You don't have a placed component to grab");
+        }
+    }
+
     public void weldLastComponent() {
         if (lastComponent != null) {
             if (lastPosition == null) {

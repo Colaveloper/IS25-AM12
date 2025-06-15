@@ -3,7 +3,6 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiForecastScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
@@ -110,8 +109,8 @@ public class GuiView extends View<GuiScreen> {
     }
 
     @Override
-    public void notifyGrabPlacedComponent(ShipBoard shipBoard) {
-        currentScreen.notifyGrabPlacedComponent(shipBoard);
+    public void notifyGrabPlacedComponent(ShipBoard shipBoard, Point prevPosition) {
+        currentScreen.notifyGrabPlacedComponent(shipBoard, prevPosition);
     }
 
     @Override
