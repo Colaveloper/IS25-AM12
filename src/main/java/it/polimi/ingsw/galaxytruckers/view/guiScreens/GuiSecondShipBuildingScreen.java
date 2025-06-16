@@ -199,6 +199,14 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
             }
 
             @Override
+            public void rotateHandComponent() {
+                if (model.getMyShip().getLastComponent() != null) {
+                    lastComponentDirection = lastComponentDirection.getLeft();
+                    guiHands.get(model.getMyShip()).rotateComponent(lastComponentDirection.getAngle());
+                }
+            }
+
+            @Override
             public void flipHourglass() {
                 if (state.getAvailableActions().contains(StateActions.FLIP_HOURGLASS)) {
                     controller.flipHourglass();
@@ -253,3 +261,4 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
         };
     }
 }
+
