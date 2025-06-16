@@ -85,6 +85,9 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
             } catch (RemoteException e) {
                 events.offerFirst(event);
                 handleNetworkError(e);
+            } catch (RuntimeException e) {
+                System.out.println("An error occurred on the client of " + player.getNickname());
+                e.printStackTrace(System.err);
             } finally {
                 afterEach.run();
             }

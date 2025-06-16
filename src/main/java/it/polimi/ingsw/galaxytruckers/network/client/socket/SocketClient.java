@@ -24,7 +24,9 @@ import java.util.concurrent.*;
 public class SocketClient implements VirtualServer, VirtualClient {
     private Socket socket;
     private ObjectInputStream inputStream;
+    private final Object outputLock = new Object();
     private ObjectOutputStream outputStream;
+    private final Object inputLock = new Object();
     private ClientControllerInterface controller;
     private boolean isRunning;
 
@@ -41,9 +43,13 @@ public class SocketClient implements VirtualServer, VirtualClient {
     public void start(String ip, int port) {
         try {
             socket = new Socket(ip, port);
-            outputStream = new ObjectOutputStream(socket.getOutputStream());
-            outputStream.flush();
-            inputStream = new ObjectInputStream(socket.getInputStream());
+            synchronized (outputLock) {
+                outputStream = new ObjectOutputStream(socket.getOutputStream());
+                outputStream.flush();
+            }
+            synchronized (inputLock) {
+                inputStream = new ObjectInputStream(socket.getInputStream());
+            }
             isRunning = true;
             inputThread = new Thread(this::inputThreadTask);
             inputThread.start();
@@ -66,7 +72,10 @@ public class SocketClient implements VirtualServer, VirtualClient {
     private void inputThreadTask() {
         while (isRunning) {
             try {
-                Message message = (Message) inputStream.readObject();
+                Message message;
+                synchronized (inputLock) {
+                    message = (Message) inputStream.readObject();
+                }
                 switch (message) {
                     case EventMessage eventMessage -> {
                         notifyEvent(eventMessage.event());
@@ -95,8 +104,10 @@ public class SocketClient implements VirtualServer, VirtualClient {
     private void sendRequest(Request request) {
         responses.put(request.getUuid(), new CompletableFuture<>());
         try {
-            outputStream.writeObject(request);
-            outputStream.flush();
+            synchronized (outputLock) {
+                outputStream.writeObject(request);
+                outputStream.flush();
+            }
             Response response = responses.get(request.getUuid()).get();
             responses.remove(response.getUuid());
             if (response.isError()) throw new RuntimeException(response.getError());
@@ -109,8 +120,10 @@ public class SocketClient implements VirtualServer, VirtualClient {
 
     private void ping() {
         try {
-            outputStream.writeObject(new Ping());
-            outputStream.flush();
+            synchronized (outputLock) {
+                outputStream.writeObject(new Ping());
+                outputStream.flush();
+            }
         } catch (IOException e) {
             handleIOException(e);
         }

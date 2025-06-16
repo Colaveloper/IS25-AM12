@@ -46,16 +46,20 @@ public class NotRegisteredSocketHandler {
     private void listenTask() {
         while (listening) {
             try {
-                Message message = (Message) inputStream.readObject();
+                Message message;
+                synchronized (inputStream) {
+                    message = (Message) inputStream.readObject();
+                }
                 switch (message) {
                     case RegisterNickname registerNickname -> {
-                        //registerNickname.getNickname();
                         this.registerNickname(registerNickname);
                     }
                     case RegisteredRequest req -> {
                         Response response = new Response(req.getUuid(), new IllegalStateException("You must register first"));
-                        outputStream.writeObject(response);
-                        outputStream.flush();
+                        synchronized (outputStream) {
+                            outputStream.writeObject(response);
+                            outputStream.flush();
+                        }
                     }
                     default -> {
                         System.err.println("ERROR: the server received a message of type "  + message.getClass().getName());
@@ -77,11 +81,15 @@ public class NotRegisteredSocketHandler {
             clientHandler.start();
             controller.registerPlayer(player);
             Response response = new Response(message.getUuid());
-            outputStream.writeObject(response);
-            outputStream.flush();
+            synchronized (outputStream) {
+                outputStream.writeObject(response);
+                outputStream.flush();
+            }
             stop();
         } catch (RuntimeException e) {
-            outputStream.writeObject(new Response(message.getUuid(),e));
+            synchronized (outputStream) {
+                outputStream.writeObject(new Response(message.getUuid(),e));
+            }
         }
     }
 

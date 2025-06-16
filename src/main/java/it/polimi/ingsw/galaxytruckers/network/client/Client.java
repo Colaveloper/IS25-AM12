@@ -58,7 +58,6 @@ public class Client {
                     controller.setServer(server);
                     socketClient.setController(controller);
                     socketClient.start(serverAddress, socketPort);
-                    System.out.println("TODO: implement Socket communication");
                     return;
                 } else {
                     System.out.println("Invalid choice!");
