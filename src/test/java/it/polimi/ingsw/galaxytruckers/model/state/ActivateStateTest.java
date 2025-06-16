@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.awt.*;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,6 +53,15 @@ class ActivateStateTest {
             }
         };
         testActivateState.setGame(game);
+    }
+
+    @Test
+    void stateSetup() {
+        Set<Point> availablePositions = Set.of(new Point(7,7));
+        testActivateState = new ActivateState(ship1, availablePositions) {
+        };
+        assertEquals(ship1, testActivateState.getShipBoard());
+        assertEquals(availablePositions, testActivateState.getAvailablePositions());
     }
 
     @Test
@@ -138,6 +148,21 @@ class ActivateStateTest {
     }
 
     @Test
+    void spendBatteriesThrowsWhenNotEnoughComponentsToActivate() {
+        testActivateState = new ActivateStateStub(ship2);
+        assertThrows(IllegalStateException.class, () -> testActivateState.spendBatteries(ship2, new Point(7,7)));
+    }
+
+    @Test
+    void spendBatteriesDoesNotThrowsIfThereAreEnoughActivatables() {
+        testActivateState = new ActivateState(ship2, Set.of(new Point(0, 0))) {
+        };
+        game.setCurrentState(testActivateState);
+        assertDoesNotThrow(() -> testActivateState.spendBatteries(ship2, new Point(7,7)));
+        assertEquals(-1,  testActivateState.batteriesToSpend);
+    }
+
+    @Test
     void goNextThrowsExceptionWhenOutOfTurn() {
         assertThrows(IllegalStateException.class, () -> testActivateState.goNext(ship2));
     }
@@ -153,6 +178,15 @@ class ActivateStateTest {
         };
         testActivateState.setGame(game);
         testActivateState.activateComponent(ship2, new Point(7,7));
+        assertThrows(IllegalStateException.class, () -> testActivateState.goNext(ship2));
+    }
+
+    @Test
+    void goNextThrowsExceptionWhenShipHasComponentsToActivate() {
+        testActivateState = new ActivateState(ship2, Set.of(new Point(0, 0))) {
+        };
+        game.setCurrentState(testActivateState);
+        testActivateState.spendBatteries(ship2, new Point(7,7));
         assertThrows(IllegalStateException.class, () -> testActivateState.goNext(ship2));
     }
 

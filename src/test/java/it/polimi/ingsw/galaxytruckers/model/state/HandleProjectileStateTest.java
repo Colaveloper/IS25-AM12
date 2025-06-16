@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,6 +30,7 @@ class HandleProjectileStateTest {
     Game game;
     Deck deck;
     AdventureCard adventureCard;
+    CountDownLatch latch;
 
 
     @BeforeEach
@@ -67,6 +69,7 @@ class HandleProjectileStateTest {
         };
         game = new Game(Level.SECOND);
         game.setEventListener(new GameEventListenerStub());
+        latch = StateTransitionUtils.setupLatch(game);
         testState.setGame(game);
     }
 
@@ -98,9 +101,10 @@ class HandleProjectileStateTest {
     void goNextChangesAdventureStateToChooseShipPieceState(){
         game = new Game(Level.SECOND);
         game.setEventListener(new GameEventListenerStub());
+        latch = StateTransitionUtils.setupLatch(game);
         testState.setGame(game);
         testState.goNext(ship1);
-        assertEquals(ChooseShipPieceState.class, game.getCurrentState().getClass());
+        StateTransitionUtils.assertTransition(latch,game,ChooseShipPieceState.class);
     }
 
     @Test
@@ -118,6 +122,7 @@ class HandleProjectileStateTest {
             }
         };
         game.setEventListener(new GameEventListenerStub());
+        latch = StateTransitionUtils.setupLatch(game);
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
@@ -133,7 +138,7 @@ class HandleProjectileStateTest {
         testState = new HandleProjectileState(ship1, projectile);
         testState.setGame(game);
         testState.goNext(ship1);
-        assertNotEquals(testState, game.getCurrentState());
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
     @Test
@@ -151,6 +156,7 @@ class HandleProjectileStateTest {
             }
         };
         game.setEventListener(new GameEventListenerStub());
+        latch = StateTransitionUtils.setupLatch(game);
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
@@ -166,7 +172,7 @@ class HandleProjectileStateTest {
         testState = new HandleProjectileState(ship1, projectile);
         testState.setGame(game);
         testState.goNext(ship1);
-        assertNotEquals(testState, game.getCurrentState());
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
 
     }
 

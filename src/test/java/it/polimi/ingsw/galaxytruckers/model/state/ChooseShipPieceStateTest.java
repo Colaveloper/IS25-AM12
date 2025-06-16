@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,10 +70,11 @@ class ChooseShipPieceStateTest {
                 return adventureCard;
             }
         };
-        testChooseShipPieceState.setGame(game);
+        CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         game.setEventListener(new GameEventListenerStub());
+        game.setCurrentState(testChooseShipPieceState);
         testChooseShipPieceState.chooseShipPiece(ship1, 0);
-        assertNotEquals(testChooseShipPieceState, game.getCurrentState());
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
 }

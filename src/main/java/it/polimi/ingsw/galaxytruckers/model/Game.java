@@ -39,6 +39,8 @@ public class Game {
     private volatile GameEventListener eventListener;
 
     private final ExecutorService transitionExecutor = Executors.newSingleThreadExecutor();
+
+    @VisibleForTesting
     private Runnable afterEach = () -> {};
 
     public Game(Level level, int shipsN) {
@@ -382,6 +384,20 @@ public class Game {
     @VisibleForTesting
     public Game(Level level) {
         this(level, 4);
+    }
+
+    public Game(GameFactory gameFactory) {
+        int shipsN = 4;
+        this.level = null;
+        this.gameFactory = gameFactory;
+        this.surrenderPolicy = this.gameFactory.createSurrenderPolicy();
+        this.scoresRegistry = this.gameFactory.createScoresRegistry();
+        this.flightBoard = gameFactory.createFlightBoard(shipsN);
+        try {
+            this.deck = gameFactory.createDeck(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @VisibleForTesting

@@ -9,6 +9,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import org.checkerframework.dataflow.qual.AssertMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,16 +20,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 class ShipBuildingStateTest {
+    CountDownLatch latch;
     Game game;
     List<ShipBoard> shipBoards;
 
@@ -44,35 +44,23 @@ class ShipBuildingStateTest {
         @BeforeEach
         void setUp() {
             game = new Game(Level.SECOND);
-            game.setEventListener(new GameEventListenerStub());
             shipBoards.add(game.addShipBoard(GameColor.BLUE));
             shipBoards.add(game.addShipBoard(GameColor.RED));
             game.setEventListener(new GameEventListenerStub());
-
-            // Make the first ship invalid so that it does not automatically change state
-            ShipBoard invalidShip = shipBoards.getFirst();
-            invalidShip.offerComponent(new Component(
-                    Map.of(
-                            Direction.UP, Connector.UNIVERSAL,
-                            Direction.LEFT, Connector.UNIVERSAL,
-                            Direction.DOWN, Connector.UNIVERSAL,
-                            Direction.RIGHT, Connector.UNIVERSAL)
-            ));
-            invalidShip.placeComponent(new Point(5,9), Direction.UP);
-            invalidShip.weldLastComponent();
-            invalidShip.offerComponent(new Component(
-                    Map.of(
-                            Direction.UP, Connector.NONE,
-                            Direction.LEFT, Connector.NONE,
-                            Direction.DOWN, Connector.NONE,
-                            Direction.RIGHT, Connector.NONE)
-            ));
-            invalidShip.placeComponent(new Point(6,9), Direction.UP);
-            invalidShip.weldLastComponent();
-
+            latch = StateTransitionUtils.setupLatch(game);
             game.start();
             shipBuildingState = (SecondShipBuildingState) game.getCurrentState();
             shipBuildingState.getHourglass().stop();
+        }
+
+        @AssertMethod
+        public void assertNoTransition() {
+            StateTransitionUtils.assertNoTransition(latch,game,shipBuildingState);
+        }
+
+        @AssertMethod
+        public void assertTransition() {
+            StateTransitionUtils.assertTransition(latch,game, ShipCorrectionState.class);
         }
 
         @Test
@@ -83,6 +71,7 @@ class ShipBuildingStateTest {
             assertNotNull(shipBuildingState.getHourglass());
             assertNotNull(shipBuildingState.getComponentBank());
             assertTrue(shipBuildingState.getBlockedForecasts().isEmpty());
+            assertNoTransition();
         }
 
         @Test
@@ -95,6 +84,15 @@ class ShipBuildingStateTest {
         }
 
         @Test
+        void requestRandComponentThrowsIfShipHasComponentInHand() {
+            Component requestedComponent = shipBuildingState.getComponentBank().getCoveredComponents().getLast();
+            shipBoards.getFirst().offerComponent(new Component());
+            assertThrows(IllegalStateException.class, () -> shipBuildingState.requestRandComponent(shipBoards.getFirst()));
+            assertEquals(requestedComponent, shipBuildingState.getComponentBank().getCoveredComponents().getLast());
+            assertTrue(shipBuildingState.getComponentBank().getUncoveredComponents().isEmpty());
+        }
+
+        @Test
         void requestComponentRemovesFromUncoveredAndAddsToShipBoard() {
             Component requestedComponent = shipBuildingState.getComponentBank().getCoveredComponents().getLast();
             shipBuildingState.requestRandComponent(shipBoards.getLast());
@@ -102,6 +100,17 @@ class ShipBuildingStateTest {
             shipBuildingState.requestComponent(shipBoards.getFirst(), requestedComponent.getId());
             assertTrue(shipBuildingState.getComponentBank().getUncoveredComponents().isEmpty());
             assertEquals(requestedComponent, shipBoards.getFirst().getLastComponent().orElse(null));
+        }
+
+        @Test
+        void requestComponentThrowsIfShipHasComponentInHand() {
+            Component requestedComponent = shipBuildingState.getComponentBank().getCoveredComponents().getLast();
+            shipBuildingState.requestRandComponent(shipBoards.getLast());
+            int id = shipBoards.getLast().getLastComponent().orElseThrow().getId();
+            shipBuildingState.rejectComponent(shipBoards.getLast());
+            shipBoards.getFirst().offerComponent(new Component());
+            assertThrows(IllegalStateException.class, () -> shipBuildingState.requestComponent(shipBoards.getFirst(), id));
+            assertTrue(shipBuildingState.getComponentBank().getUncoveredComponents().containsKey(requestedComponent.getId()));
         }
 
         @Test
@@ -153,7 +162,6 @@ class ShipBuildingStateTest {
 
         @Test
         void lastFlipHourglassThrowsExceptionIfShipIsNotCompleted() throws InterruptedException {
-            //TODO: decide whether to let players flip the hourglass before building
             Hourglass hourglass = shipBuildingState.getHourglass();
             shipBuildingState.getHourglass().setDuration(10);
             for (int i = 1; i < 2; i++) {
@@ -174,6 +182,7 @@ class ShipBuildingStateTest {
                     game.getFlightBoard().getStartingPositionsLeft().getFirst());
             assertTrue(shipBuildingState.getCompletedShipBoards().contains(shipBoards.getFirst()));
             assertEquals(1, shipBuildingState.getCompletedShipBoards().size());
+            assertNoTransition();
         }
 
         @Test
@@ -207,6 +216,15 @@ class ShipBuildingStateTest {
             shipBuildingState.releaseForecast(shipBoards.getFirst());
             assertTrue(shipBuildingState.getShipToForecasts().isEmpty());
             assertTrue(shipBuildingState.getBlockedForecasts().isEmpty());
+        }
+
+        @Test
+        void grabPlacedComponentUpdatesShip() {
+            shipBuildingState.requestRandComponent(shipBoards.getFirst());
+            shipBuildingState.placeComponent(shipBoards.getFirst(), new Point(8,7),Direction.UP);
+            shipBuildingState.grabPlacedComponent(shipBoards.getFirst());
+            assertTrue(shipBoards.getFirst().getLastComponent().isPresent());
+            assertTrue(shipBoards.getFirst().getLastPosition().isEmpty());
         }
 
         @Nested
@@ -249,6 +267,11 @@ class ShipBuildingStateTest {
             }
 
             @Test
+            void grabPlacedComponentThrowsException() {
+                assertThrows(IllegalStateException.class, () -> shipBuildingState.grabPlacedComponent(shipBoards.getFirst()));
+            }
+
+            @Test
             void lastFlipHourglassEndsBuilding() throws InterruptedException{
                 shipBuildingState.getHourglass().stop();
                 shipBuildingState.getHourglass().setDuration(10);
@@ -257,8 +280,7 @@ class ShipBuildingStateTest {
                     shipBuildingState.flipHourglass(shipBoards.getFirst());
                     Thread.sleep(100);
                 }
-
-                assertNotEquals(game.getCurrentState(), shipBuildingState);
+                assertTransition();
             }
 
             @Test
@@ -287,30 +309,19 @@ class ShipBuildingStateTest {
             shipBoards.add(game.addShipBoard(GameColor.BLUE));
             shipBoards.add(game.addShipBoard(GameColor.RED));
             game.setEventListener(new GameEventListenerStub());
-
-            // Make the first ship invalid so that it does not automatically change state
-            ShipBoard invalidShip = shipBoards.getFirst();
-            invalidShip.offerComponent(new Component(
-                    Map.of(
-                            Direction.UP, Connector.UNIVERSAL,
-                            Direction.LEFT, Connector.UNIVERSAL,
-                            Direction.DOWN, Connector.UNIVERSAL,
-                            Direction.RIGHT, Connector.UNIVERSAL)
-            ));
-            invalidShip.placeComponent(new Point(5,9), Direction.UP);
-            invalidShip.weldLastComponent();
-            invalidShip.offerComponent(new Component(
-                    Map.of(
-                            Direction.UP, Connector.NONE,
-                            Direction.LEFT, Connector.NONE,
-                            Direction.DOWN, Connector.NONE,
-                            Direction.RIGHT, Connector.NONE)
-            ));
-            invalidShip.placeComponent(new Point(6,9), Direction.UP);
-            invalidShip.weldLastComponent();
-
+            latch = StateTransitionUtils.setupLatch(game);
             game.start();
             shipBuildingState = (TestShipBuildingState) game.getCurrentState();
+        }
+
+        @AssertMethod
+        public void assertNoTransition() {
+            StateTransitionUtils.assertNoTransition(latch,game,shipBuildingState);
+        }
+
+        @AssertMethod
+        public void assertTransition() {
+            StateTransitionUtils.assertTransition(latch,game, ShipCorrectionState.class);
         }
 
         @Test
@@ -318,6 +329,7 @@ class ShipBuildingStateTest {
             // shipBuildingState.setGame(game);
             assertTrue(shipBuildingState.getCompletedShipBoards().isEmpty());
             assertNotNull(shipBuildingState.getComponentBank());
+            assertNoTransition();
         }
 
         @Test
@@ -383,13 +395,14 @@ class ShipBuildingStateTest {
             assertTrue(shipBuildingState.getCompletedShipBoards().contains(shipBoards.getFirst()));
             assertEquals(1, shipBuildingState.getCompletedShipBoards().size());
             assertEquals(firstAvailablePosition, game.getFlightBoard().getShipToPlace().get(shipBoards.getFirst()));
+            assertNoTransition();
         }
 
         @Test
-        void placeShipOnFlightBoardEndsBuildingIfAllShipsPlaced() {
+        void placeShipOnFlightBoardEndsBuildingIfAllShipsPlacedChangesState() {
             shipBuildingState.placeShipOnFlightBoard(shipBoards.getFirst());
             shipBuildingState.placeShipOnFlightBoard(shipBoards.getLast());
-
+            assertTransition();
         }
 
         @Test

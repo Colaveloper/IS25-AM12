@@ -36,7 +36,9 @@ public non-sealed class HandleProjectileState extends ActivateState implements G
         if (projectile.fireAt(shipBoard)) {
             List<Set<Point>> shipPieces = shipBoard.getConnectedSets();
             if (shipPieces.size() > 1) {
-                game.setCurrentState(new ChooseShipPieceState(shipPieces, shipBoard));
+                game.submitStateTransition(() ->
+                        game.setCurrentState(new ChooseShipPieceState(shipPieces,shipBoard))
+                );
                 return;
             }
         }

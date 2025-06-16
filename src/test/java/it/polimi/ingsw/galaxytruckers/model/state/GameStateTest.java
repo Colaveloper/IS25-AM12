@@ -103,6 +103,11 @@ class GameStateTest {
         void choosePlanetThrowsExceptionWhenUsingInvalidState() {
             assertThrows(IllegalStateException.class, () -> testState.choosePlanet(ship1, 0));
         }
+
+        @Test
+        void grabPlacedComponentThrowsExceptionWhenUsingInvalidState() {
+            assertThrows(IllegalStateException.class, () -> testState.grabPlacedComponent(ship1));
+        }
     }
 
     @Nested

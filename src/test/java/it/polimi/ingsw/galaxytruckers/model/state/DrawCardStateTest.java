@@ -26,6 +26,7 @@ class DrawCardStateTest {
     FlightBoard flightBoard;
     Deck deck;
     AdventureCard adventureCard;
+    CountDownLatch latch;
 
     @BeforeEach
     void setup() throws IOException{
@@ -41,6 +42,7 @@ class DrawCardStateTest {
             }
         };
         game.setEventListener(new GameEventListenerStub());
+        latch = StateTransitionUtils.setupLatch(game);
         ship1 = new SecondShipBoard(GameColor.RED);
         ship2 = new SecondShipBoard(GameColor.BLUE);
         flightBoard = new SecondFlightBoard(2){
@@ -100,12 +102,9 @@ class DrawCardStateTest {
             }
         };
         game.setDeck(deck);
-        CountDownLatch latch = new CountDownLatch(1);
-        game.setAfterEach(latch::countDown);
         testState.drawCard(ship1);
         testState.goNext(ship1);
-        if (latch.await(1,TimeUnit.SECONDS)) assertInstanceOf(AdventureStateStub.class,game.getCurrentState());
-        else throw new RuntimeException("Latch timed out");
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
 }

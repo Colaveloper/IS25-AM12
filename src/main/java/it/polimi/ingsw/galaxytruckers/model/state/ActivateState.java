@@ -8,8 +8,8 @@ import java.util.Set;
 public abstract class ActivateState extends AdventureState {
     protected final Set<Point> availablePositions;
     protected final ShipBoard shipBoard;
-    int batteriesToSpend;
-    int activatedComponents;
+    protected int batteriesToSpend;
+    protected int activatedComponents;
 
     protected ActivateState(ShipBoard shipBoard, Set<Point> availablePositions) {
         this.shipBoard = shipBoard;
@@ -70,13 +70,5 @@ public abstract class ActivateState extends AdventureState {
 
     public synchronized ShipBoard getShipBoard() {
         return shipBoard;
-    }
-
-    public synchronized int getBatteriesToSpend() {
-        return batteriesToSpend;
-    }
-
-    public synchronized int getActivatedComponents() {
-        return activatedComponents;
     }
 }

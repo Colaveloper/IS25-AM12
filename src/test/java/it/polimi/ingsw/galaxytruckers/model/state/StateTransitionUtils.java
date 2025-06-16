@@ -1,0 +1,47 @@
+package it.polimi.ingsw.galaxytruckers.model.state;
+
+import it.polimi.ingsw.galaxytruckers.model.Game;
+import org.checkerframework.dataflow.qual.AssertMethod;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class StateTransitionUtils {
+    public static CountDownLatch setupLatch(Game game) {
+        CountDownLatch latch = new CountDownLatch(1);
+        game.setAfterEach(() -> {
+            latch.countDown();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return latch;
+    }
+
+    @AssertMethod
+    public static void assertTransition(CountDownLatch latch, Game game, Class<? extends GameState> expectedState) {
+        try {
+            if (latch.await(1, TimeUnit.SECONDS))
+                assertInstanceOf(expectedState, game.getCurrentState());
+            else throw new IllegalStateException("Latch timed out");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @AssertMethod
+    public static void assertNoTransition(CountDownLatch latch, Game game, GameState expectedState) {
+        try {
+            if (latch.await(30, TimeUnit.MILLISECONDS))
+                throw new IllegalStateException("Latch did not time out");
+            else
+                assertEquals(expectedState, game.getCurrentState());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}

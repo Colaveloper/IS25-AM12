@@ -30,6 +30,7 @@ class ChoosePlanetStateTest {
     Deck deck;
     int choice;
     ShipBoard methodShipBoard;
+    CountDownLatch latch;
 
     @BeforeEach
     void setup(){
@@ -59,6 +60,7 @@ class ChoosePlanetStateTest {
             }
         });
         game.setEventListener(new GameEventListenerStub());
+        latch = StateTransitionUtils.setupLatch(game);
         testChoosePlanetState = new ChoosePlanetState(choosePlanetMethod, options.size());
         game.setCurrentState(testChoosePlanetState);
     }
@@ -104,12 +106,9 @@ class ChoosePlanetStateTest {
             }
         };
         game.setDeck(deck);
-        CountDownLatch latch = new CountDownLatch(1);
-        game.setAfterEach(latch::countDown);
         testChoosePlanetState.choosePlanet(ship1, 0);
         testChoosePlanetState.choosePlanet(ship2,1);
-        if (latch.await(1,TimeUnit.SECONDS)) assertInstanceOf(AdventureStateStub.class, game.getCurrentState());
-        else throw new RuntimeException("Latch timed out");
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
     @Test
@@ -132,18 +131,12 @@ class ChoosePlanetStateTest {
             }
         };
         game.setDeck(deck);
-        CountDownLatch latch = new CountDownLatch(1);
-        game.setAfterEach(latch::countDown);
         testChoosePlanetState.goNext(ship1);
         testChoosePlanetState.goNext(ship2);
         for (int i = 0; i < testChoosePlanetState.getChosenPlanets().length; i++) {
             assertFalse(testChoosePlanetState.getChosenPlanets()[i]);
         }
-        if (latch.await(1, TimeUnit.SECONDS)) {
-            assertInstanceOf(AdventureStateStub.class, game.getCurrentState());
-        } else {
-            throw new RuntimeException("Latch timed out");
-        }
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
 }

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -78,10 +79,11 @@ class RemoveCrewStateTest {
         };
         game = new Game(Level.SECOND);
         game.setEventListener(new GameEventListenerStub());
+        CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         testState.setGame(game);
         game.setDeck(deck);
         testState.loseCrew(ship1, new Point(7,7));
-        assertNotEquals(testState, game.getCurrentState());
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
     @Test
@@ -104,6 +106,7 @@ class RemoveCrewStateTest {
             }
         };
         game.setEventListener(new GameEventListenerStub());
+        CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
@@ -118,7 +121,7 @@ class RemoveCrewStateTest {
         };
         testState.setGame(game);
         testState.loseCrew(ship1, new Point(7,7));
-        assertNotEquals(testState, game.getCurrentState());
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
     @Test
@@ -131,6 +134,7 @@ class RemoveCrewStateTest {
             }
         };
         game.setEventListener(new GameEventListenerStub());
+        CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
@@ -145,6 +149,6 @@ class RemoveCrewStateTest {
         };
         testState.setGame(game);
         testState.loseCrew(ship1, new Point(7,7));
-        assertNotEquals(testState, game.getCurrentState());
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 }
