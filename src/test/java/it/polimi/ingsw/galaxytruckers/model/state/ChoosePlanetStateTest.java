@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,7 +90,7 @@ class ChoosePlanetStateTest {
     }
 
     @Test
-    void lastChoosePlanetChangesState() throws IOException{
+    void lastChoosePlanetChangesState() throws IOException, InterruptedException {
         adventureCard = new AdventureCard(game, Level.SECOND,1) {
             @Override
             public AdventureState getNextState() {
@@ -102,9 +104,12 @@ class ChoosePlanetStateTest {
             }
         };
         game.setDeck(deck);
+        CountDownLatch latch = new CountDownLatch(1);
+        game.setAfterEach(latch::countDown);
         testChoosePlanetState.choosePlanet(ship1, 0);
         testChoosePlanetState.choosePlanet(ship2,1);
-        assertInstanceOf(AdventureStateStub.class, game.getCurrentState());
+        if (latch.await(1,TimeUnit.SECONDS)) assertInstanceOf(AdventureStateStub.class, game.getCurrentState());
+        else throw new RuntimeException("Latch timed out");
     }
 
     @Test
@@ -113,7 +118,7 @@ class ChoosePlanetStateTest {
     }
 
     @Test
-    void goNextChangesAdventureState() throws IOException {
+    void goNextChangesAdventureState() throws IOException, InterruptedException {
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
@@ -127,12 +132,18 @@ class ChoosePlanetStateTest {
             }
         };
         game.setDeck(deck);
+        CountDownLatch latch = new CountDownLatch(1);
+        game.setAfterEach(latch::countDown);
         testChoosePlanetState.goNext(ship1);
         testChoosePlanetState.goNext(ship2);
         for (int i = 0; i < testChoosePlanetState.getChosenPlanets().length; i++) {
             assertFalse(testChoosePlanetState.getChosenPlanets()[i]);
         }
-        assertNotEquals(testChoosePlanetState, game.getCurrentState());
+        if (latch.await(1, TimeUnit.SECONDS)) {
+            assertInstanceOf(AdventureStateStub.class, game.getCurrentState());
+        } else {
+            throw new RuntimeException("Latch timed out");
+        }
     }
 
 }

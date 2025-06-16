@@ -33,6 +33,8 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
 
     private final Player player;
 
+    private final Object requestLock = new Object();
+
     public RmiClientHandler(RemoteClient remoteClient, Player player, ServerControllerInterface controller) throws RemoteException{
         super();
         this.remoteClient = remoteClient;
@@ -110,143 +112,199 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
 
     @Override
     public void newGame(Level level, int numPlayers) throws RemoteException {
-        controller.newGame(player, level, numPlayers);
+        synchronized (requestLock) {
+            controller.newGame(player, level, numPlayers);
+        }
     }
 
     @Override
     public void joinLobby(UUID lobbyID) throws RemoteException {
-        controller.joinLobby(player, lobbyID);
+        synchronized (requestLock) {
+            controller.joinLobby(player, lobbyID);
+        }
     }
 
     @Override
     public void leaveLobby() throws RemoteException {
-        if (player.getLobby().isPresent()) controller.leaveLobby(player);
-        else throw new IllegalStateException("You are not in a lobby yet");
+        synchronized (requestLock) {
+            if (player.getLobby().isPresent()) controller.leaveLobby(player);
+            else throw new IllegalStateException("You are not in a lobby yet");
+        }
     }
 
     @Override
     public void requestRandComponent() throws RemoteException {
-        getLobby().requestRandComponent(player);
+        synchronized (requestLock) {
+            getLobby().requestRandComponent(player);
+        }
     }
 
     @Override
     public void requestComponent(int componentID) throws RemoteException {
-        getLobby().requestComponent(player, componentID);
+        synchronized (requestLock) {
+            getLobby().requestComponent(player, componentID);
+        }
     }
 
     @Override
     public void rejectComponent() throws RemoteException {
-        getLobby().rejectComponent(player);
+        synchronized (requestLock) {
+            getLobby().rejectComponent(player);
+        }
     }
 
     @Override
     public void stashComponent() throws RemoteException {
-        getLobby().stashComponent(player);
+        synchronized (requestLock) {
+            getLobby().stashComponent(player);
+        }
     }
 
     @Override
     public void grabPlacedComponent() throws RemoteException {
-        getLobby().grabPlacedComponent(player);
+        synchronized (requestLock) {
+            getLobby().grabPlacedComponent(player);
+        }
     }
 
     @Override
     public void grabStashedComponent(int index) throws RemoteException {
-        getLobby().grabStashedComponent(player, index);
+        synchronized (requestLock) {
+            getLobby().grabStashedComponent(player, index);
+        }
     }
 
     @Override
     public void placeComponent(Point point, Direction orientation) throws RemoteException {
-        getLobby().placeComponent(player, point, orientation);
+        synchronized (requestLock) {
+            getLobby().placeComponent(player, point, orientation);
+        }
     }
 
     @Override
     public void flipHourglass() throws RemoteException {
-        getLobby().flipHourglass(player);
+        synchronized (requestLock) {
+            getLobby().flipHourglass(player);
+        }
     }
 
     @Override
     public void placeShipOnFlightBoard(int startingPosition) throws RemoteException {
-        getLobby().placeShipOnFlightBoard(player, startingPosition);
+        synchronized (requestLock) {
+            getLobby().placeShipOnFlightBoard(player, startingPosition);
+        }
     }
 
     @Override
     public void acquireForecast(int deckIndex) throws RemoteException {
-        getLobby().acquireForecast(player, deckIndex);
+        synchronized (requestLock) {
+            getLobby().acquireForecast(player, deckIndex);
+        }
     }
 
     @Override
     public void releaseForecast() throws RemoteException {
-        getLobby().releaseForecast(player);
+        synchronized (requestLock) {
+            getLobby().releaseForecast(player);
+        }
     }
 
     @Override
     public void removeComponent(Point point) throws RemoteException {
-        getLobby().removeComponent(player, point);
+        synchronized (requestLock) {
+            getLobby().removeComponent(player, point);
+        }
     }
 
     @Override
     public void chooseShipPiece(int pieceIndex) throws RemoteException {
-        getLobby().chooseShipPiece(player, pieceIndex);
+        synchronized (requestLock) {
+            getLobby().chooseShipPiece(player, pieceIndex);
+        }
     }
 
     @Override
     public void initializeCabin(Point point, CrewType crewType) throws RemoteException {
-        getLobby().initializeCabin(player, point, crewType);
+        synchronized (requestLock) {
+            getLobby().initializeCabin(player, point, crewType);
+        }
     }
 
     @Override
     public void drawCard() throws RemoteException {
-        getLobby().drawCard(player);
+        synchronized (requestLock) {
+            getLobby().drawCard(player);
+        }
     }
 
     @Override
     public void activateComponent(Point point) throws RemoteException {
-        getLobby().activateComponent(player, point);
+        synchronized (requestLock) {
+            getLobby().activateComponent(player, point);
+        }
     }
 
     @Override
     public void loseCrew(Point point) throws RemoteException {
-        getLobby().loseCrew(player, point);
+        synchronized (requestLock) {
+            getLobby().loseCrew(player, point);
+        }
     }
 
     @Override
     public void grabReward(boolean rewardGrabbed) throws RemoteException {
-        getLobby().grabReward(player, rewardGrabbed);
+        synchronized (requestLock) {
+            getLobby().grabReward(player, rewardGrabbed);
+        }
     }
 
     @Override
     public void placeGoods(Point point, GoodsType goodsType) throws RemoteException {
-        getLobby().placeGoods(player, point, goodsType);
+        synchronized (requestLock) {
+            getLobby().placeGoods(player, point, goodsType);
+        }
     }
 
     @Override
     public void removeGoods(Point point, GoodsType goodsType) throws RemoteException {
-        getLobby().removeGoods(player, point, goodsType);
+        synchronized (requestLock) {
+            getLobby().removeGoods(player, point, goodsType);
+        }
     }
 
     @Override
     public void loseGoods(Point point) throws RemoteException {
-        getLobby().loseGoods(player, point);
+        synchronized (requestLock) {
+            getLobby().loseGoods(player, point);
+        }
     }
 
     @Override
     public void useBattery(Point point) throws RemoteException {
-        getLobby().useBattery(player, point);
+        synchronized (requestLock) {
+            getLobby().useBattery(player, point);
+        }
     }
 
     @Override
     public void choosePlanet(int choice) throws RemoteException {
-        getLobby().choosePlanet(player, choice);
+        synchronized (requestLock) {
+            getLobby().choosePlanet(player, choice);
+        }
     }
 
     @Override
     public void goNext() throws RemoteException {
-        getLobby().goNext(player);
+        synchronized (requestLock) {
+            getLobby().goNext(player);
+        }
     }
 
     @Override
     public void giveUp() throws RemoteException {
-        getLobby().giveUp(player);
+        synchronized (requestLock) {
+            getLobby().giveUp(player);
+        }
     }
 
     private LobbyInterface getLobby() {

@@ -112,8 +112,7 @@ class SmugglersCardTest {
             }
 
             @Override
-            public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
-                return true;
+            public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
             }
         };
 
@@ -139,8 +138,7 @@ class SmugglersCardTest {
             }
 
             @Override
-            public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
-                return true;
+            public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
             }
         };
         game = new Game(Level.SECOND) {

@@ -16,7 +16,8 @@ public class TestFlightBoard extends FlightBoard{
         super();
         loopLength = 18;
         startingPositions = Arrays.asList(4, 2, 1, 0).subList(0, shipsN);
-        this.startingPositionsLeft = new ArrayList<>(startingPositions);
+        this.startingPositionsLeft.clear();
+        this.startingPositionsLeft.addAll(startingPositions);
     }
 
     @Override

@@ -44,11 +44,11 @@ class FlightBoardTest {
         @Test
         void placeShipOnFlightBoardNeverFailsAndIgnoresStartingPosition() {
             // starting position ignored in test flight
-            assertFalse(flightBoard.placeShipOnFlightBoard(ship1, 123));
+            flightBoard.placeShipOnFlightBoard(ship1, 123);
             shipToPlace.put(ship1, TestFlightBoard.startingPositions.get(0));
-            assertFalse(flightBoard.placeShipOnFlightBoard(ship2, 324));
+            flightBoard.placeShipOnFlightBoard(ship2, 324);
             shipToPlace.put(ship2, TestFlightBoard.startingPositions.get(1));
-            assertTrue(flightBoard.placeShipOnFlightBoard(ship3, 123));
+            flightBoard.placeShipOnFlightBoard(ship3, 123);
             shipToPlace.put(ship3, TestFlightBoard.startingPositions.get(2));
 
             for (ShipBoard ship : allShips) {
@@ -98,14 +98,6 @@ class FlightBoardTest {
                     IllegalArgumentException.class,
                     () -> flightBoard.placeShipOnFlightBoard(ship2, legalStartingPositions.get(1))
             );
-        }
-
-        @Test
-        void placeShipOnFlightBoardReturnsTrueOnlyAtTheEndOfPlacing() {
-            // testing "random" placing
-            assertFalse(flightBoard.placeShipOnFlightBoard(ship1, legalStartingPositions.get(1)));
-            assertFalse(flightBoard.placeShipOnFlightBoard(ship2, legalStartingPositions.get(0)));
-            assertTrue(flightBoard.placeShipOnFlightBoard(ship3, legalStartingPositions.get(2)));
         }
 
         @Test

@@ -23,7 +23,7 @@ public class EnabledSurrenderPolicy implements SurrenderPolicy {
     }
 
     @Override
-    public boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause) {
+    public synchronized boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause) {
         if (surrenderedShips.contains(shipBoard)) return false;
         boolean res = requests.add(shipBoard);
         if (res && listener != null) listener.notifySurrenderRequestEvent(shipBoard, cause);
@@ -31,7 +31,7 @@ public class EnabledSurrenderPolicy implements SurrenderPolicy {
     }
 
     @Override
-    public Set<ShipBoard> confirmSurrender(FlightBoard flightBoard) {
+    public synchronized Set<ShipBoard> confirmSurrender(FlightBoard flightBoard) {
 
         Set<ShipBoard> allShips = flightBoard.getShipToPlace().keySet();
         allShips.stream()
@@ -48,17 +48,17 @@ public class EnabledSurrenderPolicy implements SurrenderPolicy {
     }
 
     @Override
-    public Set<ShipBoard> getSurrenderedShips() {
+    public synchronized Set<ShipBoard> getSurrenderedShips() {
         return new HashSet<>(surrenderedShips);
     }
 
     @VisibleForTesting
-    public Set<ShipBoard> getRequests() {
+    public synchronized Set<ShipBoard> getRequests() {
         return new HashSet<>(requests);
     }
 
     @VisibleForTesting
-    protected GameEventListener getListener() {
+    protected synchronized GameEventListener getListener() {
         return listener;
     }
 }

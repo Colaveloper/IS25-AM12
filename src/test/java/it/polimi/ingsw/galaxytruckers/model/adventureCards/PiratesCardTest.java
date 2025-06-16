@@ -62,8 +62,7 @@ class PiratesCardTest {
         });
         FlightBoard flightBoardStub = new FlightBoard() {
             @Override
-            public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
-                return false;
+            public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
             }
 
             @Override

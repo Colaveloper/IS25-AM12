@@ -135,7 +135,6 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     public void removeComponent(Point position) {
         lastPosition = position;
         componentMap.remove(lastPosition).removeFromVisitor(this);
-        if (gameEventListener != null) gameEventListener.notifyRemoveComponentEvent(this,lastPosition);
         lastPosition = null;
     }
 

@@ -12,7 +12,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyEvent;
 import java.awt.*;
 
 public interface GameModelInterface {
-    Game createGame(Level level, int shipsN, Object lock);
+    Game createGame(Level level, int shipsN);
     ShipBoard addShip(Game game, GameColor color);
     void setEventListener(Game game, EventListener<LobbyEvent> listener);
     void startGame(Game game);
@@ -41,7 +41,7 @@ public interface GameModelInterface {
     void drawCard(Game game, ShipBoard shipBoard);
     void activateComponent(Game game, ShipBoard shipBoard, Point point);
     void loseCrew(Game game, ShipBoard shipBoard, Point point);
-    void grabReward(Game game, ShipBoard shipBoard, boolean rewardGrabbed);
+    void grabReward(Game game, ShipBoard shipBoard);
     void placeGoods(Game game, ShipBoard shipBoard, Point point, GoodsType goodsType);
     void removeGoods(Game game, ShipBoard shipBoard, Point point, GoodsType goodsType);
     void loseGood(Game game, ShipBoard shipBoard, Point point);

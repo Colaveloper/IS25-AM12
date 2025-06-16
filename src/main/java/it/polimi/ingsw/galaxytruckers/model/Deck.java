@@ -72,6 +72,10 @@ public abstract class Deck {
         }
     }
 
+    public boolean isEmpty() {
+        return masterDeck.isEmpty();
+    }
+
     /**
      * Loads the cards of the relevant game level from a JSON file into a list.
      * @param game the game instance from which configuration is used to load the relevant cards

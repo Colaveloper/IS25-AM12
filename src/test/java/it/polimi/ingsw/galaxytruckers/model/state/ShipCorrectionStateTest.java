@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -112,7 +114,7 @@ class ShipCorrectionStateTest {
         @Test
         void removeComponentUpdatesShipPiecesWhenShipIsSplit() {
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
-            assertTrue(shipCorrectionState.getShipPieces().containsKey(shipBoards.get(2)));
+            assertTrue(shipCorrectionState.getShipPiecesMap().containsKey(shipBoards.get(2)));
         }
 
         @Test
@@ -122,18 +124,30 @@ class ShipCorrectionStateTest {
         }
 
         @Test
-        void removeComponentWithAllValidShipsChangesState() {
+        void removeComponentWithAllValidShipsChangesState() throws InterruptedException {
+            CountDownLatch latch = new CountDownLatch(1);
+            game.setAfterEach(() -> {
+                latch.countDown();
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
             shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
             shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
-            assertInstanceOf(DrawCardState.class, game.getCurrentState());
+            if (latch.await(1,TimeUnit.SECONDS)) {
+                assertInstanceOf(ShipInitializationState.class, game.getCurrentState());
+            }
+            else throw new RuntimeException("Latch timed out");
         }
 
         @Test
         void chooseShipPieceUpdatesShipPieces() {
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
             shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
-            assertFalse(shipCorrectionState.getShipPieces().containsKey(shipBoards.get(2)));
+            assertFalse(shipCorrectionState.getShipPiecesMap().containsKey(shipBoards.get(2)));
         }
 
         @Test
@@ -149,11 +163,21 @@ class ShipCorrectionStateTest {
         }
 
         @Test
-        void chooseShipPieceWithAllValidShipsChangesState() {
+        void chooseShipPieceWithAllValidShipsChangesState() throws InterruptedException {
+            CountDownLatch latch = new CountDownLatch(1);
+            game.setAfterEach(() -> {
+                latch.countDown();
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
             shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
             shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
-            assertInstanceOf(DrawCardState.class, game.getCurrentState());
+            if (latch.await(1, TimeUnit.SECONDS)) assertInstanceOf(ShipInitializationState.class, game.getCurrentState());
+            else throw new RuntimeException("Latch timed out");
         }
     }
 

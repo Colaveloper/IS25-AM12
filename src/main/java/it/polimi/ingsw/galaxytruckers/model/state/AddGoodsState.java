@@ -16,10 +16,11 @@ public final class AddGoodsState extends AdventureState implements GameStateInte
     }
 
     @Override
-    public void addGood(ShipBoard shipBoard, Point position, GoodsType good) {
+    public synchronized void addGood(ShipBoard shipBoard, Point position, GoodsType good) {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
+        checkIfExpired();
         if (goodsBuffer.containsKey(good) && goodsBuffer.get(good) > 0) {
             shipBoard.placeGoods(position, good, 1);
             goodsBuffer.put(good, goodsBuffer.get(good) - 1);
@@ -30,10 +31,11 @@ public final class AddGoodsState extends AdventureState implements GameStateInte
     }
 
     @Override
-    public void removeGood(ShipBoard shipBoard, Point position, GoodsType good) {
+    public synchronized void removeGood(ShipBoard shipBoard, Point position, GoodsType good) {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
+        checkIfExpired();
         shipBoard.removeGoods(position, good, 1);
         game.getEventListener().notifyGoodsUpdateEvent(shipBoard,position,good,false);
         if (goodsBuffer.containsKey(good)) {
@@ -44,18 +46,19 @@ public final class AddGoodsState extends AdventureState implements GameStateInte
     }
 
     @Override
-    public void goNext(ShipBoard shipBoard) {
+    public synchronized void goNext(ShipBoard shipBoard) {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
-        game.setCurrentState(super.getNextState());
+        checkIfExpired();
+        getNextState();
     }
 
-    public ShipBoard getShipBoard() {
+    public synchronized ShipBoard getShipBoard() {
         return shipBoard;
     }
 
-    public Map<GoodsType, Integer> getGoodsBuffer(){
+    public synchronized Map<GoodsType, Integer> getGoodsBuffer(){
         return goodsBuffer;
     }
 }

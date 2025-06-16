@@ -17,8 +17,8 @@ import java.io.IOException;
 
 public class GameModel implements GameModelInterface {
     @Override
-    public Game createGame(Level level, int shipsN, Object lock) {
-        return new Game(level, shipsN, lock);
+    public Game createGame(Level level, int shipsN) {
+        return new Game(level, shipsN);
     }
 
     @Override
@@ -35,11 +35,7 @@ public class GameModel implements GameModelInterface {
 
     @Override
     public void startGame(Game game) {
-        try {
-            game.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        game.start();
     }
 
     @Override
@@ -123,8 +119,8 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public void grabReward(Game game, ShipBoard shipBoard, boolean rewardGrabbed) {
-        game.grabReward(shipBoard, rewardGrabbed);
+    public void grabReward(Game game, ShipBoard shipBoard) {
+        game.grabReward(shipBoard);
     }
 
     @Override

@@ -15,7 +15,7 @@ public final class DeclareFirePowerState extends ActivateState implements GameSt
     }
 
     @Override
-    public void activateComponent(ShipBoard shipBoard, Point position) {
+    public synchronized void activateComponent(ShipBoard shipBoard, Point position) {
         super.activateComponent(shipBoard, position);
         currentFirePower = shipBoard.getFirePower();
     }

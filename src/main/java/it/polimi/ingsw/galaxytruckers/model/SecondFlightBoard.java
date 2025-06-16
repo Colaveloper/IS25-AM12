@@ -16,20 +16,19 @@ public class SecondFlightBoard extends FlightBoard{
         super();
         loopLength = 24;
         startingPositions = Arrays.asList(6, 3, 1, 0).subList(0, shipsN);
-        this.startingPositionsLeft = new ArrayList<>(startingPositions);
+        this.startingPositionsLeft.clear();
+        this.startingPositionsLeft.addAll(startingPositions);
     }
 
     @Override
-    public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
-        // TODO: consider concurrent access to startingPositionsLeft !!!
-        if (!startingPositionsLeft.contains(startingPosition)) {
-            throw new IllegalArgumentException("Position not available for connect");
-        } else {
+    public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
+        synchronized (startingPositionsLeft) {
+            if (!startingPositionsLeft.contains(startingPosition)) {
+                throw new IllegalArgumentException("Position not available for connect");
+            }
             startingPositionsLeft.remove((Integer) startingPosition);
-            shipToPlace.put(shipBoard, startingPosition);
-            // to be interpreted as "building phase is finished for everybody"
-            return startingPositionsLeft.isEmpty();
         }
+        shipToPlace.put(shipBoard, startingPosition);
     }
 
     @Override

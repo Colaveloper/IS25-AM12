@@ -17,22 +17,23 @@ public final class ChooseShipPieceState extends AdventureState implements GameSt
     }
 
     @Override
-    public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
+    public synchronized void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
+        checkIfExpired();
         Set<Point> componentsToRemove = shipBoard.getComponentMap().keySet();
         componentsToRemove.removeAll(shipPieces.get(pieceIndex));
         componentsToRemove.forEach(shipBoard::discardComponent);
         game.getEventListener().notifyShipPieceRemovalEvent(shipBoard,pieceIndex);
-        game.setCurrentState(getNextState());
+        getNextState();
     }
 
-    public ShipBoard getShipBoard() {
+    public synchronized ShipBoard getShipBoard() {
         return shipBoard;
     }
 
-    public List<Set<Point>> getShipPieces() {
+    public synchronized List<Set<Point>> getShipPieces() {
         return shipPieces;
     }
 }

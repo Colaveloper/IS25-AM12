@@ -9,13 +9,13 @@ import java.util.List;
 
 public non-sealed class ShipCorrectionState extends GameState implements GameStateInterface {
     private final Set<ShipBoard> validShipBoards;
-    private final Map<ShipBoard, List<Set<Point>>> shipPieces;
+    private final Map<ShipBoard, List<Set<Point>>> shipPiecesMap;
     private final boolean shouldDiscard;
 
     public ShipCorrectionState(boolean shouldDiscard) {
         this.shouldDiscard = shouldDiscard;
         this.validShipBoards = new HashSet<>();
-        this.shipPieces = new HashMap<>();
+        this.shipPiecesMap = new HashMap<>();
     }
 
     protected void removeAt(ShipBoard shipBoard, Point point) {
@@ -36,14 +36,16 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
     }
 
     protected void tryStateTransition() {
-        if (validShipBoards.size() == game.getShipBoards().size() && shipPieces.isEmpty()) {
-            game.setCurrentState(new ShipInitializationState());
+        if (getValidShipBoards().size() == game.getShipBoards().size() && getShipPiecesMap().isEmpty()) {
+            game.submitStateTransition(() -> game.setCurrentState(new ShipInitializationState()));
         }
     }
 
     private boolean checkShipValidity(ShipBoard shipBoard) {
         if (shipBoard.checkValidity()) {
-            validShipBoards.add(shipBoard);
+            synchronized (validShipBoards) {
+                validShipBoards.add(shipBoard);
+            }
             return true;
         }
         return false;
@@ -52,7 +54,9 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
     private boolean checkShipConnection(ShipBoard shipBoard) {
         List<Set<Point>> currentShipPieces = shipBoard.getConnectedSets();
         if (currentShipPieces.size() > 1) {
-            shipPieces.put(shipBoard, currentShipPieces);
+            synchronized (shipPiecesMap) {
+                shipPiecesMap.put(shipBoard, currentShipPieces);
+            }
             return false;
         }
         return true;
@@ -60,13 +64,15 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
 
     @Override
     public void removeComponent(ShipBoard shipBoard, Point point) {
-        if (validShipBoards.contains(shipBoard)) {
-            throw new IllegalStateException("Ship Board is already valid");
+        synchronized (validShipBoards) {
+            if (validShipBoards.contains(shipBoard)) {
+                throw new IllegalStateException("Ship Board is already valid");
+            }
         }
         removeAt(shipBoard, point);
         if (checkShipValidity(shipBoard)) {
             if (!checkShipConnection(shipBoard)) {
-                game.getEventListener().notifyShipNotConnectedEvent(shipBoard, shipPieces.get(shipBoard));
+                game.getEventListener().notifyShipNotConnectedEvent(shipBoard, shipPiecesMap.get(shipBoard));
             } else {
                 game.getEventListener().notifyValidateShipEvent(shipBoard);
             }
@@ -76,28 +82,41 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
 
     @Override
     public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
-        if (!shipPieces.containsKey(shipBoard)) {
+        List<Set<Point>> shipPieces = getShipPieces(shipBoard);
+        if (shipPieces == null) {
             throw new IllegalStateException("You have no ship pieces to choose");
         }
-        if (pieceIndex < 0 || pieceIndex >= shipPieces.get(shipBoard).size()) {
+        if (pieceIndex < 0 || pieceIndex >= shipPieces.size()) {
             throw new IllegalArgumentException("Invalid piece index");
         }
         Set<Point> componentsToRemove = shipBoard.getComponentMap().keySet();
-        componentsToRemove.removeAll(shipPieces.get(shipBoard).get(pieceIndex));
+        componentsToRemove.removeAll(shipPieces.get(pieceIndex));
         for (Point point : componentsToRemove) {
             removeAt(shipBoard, point);
         }
-        shipPieces.remove(shipBoard);
+        synchronized (shipPiecesMap) {
+            shipPiecesMap.remove(shipBoard);
+        }
         game.getEventListener().notifyShipPieceRemovalEvent(shipBoard,pieceIndex);
         tryStateTransition();
     }
 
     public Set<ShipBoard> getValidShipBoards() {
-        return new HashSet<>(validShipBoards);
+        synchronized (validShipBoards) {
+            return new HashSet<>(validShipBoards);
+        }
     }
 
-    public Map<ShipBoard, List<Set<Point>>> getShipPieces() {
-        return new HashMap<>(shipPieces);
+    public Map<ShipBoard, List<Set<Point>>> getShipPiecesMap() {
+        synchronized (shipPiecesMap) {
+            return new HashMap<>(shipPiecesMap);
+        }
+    }
+
+    public List<Set<Point>> getShipPieces(ShipBoard shipBoard) {
+        synchronized (shipPiecesMap) {
+            return shipPiecesMap.get(shipBoard);
+        }
     }
 
     public boolean getShouldDiscard() {

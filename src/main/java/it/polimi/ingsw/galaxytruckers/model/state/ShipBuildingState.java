@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
 import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
@@ -14,6 +15,9 @@ public abstract class ShipBuildingState extends GameState{
     private final ComponentBank componentBank;
     protected final Set<ShipBoard> completedShipBoards;
 
+    private final Object coveredLock = new Object();
+    private final Object uncoveredLock = new Object();
+
     public ShipBuildingState() {
         this.completedShipBoards = new HashSet<>();
         this.componentBank = new ComponentBank();
@@ -22,35 +26,51 @@ public abstract class ShipBuildingState extends GameState{
 
     @Override
     public void requestRandComponent(ShipBoard shipBoard) {
-        if (completedShipBoards.contains(shipBoard)) {
+        if (getCompletedShipBoards().contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        Component component = componentBank.drawRandComponent();
-        shipBoard.offerComponent(component);
-        game.getEventListener().notifyRequestFaceDownComponentEvent(shipBoard,component);
+        synchronized (coveredLock) {
+            Component component = componentBank.drawRandComponent();
+            try {
+                shipBoard.offerComponent(component);
+                game.getEventListener().notifyRequestFaceDownComponentEvent(shipBoard,component);
+            } catch (IllegalStateException e) {
+                componentBank.returnCoveredComponent(component);
+                throw e;
+            }
+        }
     }
 
     @Override
     public void requestComponent(ShipBoard shipBoard, int componentId) {
-        if (completedShipBoards.contains(shipBoard)) {
+        if (getCompletedShipBoards().contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        Component component = componentBank.removeUncoveredComponent(componentId);
-        shipBoard.offerComponent(component);
-        game.getEventListener().notifyRequestFaceUpComponentEvent(shipBoard,component);
+        synchronized (uncoveredLock) {
+            Component component = componentBank.removeUncoveredComponent(componentId);
+            try {
+                shipBoard.offerComponent(component);
+                game.getEventListener().notifyRequestFaceUpComponentEvent(shipBoard,component);
+            } catch (IllegalStateException e) {
+                componentBank.addToUncoveredComponents(component);
+                throw e;
+            }
+        }
     }
 
     @Override
     public void rejectComponent(ShipBoard shipBoard) {
-        if (completedShipBoards.contains(shipBoard)) {
+        if (getCompletedShipBoards().contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        Component component = shipBoard.rejectComponent();
-        if (component == null) {
-            throw new IllegalStateException("You don't have any component to reject");
+        synchronized (uncoveredLock) {
+            Component component = shipBoard.rejectComponent();
+            if (component == null) {
+                throw new IllegalStateException("You don't have any component to reject");
+            }
+            componentBank.addToUncoveredComponents(component);
+            game.getEventListener().notifyRejectComponentEvent(shipBoard);
         }
-        componentBank.addToUncoveredComponents(component);
-        game.getEventListener().notifyRejectComponentEvent(shipBoard);
     }
 
     @Override
@@ -60,7 +80,7 @@ public abstract class ShipBuildingState extends GameState{
 
     @Override
     public void grabPlacedComponent(ShipBoard shipBoard) {
-        if (completedShipBoards.contains(shipBoard)) {
+        if (getCompletedShipBoards().contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.grabPlacedComponent();
@@ -74,7 +94,7 @@ public abstract class ShipBuildingState extends GameState{
 
     @Override
     public void placeComponent(ShipBoard shipBoard, Point point, Direction orientation) {
-        if (completedShipBoards.contains(shipBoard)) {
+        if (getCompletedShipBoards().contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.placeComponent(point, orientation);
@@ -93,16 +113,12 @@ public abstract class ShipBuildingState extends GameState{
 
     @Override
     public void placeShipOnFlightBoard(ShipBoard shipBoard) {
-        if (completedShipBoards.contains(shipBoard)) {
+        if (getCompletedShipBoards().contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        int position = game.getFlightBoard().getStartingPositionsLeft().stream()
-                .mapToInt(x -> x)
-                .min().orElseThrow(() -> new IllegalStateException("There are no more available positions"));
-        completedShipBoards.add(shipBoard);
-        game.getFlightBoard().placeShipOnFlightBoard(shipBoard, position);
+        int position = game.getFlightBoard().placeShipOnFlightBoard(shipBoard);
         game.getEventListener().notifyFlightBoardUpdateEvent(shipBoard,position);
-        if (completedShipBoards.size() == game.getShipBoards().size()) endBuilding();
+        completeShipBoard(shipBoard);
     }
 
     @Override
@@ -117,14 +133,24 @@ public abstract class ShipBuildingState extends GameState{
 
     protected abstract void endBuilding();
 
+    protected void completeShipBoard(ShipBoard shipBoard) {
+        synchronized (completedShipBoards) {
+            completedShipBoards.add(shipBoard);
+            if (completedShipBoards.size() == game.getShipBoards().size()) {
+                endBuilding();
+            }
+        }
+    }
+
     @VisibleForTesting
     public ComponentBank getComponentBank() {
         return componentBank;
     }
 
-    @VisibleForTesting
     public Set<ShipBoard> getCompletedShipBoards() {
-        return new HashSet<>(completedShipBoards);
+        synchronized (completedShipBoards) {
+            return new HashSet<>(completedShipBoards);
+        }
     }
 
     @VisibleForTesting

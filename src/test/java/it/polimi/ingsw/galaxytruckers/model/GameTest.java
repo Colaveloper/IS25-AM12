@@ -41,11 +41,7 @@ class GameTest {
 
     @Test
     void gameStartsCorrectly() {
-        try {
-            game.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        game.start();
         assertInstanceOf(ShipBuildingState.class,  game.getCurrentState());
         assertNotNull(game.getFlightBoard());
         assertNotNull(game.getDeck());
