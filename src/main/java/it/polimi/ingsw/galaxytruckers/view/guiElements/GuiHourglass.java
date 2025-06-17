@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

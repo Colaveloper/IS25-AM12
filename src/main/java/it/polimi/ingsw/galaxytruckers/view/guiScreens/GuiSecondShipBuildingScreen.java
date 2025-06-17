@@ -172,49 +172,49 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
         return new GuiController() {
             @Override
             public void placeShipOnFlightboard(int position) {
-                if (state.getAvailableActions().contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD)) {
+                if (availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD)) {
                     controller.placeShipOnFlightboard(position);
                 }
             }
 
             @Override
             public void requestRandComponent() {
-                if (state.getAvailableActions().contains(StateActions.REQUEST_RAND_COMPONENT)) {
+                if (availableActions.contains(StateActions.REQUEST_RAND_COMPONENT)) {
                     controller.requestRandComponent();
                 }
             }
 
             @Override
             public void rejectComponent() {
-                if (state.getAvailableActions().contains(StateActions.REJECT_COMPONENT)) {
+                if (availableActions.contains(StateActions.REJECT_COMPONENT)) {
                     controller.rejectComponent();
                 }
             }
 
             @Override
             public void requestComponent(int id) {
-                if (state.getAvailableActions().contains(StateActions.REQUEST_COMPONENT)) {
+                if (availableActions.contains(StateActions.REQUEST_COMPONENT)) {
                     controller.requestComponent(id);
                 }
             }
 
             @Override
             public void flipHourglass() {
-                if (state.getAvailableActions().contains(StateActions.FLIP_HOURGLASS)) {
+                if (availableActions.contains(StateActions.FLIP_HOURGLASS)) {
                     controller.flipHourglass();
                 }
             }
 
             @Override
             public void stashComponent() {
-                if (state.getAvailableActions().contains(StateActions.STASH_COMPONENT)) {
+                if (availableActions.contains(StateActions.STASH_COMPONENT)) {
                     controller.stashComponent();
                 }
             }
 
             @Override
             public void grabStashedComponent(int i) {
-                if (state.getAvailableActions().contains(StateActions.GRAB_STASHED_COMPONENT)) {
+                if (availableActions.contains(StateActions.GRAB_STASHED_COMPONENT)) {
                     controller.grabStashedComponent(i);
                 }
             }
@@ -231,7 +231,7 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
                         model.getMyShip().getShipArea().contains(point)
                         && !model.getMyShip().getComponentMap().containsKey(point)
                 ) {
-                    if (state.getAvailableActions().contains(StateActions.PLACE_COMPONENT)) {
+                    if (availableActions.contains(StateActions.PLACE_COMPONENT)) {
                         controller.placeComponent(point, lastComponentDirection);
                     }
                 }
@@ -239,14 +239,14 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 
             @Override
             public void acquireForecast(int finalI) {
-                if (state.getAvailableActions().contains(StateActions.ACQUIRE_FORECAST)) {
+                if (availableActions.contains(StateActions.ACQUIRE_FORECAST)) {
                     controller.acquireForecast(finalI);
                 }
             }
 
             @Override
             public void releaseForecast() {
-                if (state.getAvailableActions().contains(StateActions.RELEASE_FORECAST)) {
+                if (availableActions.contains(StateActions.RELEASE_FORECAST)) {
                     controller.releaseForecast();
                 }
             }

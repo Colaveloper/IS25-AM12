@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiAdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiAdventureCardRegistry;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
@@ -40,13 +41,8 @@ public class GuiForecastScreen extends GuiScreen {
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards) {
         Platform.runLater(() -> {
-            GuiAdventureCardRegistry guiAdventureCardRegistry = GuiAdventureCardRegistry.getInstance();
             for (AdventureCard adventureCard : adventureCards) {
-                ImageView cardView = new ImageView();
-                cardView.setFitWidth(200);
-                cardView.setPreserveRatio(true);
-                cardView.setImage(guiAdventureCardRegistry.getImage(adventureCard.getId()));
-                cardsBox.getChildren().add(cardView);
+                cardsBox.getChildren().add(new GuiAdventureCard(adventureCard.getId()));
             }
         });
     }
