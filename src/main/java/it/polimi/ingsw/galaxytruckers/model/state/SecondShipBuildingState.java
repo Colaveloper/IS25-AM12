@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public non-sealed class SecondShipBuildingState extends ShipBuildingState implements GameStateInterface {
     private final Hourglass hourglass;
@@ -16,6 +17,8 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
     private final Set<Integer> blockedForecasts = new HashSet<>();
 
     private final Object forecastLock = new Object();
+
+    private final AtomicBoolean alreadyTransitioned = new AtomicBoolean(false);
 
     public SecondShipBuildingState() {
         super();
@@ -105,17 +108,19 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
 
     @Override
     protected void endBuilding() {
-        game.submitStateTransition(() -> {
-            hourglass.stop();
-            Set<ShipBoard> unfinishedShipBoards = new HashSet<>(game.getShipBoards());
-            unfinishedShipBoards.removeAll(completedShipBoards);
-            for (ShipBoard shipBoard : unfinishedShipBoards) {
-                releaseForecast(shipBoard);
-                placeShipOnFlightBoard(shipBoard);
-            }
-            game.getShipBoards().forEach(ShipBoard::finishBuilding);
-            game.setCurrentState(game.getGameFactory().createShipCorrectionState());
-        });
+        if (alreadyTransitioned.compareAndSet(false,true)) {
+            game.submitStateTransition(() -> {
+                hourglass.stop();
+                Set<ShipBoard> unfinishedShipBoards = new HashSet<>(game.getShipBoards());
+                unfinishedShipBoards.removeAll(completedShipBoards);
+                for (ShipBoard shipBoard : unfinishedShipBoards) {
+                    releaseForecast(shipBoard);
+                    placeShipOnFlightBoard(shipBoard);
+                }
+                game.getShipBoards().forEach(ShipBoard::finishBuilding);
+                game.setCurrentState(game.getGameFactory().createShipCorrectionState());
+            });
+        }
     }
 
     protected void notifyHourglassEnd() {
