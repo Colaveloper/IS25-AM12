@@ -68,6 +68,7 @@ public final class SecondShipBuildingState extends ShipBuildingState {
             if(!componentInHand() && !myShip.getStashedComponents().isEmpty()) actions.add(StateActions.GRAB_STASHED_COMPONENT);
             if(!componentInHand()) actions.add(StateActions.ACQUIRE_FORECAST);
             actions.addAll(super.getAvailableActions());
+            if(!hasFinished) actions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
         }
         //TODO: implement conditional available action if needed
         return actions;
