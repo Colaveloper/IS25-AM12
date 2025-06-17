@@ -97,7 +97,7 @@ public class CliTestShipBuildingScreen extends CliScreen {
 
             case "E":
                 controller.placeShipOnFlightBoard();
-
+                break;
             case "R":
                 if (parts.length == 1) {
                     controller.rejectComponent();

@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TestFactory extends GameFactory {
-    private final static List<Integer> flightBoardStartingPositions = Arrays.asList(6, 3, 1, 0);
+    private final static List<Integer> flightBoardStartingPositions = Arrays.asList(4, 2, 1, 0);
     private final static int flightBoardLoopLength = 18;
 
     @Override
