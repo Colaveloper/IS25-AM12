@@ -28,6 +28,7 @@ public interface RemoteController extends Remote {
     void placeComponent(Point point, Direction orientation) throws RemoteException;
     void flipHourglass() throws RemoteException;
     void placeShipOnFlightBoard(int startingPosition) throws RemoteException;
+    void placeShipOnFlightBoard() throws RemoteException;
     void acquireForecast(int deckIndex) throws RemoteException;
     void releaseForecast() throws RemoteException;
 

@@ -52,6 +52,8 @@ public interface ControllerToServer {
 
     void placeShipOnFlightboard(int startingPosition);
 
+    void placeShipOnFlightBoard();
+
     void drawCard();
 
     void placeGoods(Point point, GoodsType good);

@@ -212,6 +212,12 @@ public class Lobby implements LobbyInterface {
     }
 
     @Override
+    public void placeShipOnFlightBoard(Player player) {
+        checkLobbyState(LobbyState.INGAME);
+        model.placeShipOnFlightBoard(game, player.getShipBoard().orElseThrow());
+    }
+
+    @Override
     public void acquireForecast(Player player, int deckIndex) {
         checkLobbyState(LobbyState.INGAME);
         model.acquireForecast(game, player.getShipBoard().orElseThrow(), deckIndex);

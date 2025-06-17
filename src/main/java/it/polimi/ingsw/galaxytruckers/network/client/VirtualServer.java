@@ -32,6 +32,7 @@ public interface VirtualServer {
     void placeComponent(Point point, Direction orientation);
     void flipHourglass();
     void placeShipOnFlightBoard(int startingPosition);
+    void placeShipOnFlightBoard();
     void acquireForecast(int deckIndex);
     void releaseForecast();
 

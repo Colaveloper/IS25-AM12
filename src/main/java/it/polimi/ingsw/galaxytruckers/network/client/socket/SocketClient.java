@@ -197,6 +197,11 @@ public class SocketClient implements VirtualServer, VirtualClient {
     }
 
     @Override
+    public void placeShipOnFlightBoard() {
+        sendRequest(new PlaceShipOnFlightBoard());
+    }
+
+    @Override
     public void acquireForecast(int deckIndex) {
         sendRequest(new AcquireForecast(deckIndex));
     }

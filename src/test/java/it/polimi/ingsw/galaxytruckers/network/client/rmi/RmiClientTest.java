@@ -337,6 +337,11 @@ class RemoteControllerStub implements RemoteController {
     }
 
     @Override
+    public void placeShipOnFlightBoard() throws RemoteException {
+        checker.placeShipOnFlightBoard();
+    }
+
+    @Override
     public void acquireForecast(int deckIndex){
         checker.acquireForecast(deckIndex);
     }

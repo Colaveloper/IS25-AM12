@@ -196,6 +196,13 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
     }
 
     @Override
+    public void placeShipOnFlightBoard() throws RemoteException {
+        synchronized (requestLock) {
+            getLobby().placeShipOnFlightBoard(player);
+        }
+    }
+
+    @Override
     public void acquireForecast(int deckIndex) throws RemoteException {
         synchronized (requestLock) {
             getLobby().acquireForecast(player, deckIndex);

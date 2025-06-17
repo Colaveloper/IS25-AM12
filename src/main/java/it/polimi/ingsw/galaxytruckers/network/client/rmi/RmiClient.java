@@ -130,6 +130,11 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
+    public void placeShipOnFlightBoard() {
+        runRemoteMethod(() -> remoteController.placeShipOnFlightBoard());
+    }
+
+    @Override
     public void acquireForecast(int deckIndex) {
         runRemoteMethod(() -> remoteController.acquireForecast(deckIndex));
     }

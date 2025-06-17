@@ -97,6 +97,12 @@ class ClientControllerTest {
             }
 
             @Override
+            public void placeShipOnFlightBoard() {
+                System.out.println("FAKE SERVER EVENT: your ship was successfully positioned on the FlightBoard");
+                controller.notifyEvent(new FlightBoardUpdateEvent("OtherPlayer1", 4));
+            }
+
+            @Override
             public void flipHourglass() {
 
             }

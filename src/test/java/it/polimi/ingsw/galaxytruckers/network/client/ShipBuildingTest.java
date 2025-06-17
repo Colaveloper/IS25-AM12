@@ -102,6 +102,11 @@ public class ShipBuildingTest {
             }
 
             @Override
+            public void placeShipOnFlightBoard() {
+
+            }
+
+            @Override
             public void acquireForecast(int deckIndex) {
 
             }

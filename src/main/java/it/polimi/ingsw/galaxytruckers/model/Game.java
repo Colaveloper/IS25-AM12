@@ -269,6 +269,10 @@ public class Game {
         runRequest(() -> currentState.placeShipOnFlightBoard(shipBoard, startingPosition));
     }
 
+    public void placeShipOnFlightBoard(ShipBoard shipBoard) {
+        runRequest(() -> currentState.placeShipOnFlightBoard(shipBoard));
+    }
+
     public void acquireForecast(ShipBoard shipBoard, int deckIndex) {
         runRequest(() -> currentState.acquireForecast(shipBoard, deckIndex));
     }

@@ -10,8 +10,13 @@ public class PlaceShipOnFlightBoard extends RegisteredRequest {
         this.startingPosition = startingPosition;
     }
 
+    public PlaceShipOnFlightBoard() {
+        this.startingPosition = -1;
+    }
+
     @Override
     public void execute(VirtualServer server) {
-        server.placeShipOnFlightBoard(startingPosition);
+        if (startingPosition == -1) server.placeShipOnFlightBoard();
+        else server.placeShipOnFlightBoard(startingPosition);
     }
 }

@@ -87,7 +87,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void goNext() {
         try {
             server.goNext();
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -96,7 +96,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void chooseShipPiece(int choice) {
         try {
             server.chooseShipPiece(choice);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -105,7 +105,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void activateComponent(Point point) {
         try {
             server.activateComponent(point);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -115,7 +115,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void removeComponent(Point point) {
         try {
             server.removeComponent(point);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -124,7 +124,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void useBattery(Point point) {
         try {
             server.useBattery(point);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -133,7 +133,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void initializeCabin(Point point, CrewType crewType) {
         try {
             server.initializeCabin(point, crewType);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -142,7 +142,16 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void placeShipOnFlightboard(int startingPosition) {
         try {
             server.placeShipOnFlightBoard(startingPosition);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
+            view.reportError(e.getMessage());
+        }
+    }
+
+    @Override
+    public void placeShipOnFlightBoard() {
+        try {
+            server.placeShipOnFlightBoard();
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -151,7 +160,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void flipHourglass() {
         try {
             server.flipHourglass();
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -160,7 +169,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void requestRandComponent() {
         try {
             server.requestRandComponent();
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -169,7 +178,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void requestComponent(int componentId) {
         try {
             server.requestComponent(componentId);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -178,7 +187,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void stashComponent() {
         try {
             server.stashComponent();
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -187,7 +196,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void grabPlacedComponent() {
         try {
             server.grabPlacedComponent();
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -196,7 +205,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void grabStashedComponent(int index) {
         try {
             server.grabStashedComponent(index);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -205,7 +214,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void acquireForecast(int index) {
         try {
             server.acquireForecast(index);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -214,7 +223,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void releaseForecast() {
         try {
             server.releaseForecast();
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -223,7 +232,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void rejectComponent() {
         try {
             server.rejectComponent();
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -232,7 +241,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void placeComponent(Point point, Direction orientation) {
         try {
             server.placeComponent(point, orientation);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -241,7 +250,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void drawCard() {
         try {
             server.drawCard();
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -250,7 +259,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void placeGoods(Point point, GoodsType good) {
         try {
             server.placeGoods(point, good);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -259,7 +268,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void removeGoods(Point point, GoodsType good) {
         try {
             server.removeGoods(point, good);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -268,7 +277,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void choosePlanet(int choice) {
         try {
             server.choosePlanet(choice);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -277,7 +286,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void loseCrew(Point p) {
         try {
             server.loseCrew(p);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -286,7 +295,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void grabReward(boolean g) {
         try {
             server.grabReward(g);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -295,7 +304,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void loseGoods(Point p) {
         try {
             server.loseGoods(p);
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }
@@ -304,7 +313,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void giveUp() {
         try {
             server.giveUp();
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }
     }

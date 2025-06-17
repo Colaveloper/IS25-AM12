@@ -13,7 +13,6 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyEvent;
 
 import java.awt.*;
-import java.io.IOException;
 
 public class GameModel implements GameModelInterface {
     @Override
@@ -81,6 +80,11 @@ public class GameModel implements GameModelInterface {
     @Override
     public void placeShipOnFlightBoard(Game game, ShipBoard shipBoard, int startingPosition) {
         game.placeShipOnFlightBoard(shipBoard, startingPosition);
+    }
+
+    @Override
+    public void placeShipOnFlightBoard(Game game, ShipBoard shipBoard) {
+        game.placeShipOnFlightBoard(shipBoard);
     }
 
     @Override

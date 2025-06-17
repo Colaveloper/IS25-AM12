@@ -13,40 +13,70 @@ import java.awt.*;
 
 public interface GameModelInterface {
     Game createGame(Level level, int shipsN);
+
     ShipBoard addShip(Game game, GameColor color);
+
     void setEventListener(Game game, EventListener<LobbyEvent> listener);
+
     void startGame(Game game);
 
-    //Ship building
+    //region Ship building
     void requestRandComponent(Game game, ShipBoard shipBoard);
+
     void requestComponent(Game game, ShipBoard shipBoard, int componentID);
+
     void rejectComponent(Game game, ShipBoard shipBoard);
+
     void stashComponent(Game game, ShipBoard shipBoard);
+
     void grabPlacedComponent(Game game, ShipBoard shipBoard);
+
     void grabStashedComponent(Game game, ShipBoard shipBoard, int index);
+
     void placeComponent(Game game, ShipBoard shipBoard, Point point, Direction orientation);
+
     void flipHourglass(Game game, ShipBoard shipBoard);
+
     void placeShipOnFlightBoard(Game game, ShipBoard shipBoard, int startingPosition);
+
+    void placeShipOnFlightBoard(Game game, ShipBoard shipBoard);
+
     void acquireForecast(Game game, ShipBoard shipBoard, int deckIndex);
+
     void releaseForecast(Game game, ShipBoard shipBoard);
+    //endregion
 
-    // Ship validity check
+    //region Ship validity check
     void removeComponent(Game game, ShipBoard shipBoard, Point point);
+
     void chooseShipPiece(Game game, ShipBoard shipBoard, int pieceIndex);
+    //endregion
 
-    // Ship init
+    //region Ship init
     void initializeCabin(Game game, ShipBoard shipBoard, Point point, CrewType crewType);
+    //endregion
 
-    // Adventure
+    //region Adventure
     void drawCard(Game game, ShipBoard shipBoard);
+
     void activateComponent(Game game, ShipBoard shipBoard, Point point);
+
     void loseCrew(Game game, ShipBoard shipBoard, Point point);
+
     void grabReward(Game game, ShipBoard shipBoard);
+
     void placeGoods(Game game, ShipBoard shipBoard, Point point, GoodsType goodsType);
+
     void removeGoods(Game game, ShipBoard shipBoard, Point point, GoodsType goodsType);
+
     void loseGood(Game game, ShipBoard shipBoard, Point point);
+
     void useBattery(Game game, ShipBoard shipBoard, Point point);
+
     void choosePlanet(Game game, ShipBoard shipBoard, int choice);
+
     void giveUp(Game game, ShipBoard shipBoard);
+
     void goNext(Game game, ShipBoard shipBoard);
+    //endregion
 }
