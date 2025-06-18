@@ -70,6 +70,7 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
             }
         }
         removeAt(shipBoard, point);
+        game.getEventListener().notifyRemoveComponentEvent(shipBoard, point);
         if (checkShipValidity(shipBoard)) {
             if (!checkShipConnection(shipBoard)) {
                 game.getEventListener().notifyShipNotConnectedEvent(shipBoard, shipPiecesMap.get(shipBoard));
