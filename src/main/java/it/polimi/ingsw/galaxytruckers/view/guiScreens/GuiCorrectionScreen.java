@@ -4,52 +4,54 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ShipCorrectionState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-public class GuiValidationScreen extends GuiGameScreen {
-    private boolean shipValid;
-    private final List<Set<Point>> shipPieces; // .isEmpty iif ship is 1 piece
+public class GuiCorrectionScreen extends GuiGameScreen {
+    private final List<Set<Point>> shipPieces;
 
-    public GuiValidationScreen(ClientModel model, ControllerToServer controller, ShipCorrectionState state) {
+    public GuiCorrectionScreen(ClientModel model, ControllerToServer controller, ShipCorrectionState state) {
         super(model, controller, state);
-        shipPieces = new ArrayList<>(state.getShipPieces().get(model.getMyShip()));
-        shipValid = state.getValidShipBoards().contains(model.getMyShip());
+        shipPieces = new ArrayList<>(state.getShipPieces().getOrDefault(model.getMyShip(), Collections.emptyList()));
     }
 
     @Override
     public Parent getNode() {
         VBox layout = new VBox();
         layout.setAlignment(Pos.CENTER);
-        layout.getChildren().add(guiShipBoards.get(model.getMyShip()));
+        layout.getChildren().add(getAllShips());
         return layout;
     }
 
     @Override
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        guiShipBoards.get(model.getMyShip()).notifyRemoveComponent(point);
+        guiShipBoards.get(shipBoard).notifyRemoveComponent(point);
     }
 
     @Override
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List<Point> removed) {
-        for (Point piece : removed) guiShipBoards.get(model.getMyShip()).notifyRemoveComponent(piece);
+        for (Point piece : removed) guiShipBoards.get(shipBoard).notifyRemoveComponent(piece);
     }
 
     @Override
     public void notifyShipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
-
+        this.shipPieces.clear();
+        this.shipPieces.addAll(shipPieces);
+        // todo: give the user a message
     }
 
     @Override
     public void notifyShipValidated(ShipBoard shipBoard) {
-
+        // todo: give the user a message
     }
 
     @Override
@@ -57,9 +59,9 @@ public class GuiValidationScreen extends GuiGameScreen {
         return new GuiController() {
             @Override
             public void handlePointPress(Point point) {
-                if (shipPieces.isEmpty()) {
+                if (state.getAvailableActions().contains(StateActions.REMOVE_COMPONENT)) {
                     controller.removeComponent(point);
-                } else {
+                } else if (state.getAvailableActions().contains(StateActions.CHOOSE_SHIP_PIECE)) {
                     IntStream.range(0, shipPieces.size())
                             .filter(i -> shipPieces.get(i).contains(point))
                             .findFirst()

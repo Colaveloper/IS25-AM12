@@ -28,7 +28,7 @@ public class GuiScreenFactory implements ScreenFactory<GuiScreen> {
                 case TestShipBuildingState testShipBuildingState -> null;
 //                                new GuiTestShipBuildingScreen(model, controller, testShipBuildingState);
             };
-            case ShipCorrectionState shipCorrectionState -> new GuiValidationScreen(model, controller, shipCorrectionState);
+            case ShipCorrectionState shipCorrectionState -> new GuiCorrectionScreen(model, controller, shipCorrectionState);
             case ShipInitializationState shipInitializationState -> new GuiCrewInitializationScreen(model, controller, shipInitializationState);
             case AdventureState s -> switch (s) {
                 case ActivateState activateState -> switch (activateState) {
