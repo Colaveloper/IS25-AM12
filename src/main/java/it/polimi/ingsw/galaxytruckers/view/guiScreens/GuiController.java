@@ -20,6 +20,8 @@ public abstract class GuiController {
 
     public void handlePointPress(Point currentPoint) {};
 
+    public void rotateHandComponent() {};
+
     public void acquireForecast(int finalI) {}
 
     public void releaseForecast() {}
