@@ -117,15 +117,15 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 
     @Override
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
-        int placedComponentId = shipBoard.getComponentMap().get(point).getId();
-        guiShipBoards.get(shipBoard).notifyPlaceComponent(placedComponentId, point, orientation);
+        Component component = shipBoard.getComponentMap().get(point);
+        guiShipBoards.get(shipBoard).notifyPlaceComponent(component, point, orientation);
         guiHands.get(shipBoard).notifyClearHand();
     }
 
     @Override
     public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation, Point oldPosition) {
-        int placedComponentId = shipBoard.getComponentMap().get(point).getId();
-        guiShipBoards.get(shipBoard).notifyPlaceComponent(placedComponentId, point, orientation);
+        Component component = shipBoard.getComponentMap().get(point);
+        guiShipBoards.get(shipBoard).notifyPlaceComponent(component, point, orientation);
         guiShipBoards.get(shipBoard).notifyRemoveComponent(oldPosition);
     }
 

@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.DrawCardState;
 import javafx.scene.Parent;
+import javafx.scene.layout.HBox;
 
 public class GuiNewCardScreen extends GuiScreen {
     public GuiNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState drawCardState) {
@@ -12,6 +13,6 @@ public class GuiNewCardScreen extends GuiScreen {
 
     @Override
     public Parent getNode() {
-        return null;
+        return new HBox();
     }
 }

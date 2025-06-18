@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
@@ -10,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 
 import java.awt.*;
 import java.io.IOException;
@@ -63,28 +65,29 @@ public class GuiShipBoard extends GridPane {
             for (int x = 0; x < cols; x++) {
                 Point currentPoint = new Point(minX + x, minY + y);
                 if (shipArea.contains(currentPoint)) {
-                    ImageView areaView;
+                    StackPane areaPane;
                     if (componentMap.containsKey(currentPoint)) {
                         // COMPONENT ALREADY PLACED AND WELDED
-                        areaView = new GuiComponent(componentMap.get(currentPoint));
+                        areaPane = GuiComponent.of(componentMap.get(currentPoint));
                     } else {
                         // FREE AREA
-                        areaView = new ImageView();
-                        areaView.setFitWidth(50);
-                        areaView.setFitHeight(50);
-                        areaView.setImage(emptyAreaImage);
+                        areaPane = new StackPane();
+                        ImageView FreeAreaView = new ImageView(emptyAreaImage);
+                        FreeAreaView.setFitWidth(50);
+                        FreeAreaView.setFitHeight(50);
+                        areaPane.getChildren().add(FreeAreaView);
+                        areaPane.setPrefSize(50, 50);
                     }
-                    areaView.setOnMouseClicked(_->controller.handlePointPress(currentPoint));
-                    this.add(areaView, x + 1, y + 1);
+                    areaPane.setOnMouseClicked(_->controller.handlePointPress(currentPoint));
+                    this.add(areaPane, x + 1, y + 1);
                 }
             }
         }
     }
 
-    public void notifyPlaceComponent(int componentId, Point point, Direction orientation) {
+    public void notifyPlaceComponent(Component component, Point point, Direction orientation) {
         Platform.runLater(() -> {
             Optional<Node> toReplace = this.getChildren().stream()
-                    .filter(node -> node instanceof ImageView)
                     .filter(node -> {
                         Integer col = GridPane.getColumnIndex(node);
                         Integer row = GridPane.getRowIndex(node);
@@ -97,7 +100,7 @@ public class GuiShipBoard extends GridPane {
 
             toReplace.ifPresent(node -> {
                 this.getChildren().remove(node);
-                GuiComponent guiComponent = new GuiComponent(componentId);
+                GuiComponent guiComponent = new GuiComponent(component);
                 guiComponent.setRotate(orientation.getAngle());
                 guiComponent.setOnMouseClicked(_ -> controller.handlePointPress(point));
                 this.add(guiComponent, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));
@@ -120,19 +123,21 @@ public class GuiShipBoard extends GridPane {
 
             toReplace.ifPresent(node -> {
                 this.getChildren().remove(node);
-                ImageView areaView = getEmptyAreaImageView(oldPosition);
+                StackPane areaView = getEmptyAreaPane(oldPosition);
                 this.add(areaView, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));
             });
         });
     }
 
-    private ImageView getEmptyAreaImageView(Point position) {
-        ImageView areaView = new ImageView();
-        areaView.setFitWidth(50);
-        areaView.setFitHeight(50);
-        areaView.setImage(emptyAreaImage);
-        areaView.setOnMouseClicked(_-> controller.handlePointPress(position));
-        return areaView;
+    private StackPane getEmptyAreaPane(Point position) {
+        StackPane areaPane = new StackPane();
+        ImageView FreeAreaView = new ImageView(emptyAreaImage);
+        FreeAreaView.setFitWidth(50);
+        FreeAreaView.setFitHeight(50);
+        areaPane.getChildren().add(FreeAreaView);
+        areaPane.setPrefSize(50, 50);
+        areaPane.setOnMouseClicked(_-> controller.handlePointPress(position));
+        return areaPane;
     }
 
     public GuiComponent getGuiComponent(Point position) {
@@ -146,5 +151,18 @@ public class GuiShipBoard extends GridPane {
                 })
                 .findFirst()
                 .orElse(null); // or throw exception if needed
+    }
+
+    public void notifyInitializeCabin(Point point, CrewType crewType, int numResidents) {
+        getChildren().stream()
+                .filter(node -> node instanceof GuiCabin)
+                .map(node -> (GuiCabin) node)
+                .filter(node -> {
+                    int col = GridPane.getColumnIndex(node) - 1;
+                    int row = GridPane.getRowIndex(node) - 1;
+                    return col + minX == point.x && row + minY == point.y;
+                })
+                .findFirst()
+                .ifPresent(c -> c.notifyInitialize(crewType, numResidents));
     }
 }
