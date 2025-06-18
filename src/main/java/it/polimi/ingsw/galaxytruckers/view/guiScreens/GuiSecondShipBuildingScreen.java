@@ -100,7 +100,6 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
         guiComponentBank.notifyRejectComponent(component);
         guiHands.get(shipBoard).notifyClearHand();
         resetLastComponentDirection();
-
     }
 
     @Override
@@ -145,14 +144,17 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
         guiFlightBoard.notifyFlightBoardPosition(shipBoard, position);
     }
+
     @Override
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
         guiForecast.notifyPeekForecast(shipBoard, deckIndex);
     }
+
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards) {
         throw new RuntimeException("NOOOOOOOOO");
     }
+
     @Override
     public void notifyReleaseForecast(ShipBoard shipBoard, int deckIndex) {
         guiForecast.notifyReleaseForecast(shipBoard, deckIndex);
@@ -172,49 +174,49 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
         return new GuiController() {
             @Override
             public void placeShipOnFlightboard(int position) {
-                if (availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD)) {
+                if (state.getAvailableActions().contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD)) {
                     controller.placeShipOnFlightboard(position);
                 }
             }
 
             @Override
             public void requestRandComponent() {
-                if (availableActions.contains(StateActions.REQUEST_RAND_COMPONENT)) {
+                if (state.getAvailableActions().contains(StateActions.REQUEST_RAND_COMPONENT)) {
                     controller.requestRandComponent();
                 }
             }
 
             @Override
             public void rejectComponent() {
-                if (availableActions.contains(StateActions.REJECT_COMPONENT)) {
+                if (state.getAvailableActions().contains(StateActions.REJECT_COMPONENT)) {
                     controller.rejectComponent();
                 }
             }
 
             @Override
             public void requestComponent(int id) {
-                if (availableActions.contains(StateActions.REQUEST_COMPONENT)) {
+                if (state.getAvailableActions().contains(StateActions.REQUEST_COMPONENT)) {
                     controller.requestComponent(id);
                 }
             }
 
             @Override
             public void flipHourglass() {
-                if (availableActions.contains(StateActions.FLIP_HOURGLASS)) {
+                if (state.getAvailableActions().contains(StateActions.FLIP_HOURGLASS)) {
                     controller.flipHourglass();
                 }
             }
 
             @Override
             public void stashComponent() {
-                if (availableActions.contains(StateActions.STASH_COMPONENT)) {
+                if (state.getAvailableActions().contains(StateActions.STASH_COMPONENT)) {
                     controller.stashComponent();
                 }
             }
 
             @Override
             public void grabStashedComponent(int i) {
-                if (availableActions.contains(StateActions.GRAB_STASHED_COMPONENT)) {
+                if (state.getAvailableActions().contains(StateActions.GRAB_STASHED_COMPONENT)) {
                     controller.grabStashedComponent(i);
                 }
             }
@@ -222,16 +224,16 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
             @Override
             public void handlePointPress(Point point) {
                 if (
-                        model.getMyShip().getLastPosition() != null
-                        && model.getMyShip().getLastPosition().equals(point)
+                        myShipBoard.getLastPosition() != null
+                        && myShipBoard.getLastPosition().equals(point)
                 ) {
                     lastComponentDirection = lastComponentDirection.getLeft();
-                    guiShipBoards.get(model.getMyShip()).getGuiComponent(point).setRotate(lastComponentDirection.getAngle());
+                    guiShipBoards.get(myShipBoard).getGuiComponent(point).setRotate(lastComponentDirection.getAngle());
                 } else if (
-                        model.getMyShip().getShipArea().contains(point)
-                        && !model.getMyShip().getComponentMap().containsKey(point)
+                        myShipBoard.getShipArea().contains(point)
+                        && !myShipBoard.getComponentMap().containsKey(point)
                 ) {
-                    if (availableActions.contains(StateActions.PLACE_COMPONENT)) {
+                    if (state.getAvailableActions().contains(StateActions.PLACE_COMPONENT)) {
                         controller.placeComponent(point, lastComponentDirection);
                     }
                 }
@@ -239,14 +241,14 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 
             @Override
             public void acquireForecast(int finalI) {
-                if (availableActions.contains(StateActions.ACQUIRE_FORECAST)) {
+                if (state.getAvailableActions().contains(StateActions.ACQUIRE_FORECAST)) {
                     controller.acquireForecast(finalI);
                 }
             }
 
             @Override
             public void releaseForecast() {
-                if (availableActions.contains(StateActions.RELEASE_FORECAST)) {
+                if (state.getAvailableActions().contains(StateActions.RELEASE_FORECAST)) {
                     controller.releaseForecast();
                 }
             }

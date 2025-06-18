@@ -26,7 +26,6 @@ public abstract class GuiScreen extends Screen {
     protected final ControllerToServer controller;
     protected final GameState state;
     protected ShipBoard myShipBoard;
-    protected final List<StateActions> availableActions;
 
 
 
@@ -34,11 +33,8 @@ public abstract class GuiScreen extends Screen {
         this.model = model;
         this.controller = controller;
         this.state = state;
-        this.availableActions = new ArrayList<>();
-        if (state != null) {
-            this.availableActions.addAll(state.getAvailableActions());
-            this.myShipBoard = model.getMyShip();
-        }
+        if (state != null) this.myShipBoard = model.getMyShip();
+
  }
 
     public GuiScreen(ClientModel model, ControllerToServer controller) {
