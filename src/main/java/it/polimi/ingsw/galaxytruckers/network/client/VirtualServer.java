@@ -56,7 +56,7 @@ public interface VirtualServer {
     void drawCard();
     void activateComponent(Point point);
     void loseCrew(Point point);
-    void grabReward(boolean rewardGrabbed);
+    void grabReward();
     void placeGoods(Point point, GoodsType goodsType);
     void removeGoods(Point point, GoodsType goodsType);
     void loseGoods(Point point);

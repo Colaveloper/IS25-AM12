@@ -69,7 +69,7 @@ public interface LobbyInterface {
 
     void loseCrew(Player player, Point point);
 
-    void grabReward(Player player, boolean rewardGrabbed);
+    void grabReward(Player player);
 
     void placeGoods(Player player, Point point, GoodsType goodsType);
 

@@ -266,7 +266,7 @@ public class Lobby implements LobbyInterface {
     }
 
     @Override
-    public void grabReward(Player player, boolean rewardGrabbed) {
+    public void grabReward(Player player) {
         checkLobbyState(LobbyState.INGAME);
         model.grabReward(game, player.getShipBoard().orElseThrow());
     }

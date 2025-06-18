@@ -5,7 +5,6 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
-import it.polimi.ingsw.galaxytruckers.view.CliView;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
@@ -153,7 +152,7 @@ class ClientControllerTest {
             }
 
             @Override
-            public void grabReward(boolean rewardGrabbed) {
+            public void grabReward() {
 
             }
 

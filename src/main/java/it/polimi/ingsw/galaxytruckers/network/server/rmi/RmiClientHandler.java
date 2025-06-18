@@ -259,9 +259,9 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
     }
 
     @Override
-    public void grabReward(boolean rewardGrabbed) throws RemoteException {
+    public void grabReward() throws RemoteException {
         synchronized (requestLock) {
-            getLobby().grabReward(player, rewardGrabbed);
+            getLobby().grabReward(player);
         }
     }
 

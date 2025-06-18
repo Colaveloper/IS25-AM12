@@ -43,7 +43,7 @@ public interface RemoteController extends Remote {
     void drawCard() throws RemoteException;
     void activateComponent(Point point) throws RemoteException;
     void loseCrew(Point point) throws RemoteException;
-    void grabReward(boolean rewardGrabbed) throws RemoteException;
+    void grabReward() throws RemoteException;
     void placeGoods(Point point, GoodsType goodsType) throws RemoteException;
     void removeGoods(Point point, GoodsType goodsType) throws RemoteException;
     void loseGoods(Point point) throws RemoteException;

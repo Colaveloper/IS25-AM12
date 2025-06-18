@@ -66,7 +66,7 @@ public interface ControllerToServer {
 
     void loseCrew(Point p);
 
-    void grabReward(boolean rewardGrabbed);
+    void grabReward();
 
     void giveUp();
 }

@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.utils.Logger;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import it.polimi.ingsw.galaxytruckers.view.*;
-import it.polimi.ingsw.galaxytruckers.view.cliScreens.CliScreen;
 import it.polimi.ingsw.galaxytruckers.view.controller.ClientEventHandler;
 import it.polimi.ingsw.galaxytruckers.view.controller.PlayerRegistry;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
@@ -292,9 +291,9 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     }
 
     @Override
-    public void grabReward(boolean g) {
+    public void grabReward() {
         try {
-            server.grabReward(g);
+            server.grabReward();
         } catch (RuntimeException e) {
             view.reportError(e.getMessage());
         }

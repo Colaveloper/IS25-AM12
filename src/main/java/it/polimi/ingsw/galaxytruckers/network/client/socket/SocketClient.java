@@ -242,8 +242,8 @@ public class SocketClient implements VirtualServer, VirtualClient {
     }
 
     @Override
-    public void grabReward(boolean rewardGrabbed) {
-        sendRequest(new GrabReward(rewardGrabbed));
+    public void grabReward() {
+        sendRequest(new GrabReward());
     }
 
     @Override

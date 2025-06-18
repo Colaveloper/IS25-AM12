@@ -147,7 +147,7 @@ public class ShipBuildingTest {
             }
 
             @Override
-            public void grabReward(boolean rewardGrabbed) {
+            public void grabReward() {
 
             }
 

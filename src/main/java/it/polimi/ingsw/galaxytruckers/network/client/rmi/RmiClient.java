@@ -170,8 +170,8 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     @Override
-    public void grabReward(boolean rewardGrabbed) {
-        runRemoteMethod(() -> remoteController.grabReward(rewardGrabbed));
+    public void grabReward() {
+        runRemoteMethod(() -> remoteController.grabReward());
     }
 
     @Override
