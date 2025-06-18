@@ -2,14 +2,12 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
-import it.polimi.ingsw.galaxytruckers.view.guiElements.*;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
-import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
+import it.polimi.ingsw.galaxytruckers.view.model.state.TestShipBuildingState;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -17,24 +15,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
+public class GuiTestShipBuildingScreen extends GuiShipBuildingScreen {
 
-    private final GuiForecast guiForecast;
-    private final GuiHourglass guiHourglass;
-    protected final Map<ShipBoard, GuiStash> guiStashes;
-
-    public GuiSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState state) {
+    public GuiTestShipBuildingScreen(ClientModel model, ControllerToServer controller, TestShipBuildingState state) {
         super(model, controller, state);
-        guiForecast = new GuiForecast(state.getBlockedForecasts(), getGuiController());
-        guiHourglass = new GuiHourglass(getGuiController());
-        guiStashes = new HashMap<>();
-        for (ShipBoard shipBoard : model.getGame().getShipBoards()) {
-            guiStashes.put(shipBoard, new GuiStash(shipBoard.getStashedComponents(), getGuiController()));
-        }
     }
 
     @Override
@@ -45,10 +31,10 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
         // Add ship board
         layout.getChildren().add(guiShipBoards.get(shipBoard));
 
-        // Add hand and stash to the layout
-        HBox handAndStashBox = new HBox();
-        handAndStashBox.getChildren().addAll(guiHands.get(shipBoard), guiStashes.get(shipBoard));
-        layout.getChildren().add(handAndStashBox);
+        // Add hand to the layout
+        HBox handBox = new HBox();
+        handBox.getChildren().add(guiHands.get(shipBoard));
+        layout.getChildren().add(handBox);
 
         // Add player nickname below the ship
         Player player = null;
@@ -80,54 +66,9 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
         layout.getChildren().addAll(
             getStyledFlightBoard(), // Place the styled flightboard at the top
             guiComponentBank,
-            guiForecast,
-            guiHourglass,
             getAllShips()
         );
         return layout;
-    }
-
-    @Override
-    public void notifyStashComponent(ShipBoard shipBoard, Component component) {
-        guiStashes.get(shipBoard).notifyStash(component);
-        guiHands.get(shipBoard).notifyClearHand();
-    }
-
-    @Override
-    public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
-        guiStashes.get(shipBoard).notifyStash(component);
-        guiShipBoards.get(shipBoard).notifyRemoveComponent(oldPosition);
-    }
-
-    @Override
-    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
-        guiStashes.get(shipBoard).notifyGrab(index);
-        guiHands.get(shipBoard).notifySetHand(component);
-    }
-
-    @Override
-    public void notifyFlipHourglass(ShipBoard shipBoard) {
-        guiHourglass.notifyFlipHourglass();
-    }
-
-    @Override
-    public void notifyHourglassEnd() {
-        guiHourglass.notifyHourglassEnd();
-    }
-
-    @Override
-    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        guiForecast.notifyPeekForecast(shipBoard, deckIndex);
-    }
-
-    @Override
-    public void setForecastDeck(List<AdventureCard> adventureCards) {
-        throw new RuntimeException("NOOOOOOOOO");
-    }
-
-    @Override
-    public void notifyReleaseForecast(ShipBoard shipBoard, int deckIndex) {
-        guiForecast.notifyReleaseForecast(shipBoard, deckIndex);
     }
 
     @Override
@@ -135,8 +76,8 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
         return new GuiController() {
             @Override
             public void placeShipOnFlightboard(int position) {
-                if (state.getAvailableActions().contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD)) {
-                    controller.placeShipOnFlightboard(position);
+                if (state.getAvailableActions().contains(StateActions.PLACE_SHIP_FOR_TEST)) {
+                    controller.placeShipOnFlightBoard();
                 }
             }
 
@@ -172,27 +113,6 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
             }
 
             @Override
-            public void flipHourglass() {
-                if (state.getAvailableActions().contains(StateActions.FLIP_HOURGLASS)) {
-                    controller.flipHourglass();
-                }
-            }
-
-            @Override
-            public void stashComponent() {
-                if (state.getAvailableActions().contains(StateActions.STASH_COMPONENT)) {
-                    controller.stashComponent();
-                }
-            }
-
-            @Override
-            public void grabStashedComponent(int i) {
-                if (state.getAvailableActions().contains(StateActions.GRAB_STASHED_COMPONENT)) {
-                    controller.grabStashedComponent(i);
-                }
-            }
-
-            @Override
             public void handlePointPress(Point point) {
                 // clicking on a component that has been placed on the ship
                 if (myShipBoard.getComponentMap().containsKey(point)) {
@@ -215,20 +135,6 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
                         Direction orientation = myShipBoard.getLastComponent().getOrientation();
                         controller.placeComponent(point, orientation);
                     }
-                }
-            }
-
-            @Override
-            public void acquireForecast(int finalI) {
-                if (state.getAvailableActions().contains(StateActions.ACQUIRE_FORECAST)) {
-                    controller.acquireForecast(finalI);
-                }
-            }
-
-            @Override
-            public void releaseForecast() {
-                if (state.getAvailableActions().contains(StateActions.RELEASE_FORECAST)) {
-                    controller.releaseForecast();
                 }
             }
         };

@@ -25,8 +25,7 @@ public class GuiScreenFactory implements ScreenFactory<GuiScreen> {
         return switch (gameState) {
             case ShipBuildingState shipBuildingState -> switch (shipBuildingState) {
                 case SecondShipBuildingState secondShipBuildingState -> new GuiSecondShipBuildingScreen(model, controller, secondShipBuildingState);
-                case TestShipBuildingState testShipBuildingState -> null;
-//                                new GuiTestShipBuildingScreen(model, controller, testShipBuildingState);
+                case TestShipBuildingState testShipBuildingState -> new GuiTestShipBuildingScreen(model, controller, testShipBuildingState);
             };
             case ShipCorrectionState shipCorrectionState -> new GuiCorrectionScreen(model, controller, shipCorrectionState);
             case ShipInitializationState shipInitializationState -> new GuiCrewInitializationScreen(model, controller, shipInitializationState);

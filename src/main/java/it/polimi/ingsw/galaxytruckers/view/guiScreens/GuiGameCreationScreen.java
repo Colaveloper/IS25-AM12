@@ -43,7 +43,7 @@ public class GuiGameCreationScreen extends GuiScreen {
                 "-fx-font-size: 14px;";
 
         ComboBox<Level> levelComboBox = new ComboBox<>();
-        levelComboBox.getItems().addAll(Level.SECOND, Level.TEST);
+        levelComboBox.getItems().addAll(Level.values());
         levelComboBox.setPromptText("Select Level");
         levelComboBox.setMaxWidth(Double.MAX_VALUE);
         levelComboBox.setStyle(comboBoxStyle);
