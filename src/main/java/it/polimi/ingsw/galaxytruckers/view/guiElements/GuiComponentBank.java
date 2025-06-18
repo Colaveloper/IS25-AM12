@@ -54,27 +54,25 @@ public class GuiComponentBank extends HBox {
         minusButton.setPrefSize(50, 50);
         minusButton.setOnMouseClicked(_ -> controller.rejectComponent());
 
-        // Replace HBox with FlowPane for automatic wrapping
+        // flowpane for rejected components
         rejectedContainer = new FlowPane();
-        rejectedContainer.setHgap(10); // Horizontal gap between components
-        rejectedContainer.setVgap(10); // Vertical gap between rows
-        rejectedContainer.setPrefWidth(Control.USE_COMPUTED_SIZE); // Allow it to calculate width
-        rejectedContainer.setMaxWidth(Double.MAX_VALUE); // Allow it to grow to full width
-        HBox.setHgrow(rejectedContainer, Priority.ALWAYS); // Let it grow horizontally within parent
+        rejectedContainer.setHgap(10);
+        rejectedContainer.setVgap(10);
+        rejectedContainer.setPrefWidth(Control.USE_COMPUTED_SIZE);
+        rejectedContainer.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(rejectedContainer, Priority.ALWAYS);
 
-        // Add styling for visual separation - semi-transparent dark background with border
         rejectedContainer.setStyle(
-            "-fx-background-color: rgba(20, 20, 40, 0.7);" + // Semi-transparent dark background
-            "-fx-border-color: rgba(100, 100, 200, 0.8);" +  // Blue-ish border
-            "-fx-border-width: 1px;" +                       // Border width
-            "-fx-border-radius: 5px;" +                      // Rounded corners for border
-            "-fx-background-radius: 5px;" +                  // Rounded corners for background
-            "-fx-padding: 10px;"                             // Inner padding
+            "-fx-background-color: rgba(20, 20, 40, 0.7);" +
+            "-fx-border-color: rgba(100, 100, 200, 0.8);" +
+            "-fx-border-width: 1px;" +
+            "-fx-border-radius: 5px;" +
+            "-fx-background-radius: 5px;" +
+            "-fx-padding: 10px;"
         );
 
-        // Set the container width to fill most of the screen
         VBox.setVgrow(rejectedContainer, Priority.ALWAYS);
-        rejectedContainer.setPrefWrapLength(1200); // Set preferred wrap length to be very wide
+        rejectedContainer.setPrefWrapLength(1200);
 
         componentBank.getUncoveredComponents().forEach(component -> {
             GuiComponent newComponent = new GuiComponent(component);

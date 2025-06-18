@@ -39,20 +39,16 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
 
     @Override
     protected VBox getFullShip(ShipBoard shipBoard) {
-        VBox layout = new VBox(5); // Add spacing between ship and nickname
+        VBox layout = new VBox(5);
         layout.setAlignment(Pos.CENTER);
 
-        // Add ship board
         layout.getChildren().add(guiShipBoards.get(shipBoard));
 
-        // Add hand and stash to the layout
         HBox handAndStashBox = new HBox();
         handAndStashBox.getChildren().addAll(guiHands.get(shipBoard), guiStashes.get(shipBoard));
         layout.getChildren().add(handAndStashBox);
 
-        // Add player nickname below the ship
         Player player = null;
-        // Find the player for this ship
         for (Map.Entry<ShipBoard, Player> entry : model.getShipToPlayer().entrySet()) {
             if (entry.getKey().equals(shipBoard)) {
                 player = entry.getValue();
@@ -75,10 +71,10 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
 
     @Override
     public Parent getNode() {
-        VBox layout = new VBox(20); // Added spacing between components
+        VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
         layout.getChildren().addAll(
-            getStyledFlightBoard(), // Place the styled flightboard at the top
+            getStyledFlightBoard(),
             guiComponentBank,
             guiForecast,
             guiHourglass,
