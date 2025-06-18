@@ -27,7 +27,6 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
     private final GuiHourglass guiHourglass;
     protected final Map<ShipBoard, GuiHand> guiHands;
     protected final Map<ShipBoard, GuiStash> guiStashes;
-    private Direction lastComponentDirection;
 
     public GuiSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState state) {
         super(model, controller, state);
@@ -45,7 +44,6 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
         for (ShipBoard shipBoard : model.getGame().getShipBoards()) {
             guiStashes.put(shipBoard, new GuiStash(shipBoard.getStashedComponents(), getGuiController()));
         }
-        resetLastComponentDirection();
     }
 
     @Override
@@ -68,7 +66,6 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 
     @Override
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
-        resetLastComponentDirection();
         guiComponentBank.notifyRequestRandComponent();
         guiHands.get(shipBoard).notifySetHand(component);
     }
@@ -76,7 +73,6 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 
     @Override
     public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
-        resetLastComponentDirection();
         guiComponentBank.notifyRequestComponent(component);
         guiHands.get(shipBoard).notifySetHand(component);
     }
@@ -85,32 +81,27 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
     public void notifyStashComponent(ShipBoard shipBoard, Component component) {
         guiStashes.get(shipBoard).notifyStash(component);
         guiHands.get(shipBoard).notifyClearHand();
-        resetLastComponentDirection();
     }
 
     @Override
     public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
         guiStashes.get(shipBoard).notifyStash(component);
         guiShipBoards.get(shipBoard).notifyRemoveComponent(oldPosition);
-        resetLastComponentDirection();
     }
 
     @Override
     public void notifyRejectComponent(ShipBoard shipBoard, Component component) {
         guiComponentBank.notifyRejectComponent(component);
         guiHands.get(shipBoard).notifyClearHand();
-        resetLastComponentDirection();
     }
 
     @Override
     public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
         guiComponentBank.notifyRejectComponent(component);
         guiShipBoards.get(shipBoard).notifyRemoveComponent(oldPosition);
-        resetLastComponentDirection();
     }
     @Override
     public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
-        resetLastComponentDirection();
         guiStashes.get(shipBoard).notifyGrab(index);
         guiHands.get(shipBoard).notifySetHand(component);
     }
@@ -165,10 +156,6 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
         guiShipBoards.get(shipBoard).notifyRemoveComponent(point);
     }
 
-    private void resetLastComponentDirection() {
-        lastComponentDirection = Direction.UP;
-    }
-
     @Override
     protected GuiController getGuiController() {
         return new GuiController() {
@@ -203,8 +190,10 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
             @Override
             public void rotateHandComponent() {
                 if (model.getMyShip().getLastComponent() != null) {
-                    lastComponentDirection = lastComponentDirection.getLeft();
-                    guiHands.get(model.getMyShip()).rotateComponent(lastComponentDirection.getAngle());
+                    Direction currentDirection = model.getMyShip().getLastComponent().getOrientation();
+                    Direction newDirection = currentDirection.getLeft();
+                    model.getMyShip().getLastComponent().setOrientation(newDirection);
+                    guiHands.get(model.getMyShip()).rotateComponent(newDirection.getAngle());
                 }
             }
 
@@ -231,18 +220,26 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
 
             @Override
             public void handlePointPress(Point point) {
-                if (
-                        myShipBoard.getLastPosition() != null
-                        && myShipBoard.getLastPosition().equals(point)
-                ) {
-                    lastComponentDirection = lastComponentDirection.getLeft();
-                    guiShipBoards.get(myShipBoard).getGuiComponent(point).setRotate(lastComponentDirection.getAngle());
-                } else if (
-                        myShipBoard.getShipArea().contains(point)
-                        && !myShipBoard.getComponentMap().containsKey(point)
-                ) {
+                // clicking on a component that has been placed on the ship
+                if (myShipBoard.getComponentMap().containsKey(point)) {
+                    // we grab the component only if it hasn't been welded
+                    if (myShipBoard.getLastPosition() != null &&
+                        myShipBoard.getLastPosition().equals(point) &&
+                        state.getAvailableActions().contains(StateActions.GRAB_PLACED_COMPONENT)) {
+                        Component component = myShipBoard.getComponentMap().get(point);
+                        controller.grabPlacedComponent();
+                        guiShipBoards.get(myShipBoard).notifyRemoveComponent(point);
+                        guiHands.get(myShipBoard).notifySetHand(component);
+                    }
+                }
+                // places the component in an empty space on the shipboard
+                else if (myShipBoard.getShipArea().contains(point) &&
+                        !myShipBoard.getComponentMap().containsKey(point) &&
+                        myShipBoard.getLastComponent() != null &&
+                        myShipBoard.getLastPosition() == null) {
                     if (state.getAvailableActions().contains(StateActions.PLACE_COMPONENT)) {
-                        controller.placeComponent(point, lastComponentDirection);
+                        Direction orientation = myShipBoard.getLastComponent().getOrientation();
+                        controller.placeComponent(point, orientation);
                     }
                 }
             }
@@ -263,4 +260,3 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
         };
     }
 }
-

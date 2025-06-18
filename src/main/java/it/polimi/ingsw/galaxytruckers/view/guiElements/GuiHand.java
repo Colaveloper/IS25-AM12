@@ -28,6 +28,7 @@ public class GuiHand extends HBox {
             getChildren().clear();
             guiHandComponent = new GuiComponent(component);
             guiHandComponent.setOnMouseClicked(_ -> controller.rotateHandComponent());
+            guiHandComponent.setRotate(component.getOrientation().getAngle());
             getChildren().add(guiHandComponent);
         });
     }
