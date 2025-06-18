@@ -12,24 +12,26 @@ public final class GrabRewardState extends AdventureState implements GameStateIn
     }
 
     @Override
-    public void grabReward(ShipBoard shipBoard) {
+    public synchronized void grabReward(ShipBoard shipBoard) {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
+        checkIfExpired();
         rewardMethod.run();
         game.getEventListener().notifyGrabCreditsEvent(shipBoard, shipBoard.getCredits());
-        game.setCurrentState(super.getNextState());
+        getNextState();
     }
 
     @Override
-    public void goNext(ShipBoard shipBoard) {
+    public synchronized void goNext(ShipBoard shipBoard) {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
-        game.setCurrentState(super.getNextState());
+        checkIfExpired();
+        getNextState();
     }
 
-    public ShipBoard getShipBoard() {
+    public synchronized ShipBoard getShipBoard() {
         return shipBoard;
     }
 }

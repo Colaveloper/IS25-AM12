@@ -9,11 +9,12 @@ import java.util.stream.Collectors;
 
 public abstract class FlightBoard {
     protected final Map<ShipBoard, Integer> shipToPlace; // contains playing ships only
-    protected List<Integer> startingPositionsLeft;
+    protected final List<Integer> startingPositionsLeft;
     protected GameEventListener gameEventListener = null;
 
     public FlightBoard() {
         this.shipToPlace = new HashMap<>();
+        this.startingPositionsLeft = new ArrayList<>();
     }
 
     public void setGameEventListener(GameEventListener gameEventListener) {
@@ -25,7 +26,9 @@ public abstract class FlightBoard {
      * on the flightBoard
      * */
     public Map<ShipBoard, Integer> getShipToPlace() {
-        return shipToPlace;
+        synchronized (shipToPlace) {
+            return new HashMap<>(shipToPlace);
+        }
     }
 
     /**
@@ -36,8 +39,8 @@ public abstract class FlightBoard {
      * @param startingPosition the starting position of the ship to place
      * @return true if there are no more starting positions left, false otherwise
      * */
-    public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
-        return placeShipOnFlightBoard(shipBoard);
+    public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
+        placeShipOnFlightBoard(shipBoard);
     }
 
     /**
@@ -45,12 +48,17 @@ public abstract class FlightBoard {
      * position unavailable for future calls.
      *
      * @param shipBoard the ship to be placed
-     * @return true if there are no more starting positions left, false otherwise
+     * @return the position the ship was placed at
      * */
-    public boolean placeShipOnFlightBoard(ShipBoard shipBoard) {
-        shipToPlace.put(shipBoard, startingPositionsLeft.removeFirst());
-        // to be interpreted as "building phase is finished for everybody"
-        return startingPositionsLeft.isEmpty();
+    public int placeShipOnFlightBoard(ShipBoard shipBoard) {
+        int position;
+        synchronized (startingPositionsLeft) {
+            position = startingPositionsLeft.removeFirst();
+        }
+        synchronized (shipToPlace) {
+            shipToPlace.put(shipBoard, position);
+        }
+        return position;
     }
 
     /**
@@ -61,11 +69,12 @@ public abstract class FlightBoard {
      * @return a {@link List} of shipboards in the order that they appear
      * on the flightboard*/
     public List<ShipBoard> getOrderedShips() {
-        return shipToPlace.entrySet().stream()
-                .sorted(Comparator.<Map.Entry<ShipBoard, Integer>>comparingInt(Map.Entry::getValue).reversed())
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
-        // nth .pop() returns the nth player
+        synchronized (shipToPlace) {
+            return shipToPlace.entrySet().stream()
+                    .sorted(Comparator.<Map.Entry<ShipBoard, Integer>>comparingInt(Map.Entry::getValue).reversed())
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+        }
     }
 
     /**
@@ -73,25 +82,28 @@ public abstract class FlightBoard {
      * @param shipBoard the shipboard to be moved
      * @param displacement the amount of spaces to move on the flightboard*/
     public void displaceShip (ShipBoard shipBoard, int displacement) {
-        int displacementLeft = displacement;
-        int tryMove = displacementLeft>0 ? 1 : -1;
-        int newPosition = shipToPlace.get(shipBoard);
-        while (displacementLeft!=0) {
-            int finalNewPosition = newPosition;
-            int finalTryMove = tryMove;
-            if (
-                    shipToPlace.values().stream()
-                            .anyMatch(p -> p%getLoopLength() == (finalNewPosition + finalTryMove))
-            ) {
-                tryMove += displacementLeft>0 ? 1 : -1;
-            } else {
-                newPosition += tryMove;
-                tryMove = displacementLeft>0 ? 1 : -1;
-                displacementLeft += displacementLeft>0 ? -1 : 1;
+        int newPosition;
+        synchronized (shipToPlace) {
+            int displacementLeft = displacement;
+            int tryMove = displacementLeft>0 ? 1 : -1;
+            newPosition = shipToPlace.get(shipBoard);
+            while (displacementLeft!=0) {
+                int finalNewPosition = newPosition;
+                int finalTryMove = tryMove;
+                if (
+                        shipToPlace.values().stream()
+                                .anyMatch(p -> p%getLoopLength() == (finalNewPosition + finalTryMove))
+                ) {
+                    tryMove += displacementLeft>0 ? 1 : -1;
+                } else {
+                    newPosition += tryMove;
+                    tryMove = displacementLeft>0 ? 1 : -1;
+                    displacementLeft += displacementLeft>0 ? -1 : 1;
+                }
             }
+            shipToPlace.put(shipBoard, newPosition);
+            if (gameEventListener != null) gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,newPosition);
         }
-        shipToPlace.put(shipBoard, newPosition);
-        if (gameEventListener != null) gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,newPosition);
     }
 
     /**
@@ -113,7 +125,9 @@ public abstract class FlightBoard {
      * on the flightboard*/
     @VisibleForTesting
     public List<Integer> getStartingPositionsLeft() {
-        return new ArrayList<>(startingPositionsLeft);
+        synchronized (startingPositionsLeft) {
+            return new ArrayList<>(startingPositionsLeft);
+        }
     }
 }
 

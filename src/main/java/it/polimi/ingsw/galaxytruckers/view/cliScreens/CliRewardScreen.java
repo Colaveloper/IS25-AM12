@@ -1,10 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GrabRewardState;
 
 public class CliRewardScreen extends CliAdventureScreen {
@@ -40,7 +37,7 @@ public class CliRewardScreen extends CliAdventureScreen {
             System.out.println("It's not your turn to grab a reward");
             return;
         }
-        if(input.equalsIgnoreCase("P")) controller.grabReward(true);
+        if(input.equalsIgnoreCase("P")) controller.grabReward();
         if(input.equalsIgnoreCase("")) controller.goNext();
     }
 

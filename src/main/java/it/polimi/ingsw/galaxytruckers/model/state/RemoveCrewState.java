@@ -14,24 +14,25 @@ public final class RemoveCrewState extends AdventureState implements GameStateIn
     }
 
     @Override
-    public void loseCrew(ShipBoard shipBoard, Point position) {
+    public synchronized void loseCrew(ShipBoard shipBoard, Point position) {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
+        checkIfExpired();
         if (shipBoard.getCrewSize() > 0 && crewSacrifice > 0) {
             shipBoard.loseCrew(position);
             crewSacrifice--;
         }
         if (crewSacrifice <= 0 || shipBoard.getCrewSize() <= 0) {
-            game.setCurrentState(getNextState());
+            getNextState();
         }
     }
 
-    public ShipBoard getShipBoard() {
+    public synchronized ShipBoard getShipBoard() {
         return shipBoard;
     }
 
-    public int getCrewSacrifice() {
+    public synchronized int getCrewSacrifice() {
         return crewSacrifice;
     }
 }

@@ -25,10 +25,11 @@ public final class RemoveGoodsState extends AdventureState implements GameStateI
     }
 
     @Override
-    public void loseGood(ShipBoard shipBoard, Point position) {
+    public synchronized void loseGood(ShipBoard shipBoard, Point position) {
         if (!shipBoard.equals(this.shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
+        checkIfExpired();
         computeMostValuableGood();
         if (mostValuableGood != null) {
             shipBoard.removeGoods(position, mostValuableGood, 1);
@@ -38,7 +39,6 @@ public final class RemoveGoodsState extends AdventureState implements GameStateI
             game.getEventListener().notifyUseBatteryEvent(shipBoard, position);
         }
         goodsToLose--;
-
         tryStateTransition();
     }
 
@@ -51,15 +51,15 @@ public final class RemoveGoodsState extends AdventureState implements GameStateI
 
     private void tryStateTransition() {
         if (goodsToLose == 0 || (shipBoard.getGoodsValue() == 0 && shipBoard.getNumBatteries() == 0)) {
-            game.setCurrentState(super.getNextState());
+            getNextState();
         }
     }
 
-    public int getGoodsToLose() {
+    public synchronized int getGoodsToLose() {
         return goodsToLose;
     }
 
-    public ShipBoard getShipBoard() {
+    public synchronized ShipBoard getShipBoard() {
         return shipBoard;
     }
 }

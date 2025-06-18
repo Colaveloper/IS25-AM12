@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,6 +50,7 @@ class GrabRewardStateTest {
             }
         };
         game.setEventListener(new GameEventListenerStub());
+        CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         adventureCard = new AdventureCard(game, Level.SECOND,1) {
             @Override
             public AdventureState getNextState() {
@@ -63,7 +65,7 @@ class GrabRewardStateTest {
         };
         testState.setGame(game);
         testState.grabReward(ship1);
-        assertNotEquals(testState, game.getCurrentState());
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
     @Test
@@ -80,6 +82,7 @@ class GrabRewardStateTest {
             }
         };
         game.setEventListener(new GameEventListenerStub());
+        CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
@@ -94,7 +97,7 @@ class GrabRewardStateTest {
         };
         testState.setGame(game);
         testState.goNext(ship1);
-        assertNotEquals(testState, game.getCurrentState());
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
 }

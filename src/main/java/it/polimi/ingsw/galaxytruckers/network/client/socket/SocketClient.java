@@ -197,6 +197,11 @@ public class SocketClient implements VirtualServer, VirtualClient {
     }
 
     @Override
+    public void placeShipOnFlightBoard() {
+        sendRequest(new PlaceShipOnFlightBoard());
+    }
+
+    @Override
     public void acquireForecast(int deckIndex) {
         sendRequest(new AcquireForecast(deckIndex));
     }
@@ -237,8 +242,8 @@ public class SocketClient implements VirtualServer, VirtualClient {
     }
 
     @Override
-    public void grabReward(boolean rewardGrabbed) {
-        sendRequest(new GrabReward(rewardGrabbed));
+    public void grabReward() {
+        sendRequest(new GrabReward());
     }
 
     @Override

@@ -73,8 +73,8 @@ public class GuiShipBoard extends GridPane {
                         areaView.setFitWidth(50);
                         areaView.setFitHeight(50);
                         areaView.setImage(emptyAreaImage);
-                        areaView.setOnMouseClicked(_->controller.handlePointPress(currentPoint));
                     }
+                    areaView.setOnMouseClicked(_->controller.handlePointPress(currentPoint));
                     this.add(areaView, x + 1, y + 1);
                 }
             }

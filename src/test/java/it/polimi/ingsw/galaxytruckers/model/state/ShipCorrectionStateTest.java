@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
@@ -9,6 +10,7 @@ import it.polimi.ingsw.galaxytruckers.model.factory.TestFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import org.checkerframework.dataflow.qual.AssertMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,6 +29,7 @@ class ShipCorrectionStateTest {
     List<ShipBoard> shipBoards;
     ShipCorrectionState shipCorrectionState;
     Game game;
+    CountDownLatch latch;
 
     @BeforeEach
     void setup() {
@@ -45,7 +50,7 @@ class ShipCorrectionStateTest {
                 shipBoard.removeComponent(new Point(7, 7));
             }
             game.setEventListener(new GameEventListenerStub());
-            game.start();
+            latch = StateTransitionUtils.setupLatch(game);
             for (ShipBoard shipBoard : shipBoards) {
                 shipBoard.offerComponent(new Cabin(
                         Map.of(
@@ -87,8 +92,17 @@ class ShipCorrectionStateTest {
             ));
             shipBoards.get(2).placeComponent(new Point(9, 7), Direction.UP);
             shipBoards.get(2).weldLastComponent();
-            game.getCurrentState().placeShipOnFlightBoard(shipBoards.getFirst());
             game.setCurrentState(shipCorrectionState);
+        }
+
+        @AssertMethod
+        void assertNoTransition() {
+            StateTransitionUtils.assertNoTransition(latch,game,shipCorrectionState);
+        }
+
+        @AssertMethod
+        void assertTransition() {
+            StateTransitionUtils.assertTransition(latch,game, ShipInitializationState.class);
         }
 
         @Test
@@ -101,24 +115,28 @@ class ShipCorrectionStateTest {
             shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
             assertEquals(1, shipBoards.get(1).getComponentMap().size());
             assertTrue(shipCorrectionState.getValidShipBoards().contains(shipBoards.get(1)));
+            assertNoTransition();
         }
 
         @Test
         void removeComponentDoesNotUpdateLosses() {
             shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
             assertEquals(0, shipBoards.get(1).getLosses());
+            assertNoTransition();
         }
 
         @Test
         void removeComponentUpdatesShipPiecesWhenShipIsSplit() {
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
-            assertTrue(shipCorrectionState.getShipPieces().containsKey(shipBoards.get(2)));
+            assertTrue(shipCorrectionState.getShipPiecesMap().containsKey(shipBoards.get(2)));
+            assertNoTransition();
         }
 
         @Test
         void shipRemainsInvalidAfterRemoval() {
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(9,7));
             assertFalse(shipCorrectionState.getValidShipBoards().contains(shipBoards.get(2)));
+            assertNoTransition();
         }
 
         @Test
@@ -126,14 +144,14 @@ class ShipCorrectionStateTest {
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
             shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
             shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
-            assertInstanceOf(DrawCardState.class, game.getCurrentState());
+            assertTransition();
         }
 
         @Test
         void chooseShipPieceUpdatesShipPieces() {
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
             shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
-            assertFalse(shipCorrectionState.getShipPieces().containsKey(shipBoards.get(2)));
+            assertFalse(shipCorrectionState.getShipPiecesMap().containsKey(shipBoards.get(2)));
         }
 
         @Test
@@ -149,11 +167,11 @@ class ShipCorrectionStateTest {
         }
 
         @Test
-        void chooseShipPieceWithAllValidShipsChangesState() {
+        void chooseShipPieceWithAllValidShipsChangesState() throws InterruptedException {
             shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
             shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
-            assertInstanceOf(DrawCardState.class, game.getCurrentState());
+            assertTransition();
         }
     }
 
@@ -166,8 +184,7 @@ class ShipCorrectionStateTest {
             game.setEventListener(new GameEventListenerStub());
             shipBoards.add(game.addShipBoard(GameColor.BLUE));
             shipBoards.add(game.addShipBoard(GameColor.RED));
-            game.start();
-            game.placeShipOnFlightBoard(shipBoards.getFirst(), game.getFlightBoard().getStartingPositionsLeft().getFirst());
+            latch = StateTransitionUtils.setupLatch(game);
             shipBoards.get(1).offerComponent(new Component(
                     Map.of(
                             Direction.UP, Connector.NONE,

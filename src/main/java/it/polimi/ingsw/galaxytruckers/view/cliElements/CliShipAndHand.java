@@ -11,45 +11,29 @@ import java.util.List;
 public class CliShipAndHand extends CliShipBoard {
 
     private final CliHand cliHand;
-    private Point lastPosition;
-    private Component lastComponent;
-
     public CliShipAndHand(ShipBoard shipBoard, String nickname) {
         super(shipBoard, nickname);
-        cliHand = new CliHand(shipBoard.getLastComponent());
-        this.lastPosition = null;
-        this.lastComponent = null;
-    }
-
-    public void onOffer(Component component) {
-        this.lastComponent = component;
-        //cliHand.updateHand(component);
-    }
-
-    public void onWeld() {
-        this.lastComponent = null;
-        this.lastPosition = null;
-    }
-
-    public void onPlace(Point point) {
-        CliComponent component;
-        if (lastPosition != null) {
-            component = this.cliComponentMap.remove(lastPosition);
+        if (shipBoard.getLastComponent() != null) {
+            cliHand = new CliHand(shipBoard.getLastComponent());
         } else {
-            component = CliComponent.of(lastComponent);
+            cliHand = new CliHand();
         }
-        lastPosition = point;
-        this.cliComponentMap.put(point, component);
     }
 
-    public CliHand getCliHand() {
-        return cliHand;
+    public void clearHand() {
+        cliHand.clearHand();
+        setDirty();
+    }
+
+    public void setHand(Component component) {
+        cliHand.setHand(component);
+        setDirty();
     }
 
     @Override
     protected List<String> getNewDescription() {
         List<String> description = new ArrayList<>();
-        description.addAll(super.getDescription());
+        description.addAll(super.getNewDescription());
         description.addAll(cliHand.getDescription());
         return description;
     }

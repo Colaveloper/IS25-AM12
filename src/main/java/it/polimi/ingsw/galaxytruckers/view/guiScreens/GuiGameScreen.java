@@ -20,12 +20,10 @@ import java.util.Map;
 public abstract class GuiGameScreen extends GuiScreen {
 
     protected final GuiFlightBoard guiFlightBoard;
-    protected final Map<ShipBoard, GuiShipBoard> guiShipBoards;
-    private GameState gameState;
+    protected final Map<ShipBoard, GuiShipBoard> guiShipBoards; // static?
 
     public GuiGameScreen(ClientModel model, ControllerToServer controller, GameState state) {
         super(model, controller, state);
-        gameState = state;
         this.guiShipBoards = new HashMap<>();
         guiShipBoards.put(model.getMyShip(), new GuiShipBoard(model.getMyShip(), getGuiController()));
         for (ShipBoard s : model.getGame().getShipBoards()) {

@@ -5,7 +5,6 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
-import it.polimi.ingsw.galaxytruckers.view.CliView;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 
@@ -97,6 +96,12 @@ class ClientControllerTest {
             }
 
             @Override
+            public void placeShipOnFlightBoard() {
+                System.out.println("FAKE SERVER EVENT: your ship was successfully positioned on the FlightBoard");
+                controller.notifyEvent(new FlightBoardUpdateEvent("OtherPlayer1", 4));
+            }
+
+            @Override
             public void flipHourglass() {
 
             }
@@ -147,7 +152,7 @@ class ClientControllerTest {
             }
 
             @Override
-            public void grabReward(boolean rewardGrabbed) {
+            public void grabReward() {
 
             }
 

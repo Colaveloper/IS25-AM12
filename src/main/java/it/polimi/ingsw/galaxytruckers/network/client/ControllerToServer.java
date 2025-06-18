@@ -52,6 +52,8 @@ public interface ControllerToServer {
 
     void placeShipOnFlightboard(int startingPosition);
 
+    void placeShipOnFlightBoard();
+
     void drawCard();
 
     void placeGoods(Point point, GoodsType good);
@@ -64,7 +66,7 @@ public interface ControllerToServer {
 
     void loseCrew(Point p);
 
-    void grabReward(boolean rewardGrabbed);
+    void grabReward();
 
     void giveUp();
 }

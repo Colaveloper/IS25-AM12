@@ -10,10 +10,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public non-sealed class SecondShipBuildingState extends ShipBuildingState implements GameStateInterface{
+public non-sealed class SecondShipBuildingState extends ShipBuildingState implements GameStateInterface {
     private final Hourglass hourglass;
     private final Map<ShipBoard, Integer> shipToForecasts = new HashMap<>();
-        private final Set<Integer> blockedForecasts = new HashSet<>();
+    private final Set<Integer> blockedForecasts = new HashSet<>();
+
+    private final Object forecastLock = new Object();
 
     public SecondShipBuildingState() {
         super();
@@ -22,32 +24,32 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
 
     @Override
     public void flipHourglass(ShipBoard shipBoard) {
-        boolean isLast = hourglass.isLastFlip();
-        if (isLast) {
-            if (!completedShipBoards.contains(shipBoard)) {
-                throw new IllegalStateException("Ship must be completed before the last flip");
+        synchronized (this.hourglass) {
+            boolean isLast = hourglass.isLastFlip();
+            if (isLast) {
+                if (!getCompletedShipBoards().contains(shipBoard)) {
+                    throw new IllegalStateException("Ship must be completed before the last flip");
+                }
+                hourglass.flip(() -> {
+                    notifyHourglassEnd();
+                    endBuilding();
+                });
+            } else {
+                hourglass.flip(this::notifyHourglassEnd);
             }
-            hourglass.flip(() -> {
-                notifyHourglassEnd();
-                endBuilding();
-            });
-        } else {
-            hourglass.flip(this::notifyHourglassEnd);
+            game.getEventListener().notifyFlipHourglassEvent(shipBoard);
         }
-        game.getEventListener().notifyFlipHourglassEvent(shipBoard);
     }
 
     @Override
     public void setGame(Game game) {
-        this.game = game;
-        game.getEventListener().notifyGameStateUpdateEvent(this);
-        game.getEventListener().notifyFlipHourglassEvent(game.getShipBoards().stream().findAny().orElseThrow());
+        super.setGame(game);
         hourglass.flip(this::notifyHourglassEnd);
     }
 
     @Override
     public void stashComponent(ShipBoard shipBoard) {
-        if (completedShipBoards.contains(shipBoard)) {
+        if (getCompletedShipBoards().contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.stashComponent();
@@ -56,7 +58,7 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
 
     @Override
     public void grabStashedComponent(ShipBoard shipBoard, int index) {
-        if (completedShipBoards.contains(shipBoard)) {
+        if (getCompletedShipBoards().contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.grabStashedComponent(index);
@@ -65,55 +67,55 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
 
     @Override
     public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
-        if (completedShipBoards.contains(shipBoard)) {
+        if (getCompletedShipBoards().contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
         releaseForecast(shipBoard);
         game.getFlightBoard().placeShipOnFlightBoard(shipBoard, startingPosition);
-        completedShipBoards.add(shipBoard);
         game.getEventListener().notifyFlightBoardUpdateEvent(shipBoard, startingPosition);
-        if (completedShipBoards.size() == game.getShipBoards().size()) {
-            endBuilding();
-        }
+        completeShipBoard(shipBoard);
     }
 
     @Override
     public void acquireForecast(ShipBoard shipBoard, int deckIndex) {
-        if (completedShipBoards.contains(shipBoard)) {
+        if (getCompletedShipBoards().contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        if (blockedForecasts.contains(deckIndex)) {
-            throw new IllegalArgumentException("Deck is unavailable");
+        synchronized (forecastLock) {
+            if (blockedForecasts.contains(deckIndex)) {
+                throw new IllegalArgumentException("Deck is unavailable");
+            }
+            blockedForecasts.add(deckIndex);
+            shipToForecasts.put(shipBoard, deckIndex);
+            game.getEventListener().notifyPeekForecastEvent(shipBoard, deckIndex);
+            game.getEventListener().notifyForecastDetailsEvent(shipBoard, game.getDeck().getForecastDeck(deckIndex));
         }
-        blockedForecasts.add(deckIndex);
-        shipToForecasts.put(shipBoard, deckIndex);
-        game.getEventListener().notifyPeekForecastEvent(shipBoard,deckIndex);
-        game.getEventListener().notifyForecastDetailsEvent(shipBoard,game.getDeck().getForecastDeck(deckIndex));
     }
 
     @Override
     public void releaseForecast(ShipBoard shipBoard) {
-        if (shipToForecasts.containsKey(shipBoard)) {
-            int index = shipToForecasts.remove(shipBoard);
-            blockedForecasts.remove(index);
-            game.getEventListener().notifyReleaseForecastEvent(shipBoard,index);
+        synchronized (forecastLock) {
+            if (shipToForecasts.containsKey(shipBoard)) {
+                int index = shipToForecasts.remove(shipBoard);
+                blockedForecasts.remove(index);
+                game.getEventListener().notifyReleaseForecastEvent(shipBoard, index);
+            }
         }
     }
 
     @Override
     protected void endBuilding() {
-        synchronized (game.getLock()) {
+        game.submitStateTransition(() -> {
             hourglass.stop();
             Set<ShipBoard> unfinishedShipBoards = new HashSet<>(game.getShipBoards());
             unfinishedShipBoards.removeAll(completedShipBoards);
             for (ShipBoard shipBoard : unfinishedShipBoards) {
                 releaseForecast(shipBoard);
-                shipBoard.finishBuilding();
                 placeShipOnFlightBoard(shipBoard);
             }
             game.getShipBoards().forEach(ShipBoard::finishBuilding);
             game.setCurrentState(game.getGameFactory().createShipCorrectionState());
-        }
+        });
     }
 
     protected void notifyHourglassEnd() {

@@ -30,6 +30,7 @@ public final class DrawCardState extends AdventureState {
 
     @Override
     public void notifyDrawCard(AdventureCard adventureCard) {
+        currentCard = adventureCard;
         hasDrawn = true;
         game.getObservers().forEach(observer -> observer.notifyDrawCard(adventureCard));
     }

@@ -102,6 +102,11 @@ public class ShipBuildingTest {
             }
 
             @Override
+            public void placeShipOnFlightBoard() {
+
+            }
+
+            @Override
             public void acquireForecast(int deckIndex) {
 
             }
@@ -142,7 +147,7 @@ public class ShipBuildingTest {
             }
 
             @Override
-            public void grabReward(boolean rewardGrabbed) {
+            public void grabReward() {
 
             }
 

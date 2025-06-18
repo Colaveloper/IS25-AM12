@@ -190,8 +190,8 @@ class RmiClientTest {
 
         @Test
         void grabReward() {
-            rmiClient.grabReward(true);
-            verify(checker).grabReward(true);
+            rmiClient.grabReward();
+            verify(checker).grabReward();
         }
 
         @Test
@@ -337,6 +337,11 @@ class RemoteControllerStub implements RemoteController {
     }
 
     @Override
+    public void placeShipOnFlightBoard() throws RemoteException {
+        checker.placeShipOnFlightBoard();
+    }
+
+    @Override
     public void acquireForecast(int deckIndex){
         checker.acquireForecast(deckIndex);
     }
@@ -377,8 +382,8 @@ class RemoteControllerStub implements RemoteController {
     }
 
     @Override
-    public void grabReward(boolean rewardGrabbed){
-        checker.grabReward(rewardGrabbed);
+    public void grabReward(){
+        checker.grabReward();
     }
 
     @Override

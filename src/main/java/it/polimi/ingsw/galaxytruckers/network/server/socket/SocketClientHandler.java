@@ -217,6 +217,11 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
     }
 
     @Override
+    public void placeShipOnFlightBoard() {
+        getLobby().placeShipOnFlightBoard(player);
+    }
+
+    @Override
     public void acquireForecast(int deckIndex) {
         getLobby().acquireForecast(player,deckIndex);
     }
@@ -252,8 +257,8 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
     }
 
     @Override
-    public void grabReward(boolean rewardGrabbed) {
-        getLobby().grabReward(player,rewardGrabbed);
+    public void grabReward() {
+        getLobby().grabReward(player);
     }
 
     @Override

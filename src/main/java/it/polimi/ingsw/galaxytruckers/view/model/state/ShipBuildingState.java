@@ -42,7 +42,6 @@ public sealed abstract class ShipBuildingState extends GameState permits
             if(myShip.getLastComponent() != null) actions.add(StateActions.PLACE_COMPONENT);
             if(componentInHand()) actions.add(StateActions.ROTATE_COMPONENT);
             if(myShip.getLastPosition() != null) actions.add(StateActions.GRAB_PLACED_COMPONENT);
-            actions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
         }
         return actions;
     }

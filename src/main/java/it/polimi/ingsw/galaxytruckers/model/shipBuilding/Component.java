@@ -23,6 +23,13 @@ public class Component {
         this.id = 0;
     }
 
+    @VisibleForTesting
+    public Component() {
+        this.connectors = Map.of();
+        this.orientation = Direction.UP;
+        this.id = 0;
+    }
+
     public Map<Direction, Connector> getConnectors() {
         return connectors;
     }

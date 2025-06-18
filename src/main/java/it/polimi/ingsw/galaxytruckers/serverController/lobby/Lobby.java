@@ -19,15 +19,16 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Lobby implements LobbyInterface {
+    private final Object preparationLock = new Object();
+
     private final GameModelInterface model;
     private final UUID id;
     private final Level level;
     private final int numPlayers;
     private final Player host;
 
-    private LobbyState state;
-    private final Object lock = new Object();
-    private Game game;
+    private volatile LobbyState state;
+    private volatile Game game;
     private final List<Player> players;
     private final Set<GameColor> chosenColors;
     private final Map<Player, GameColor> playerColors;
@@ -75,7 +76,7 @@ public class Lobby implements LobbyInterface {
     }
 
     public List<Player> getPlayers() {
-        synchronized (players) {
+        synchronized (preparationLock) {
             return new ArrayList<>(players);
         }
     }
@@ -84,18 +85,17 @@ public class Lobby implements LobbyInterface {
      * Adds a player to the lobby, assigning a color among the remaining ones.
      * If {@link #numPlayers} is not reached, enqueues the joining event,
      * otherwise calls {@link #startGame()}
+     *
      * @param player the player to add
      */
     public boolean addPlayer(Player player) {
-        synchronized (lock) {
+        synchronized (preparationLock) {
             checkLobbyState(LobbyState.PREPARATION);
             GameColor chosenColor = Arrays.stream(GameColor.values())
                     .filter(c -> !chosenColors.contains(c))
                     .findAny().orElseThrow();
             chosenColors.add(chosenColor);
-            synchronized (players) {
-                players.add(player);
-            }
+            players.add(player);
             playerColors.put(player, chosenColor);
             player.setLobby(this);
             eventQueue.notifyEvent(new LobbyDetailsEvent(
@@ -138,9 +138,7 @@ public class Lobby implements LobbyInterface {
     }
 
     public void setState(LobbyState state) {
-        synchronized (lock) {
-            this.state = state;
-        }
+        this.state = state;
     }
 
     /**
@@ -148,214 +146,170 @@ public class Lobby implements LobbyInterface {
      * Sets the game of the lobby to a new instance of {@link Game} of the specified level
      */
     private void startGame() {
-        Game game = model.createGame(this.level, this.numPlayers, this.lock);
+        Game game = model.createGame(this.level, this.numPlayers);
         for (Player player : getPlayers()) {
             ShipBoard ship = model.addShip(game, playerColors.get(player));
             player.setShipBoard(ship);
         }
-        setState(LobbyState.INGAME);
-        model.setEventListener(game,eventQueue);
+        model.setEventListener(game, eventQueue);
         model.startGame(game);
         this.game = game;
+        setState(LobbyState.INGAME);
     }
 
     @Override
     public void requestRandComponent(Player player) {
-        synchronized (lock) {
-            checkLobbyState(LobbyState.INGAME);
-            model.requestRandComponent(game,player.getShipBoard().orElseThrow());
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.requestRandComponent(game, player.getShipBoard().orElseThrow());
     }
 
     @Override
     public void requestComponent(Player player, int componentID) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.requestComponent(game, player.getShipBoard().orElseThrow(), componentID);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.requestComponent(game, player.getShipBoard().orElseThrow(), componentID);
     }
 
     @Override
     public void rejectComponent(Player player) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.rejectComponent(game, player.getShipBoard().orElseThrow());
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.rejectComponent(game, player.getShipBoard().orElseThrow());
     }
 
     @Override
     public void stashComponent(Player player) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.stashComponent(game, player.getShipBoard().orElseThrow());
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.stashComponent(game, player.getShipBoard().orElseThrow());
     }
 
     @Override
     public void grabPlacedComponent(Player player) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.grabPlacedComponent(game, player.getShipBoard().orElseThrow());
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.grabPlacedComponent(game, player.getShipBoard().orElseThrow());
     }
 
     @Override
     public void grabStashedComponent(Player player, int index) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.grabStashedComponent(game, player.getShipBoard().orElseThrow(), index);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.grabStashedComponent(game, player.getShipBoard().orElseThrow(), index);
     }
 
     @Override
     public void placeComponent(Player player, Point point, Direction orientation) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.placeComponent(game, player.getShipBoard().orElseThrow(), point, orientation);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.placeComponent(game, player.getShipBoard().orElseThrow(), point, orientation);
     }
 
     @Override
     public void flipHourglass(Player player) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.flipHourglass(game, player.getShipBoard().orElseThrow());
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.flipHourglass(game, player.getShipBoard().orElseThrow());
     }
 
     @Override
     public void placeShipOnFlightBoard(Player player, int startingPosition) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.placeShipOnFlightBoard(game, player.getShipBoard().orElseThrow(), startingPosition);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.placeShipOnFlightBoard(game, player.getShipBoard().orElseThrow(), startingPosition);
+    }
+
+    @Override
+    public void placeShipOnFlightBoard(Player player) {
+        checkLobbyState(LobbyState.INGAME);
+        model.placeShipOnFlightBoard(game, player.getShipBoard().orElseThrow());
     }
 
     @Override
     public void acquireForecast(Player player, int deckIndex) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.acquireForecast(game, player.getShipBoard().orElseThrow(), deckIndex);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.acquireForecast(game, player.getShipBoard().orElseThrow(), deckIndex);
     }
 
     @Override
     public void releaseForecast(Player player) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.releaseForecast(game, player.getShipBoard().orElseThrow());
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.releaseForecast(game, player.getShipBoard().orElseThrow());
     }
 
     @Override
     public void removeComponent(Player player, Point point) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.removeComponent(game, player.getShipBoard().orElseThrow(), point);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.removeComponent(game, player.getShipBoard().orElseThrow(), point);
     }
 
     @Override
     public void chooseShipPiece(Player player, int pieceIndex) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.chooseShipPiece(game, player.getShipBoard().orElseThrow(), pieceIndex);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.chooseShipPiece(game, player.getShipBoard().orElseThrow(), pieceIndex);
     }
 
     @Override
     public void initializeCabin(Player player, Point point, CrewType crewType) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.initializeCabin(game, player.getShipBoard().orElseThrow(), point, crewType);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.initializeCabin(game, player.getShipBoard().orElseThrow(), point, crewType);
     }
 
     @Override
     public void drawCard(Player player) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.drawCard(game, player.getShipBoard().orElseThrow());
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.drawCard(game, player.getShipBoard().orElseThrow());
     }
 
     @Override
     public void activateComponent(Player player, Point point) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.activateComponent(game, player.getShipBoard().orElseThrow(), point);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.activateComponent(game, player.getShipBoard().orElseThrow(), point);
     }
 
     @Override
     public void loseCrew(Player player, Point point) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.loseCrew(game, player.getShipBoard().orElseThrow(), point);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.loseCrew(game, player.getShipBoard().orElseThrow(), point);
     }
 
     @Override
-    public void grabReward(Player player, boolean rewardGrabbed) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.grabReward(game, player.getShipBoard().orElseThrow(), rewardGrabbed);
-        }
+    public void grabReward(Player player) {
+        checkLobbyState(LobbyState.INGAME);
+        model.grabReward(game, player.getShipBoard().orElseThrow());
     }
 
     @Override
     public void placeGoods(Player player, Point point, GoodsType goodsType) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.placeGoods(game, player.getShipBoard().orElseThrow(), point, goodsType);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.placeGoods(game, player.getShipBoard().orElseThrow(), point, goodsType);
     }
 
     @Override
     public void removeGoods(Player player, Point point, GoodsType goodsType) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.removeGoods(game, player.getShipBoard().orElseThrow(), point, goodsType);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.removeGoods(game, player.getShipBoard().orElseThrow(), point, goodsType);
     }
 
     @Override
     public void loseGoods(Player player, Point point) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.loseGood(game, player.getShipBoard().orElseThrow(), point);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.loseGood(game, player.getShipBoard().orElseThrow(), point);
     }
 
     @Override
     public void useBattery(Player player, Point point) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.useBattery(game, player.getShipBoard().orElseThrow(), point);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.useBattery(game, player.getShipBoard().orElseThrow(), point);
     }
 
     @Override
     public void choosePlanet(Player player, int choice) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.choosePlanet(game, player.getShipBoard().orElseThrow(), choice);
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.choosePlanet(game, player.getShipBoard().orElseThrow(), choice);
     }
 
     @Override
     public void goNext(Player player) {
-        synchronized (lock){
-            checkLobbyState(LobbyState.INGAME);
-            model.goNext(game, player.getShipBoard().orElseThrow());
-        }
+        checkLobbyState(LobbyState.INGAME);
+        model.goNext(game, player.getShipBoard().orElseThrow());
     }
 
     @Override
     public void giveUp(Player player) {
-        synchronized (lock) {
-            checkLobbyState(LobbyState.INGAME);
-            model.giveUp(game, player.getShipBoard().orElseThrow());
-        }
-    }
+        checkLobbyState(LobbyState.INGAME);
+        model.giveUp(game, player.getShipBoard().orElseThrow());
+	}
 }

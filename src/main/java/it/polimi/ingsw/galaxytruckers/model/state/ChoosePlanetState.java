@@ -30,10 +30,11 @@ public final class ChoosePlanetState extends AdventureState implements GameState
     }
 
     @Override
-    public void choosePlanet(ShipBoard shipBoard, int choice) {
+    public synchronized void choosePlanet(ShipBoard shipBoard, int choice) {
         if (!shipBoard.equals(getCurrentShip())) {
             throw new IllegalStateException("It's not your turn");
         }
+        checkIfExpired();
         if (choice < 0 || choice > this.numPlanets || chosenPlanets[choice]) {
             throw new IllegalArgumentException("Invalid choice: " + choice);
         }
@@ -46,10 +47,11 @@ public final class ChoosePlanetState extends AdventureState implements GameState
     }
 
     @Override
-    public void goNext(ShipBoard shipBoard) {
+    public synchronized void goNext(ShipBoard shipBoard) {
         if (!shipBoard.equals(orderedShipBoards.get(shipIndex))) {
             throw new IllegalStateException("It's not your turn");
         }
+        checkIfExpired();
         ShipBoard nextShipBoard = nextShip();
         if (nextShipBoard != null)
             game.getEventListener().notifyCurrentPlayerUpdateEvent(nextShipBoard);
@@ -58,7 +60,7 @@ public final class ChoosePlanetState extends AdventureState implements GameState
     private ShipBoard nextShip() {
         shipIndex++;
         if (shipIndex >= orderedShipBoards.size()) {
-            game.setCurrentState(getNextState());
+            getNextState();
             return null;
         }
         return orderedShipBoards.get(shipIndex);
@@ -68,11 +70,11 @@ public final class ChoosePlanetState extends AdventureState implements GameState
         return numPlanets;
     }
 
-    public ShipBoard getCurrentShip() {
+    public synchronized ShipBoard getCurrentShip() {
         return orderedShipBoards.get(shipIndex);
     }
 
-    public boolean[] getChosenPlanets() {
+    public synchronized boolean[] getChosenPlanets() {
         return chosenPlanets;
     }
 }

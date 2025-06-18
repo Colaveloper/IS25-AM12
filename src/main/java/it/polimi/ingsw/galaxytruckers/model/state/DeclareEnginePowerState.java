@@ -15,7 +15,7 @@ public final class DeclareEnginePowerState extends ActivateState implements Game
     }
 
     @Override
-    public void activateComponent(ShipBoard shipBoard, Point position) {
+    public synchronized void activateComponent(ShipBoard shipBoard, Point position) {
         super.activateComponent(shipBoard, position);
         this.enginePower = shipBoard.getEnginePower();
     }

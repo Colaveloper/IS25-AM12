@@ -1,9 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -35,14 +35,19 @@ public class GuiHourglass extends StackPane {
     }
 
     public void notifyFlipHourglass() {
-        secondsLeft = 60;
-        timerLabel.setText("60");
-        getChildren().setAll(timerLabel);
-        timeline.playFromStart();
+        Platform.runLater(()-> {
+            secondsLeft = 60;
+            timerLabel.setText("60");
+            getChildren().setAll(timerLabel);
+            timeline.playFromStart();
+        });
     }
 
     public void notifyHourglassEnd() {
-        timeline.stop();
-        getChildren().setAll(hourglassButton);
+        Platform.runLater(()-> {
+            getChildren().setAll(hourglassButton);
+            timeline.stop();
+            controller.flipHourglass();
+        });
     }
 }

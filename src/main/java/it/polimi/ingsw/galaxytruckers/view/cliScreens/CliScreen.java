@@ -123,6 +123,7 @@ public abstract class CliScreen extends Screen {
                     case ROTATE_COMPONENT ->        actions.add("R [LEFT|RIGHT] Rotate component   ");
                     case FLIP_HOURGLASS ->          actions.add("H  To Flip hourglass              ");
                     case PLACE_SHIP_ON_FLIGHTBOARD->actions.add("E [i] End and place on flightboard");
+                    case PLACE_SHIP_FOR_TEST ->     actions.add("E to place ship on first available space");
                     case FINISH_BUILDING ->         actions.add("X  To finish building             ");
                     case ACQUIRE_FORECAST ->        actions.add("F [i]  Pick i-th forecast deck    ");
                     case DRAW_CARD ->               actions.add("  Press ENTER to draw a card      ");
@@ -186,7 +187,8 @@ public abstract class CliScreen extends Screen {
             case "Y" -> availableActions.contains(StateActions.GIVE_UP)         && input.matches("Y");
             case "B" -> availableActions.contains(StateActions.SPEND_BATTERIES) && input.matches("B\\s\\d+\\s\\d+");
             case "A" -> availableActions.contains(StateActions.ACTIVATE_COMPONENT)&& input.matches("A\\s\\d+\\s\\d+");
-            case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.matches("E\\s\\d+");
+            case "E" -> availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) && input.matches("E\\s\\d+") ||
+                        availableActions.contains(StateActions.PLACE_SHIP_FOR_TEST) && input.matches("E");
             case "G" -> availableActions.contains(StateActions.GRAB_PLACED_COMPONENT) && input.matches("G");
             case " " ->(availableActions.contains(StateActions.GO_NEXT)    ||
                         availableActions.contains(StateActions.DRAW_CARD)  ||

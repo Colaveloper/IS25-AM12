@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
 import it.polimi.ingsw.galaxytruckers.view.ModelObserver;
+import it.polimi.ingsw.galaxytruckers.view.model.Game;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
@@ -18,6 +19,12 @@ public final class SecondShipBuildingState extends ShipBuildingState {
     private final Hourglass hourglass = new Hourglass(3);
     private boolean forecastAcquired = false;
     private boolean hourglassEndTriggered = false;
+
+    @Override
+    public void setGame(Game game) {
+        super.setGame(game);
+        hourglass.flip();
+    }
 
     @Override
     public void leave() {
@@ -61,6 +68,7 @@ public final class SecondShipBuildingState extends ShipBuildingState {
             if(!componentInHand() && !myShip.getStashedComponents().isEmpty()) actions.add(StateActions.GRAB_STASHED_COMPONENT);
             if(!componentInHand()) actions.add(StateActions.ACQUIRE_FORECAST);
             actions.addAll(super.getAvailableActions());
+            if(!hasFinished) actions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
         }
         //TODO: implement conditional available action if needed
         return actions;

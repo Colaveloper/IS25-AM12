@@ -16,7 +16,7 @@ public non-sealed class HandleProjectileState extends ActivateState implements G
     }
 
     @Override
-    public void activateComponent(ShipBoard shipBoard, Point position) {
+    public synchronized void activateComponent(ShipBoard shipBoard, Point position) {
         if (batteriesToSpend == 0) {
             super.activateComponent(shipBoard, position);
         } else {
@@ -25,24 +25,27 @@ public non-sealed class HandleProjectileState extends ActivateState implements G
     }
 
     @Override
-    public void goNext(ShipBoard shipBoard) {
-        if(this.shipBoard != shipBoard){
+    public synchronized void goNext(ShipBoard shipBoard) {
+        if(!this.shipBoard.equals(shipBoard)){
             throw new IllegalStateException("It's not your turn");
         }
+        checkIfExpired();
         if (batteriesToSpend > 0) {
             throw new IllegalStateException("You still have batteries to spend");
         }
         if (projectile.fireAt(shipBoard)) {
             List<Set<Point>> shipPieces = shipBoard.getConnectedSets();
             if (shipPieces.size() > 1) {
-                game.setCurrentState(new ChooseShipPieceState(shipPieces, shipBoard));
+                game.submitStateTransition(() ->
+                        game.setCurrentState(new ChooseShipPieceState(shipPieces,shipBoard))
+                );
                 return;
             }
         }
-        game.setCurrentState(getNextState());
+        getNextState();
     }
 
-    public Projectile getProjectile() {
+    public synchronized Projectile getProjectile() {
         return projectile;
     }
 }

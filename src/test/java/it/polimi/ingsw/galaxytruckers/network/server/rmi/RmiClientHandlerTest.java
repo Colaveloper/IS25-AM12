@@ -195,8 +195,8 @@ class RmiClientHandlerTest {
 
     @Test
     void grabReward() throws RemoteException {
-        rmiClientHandler.grabReward(false);
-        verify(lobby).grabReward(player,false);
+        rmiClientHandler.grabReward();
+        verify(lobby).grabReward(player);
     }
 
     @Test

@@ -15,7 +15,6 @@ public class CliDeclareFirePowerScreen extends CliActivationScreen {
 
     private final DeclareFirePowerState gameState;
     private final boolean isMyTurn;
-    private final boolean imOut;
     private final ShipBoard currentShip;
 
     public CliDeclareFirePowerScreen(ClientModel model, ControllerToServer controller, DeclareFirePowerState gameState) {
@@ -23,7 +22,6 @@ public class CliDeclareFirePowerScreen extends CliActivationScreen {
         this.gameState = gameState;
         this.currentShip = gameState.getShipBoard();
         this.isMyTurn = currentShip.equals(myShipBoard);
-        imOut = gameState.getImOut();
     }
 
     @Override

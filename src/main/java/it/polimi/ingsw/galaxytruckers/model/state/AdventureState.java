@@ -1,10 +1,17 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.SurrenderPolicy;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.SurrenderCause;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 public abstract class AdventureState extends GameState {
+    protected boolean expired = false;
+
+    protected void checkIfExpired() {
+        if (expired) throw new IllegalStateException("It's too late to take this action");
+    }
+
     @Override
     public void giveUp(ShipBoard shipBoard) {
         SurrenderPolicy surrenderPolicy = game.getSurrenderPolicy();
@@ -16,7 +23,14 @@ public abstract class AdventureState extends GameState {
         }
     }
 
-    public GameState getNextState() {
-        return game.getDeck().getCurrentCard().getNextState();
+    public synchronized void getNextState() {
+        game.submitStateTransition(() ->
+                game.setCurrentState(game.getDeck().getCurrentCard().getNextState()));
+        expired = true;
+    }
+
+    @VisibleForTesting
+    protected void setExpired(boolean expired) {
+        this.expired = expired;
     }
 }

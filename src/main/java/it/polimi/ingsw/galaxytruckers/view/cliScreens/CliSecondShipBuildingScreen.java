@@ -148,12 +148,9 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                 break;
 
             case "R":
-                if (parts.length == 1) {
-                    controller.rejectComponent();
-                }
+                if (parts.length == 1) controller.rejectComponent();
                 else if (parts.length == 2) {
                     Component lastComponent = myShipBoard.getLastComponent();
-                    Point lastPosition = myShipBoard.getLastPosition();
                     if(lastComponent == null) {
                         System.out.println("Nothing to rotate");
                         break;
@@ -165,16 +162,10 @@ public class CliSecondShipBuildingScreen extends CliScreen {
                     cliAllShips.setDirty();
                     buildingShipToCliShip.get(myShipBoard).setDirty();
 
-//                    if(lastPosition != null) buildingShipToCliShip.get(myShipBoard).getCliComponent(lastPosition).setDirty();
-//                    else {
-                        buildingShipToCliShip.get(myShipBoard).clearHand();
-                        buildingShipToCliShip.get(myShipBoard).setHand(lastComponent);
-//                    }
+                    buildingShipToCliShip.get(myShipBoard).clearHand();
+                    buildingShipToCliShip.get(myShipBoard).setHand(lastComponent);
 
                     render();
-                }
-                else {
-                    System.out.println("Invalid command. Use 'R' to reject the component or 'R LEFT'/'R RIGHT' to rotate it.");
                 }
                 break;
 

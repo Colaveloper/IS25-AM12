@@ -100,7 +100,6 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
         guiComponentBank.notifyRejectComponent(component);
         guiHands.get(shipBoard).notifyClearHand();
         resetLastComponentDirection();
-
     }
 
     @Override
@@ -145,14 +144,17 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
         guiFlightBoard.notifyFlightBoardPosition(shipBoard, position);
     }
+
     @Override
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
         guiForecast.notifyPeekForecast(shipBoard, deckIndex);
     }
+
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards) {
         throw new RuntimeException("NOOOOOOOOO");
     }
+
     @Override
     public void notifyReleaseForecast(ShipBoard shipBoard, int deckIndex) {
         guiForecast.notifyReleaseForecast(shipBoard, deckIndex);
@@ -230,14 +232,14 @@ public class GuiSecondShipBuildingScreen extends GuiGameScreen {
             @Override
             public void handlePointPress(Point point) {
                 if (
-                        model.getMyShip().getLastPosition() != null
-                        && model.getMyShip().getLastPosition().equals(point)
+                        myShipBoard.getLastPosition() != null
+                        && myShipBoard.getLastPosition().equals(point)
                 ) {
                     lastComponentDirection = lastComponentDirection.getLeft();
-                    guiShipBoards.get(model.getMyShip()).getGuiComponent(point).setRotate(lastComponentDirection.getAngle());
+                    guiShipBoards.get(myShipBoard).getGuiComponent(point).setRotate(lastComponentDirection.getAngle());
                 } else if (
-                        model.getMyShip().getShipArea().contains(point)
-                        && !model.getMyShip().getComponentMap().containsKey(point)
+                        myShipBoard.getShipArea().contains(point)
+                        && !myShipBoard.getComponentMap().containsKey(point)
                 ) {
                     if (state.getAvailableActions().contains(StateActions.PLACE_COMPONENT)) {
                         controller.placeComponent(point, lastComponentDirection);

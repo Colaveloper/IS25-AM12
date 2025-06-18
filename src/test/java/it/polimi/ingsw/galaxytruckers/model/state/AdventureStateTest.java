@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.*;
+import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -8,7 +9,9 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,4 +56,34 @@ class AdventureStateTest {
         assertEquals(Set.of(ship1), ((EnabledSurrenderPolicy) game.getSurrenderPolicy()).getRequests());
     }
 
+    @Test
+    void getNextStateUpdatesGameStateAndExpired() {
+        game = new Game(Level.SECOND);
+        try {
+            game.setDeck(new Deck(game) {
+                /**
+                 * Returns the current card to be played.
+                 *
+                 * @return the deck's current card
+                 */
+                @Override
+                public AdventureCard getCurrentCard() {
+                    return new AdventureCard(game,Level.TEST,0) {
+                        @Override
+                        public AdventureState getNextState() {
+                            return new AdventureStateStub();
+                        }
+                    };
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        game.setEventListener(new GameEventListenerStub());
+        CountDownLatch latch = StateTransitionUtils.setupLatch(game);
+        game.setCurrentState(testAdventureState);
+        testAdventureState.getNextState();
+        assertThrows(IllegalStateException.class, () -> testAdventureState.checkIfExpired());
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
+    }
 }

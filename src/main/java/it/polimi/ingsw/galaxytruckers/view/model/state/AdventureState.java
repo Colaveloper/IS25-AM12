@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
 import it.polimi.ingsw.galaxytruckers.view.model.Game;
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
@@ -20,9 +21,14 @@ public sealed abstract class AdventureState extends GameState permits
 
     protected boolean imOut;
     protected ShipBoard currentShip;
+    protected AdventureCard currentCard;
 
     public boolean getImOut() {
         return imOut;
+    }
+
+    public AdventureCard getCurrentCard() {
+        return currentCard;
     }
 
     @Override

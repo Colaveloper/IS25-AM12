@@ -80,7 +80,7 @@ public class StateDTOConverter {
                 return new ShipCorrectionDTO(
                         shipCorrectionState.getValidShipBoards().stream()
                                 .map(s -> Player.getPlayer(s).getNickname()).collect(Collectors.toSet()),
-                        shipCorrectionState.getShipPieces().entrySet().stream()
+                        shipCorrectionState.getShipPiecesMap().entrySet().stream()
                                 .map(e -> Map.entry(
                                         Player.getPlayer(e.getKey()).getNickname(),
                                         e.getValue()

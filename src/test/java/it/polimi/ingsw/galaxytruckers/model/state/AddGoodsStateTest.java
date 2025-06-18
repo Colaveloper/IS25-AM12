@@ -17,6 +17,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,6 +29,7 @@ class AddGoodsStateTest {
     Game game;
     AdventureCard adventureCard;
     Deck deck;
+    CountDownLatch latch;
 
     @BeforeEach
     void setup(){
@@ -48,7 +50,8 @@ class AddGoodsStateTest {
         testAddGoodState = new AddGoodsState(goodsBuffer, ship1);
         game = new Game(Level.SECOND);
         game.setEventListener(new GameEventListenerStub());
-        testAddGoodState.setGame(game);
+        latch = StateTransitionUtils.setupLatch(game);
+        game.setCurrentState(testAddGoodState);
     }
 
     @Test
@@ -115,9 +118,13 @@ class AddGoodsStateTest {
                 return adventureCard;
             }
         };
-        testAddGoodState.setGame(game);
+        latch = StateTransitionUtils.setupLatch(game);
+        game.setCurrentState(testAddGoodState);
         testAddGoodState.goNext(ship1);
-        assertNotEquals(testAddGoodState, game.getCurrentState());
+        assertThrows(IllegalStateException.class, () -> testAddGoodState.goNext(ship1));
+        assertThrows(IllegalStateException.class, () -> testAddGoodState.addGood(ship1, new Point(7,7), GoodsType.GREEN));
+        assertThrows(IllegalStateException.class, () -> testAddGoodState.removeGood(ship1, new Point(7,7), GoodsType.RED));
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
 }

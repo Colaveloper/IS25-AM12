@@ -56,8 +56,7 @@ class AbandonedShipCardTest {
             }
 
             @Override
-            public boolean placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
-                return true;
+            public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
             }
 
             @Override

@@ -1,17 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.ComponentRegistry;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class ComponentBank {
-    private List<Component> coveredComponents;
+    private final List<Component> coveredComponents;
     private final Map<Integer, Component> uncoveredComponents;
 
     public ComponentBank() {
@@ -20,7 +15,8 @@ public class ComponentBank {
     }
 
     public void initialize() {
-        this.coveredComponents = ComponentRegistry.getInstance().getBankComponents();
+        this.coveredComponents.clear();
+        this.coveredComponents.addAll(ComponentRegistry.getInstance().getBankComponents());
         Collections.shuffle(this.coveredComponents);
     }
 
@@ -37,6 +33,10 @@ public class ComponentBank {
 
     public void addToUncoveredComponents(Component component) {
         uncoveredComponents.put(component.getId(), component);
+    }
+
+    public void returnCoveredComponent(Component component) {
+        coveredComponents.add(component);
     }
 
     @VisibleForTesting

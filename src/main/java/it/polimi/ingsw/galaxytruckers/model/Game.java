@@ -14,26 +14,36 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Supplier;
 
 public class Game {
-    private final Object lock;
-
     private final Level level;
     private final GameFactory gameFactory;
 
     private final Set<ShipBoard> shipBoards = new HashSet<>();
     private final SurrenderPolicy surrenderPolicy;
     private final ScoresRegistry scoresRegistry;
-    private FlightBoard flightBoard;
-    private Deck deck;
+    private volatile FlightBoard flightBoard;
+    private volatile Deck deck;
 
+    private final ReentrantReadWriteLock stateLock = new ReentrantReadWriteLock();
     private GameState currentState;
+    private boolean gameOver = false;
+
     private final Map<ShipBoard, Integer> finalScores = new HashMap<>();
 
+    private volatile GameEventListener eventListener;
 
-    private GameEventListener eventListener;
+    private final ExecutorService transitionExecutor = Executors.newSingleThreadExecutor();
 
-    public Game(Level level, int shipsN, Object lock) {
+    @VisibleForTesting
+    private Runnable afterEach = () -> {};
+
+    public Game(Level level, int shipsN) {
         this.level = level;
         this.gameFactory = GameFactory.getFactory(level);
         this.surrenderPolicy = this.gameFactory.createSurrenderPolicy();
@@ -44,14 +54,9 @@ public class Game {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.lock = lock;
     }
 
-    @VisibleForTesting
-    public Game(Level level) {
-        this(level, 4, new Object());
-    }
-
+    //region Setup methods
     /**
      * Adds shipboard of the given color to the game
      *
@@ -59,48 +64,68 @@ public class Game {
      * @return the added shipboard
      */
     public ShipBoard addShipBoard(GameColor color) {
-        ShipBoard shipBoard = gameFactory.createShipBoard(color);
-        shipBoards.add(shipBoard);
-        return shipBoard;
+        synchronized (shipBoards) {
+            ShipBoard shipBoard = gameFactory.createShipBoard(color);
+            shipBoards.add(shipBoard);
+            return shipBoard;
+        }
     }
 
     /**
-     * Instantiates the game's flightBoard and Deck and sets the
-     * current state of the game to shipbuilding
-     *
-     * @throws IOException if an error occurs when trying to load the deck's
-     *                     cards from disk
+     * Sets a {@link GameEventListener} for the game
+     * @param eventListener the new {@link GameEventListener}
      */
-    public void start() throws IOException {
-        this.flightBoard = gameFactory.createFlightBoard(shipBoards.size());
-        this.flightBoard.setGameEventListener(eventListener);
-        this.deck = gameFactory.createDeck(this);
+    public void setEventListener(GameEventListener eventListener) {
+        this.eventListener = eventListener;
+        shipBoards.forEach(s -> s.setGameEventListener(eventListener));
+        surrenderPolicy.setEventListener(eventListener);
+        flightBoard.setGameEventListener(eventListener);
+    }
+
+    /**
+     * Starts the game by setting the current state to ShipBuilding
+     */
+    public void start() {
         setCurrentState(gameFactory.createShipBuildingState());
     }
 
-    /**
-     * @return the game's factory
-     */
-    @VisibleForTesting
-    public GameFactory getGameFactory() {
-        return gameFactory;
-    }
+    //endregion
 
+    //region State methods
+
+    public void submitStateTransition(Runnable runnable) {
+        transitionExecutor.submit(() -> {
+            withStateWriteLock(runnable);
+            afterEach.run();
+        });
+    }
     /**
      * Sets the game's current state to the given state
      *
      * @param state the {@code GameState} to be set
      */
     public void setCurrentState(GameState state) {
-        this.currentState = state;
-        state.setGame(this);
+        withStateWriteLock(() -> {
+            this.currentState = state;
+            state.setGame(this);
+        });
+    }
+
+    //endregion
+
+    //region Getters
+    /**
+     * @return the game's factory
+     */
+    public GameFactory getGameFactory() {
+        return gameFactory;
     }
 
     /**
      * @return the game's current state
      */
     public GameState getCurrentState() {
-        return currentState;
+        return withStateReadLock(() -> currentState);
     }
 
     /**
@@ -121,7 +146,9 @@ public class Game {
      * @return a {@link Set} containing all the game's ship boards
      */
     public Set<ShipBoard> getShipBoards() {
-        return shipBoards;
+        synchronized (shipBoards) {
+            return new HashSet<>(shipBoards);
+        }
     }
 
     /**
@@ -135,11 +162,19 @@ public class Game {
         return surrenderPolicy;
     }
 
+    public boolean isGameOver() {
+        return withStateReadLock(() -> gameOver);
+    }
+
+    //endregion
+
+    //region GameEnd methods
     /**
      * Assigns ship rewards to be used in the final score and
      * changes game state to the end game state
      */
-    public void endGame() {
+    private void endGame() {
+        gameOver = true;
         assignShipRewards();
         eventListener.notifyGameEndEvent(finalScores);
     }
@@ -148,12 +183,16 @@ public class Game {
      * Sets game state to the end game state if there are no
      * more ships playing
      */
-    public boolean endGameIfAllShipsHaveGivenUp() {
-        if (surrenderPolicy.getSurrenderedShips().size() == shipBoards.size()) {
-            endGame();
-            return true;
-        }
-        return false;
+    public boolean tryEndGame() {
+        return withStateWriteLock(() -> {
+            if (gameOver) return false;
+            if (surrenderPolicy.getSurrenderedShips().size() == getShipBoards().size() ||
+                    deck.isEmpty()) {
+                endGame();
+                return true;
+            }
+            return false;
+        });
     }
 
     private void assignShipRewards() {
@@ -187,6 +226,183 @@ public class Game {
             }
         });
     }
+    //endregion
+
+    //region Player requests
+    public GameEventListener getEventListener() {
+        return eventListener;
+    }
+
+    public void requestRandComponent(ShipBoard shipBoard) {
+        runRequest(() -> currentState.requestRandComponent(shipBoard));
+    }
+
+    public void requestComponent(ShipBoard shipBoard, int componentID) {
+        runRequest(() -> currentState.requestComponent(shipBoard, componentID));
+    }
+
+    public void rejectComponent(ShipBoard shipBoard) {
+        runRequest(() -> currentState.rejectComponent(shipBoard));
+    }
+
+    public void stashComponent(ShipBoard shipBoard) {
+        runRequest(() -> currentState.stashComponent(shipBoard));
+    }
+
+    public void grabPlacedComponent(ShipBoard shipBoard) {
+        runRequest(() -> currentState.grabPlacedComponent(shipBoard));
+    }
+
+    public void grabStashedComponent(ShipBoard shipBoard, int index) {
+        runRequest(() -> currentState.grabStashedComponent(shipBoard, index));
+    }
+
+    public void placeComponent(ShipBoard shipBoard, Point point, Direction orientation) {
+        runRequest(() -> currentState.placeComponent(shipBoard, point, orientation));
+    }
+
+    public void flipHourglass(ShipBoard shipBoard) {
+        runRequest(() -> currentState.flipHourglass(shipBoard));
+    }
+
+    public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
+        runRequest(() -> currentState.placeShipOnFlightBoard(shipBoard, startingPosition));
+    }
+
+    public void placeShipOnFlightBoard(ShipBoard shipBoard) {
+        runRequest(() -> currentState.placeShipOnFlightBoard(shipBoard));
+    }
+
+    public void acquireForecast(ShipBoard shipBoard, int deckIndex) {
+        runRequest(() -> currentState.acquireForecast(shipBoard, deckIndex));
+    }
+
+    public void releaseForecast(ShipBoard shipBoard) {
+        runRequest(() -> currentState.releaseForecast(shipBoard));
+    }
+
+    public void removeComponent(ShipBoard shipBoard, Point point) {
+        runRequest(() -> currentState.removeComponent(shipBoard, point));
+    }
+
+    public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
+        runRequest(() -> currentState.chooseShipPiece(shipBoard, pieceIndex));
+    }
+
+    public void initializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
+        runRequest(() -> currentState.initializeCabin(shipBoard, point, crewType));
+    }
+
+    public void activateComponent(ShipBoard shipBoard, Point point) {
+        runRequest(() -> currentState.activateComponent(shipBoard, point));
+    }
+
+    public void loseCrew(ShipBoard shipBoard, Point point) {
+        runRequest(() -> currentState.loseCrew(shipBoard, point));
+    }
+
+    public void grabReward(ShipBoard shipBoard) {
+        runRequest(() -> currentState.grabReward(shipBoard));
+    }
+
+    public void placeGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+        runRequest(() -> currentState.addGood(shipBoard, point, goodsType));
+    }
+
+    public void removeGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+        runRequest(() -> currentState.removeGood(shipBoard, point, goodsType));
+    }
+
+    public void useBattery(ShipBoard shipBoard, Point point) {
+        runRequest(() -> currentState.spendBatteries(shipBoard, point));
+    }
+
+    public void choosePlanet(ShipBoard shipBoard, int choice) {
+        runRequest(() -> currentState.choosePlanet(shipBoard, choice));
+    }
+
+    public void giveUp(ShipBoard shipBoard) {
+        runRequest(() -> currentState.giveUp(shipBoard));
+    }
+
+    public void drawCard(ShipBoard shipBoard) {
+        runRequest(() -> currentState.drawCard(shipBoard));
+    }
+
+    public void loseGood(ShipBoard shipBoard, Point point) {
+        runRequest(() -> loseGood(shipBoard, point));
+    }
+
+    public void goNext(ShipBoard shipBoard) {
+        runRequest(() -> currentState.goNext(shipBoard));
+    }
+    //endregion
+
+    //region Utility methods
+    private <T> T withStateReadLock(Supplier<T> method) {
+        return withStateLock(method, false);
+    }
+
+    private void withStateReadLock(Runnable method) {
+        withStateReadLock(() -> {
+            method.run();
+            return null;
+        });
+    }
+
+    private <T> T withStateWriteLock(Supplier<T> method) {
+        return withStateLock(method, true);
+    }
+
+    private void withStateWriteLock(Runnable method) {
+        withStateWriteLock(() -> {
+            method.run();
+            return null;
+        });
+    }
+
+    private  <T> T withStateLock(Supplier<T> method, boolean write) {
+        Lock lock;
+        if (write) {
+            lock = stateLock.writeLock();
+        } else {
+            lock = stateLock.readLock();
+        }
+        lock.lock();
+        try {
+            return method.get();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void runRequest(Runnable method) {
+        withStateReadLock(() -> {
+            if (gameOver) throw new IllegalStateException("The game is over");
+            method.run();
+        });
+    }
+    //endregion
+
+    //region Test methods
+    @VisibleForTesting
+    public Game(Level level) {
+        this(level, 4);
+    }
+
+    public Game(GameFactory gameFactory) {
+        int shipsN = 4;
+        this.level = null;
+        this.gameFactory = gameFactory;
+        this.surrenderPolicy = this.gameFactory.createSurrenderPolicy();
+        this.scoresRegistry = this.gameFactory.createScoresRegistry();
+        this.flightBoard = gameFactory.createFlightBoard(shipsN);
+        try {
+            this.deck = gameFactory.createDeck(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @VisibleForTesting
     public void setFlightBoard(FlightBoard flightBoard) {
@@ -198,168 +414,9 @@ public class Game {
         this.deck = deck;
     }
 
-    public void setEventListener(GameEventListener eventListener) {
-        this.eventListener = eventListener;
-        shipBoards.forEach(s -> s.setGameEventListener(eventListener));
-        surrenderPolicy.setEventListener(eventListener);
-        flightBoard.setGameEventListener(eventListener);
+    @VisibleForTesting
+    public void setAfterEach(Runnable afterEach) {
+        this.afterEach = afterEach;
     }
-
-    public GameEventListener getEventListener() {
-        return eventListener;
-    }
-
-    public Object getLock() {
-        return lock;
-    }
-
-    public void requestRandComponent(ShipBoard shipBoard) {
-        synchronized (lock) {
-            currentState.requestRandComponent(shipBoard);
-        }
-    }
-
-    public void requestComponent(ShipBoard shipBoard, int componentID) {
-        synchronized (lock) {
-            currentState.requestComponent(shipBoard, componentID);
-        }
-    }
-
-    public void rejectComponent(ShipBoard shipBoard) {
-        synchronized (lock) {
-            currentState.rejectComponent(shipBoard);
-        }
-    }
-
-    public void stashComponent(ShipBoard shipBoard) {
-        synchronized (lock) {
-            currentState.stashComponent(shipBoard);
-        }
-    }
-
-    public void grabPlacedComponent(ShipBoard shipBoard) {
-        synchronized (lock) {
-            currentState.grabPlacedComponent(shipBoard);
-        }
-    }
-
-    public void grabStashedComponent(ShipBoard shipBoard, int index) {
-        synchronized (lock) {
-            currentState.grabStashedComponent(shipBoard, index);
-        }
-    }
-
-    public void placeComponent(ShipBoard shipBoard, Point point, Direction orientation) {
-        synchronized (lock) {
-            currentState.placeComponent(shipBoard, point, orientation);
-        }
-    }
-
-    public void flipHourglass(ShipBoard shipBoard) {
-        synchronized (lock) {
-            currentState.flipHourglass(shipBoard);
-        }
-    }
-
-    public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
-        synchronized (lock) {
-            currentState.placeShipOnFlightBoard(shipBoard, startingPosition);
-        }
-    }
-
-    public void acquireForecast(ShipBoard shipBoard, int deckIndex) {
-        synchronized (lock) {
-            currentState.acquireForecast(shipBoard, deckIndex);
-        }
-    }
-
-    public void releaseForecast(ShipBoard shipBoard) {
-        synchronized (lock) {
-            currentState.releaseForecast(shipBoard);
-        }
-    }
-
-    public void removeComponent(ShipBoard shipBoard, Point point) {
-        synchronized (lock) {
-            currentState.removeComponent(shipBoard, point);
-        }
-    }
-
-    public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
-        synchronized (lock) {
-            currentState.chooseShipPiece(shipBoard, pieceIndex);
-        }
-    }
-
-    public void initializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
-        synchronized (lock) {
-            currentState.initializeCabin(shipBoard, point, crewType);
-        }
-    }
-
-    public void activateComponent(ShipBoard shipBoard, Point point) {
-        synchronized (lock) {
-            currentState.activateComponent(shipBoard, point);
-        }
-    }
-
-    public void loseCrew(ShipBoard shipBoard, Point point) {
-        synchronized (lock) {
-            currentState.loseCrew(shipBoard, point);
-        }
-    }
-
-    public void grabReward(ShipBoard shipBoard, boolean rewardGrabbed) {
-        synchronized (lock) {
-            currentState.grabReward(shipBoard);
-        }
-    }
-
-    public void placeGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        synchronized (lock) {
-            currentState.addGood(shipBoard, point, goodsType);
-        }
-    }
-
-    public void removeGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        synchronized (lock) {
-            currentState.removeGood(shipBoard, point, goodsType);
-        }
-    }
-
-    public void useBattery(ShipBoard shipBoard, Point point) {
-        synchronized (lock) {
-            currentState.spendBatteries(shipBoard, point);
-        }
-    }
-
-    public void choosePlanet(ShipBoard shipBoard, int choice) {
-        synchronized (lock) {
-            currentState.choosePlanet(shipBoard, choice);
-        }
-    }
-
-    public void giveUp(ShipBoard shipBoard) {
-        synchronized (lock) {
-            currentState.giveUp(shipBoard);
-        }
-    }
-
-    public void drawCard(ShipBoard shipBoard) {
-        synchronized (lock) {
-            currentState.drawCard(shipBoard);
-        }
-    }
-
-    public void loseGood(ShipBoard shipBoard, Point point) {
-        synchronized (lock) {
-            currentState.loseGood(shipBoard, point);
-        }
-    }
-
-    public void goNext(ShipBoard shipBoard) {
-        synchronized (lock) {
-            currentState.goNext(shipBoard);
-        }
-    }
+    //endregion
 }
