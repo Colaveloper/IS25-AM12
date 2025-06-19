@@ -59,11 +59,11 @@ public abstract class CliActivationScreen extends CliAdventureScreen {
             }
             case "" -> {
                 if(batteriesToSpend > 0) {
-                    System.out.println("Your need to activate " + batteriesToSpend + " batteries");
+                    System.out.println("You need to activate " + batteriesToSpend + " batteries");
                     return;
                 }
                 if(batteriesToSpend < 0) {
-                    System.out.println("Your need to activate " + (batteriesToSpend * (-1)) + " components");
+                    System.out.println("You need to activate " + (batteriesToSpend * (-1)) + " components");
                     return;
                 }
                 controller.goNext();

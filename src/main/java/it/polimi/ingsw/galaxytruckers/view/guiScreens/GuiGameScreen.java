@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -15,9 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class GuiGameScreen extends GuiScreen {
-
     protected final GuiFlightBoard guiFlightBoard;
     protected final Map<ShipBoard, GuiShipBoard> guiShipBoards; // static?
+    protected final HBox guiContextBox;
 
     public GuiGameScreen(ClientModel model, ControllerToServer controller, GameState state) {
         super(model, controller, state);
@@ -29,6 +30,7 @@ public abstract class GuiGameScreen extends GuiScreen {
             }
         };
         this.guiFlightBoard = new GuiFlightBoard(model.getGame().getFlightBoard(), getGuiController());
+        this.guiContextBox = new HBox();
     }
 
     // overridden for different levels and game-phases
@@ -87,6 +89,20 @@ public abstract class GuiGameScreen extends GuiScreen {
         }
 
         return layout;
+    }
+
+    protected void updateContextBox(String context) {
+        Platform.runLater(()->{
+            guiContextBox.getChildren().clear();
+            Label contextLabel = new Label(context);
+            contextLabel.setStyle(
+                    "-fx-font-size: 14px;" +
+                            "-fx-text-fill: white;" +
+                            "-fx-font-weight: bold;"
+            );
+            guiContextBox.getChildren().add(contextLabel);
+            guiContextBox.setAlignment(Pos.CENTER);
+        });
     }
 
     protected HBox getGuiAllShips() {

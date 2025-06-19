@@ -3,6 +3,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
 import javafx.animation.RotateTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -51,7 +52,15 @@ public class GuiComponent extends StackPane {
     protected void updateContentBox(List<Color> colors) {
         contentBox.getChildren().clear();
         for (Color color : colors) {
-            contentBox.getChildren().add(new Circle(4, color));
+            Circle contentUnitCircle = new Circle(4);
+
+            DropShadow shadow = new DropShadow();
+            shadow.setOffsetX(0.5);
+            shadow.setOffsetY(0.5);
+            shadow.setColor(Color.rgb(0, 0, 0, 0.5)); // semi-transparent black
+
+            contentUnitCircle.setEffect(shadow);
+            contentBox.getChildren().add(contentUnitCircle);
         }
     }
 }
