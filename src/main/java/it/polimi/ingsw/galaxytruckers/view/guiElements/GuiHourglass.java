@@ -19,9 +19,12 @@ public class GuiHourglass extends StackPane {
     public GuiHourglass(GuiController controller) {
         this.controller = controller;
 
-        timerLabel.setStyle("-fx-font-size: 24px;");
-        hourglassButton.setStyle("-fx-font-size: 24px;");
+        timerLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        hourglassButton.setStyle("-fx-font-size: 14px; -fx-padding: 2px 4px;");
         hourglassButton.setOnAction(e -> controller.flipHourglass());
+        setMaxSize(40, 30);
+        setStyle("-fx-background-color: rgba(240, 240, 240, 0.7); -fx-background-radius: 4; -fx-border-radius: 4; -fx-border-color: #cccccc; -fx-border-width: 1;");
+
         getChildren().add(timerLabel);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {

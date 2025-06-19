@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.geometry.Insets;
 
 import java.awt.*;
 import java.util.Map;
@@ -27,6 +28,8 @@ public class GuiTestShipBuildingScreen extends GuiShipBuildingScreen {
     protected VBox getFullShip(ShipBoard shipBoard) {
         VBox layout = new VBox(5);
         layout.setAlignment(Pos.CENTER);
+        layout.setMaxWidth(100);
+        layout.setMaxHeight(120);
 
         layout.getChildren().add(guiShipBoards.get(shipBoard));
 
@@ -57,11 +60,16 @@ public class GuiTestShipBuildingScreen extends GuiShipBuildingScreen {
 
     @Override
     public Parent getNode() {
-        VBox layout = new VBox(20); // Added spacing between components
-        layout.setAlignment(Pos.CENTER);
+        VBox layout = new VBox(10);
+        layout.setAlignment(Pos.TOP_CENTER);
+        layout.setPadding(new Insets(5, 0, 0, 0));
+
+        HBox topRow = new HBox(15);
+        topRow.setAlignment(Pos.CENTER);
+        topRow.getChildren().addAll(guiComponentBank, getGuiFlightBoard());
+
         layout.getChildren().addAll(
-            getGuiFlightBoard(), // Place the styled flightboard at the top
-            guiComponentBank,
+            topRow,
             getGuiAllShips()
         );
         return layout;
