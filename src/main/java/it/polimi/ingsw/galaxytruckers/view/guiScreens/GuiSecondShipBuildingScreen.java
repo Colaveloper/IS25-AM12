@@ -74,7 +74,7 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
         layout.getChildren().addAll(
-            getStyledFlightBoard(),
+            getGuiFlightBoard(),
             guiComponentBank,
             guiForecast,
             guiHourglass,
