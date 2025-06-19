@@ -3,11 +3,11 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.guiElements.PurpleContainer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -16,9 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class GuiGameScreen extends GuiScreen {
-
     protected final GuiFlightBoard guiFlightBoard;
     protected final Map<ShipBoard, GuiShipBoard> guiShipBoards; // static?
+    protected final HBox guiContextBox;
 
     public GuiGameScreen(ClientModel model, ControllerToServer controller, GameState state) {
         super(model, controller, state);
@@ -30,6 +30,7 @@ public abstract class GuiGameScreen extends GuiScreen {
             }
         };
         this.guiFlightBoard = new GuiFlightBoard(model.getGame().getFlightBoard(), getGuiController());
+        this.guiContextBox = new HBox();
     }
 
     // overridden for different levels and game-phases
@@ -88,6 +89,20 @@ public abstract class GuiGameScreen extends GuiScreen {
         }
 
         return layout;
+    }
+
+    protected void updateContextBox(String context) {
+        Platform.runLater(()->{
+            guiContextBox.getChildren().clear();
+            Label contextLabel = new Label(context);
+            contextLabel.setStyle(
+                    "-fx-font-size: 14px;" +
+                            "-fx-text-fill: white;" +
+                            "-fx-font-weight: bold;"
+            );
+            guiContextBox.getChildren().add(contextLabel);
+            guiContextBox.setAlignment(Pos.CENTER);
+        });
     }
 
     protected HBox getGuiAllShips() {
@@ -194,8 +209,8 @@ public abstract class GuiGameScreen extends GuiScreen {
     protected abstract GuiController getGuiController();
 
     // styled flight board with label and container
-    protected VBox getStyledFlightBoard() {
-        PurpleContainer container = new PurpleContainer(10);
+    protected VBox getGuiFlightBoard() {
+        VBox container = new VBox(10);
         container.setAlignment(Pos.CENTER);
         container.setPadding(new javafx.geometry.Insets(10));
 
@@ -206,6 +221,15 @@ public abstract class GuiGameScreen extends GuiScreen {
             "-fx-font-weight: bold;"
         );
         flightBoardLabel.setAlignment(Pos.CENTER);
+
+        container.setStyle(
+            "-fx-background-color: rgba(20, 20, 40, 0.7);" +
+            "-fx-border-color: rgba(100, 100, 200, 0.8);" +
+            "-fx-border-width: 1px;" +
+            "-fx-border-radius: 5px;" +
+            "-fx-background-radius: 5px;" +
+            "-fx-padding: 10px;"
+        );
 
         container.getChildren().addAll(flightBoardLabel, guiFlightBoard);
         return container;

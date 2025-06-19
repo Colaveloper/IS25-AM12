@@ -25,7 +25,6 @@ public class CliProjectilesScreen extends CliActivationScreen {
         this.isMyTurn = currentShip.equals(model.getMyShip());
     }
 
-
     @Override
     public void render() {
         printShipFlightStats().forEach(System.out::println);
@@ -61,5 +60,4 @@ public class CliProjectilesScreen extends CliActivationScreen {
         ship.onRemoveComponent(point);
         cliAllShips.setDirty();
     }
-
 }
