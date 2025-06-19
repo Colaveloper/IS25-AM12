@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiFlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.PurpleContainer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -210,7 +211,7 @@ public abstract class GuiGameScreen extends GuiScreen {
 
     // styled flight board with label and container
     protected VBox getGuiFlightBoard() {
-        VBox container = new VBox(10);
+        PurpleContainer container = new PurpleContainer(10);
         container.setAlignment(Pos.CENTER);
         container.setPadding(new javafx.geometry.Insets(10));
 
@@ -221,15 +222,6 @@ public abstract class GuiGameScreen extends GuiScreen {
             "-fx-font-weight: bold;"
         );
         flightBoardLabel.setAlignment(Pos.CENTER);
-
-        container.setStyle(
-            "-fx-background-color: rgba(20, 20, 40, 0.7);" +
-            "-fx-border-color: rgba(100, 100, 200, 0.8);" +
-            "-fx-border-width: 1px;" +
-            "-fx-border-radius: 5px;" +
-            "-fx-background-radius: 5px;" +
-            "-fx-padding: 10px;"
-        );
 
         container.getChildren().addAll(flightBoardLabel, guiFlightBoard);
         return container;
