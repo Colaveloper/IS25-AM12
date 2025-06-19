@@ -209,7 +209,7 @@ public abstract class GuiGameScreen extends GuiScreen {
     protected abstract GuiController getGuiController();
 
     // styled flight board with label and container
-    protected VBox getStyledFlightBoard() {
+    protected VBox getGuiFlightBoard() {
         VBox container = new VBox(10);
         container.setAlignment(Pos.CENTER);
         container.setPadding(new javafx.geometry.Insets(10));

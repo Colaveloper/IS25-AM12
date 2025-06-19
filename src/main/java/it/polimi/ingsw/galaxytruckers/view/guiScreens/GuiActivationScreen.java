@@ -8,7 +8,10 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.ActivateState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 
 import java.awt.*;
 import java.util.Set;
@@ -24,6 +27,24 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
         } else {
             updateContextBox("Wait for your turn");
         }
+    }
+
+    @Override
+    public Parent getNode() {
+        VBox layout = new VBox(20);
+        layout.setAlignment(Pos.CENTER);
+
+        Button goNextButton = new Button("OK");
+        goNextButton.setOnAction(_ -> getGuiController().goNext());
+        goNextButton.setDisable(batteriesToSpend != 0);
+
+        layout.getChildren().addAll(
+                getGuiFlightBoard(),
+                getGuiAllShips(),
+                goNextButton
+        );
+
+        return layout;
     }
 
     @Override

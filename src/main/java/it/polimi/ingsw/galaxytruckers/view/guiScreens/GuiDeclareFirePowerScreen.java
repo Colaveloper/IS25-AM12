@@ -14,21 +14,6 @@ import java.awt.*;
 public class GuiDeclareFirePowerScreen extends GuiActivationScreen {
     public GuiDeclareFirePowerScreen(ClientModel model, ControllerToServer controller, DeclareFirePowerState declareFirePowerState) {
         super(model, controller, declareFirePowerState);
+        updateContextBox("Select an double-engine to activate or a battery to use");
     }
-
-    @Override
-    public Parent getNode() {
-        VBox layout = new VBox();
-        layout.getChildren().add(new Label("GuiDeclareFirePowerScreen"));
-        layout.getChildren().add(guiContextBox);
-        layout.getChildren().add(getGuiAllShips());
-
-        Button goNextButton = new Button("OK");
-        goNextButton.setOnAction(_ -> getGuiController().goNext());
-        layout.getChildren().add(goNextButton);
-
-        return layout;
-    }
-
-
 }

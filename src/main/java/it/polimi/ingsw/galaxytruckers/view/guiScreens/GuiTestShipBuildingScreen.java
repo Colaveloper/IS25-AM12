@@ -60,7 +60,7 @@ public class GuiTestShipBuildingScreen extends GuiShipBuildingScreen {
         VBox layout = new VBox(20); // Added spacing between components
         layout.setAlignment(Pos.CENTER);
         layout.getChildren().addAll(
-            getStyledFlightBoard(), // Place the styled flightboard at the top
+            getGuiFlightBoard(), // Place the styled flightboard at the top
             guiComponentBank,
             getGuiAllShips()
         );
