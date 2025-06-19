@@ -31,26 +31,17 @@ public class GuiScreenFactory implements ScreenFactory<GuiScreen> {
             case ShipInitializationState shipInitializationState -> new GuiCrewInitializationScreen(model, controller, shipInitializationState);
             case AdventureState s -> switch (s) {
                 case ActivateState activateState -> switch (activateState) {
-                    case DeclareEnginePowerState declareEnginePowerState -> null;
-//                                    new GuiDeclareEnginePowerScreen(model, controller, declareEnginePowerState);
-                    case DeclareFirePowerState declareFirePowerState -> null;
-//                                    new GuiDeclareFirePowerScreen(model, controller, declareFirePowerState);
-                    case HandleProjectileState handleProjectileState -> null;
-//                                    new GuiProjectilesScreen(model, controller, handleProjectileState);
+                    case DeclareEnginePowerState declareEnginePowerState -> new GuiDeclareEnginePowerScreen(model, controller, declareEnginePowerState);
+                    case DeclareFirePowerState declareFirePowerState -> new GuiDeclareFirePowerScreen(model, controller, declareFirePowerState);
+                    case HandleProjectileState handleProjectileState -> new GuiProjectilesScreen(model, controller, handleProjectileState);
                 };
-                case AddGoodsState addGoodsState -> null;
-//                                new GuiGoodsScreen(model, controller, addGoodsState);
-                case ChoosePlanetState choosePlanetState -> null;
-//                                new GuiPlanetScreen(model, controller, choosePlanetState);
-                case ChooseShipPieceState chooseShipPieceState -> null;
-//                                new GuiShipPieceChoiceScreen(model, controller, chooseShipPieceState);
+                case AddGoodsState addGoodsState -> new GuiGoodsScreen(model, controller, addGoodsState);
+                case ChoosePlanetState choosePlanetState -> new GuiPlanetScreen(model, controller, choosePlanetState);
+                case ChooseShipPieceState chooseShipPieceState -> new GuiShipPieceChoiceScreen(model, controller, chooseShipPieceState);
                 case DrawCardState drawCardState -> new GuiNewCardScreen(model, controller, drawCardState);
-                case GrabRewardState grabRewardState -> null;
-//                                new GuiRewardScreen(model, controller, grabRewardState);
-                case RemoveCrewState removeCrewState -> null;
-//                                new GuiRemoveCrewScreen(model, controller, removeCrewState);
-                case RemoveGoodsState removeGoodsState -> null;
-//                                new GuiLoseGoodsScreen(model, controller, removeGoodsState);
+                case GrabRewardState grabRewardState -> new GuiRewardScreen(model, controller, grabRewardState);
+                case RemoveCrewState removeCrewState -> new GuiRemoveCrewScreen(model, controller, removeCrewState);
+                case RemoveGoodsState removeGoodsState -> new GuiLoseGoodsScreen(model, controller, removeGoodsState);
             };
         };
     }

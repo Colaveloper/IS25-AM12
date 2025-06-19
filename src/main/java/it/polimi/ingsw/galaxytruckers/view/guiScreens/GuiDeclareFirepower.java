@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ActivateState;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 
 public class GuiDeclareFirepower extends GuiActivationScreen{
     public GuiDeclareFirepower(ClientModel model, ControllerToServer controller, ActivateState state) {
@@ -17,6 +18,6 @@ public class GuiDeclareFirepower extends GuiActivationScreen{
 
     @Override
     public Parent getNode() {
-        return null;
+        return new Label("GuiDeclareFirepower");
     }
 }

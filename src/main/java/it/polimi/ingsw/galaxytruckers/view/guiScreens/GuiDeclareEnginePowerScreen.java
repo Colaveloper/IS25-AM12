@@ -4,8 +4,9 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ActivateState;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 
-public class GuiDeclareEnginePowerScreen extends GuiActivationScreen{
+public class GuiDeclareEnginePowerScreen extends GuiActivationScreen {
     public GuiDeclareEnginePowerScreen(ClientModel model, ControllerToServer controller, ActivateState state) {
         super(model, controller, state);
     }
@@ -17,6 +18,6 @@ public class GuiDeclareEnginePowerScreen extends GuiActivationScreen{
 
     @Override
     public Parent getNode() {
-        return null;
+        return new Label("GuiDeclareEnginePowerScreen");
     }
 }

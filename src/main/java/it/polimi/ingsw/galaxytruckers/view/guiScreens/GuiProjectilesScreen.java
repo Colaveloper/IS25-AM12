@@ -2,14 +2,15 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.state.AdventureState;
+import it.polimi.ingsw.galaxytruckers.view.model.state.HandleProjectileState;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 
-public class GuiShipPieceChoiceScreen extends GuiAdventureScreen{
-    public GuiShipPieceChoiceScreen(ClientModel model, ControllerToServer controller, AdventureState gameState) {
-        super(model, controller, gameState);
+public class GuiProjectilesScreen extends GuiActivationScreen {
+    public GuiProjectilesScreen(ClientModel model, ControllerToServer controller, HandleProjectileState handleProjectileState) {
+        super(model, controller, handleProjectileState);
     }
+
 
     @Override
     protected GuiController getGuiController() {
@@ -18,6 +19,6 @@ public class GuiShipPieceChoiceScreen extends GuiAdventureScreen{
 
     @Override
     public Parent getNode() {
-        return new Label("GuiShipPieceChoiceScreen");
+        return new Label("GuiProjectilesScreen");
     }
 }
