@@ -25,7 +25,7 @@ public class GuiComponentBank extends HBox {
 
         setMaxWidth(Double.MAX_VALUE);
         setSpacing(20);
-        setPadding(new Insets(10));
+        setPadding(new Insets(5));
         setAlignment(Pos.TOP_LEFT);
         HBox.setHgrow(this, Priority.ALWAYS);
 

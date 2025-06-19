@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.geometry.Insets;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -41,6 +42,8 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
     protected VBox getFullShip(ShipBoard shipBoard) {
         VBox layout = new VBox(5);
         layout.setAlignment(Pos.CENTER);
+        layout.setMaxWidth(100);
+        layout.setMaxHeight(100);
 
         layout.getChildren().add(guiShipBoards.get(shipBoard));
 
@@ -71,13 +74,21 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
 
     @Override
     public Parent getNode() {
-        VBox layout = new VBox(20);
-        layout.setAlignment(Pos.CENTER);
+        VBox layout = new VBox(10);
+        layout.setAlignment(Pos.TOP_CENTER);
+        layout.setPadding(new Insets(5, 0, 0, 0));
+
+        HBox topRow = new HBox(15);
+        topRow.setAlignment(Pos.CENTER);
+        topRow.getChildren().addAll(guiForecast, getStyledFlightBoard());
+
+        HBox bankRow = new HBox(15);
+        bankRow.setAlignment(Pos.CENTER);
+        bankRow.getChildren().addAll(guiComponentBank, guiHourglass);
+
         layout.getChildren().addAll(
-            getStyledFlightBoard(),
-            guiComponentBank,
-            guiForecast,
-            guiHourglass,
+            bankRow,
+            topRow,
             getAllShips()
         );
         return layout;
