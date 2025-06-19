@@ -42,7 +42,7 @@ public class GuiCrewInitializationScreen extends GuiGameScreen {
 
         Button skipButton = new Button("SKIP PLACING SELECTED ALIEN");
 
-        layout.getChildren().addAll(crewButtons, skipButton, getAllShips());
+        layout.getChildren().addAll(crewButtons, skipButton, getGuiAllShips());
         return layout;
     }
 

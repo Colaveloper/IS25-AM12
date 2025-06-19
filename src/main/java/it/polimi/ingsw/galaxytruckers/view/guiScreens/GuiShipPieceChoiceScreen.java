@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.AdventureState;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 
-public class GuiShipPieceChoiceScreen extends GuiAdventureScreen{
+public class GuiShipPieceChoiceScreen extends GuiAdventureScreen {
     public GuiShipPieceChoiceScreen(ClientModel model, ControllerToServer controller, AdventureState gameState) {
         super(model, controller, gameState);
     }

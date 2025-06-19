@@ -28,7 +28,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
     public Parent getNode() {
         VBox layout = new VBox();
         layout.setAlignment(Pos.CENTER);
-        layout.getChildren().add(getAllShips());
+        layout.getChildren().add(getGuiAllShips());
         return layout;
     }
 

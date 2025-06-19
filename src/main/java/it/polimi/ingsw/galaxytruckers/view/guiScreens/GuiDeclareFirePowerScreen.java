@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.DeclareFirePowerState;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 public class GuiDeclareFirePowerScreen extends GuiActivationScreen {
     public GuiDeclareFirePowerScreen(ClientModel model, ControllerToServer controller, DeclareFirePowerState declareFirePowerState) {
@@ -18,6 +19,9 @@ public class GuiDeclareFirePowerScreen extends GuiActivationScreen {
 
     @Override
     public Parent getNode() {
-        return new Label("GuiDeclareFirePowerScreen");
+        VBox layout = new VBox();
+        layout.getChildren().add(new Label("GuiDeclareFirePowerScreen"));
+        layout.getChildren().add(getGuiAllShips());
+        return layout;
     }
 }

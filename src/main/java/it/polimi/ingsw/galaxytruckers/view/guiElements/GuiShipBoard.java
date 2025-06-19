@@ -101,7 +101,6 @@ public class GuiShipBoard extends GridPane {
             toReplace.ifPresent(node -> {
                 this.getChildren().remove(node);
                 GuiComponent guiComponent = new GuiComponent(component);
-                guiComponent.setRotate(orientation.getAngle());
                 guiComponent.setOnMouseClicked(_ -> controller.handlePointPress(point));
                 this.add(guiComponent, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));
             });

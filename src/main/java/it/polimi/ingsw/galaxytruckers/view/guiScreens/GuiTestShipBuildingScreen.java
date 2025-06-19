@@ -62,7 +62,7 @@ public class GuiTestShipBuildingScreen extends GuiShipBuildingScreen {
         layout.getChildren().addAll(
             getStyledFlightBoard(), // Place the styled flightboard at the top
             guiComponentBank,
-            getAllShips()
+            getGuiAllShips()
         );
         return layout;
     }

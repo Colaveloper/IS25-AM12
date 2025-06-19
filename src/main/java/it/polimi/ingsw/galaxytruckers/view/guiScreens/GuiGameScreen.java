@@ -7,12 +7,10 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
-import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,7 +89,7 @@ public abstract class GuiGameScreen extends GuiScreen {
         return layout;
     }
 
-    protected HBox getAllShips() {
+    protected HBox getGuiAllShips() {
         // main ship and other ships in separate containers
         // other ships organized in a grid layout
         // each ship has a label with the player's nickname

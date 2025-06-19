@@ -78,7 +78,7 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
             guiComponentBank,
             guiForecast,
             guiHourglass,
-            getAllShips()
+            getGuiAllShips()
         );
         return layout;
     }

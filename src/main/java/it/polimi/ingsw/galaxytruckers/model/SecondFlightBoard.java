@@ -24,7 +24,7 @@ public class SecondFlightBoard extends FlightBoard{
     public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
         synchronized (startingPositionsLeft) {
             if (!startingPositionsLeft.contains(startingPosition)) {
-                throw new IllegalArgumentException("Position not available for connect");
+                throw new IllegalArgumentException("Position not available for positioning");
             }
             startingPositionsLeft.remove((Integer) startingPosition);
         }

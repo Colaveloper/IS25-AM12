@@ -7,37 +7,37 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.stream.IntStream;
 
 public class GuiCabin extends GuiComponent {
-    HBox crewBox;
 
     public GuiCabin(Cabin cabin) {
         super(cabin);
-        crewBox = new HBox(2);
-        for (int i = 0; i < cabin.getNumResidents(); i++) {
-            Circle crewMember = switch (cabin.getCrewType()) {
-                case PURPLE -> new Circle(4, Color.PURPLE);
-                case BROWN -> new Circle(4, Color.BROWN);
-                case HUMAN -> new Circle(4, Color.WHITE);
-            };
-            crewBox.getChildren().add(crewMember);
-        }
-        getChildren().add(crewBox);
+        updateContentBox(new ArrayList<>(Collections.nCopies(
+                cabin.getNumResidents(),
+                switch (cabin.getCrewType()) {
+                    case PURPLE -> Color.PURPLE;
+                    case BROWN -> Color.BROWN;
+                    case HUMAN -> Color.WHITE;
+                }
+        )));
     }
 
     public void notifyInitialize(CrewType crewType, int numResidents) {
-        Platform.runLater(()->{
-            crewBox.getChildren().clear();
-            for (int i = 0; i < numResidents; i++) {
-                Circle crewMember = switch (crewType) {
-                    case PURPLE -> new Circle(4, Color.PURPLE);
-                    case BROWN -> new Circle(4, Color.BROWN);
-                    case HUMAN -> new Circle(4, Color.WHITE);
-                };
-                crewBox.getChildren().add(crewMember);
-            }
-        });
+        updateContentBox(new ArrayList<>(Collections.nCopies(
+                numResidents,
+                switch (crewType) {
+                    case PURPLE -> Color.PURPLE;
+                    case BROWN -> Color.BROWN;
+                    case HUMAN -> Color.WHITE;
+                }
+        )));
+    }
+
+    public void notifyCrewLoss() {
+        // todo: implement and use
     }
 }
 
