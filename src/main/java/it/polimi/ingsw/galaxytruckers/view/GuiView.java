@@ -70,12 +70,12 @@ public class GuiView extends View<GuiScreen> {
     //region Event-Notify methods
     @Override
     public void notifyNewLobby(Lobby lobby) {
-
+        currentScreen.notifyNewLobby(lobby);
     }
 
     @Override
     public void notifyRemoveLobby(UUID uuid) {
-
+        currentScreen.notifyRemoveLobby(uuid);
     }
 
     @Override

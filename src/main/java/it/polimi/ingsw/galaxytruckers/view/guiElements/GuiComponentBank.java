@@ -4,25 +4,21 @@ import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
 import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
-import java.util.ArrayList;
 
 public class GuiComponentBank extends HBox {
 
     private final GuiController controller;
     private final Label coveredNLabel;
-    private final HBox rejectedContainer;
+    private final FlowPane rejectedContainer; // Changed to FlowPane
 
     public GuiComponentBank(ComponentBank componentBank, GuiController controller) {
         this.controller = controller;
@@ -58,7 +54,26 @@ public class GuiComponentBank extends HBox {
         minusButton.setPrefSize(50, 50);
         minusButton.setOnMouseClicked(_ -> controller.rejectComponent());
 
-        rejectedContainer = new HBox();
+        // flowpane for rejected components
+        rejectedContainer = new FlowPane();
+        rejectedContainer.setHgap(10);
+        rejectedContainer.setVgap(10);
+        rejectedContainer.setPrefWidth(Control.USE_COMPUTED_SIZE);
+        rejectedContainer.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(rejectedContainer, Priority.ALWAYS);
+
+        rejectedContainer.setStyle(
+            "-fx-background-color: rgba(20, 20, 40, 0.7);" +
+            "-fx-border-color: rgba(100, 100, 200, 0.8);" +
+            "-fx-border-width: 1px;" +
+            "-fx-border-radius: 5px;" +
+            "-fx-background-radius: 5px;" +
+            "-fx-padding: 10px;"
+        );
+
+        VBox.setVgrow(rejectedContainer, Priority.ALWAYS);
+        rejectedContainer.setPrefWrapLength(1200);
+
         componentBank.getUncoveredComponents().forEach(component -> {
             GuiComponent newComponent = new GuiComponent(component);
             rejectedContainer.getChildren().add(newComponent);
