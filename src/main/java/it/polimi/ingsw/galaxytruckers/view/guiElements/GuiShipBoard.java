@@ -162,4 +162,33 @@ public class GuiShipBoard extends GridPane {
                 .findFirst()
                 .ifPresent(c -> c.notifyInitialize(crewType, numResidents));
     }
+
+    public void highlightPoints(Set<Point> points, it.polimi.ingsw.galaxytruckers.view.enums.Highlights highlight) {
+        Platform.runLater(() -> {
+            for (Point point : points) {
+                getChildren().stream()
+                        .filter(node -> node instanceof GuiComponent)
+                        .map(node -> (GuiComponent) node)
+                        .filter(node -> {
+                            Integer col = GridPane.getColumnIndex(node);
+                            Integer row = GridPane.getRowIndex(node);
+                            if (col == null || row == null) return false;
+                            col -= 1;
+                            row -= 1;
+                            return col + minX == point.x && row + minY == point.y;
+                        })
+                        .findFirst()
+                        .ifPresent(component -> component.highlight(highlight));
+            }
+        });
+    }
+
+    public void clearHighlights() {
+        Platform.runLater(() -> {
+            getChildren().stream()
+                    .filter(node -> node instanceof GuiComponent)
+                    .map(node -> (GuiComponent) node)
+                    .forEach(component -> component.highlight(it.polimi.ingsw.galaxytruckers.view.enums.Highlights.RESET));
+        });
+    }
 }
