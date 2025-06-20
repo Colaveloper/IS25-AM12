@@ -16,9 +16,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.awt.*;
@@ -122,6 +120,24 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
                 guiContextBox.getChildren().setAll(new Label("The action will be performed on a "+type+" good"));
                 selectedGoodsType.set(type);
             });
+            Background defaultBackground = new Background(new BackgroundFill(
+                    Color.LIGHTGRAY, new CornerRadii(5.0), null
+            ));
+            Background focusedBackground = new Background(new BackgroundFill(
+                    switch (type) {
+                        case RED -> Color.RED;
+                        case BLUE -> Color.BLUE;
+                        case GREEN -> Color.GREEN;
+                        case YELLOW -> Color.GOLD;
+                    }, new CornerRadii(5.0), null));
+            typeButton.backgroundProperty().bind(
+                Bindings.createObjectBinding(
+                        () -> (selectedGoodsType.get() == type
+                                ? focusedBackground
+                                : defaultBackground
+                        ), selectedGoodsType
+                )
+            );
             goodsTypeBox.getChildren().add(typeButton);
         }
 
@@ -132,8 +148,8 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
         placeButton.disableProperty().bind(
                 Bindings.createBooleanBinding(
                         () -> (
-                                selectedPoint == null ||
-                                selectedGoodsType == null ||
+                                selectedPoint.get() == null ||
+                                selectedGoodsType.get() == null ||
                                 goodsBuffer.getGoodsBuffer().getOrDefault(selectedGoodsType.get(), 0) <= 0 ||
                                 !myShipBoard.getCargoHolds().containsKey(selectedPoint.get())
                         ), selectedPoint, selectedGoodsType
@@ -147,8 +163,8 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
                 guiContextBox.getChildren().add(new Label("Cannot add special cargo to a regular cargo hold!"));
             } else {
                 controller.placeGoods(selectedPoint.get(), selectedGoodsType.get());
-                selectedPoint = null;
-                selectedGoodsType = null;
+                selectedPoint.set(null);
+                selectedGoodsType.set(null);
             }
         });
 
@@ -166,8 +182,8 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
 
         removeButton.setOnAction(_ -> {
             controller.removeGoods(selectedPoint.get(), selectedGoodsType.get());
-            selectedPoint = null;
-            selectedGoodsType = null;
+            selectedPoint.set(null);
+            selectedGoodsType.set(null);
         });
 
         Button nextButton = new Button("Done");
@@ -180,14 +196,8 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
     }
 
     @Override
-    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        guiShipBoards.get(shipBoard).notifyComponentChange(point);
-        updateBufferInfoBox();
-    }
-
-    @Override
-    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        guiShipBoards.get(shipBoard).notifyComponentChange(point);
+    public void notifyComponentChange(ShipBoard shipBoard, Point point) {
+        super.notifyComponentChange(shipBoard, point);
         updateBufferInfoBox();
     }
 }
