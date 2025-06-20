@@ -245,7 +245,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     }
 
     public List<Component> getStashedComponents() {
-        return null;
+        return List.of();
     }
 
     //CargoHold methods

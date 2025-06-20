@@ -13,7 +13,7 @@ public class CliShipAndHand extends CliShipBoard {
     private final CliHand cliHand;
     public CliShipAndHand(ShipBoard shipBoard, String nickname) {
         super(shipBoard, nickname);
-        if (shipBoard.getLastComponent() != null) {
+        if (shipBoard.getLastComponent() != null && shipBoard.getLastPosition() == null) {
             cliHand = new CliHand(shipBoard.getLastComponent());
         } else {
             cliHand = new CliHand();

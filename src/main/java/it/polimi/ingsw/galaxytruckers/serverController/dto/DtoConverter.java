@@ -2,8 +2,9 @@ package it.polimi.ingsw.galaxytruckers.serverController.dto;
 
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Hourglass;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.components.*;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.states.*;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
@@ -187,8 +188,13 @@ public class DtoConverter {
         return new ShipBoardDTO(
                 shipBoard.getComponentMap().entrySet().stream().collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        entry -> entry.getValue().getId()
-                ))
+                        entry -> getComponent(entry.getValue())
+                )),
+                shipBoard.getLastComponent().map(Component::getId).orElse(-1),
+                shipBoard.getLastPosition().orElse(null),
+                shipBoard.getStashedComponents().stream().map(Component::getId).toList(),
+                shipBoard.getCredits(),
+                shipBoard.getLosses()
         );
     }
 
@@ -197,6 +203,31 @@ public class DtoConverter {
                 hourglass.getMissingTime(),
                 hourglass.getFlipsLeft(),
                 hourglass.getIsRunning()
+        );
+    }
+
+    public static ComponentDTO getComponent(ComponentInterface component) {
+        ComponentPayload payload = null;
+        switch (component) {
+            case Activatable activatable -> {
+                payload = new ActivatablePayload(activatable.isActive());
+            }
+            case Battery battery -> {
+                payload = new BatteryPayload(battery.getNumBatteries());
+            }
+            case Cabin cabin -> {
+                payload = new CabinPayload(cabin.getCrewType(), cabin.getNumResidents());
+            }
+            case CargoHold cargoHold -> {
+                payload = new CargoPayload(cargoHold.getGoods());
+            }
+            case Cannon _, Engine _, LifeSupport _, Component _ -> {
+            }
+        }
+        return new ComponentDTO(
+                component.getId(),
+                component.getOrientation(),
+                payload
         );
     }
 }

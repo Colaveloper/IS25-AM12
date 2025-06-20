@@ -41,10 +41,10 @@ public sealed class Component permits
     }
 
     /**
-     * Get the actual connector for a given direction, accounting for the component's rotation.
+     * Get the actual connector for a given orientation, accounting for the component's rotation.
      *
-     * @param direction The requested direction
-     * @return The connector in that direction after rotation
+     * @param direction The requested orientation
+     * @return The connector in that orientation after rotation
      */
     public Connector getRotatedConnector(Direction direction) {
         int steps = 0;

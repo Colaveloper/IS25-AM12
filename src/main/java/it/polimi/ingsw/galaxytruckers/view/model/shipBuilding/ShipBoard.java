@@ -34,9 +34,6 @@ public abstract class ShipBoard {
     protected final Map<Point, Cabin> cabins;
     protected final Map<Point, Activatable> activatables;
 
-    private boolean hasBrown = false;
-    private boolean hasPurple = false;
-
     public ShipBoard(GameColor color) { // (, Color color)
         this.color = color;
 
@@ -66,7 +63,7 @@ public abstract class ShipBoard {
 
     public abstract Set<Point> getShipArea();
 
-    //Setup methods
+    //region Setup methods
     public void setComponentMap(Map<Point, Component> componentMap) {
         this.componentMap.clear();
         for (Point point : componentMap.keySet()) {
@@ -75,6 +72,22 @@ public abstract class ShipBoard {
             updateStats(point, component);
         }
     }
+
+    public void setHand(Component lastComponent, Point lastPosition) {
+        this.lastComponent = lastComponent;
+        this.lastPosition = lastPosition;
+        if (lastComponent != null && lastPosition != null) {
+            componentMap.put(lastPosition, lastComponent);
+        }
+    }
+
+    public void setStashedComponents(List<Component> stashedComponents) {
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
+    }
+    //endregion
 
     //CliComponentBank interaction methods
 
@@ -138,12 +151,12 @@ public abstract class ShipBoard {
                 numBatteries += c.getNumBatteries();
             }
             case Cabin c -> {
-                cabins.put(position, c);
-                crewSize += c.getNumResidents();
+                add(position,c);
             }
             case DoubleCannon c -> {
                 cannons.put(position,c);
                 activatables.put(position,c);
+                firePower += c.getFirePower();
             }
             case Cannon c -> {
                 cannons.put(position, c);
@@ -152,6 +165,7 @@ public abstract class ShipBoard {
             case DoubleEngine c -> {
                 engines.put(position,c);
                 activatables.put(position,c);
+                enginePower += c.getEnginePower();
             }
             case Engine c -> {
                 engines.put(position,c);
@@ -162,8 +176,9 @@ public abstract class ShipBoard {
             }
             case Shield c -> {
                 shields.put(position,c);
+                activatables.put(position,c);
             }
-            case Component _ -> {}
+            case LifeSupport _, Component _ -> {}
         }
     }
 
@@ -183,25 +198,21 @@ public abstract class ShipBoard {
                 numBatteries -= battery.numBatteries;
             }
             case Cabin cabin -> {
-                cabins.remove(position);
-                switch (cabin.getCrewType()) {
-                    case PURPLE -> hasPurple = false;
-                    case BROWN -> hasBrown = false;
-                    case HUMAN -> {}
-                }
-                crewSize -= cabin.getNumResidents();
+                remove(position,cabin);
             }
-            case DoubleCannon _ -> {
+            case DoubleCannon doubleCannon -> {
                 cannons.remove(position);
                 activatables.remove(position);
+                firePower -= doubleCannon.getFirePower();
             }
             case Cannon cannon -> {
                 cannons.remove(position);
                 firePower -= cannon.getFirePower();
             }
-            case DoubleEngine _ -> {
+            case DoubleEngine doubleEngine -> {
                 engines.remove(position);
                 activatables.remove(position);
+                enginePower -= doubleEngine.getEnginePower();
             }
             case Engine engine -> {
                 engines.remove(position);
@@ -212,8 +223,9 @@ public abstract class ShipBoard {
             }
             case Shield _ -> {
                 shields.remove(position);
+                activatables.remove(position);
             }
-            case Component _ -> {}
+            case LifeSupport _, Component _ -> {}
         }
     }
 
@@ -247,18 +259,8 @@ public abstract class ShipBoard {
     public int initializeCabin(Point position, CrewType crewType) {
         Cabin cabin = cabins.get(position);
         cabin.initialize(crewType);
-        switch (crewType) {
-            case PURPLE -> {
-                hasPurple = true;
-                crewSize += cabin.getNumResidents();
-            }
-            case BROWN -> {
-                hasBrown = true;
-                crewSize += cabin.getNumResidents();
-            }
-            case HUMAN -> crewSize += cabin.getNumResidents();
-        }
-        return cabins.get(position).getNumResidents();
+        crewSize += cabin.getNumResidents();
+        return cabin.getNumResidents();
     }
 
     public void loseCrew(Point position) {
@@ -273,7 +275,7 @@ public abstract class ShipBoard {
         switch (component) {
             case DoubleCannon doubleCannon -> firePower += doubleCannon.getFirePower();
             case DoubleEngine doubleEngine -> enginePower += doubleEngine.getEnginePower();
-            case Shield shield -> {}
+            case Shield _ -> {}
         }
     }
 
@@ -282,7 +284,7 @@ public abstract class ShipBoard {
         switch (component) {
             case DoubleCannon doubleCannon -> firePower -= doubleCannon.getFirePower();
             case DoubleEngine doubleEngine -> enginePower -= doubleEngine.getEnginePower();
-            case Shield shield -> {}
+            case Shield _ -> {}
         }
         component.setActive(false);
     }
@@ -302,11 +304,11 @@ public abstract class ShipBoard {
     }
 
     public int getFirePower() {
-        return hasPurple  && firePower > 0? firePower + 4 : firePower;
+        return firePower;
     }
 
     public int getEnginePower() {
-        return hasBrown && enginePower > 0? enginePower + 2 : enginePower;
+        return enginePower;
     }
 
     public int getNumBatteries() {
@@ -373,5 +375,16 @@ public abstract class ShipBoard {
 
     public GameColor getColor() {
         return color;
+    }
+
+    //Stat update methods
+    protected void add(Point point, Cabin cabin) {
+        cabins.put(point, cabin);
+        crewSize += cabin.getNumResidents();
+    }
+
+    protected void remove(Point point, Cabin cabin) {
+        cabins.remove(point);
+        crewSize -= cabin.getNumResidents();
     }
 }

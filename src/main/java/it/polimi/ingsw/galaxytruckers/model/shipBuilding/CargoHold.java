@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CargoHold extends Component{
+public non-sealed class CargoHold extends Component implements ComponentInterface{
     private final int size;
     private int numGoods;
     private final Map<GoodsType, Integer> goods;
@@ -34,7 +34,7 @@ public class CargoHold extends Component{
     public Boolean getIsSpecial() { return isSpecial; }
 
     public Map<GoodsType, Integer> getGoods() {
-        return goods;
+        return new HashMap<>(goods);
     }
 
     public void addGoods(GoodsType goodsType, int amount) throws IllegalArgumentException {

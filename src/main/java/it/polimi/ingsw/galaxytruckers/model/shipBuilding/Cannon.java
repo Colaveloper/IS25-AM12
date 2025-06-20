@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import java.util.List;
 import java.util.Map;
 
-public class Cannon extends Component {
+public non-sealed class Cannon extends Component implements ComponentInterface{
 
     public Cannon(Map<Direction, Connector> connectors, int id) {
         super(connectors, id);

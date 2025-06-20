@@ -38,4 +38,11 @@ public final class Cabin extends Component {
         this.numResidents--;
     }
 
+    public void setCrewType(CrewType crewType) {
+        this.crewType = crewType;
+    }
+
+    public void setNumResidents(int numResidents) {
+        this.numResidents = numResidents;
+    }
 }

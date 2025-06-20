@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import java.util.List;
 import java.util.Map;
 
-public class DoubleCannon extends Cannon implements Activatable {
+public non-sealed class DoubleCannon extends Cannon implements Activatable {
     private boolean active;
 
     public DoubleCannon(Map<Direction, Connector> connectors, int id) {

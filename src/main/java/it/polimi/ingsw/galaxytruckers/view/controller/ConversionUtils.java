@@ -1,9 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.view.controller;
 
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.ComponentDTO;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ShipBuildingState;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.BuildingDataDTO;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,7 +32,7 @@ public class ConversionUtils {
                 .collect(supplier,R::add,R::addAll);
     }
 
-    public ShipBoard convert(String nickname) {
+    public ShipBoard convertName(String nickname) {
         return playerRegistry.getByNickname(nickname).getShipBoard();
     }
 
@@ -46,5 +46,27 @@ public class ConversionUtils {
         componentBank.setUncoveredComponents(data.uncoveredIds().stream()
                 .map(id -> ComponentRegistry.getInstance().getComponent(id))
                 .toList());
+    }
+
+    public Component convertComponent(ComponentDTO componentDTO) {
+        Component component = ComponentRegistry.getInstance().getComponent(componentDTO.id());
+        component.setOrientation(componentDTO.orientation());
+        switch (component) {
+            case Battery battery -> {
+                battery.setNumBatteries(componentDTO.payload().numBatteries());
+            }
+            case Cabin cabin -> {
+                cabin.setCrewType(componentDTO.payload().crewType());
+                cabin.setNumResidents(componentDTO.payload().numResidents());
+            }
+            case CargoHold cargoHold -> {
+                cargoHold.setGoods(componentDTO.payload().goods());
+            }
+            case Activatable activatable -> {
+                activatable.setActive(componentDTO.payload().active());
+            }
+            case Cannon _, Engine _, LifeSupport _, Component _ -> {}
+        }
+        return component;
     }
 }

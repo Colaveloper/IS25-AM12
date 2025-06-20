@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.util.*;
 
-public class Component {
+public non-sealed class Component implements ComponentInterface {
     private final Map<Direction, Connector> connectors;
     private Direction orientation;
     private final int id;

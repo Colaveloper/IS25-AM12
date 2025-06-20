@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.util.Map;
 
-public class Battery extends Component{
+public non-sealed class Battery extends Component implements ComponentInterface{
     int numBatteries;
 
     public Battery(Map<Direction, Connector> connectors, int id, int numBatteries) {

@@ -7,7 +7,7 @@ import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
 
-public class DoubleEngine extends Engine implements Activatable{
+public non-sealed class DoubleEngine extends Engine implements Activatable{
     private boolean active;
 
     public DoubleEngine(Map<Direction, Connector> connectors, int id) {

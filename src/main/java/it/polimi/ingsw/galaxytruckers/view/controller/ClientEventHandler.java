@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.controller;
 
 
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.*;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.states.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventHandler;
@@ -9,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import it.polimi.ingsw.galaxytruckers.view.model.*;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
+import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 
@@ -208,8 +208,29 @@ public class ClientEventHandler implements EventHandler<Event> {
                     //Set Ships
                     Map<String, ShipBoardDTO> ships = gameSnapshot.ships();
                     for (String nickname : ships.keySet()) {
-                        ShipBoard shipBoard = conversionUtils.convert(nickname);
-                        //TODO: setup ship
+                        ShipBoardDTO ship = ships.get(nickname);
+                        ShipBoard shipBoard = conversionUtils.convertName(nickname);
+                        //Set ComponentMap
+                        Map<Point, Component> componentMap = new HashMap<>();
+                        Map<Point, ComponentDTO> componentDTOMap = ship.componentMap();
+                        for (Point point : componentDTOMap.keySet()) {
+                            componentMap.put(point,conversionUtils.convertComponent(componentDTOMap.get(point)));
+                        }
+                        shipBoard.setComponentMap(componentMap);
+                        //Set hand
+                        Component lastComponent = (ship.lastComponent() != -1)
+                                ? ComponentRegistry.getInstance().getComponent(ship.lastComponent())
+                                : null;
+                        Point lastPosition = ship.lastPosition();
+                        shipBoard.setHand(lastComponent,lastPosition);
+                        //Set stash
+                        List<Component> stashedComponents = ship.stashedComponents().stream()
+                                .map(id -> ComponentRegistry.getInstance().getComponent(id))
+                                .toList();
+                        shipBoard.setStashedComponents(stashedComponents);
+                        //Set Stats
+                        shipBoard.setCredits(ship.credits());
+                        shipBoard.setLosses(ship.losses());
                     }
 
                     //Set Game State

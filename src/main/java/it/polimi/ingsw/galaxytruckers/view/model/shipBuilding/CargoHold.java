@@ -48,4 +48,9 @@ public final class CargoHold extends Component {
         }
     }
 
+    public void setGoods(Map<GoodsType, Integer> goods) {
+        this.goods.clear();
+        this.goods.putAll(goods);
+    }
+
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 
 import java.awt.*;
 import java.util.List;
@@ -39,12 +39,12 @@ public class SecondShipBoard extends ShipBoard {
     ));
 
     private final List<Component> stashedComponents;
-    private int numStashed;
+
+    private final Set<CrewType> aliens = new HashSet<>();
 
     public SecondShipBoard(GameColor color) {
         super(color);
         this.stashedComponents = new ArrayList<>();
-        numStashed = 0;
     }
 
     @Override
@@ -58,11 +58,16 @@ public class SecondShipBoard extends ShipBoard {
         stashedComponents.clear();
     }
 
+    @Override
+    public void setStashedComponents(List<Component> stashedComponents) {
+        this.stashedComponents.clear();
+        this.stashedComponents.addAll(stashedComponents);
+    }
+
     //Stashing methods
 
     public void stashComponent() {
         stashedComponents.add(lastComponent);
-        numStashed++;
         resetLastComponent();
     }
 
@@ -74,5 +79,57 @@ public class SecondShipBoard extends ShipBoard {
     @Override
     public List<Component> getStashedComponents() {
         return stashedComponents;
+    }
+
+    //Aliens methods
+    
+    @Override
+    public int initializeCabin(Point position, CrewType crewType) {
+        int residents = super.initializeCabin(position, crewType);
+        addAliens(crewType);
+        return residents;
+    }
+
+    @Override
+    public int getFirePower() {
+        return (firePower > 0 && aliens.contains(CrewType.PURPLE))
+                ? firePower + 4
+                : firePower;
+    }
+
+    @Override
+    public int getEnginePower() {
+        return (enginePower > 0 && aliens.contains(CrewType.BROWN))
+                ? enginePower + 2
+                : enginePower;
+    }
+
+    @Override
+    protected void add(Point point, Cabin cabin) {
+        super.add(point, cabin);
+        addAliens(cabin.getCrewType());
+    }
+
+    @Override
+    protected void remove(Point point, Cabin cabin) {
+        super.remove(point, cabin);
+        removeAliens(cabin.getCrewType());
+    }
+
+    @Override
+    public void loseCrew(Point position) {
+        super.loseCrew(position);
+        removeAliens(cabins.get(position).getCrewType());
+    }
+
+    private void addAliens(CrewType crewType) {
+        switch (crewType) {
+            case BROWN, PURPLE -> aliens.add(crewType);
+            case HUMAN -> {}
+        }
+    }
+
+    private void removeAliens(CrewType crewType) {
+        aliens.remove(crewType);
     }
 }

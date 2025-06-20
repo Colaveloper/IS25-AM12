@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import java.util.List;
 import java.util.Map;
 
-public class Engine extends Component {
+public non-sealed class Engine extends Component implements ComponentInterface{
     public Engine(Map<Direction, Connector> connectors, int id) {
         super(connectors, id);
     }

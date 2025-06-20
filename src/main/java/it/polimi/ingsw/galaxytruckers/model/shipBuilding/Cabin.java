@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.util.Map;
 
-public class Cabin extends Component {
+public non-sealed class Cabin extends Component implements ComponentInterface{
     private boolean initialized;
     private CrewType crewType;
     private int numResidents;

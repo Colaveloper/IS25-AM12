@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Shield extends Component implements Activatable{
+public non-sealed class Shield extends Component implements Activatable{
     private boolean active;
 
     public Shield(Map<Direction, Connector> connectors, int id) {
