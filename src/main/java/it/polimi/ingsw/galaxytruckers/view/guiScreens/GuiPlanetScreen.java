@@ -8,10 +8,10 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.ChoosePlanetState;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -32,7 +32,7 @@ public class GuiPlanetScreen extends GuiAdventureScreen {
     }
 
     @Override
-    public Parent getNode() {
+    public Pane getNode() {
         layout = new HBox(20);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
@@ -51,8 +51,7 @@ public class GuiPlanetScreen extends GuiAdventureScreen {
 
         ShipBoard[] options = choosePlanetState.getOptions();
         for (int i = 0; i < options.length; i++) {
-            final int index = i;
-            Button btn = createPlanetButton(options[i], index);
+            Button btn = createPlanetButton(options[i], i);
             planets.getChildren().add(btn);
         }
         content.getChildren().add(planets);
@@ -115,7 +114,7 @@ public class GuiPlanetScreen extends GuiAdventureScreen {
     private void updateUI() {
         if (layout != null) {
             layout.getChildren().clear();
-            layout.getChildren().add(((HBox) getNode()).getChildren().get(0));
+            layout.getChildren().add(getNode().getChildren().getFirst());
         }
     }
 }

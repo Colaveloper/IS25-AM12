@@ -12,11 +12,11 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.awt.*;
@@ -55,7 +55,7 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
     }
 
     @Override
-    public Parent getNode() {
+    public Pane getNode() {
         updateLayout();
         return layout;
     }

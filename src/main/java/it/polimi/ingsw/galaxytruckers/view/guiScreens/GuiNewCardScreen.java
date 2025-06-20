@@ -7,23 +7,39 @@ import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 import javafx.application.Platform;
-import javafx.scene.Parent;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.util.Optional;
 
 public class GuiNewCardScreen extends GuiAdventureScreen {
-    public HBox layout;
+    VBox layout = new VBox(20);
+    Button actionButton = new Button("Draw Card");
 
     public GuiNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState drawCardState) {
         super(model, controller, drawCardState);
-        layout = new HBox();
     }
 
     @Override
-    public Parent getNode() {
-        updateLayout();
+    public Pane getNode() {
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().add(guiContextBox);
+
+        if(isMyTurn()) {
+            actionButton.setOnAction(e -> getGuiController().drawCard());
+            layout.getChildren().add(actionButton);
+            updateContextBox("Draw and start a new adventure!");
+        } else {
+            actionButton.setDisable(true);
+            updateContextBox("Wait for the leader to draw");
+        }
+
+        Optional<GuiAdventureCard> guiAdventureCard = guiAdventureCard();
+        guiAdventureCard.ifPresent(layout.getChildren()::add);
+
         return layout;
     }
 
@@ -48,25 +64,11 @@ public class GuiNewCardScreen extends GuiAdventureScreen {
 
     @Override
     public void notifyDrawCard(AdventureCard adventureCard) {
-        Platform.runLater(this::updateLayout);
-    }
-
-    private void updateLayout() {
-        layout.getChildren().clear();
-
-        Optional<GuiAdventureCard> guiAdventureCard = guiAdventureCard();
-        guiAdventureCard.ifPresent(layout.getChildren()::add);
-
-        if (isMyTurn()) {
-            Button actionButton;
-            if (guiAdventureCard.isPresent()) {
-                actionButton = new Button("Start Adventure");
-                actionButton.setOnAction(e -> getGuiController().goNext());
-            } else {
-                actionButton = new Button("Draw Card");
-                actionButton.setOnAction(e -> getGuiController().drawCard());
-            }
-            layout.getChildren().add(actionButton);
-        }
+        Platform.runLater(()->{
+            Optional<GuiAdventureCard> guiAdventureCard = guiAdventureCard();
+            guiAdventureCard.ifPresent(layout.getChildren()::add);
+            actionButton.setText("Start Adventure");
+            actionButton.setOnAction(e -> getGuiController().goNext());
+        });
     }
 }

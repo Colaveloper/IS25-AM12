@@ -1,17 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -32,7 +30,7 @@ public class GuiNicknameChoiceScreen extends GuiScreen {
     }
 
     @Override
-    public Parent getNode() {
+    public Pane getNode() {
         VBox layout = new VBox(20);
         layout.setMinHeight(Region.USE_PREF_SIZE);
         layout.setMaxHeight(Region.USE_PREF_SIZE);

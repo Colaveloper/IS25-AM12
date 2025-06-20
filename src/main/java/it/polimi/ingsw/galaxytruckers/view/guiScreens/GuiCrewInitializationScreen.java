@@ -6,9 +6,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ShipInitializationState;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.awt.*;
@@ -26,24 +26,20 @@ public class GuiCrewInitializationScreen extends GuiGameScreen {
     }
 
     @Override
-    public Parent getNode() {
-        VBox layout = new VBox();
-        layout.setAlignment(Pos.CENTER);
+    public Pane getNode() {
+        Pane superPane = super.getNode();
 
         HBox crewButtons = new HBox();
 
         for(CrewType crewType : crewTypeToPoints.keySet()) {
             Button crewButton = new Button(crewType.name()+" ALIEN");
-            crewButton.setOnAction(_ -> {
-                currentCrewType = crewType;
-            });
+            crewButton.setOnAction(_ -> currentCrewType = crewType);
             crewButtons.getChildren().add(crewButton);
         }
-
         Button skipButton = new Button("SKIP PLACING SELECTED ALIEN");
 
-        layout.getChildren().addAll(crewButtons, skipButton, getGuiAllShips());
-        return layout;
+        superPane.getChildren().addAll(crewButtons, skipButton);
+        return superPane;
     }
 
     @Override

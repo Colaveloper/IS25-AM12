@@ -1,17 +1,13 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -22,7 +18,7 @@ public class GuiLobbyScreen extends GuiScreen {
     }
 
     @Override
-    public Parent getNode() {
+    public Pane getNode() {
         FlowPane lobbyPane = new FlowPane();
         lobbyPane.setAlignment(Pos.CENTER);
         lobbyPane.setHgap(20);

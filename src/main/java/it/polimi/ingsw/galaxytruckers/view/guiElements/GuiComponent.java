@@ -18,7 +18,7 @@ public class GuiComponent extends StackPane {
 
     private final int id;
     private final HBox contentBox;
-    private ImageView componentView;
+    private final ImageView componentView;
 
     protected GuiComponent(Component component) {
         this.id = component.getId();

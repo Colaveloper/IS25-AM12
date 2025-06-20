@@ -6,12 +6,11 @@ import it.polimi.ingsw.galaxytruckers.view.model.Lobby;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -36,7 +35,7 @@ public class GuiJoinOrCreateScreen extends GuiScreen {
     }
 
     @Override
-    public Parent getNode() {
+    public Pane getNode() {
         Label title = new Label("Are you ready for a new adventure?");
         title.setFont(new Font("Arial", 24));
         title.setWrapText(true);

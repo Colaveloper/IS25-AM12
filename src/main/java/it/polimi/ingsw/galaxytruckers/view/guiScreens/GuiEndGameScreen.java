@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import javafx.scene.Parent;
+import javafx.scene.layout.Pane;
 
 public class GuiEndGameScreen extends GuiScreen {
     public GuiEndGameScreen(ClientModel model, ControllerToServer controller) {
@@ -10,7 +10,7 @@ public class GuiEndGameScreen extends GuiScreen {
     }
 
     @Override
-    public Parent getNode() {
+    public Pane getNode() {
         return null;
     }
 }

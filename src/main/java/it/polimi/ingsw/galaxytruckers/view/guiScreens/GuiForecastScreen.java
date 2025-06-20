@@ -2,15 +2,13 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiAdventureCard;
-import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiAdventureCardRegistry;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
@@ -23,7 +21,7 @@ public class GuiForecastScreen extends GuiScreen {
     }
 
     @Override
-    public Parent getNode() {
+    public Pane getNode() {
 
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);

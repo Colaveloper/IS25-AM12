@@ -1,50 +1,38 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.model.state.ActivateState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.AdventureState;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 
 import java.awt.*;
-import java.util.Set;
 
 public abstract class GuiActivationScreen extends GuiAdventureScreen {
     private int batteriesToSpend;
+    private final Button goNextButton = new Button("FINISH ACTIVATION") ;
 
     public GuiActivationScreen(ClientModel model, ControllerToServer controller, AdventureState gameState) {
         super(model, controller, gameState);
         batteriesToSpend = 0;
         if (isMyTurn()) {
             updateContextBox("Spend the batteries you want to activate components, then press OK");
+            goNextButton.setOnAction(_ -> getGuiController().goNext());
         } else {
             updateContextBox("Wait for your turn");
         }
     }
 
     @Override
-    public Parent getNode() {
-        VBox layout = new VBox(20);
-        layout.setAlignment(Pos.CENTER);
-
-        Button goNextButton = new Button("OK");
-        goNextButton.setOnAction(_ -> getGuiController().goNext());
-        goNextButton.setDisable(batteriesToSpend != 0);
-
-        layout.getChildren().addAll(
-                getGuiFlightBoard(),
-                getGuiAllShips(),
-                goNextButton
-        );
-
-        return layout;
+    public Pane getNode() {
+        Pane superGroup = super.getNode();
+        if (isMyTurn()) {
+            superGroup.getChildren().add(goNextButton);
+        }
+        return superGroup;
     }
 
     @Override
@@ -93,12 +81,14 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
     @Override
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
         batteriesToSpend ++;
+        goNextButton.setDisable(batteriesToSpend != 0);
 //        shipToCliShip.get(shipBoard).highlightPoints(Set.of(point), Highlights.BLUE);
     }
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
         batteriesToSpend --;
+        goNextButton.setDisable(batteriesToSpend != 0);
 //        shipToCliShip.get(shipBoard).highlightPoints(Set.of(point), Highlights.GREEN);
     }
 }

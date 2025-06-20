@@ -26,7 +26,7 @@ public abstract class GuiGameScreen extends GuiScreen {
         "-fx-border-radius: 5px;" +
         "-fx-background-radius: 5px;" +
         "-fx-padding: 10px;";
-    protected final HBox guiContextBox;
+    protected final PurpleContainer guiContextBox;
 
     public GuiGameScreen(ClientModel model, ControllerToServer controller, GameState state) {
         super(model, controller, state);
@@ -38,7 +38,18 @@ public abstract class GuiGameScreen extends GuiScreen {
             }
         }
         this.guiFlightBoard = new GuiFlightBoard(model.getGame().getFlightBoard(), getGuiController());
-        this.guiContextBox = new HBox();
+        this.guiContextBox = new PurpleContainer();
+    }
+
+    public Pane getNode() {
+        VBox layout = new VBox(20);
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(
+                guiContextBox,
+                getGuiFlightBoard(),
+                getGuiAllShips()
+        );
+        return layout;
     }
 
     protected VBox getFullShip(ShipBoard shipBoard) {

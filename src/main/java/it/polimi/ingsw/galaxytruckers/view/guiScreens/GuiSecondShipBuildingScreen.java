@@ -11,9 +11,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 
@@ -73,7 +73,7 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
     }
 
     @Override
-    public Parent getNode() {
+    public Pane getNode() {
         VBox layout = new VBox(10);
         layout.setAlignment(Pos.TOP_CENTER);
         layout.setPadding(new Insets(5, 0, 0, 0));

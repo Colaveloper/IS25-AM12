@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ShipCorrectionState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.awt.*;
@@ -22,14 +22,6 @@ public class GuiCorrectionScreen extends GuiGameScreen {
     public GuiCorrectionScreen(ClientModel model, ControllerToServer controller, ShipCorrectionState state) {
         super(model, controller, state);
         shipPieces = new ArrayList<>(state.getShipPieces().getOrDefault(model.getMyShip(), Collections.emptyList()));
-    }
-
-    @Override
-    public Parent getNode() {
-        VBox layout = new VBox();
-        layout.setAlignment(Pos.CENTER);
-        layout.getChildren().add(getGuiAllShips());
-        return layout;
     }
 
     @Override
