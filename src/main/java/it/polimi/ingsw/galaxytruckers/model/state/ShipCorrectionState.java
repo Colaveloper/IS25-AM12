@@ -110,7 +110,11 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
 
     public Map<ShipBoard, List<Set<Point>>> getShipPiecesMap() {
         synchronized (shipPiecesMap) {
-            return new HashMap<>(shipPiecesMap);
+            Map<ShipBoard, List<Set<Point>>> mapCopy = new HashMap<>();
+            for (ShipBoard ship : shipPiecesMap.keySet()) {
+                mapCopy.put(ship, new ArrayList<>(shipPiecesMap.get(ship)));
+            }
+            return mapCopy;
         }
     }
 

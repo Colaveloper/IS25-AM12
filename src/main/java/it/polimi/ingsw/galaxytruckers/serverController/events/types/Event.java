@@ -8,6 +8,9 @@ import java.util.Optional;
  * Includes methods to inspect what changed
  */
 public sealed interface Event extends Serializable permits LobbyEvent, ControllerEvent {
+    default boolean shouldResume() {
+        return false;
+    }
     default Optional<String> getReceiverName() {
         return Optional.empty();
     }

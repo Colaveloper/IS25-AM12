@@ -142,7 +142,6 @@ public abstract class ShipBuildingState extends GameState{
         }
     }
 
-    @VisibleForTesting
     public ComponentBank getComponentBank() {
         return componentBank;
     }

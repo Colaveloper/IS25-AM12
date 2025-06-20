@@ -3,13 +3,10 @@ package it.polimi.ingsw.galaxytruckers.view.model;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.view.ModelObserver;
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
-import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +15,6 @@ public class Game {
     private List<ModelObserver> observers;
 
     private final Level level;
-    private final int playersNumber;
 
     private final GameFactory gameFactory;
     private final Set<ShipBoard> shipBoards = new HashSet<>();
@@ -26,9 +22,8 @@ public class Game {
     private final FlightBoard flightBoard;
     private GameState currentState = null;
 
-    public Game(Level level, int playersNumber) {
+    public Game(Level level) {
         this.level = level;
-        this.playersNumber = playersNumber;
         this.gameFactory = GameFactory.getFactory(level);
         this.flightBoard = this.gameFactory.createFlightBoard();
     }
@@ -99,10 +94,6 @@ public class Game {
      */
     public Level getLevel() {
         return level;
-    }
-
-    public int getPlayersNumber() {
-        return playersNumber;
     }
 
     public GameFactory getGameFactory() {

@@ -10,28 +10,29 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Hourglass {
-    private final static long DURATION = 60000; // 60 seconds
+    private final static int DURATION = 60;
 
-    private final AtomicInteger flipsLeft = new AtomicInteger();
-    private final AtomicBoolean isRunning = new AtomicBoolean(false);
+    private int flipsLeft;
+    private boolean isRunning = false;
+    private int missingTime = 0;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture;
-    private long duration = DURATION;
+    private int duration = DURATION;
 
     public Hourglass(int rounds) {
-        this.flipsLeft.set(rounds);
+        this.flipsLeft = rounds;
     }
 
     @VisibleForTesting
-    public void setDuration(long duration) {
+    public synchronized void setDuration(int duration) {
         this.duration = duration;
     }
 
-    @VisibleForTesting
-    public void stop() {
+    public synchronized void stop() {
         if (scheduledFuture != null) {
             scheduledFuture.cancel(true);
-            isRunning.set(false);
+            missingTime = 0;
+            isRunning = false;
         }
     }
 
@@ -39,8 +40,8 @@ public class Hourglass {
      * @return {@code true} if the next hourglass flip is the last one,
      * {@code false} otherwise
      */
-    public boolean isLastFlip() {
-        return this.flipsLeft.get() == 1;
+    public synchronized boolean isLastFlip() {
+        return this.flipsLeft == 1;
     }
 
     /**
@@ -49,18 +50,39 @@ public class Hourglass {
      * @param endTask the task to be executed when the hourglass runs out
      * @throws IllegalStateException if the hourglass is already running
      */
-    public void flip(Runnable endTask) {
-        if (isRunning.compareAndSet(false, true)) {
-            if (flipsLeft.get() <= 0) {
+    public synchronized void flip(Runnable endTask) {
+        if (!isRunning) {
+            if (flipsLeft <= 0) {
                 throw new IllegalStateException("The hourglass is already on the last spot");
             }
+            isRunning = true;
+            missingTime = duration;
             scheduledFuture = scheduler.schedule(() -> {
-                endTask.run();
-                isRunning.set(false);
-            }, duration, TimeUnit.MILLISECONDS);
+                boolean end = false;
+                synchronized (this) {
+                    missingTime--;
+                    if (missingTime <= 0) {
+                        end = true;
+                        isRunning = false;
+                    }
+                }
+                if (end) endTask.run();
+            }, 1, TimeUnit.SECONDS);
         } else {
             throw new IllegalStateException("The hourglass is not yet finished");
         }
-        flipsLeft.getAndDecrement();
+        flipsLeft--;
+    }
+
+    public synchronized int getFlipsLeft() {
+        return flipsLeft;
+    }
+
+    public synchronized boolean getIsRunning() {
+        return isRunning;
+    }
+
+    public synchronized int getMissingTime() {
+        return missingTime;
     }
 }

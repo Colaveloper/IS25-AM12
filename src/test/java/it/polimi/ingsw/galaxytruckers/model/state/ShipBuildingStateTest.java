@@ -274,11 +274,11 @@ class ShipBuildingStateTest {
             @Test
             void lastFlipHourglassEndsBuilding() throws InterruptedException{
                 shipBuildingState.getHourglass().stop();
-                shipBuildingState.getHourglass().setDuration(10);
+                shipBuildingState.getHourglass().setDuration(1);
 
                 for (int i = 1; i < 3; i++) {
                     shipBuildingState.flipHourglass(shipBoards.getFirst());
-                    Thread.sleep(100);
+                    Thread.sleep(1050);
                 }
                 assertTransition();
             }

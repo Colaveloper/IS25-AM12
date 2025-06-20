@@ -6,7 +6,7 @@ import java.time.temporal.ChronoUnit;
 
 public class Session {
     private static final Duration expirationDelay = Duration.of(15, ChronoUnit.SECONDS);
-    private ClientHandler clientHandler;
+    private final ClientHandler clientHandler;
     private Instant lastPing;
 
     public Session(ClientHandler clientHandler, Instant lastPing) {
@@ -16,14 +16,6 @@ public class Session {
 
     public ClientHandler getClientHandler() {
         return clientHandler;
-    }
-
-    public void setClientHandler(ClientHandler clientHandler) {
-        this.clientHandler = clientHandler;
-    }
-
-    public Instant getLastPing() {
-        return lastPing;
     }
 
     public void setLastPing(Instant lastPing) {

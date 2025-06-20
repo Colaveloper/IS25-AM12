@@ -51,7 +51,11 @@ public class SessionManager {
 
     public ClientHandler getClient(Player player) {
         synchronized (activeSessions) {
-            return activeSessions.get(player).getClientHandler();
+            if (activeSessions.containsKey(player)) {
+                return activeSessions.get(player).getClientHandler();
+            } else {
+                return null;
+            }
         }
     }
 
@@ -69,17 +73,14 @@ public class SessionManager {
     }
 
     private void cleanup() {
-        List<Player> expiredPlayers = new ArrayList<>();
         synchronized (activeSessions) {
             Instant now = Instant.now();
-            for (Player player : activeSessions.keySet()) {
+            Set<Player> activePlayers = new HashSet<>(activeSessions.keySet());
+            for (Player player : activePlayers) {
                 if (activeSessions.get(player).isExpired(now)) {
-                    expiredPlayers.add(player);
+                    serverController.handlePlayerDisconnection(player);
                 }
             }
-        }
-        for (Player player : expiredPlayers) {
-            serverController.handlePlayerDisconnection(player);
         }
     }
 }

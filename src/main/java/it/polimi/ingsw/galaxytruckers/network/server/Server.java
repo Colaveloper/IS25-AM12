@@ -36,7 +36,7 @@ public class Server {
             System.err.println("Failed to connect socket server: ");
             e.printStackTrace(System.err);
         }
-        SessionManager.getInstance().shutDown();
+        //SessionManager.getInstance().shutDown();
     }
 
     public static void main(String[] args) {

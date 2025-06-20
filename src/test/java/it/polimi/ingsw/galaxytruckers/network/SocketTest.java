@@ -50,7 +50,7 @@ public class SocketTest {
     void registerNickname() {
         socketClient.registerNickname("x");
         System.out.println("Server controller: " + serverController);
-        verify(serverController).registerPlayer(Player.getPlayer("x"));
+        verify(serverController).requestActiveLobbies(Player.getPlayer("x"));
         System.out.println("VERIFIED");
     }
 
@@ -81,7 +81,7 @@ class ServerControllerStub implements ServerControllerInterface {
 
 
     @Override
-    public void registerPlayer(Player player) {
+    public void requestActiveLobbies(Player player) {
 
     }
 
@@ -138,6 +138,11 @@ class ServerControllerStub implements ServerControllerInterface {
      */
     @Override
     public void leaveLobby(Player player) {
+
+    }
+
+    @Override
+    public void notifyPlayerReconnection(Player player) {
 
     }
 }

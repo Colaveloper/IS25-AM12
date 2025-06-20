@@ -1,21 +1,23 @@
 package it.polimi.ingsw.galaxytruckers.view.model;
 
-import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.*;
 
-public class FlightBoard implements Invalidator {
+public class FlightBoard {
     private final Map<ShipBoard, Integer> shipToPlace;
     private final int loopLength;
     private final List<Integer> startingPositions;
-
-    private final List<Listener> listeners = new ArrayList<>();
 
     public FlightBoard(List<Integer> startingPositions, int loopLength) {
         this.shipToPlace = new HashMap<>();
         this.startingPositions = startingPositions;
         this.loopLength = loopLength;
+    }
+
+    public void setShipToPlace(Map<ShipBoard, Integer> shipToPlace) {
+        this.shipToPlace.clear();
+        this.shipToPlace.putAll(shipToPlace);
     }
 
     /**
@@ -33,7 +35,6 @@ public class FlightBoard implements Invalidator {
      */
     public void setShipPosition(ShipBoard shipBoard, int position) {
         shipToPlace.put(shipBoard, position);
-        notifyObservers();
     }
 
     /**
@@ -49,7 +50,6 @@ public class FlightBoard implements Invalidator {
      */
     public void removeShip(ShipBoard shipBoard) {
         shipToPlace.remove(shipBoard);
-        notifyObservers();
     }
 
     /**
@@ -58,22 +58,6 @@ public class FlightBoard implements Invalidator {
      * */
     public List<Integer> getStartingPositions() {
         return startingPositions;
-    }
-
-    public void notifyObservers() {
-        for (Listener o : listeners) {
-            o.onNotified();
-        }
-    }
-
-    @Override
-    public void addObserver(Listener o) {
-        listeners.add(o);
-    }
-
-    @Override
-    public void removeObserver(Listener o) {
-        listeners.remove(o);
     }
 }
 

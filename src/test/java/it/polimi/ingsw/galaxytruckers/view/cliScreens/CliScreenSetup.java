@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
-import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
@@ -8,11 +7,9 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 
 import java.awt.*;
 import java.util.Map;
-import java.util.Set;
 
 public class CliScreenSetup {
     protected static ClientController controller;
@@ -23,7 +20,7 @@ public class CliScreenSetup {
         controller = new ClientController();
         model = new ClientModel();
 
-        model.createGame(Level.SECOND, 1);
+        model.createGame(Level.SECOND);
         controller.setModel(model);
         controller.setMyNickname("Player 1");
         shipBoard = new SecondShipBoard(GameColor.BLUE);

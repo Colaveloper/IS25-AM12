@@ -8,5 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public record ShipInitializationDTO(Map<String, Map<CrewType, Set<Point>>> crewTypeToCabins) implements StateDTO{
+public record ShipInitializationDTO(
+        Map<String, Map<CrewType, Set<Point>>> crewTypeToCabins
+) implements StateDTO, ComplexStateDTO {
 }

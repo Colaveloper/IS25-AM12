@@ -7,7 +7,6 @@ import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 class GuiShipBuildingScreenTest {
 
@@ -21,7 +20,7 @@ class GuiShipBuildingScreenTest {
     @BeforeEach
     void setUp() {
 
-        model.createGame(Level.SECOND, 4);
+        model.createGame(Level.SECOND);
         model.addPlayer(player1, GameColor.BLUE);
 //        model.addPlayer(player2, GameColor.RED);
 //        model.addPlayer(player3, GameColor.GREEN);

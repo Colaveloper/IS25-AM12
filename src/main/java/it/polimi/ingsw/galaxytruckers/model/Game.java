@@ -8,6 +8,10 @@ import it.polimi.ingsw.galaxytruckers.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.DtoConverter;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.GameSnapshot;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.ShipBoardDTO;
+import it.polimi.ingsw.galaxytruckers.serverController.utils.NetworkUtils;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
@@ -20,7 +24,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
-public class Game {
+public class Game implements GameInterface {
     private final Level level;
     private final GameFactory gameFactory;
 
@@ -56,6 +60,21 @@ public class Game {
         }
     }
 
+    @Override
+    public GameSnapshot getSnapshot() {
+        return withStateWriteLock(() -> {
+            Map<String, ShipBoardDTO> ships = new HashMap<>();
+            for (ShipBoard shipBoard : shipBoards) {
+                ships.put(NetworkUtils.convert(shipBoard),DtoConverter.getShipBoard(shipBoard));
+            }
+            return new GameSnapshot(
+                    DtoConverter.getFlightBoard(flightBoard),
+                    DtoConverter.getComplexState(getCurrentState()),
+                    ships
+            );
+        });
+    }
+
     //region Setup methods
     /**
      * Adds shipboard of the given color to the game
@@ -63,6 +82,7 @@ public class Game {
      * @param color the color of the added shipboard
      * @return the added shipboard
      */
+    @Override
     public ShipBoard addShipBoard(GameColor color) {
         synchronized (shipBoards) {
             ShipBoard shipBoard = gameFactory.createShipBoard(color);
@@ -75,6 +95,7 @@ public class Game {
      * Sets a {@link GameEventListener} for the game
      * @param eventListener the new {@link GameEventListener}
      */
+    @Override
     public void setEventListener(GameEventListener eventListener) {
         this.eventListener = eventListener;
         shipBoards.forEach(s -> s.setGameEventListener(eventListener));
@@ -85,6 +106,7 @@ public class Game {
     /**
      * Starts the game by setting the current state to ShipBuilding
      */
+    @Override
     public void start() {
         setCurrentState(gameFactory.createShipBuildingState());
     }
@@ -166,6 +188,10 @@ public class Game {
         return withStateReadLock(() -> gameOver);
     }
 
+    public GameEventListener getEventListener() {
+        return eventListener;
+    }
+
     //endregion
 
     //region GameEnd methods
@@ -229,110 +255,133 @@ public class Game {
     //endregion
 
     //region Player requests
-    public GameEventListener getEventListener() {
-        return eventListener;
-    }
 
+    @Override
     public void requestRandComponent(ShipBoard shipBoard) {
         runRequest(() -> currentState.requestRandComponent(shipBoard));
     }
 
+    @Override
     public void requestComponent(ShipBoard shipBoard, int componentID) {
         runRequest(() -> currentState.requestComponent(shipBoard, componentID));
     }
 
+    @Override
     public void rejectComponent(ShipBoard shipBoard) {
         runRequest(() -> currentState.rejectComponent(shipBoard));
     }
 
+    @Override
     public void stashComponent(ShipBoard shipBoard) {
         runRequest(() -> currentState.stashComponent(shipBoard));
     }
 
+    @Override
     public void grabPlacedComponent(ShipBoard shipBoard) {
         runRequest(() -> currentState.grabPlacedComponent(shipBoard));
     }
 
+    @Override
     public void grabStashedComponent(ShipBoard shipBoard, int index) {
         runRequest(() -> currentState.grabStashedComponent(shipBoard, index));
     }
 
+    @Override
     public void placeComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         runRequest(() -> currentState.placeComponent(shipBoard, point, orientation));
     }
 
+    @Override
     public void flipHourglass(ShipBoard shipBoard) {
         runRequest(() -> currentState.flipHourglass(shipBoard));
     }
 
+    @Override
     public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
         runRequest(() -> currentState.placeShipOnFlightBoard(shipBoard, startingPosition));
     }
 
+    @Override
     public void placeShipOnFlightBoard(ShipBoard shipBoard) {
         runRequest(() -> currentState.placeShipOnFlightBoard(shipBoard));
     }
 
+    @Override
     public void acquireForecast(ShipBoard shipBoard, int deckIndex) {
         runRequest(() -> currentState.acquireForecast(shipBoard, deckIndex));
     }
 
+    @Override
     public void releaseForecast(ShipBoard shipBoard) {
         runRequest(() -> currentState.releaseForecast(shipBoard));
     }
 
+    @Override
     public void removeComponent(ShipBoard shipBoard, Point point) {
         runRequest(() -> currentState.removeComponent(shipBoard, point));
     }
 
+    @Override
     public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
         runRequest(() -> currentState.chooseShipPiece(shipBoard, pieceIndex));
     }
 
+    @Override
     public void initializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
         runRequest(() -> currentState.initializeCabin(shipBoard, point, crewType));
     }
 
+    @Override
     public void activateComponent(ShipBoard shipBoard, Point point) {
         runRequest(() -> currentState.activateComponent(shipBoard, point));
     }
 
+    @Override
     public void loseCrew(ShipBoard shipBoard, Point point) {
         runRequest(() -> currentState.loseCrew(shipBoard, point));
     }
 
+    @Override
     public void grabReward(ShipBoard shipBoard) {
         runRequest(() -> currentState.grabReward(shipBoard));
     }
 
+    @Override
     public void placeGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
         runRequest(() -> currentState.addGood(shipBoard, point, goodsType));
     }
 
+    @Override
     public void removeGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
         runRequest(() -> currentState.removeGood(shipBoard, point, goodsType));
     }
 
+    @Override
     public void useBattery(ShipBoard shipBoard, Point point) {
         runRequest(() -> currentState.spendBatteries(shipBoard, point));
     }
 
+    @Override
     public void choosePlanet(ShipBoard shipBoard, int choice) {
         runRequest(() -> currentState.choosePlanet(shipBoard, choice));
     }
 
+    @Override
     public void giveUp(ShipBoard shipBoard) {
         runRequest(() -> currentState.giveUp(shipBoard));
     }
 
+    @Override
     public void drawCard(ShipBoard shipBoard) {
         runRequest(() -> currentState.drawCard(shipBoard));
     }
 
+    @Override
     public void loseGood(ShipBoard shipBoard, Point point) {
         runRequest(() -> loseGood(shipBoard, point));
     }
 
+    @Override
     public void goNext(ShipBoard shipBoard) {
         runRequest(() -> currentState.goNext(shipBoard));
     }

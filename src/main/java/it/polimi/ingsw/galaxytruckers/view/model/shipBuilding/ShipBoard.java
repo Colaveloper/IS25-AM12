@@ -66,6 +66,16 @@ public abstract class ShipBoard {
 
     public abstract Set<Point> getShipArea();
 
+    //Setup methods
+    public void setComponentMap(Map<Point, Component> componentMap) {
+        this.componentMap.clear();
+        for (Point point : componentMap.keySet()) {
+            Component component = componentMap.get(point);
+            this.componentMap.put(point, component);
+            updateStats(point, component);
+        }
+    }
+
     //CliComponentBank interaction methods
 
     protected void resetLastComponent() {
@@ -115,41 +125,45 @@ public abstract class ShipBoard {
 
     public void weldLastComponent() {
         if (lastComponent != null) {
-            switch (lastComponent) {
-                case Battery c -> {
-                    batteries.put(lastPosition, c);
-                    numBatteries += c.getNumBatteries();
-                }
-                case Cabin c -> {
-                    cabins.put(lastPosition, c);
-                    crewSize += c.getNumResidents();
-                }
-                case DoubleCannon c -> {
-                    cannons.put(lastPosition,c);
-                    activatables.put(lastPosition,c);
-                }
-                case Cannon c -> {
-                    cannons.put(lastPosition, c);
-                    firePower += c.getFirePower();
-                }
-                case DoubleEngine c -> {
-                    engines.put(lastPosition,c);
-                    activatables.put(lastPosition,c);
-                }
-                case Engine c -> {
-                    engines.put(lastPosition,c);
-                    enginePower += c.getEnginePower();
-                }
-                case CargoHold c -> {
-                    cargoHolds.put(lastPosition,c);
-                }
-                case Shield c -> {
-                    shields.put(lastPosition,c);
-                }
-                case Component _ -> {}
-            }
+            updateStats(lastPosition, lastComponent);
             lastComponent = null;
             lastPosition = null;
+        }
+    }
+
+    private void updateStats(Point position, Component component) {
+        switch (component) {
+            case Battery c -> {
+                batteries.put(position, c);
+                numBatteries += c.getNumBatteries();
+            }
+            case Cabin c -> {
+                cabins.put(position, c);
+                crewSize += c.getNumResidents();
+            }
+            case DoubleCannon c -> {
+                cannons.put(position,c);
+                activatables.put(position,c);
+            }
+            case Cannon c -> {
+                cannons.put(position, c);
+                firePower += c.getFirePower();
+            }
+            case DoubleEngine c -> {
+                engines.put(position,c);
+                activatables.put(position,c);
+            }
+            case Engine c -> {
+                engines.put(position,c);
+                enginePower += c.getEnginePower();
+            }
+            case CargoHold c -> {
+                cargoHolds.put(position,c);
+            }
+            case Shield c -> {
+                shields.put(position,c);
+            }
+            case Component _ -> {}
         }
     }
 

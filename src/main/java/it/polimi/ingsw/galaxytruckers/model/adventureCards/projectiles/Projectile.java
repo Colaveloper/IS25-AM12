@@ -30,7 +30,6 @@ public abstract class Projectile {
     }
 
     /**
-     *
      * @param shipBoard the ship that is threatened by the projectile
      * @return true if a component is removed (in that case a check on the connectivity should take place), false otherwise
      */

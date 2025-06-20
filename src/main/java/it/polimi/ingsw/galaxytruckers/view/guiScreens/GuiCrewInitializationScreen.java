@@ -15,10 +15,11 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class GuiCrewInitializationScreen extends GuiGameScreen {
     private CrewType currentCrewType;
-    private final Map<CrewType, List<Point>> crewTypeToPoints;
+    private final Map<CrewType, Set<Point>> crewTypeToPoints;
 
     public GuiCrewInitializationScreen(ClientModel model, ControllerToServer controller, ShipInitializationState state) {
         super(model, controller, state);

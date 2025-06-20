@@ -27,10 +27,10 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
     private final ObjectInputStream inputStream;
     private final ObjectOutputStream outputStream;
 
-    private Thread updateThread = null;
-    private boolean isUpdating = false;
-    private Thread requestThread = null;
-    private boolean isRunning = false;
+    private final Thread updateThread;
+    private volatile boolean isUpdating = false;
+    private final Thread requestThread;
+    private volatile boolean isRunning = false;
 
     private final BlockingDeque<Event> eventQueue = new LinkedBlockingDeque<>();
 
@@ -39,16 +39,26 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
         this.outputStream = outputStream;
         this.player = player;
         this.controller = controller;
+        this.requestThread = new Thread(this::requestTask, "RequestThread");
+        this.updateThread = new Thread(this::updateTask, "UpdateThread");
     }
 
     public void start() {
         isRunning = true;
-        requestThread = new Thread(this::requestTask, "RequestThread");
         requestThread.start();
         isUpdating = true;
-        updateThread = new Thread(this::updateTask, "UpdateThread");
         updateThread.start();
         System.out.println("Started Socket Client Handler");
+    }
+
+    @Override
+    public void pause() {
+        //TODO: define pause mechanism
+    }
+
+    @Override
+    public void resume() {
+
     }
 
     @Override
@@ -62,12 +72,10 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     public void stopUpdateThread() {
         isUpdating = false;
-        updateThread = null;
     }
 
     public void stopRequestThread() {
         isRunning = false;
-        requestThread = null;
     }
 
     private void updateTask() {

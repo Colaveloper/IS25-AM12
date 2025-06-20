@@ -39,6 +39,14 @@ public class ComponentBank {
         coveredComponents.add(component);
     }
 
+    public int getNumCovered() {
+        return coveredComponents.size();
+    }
+
+    public List<Integer> getUncoveredIds() {
+        return new ArrayList<>(uncoveredComponents.keySet());
+    }
+
     @VisibleForTesting
     public List<Component> getCoveredComponents() {
         return new ArrayList<>(coveredComponents);

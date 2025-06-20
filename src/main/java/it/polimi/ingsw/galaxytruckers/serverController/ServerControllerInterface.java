@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface ServerControllerInterface {
 
-    void registerPlayer(Player player);
+    void requestActiveLobbies(Player player);
 
     /**
      * Creates a new lobby for a game of the chosen level and with
@@ -44,6 +44,8 @@ public interface ServerControllerInterface {
      * @param player the player who has disconnected
      */
     void handlePlayerDisconnection(Player player);
+
+    void notifyPlayerReconnection(Player player);
 
     /**
      * Notifies other players in the lobby of the player's exit and interrupts

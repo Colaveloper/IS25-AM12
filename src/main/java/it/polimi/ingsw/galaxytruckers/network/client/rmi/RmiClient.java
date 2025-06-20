@@ -20,6 +20,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class RmiClient extends UnicastRemoteObject implements RemoteClient, VirtualServer {
@@ -27,6 +28,10 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     private RemoteController remoteController;
     private ClientControllerInterface clientController;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private ScheduledFuture<?> scheduleTask;
+
+    boolean connected = false;
+    private final Object connectionLock = new Object();
 
     public RmiClient() throws RemoteException {
         super();
@@ -46,12 +51,22 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     private void handleNetworkError(RemoteException e) {
-        //TODO: define a way to handle network errors
-        throw new RuntimeException("Failed to handle network exception", e);
+        e.printStackTrace(System.err);
+        synchronized (connectionLock) {
+            if (connected) {
+                connected = false;
+                scheduler.shutdownNow();
+                scheduleTask.cancel(true);
+                //TODO: finish implementing reconnection on network failure
+            }
+        }
+        throw new IllegalStateException("Client is not connected");
     }
 
     private void ping() {
-        runRemoteMethod(() -> remoteController.ping());
+        synchronized (connectionLock) {
+            runRemoteMethod(() -> remoteController.ping());
+        }
     }
 
     // VirtualServer
@@ -60,7 +75,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     public void registerNickname(String myNickname) {
         runRemoteMethod(() -> {
             this.remoteController = server.registerNickname(this, myNickname);
-            this.scheduler.scheduleAtFixedRate(this::ping,50,50, TimeUnit.SECONDS); //todo set to 5 later
+            this.scheduleTask = this.scheduler.scheduleAtFixedRate(this::ping,5,5, TimeUnit.SECONDS);
         });
     }
 

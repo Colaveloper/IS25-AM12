@@ -34,9 +34,6 @@ public class Player {
 
     public static Player getPlayer(String nickname) {
         synchronized (nicknameToPlayer) {
-            if (!nicknameToPlayer.containsKey(nickname)) {
-                throw new IllegalArgumentException("Nickname does not exist");
-            }
             return nicknameToPlayer.get(nickname);
         }
     }

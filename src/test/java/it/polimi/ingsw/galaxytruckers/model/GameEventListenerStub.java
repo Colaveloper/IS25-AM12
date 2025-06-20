@@ -16,6 +16,11 @@ import java.util.Map;
 import java.util.Set;
 
 public class GameEventListenerStub extends GameEventListener{
+
+    public GameEventListenerStub() {
+        super(null);
+    }
+
     @Override
     public void notifyLoseCrewEvent(ShipBoard shipBoard, Point point) {
     }
@@ -122,10 +127,6 @@ public class GameEventListenerStub extends GameEventListener{
 
     @Override
     public void notifyActivateComponentEvent(ShipBoard shipBoard, Point point, boolean active) {
-    }
-
-    @Override
-    public void setControllerListener(EventListener<LobbyEvent> controllerListener) {
     }
 
     @Override

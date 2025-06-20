@@ -106,4 +106,14 @@ class VirtualClientStub implements ClientHandler {
     @Override
     public void stop() {
     }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
 }

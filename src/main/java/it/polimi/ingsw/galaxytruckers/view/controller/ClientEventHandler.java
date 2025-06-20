@@ -2,15 +2,12 @@ package it.polimi.ingsw.galaxytruckers.view.controller;
 
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.serverController.dto.LobbyDTO;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.*;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.states.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventHandler;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
-import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.Lobby;
-import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
-import it.polimi.ingsw.galaxytruckers.view.model.Player;
+import it.polimi.ingsw.galaxytruckers.view.model.*;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
@@ -23,10 +20,12 @@ import java.util.stream.Collectors;
 public class ClientEventHandler implements EventHandler<Event> {
     private final ClientModel clientModel;
     private final PlayerRegistry playerRegistry;
+    private final ConversionUtils conversionUtils;
 
     public ClientEventHandler(ClientModel clientModel, PlayerRegistry playerRegistry) {
         this.clientModel = clientModel;
         this.playerRegistry = playerRegistry;
+        this.conversionUtils = new ConversionUtils(playerRegistry);
     }
 
     /**
@@ -89,22 +88,13 @@ public class ClientEventHandler implements EventHandler<Event> {
             );
             case JoinLobbyEvent joinLobbyEvent -> {
                 Player player = playerRegistry.addPlayer(joinLobbyEvent.playerName());
-                //TODO: also send the player color
-                // Only add to model if the player is not already present
                 if(!clientModel.getPlayers().contains(player)) {
                     clientModel.addPlayer(player, joinLobbyEvent.color());
                 }
             }
             case LobbyDetailsEvent lobbyDetailsEvent -> {
-                //TODO: update client state
-                clientModel.createGame(lobbyDetailsEvent.level(), lobbyDetailsEvent.playersN());
-                for (String name : lobbyDetailsEvent.playerColors().keySet()) {
-                    Player player = playerRegistry.addPlayer(name);
-                    if(!clientModel.getPlayers().contains(player)) {
-                        clientModel.addPlayer(player, lobbyDetailsEvent.playerColors().get(name));
-                    }
-                }
-                clientModel.setMetaState(MetaState.INLOBBY);
+                LobbyDetailsDTO details = lobbyDetailsEvent.details();
+                setupLobby(details,true);
             }
             case NewCardEvent newCardEvent -> clientModel.notifyDrawCard(
                     AdventureCardRegistry.getInstance().getCard(newCardEvent.cardId())
@@ -182,12 +172,12 @@ public class ClientEventHandler implements EventHandler<Event> {
                     loseCrewEvent.point()
             );
             case AddActiveLobbyEvent addActiveLobbyEvent -> {
-                LobbyDTO lobby = addActiveLobbyEvent.newLobby();
+                ActiveLobbyDTO lobby = addActiveLobbyEvent.newLobby();
                 clientModel.notifyNewLobby(new Lobby(lobby.id(), lobby.numPlayers(), lobby.level(), lobby.host()));
             }
             case RemoveActiveLobbyEvent removeActiveLobbyEvent -> clientModel.notifyRemoveLobby(removeActiveLobbyEvent.lobbyId());
             case SetActiveLobbiesEvent setActiveLobbyEvent -> {
-                for(LobbyDTO lobby : setActiveLobbyEvent.activeLobbies()) {
+                for(ActiveLobbyDTO lobby : setActiveLobbyEvent.activeLobbies()) {
                     clientModel.notifyNewLobby(new Lobby(lobby.id(), lobby.numPlayers(), lobby.level(), lobby.host()));
                 }
                 clientModel.setMetaState(MetaState.JOINORCREATE);
@@ -203,7 +193,43 @@ public class ClientEventHandler implements EventHandler<Event> {
                         playerRegistry.getByNickname(grabPlacedComponentEvent.playerName()).getShipBoard()
                 );
             }
+            case GameSnapshotEvent gameSnapshotEvent -> {
+                LobbyDetailsDTO details = gameSnapshotEvent.lobbyDetails();
+                GameSnapshot gameSnapshot = gameSnapshotEvent.gameSnapshot();
+                if (gameSnapshot != null) {
+                    //Set lobby details
+                    setupLobby(details,false);
+
+                    Game game = clientModel.getGame();
+                    //Set FlightBoard
+                    Map<String,Integer> playerToPlace = gameSnapshot.flightBoardDTO().playerToPlace();
+                    game.getFlightBoard().setShipToPlace(conversionUtils.convertMap(playerToPlace));
+
+                    //Set Ships
+                    Map<String, ShipBoardDTO> ships = gameSnapshot.ships();
+                    for (String nickname : ships.keySet()) {
+                        ShipBoard shipBoard = conversionUtils.convert(nickname);
+                        //TODO: setup ship
+                    }
+
+                    //Set Game State
+                    updateGameState(gameSnapshot.state());
+                } else {
+                    setupLobby(details,true);
+                }
+            }
         }
+    }
+
+    private void setupLobby(LobbyDetailsDTO details, boolean setMetaState) {
+        clientModel.createGame(details.level());
+        for (String name : details.playerColors().keySet()) {
+            Player player = playerRegistry.addPlayer(name);
+            if(!clientModel.getPlayers().contains(player)) {
+                clientModel.addPlayer(player, details.playerColors().get(name));
+            }
+        }
+        if (setMetaState) clientModel.setMetaState(MetaState.INLOBBY);
     }
 
     private void updateGameState(StateDTO stateDTO) {
@@ -260,23 +286,9 @@ public class ClientEventHandler implements EventHandler<Event> {
                             )),
                     shipCorrectionDTO.shouldDiscard());
             case ShipInitializationDTO shipInitializationDTO -> {
-                Map<ShipBoard, Map<CrewType, Set<Point>>> setMap = shipInitializationDTO.crewTypeToCabins()
-                        .entrySet()
-                        .stream()
-                        .map(e -> Map.entry(
-                                playerRegistry.getByNickname(e.getKey()).getShipBoard(),
-                                e.getValue()))
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-                Map<ShipBoard, Map<CrewType, List<Point>>> finalMap = new HashMap<>();
-                for (ShipBoard shipBoard : setMap.keySet()) {
-                    finalMap.put(shipBoard, new HashMap<>());
-                    for (CrewType crewType : setMap.get(shipBoard).keySet()) {
-                        finalMap.get(shipBoard).put(crewType, setMap.get(shipBoard).get(crewType).stream().toList());
-                    }
-                }
                 gameState = new ShipInitializationState(
                         myShip,
-                        finalMap
+                        conversionUtils.convertMap(shipInitializationDTO.crewTypeToCabins())
                 );
             }
             case SimpleStateDTO simpleStateDTO -> {
@@ -290,6 +302,31 @@ public class ClientEventHandler implements EventHandler<Event> {
             }
         }
         clientModel.notifyCurrentState(gameState);
+        clientModel.setMetaState(MetaState.INGAME);
+    }
+
+    private void updateGameState(ComplexStateDTO complexStateDTO) {
+        GameState newState;
+        switch (complexStateDTO) {
+            case SecondShipBuildingDTO secondShipBuildingDTO -> {
+                SecondShipBuildingState state = new SecondShipBuildingState();
+                newState = state;
+                conversionUtils.convertBuildingData(state,secondShipBuildingDTO.baseData());
+            }
+            case ShipInitializationDTO shipInitializationDTO -> {
+                newState = new ShipInitializationState(
+                        clientModel.getMyShip(),
+                        conversionUtils.convertMap(shipInitializationDTO.crewTypeToCabins())
+                );
+            }
+            case TestShipBuildingDTO testShipBuildingDTO -> {
+                TestShipBuildingState state = new TestShipBuildingState();
+                newState = state;
+                conversionUtils.convertBuildingData(state,testShipBuildingDTO.data());
+            }
+        }
+        newState.setMyShip(clientModel.getMyShip());
+        clientModel.notifyCurrentState(newState);
         clientModel.setMetaState(MetaState.INGAME);
     }
 }

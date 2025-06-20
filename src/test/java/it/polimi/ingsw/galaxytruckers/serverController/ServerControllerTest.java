@@ -44,7 +44,7 @@ class ServerControllerTest {
     void joinLobbyWithInCorrectKey(){
         Player p1 = Player.addPlayer("player1");
         testController.newGame(p1, Level.SECOND, 2);
-        assertThrows(IllegalArgumentException.class, () -> testController.joinLobby(Player.addPlayer("player2"),new Lobby(model, p1, Level.SECOND, 2, null).getId()));
+        assertThrows(IllegalArgumentException.class, () -> testController.joinLobby(Player.addPlayer("player2"),UUID.randomUUID()));
     }
 
     @Test

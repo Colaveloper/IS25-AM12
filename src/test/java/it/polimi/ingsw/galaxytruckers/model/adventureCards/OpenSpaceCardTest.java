@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -122,7 +123,7 @@ class OpenSpaceCardTest {
                 return ships;
             }
         };
-        listener = new GameEventListener();
+        listener = new GameEventListenerStub();
         game = new Game(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoardStub;

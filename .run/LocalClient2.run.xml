@@ -5,6 +5,7 @@
     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.network.client.Client" />
     <module name="GalaxyTruckers" />
     <option name="PROGRAM_PARAMETERS" value="Galaxy-Truckers-Server 127.0.0.1 12345 12346" />
+    <option name="VM_PARAMETERS" value="--enable-native-access=ALL-UNNAMED" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

@@ -1,9 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.serverController;
 
 import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.model.GameInterface;
 import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
-import it.polimi.ingsw.galaxytruckers.serverController.dto.LobbyDTO;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.DtoConverter;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.ActiveLobbyDTO;
 import it.polimi.ingsw.galaxytruckers.serverController.events.ControllerEventHandler;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.AddActiveLobbyEvent;
@@ -32,23 +34,24 @@ public class ServerController implements ServerControllerInterface {
     }
 
     @Override
-    public void registerPlayer(Player player) {
-        List<LobbyDTO> lobbyDTOS;
+    public void requestActiveLobbies(Player player) {
+        List<ActiveLobbyDTO> activeLobbyDTOS;
         synchronized (idToLobby) {
-            lobbyDTOS = idToLobby.values().stream()
-                    .map(LobbyDTO::from).toList();
+            activeLobbyDTOS = idToLobby.values().stream()
+                    .map(DtoConverter::getActiveLobby).toList();
+            this.eventQueue.notifyEvent(new SetActiveLobbiesEvent(player.getNickname(), activeLobbyDTOS));
         }
-        this.eventQueue.notifyEvent(new SetActiveLobbiesEvent(player.getNickname(),lobbyDTOS));
 
     }
 
     @Override
     public LobbyInterface newGame(Player creator, Level level, int numPlayers) {
         synchronized (idToLobby) {
-            Lobby newLobby = new Lobby(model, creator, level, numPlayers, this::removeLobby);
+            GameInterface game = model.createGame(level, numPlayers);
+            Lobby newLobby = new Lobby(game, creator, level, numPlayers, this::removeLobby);
             idToLobby.put(newLobby.getId(), newLobby);
             activeLobbies.add(newLobby);
-            eventQueue.notifyEvent(new AddActiveLobbyEvent(LobbyDTO.from(newLobby)));
+            eventQueue.notifyEvent(new AddActiveLobbyEvent(DtoConverter.getActiveLobby(newLobby)));
             System.out.println(creator.getNickname() + " has created a new lobby: " + newLobby.getId());
             return newLobby;
         }
@@ -70,28 +73,26 @@ public class ServerController implements ServerControllerInterface {
         }
     }
 
-    //TODO: define different ways to handle player disconnection / exit
-    // when the lobby is active (in preparation)
     @Override
     public void handlePlayerDisconnection(Player player) {
-        synchronized (idToLobby){
-            System.out.println("Player " + player.getNickname() + " has disconnected");
-            player.getLobby().ifPresentOrElse(
-                    lobby -> {
-                        lobby.notifyPlayerDisconnection(player);
-                        idToLobby.remove(lobby.getId());
-                        if (activeLobbies.contains(lobby)) {
-                            activeLobbies.remove(lobby);
-                            eventQueue.notifyEvent(new RemoveActiveLobbyEvent(lobby.getId()));
-                        }
-                        System.out.println("The lobby " + lobby.getId() + " has been removed");
-                    },
-                    () -> {
-                        SessionManager.getInstance().unregisterClient(player);
-                        Player.removePlayer(player.getNickname());
-                        System.out.println("The player " + player.getNickname() + " has been removed");
-                    });
-        }
+        System.out.println("Player " + player.getNickname() + " has disconnected");
+        player.getLobby().ifPresentOrElse(
+                lobby -> {
+                    lobby.notifyPlayerDisconnection(player);
+                },
+                () -> {
+                    Player.removePlayer(player.getNickname());
+                    System.out.println("The player " + player.getNickname() + " has been removed");
+                });
+        SessionManager.getInstance().unregisterClient(player);
+    }
+
+    @Override
+    public void notifyPlayerReconnection(Player player) {
+        System.out.println("The player " +  player.getNickname() + " has been reconnected");
+        player.getLobby().ifPresent(lobby -> {
+            lobby.notifyPlayerReconnection(player);
+        });
     }
 
     @Override

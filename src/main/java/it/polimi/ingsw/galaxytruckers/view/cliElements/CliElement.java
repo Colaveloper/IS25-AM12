@@ -1,7 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
-import it.polimi.ingsw.galaxytruckers.view.observables.Invalidator;
-
 import java.util.ArrayList;
 import java.util.List;
 

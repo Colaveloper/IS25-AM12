@@ -24,7 +24,7 @@ public sealed abstract class ShipBuildingState extends GameState permits
 
     public ShipBuildingState() {
         this.completedShipBoards = new HashSet<>();
-        this.componentBank = new ComponentBank(ComponentRegistry.getInstance().getSize());
+        this.componentBank = new ComponentBank();
     }
 
     @Override
@@ -97,6 +97,11 @@ public sealed abstract class ShipBuildingState extends GameState permits
         } else {
             game.getObservers().forEach(observer -> observer.notifyPlaceComponent(shipBoard, point, orientation));
         }
+    }
+
+    public void setCompletedShipBoards(Set<ShipBoard> completedShipBoards) {
+        this.completedShipBoards.clear();
+        this.completedShipBoards.addAll(completedShipBoards);
     }
 
     protected boolean componentInHand(){

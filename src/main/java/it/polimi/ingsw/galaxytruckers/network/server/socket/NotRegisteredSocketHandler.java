@@ -66,7 +66,7 @@ public class NotRegisteredSocketHandler {
                     }
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                handleIOException(e);
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException("Message class not found, config error", e);
             }
@@ -79,7 +79,7 @@ public class NotRegisteredSocketHandler {
             SocketClientHandler clientHandler = new SocketClientHandler(inputStream,outputStream,player,controller);
             SessionManager.getInstance().registerClient(player, clientHandler);
             clientHandler.start();
-            controller.registerPlayer(player);
+            controller.requestActiveLobbies(player);
             Response response = new Response(message.getUuid());
             synchronized (outputStream) {
                 outputStream.writeObject(response);
@@ -94,7 +94,7 @@ public class NotRegisteredSocketHandler {
     }
 
     private void handleIOException(IOException e) {
-        System.err.println("An IOException occurred while trying to communicate with the server.");
+        System.err.println("An IOException occurred while trying to communicate with the client.");
         removeHandler.accept(this);
         e.printStackTrace(System.err);
         stop();

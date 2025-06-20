@@ -54,9 +54,9 @@ public class ClientModel {
         }
     }
 
-    public void createGame(Level level, int playersN) {
+    public void createGame(Level level) {
         synchronized (gameLock) {
-            game = new Game(level, playersN);
+            game = new Game(level);
             game.setObservers(observers);
         }
     }

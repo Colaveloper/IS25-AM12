@@ -18,46 +18,68 @@ import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class RmiClientHandler extends UnicastRemoteObject implements RemoteController, ClientHandler {
     private final RemoteClient remoteClient;
     private final ServerControllerInterface controller;
     private SessionManager sessionManager;
-    private Runnable afterEach = () -> {};
+    private Runnable afterEach = () -> {
+    };
 
-    private Thread updateThread;
+    private final Thread updateThread;
     private boolean running = false;
-    private final BlockingDeque<Event> events;
+    private final BlockingQueue<Event> events;
 
     private final Player player;
 
-    private final Object requestLock = new Object();
+    private boolean paused = false;
 
-    public RmiClientHandler(RemoteClient remoteClient, Player player, ServerControllerInterface controller) throws RemoteException{
+    private final Object requestLock = new Object();
+    private final Object eventLock = new Object();
+    private final Object queueLock = new Object();
+
+    public RmiClientHandler(RemoteClient remoteClient, Player player, ServerControllerInterface controller) throws RemoteException {
         super();
         this.remoteClient = remoteClient;
         this.player = player;
         this.controller = controller;
-        this.updateThread = null;
-        this.events = new LinkedBlockingDeque<>();
+        this.events = new LinkedBlockingQueue<>();
+        this.updateThread = new Thread(this::runUpdateThread, "UpdateThread");
         this.sessionManager = SessionManager.getInstance();
     }
 
     public void start() {
         running = true;
-        updateThread = new Thread(this::runUpdateThread,"UpdateThread");
         updateThread.start();
     }
 
     @Override
+    public void pause() {
+        synchronized (queueLock) {
+            paused = true;
+        }
+    }
+
+    @Override
+    public void resume() {
+        synchronized (queueLock) {
+            paused = false;
+        }
+    }
+
+    @Override
     public void stop() {
-        running = false;
-        this.updateThread = null;
         try {
             System.out.println("Stopping RmiClientHandler");
-            UnicastRemoteObject.unexportObject(this, true);
+            synchronized (requestLock) {
+                UnicastRemoteObject.unexportObject(this, false);
+            }
+            running = false;
+            synchronized (eventLock) {
+                updateThread.interrupt();
+            }
         } catch (NoSuchObjectException e) {
             System.out.println("The RMI client is not currently exported");
         }
@@ -65,27 +87,20 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
 
     private void handleNetworkError(RemoteException e) {
         System.out.println("WARNING: Failed to contact player " + player.getNickname() + "\n" +
-                "A remote exception was thrown: " +  e.getMessage());
+                "A remote exception was thrown: " + e.getMessage());
         controller.handlePlayerDisconnection(player);
-        stop();
-    }
-
-    private void handleInternalError() {
-        System.err.println("ERROR: The update queue for " + player.getNickname() +
-                " has failed to handle all updates");
-        stop();
     }
 
     protected void runUpdateThread() {
-        Event event = null;
         while (running) {
             try {
-                event = events.takeFirst();
-                remoteClient.notifyEvent(event);
+                Event event = events.take();
+                synchronized (eventLock) {
+                    remoteClient.notifyEvent(event);
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             } catch (RemoteException e) {
-                events.offerFirst(event);
                 handleNetworkError(e);
             } catch (RuntimeException e) {
                 System.out.println("An error occurred on the client of " + player.getNickname());
@@ -105,7 +120,15 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
 
     @Override
     public void notifyEvent(Event event) {
-        events.offer(event);
+        synchronized (queueLock) {
+            if (!paused) {
+                if (!events.offer(event)) {
+                    System.err.println("ERROR: The update queue for " + player.getNickname() +
+                            " has failed to handle all updates");
+                    stop();
+                }
+            }
+        }
     }
 
     // RemoteController
@@ -333,9 +356,5 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
         this.afterEach = afterEach;
     }
 
-    @VisibleForTesting
-    protected Thread getUpdateThread() {
-        return updateThread;
-    }
 }
 

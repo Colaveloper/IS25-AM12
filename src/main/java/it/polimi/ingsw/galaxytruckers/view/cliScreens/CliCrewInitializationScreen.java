@@ -9,12 +9,13 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.ShipInitializationState;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CliCrewInitializationScreen extends CliScreen {
 
     private final boolean shipNotValid;
     private CrewType currentCrewType;
-    private final Map<CrewType,List<Point>> crewTypeToPoints;
+    private final Map<CrewType, Set<Point>> crewTypeToPoints;
 
     public CliCrewInitializationScreen(ClientModel model, ControllerToServer controller,  ShipInitializationState gameState) {
         super(model, controller, gameState);

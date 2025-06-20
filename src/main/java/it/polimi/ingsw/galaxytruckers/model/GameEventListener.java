@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.SurrenderCause;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import it.polimi.ingsw.galaxytruckers.serverController.dto.StateDTOConverter;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.DtoConverter;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
@@ -18,9 +18,9 @@ import java.util.Set;
 import java.util.List;
 
 public class GameEventListener {
-    private EventListener<LobbyEvent> controllerListener;
+    private final EventListener<LobbyEvent> controllerListener;
 
-    public void setControllerListener(EventListener<LobbyEvent> controllerListener) {
+    public GameEventListener(EventListener<LobbyEvent> controllerListener) {
         this.controllerListener = controllerListener;
     }
 
@@ -49,7 +49,7 @@ public class GameEventListener {
     public void notifyGameStateUpdateEvent(GameState gameState) {
         System.out.println("Game state update: " + gameState.getClass().getSimpleName());
         controllerListener.notifyEvent(new GameStateUpdateEvent(
-                StateDTOConverter.convert(gameState)
+                DtoConverter.getState(gameState)
         ));
     }
 

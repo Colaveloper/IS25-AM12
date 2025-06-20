@@ -13,7 +13,7 @@ public interface LobbyInterface {
     //region Shipbuilding
 
     /**
-     * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameModelInterface#requestRandComponent(Game, ShipBoard)}
+     * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#requestRandComponent(ShipBoard)}
      * on the lobby game and the player's shipBoard
      *
      * @param player the player wishing to perform the action
@@ -21,7 +21,7 @@ public interface LobbyInterface {
     void requestRandComponent(Player player);
 
     /**
-     * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameModelInterface#requestComponent(Game, ShipBoard, int)}
+     * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#requestComponent(ShipBoard, int)}
      * on the lobby game, the player's shipboard and the given id
      *
      * @param player      the nickname of the player wishing to perform the action

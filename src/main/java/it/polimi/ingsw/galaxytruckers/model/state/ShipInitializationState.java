@@ -80,7 +80,11 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
 
     public Map<ShipBoard, Map<CrewType, Set<Point>>> getShipRelevantCabins() {
         synchronized (shipRelevantCabins) {
-            return new HashMap<>(shipRelevantCabins);
+            Map<ShipBoard, Map<CrewType, Set<Point>>> mapCopy = new HashMap<>();
+            for (ShipBoard ship : shipRelevantCabins.keySet()) {
+                mapCopy.put(ship, new HashMap<>(shipRelevantCabins.get(ship)));
+            }
+            return mapCopy;
         }
     }
 

@@ -31,17 +31,18 @@ public class LobbyEventHandler extends EventQueueHandler<LobbyEvent> {
 
     private void broadcastEvent(LobbyEvent event) {
         for (Player player : getPlayers()) {
-            ClientHandler virtualClient = SessionManager.getInstance().getClient(player);
-            if (virtualClient != null) {
-                virtualClient.notifyEvent(event);
+            ClientHandler clientHandler = SessionManager.getInstance().getClient(player);
+            if (clientHandler != null) {
+                clientHandler.notifyEvent(event);
             }
         }
     }
 
     private void sendEvent(String playerName, LobbyEvent event) {
-        ClientHandler virtualClient = SessionManager.getInstance().getClient(Player.getPlayer(playerName));
-        if (virtualClient != null) {
-            virtualClient.notifyEvent(event);
+        ClientHandler clientHandler = SessionManager.getInstance().getClient(Player.getPlayer(playerName));
+        if (clientHandler != null) {
+            if (event.shouldResume()) clientHandler.resume();
+            clientHandler.notifyEvent(event);
         }
     }
 }

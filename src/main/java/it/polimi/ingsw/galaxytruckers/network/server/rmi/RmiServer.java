@@ -16,6 +16,8 @@ public class RmiServer extends UnicastRemoteObject implements RemoteServer {
     private Registry registry;
     private String name;
 
+    private final Object lock = new Object();
+
     public RmiServer(ServerControllerInterface controller) throws RemoteException {
         super();
         this.controller = controller;
@@ -32,11 +34,27 @@ public class RmiServer extends UnicastRemoteObject implements RemoteServer {
 
     @Override
     public RemoteController registerNickname(RemoteClient client, String nickname) throws RemoteException {
-        Player player = Player.addPlayer(nickname);
+        Player player;
+        RemoteController clientHandler;
+        synchronized (lock) {
+            player = Player.getPlayer(nickname);
+            if (player != null && SessionManager.getInstance().getClient(player) == null) {
+                clientHandler = addClientHandler(player, client, true);
+                controller.notifyPlayerReconnection(player);
+            } else {
+                player = Player.addPlayer(nickname);
+                clientHandler = addClientHandler(player, client, false);
+            }
+            return clientHandler;
+        }
+    }
+
+    private RmiClientHandler addClientHandler(Player player, RemoteClient client, boolean paused) throws RemoteException {
         RmiClientHandler clientHandler = new RmiClientHandler(client, player, controller);
         SessionManager.getInstance().registerClient(player, clientHandler);
+        if (paused) clientHandler.pause();
         clientHandler.start();
-        controller.registerPlayer(player);
+        controller.requestActiveLobbies(player);
         return clientHandler;
     }
 
