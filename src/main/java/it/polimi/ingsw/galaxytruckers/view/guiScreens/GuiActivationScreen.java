@@ -1,13 +1,22 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiComponent;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 import javafx.scene.Group;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 import java.awt.*;
 
@@ -81,14 +90,39 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
     @Override
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
         batteriesToSpend ++;
+        highlightComponent(shipBoard, point, Highlights.BLUE);
         goNextButton.setDisable(batteriesToSpend != 0);
-//        shipToCliShip.get(shipBoard).highlightPoints(Set.of(point), Highlights.BLUE);
     }
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
         batteriesToSpend --;
+        highlightComponent(shipBoard, point, Highlights.GREEN);
         goNextButton.setDisable(batteriesToSpend != 0);
-//        shipToCliShip.get(shipBoard).highlightPoints(Set.of(point), Highlights.GREEN);
+    }
+
+    private void highlightComponent(ShipBoard shipBoard, Point point, Highlights color) {
+        GuiShipBoard guiShipBoard = guiShipBoards.get(shipBoard);
+        if (guiShipBoard == null) return;
+
+        int minX = shipBoard.getShipArea().stream().mapToInt(p -> p.x).min().orElse(0);
+        int minY = shipBoard.getShipArea().stream().mapToInt(p -> p.y).min().orElse(0);
+
+        int targetCol = point.x - minX + 1;
+        int targetRow = point.y - minY + 1;
+
+        guiShipBoard.getChildren().stream()
+            .filter(node -> {
+                Integer col = GridPane.getColumnIndex(node);
+                Integer row = GridPane.getRowIndex(node);
+                return col != null && row != null && col == targetCol && row == targetRow;
+            })
+            .findFirst()
+            .ifPresent(node -> highlightNode(node, color));
+    }
+
+    private void highlightNode(javafx.scene.Node node, Highlights color) {
+        GuiComponent component = (GuiComponent) node;
+        component.highlight(color);
     }
 }

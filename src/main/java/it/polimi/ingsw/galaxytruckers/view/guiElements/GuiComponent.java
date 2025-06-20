@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
 import javafx.animation.RotateTransition;
 import javafx.application.Platform;
@@ -66,4 +67,20 @@ public class GuiComponent extends StackPane {
             contentBox.getChildren().add(contentUnitCircle);
         }
     }
+
+    public void highlight(Highlights color) {
+        setStyle("-fx-border-color: " + getColorString(color) + "; " +
+                "-fx-border-width: 3px); ");
+    }
+
+    private String getColorString(Highlights highlight) {
+        return switch (highlight) {
+            case GREEN -> "green";
+            case BLUE -> "blue";
+            case RED -> "red";
+            case YELLOW -> "yellow";
+            default -> "transparent";
+        };
+    }
 }
+
