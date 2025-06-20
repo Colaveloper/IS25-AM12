@@ -67,10 +67,8 @@ public class GuiShipBoard extends GridPane {
                 if (shipArea.contains(currentPoint)) {
                     StackPane areaPane;
                     if (componentMap.containsKey(currentPoint)) {
-                        // COMPONENT ALREADY PLACED AND WELDED
                         areaPane = GuiComponent.of(componentMap.get(currentPoint));
                     } else {
-                        // FREE AREA
                         areaPane = new StackPane();
                         ImageView FreeAreaView = new ImageView(emptyAreaImage);
                         FreeAreaView.setFitWidth(50);

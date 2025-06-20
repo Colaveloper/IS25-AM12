@@ -100,11 +100,11 @@ public class GuiTestShipBuildingScreen extends GuiShipBuildingScreen {
 
             @Override
             public void rotateHandComponent() {
-                if (model.getMyShip().getLastComponent() != null) {
-                    Direction currentDirection = model.getMyShip().getLastComponent().getOrientation();
+                if (myShipBoard.getLastComponent() != null) {
+                    Direction currentDirection = myShipBoard.getLastComponent().getOrientation();
                     Direction newDirection = currentDirection.getLeft();
-                    model.getMyShip().getLastComponent().setOrientation(newDirection);
-                    guiHands.get(model.getMyShip()).rotateComponent(newDirection.getAngle());
+                    myShipBoard.getLastComponent().setOrientation(newDirection);
+                    guiHands.get(myShipBoard).setComponentDirection(newDirection);
                 }
             }
 
@@ -128,8 +128,7 @@ public class GuiTestShipBuildingScreen extends GuiShipBuildingScreen {
                         myShipBoard.getLastComponent() != null &&
                         myShipBoard.getLastPosition() == null) {
                     if (state.getAvailableActions().contains(StateActions.PLACE_COMPONENT)) {
-                        Direction orientation = myShipBoard.getLastComponent().getOrientation();
-                        controller.placeComponent(point, orientation);
+                        controller.placeComponent(point, myShipBoard.getLastComponent().getOrientation());
                     }
                 }
             }
