@@ -189,7 +189,7 @@ public class GuiView extends View<GuiScreen> {
 
     @Override
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents) {
-        currentScreen.notifyInitializeCabin(shipBoard, point, crewType, numResidents);
+        currentScreen.notifyComponentChange(shipBoard, point);
     }
 
     @Override
@@ -204,32 +204,32 @@ public class GuiView extends View<GuiScreen> {
 
     @Override
     public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
-        currentScreen.notifyLoseCrew(shipBoard,point);
+        currentScreen.notifyComponentChange(shipBoard,point);
     }
 
     @Override
     public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed) {
-        currentScreen.notifyGrabReward(shipBoard,rewardGrabbed);
+        currentScreen.notifyGrabReward(shipBoard, rewardGrabbed);
     }
 
     @Override
     public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        currentScreen.notifyPlaceGoods(shipBoard,point,goodsType);
+        currentScreen.notifyComponentChange(shipBoard, point);
     }
 
     @Override
     public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
-        currentScreen.notifyRemoveGoods(shipBoard,point,goodsType);
+        currentScreen.notifyComponentChange(shipBoard, point);
     }
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        currentScreen.notifyUseBattery(shipBoard,point);
+        currentScreen.notifyUseBattery(shipBoard, point);
     }
 
     @Override
     public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard) {
-        currentScreen.notifyChoosePlanet(shipBoard,choice, nextShipBoard);
+        currentScreen.notifyChoosePlanet(shipBoard, choice, nextShipBoard);
     }
 
     @Override

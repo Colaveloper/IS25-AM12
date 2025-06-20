@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +39,8 @@ public abstract class GuiGameScreen extends GuiScreen {
             }
         }
         this.guiFlightBoard = new GuiFlightBoard(model.getGame().getFlightBoard(), getGuiController());
-        this.guiContextBox = new PurpleContainer();
+        guiContextBox = new PurpleContainer();
+        guiContextBox.setAlignment(Pos.CENTER);
     }
 
     public Pane getNode() {
@@ -105,20 +107,6 @@ public abstract class GuiGameScreen extends GuiScreen {
         }
 
         return layout;
-    }
-
-    protected void updateContextBox(String context) {
-        Platform.runLater(()->{
-            guiContextBox.getChildren().clear();
-            Label contextLabel = new Label(context);
-            contextLabel.setStyle(
-                    "-fx-font-size: 14px;" +
-                            "-fx-text-fill: white;" +
-                            "-fx-font-weight: bold;"
-            );
-            guiContextBox.getChildren().add(contextLabel);
-            guiContextBox.setAlignment(Pos.CENTER);
-        });
     }
 
     protected HBox getGuiAllShips() {
@@ -190,4 +178,9 @@ public abstract class GuiGameScreen extends GuiScreen {
     }
 
     protected abstract GuiController getGuiController();
+
+    @Override
+    public void notifyComponentChange(ShipBoard shipBoard, Point point) {
+        guiShipBoards.get(shipBoard).notifyComponentChange(point);
+    }
 }

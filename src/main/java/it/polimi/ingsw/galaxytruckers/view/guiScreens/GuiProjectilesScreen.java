@@ -32,7 +32,7 @@ public class GuiProjectilesScreen extends GuiActivationScreen {
         super(model, controller, handleProjectileState);
         this.projectile = handleProjectileState.getProjectile();
         if (isMyTurn()) {
-            updateContextBox("Select a component to activate or a battery to use");
+            guiContextBox.getChildren().setAll(new Label("Select a component to activate or a battery to use"));
         }
     }
 

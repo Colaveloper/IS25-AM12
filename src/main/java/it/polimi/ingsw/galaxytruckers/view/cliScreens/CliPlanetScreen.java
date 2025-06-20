@@ -1,10 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ChoosePlanetState;
 
+import java.awt.*;
 import java.util.*;
 
 public class CliPlanetScreen extends CliAdventureScreen {
@@ -78,5 +80,10 @@ public class CliPlanetScreen extends CliAdventureScreen {
     public void notifyCurrentPlayerUpdate(ShipBoard shipBoard) {
         currentShip = shipBoard;
         isMyTurn = currentShip.equals(myShipBoard);
+    }
+
+    @Override
+    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+        super.notifyPlaceGoods(shipBoard, point, goodsType);
     }
 }

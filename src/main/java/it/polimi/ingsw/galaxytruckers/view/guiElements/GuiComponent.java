@@ -1,17 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.enums.CliHighlights;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
-import javafx.animation.RotateTransition;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.util.Duration;
 
 import java.util.List;
 
@@ -54,26 +52,45 @@ public class GuiComponent extends StackPane {
     }
 
     protected void updateContentBox(List<Color> colors) {
-        contentBox.getChildren().clear();
-        for (Color color : colors) {
-            Circle contentUnitCircle = new Circle(4);
+        Platform.runLater(()->{
+            contentBox.getChildren().clear();
+            for (Color color : colors) {
+                Circle contentUnitCircle = new Circle(4);
+                contentUnitCircle.setFill(color);
 
-            DropShadow shadow = new DropShadow();
-            shadow.setOffsetX(0.5);
-            shadow.setOffsetY(0.5);
-            shadow.setColor(Color.rgb(0, 0, 0, 0.5)); // semi-transparent black
+                DropShadow shadow = new DropShadow();
+                shadow.setOffsetX(0.5);
+                shadow.setOffsetY(0.5);
+                shadow.setColor(Color.rgb(0, 0, 0, 0.5)); // semi-transparent black
 
-            contentUnitCircle.setEffect(shadow);
-            contentBox.getChildren().add(contentUnitCircle);
+                contentUnitCircle.setEffect(shadow);
+                contentBox.getChildren().add(contentUnitCircle);
+            }
+        });
+    }
+
+    public void setHighlight(Color color) {
+        if (color == null) {
+            clearHighlight();
+            return;
         }
+
+        BorderStroke borderStroke = new BorderStroke(
+                color,
+                BorderStrokeStyle.SOLID,
+                CornerRadii.EMPTY,
+                new BorderWidths(2),
+                new Insets(0)
+        );
+
+        contentBox.setBorder(new Border(borderStroke));
     }
 
-    public void highlight(Highlights color) {
-        setStyle("-fx-border-color: " + getColorString(color) + "; " +
-                "-fx-border-width: 3px); ");
+    public void clearHighlight() {
+        contentBox.setBorder(Border.EMPTY);
     }
 
-    private String getColorString(Highlights highlight) {
+    private String getColorString(CliHighlights highlight) {
         return switch (highlight) {
             case GREEN -> "green";
             case BLUE -> "blue";
@@ -82,5 +99,7 @@ public class GuiComponent extends StackPane {
             default -> "transparent";
         };
     }
+
+    public void notifyContentChange() {}
 }
 

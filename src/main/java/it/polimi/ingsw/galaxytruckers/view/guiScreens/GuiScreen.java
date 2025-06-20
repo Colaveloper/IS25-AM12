@@ -7,6 +7,8 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.scene.layout.Pane;
 
+import java.awt.*;
+
 public abstract class GuiScreen extends Screen {
     protected final ClientModel model;
     protected final ControllerToServer controller;

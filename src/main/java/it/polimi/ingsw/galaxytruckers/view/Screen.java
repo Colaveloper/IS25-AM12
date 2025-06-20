@@ -82,4 +82,6 @@ public abstract class Screen {
     public void notifyNewLobby(Lobby lobby){}
 
     public void notifyRemoveLobby(UUID LobbyId){}
+
+    public void notifyComponentChange(ShipBoard shipBoard, Point point) {}
 }

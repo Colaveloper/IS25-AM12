@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
@@ -12,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.io.IOException;
@@ -150,20 +150,20 @@ public class GuiShipBoard extends GridPane {
                 .orElse(null); // or throw exception if needed
     }
 
-    public void notifyInitializeCabin(Point point, CrewType crewType, int numResidents) {
+    public void notifyComponentChange(Point point) {
         getChildren().stream()
-                .filter(node -> node instanceof GuiCabin)
-                .map(node -> (GuiCabin) node)
+                .filter(node -> node instanceof GuiComponent)
+                .map(node -> (GuiComponent) node)
                 .filter(node -> {
                     int col = GridPane.getColumnIndex(node) - 1;
                     int row = GridPane.getRowIndex(node) - 1;
                     return col + minX == point.x && row + minY == point.y;
                 })
                 .findFirst()
-                .ifPresent(c -> c.notifyInitialize(crewType, numResidents));
+                .ifPresent(GuiComponent::notifyContentChange);
     }
 
-    public void highlightPoints(Set<Point> points, it.polimi.ingsw.galaxytruckers.view.enums.Highlights highlight) {
+    public void highlightPoints(Set<Point> points, Color color) {
         Platform.runLater(() -> {
             for (Point point : points) {
                 getChildren().stream()
@@ -178,7 +178,7 @@ public class GuiShipBoard extends GridPane {
                             return col + minX == point.x && row + minY == point.y;
                         })
                         .findFirst()
-                        .ifPresent(component -> component.highlight(highlight));
+                        .ifPresent(component -> component.setHighlight(color));
             }
         });
     }
@@ -188,7 +188,7 @@ public class GuiShipBoard extends GridPane {
             getChildren().stream()
                     .filter(node -> node instanceof GuiComponent)
                     .map(node -> (GuiComponent) node)
-                    .forEach(component -> component.highlight(it.polimi.ingsw.galaxytruckers.view.enums.Highlights.RESET));
+                    .forEach(component -> component.clearHighlight());
         });
     }
 }

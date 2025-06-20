@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliElement;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.enums.CliHighlights;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
 
 import java.util.ArrayList;
@@ -20,8 +20,8 @@ public class CliComponent extends CliElement {
     protected CliComponent(Component component) {
         this.component = component;
         this.connectors = component.getConnectors();
-        open = Highlights.RESET.getHighlight();
-        close = Highlights.RESET.getHighlight();
+        open = CliHighlights.RESET.getHighlight();
+        close = CliHighlights.RESET.getHighlight();
     }
 
     public static CliComponent of(Component component) {
@@ -74,9 +74,9 @@ public class CliComponent extends CliElement {
         return component.getId();
     }
 
-    public void highlight(Highlights color) {
+    public void highlight(CliHighlights color) {
         open = color.getHighlight();
-        close = Highlights.RESET.getHighlight();
+        close = CliHighlights.RESET.getHighlight();
         setDirty();
     }
 
@@ -86,8 +86,8 @@ public class CliComponent extends CliElement {
     }
 
     protected List<String> addBorders(String middle) {
-        //open = Highlights.RESET.getHighlight();
-        close = Highlights.RESET.getHighlight();
+        //open = CliHighlights.RESET.getHighlight();
+        close = CliHighlights.RESET.getHighlight();
 
         List<String> lines = new ArrayList<>();
             lines.add(0, open+"╭─" + getConnector(Direction.UP) + "─╮"+close);

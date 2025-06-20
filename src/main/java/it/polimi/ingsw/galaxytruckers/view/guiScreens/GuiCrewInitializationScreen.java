@@ -44,7 +44,7 @@ public class GuiCrewInitializationScreen extends GuiGameScreen {
 
     @Override
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
-        guiShipBoards.get(shipBoard).notifyInitializeCabin(point, crewType, numResidents);
+        guiShipBoards.get(shipBoard).notifyComponentChange(point);
     }
 
     @Override

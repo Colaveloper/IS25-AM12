@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.enums.CliHighlights;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Cabin;
 
 import java.util.List;
@@ -20,18 +20,18 @@ public class CliCabin extends CliComponent{
         String open;
         switch (cabin.getCrewType()){
             case CrewType.PURPLE -> {
-                open = Highlights.MAGENTA.getHighlight();
+                open = CliHighlights.MAGENTA.getHighlight();
             }
             case CrewType.BROWN -> {
-                open = Highlights.YELLOW.getHighlight();
+                open = CliHighlights.YELLOW.getHighlight();
             }
             case CrewType.HUMAN -> {
-                open = Highlights.WHITE.getHighlight();
+                open = CliHighlights.WHITE.getHighlight();
             }
             default -> {
-                open = Highlights.RESET.getHighlight();
+                open = CliHighlights.RESET.getHighlight();
             }
         };
-        return addBorders(open + " ⌂" + cabin.getNumResidents() + Highlights.RESET.getHighlight());
+        return addBorders(open + " ⌂" + cabin.getNumResidents() + CliHighlights.RESET.getHighlight());
     }
 }

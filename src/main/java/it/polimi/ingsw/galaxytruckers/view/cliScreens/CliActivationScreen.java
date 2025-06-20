@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.enums.CliHighlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ActivateState;
@@ -74,7 +74,7 @@ public abstract class CliActivationScreen extends CliAdventureScreen {
     @Override
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
         batteriesToSpend ++;
-        shipToCliShip.get(shipBoard).highlightPoints(Set.of(point), Highlights.BLUE);
+        shipToCliShip.get(shipBoard).highlightPoints(Set.of(point), CliHighlights.BLUE);
         cliAllShips.setDirty();
         shipToCliShip.get(shipBoard).setDirty();
         shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
@@ -83,7 +83,7 @@ public abstract class CliActivationScreen extends CliAdventureScreen {
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
         batteriesToSpend --;
-        shipToCliShip.get(shipBoard).highlightPoints(Set.of(point), Highlights.GREEN);
+        shipToCliShip.get(shipBoard).highlightPoints(Set.of(point), CliHighlights.GREEN);
         cliAllShips.setDirty();
         shipToCliShip.get(shipBoard).setDirty();
         shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();

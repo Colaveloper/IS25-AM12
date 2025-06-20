@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.utils;
 
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.enums.CliHighlights;
 
 import java.lang.*;
 
@@ -23,6 +23,6 @@ public class Logger {
             res.append(params[i].toString());
         }
 
-        System.out.println(Highlights.getSomeColors(n).getLast().getHighlight() + res.toString() + Highlights.RESET.getHighlight());
+        System.out.println(CliHighlights.getSomeColors(n).getLast().getHighlight() + res.toString() + CliHighlights.RESET.getHighlight());
     }
 }

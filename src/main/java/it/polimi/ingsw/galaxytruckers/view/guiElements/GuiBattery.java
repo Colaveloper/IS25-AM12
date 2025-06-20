@@ -10,16 +10,18 @@ import java.util.Collections;
 import java.util.HashSet;
 
 public class GuiBattery extends GuiComponent {
+    private final Battery battery;
 
     public GuiBattery(Battery battery) {
         super(battery);
+        this.battery = battery;
+        notifyContentChange();
+    }
+
+    public void notifyContentChange() {
         updateContentBox(new ArrayList<>(Collections.nCopies(
                 battery.getNumBatteries(),
                 Color.GREEN
         )));
-    }
-
-    public void notifyBatteryUpdate() {
-        // todo: implement and use
     }
 }

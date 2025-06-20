@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliBattery;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliCabin;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliCargoHold;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents.CliComponent;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.enums.CliHighlights;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 
@@ -79,7 +79,7 @@ public class CliShipBoard extends CliElement {
 //        return batteries;
 //    }
 
-    public void highlightPoints(Set<Point> points, Highlights color){
+    public void highlightPoints(Set<Point> points, CliHighlights color){
         for (Point point : points){
             cliComponentMap.get(point).highlight(color);
         }

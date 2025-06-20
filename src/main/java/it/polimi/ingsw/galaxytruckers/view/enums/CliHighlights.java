@@ -3,7 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.enums;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum Highlights {
+public enum CliHighlights {
 
        /*0*/RESET   ("\u001b[0m"),
        /*1*/RED     ("\u001b[31m"),
@@ -21,7 +21,7 @@ public enum Highlights {
 
     private final String color;
 
-    Highlights(String color) {
+    CliHighlights(String color) {
         this.color = color;
     }
 
@@ -29,9 +29,8 @@ public enum Highlights {
         return color;
     }
 
-    public static List<Highlights> getSomeColors(int i) {
-        List<Highlights> someColors = new ArrayList<Highlights>(List.of(Highlights.values()));
+    public static List<CliHighlights> getSomeColors(int i) {
+        List<CliHighlights> someColors = new ArrayList<CliHighlights>(List.of(CliHighlights.values()));
         return someColors.subList(0, i + 1);
     }
-
 }

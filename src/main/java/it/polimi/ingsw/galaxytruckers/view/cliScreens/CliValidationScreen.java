@@ -1,20 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.enums.CliHighlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ShipCorrectionState;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class CliValidationScreen extends CliScreen {
@@ -40,10 +34,10 @@ public class CliValidationScreen extends CliScreen {
 
         if(shipBroken) {
             System.out.println("your ship is broken, choose a piece to keep from these");
-            List<Highlights> highlights = Highlights.getSomeColors(myShipPieces);
+            List<CliHighlights> highlights = CliHighlights.getSomeColors(myShipPieces);
             for(int i = 1; i <= myShipPieces; i++) {
-                String colorChoice = highlights.get(i) == Highlights.RESET ? "WHITE" : highlights.get(i).toString();
-                System.out.println(highlights.get(i).getHighlight() + i + " " + colorChoice + Highlights.RESET.getHighlight() + "\t");
+                String colorChoice = highlights.get(i) == CliHighlights.RESET ? "WHITE" : highlights.get(i).toString();
+                System.out.println(highlights.get(i).getHighlight() + i + " " + colorChoice + CliHighlights.RESET.getHighlight() + "\t");
             }
         }
         if (!shipValid) {//add else if to separate validation and ship piece choice
@@ -128,7 +122,7 @@ public class CliValidationScreen extends CliScreen {
 
     private void shipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
         int numPieces = shipPieces.size();
-        List<Highlights> highlights = Highlights.getSomeColors(numPieces);
+        List<CliHighlights> highlights = CliHighlights.getSomeColors(numPieces);
         for(int i = 0; i < numPieces; i++){
             shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i + 1));
         }

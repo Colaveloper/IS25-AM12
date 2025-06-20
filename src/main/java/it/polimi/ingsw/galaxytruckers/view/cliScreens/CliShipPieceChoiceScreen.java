@@ -1,20 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliFlightBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAllShips;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipHandAndStash;
+import it.polimi.ingsw.galaxytruckers.view.enums.CliHighlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
-import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ChooseShipPieceState;
-import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 
 import java.awt.*;
 import java.util.Set;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CliShipPieceChoiceScreen extends CliAdventureScreen {
@@ -33,7 +27,7 @@ public class CliShipPieceChoiceScreen extends CliAdventureScreen {
 
     private void shipNotConnected(ShipBoard shipBoard, List<Set<Point>> shipPieces) {
         int numPieces = shipPieces.size();
-        List<Highlights> highlights = Highlights.getSomeColors(numPieces);
+        List<CliHighlights> highlights = CliHighlights.getSomeColors(numPieces);
         for(int i = 0; i < numPieces; i++){
             shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i+1));
         }
@@ -63,7 +57,7 @@ public class CliShipPieceChoiceScreen extends CliAdventureScreen {
 
     @Override
     public void render() {
-        List<Highlights> colors= Highlights.getSomeColors(numPieces);
+        List<CliHighlights> colors= CliHighlights.getSomeColors(numPieces);
 //        for(int i = 0; i < numPieces; i++){
 //            shipToCliShip.get(currentShip).highlightPoints(points.get(i), colors.get(i+1));  //color ship pieces with list of colors
 //        }
@@ -76,7 +70,7 @@ public class CliShipPieceChoiceScreen extends CliAdventureScreen {
         if (shipBroken) {
             System.out.println("your ship is broken, choose a piece of ship to keep");
             for(int i = 1; i <= numPieces; i++) {
-                System.out.println(colors.get(i).getHighlight() + i + "\t" + colors.get(i) + Highlights.RESET.getHighlight() + "\n");
+                System.out.println(colors.get(i).getHighlight() + i + "\t" + colors.get(i) + CliHighlights.RESET.getHighlight() + "\n");
             }
         }
         else{

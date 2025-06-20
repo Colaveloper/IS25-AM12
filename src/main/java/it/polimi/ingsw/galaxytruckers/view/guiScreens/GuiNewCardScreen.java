@@ -9,6 +9,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -31,10 +32,10 @@ public class GuiNewCardScreen extends GuiAdventureScreen {
         if(isMyTurn()) {
             actionButton.setOnAction(e -> getGuiController().drawCard());
             layout.getChildren().add(actionButton);
-            updateContextBox("Draw and start a new adventure!");
+            guiContextBox.getChildren().setAll(new Label("Draw and start a new adventure!"));
         } else {
             actionButton.setDisable(true);
-            updateContextBox("Wait for the leader to draw");
+            guiContextBox.getChildren().setAll(new Label("Wait for the leader to draw"));
         }
 
         Optional<GuiAdventureCard> guiAdventureCard = guiAdventureCard();

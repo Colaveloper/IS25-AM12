@@ -1,11 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements;
 
 import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
-import it.polimi.ingsw.galaxytruckers.view.model.Player;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.cliElements.CliComponents;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.enums.CliHighlights;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.CargoHold;
 
 import java.util.List;
@@ -33,21 +33,21 @@ public class CliCargoHold extends CliComponent {
         for(GoodsType type : goodMap.keySet()) {
             switch (type) {
                 case GoodsType.RED -> {
-                    open = Highlights.RED.getHighlight();
+                    open = CliHighlights.RED.getHighlight();
                 }
                 case GoodsType.GREEN -> {
-                    open = Highlights.GREEN.getHighlight();
+                    open = CliHighlights.GREEN.getHighlight();
                 }
                 case GoodsType.BLUE -> {
-                    open = Highlights.BLUE.getHighlight();
+                    open = CliHighlights.BLUE.getHighlight();
                 }
                 case GoodsType.YELLOW -> {
-                    open = Highlights.YELLOW.getHighlight();
+                    open = CliHighlights.YELLOW.getHighlight();
                 }
-                default -> open = Highlights.RESET.getHighlight();
+                default -> open = CliHighlights.RESET.getHighlight();
             }
             for(int i = 0; i < goodMap.get(type); i++) {
-                result.append(open).append(symbols.get(1)).append(Highlights.RESET.getHighlight());
+                result.append(open).append(symbols.get(1)).append(CliHighlights.RESET.getHighlight());
                 placed++;
             }
         }

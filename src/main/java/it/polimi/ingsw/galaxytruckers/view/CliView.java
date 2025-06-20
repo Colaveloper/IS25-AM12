@@ -189,14 +189,12 @@ public class CliView extends View<CliScreen> {
     @Override
     public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
         currentScreen.notifyComponentChange(shipBoard, point);
-        //currentScreen.notifyPlaceGoods(shipBoard, point, goodsType);
         currentScreen.render();
     }
 
     @Override
     public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
         currentScreen.notifyComponentChange(shipBoard, point);
-        //currentScreen.notifyRemoveGoods(shipBoard, point, goodsType);
         currentScreen.render();
     }
 

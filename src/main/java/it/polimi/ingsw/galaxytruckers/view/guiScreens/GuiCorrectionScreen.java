@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.enums.Highlights;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiHighlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.ShipCorrectionState;
@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -46,11 +47,11 @@ public class GuiCorrectionScreen extends GuiGameScreen {
         if (shipBroken) {
             message = "Your ship is broken. Choose a piece to keep by clicking on any component in that piece.";
         } else if (!shipValid) {
-            message = "Your ship has invalid component positioning. Click on a component to remove it.";
+            message = "Your ship has invalid component positioning. Guick on a component to remove it.";
         } else {
             message = "Your ship is valid. Wait for other players to correct their ships.";
         }
-        updateContextBox(message);
+        guiContextBox.getChildren().setAll(new Label(message));
     }
 
     private void showConfirmationButton(String message) {
@@ -88,8 +89,8 @@ public class GuiCorrectionScreen extends GuiGameScreen {
 
             if (shipBroken) {
                 for (int i = 0; i < shipPieces.size(); i++) {
-                    List<Highlights> highlights = Highlights.getSomeColors(shipPieces.size());
-                    guiShipBoards.get(model.getMyShip()).highlightPoints(shipPieces.get(i), highlights.get(i + 1));
+                    List<GuiHighlights> highlights = GuiHighlights.getSomeColors(shipPieces.size());
+                    guiShipBoards.get(model.getMyShip()).highlightPoints(shipPieces.get(i), highlights.get(i + 1).getColor());
                 }
             }
 
@@ -104,15 +105,15 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             } else {
                 message = "Your ship is valid. Wait for other players to correct their ships.";
             }
-            updateContextBox(message);
+            guiContextBox.getChildren().setAll(new Label(message));
         }
     }
 
     private void shipNotConnected(ShipBoard shipBoard, List<Set<Point>> pieces) {
         int numPieces = pieces.size();
-        List<Highlights> highlights = Highlights.getSomeColors(numPieces);
+        List<GuiHighlights> highlights = GuiHighlights.getSomeColors(numPieces);
         for (int i = 0; i < numPieces; i++) {
-            guiShipBoards.get(shipBoard).highlightPoints(pieces.get(i), highlights.get(i + 1));
+            guiShipBoards.get(shipBoard).highlightPoints(pieces.get(i), highlights.get(i + 1).getColor());
         }
     }
 
@@ -131,7 +132,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             shipBroken = false;
             shipValid = true;
             String message = "Your ship is valid. Wait for other players to correct their ships.";
-            updateContextBox(message);
+            guiContextBox.getChildren().setAll(new Label(message));
         }
     }
 
@@ -143,7 +144,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             shipBroken = true;
             shipValid = true;
             String message = "Your ship is broken. Choose a piece to keep by clicking on any component in that piece.";
-            updateContextBox(message);
+            guiContextBox.getChildren().setAll(new Label(message));
         }
         shipNotConnected(shipBoard, pieces);
     }
@@ -154,7 +155,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             shipBroken = false;
             shipValid = true;
             String message = "Your ship is valid. Wait for other players to correct their ships.";
-            updateContextBox(message);
+            guiContextBox.getChildren().setAll(new Label(message));
         }
         guiShipBoards.get(shipBoard).clearHighlights();
     }
@@ -167,7 +168,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
                 if (state.getAvailableActions().contains(StateActions.REMOVE_COMPONENT) && !shipValid) {
                     selectedPoint = point;
                     guiShipBoards.get(model.getMyShip()).highlightPoints(
-                            Collections.singleton(point), Highlights.YELLOW);
+                            Collections.singleton(point), javafx.scene.paint.Color.YELLOW);
                     showConfirmationButton("Remove this component?");
                 } else if (state.getAvailableActions().contains(StateActions.CHOOSE_SHIP_PIECE) && shipBroken) {
                     IntStream.range(0, shipPieces.size())
@@ -177,7 +178,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
                                 selectedPieceIndex = i;
                                 guiShipBoards.get(model.getMyShip()).clearHighlights();
                                 guiShipBoards.get(model.getMyShip()).highlightPoints(
-                                        shipPieces.get(i), Highlights.YELLOW);
+                                        shipPieces.get(i), Color.YELLOW);
                                 showConfirmationButton("Keep this piece?");
                             });
                 }
