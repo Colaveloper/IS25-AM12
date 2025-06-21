@@ -2,8 +2,6 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.enums.CliHighlights;
-import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiHighlights;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.AddGoodsState;
@@ -21,7 +19,6 @@ import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public class GuiGoodsScreen extends GuiAdventureScreen {
     private final GoodsBuffer goodsBuffer;
@@ -39,14 +36,13 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
         });
         this.selectedGoodsType = new SimpleObjectProperty<>();
         if (isMyTurn()) {
-            guiContextBox.getChildren().setAll(
-                    new Label("Your turn to manage goods"),
-                    new Label("Select a position as a source or a destination"),
-                    new Label("Select a goods type to place or remove"),
-                    new Label("Then select the action")
-            );
+            guiLog.log("Your turn to manage goods");
+            guiLog.log("Select a position as a source or a destination");
+            guiLog.log("Select a goods type to place or remove");
+            guiLog.log("Then select the action");
+            guiButtonBox.getChildren().setAll(getButtonsBox());
         } else {
-            guiContextBox.getChildren().setAll(new Label("Wait for others to manage goods"));
+            guiLog.log("Wait for others to manage goods");
         }
     }
 
@@ -61,9 +57,9 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
                 ) {
                     if (myShipBoard.getCargoHolds().containsKey(point)) {
                         selectedPoint.set(point);
-                        guiContextBox.getChildren().setAll(new Label("Action to be performed at "+ point.x + "," + point.y));
+                        guiLog.log("Action to be performed at "+ point.x + "," + point.y);
                     } else {
-                        guiContextBox.getChildren().setAll(new Label("No cargo hold at " + point.x + "," + point.y));
+                        guiLog.log("No cargo hold at " + point.x + "," + point.y);
                     }
                 }
             }
@@ -75,25 +71,6 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
                 }
             }
         };
-    }
-
-    @Override
-    public Pane getNode() {
-        Pane superPane = super.getNode();
-
-        if (isMyTurn()) {
-            HBox bottomBox = new HBox(10);
-            bottomBox.setAlignment(Pos.CENTER);
-
-            updateBufferInfoBox();
-
-            bottomBox.getChildren().addAll(bufferInfoBox, getButtonsBox());
-
-            superPane.getChildren().add(bottomBox);
-            superPane.setScaleX(0.9);
-            superPane.setScaleY(0.9);
-        }
-        return superPane;
     }
 
     private void updateBufferInfoBox() {
@@ -121,7 +98,7 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
         for (GoodsType type : GoodsType.values()) {
             Button typeButton = new Button(type.toString());
             typeButton.setOnAction(_ -> {
-                guiContextBox.getChildren().setAll(new Label("The action will be performed on a "+type+" good"));
+                guiLog.log("The action will be performed on a "+type+" good");
                 selectedGoodsType.set(type);
             });
             Background defaultBackground = new Background(new BackgroundFill(
@@ -164,7 +141,7 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
             if (selectedGoodsType.get() == GoodsType.RED &&
                 !myShipBoard.getCargoHolds().get(selectedPoint.get()).isSpecial()
             ) {
-                guiContextBox.getChildren().add(new Label("Cannot add special cargo to a regular cargo hold!"));
+                guiLog.getChildren().add(new Label("Cannot add special cargo to a regular cargo hold!"));
             } else {
                 controller.placeGoods(selectedPoint.get(), selectedGoodsType.get());
                 selectedPoint.set(null);

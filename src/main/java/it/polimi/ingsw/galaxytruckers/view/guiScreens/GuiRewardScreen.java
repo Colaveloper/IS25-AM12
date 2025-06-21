@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.GrabRewardState;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
-public class GuiRewardScreen extends GuiGameScreen {
+public class GuiRewardScreen extends GuiAdventureScreen {
     public GuiRewardScreen(ClientModel model, ControllerToServer controller, GrabRewardState grabRewardState) {
         super(model, controller, grabRewardState);
     }

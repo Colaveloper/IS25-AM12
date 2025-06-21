@@ -43,6 +43,19 @@ public class GuiCrewInitializationScreen extends GuiGameScreen {
     }
 
     @Override
+    protected VBox getFreeUseVBox() {
+        return new VBox();
+    }
+
+    @Override
+    protected VBox getShipBoardVBox(ShipBoard shipBoard) {
+        VBox getShipBoardVBox = new VBox(5);
+        getShipBoardVBox.setAlignment(Pos.CENTER);
+        getShipBoardVBox.getChildren().addAll(guiShipBoards.get(shipBoard));
+        return getShipBoardVBox;
+    }
+
+    @Override
     public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
         guiShipBoards.get(shipBoard).notifyComponentChange(point);
     }

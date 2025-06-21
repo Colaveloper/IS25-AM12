@@ -27,13 +27,11 @@ public class GuiRemoveCrewScreen extends GuiAdventureScreen {
         super(model, controller, removeCrewState);
         this.selectedPoint = new SimpleObjectProperty<>();
         if (isMyTurn()) {
-            guiContextBox.getChildren().setAll(
-                    new Label("Your turn to remove crew members"),
-                    new Label("Select cabins to remove crew from"),
-                    new Label("Then select remove action")
-            );
+            guiLog.log("Your turn to remove crew members");
+            guiLog.log("Select a cabin to remove crew from");
+            guiLog.log("Then select remove action");
         } else {
-            guiContextBox.getChildren().setAll(new Label("Wait for others to remove crew members"));
+            guiLog.log("Wait for others to remove crew members");
         }
     }
 
@@ -45,9 +43,9 @@ public class GuiRemoveCrewScreen extends GuiAdventureScreen {
                 if (state.getAvailableActions().contains(StateActions.LOSE_CREW)) {
                     if (myShipBoard.getCabins().containsKey(point)) {
                         selectedPoint.set(point);
-                        guiContextBox.getChildren().setAll(new Label("Action to be performed at "+ point.x + "," + point.y));
+                        guiLog.log("Action to be performed at "+ point.x + "," + point.y);
                     } else {
-                        guiContextBox.getChildren().setAll(new Label("No cabin at " + point.x + "," + point.y));
+                        guiLog.log("No cabin at " + point.x + "," + point.y);
                     }
                 }
             }

@@ -29,7 +29,7 @@ public class GuiComponent extends StackPane {
 
         contentBox = new HBox(2);
 
-        setPrefSize(50, 50);
+        setMaxSize(50, 50);
         setAlignment(Pos.CENTER);
         getChildren().addAll(componentView, contentBox);
     }

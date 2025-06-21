@@ -5,13 +5,17 @@ import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.awt.*;
 import java.io.IOException;
@@ -22,17 +26,32 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-public class GuiShipBoard extends GridPane {
-    private final int minX;
-    private final int minY;
+public class GuiShipBoard extends PurpleVBox {
+    private int minX;
+    private int minY;
     private final GuiController controller;
+    private final GridPane shipGrid;
 
     Image emptyAreaImage = null;
     public final static Path emptyAreaImagePath = Path.of("src/main/resources/textures/tiles/empty_area.png");
 
-    public GuiShipBoard(ShipBoard shipBoard, GuiController controller) {
+    public GuiShipBoard(String name, ShipBoard shipBoard, GuiController controller) {
         this.controller = controller;
 
+        super(5);
+        setAlignment(Pos.CENTER);
+
+        shipGrid = new GridPane();
+        setShipGrid(shipBoard);
+
+        Label nameLabel = new Label(name);
+        nameLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
+        nameLabel.setTextFill(Color.WHITE);
+
+        this.getChildren().addAll(nameLabel, shipGrid);
+    }
+
+    private void setShipGrid(ShipBoard shipBoard) {
         Set<Point> shipArea = shipBoard.getShipArea();
         Map<Point, Component> componentMap = shipBoard.getComponentMap();
 
@@ -44,8 +63,8 @@ public class GuiShipBoard extends GridPane {
         int rows = maxY - minY + 1;
         int cols = maxX - minX + 1;
 
-        this.setHgap(0);
-        this.setVgap(0);
+        shipGrid.setHgap(0);
+        shipGrid.setVgap(0);
 
         try (InputStream is = Files.newInputStream(emptyAreaImagePath)) {
             emptyAreaImage = new Image(is);
@@ -55,12 +74,12 @@ public class GuiShipBoard extends GridPane {
 
         for (int x = 0; x < cols; x++) {
             javafx.scene.control.Label colLabel = new javafx.scene.control.Label(String.valueOf(minX + x));
-            this.add(colLabel, x + 1, 0);
+            shipGrid.add(colLabel, x + 1, 0);
         }
 
         for (int y = 0; y < rows; y++) {
             javafx.scene.control.Label rowLabel = new Label(String.valueOf(minY + y));
-            this.add(rowLabel, 0, y + 1);
+            shipGrid.add(rowLabel, 0, y + 1);
 
             for (int x = 0; x < cols; x++) {
                 Point currentPoint = new Point(minX + x, minY + y);
@@ -68,16 +87,12 @@ public class GuiShipBoard extends GridPane {
                     StackPane areaPane;
                     if (componentMap.containsKey(currentPoint)) {
                         areaPane = GuiComponent.of(componentMap.get(currentPoint));
+                        areaPane.setMaxSize(50, 50);
+                        areaPane.setOnMouseClicked(_->controller.handlePointPress(currentPoint));
                     } else {
-                        areaPane = new StackPane();
-                        ImageView FreeAreaView = new ImageView(emptyAreaImage);
-                        FreeAreaView.setFitWidth(50);
-                        FreeAreaView.setFitHeight(50);
-                        areaPane.getChildren().add(FreeAreaView);
-                        areaPane.setPrefSize(50, 50);
+                        areaPane = getEmptyAreaPane(currentPoint);
                     }
-                    areaPane.setOnMouseClicked(_->controller.handlePointPress(currentPoint));
-                    this.add(areaPane, x + 1, y + 1);
+                    shipGrid.add(areaPane, x + 1, y + 1);
                 }
             }
         }
@@ -85,7 +100,7 @@ public class GuiShipBoard extends GridPane {
 
     public void notifyPlaceComponent(Component component, Point point, Direction orientation) {
         Platform.runLater(() -> {
-            Optional<Node> toReplace = this.getChildren().stream()
+            Optional<Node> toReplace = shipGrid.getChildren().stream()
                     .filter(node -> {
                         Integer col = GridPane.getColumnIndex(node);
                         Integer row = GridPane.getRowIndex(node);
@@ -97,17 +112,18 @@ public class GuiShipBoard extends GridPane {
                     .findFirst();
 
             toReplace.ifPresent(node -> {
-                this.getChildren().remove(node);
+                shipGrid.getChildren().remove(node);
                 GuiComponent guiComponent = new GuiComponent(component);
+                guiComponent.setMaxSize(50, 50);
                 guiComponent.setOnMouseClicked(_ -> controller.handlePointPress(point));
-                this.add(guiComponent, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));
+                shipGrid.add(guiComponent, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));
             });
         });
     }
 
     public void notifyRemoveComponent(Point oldPosition) {
         Platform.runLater(() -> {
-            Optional<Node> toReplace = this.getChildren().stream()
+            Optional<Node> toReplace = shipGrid.getChildren().stream()
                     .filter(node -> {
                         Integer col = GridPane.getColumnIndex(node);
                         Integer row = GridPane.getRowIndex(node);
@@ -119,20 +135,25 @@ public class GuiShipBoard extends GridPane {
                     .findFirst();
 
             toReplace.ifPresent(node -> {
-                this.getChildren().remove(node);
+                shipGrid.getChildren().remove(node);
                 StackPane areaView = getEmptyAreaPane(oldPosition);
-                this.add(areaView, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));
+                shipGrid.add(areaView, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));
             });
         });
     }
 
     private StackPane getEmptyAreaPane(Point position) {
         StackPane areaPane = new StackPane();
-        ImageView FreeAreaView = new ImageView(emptyAreaImage);
-        FreeAreaView.setFitWidth(50);
-        FreeAreaView.setFitHeight(50);
-        areaPane.getChildren().add(FreeAreaView);
-        areaPane.setPrefSize(50, 50);
+
+        ImageView freeAreaView = new ImageView(emptyAreaImage);
+        freeAreaView.setFitWidth(50);
+        freeAreaView.setFitHeight(50);
+//        freeAreaView.fitWidthProperty().bind(areaPane.widthProperty());
+//        freeAreaView.fitHeightProperty().bind(areaPane.heightProperty());
+
+        areaPane.getChildren().add(freeAreaView);
+        areaPane.setMaxSize(50, 50);
+        areaPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         areaPane.setOnMouseClicked(_-> controller.handlePointPress(position));
         return areaPane;
     }

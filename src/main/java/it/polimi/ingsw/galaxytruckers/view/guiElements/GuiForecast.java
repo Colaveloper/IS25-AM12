@@ -1,29 +1,24 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
-import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import javafx.application.Platform;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiForecast extends HBox {
+public class GuiForecast extends PurpleHBox {
     private final GuiController controller;
-    private ShipBoard[] blockedForecasts;
     private final List<StackPane> slots;
 
     private static final int SLOT_SIZE = 30;
 
 
     public GuiForecast(ShipBoard[] blockedForecasts, GuiController controller) {
+        super(10);
         this.controller = controller;
-        this.blockedForecasts = blockedForecasts;
         this.slots = new ArrayList<>();
 
         for (int i = 0; i < blockedForecasts.length; i++) {
@@ -74,7 +69,7 @@ public class GuiForecast extends HBox {
         });
     }
 
-    public void notifyReleaseForecast(ShipBoard shipBoard, int deckIndex) {
+    public void notifyReleaseForecast(int deckIndex) {
         Platform.runLater(()-> {
             slots.get(deckIndex).getChildren().setAll(createFreeForecast());
         });

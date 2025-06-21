@@ -10,7 +10,6 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -27,15 +26,15 @@ public class GuiNewCardScreen extends GuiAdventureScreen {
     @Override
     public Pane getNode() {
         layout.setAlignment(Pos.CENTER);
-        layout.getChildren().add(guiContextBox);
+        layout.getChildren().add(guiLog);
 
         if(isMyTurn()) {
             actionButton.setOnAction(e -> getGuiController().drawCard());
             layout.getChildren().add(actionButton);
-            guiContextBox.getChildren().setAll(new Label("Draw and start a new adventure!"));
+            guiLog.getChildren().setAll(new Label("Draw and start a new adventure!"));
         } else {
             actionButton.setDisable(true);
-            guiContextBox.getChildren().setAll(new Label("Wait for the leader to draw"));
+            guiLog.getChildren().setAll(new Label("Wait for the leader to draw"));
         }
 
         Optional<GuiAdventureCard> guiAdventureCard = guiAdventureCard();

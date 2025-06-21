@@ -13,9 +13,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.geometry.Insets;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -39,59 +37,25 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
     }
 
     @Override
-    protected VBox getFullShip(ShipBoard shipBoard) {
-        VBox layout = new VBox(5);
-        layout.setAlignment(Pos.CENTER);
-        layout.setMaxWidth(100);
-        layout.setMaxHeight(100);
+    protected VBox getShipBoardVBox(ShipBoard shipBoard) {
+        VBox getShipBoardVBox = new VBox(5);
+        getShipBoardVBox.setAlignment(Pos.CENTER);
 
-        layout.getChildren().add(guiShipBoards.get(shipBoard));
+        PurpleVBox shipBoardVBox = guiShipBoards.get(shipBoard);
 
         HBox handAndStashBox = new HBox();
         handAndStashBox.getChildren().addAll(guiHands.get(shipBoard), guiStashes.get(shipBoard));
-        layout.getChildren().add(handAndStashBox);
 
-        Player player = null;
-        for (Map.Entry<ShipBoard, Player> entry : model.getShipToPlayer().entrySet()) {
-            if (entry.getKey().equals(shipBoard)) {
-                player = entry.getValue();
-                break;
-            }
-        }
+        getShipBoardVBox.getChildren().addAll(shipBoardVBox, handAndStashBox);
 
-        if (player != null) {
-            Label nicknameLabel = new Label(player.getNickname());
-            nicknameLabel.setStyle(
-                "-fx-font-size: 16px;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-weight: bold;"
-            );
-            layout.getChildren().add(nicknameLabel);
-        }
-
-        return layout;
+        return getShipBoardVBox;
     }
 
     @Override
-    public Pane getNode() {
-        VBox layout = new VBox(10);
-        layout.setAlignment(Pos.TOP_CENTER);
-        layout.setPadding(new Insets(5, 0, 0, 0));
-
-        HBox topRow = new HBox(15);
-        topRow.setAlignment(Pos.CENTER);
-        topRow.getChildren().addAll(guiForecast, getGuiFlightBoard());
-
-        HBox bankRow = new HBox(15);
-        bankRow.setAlignment(Pos.CENTER);
-        bankRow.getChildren().addAll(guiComponentBank, guiHourglass);
-
-        layout.getChildren().addAll(
-            bankRow,
-            topRow,
-            getGuiAllShips()
-        );
-        return layout;
+    protected VBox getFreeUseVBox() {
+        VBox freeUseVBox = new VBox(5);
+        freeUseVBox.getChildren().addAll(guiForecast, guiComponentBank);
+        return freeUseVBox;
     }
 
     @Override
@@ -134,7 +98,7 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
 
     @Override
     public void notifyReleaseForecast(ShipBoard shipBoard, int deckIndex) {
-        guiForecast.notifyReleaseForecast(shipBoard, deckIndex);
+        guiForecast.notifyReleaseForecast(deckIndex);
     }
 
     @Override

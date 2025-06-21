@@ -1,20 +1,22 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
 import it.polimi.ingsw.galaxytruckers.view.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.util.*;
 
-public class GuiFlightBoard extends HBox {
+public class GuiFlightBoard extends PurpleVBox {
     private final GuiController controller;
     private final List<Integer> startingPositions;
     private final int loopLength;
@@ -31,12 +33,27 @@ public class GuiFlightBoard extends HBox {
         this.shipToPlace = flightBoard.getShipToPlace();
         this.slots = new ArrayList<>();
 
+        Label flightBoardLabel = new Label("FlightBoard");
+        flightBoardLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
+        flightBoardLabel.setTextFill(Color.WHITE);
+
+        HBox flightBoardHBox = getFlightBoardHBox();
+
+        getChildren().addAll(flightBoardLabel, flightBoardHBox);
+    }
+
+    private HBox getFlightBoardHBox() {
+
+        HBox flightBoardHBox = new HBox();
+        flightBoardHBox.setMaxWidth(Double.MAX_VALUE);
+        flightBoardHBox.setMaxHeight(30);
+
         // each slot has either a triangle (empty) or a circle (ship)
         for (int i = 0; i < loopLength; i++) {
             StackPane slot = new StackPane();
             slot.setPrefSize(SLOT_SIZE, SLOT_SIZE);
             slots.add(slot);
-            getChildren().add(slot);
+            flightBoardHBox.getChildren().add(slot);
         }
 
         for (int i = 0; i < loopLength; i++) {
@@ -51,8 +68,9 @@ public class GuiFlightBoard extends HBox {
                     );
         }
 
-        setSpacing(5);
-        setAlignment(Pos.CENTER);
+        flightBoardHBox.setSpacing(5);
+        flightBoardHBox.setAlignment(Pos.CENTER);
+        return flightBoardHBox;
     }
 
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {

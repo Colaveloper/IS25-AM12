@@ -22,22 +22,20 @@ import javafx.scene.paint.Color;
 import java.awt.*;
 
 public class GuiLoseGoodsScreen extends GuiAdventureScreen {
-    private ObjectProperty<Point> selectedPoint;
-    private ObjectProperty<GoodsType> selectedGoodsType;
+    private final ObjectProperty<Point> selectedPoint;
+    private final ObjectProperty<GoodsType> selectedGoodsType;
 
     public GuiLoseGoodsScreen(ClientModel model, ControllerToServer controller, RemoveGoodsState removeGoodsState) {
         super(model, controller, removeGoodsState);
         this.selectedPoint = new SimpleObjectProperty<>();
         this.selectedGoodsType = new SimpleObjectProperty<>();
         if (isMyTurn()) {
-            guiContextBox.getChildren().setAll(
-                    new Label("Your turn to lose goods"),
-                    new Label("Select a cargo hold to remove goods from"),
-                    new Label("Select a goods type to remove"),
-                    new Label("Then select remove action")
-            );
+            guiLog.log("Your turn to lose goods");
+            guiLog.log("Select a cargo hold to remove goods from");
+            guiLog.log("Select a goods type to remove");
+            guiLog.log("Then select remove action");
         } else {
-            guiContextBox.getChildren().setAll(new Label("Wait for others to lose goods"));
+            guiLog.log("Wait for others to lose goods");
         }
     }
 
@@ -49,9 +47,9 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
                 if (state.getAvailableActions().contains(StateActions.REMOVE_GOOD)) {
                     if (myShipBoard.getCargoHolds().containsKey(point)) {
                         selectedPoint.set(point);
-                        guiContextBox.getChildren().setAll(new Label("Action to be performed at "+ point.x + "," + point.y));
+                        guiLog.log("Action to be performed at "+ point.x + "," + point.y);
                     } else {
-                        guiContextBox.getChildren().setAll(new Label("No cargo hold at " + point.x + "," + point.y));
+                        guiLog.log("No cargo hold at " + point.x + "," + point.y);
                     }
                 }
             }
@@ -120,7 +118,7 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         for (GoodsType type : GoodsType.values()) {
             Button typeButton = new Button(type.toString());
             typeButton.setOnAction(_ -> {
-                guiContextBox.getChildren().setAll(new Label("The action will be performed on a "+type+" good"));
+                guiLog.log("The action will be performed on a "+type+" good");
                 selectedGoodsType.set(type);
             });
             Background defaultBackground = new Background(new BackgroundFill(
