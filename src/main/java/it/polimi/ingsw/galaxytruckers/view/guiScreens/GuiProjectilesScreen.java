@@ -32,7 +32,7 @@ public class GuiProjectilesScreen extends GuiActivationScreen {
         super(model, controller, handleProjectileState);
         this.projectile = handleProjectileState.getProjectile();
         if (isMyTurn()) {
-            guiContextBox.getChildren().setAll(new Label("Select a component to activate or a battery to use"));
+            guiContextBox.getChildren().setAll(new Label("Select a shield to activate or a battery to use"));
         }
     }
 
@@ -62,10 +62,5 @@ public class GuiProjectilesScreen extends GuiActivationScreen {
 
         projectileBox.getChildren().addAll(projectileView, rollLabel);
         return projectileBox;
-    }
-
-    @Override
-    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        guiShipBoards.get(shipBoard).notifyRemoveComponent(point);
     }
 }

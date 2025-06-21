@@ -83,11 +83,4 @@ public abstract class GuiShipBuildingScreen extends GuiGameScreen {
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
         guiFlightBoard.notifyFlightBoardPosition(shipBoard, position);
     }
-
-    @Override
-    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        guiShipBoards.get(shipBoard).notifyRemoveComponent(point);
-    }
-
-
 }
