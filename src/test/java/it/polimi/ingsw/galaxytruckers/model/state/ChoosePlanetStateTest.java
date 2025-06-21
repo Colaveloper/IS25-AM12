@@ -134,7 +134,7 @@ class ChoosePlanetStateTest {
         testChoosePlanetState.goNext(ship1);
         testChoosePlanetState.goNext(ship2);
         for (int i = 0; i < testChoosePlanetState.getChosenPlanets().length; i++) {
-            assertFalse(testChoosePlanetState.getChosenPlanets()[i]);
+            assertNull(testChoosePlanetState.getChosenPlanets()[i]);
         }
         StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }

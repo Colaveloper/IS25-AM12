@@ -20,6 +20,7 @@ public class Game {
     private final Set<ShipBoard> shipBoards = new HashSet<>();
     private final Set<ShipBoard> givenUpShips = new HashSet<>();
     private final FlightBoard flightBoard;
+    private ShipBoard myShip;
     private GameState currentState = null;
 
     public Game(Level level) {
@@ -36,6 +37,10 @@ public class Game {
         return observers;
     }
 
+    public void setMyShip(ShipBoard myShip) {
+        this.myShip = myShip;
+    }
+
     public ShipBoard addShipBoard(GameColor color) {
         ShipBoard shipBoard = gameFactory.createShipBoard(color);
         shipBoards.add(shipBoard);
@@ -50,6 +55,10 @@ public class Game {
         if (this.currentState != null) this.currentState.leave();
         this.currentState = state;
         state.setGame(this);
+    }
+
+    public ShipBoard getMyShip() {
+        return myShip;
     }
 
     /**

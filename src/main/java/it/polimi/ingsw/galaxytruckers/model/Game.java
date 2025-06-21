@@ -11,7 +11,7 @@ import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.DtoConverter;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.GameSnapshot;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.ShipBoardDTO;
-import it.polimi.ingsw.galaxytruckers.serverController.utils.NetworkUtils;
+import it.polimi.ingsw.galaxytruckers.serverController.utils.ConversionUtils;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
@@ -65,7 +65,7 @@ public class Game implements GameInterface {
         return withStateWriteLock(() -> {
             Map<String, ShipBoardDTO> ships = new HashMap<>();
             for (ShipBoard shipBoard : shipBoards) {
-                ships.put(NetworkUtils.convert(shipBoard),DtoConverter.getShipBoard(shipBoard));
+                ships.put(ConversionUtils.convert(shipBoard),DtoConverter.getShipBoard(shipBoard));
             }
             return new GameSnapshot(
                     DtoConverter.getFlightBoard(flightBoard),

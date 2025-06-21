@@ -3,19 +3,20 @@ package it.polimi.ingsw.galaxytruckers.serverController.utils;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class NetworkUtils {
+public class ConversionUtils {
     public static String convert(ShipBoard shipBoard) {
         return Player.getPlayer(shipBoard).getNickname();
     }
 
     public static <T extends Collection<ShipBoard>, R extends Collection<String>> R convertCollection(T collection, Supplier<R> supplier) {
         return collection.stream()
-                .map(NetworkUtils::convert)
+                .map(ConversionUtils::convert)
                 .collect(supplier,R::add,R::addAll);
     }
 
@@ -23,5 +24,11 @@ public class NetworkUtils {
         return map.entrySet().stream().collect(Collectors.toMap(
                 entry -> convert(entry.getKey()),
                 Map.Entry::getValue));
+    }
+
+    public static String[] convertArray(ShipBoard[] array) {
+        return Arrays.stream(array)
+                .map(ConversionUtils::convert)
+                .toArray(String[]::new);
     }
 }

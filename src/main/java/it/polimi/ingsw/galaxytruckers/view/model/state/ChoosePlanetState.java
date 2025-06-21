@@ -50,4 +50,8 @@ public final class ChoosePlanetState extends AdventureState {
     public ShipBoard[] getOptions() {
         return options;
     }
+
+    public void setOptions(ShipBoard[] options) {
+        System.arraycopy(options, 0, this.options, 0, this.options.length);
+    }
 }

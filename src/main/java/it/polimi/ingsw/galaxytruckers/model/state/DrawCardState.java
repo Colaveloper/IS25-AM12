@@ -4,8 +4,6 @@ import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.SurrenderPolicy;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
-import java.util.List;
-
 public final class DrawCardState extends AdventureState implements GameStateInterface {
     private ShipBoard shipBoard;
     private boolean hasDrawn = false;
@@ -52,7 +50,11 @@ public final class DrawCardState extends AdventureState implements GameStateInte
         getNextState();
     }
 
-    public ShipBoard getShipBoard() {
+    public synchronized ShipBoard getShipBoard() {
         return shipBoard;
+    }
+
+    public synchronized boolean hasDrawn() {
+        return hasDrawn;
     }
 }

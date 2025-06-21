@@ -8,7 +8,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.dto.components.*;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.states.*;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
-import it.polimi.ingsw.galaxytruckers.serverController.utils.NetworkUtils;
+import it.polimi.ingsw.galaxytruckers.serverController.utils.ConversionUtils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,34 +19,19 @@ public class DtoConverter {
     public static StateDTO getState(GameStateInterface gameState) {
         switch (gameState) {
             case AddGoodsState addGoodsState -> {
-                return new AddGoodsDTO(
-                        NetworkUtils.convert(addGoodsState.getShipBoard()),
-                        addGoodsState.getGoodsBuffer()
-                );
+                return stateDtoOf(addGoodsState);
             }
             case ChoosePlanetState choosePlanetState -> {
-                return new ChoosePlanetDTO(
-                        NetworkUtils.convert(choosePlanetState.getCurrentShip()),
-                        choosePlanetState.getNumPlanets()
-                );
+                return stateDtoOf(choosePlanetState);
             }
             case ChooseShipPieceState chooseShipPieceState -> {
-                return new ChooseShipPieceDTO(
-                        Player.getPlayer(chooseShipPieceState.getShipBoard()).getNickname(),
-                        chooseShipPieceState.getShipPieces()
-                );
+                return stateDtoOf(chooseShipPieceState);
             }
             case DeclareEnginePowerState declareEnginePowerState -> {
-                return new SimpleStateDTO(
-                        Player.getPlayer(declareEnginePowerState.getShipBoard()).getNickname(),
-                        StateDTOType.DECLARE_ENGINE_POWER
-                );
+                return stateDtoOf(declareEnginePowerState);
             }
             case DeclareFirePowerState declareFirePowerState -> {
-                return new SimpleStateDTO(
-                        Player.getPlayer(declareFirePowerState.getShipBoard()).getNickname(),
-                        StateDTOType.DECLARE_FIRE_POWER
-                );
+                return stateDtoOf(declareFirePowerState);
             }
             case DrawCardState drawCardState -> {
                 return new SimpleStateDTO(
@@ -55,48 +40,24 @@ public class DtoConverter {
                 );
             }
             case GrabRewardState grabRewardState -> {
-                return new SimpleStateDTO(
-                        Player.getPlayer(grabRewardState.getShipBoard()).getNickname(),
-                        StateDTOType.GRAB_REWARD
-                );
+                return stateDtoOf(grabRewardState);
             }
             case HandleProjectileState handleProjectileState -> {
-                return new HandleProjectileDTO(
-                        Player.getPlayer(handleProjectileState.getShipBoard()).getNickname(),
-                        handleProjectileState.getProjectile().getProjectileType(),
-                        handleProjectileState.getProjectile().getDiceRoll(),
-                        handleProjectileState.getProjectile().getDirection(),
-                        handleProjectileState.getAvailablePositions()
-                );
+                return stateDtoOf(handleProjectileState);
             }
             case RemoveCrewState removeCrewState -> {
-                return new RemoveCrewDTO(
-                        Player.getPlayer(removeCrewState.getShipBoard()).getNickname(),
-                        removeCrewState.getCrewSacrifice()
-                );
+                return stateDtoOf(removeCrewState);
             }
             case RemoveGoodsState removeGoodsState -> {
-                return new RemoveGoodsDTO(
-                        Player.getPlayer(removeGoodsState.getShipBoard()).getNickname(),
-                        removeGoodsState.getGoodsToLose()
-                );
-            }
-            case SecondShipBuildingState _ -> {
-                return new ShipBuildingDTO();
+                return stateDtoOf(removeGoodsState);
             }
             case ShipCorrectionState shipCorrectionState -> {
-                return new ShipCorrectionDTO(
-                        NetworkUtils.convertCollection(shipCorrectionState.getValidShipBoards(), HashSet::new),
-                        NetworkUtils.convertMap(shipCorrectionState.getShipPiecesMap()),
-                        shipCorrectionState.getShouldDiscard()
-                );
+                return stateDtoOf(shipCorrectionState);
             }
             case ShipInitializationState shipInitializationState -> {
-                return new ShipInitializationDTO(
-                        NetworkUtils.convertMap(shipInitializationState.getShipRelevantCabins())
-                );
+                return stateDtoOf(shipInitializationState);
             }
-            case TestShipBuildingState _ -> {
+            case SecondShipBuildingState _, TestShipBuildingState _ -> {
                 return new ShipBuildingDTO();
             }
             case GameState _ -> throw new RuntimeException("Invalid state");
@@ -106,35 +67,53 @@ public class DtoConverter {
     public static ComplexStateDTO getComplexState(GameStateInterface gameState) {
         switch (gameState) {
             case AddGoodsState addGoodsState -> {
+                return stateDtoOf(addGoodsState);
             }
             case ChoosePlanetState choosePlanetState -> {
+                return new ComplexChoosePlanetDTO(
+                        stateDtoOf(choosePlanetState),
+                        ConversionUtils.convertArray(choosePlanetState.getChosenPlanets())
+                );
             }
             case ChooseShipPieceState chooseShipPieceState -> {
+                return stateDtoOf(chooseShipPieceState);
             }
             case DeclareEnginePowerState declareEnginePowerState -> {
+                return stateDtoOf(declareEnginePowerState);
             }
             case DeclareFirePowerState declareFirePowerState -> {
+                return stateDtoOf(declareFirePowerState);
             }
             case DrawCardState drawCardState -> {
+                return new ComplexDrawCardDTO(
+                        ConversionUtils.convert(drawCardState.getShipBoard()),
+                        drawCardState.hasDrawn()
+                );
             }
             case GrabRewardState grabRewardState -> {
+                return stateDtoOf(grabRewardState);
             }
             case HandleProjectileState handleProjectileState -> {
+                return stateDtoOf(handleProjectileState);
             }
             case RemoveCrewState removeCrewState -> {
+                return stateDtoOf(removeCrewState);
             }
             case RemoveGoodsState removeGoodsState -> {
+                return stateDtoOf(removeGoodsState);
             }
             case SecondShipBuildingState secondShipBuildingState -> {
                 return new SecondShipBuildingDTO(
                         getBuildingData(secondShipBuildingState),
                         getHourglass(secondShipBuildingState.getHourglass()),
-                        NetworkUtils.convertMap(secondShipBuildingState.getShipToForecasts())
+                        ConversionUtils.convertMap(secondShipBuildingState.getShipToForecasts())
                 );
             }
             case ShipCorrectionState shipCorrectionState -> {
+                return stateDtoOf(shipCorrectionState);
             }
             case ShipInitializationState shipInitializationState -> {
+                return stateDtoOf(shipInitializationState);
             }
             case TestShipBuildingState testShipBuildingState -> {
                 return new TestShipBuildingDTO(
@@ -145,7 +124,6 @@ public class DtoConverter {
                 throw new RuntimeException("Invalid state");
             }
         }
-        return new ShipInitializationDTO(new HashMap<>());
     }
 
     public static ActiveLobbyDTO getActiveLobby(Lobby lobby) {
@@ -174,13 +152,13 @@ public class DtoConverter {
         return new BuildingDataDTO(
                 shipBuildingState.getComponentBank().getNumCovered(),
                 shipBuildingState.getComponentBank().getUncoveredIds(),
-                NetworkUtils.convertCollection(shipBuildingState.getCompletedShipBoards(), HashSet::new)
+                ConversionUtils.convertCollection(shipBuildingState.getCompletedShipBoards(), HashSet::new)
         );
     }
 
     public static FlightBoardDTO getFlightBoard(FlightBoard flightBoard) {
         return new FlightBoardDTO(
-                NetworkUtils.convertMap(flightBoard.getShipToPlace())
+                ConversionUtils.convertMap(flightBoard.getShipToPlace())
         );
     }
 
@@ -230,4 +208,88 @@ public class DtoConverter {
                 payload
         );
     }
+
+    //region Specific state conversion methods
+
+    private static ShipCorrectionDTO stateDtoOf(ShipCorrectionState shipCorrectionState) {
+        return new ShipCorrectionDTO(
+                ConversionUtils.convertCollection(shipCorrectionState.getValidShipBoards(), HashSet::new),
+                ConversionUtils.convertMap(shipCorrectionState.getShipPiecesMap()),
+                shipCorrectionState.getShouldDiscard()
+        );
+    }
+
+    private static ShipInitializationDTO stateDtoOf(ShipInitializationState shipInitializationState) {
+        return new ShipInitializationDTO(
+                ConversionUtils.convertMap(shipInitializationState.getShipRelevantCabins())
+        );
+    }
+
+    private static SimpleStateDTO stateDtoOf(DeclareFirePowerState declareFirePowerState) {
+        return new SimpleStateDTO(
+                ConversionUtils.convert(declareFirePowerState.getShipBoard()),
+                StateDTOType.DECLARE_FIRE_POWER
+        );
+    }
+
+    private static SimpleStateDTO stateDtoOf(DeclareEnginePowerState declareEnginePowerState) {
+        return new SimpleStateDTO(
+                ConversionUtils.convert(declareEnginePowerState.getShipBoard()),
+                StateDTOType.DECLARE_ENGINE_POWER
+        );
+    }
+
+    private static SimpleStateDTO stateDtoOf(GrabRewardState grabRewardState) {
+        return new SimpleStateDTO(
+                ConversionUtils.convert(grabRewardState.getShipBoard()),
+                StateDTOType.GRAB_REWARD
+        );
+    }
+
+    private static AddGoodsDTO stateDtoOf(AddGoodsState addGoodsState) {
+        return new AddGoodsDTO(
+                ConversionUtils.convert(addGoodsState.getShipBoard()),
+                addGoodsState.getGoodsBuffer()
+        );
+    }
+
+    private static ChooseShipPieceDTO stateDtoOf(ChooseShipPieceState chooseShipPieceState) {
+        return new ChooseShipPieceDTO(
+                Player.getPlayer(chooseShipPieceState.getShipBoard()).getNickname(),
+                chooseShipPieceState.getShipPieces()
+        );
+    }
+
+    private static HandleProjectileDTO stateDtoOf(HandleProjectileState handleProjectileState) {
+        return new HandleProjectileDTO(
+                Player.getPlayer(handleProjectileState.getShipBoard()).getNickname(),
+                handleProjectileState.getProjectile().getProjectileType(),
+                handleProjectileState.getProjectile().getDiceRoll(),
+                handleProjectileState.getProjectile().getDirection(),
+                handleProjectileState.getAvailablePositions()
+        );
+    }
+
+    private static RemoveCrewDTO stateDtoOf(RemoveCrewState removeCrewState) {
+        return new RemoveCrewDTO(
+                Player.getPlayer(removeCrewState.getShipBoard()).getNickname(),
+                removeCrewState.getCrewSacrifice()
+        );
+    }
+
+    private static RemoveGoodsDTO stateDtoOf(RemoveGoodsState removeGoodsState) {
+        return new RemoveGoodsDTO(
+                Player.getPlayer(removeGoodsState.getShipBoard()).getNickname(),
+                removeGoodsState.getGoodsToLose()
+        );
+    }
+
+    private static ChoosePlanetDTO stateDtoOf(ChoosePlanetState choosePlanetState) {
+        return new ChoosePlanetDTO(
+                ConversionUtils.convert(choosePlanetState.getCurrentShip()),
+                choosePlanetState.getNumPlanets()
+        );
+    }
+
+    //endregion
 }

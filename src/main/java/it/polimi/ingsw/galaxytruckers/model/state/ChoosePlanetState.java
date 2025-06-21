@@ -12,13 +12,13 @@ public final class ChoosePlanetState extends AdventureState implements GameState
     private final int numPlanets;
     private final List<ShipBoard> orderedShipBoards;
     private final BiConsumer<ShipBoard, Integer> choosePlanetMethod;
-    private final boolean[] chosenPlanets;
+    private final ShipBoard[] chosenPlanets;
 
     public ChoosePlanetState(BiConsumer<ShipBoard,Integer> choosePlanetMethod, int numPlanets) {
         this.choosePlanetMethod = choosePlanetMethod;
         this.numPlanets = numPlanets;
         this.orderedShipBoards = new ArrayList<>();
-        this.chosenPlanets = new boolean[numPlanets];
+        this.chosenPlanets = new ShipBoard[numPlanets];
         this.shipIndex = 0;
     }
 
@@ -35,11 +35,11 @@ public final class ChoosePlanetState extends AdventureState implements GameState
             throw new IllegalStateException("It's not your turn");
         }
         checkIfExpired();
-        if (choice < 0 || choice > this.numPlanets || chosenPlanets[choice]) {
+        if (choice < 0 || choice > this.numPlanets || chosenPlanets[choice] != null) {
             throw new IllegalArgumentException("Invalid choice: " + choice);
         }
         choosePlanetMethod.accept(getCurrentShip(),choice);
-        chosenPlanets[choice] = true;
+        chosenPlanets[choice] = shipBoard;
         ShipBoard nextShipBoard = nextShip();
         if (nextShipBoard != null) {
             game.getEventListener().notifyPlanetChoiceEvent(shipBoard,choice, nextShipBoard);
@@ -74,7 +74,7 @@ public final class ChoosePlanetState extends AdventureState implements GameState
         return orderedShipBoards.get(shipIndex);
     }
 
-    public synchronized boolean[] getChosenPlanets() {
+    public synchronized ShipBoard[] getChosenPlanets() {
         return chosenPlanets;
     }
 }

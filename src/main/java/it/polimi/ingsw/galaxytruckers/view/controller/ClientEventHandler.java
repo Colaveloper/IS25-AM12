@@ -254,100 +254,20 @@ public class ClientEventHandler implements EventHandler<Event> {
     }
 
     private void updateGameState(StateDTO stateDTO) {
-        GameState gameState = null;
-        ShipBoard myShip = clientModel.getMyShip();
-        switch (stateDTO) {
-            case AddGoodsDTO addGoodsDTO -> gameState = new AddGoodsState(
-                    myShip,
-                   addGoodsDTO.goodsBuffer(),
-                   playerRegistry.getByNickname(addGoodsDTO.playerName()).getShipBoard()
-           );
-            case ChoosePlanetDTO choosePlanetDTO -> {
-                ShipBoard ship = playerRegistry.getByNickname(choosePlanetDTO.playerName()).getShipBoard();
-                gameState = new ChoosePlanetState(
-                        myShip,
-                        ship,
-                        choosePlanetDTO.numPlanets()
-                );
-            }
-            case ChooseShipPieceDTO chooseShipPieceDTO -> gameState = new ChooseShipPieceState(
-                    myShip,
-                    chooseShipPieceDTO.shipPieces(),
-                    playerRegistry.getByNickname(chooseShipPieceDTO.playerName()).getShipBoard()
-            );
-            case HandleProjectileDTO handleProjectileDTO -> gameState = new HandleProjectileState(
-                    myShip,
-                    playerRegistry.getByNickname(handleProjectileDTO.playerName()).getShipBoard(),
-                    new Projectile(handleProjectileDTO.diceRoll(), handleProjectileDTO.direction(), handleProjectileDTO.projectileType()),
-                    handleProjectileDTO.availablePoints()
-            );
-            case RemoveCrewDTO removeCrewDTO -> gameState = new RemoveCrewState(
-                    myShip,
-                    removeCrewDTO.crewLoss(),
-                    playerRegistry.getByNickname(removeCrewDTO.playerName()).getShipBoard()
-            );
-            case RemoveGoodsDTO removeGoodsDTO -> gameState = new RemoveGoodsState(
-                    myShip,
-                    removeGoodsDTO.goodsLoss(),
-                    playerRegistry.getByNickname(removeGoodsDTO.playerName()).getShipBoard()
-            );
-            case ShipBuildingDTO shipBuildingDTO -> {
-                gameState = clientModel.getGame().getGameFactory().createShipBuildingState();
-                gameState.setMyShip(clientModel.getMyShip());
-            }
-            case ShipCorrectionDTO shipCorrectionDTO -> gameState = new ShipCorrectionState(
-                    myShip,
-                    shipCorrectionDTO.validShips().stream()
-                            .map(name -> playerRegistry.getByNickname(name).getShipBoard())
-                            .collect(Collectors.toSet()),
-                    shipCorrectionDTO.shipPieces().entrySet().stream()
-                            .collect(Collectors.toMap(
-                                    e -> playerRegistry.getByNickname(e.getKey()).getShipBoard(),
-                                    Map.Entry::getValue
-                            )),
-                    shipCorrectionDTO.shouldDiscard());
-            case ShipInitializationDTO shipInitializationDTO -> {
-                gameState = new ShipInitializationState(
-                        myShip,
-                        conversionUtils.convertMap(shipInitializationDTO.crewTypeToCabins())
-                );
-            }
-            case SimpleStateDTO simpleStateDTO -> {
-                ShipBoard shipBoard = playerRegistry.getByNickname(simpleStateDTO.playerName()).getShipBoard();
-                switch (simpleStateDTO.type()) {
-                    case DECLARE_ENGINE_POWER -> gameState = new DeclareEnginePowerState(myShip,shipBoard);
-                    case DECLARE_FIRE_POWER -> gameState = new DeclareFirePowerState(myShip,shipBoard);
-                    case DRAW_CARD -> gameState = new DrawCardState(myShip,shipBoard);
-                    case GRAB_REWARD -> gameState = new GrabRewardState(myShip,shipBoard);
-                }
-            }
+        GameState gameState = conversionUtils.getGameState(stateDTO,clientModel);
+        if (gameState == null) System.err.println("GameState is null");
+        else {
+            clientModel.notifyCurrentState(gameState);
+            clientModel.setMetaState(MetaState.INGAME);
         }
-        clientModel.notifyCurrentState(gameState);
-        clientModel.setMetaState(MetaState.INGAME);
     }
 
     private void updateGameState(ComplexStateDTO complexStateDTO) {
-        GameState newState;
-        switch (complexStateDTO) {
-            case SecondShipBuildingDTO secondShipBuildingDTO -> {
-                SecondShipBuildingState state = new SecondShipBuildingState();
-                newState = state;
-                conversionUtils.convertBuildingData(state,secondShipBuildingDTO.baseData());
-            }
-            case ShipInitializationDTO shipInitializationDTO -> {
-                newState = new ShipInitializationState(
-                        clientModel.getMyShip(),
-                        conversionUtils.convertMap(shipInitializationDTO.crewTypeToCabins())
-                );
-            }
-            case TestShipBuildingDTO testShipBuildingDTO -> {
-                TestShipBuildingState state = new TestShipBuildingState();
-                newState = state;
-                conversionUtils.convertBuildingData(state,testShipBuildingDTO.data());
-            }
+        GameState state = conversionUtils.getGameState(complexStateDTO,clientModel);
+        if (state == null) System.err.println("GameState is null");
+        else {
+            clientModel.notifyCurrentState(state);
+            clientModel.setMetaState(MetaState.INGAME);
         }
-        newState.setMyShip(clientModel.getMyShip());
-        clientModel.notifyCurrentState(newState);
-        clientModel.setMetaState(MetaState.INGAME);
     }
 }

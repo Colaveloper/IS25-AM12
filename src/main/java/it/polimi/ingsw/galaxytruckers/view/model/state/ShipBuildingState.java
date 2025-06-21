@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
 import it.polimi.ingsw.galaxytruckers.view.Direction;
-import it.polimi.ingsw.galaxytruckers.view.controller.ComponentRegistry;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ComponentBank;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;

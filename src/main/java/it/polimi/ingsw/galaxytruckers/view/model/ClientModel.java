@@ -77,6 +77,10 @@ public class ClientModel {
                 players.add(player);
                 player.setShipBoard(game.addShipBoard(color));
                 shipToPlayer.put(player.getShipBoard(), player);
+                //TODO: fix myShipLogic to not be included in the states
+                if (getClientPlayer().equals(player)) {
+                    game.setMyShip(player.getShipBoard());
+                }
             }
         }
     }
