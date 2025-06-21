@@ -9,28 +9,36 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.RemoveGoodsState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.awt.*;
 
 public class GuiLoseGoodsScreen extends GuiAdventureScreen {
-    private final BorderPane layout;
-    private Point selectedPoint;
-    private GoodsType selectedGoodsType;
-    private GuiShipBoard guiShipBoard;
+    private ObjectProperty<Point> selectedPoint;
+    private ObjectProperty<GoodsType> selectedGoodsType;
 
     public GuiLoseGoodsScreen(ClientModel model, ControllerToServer controller, RemoveGoodsState removeGoodsState) {
         super(model, controller, removeGoodsState);
-        this.layout = new BorderPane();
-        this.selectedPoint = null;
-        this.selectedGoodsType = null;
+        this.selectedPoint = new SimpleObjectProperty<>();
+        this.selectedGoodsType = new SimpleObjectProperty<>();
+        if (isMyTurn()) {
+            guiContextBox.getChildren().setAll(
+                    new Label("Your turn to lose goods"),
+                    new Label("Select a cargo hold to remove goods from"),
+                    new Label("Select a goods type to remove"),
+                    new Label("Then select remove action")
+            );
+        } else {
+            guiContextBox.getChildren().setAll(new Label("Wait for others to lose goods"));
+        }
     }
 
     @Override
@@ -38,8 +46,14 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         return new GuiController() {
             @Override
             public void handlePointPress(Point point) {
-                selectedPoint = point;
-                Platform.runLater(() -> updateLayout());
+                if (state.getAvailableActions().contains(StateActions.REMOVE_GOOD)) {
+                    if (myShipBoard.getCargoHolds().containsKey(point)) {
+                        selectedPoint.set(point);
+                        guiContextBox.getChildren().setAll(new Label("Action to be performed at "+ point.x + "," + point.y));
+                    } else {
+                        guiContextBox.getChildren().setAll(new Label("No cargo hold at " + point.x + "," + point.y));
+                    }
+                }
             }
 
             @Override
@@ -53,101 +67,111 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
 
     @Override
     public Pane getNode() {
-        updateLayout();
-        return layout;
+        Pane superPane = super.getNode();
+
+        if (isMyTurn()) {
+            HBox bottomBox = new HBox(10);
+            bottomBox.setAlignment(Pos.CENTER);
+
+            VBox cargoInfoBox = new VBox(2);
+            updateCargoInfoBox(cargoInfoBox);
+
+            bottomBox.getChildren().addAll(cargoInfoBox, getButtonsBox());
+
+            superPane.getChildren().add(bottomBox);
+            superPane.setScaleX(0.9);
+            superPane.setScaleY(0.9);
+        }
+        return superPane;
     }
 
-    private void updateLayout() {
-        layout.getChildren().clear();
+    private void updateCargoInfoBox(VBox cargoInfoBox) {
+        cargoInfoBox.getChildren().clear();
+        cargoInfoBox.getChildren().add(new Label("Cargo holds with goods: " + countCargoHoldsWithGoods()));
 
-        ShipBoard currentShip = state.getShipBoard();
+        if (selectedPoint.get() != null && myShipBoard.getCargoHolds().containsKey(selectedPoint.get())) {
+            CargoHold cargoHold = myShipBoard.getCargoHolds().get(selectedPoint.get());
+            Label positionLabel = new Label("Selected position: (" + selectedPoint.get().x + "," + selectedPoint.get().y + ")");
+            positionLabel.setTextFill(Color.WHITE);
+            cargoInfoBox.getChildren().add(positionLabel);
 
-        VBox topInfo = new VBox(5);
-        topInfo.setPadding(new Insets(10));
-        topInfo.setAlignment(Pos.CENTER);
-
-        if (isMyTurn()) {
-            Label turnLabel = new Label("Your turn to lose goods");
-            turnLabel.setStyle("-fx-text-fill: white;");
-            topInfo.getChildren().add(turnLabel);
-
-            Label instructionLabel = new Label("Select cargo holds to discard goods from");
-            instructionLabel.setStyle("-fx-text-fill: white;");
-            topInfo.getChildren().add(instructionLabel);
-
-            int cargoHoldsWithGoods = countCargoHoldsWithGoods();
-            Label cargoHoldsLabel = new Label("Cargo holds with goods: " + cargoHoldsWithGoods);
-            cargoHoldsLabel.setStyle("-fx-text-fill: white;");
-            topInfo.getChildren().add(cargoHoldsLabel);
-
-            if (selectedPoint != null) {
-                Label selectedPointLabel = new Label("Selected position: (" + selectedPoint.x + "," + selectedPoint.y + ")");
-                selectedPointLabel.setStyle("-fx-text-fill: white;");
-                topInfo.getChildren().add(selectedPointLabel);
-            }
-        } else {
-            Label waitingLabel = new Label("Waiting for " + currentShip.getColor() + " ship to lose goods");
-            waitingLabel.setStyle("-fx-text-fill: white;");
-            topInfo.getChildren().add(waitingLabel);
-        }
-
-        layout.setTop(topInfo);
-
-        guiShipBoard = new GuiShipBoard(currentShip, getGuiController());
-
-        VBox centerBox = new VBox(10);
-        centerBox.setAlignment(Pos.CENTER);
-        centerBox.getChildren().add(guiShipBoard);
-
-        layout.setCenter(centerBox);
-
-        if (isMyTurn()) {
-            HBox buttons = new HBox(10);
-            buttons.setPadding(new Insets(10));
-            buttons.setAlignment(Pos.CENTER);
-
-            VBox goodsTypeButtons = new VBox(5);
-            goodsTypeButtons.setPadding(new Insets(5));
-            Label selectGoodsLabel = new Label("Select goods type:");
-            selectGoodsLabel.setStyle("-fx-text-fill: white;");
-            goodsTypeButtons.getChildren().add(selectGoodsLabel);
-
-            for (GoodsType type : GoodsType.values()) {
-                Button typeButton = new Button(type.toString());
-                typeButton.setOnAction(e -> {
-                    selectedGoodsType = type;
-                    updateLayout();
-                });
-
-                if (type == selectedGoodsType) {
-                    typeButton.setStyle("-fx-background-color: lightblue;");
+            for (GoodsType type : cargoHold.getGoods().keySet()) {
+                int amount = cargoHold.getGoods().getOrDefault(type, 0);
+                if (amount > 0) {
+                    Label goodsLabel = new Label(type + ": " + amount);
+                    goodsLabel.setTextFill(Color.WHITE);
+                    cargoInfoBox.getChildren().add(goodsLabel);
                 }
-
-                goodsTypeButtons.getChildren().add(typeButton);
             }
-
-            VBox actionButtons = new VBox(5);
-            actionButtons.setPadding(new Insets(5));
-
-            Button removeButton = new Button("Lose Good");
-            removeButton.setDisable(selectedPoint == null ||
-                    !currentShip.getCargoHolds().containsKey(selectedPoint) ||
-                    currentShip.getCargoHolds().get(selectedPoint).getGoods().isEmpty());
-            removeButton.setOnAction(e -> {
-                controller.loseGoods(selectedPoint);
-                selectedPoint = null;
-                selectedGoodsType = null;
-                updateLayout();
-            });
-
-            Button nextButton = new Button("Done");
-            nextButton.setOnAction(e -> getGuiController().goNext());
-
-            actionButtons.getChildren().addAll(removeButton, nextButton);
-
-            buttons.getChildren().addAll(goodsTypeButtons, actionButtons);
-            layout.setBottom(buttons);
         }
+    }
+
+    private HBox getButtonsBox() {
+        HBox buttonsBox = new HBox(10);
+        buttonsBox.setPadding(new Insets(10));
+        buttonsBox.setAlignment(Pos.CENTER);
+
+        VBox goodsTypeBox = new VBox(5);
+        goodsTypeBox.setPadding(new Insets(5));
+        Label selectGoodsLabel = new Label("Select goods type:");
+        selectGoodsLabel.setTextFill(Color.WHITE);
+        goodsTypeBox.getChildren().add(selectGoodsLabel);
+
+        for (GoodsType type : GoodsType.values()) {
+            Button typeButton = new Button(type.toString());
+            typeButton.setOnAction(_ -> {
+                guiContextBox.getChildren().setAll(new Label("The action will be performed on a "+type+" good"));
+                selectedGoodsType.set(type);
+            });
+            Background defaultBackground = new Background(new BackgroundFill(
+                    Color.LIGHTGRAY, new CornerRadii(5.0), null
+            ));
+            Background focusedBackground = new Background(new BackgroundFill(
+                    switch (type) {
+                        case RED -> Color.RED;
+                        case BLUE -> Color.BLUE;
+                        case GREEN -> Color.GREEN;
+                        case YELLOW -> Color.GOLD;
+                    }, new CornerRadii(5.0), null));
+            typeButton.backgroundProperty().bind(
+                Bindings.createObjectBinding(
+                        () -> (selectedGoodsType.get() == type
+                                ? focusedBackground
+                                : defaultBackground
+                        ), selectedGoodsType
+                )
+            );
+            goodsTypeBox.getChildren().add(typeButton);
+        }
+
+        VBox actionButtons = new VBox(5);
+        actionButtons.setPadding(new Insets(5));
+
+        Button removeButton = new Button("Lose Good");
+        removeButton.disableProperty().bind(
+                Bindings.createBooleanBinding(
+                        () -> (
+                                selectedPoint.get() == null ||
+                                selectedGoodsType.get() == null ||
+                                !myShipBoard.getCargoHolds().containsKey(selectedPoint.get()) ||
+                                !myShipBoard.getCargoHolds().get(selectedPoint.get()).getGoods().containsKey(selectedGoodsType.get())
+                        ), selectedGoodsType, selectedPoint
+                )
+        );
+
+        removeButton.setOnAction(_ -> {
+            controller.loseGoods(selectedPoint.get());
+            selectedPoint.set(null);
+            selectedGoodsType.set(null);
+        });
+
+        Button nextButton = new Button("Done");
+        nextButton.setOnAction(_ -> getGuiController().goNext());
+
+        actionButtons.getChildren().addAll(removeButton, nextButton);
+
+        buttonsBox.getChildren().addAll(goodsTypeBox, actionButtons);
+        return buttonsBox;
     }
 
     private int countCargoHoldsWithGoods() {
@@ -159,5 +183,16 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
             }
         }
         return count;
+    }
+
+    @Override
+    public void notifyComponentChange(ShipBoard shipBoard, Point point) {
+        super.notifyComponentChange(shipBoard, point);
+        if (isMyTurn()) {
+            Platform.runLater(() -> {
+                VBox cargoInfoBox = new VBox(2);
+                updateCargoInfoBox(cargoInfoBox);
+            });
+        }
     }
 }

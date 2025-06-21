@@ -25,10 +25,7 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
         batteriesToSpend = new SimpleIntegerProperty(0);
         if (isMyTurn()) {
             guiContextBox.getChildren().setAll(new Label("Spend the batteries you want to activate components, then press OK"));
-            goNextButton.setOnAction(_ -> getGuiController().goNext());
-            goNextButton.disableProperty().bind(
-                    Bindings.createBooleanBinding(() -> (batteriesToSpend.get() != 0), batteriesToSpend)
-            );
+        } else {
             guiContextBox.getChildren().setAll(new Label("Wait for your turn"));
         }
     }
@@ -37,7 +34,16 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
     public Pane getNode() {
         Pane superGroup = super.getNode();
         if (isMyTurn()) {
+            batteriesToSpend.set(0);
+
+            goNextButton.setOnAction(_ -> getGuiController().goNext());
+            goNextButton.disableProperty().bind(
+                    Bindings.createBooleanBinding(() -> (batteriesToSpend.get() != 0), batteriesToSpend)
+            );
             superGroup.getChildren().add(goNextButton);
+            goNextButton.setVisible(true);
+
+            guiContextBox.getChildren().setAll(new Label("Spend the batteries you want to activate components, then press FINISH ACTIVATION"));
         }
         return superGroup;
     }
@@ -87,33 +93,14 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
 
     @Override
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-        batteriesToSpend.add(1);
+        batteriesToSpend.add(-1);
         guiShipBoards.get(myShipBoard).highlightPoints(Set.of(point), Color.BLUE);
     }
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        batteriesToSpend.add(-1);
+        batteriesToSpend.add(1);
+        guiShipBoards.get(myShipBoard).notifyComponentChange(point);
         guiShipBoards.get(myShipBoard).highlightPoints(Set.of(point), Color.GREEN);
     }
-//
-//    private void highlightComponent(ShipBoard shipBoard, Point point, CliHighlights color) {
-//        GuiShipBoard guiShipBoard = guiShipBoards.get(shipBoard);
-//        if (guiShipBoard == null) return;
-//
-//        int minX = shipBoard.getShipArea().stream().mapToInt(p -> p.x).min().orElse(0);
-//        int minY = shipBoard.getShipArea().stream().mapToInt(p -> p.y).min().orElse(0);
-//
-//        int targetCol = point.x - minX + 1;
-//        int targetRow = point.y - minY + 1;
-//
-//        guiShipBoard.getChildren().stream()
-//            .filter(node -> {
-//                Integer col = GridPane.getColumnIndex(node);
-//                Integer row = GridPane.getRowIndex(node);
-//                return col != null && row != null && col == targetCol && row == targetRow;
-//            })
-//            .findFirst()
-//            .ifPresent(node -> highlightNode(node, color));
-//    }
 }
