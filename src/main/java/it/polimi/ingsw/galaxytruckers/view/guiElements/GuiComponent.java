@@ -90,15 +90,15 @@ public class GuiComponent extends StackPane {
         contentBox.setBorder(Border.EMPTY);
     }
 
-    private String getColorString(CliHighlights highlight) {
-        return switch (highlight) {
-            case GREEN -> "green";
-            case BLUE -> "blue";
-            case RED -> "red";
-            case YELLOW -> "yellow";
-            default -> "transparent";
-        };
-    }
+//    private String getColorString(CliHighlights highlight) {
+//        return switch (highlight) {
+//            case GREEN -> "green";
+//            case BLUE -> "blue";
+//            case RED -> "red";
+//            case YELLOW -> "yellow";
+//            default -> "transparent";
+//        };
+//    }
 
     public void notifyContentChange() {}
 }

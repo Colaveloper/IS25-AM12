@@ -188,7 +188,7 @@ public class GuiShipBoard extends GridPane {
             getChildren().stream()
                     .filter(node -> node instanceof GuiComponent)
                     .map(node -> (GuiComponent) node)
-                    .forEach(component -> component.clearHighlight());
+                    .forEach(GuiComponent::clearHighlight);
         });
     }
 }
