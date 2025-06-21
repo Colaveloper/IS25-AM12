@@ -57,7 +57,7 @@ public class Hourglass {
             }
             isRunning = true;
             missingTime = duration;
-            scheduledFuture = scheduler.schedule(() -> {
+            scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
                 boolean end = false;
                 synchronized (this) {
                     missingTime--;
@@ -66,8 +66,11 @@ public class Hourglass {
                         isRunning = false;
                     }
                 }
-                if (end) endTask.run();
-            }, 1, TimeUnit.SECONDS);
+                if (end) {
+                    endTask.run();
+                    stop();
+                }
+            }, 0, 1, TimeUnit.SECONDS);
         } else {
             throw new IllegalStateException("The hourglass is not yet finished");
         }

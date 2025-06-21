@@ -18,7 +18,11 @@ import java.util.Set;
 public class GameEventListenerStub extends GameEventListener{
 
     public GameEventListenerStub() {
-        super(null);
+        super(null,null);
+    }
+
+    @Override
+    public void requestSnapshot(Game game, ShipBoard shipBoard) {
     }
 
     @Override

@@ -16,15 +16,21 @@ public final class AddGoodsState extends AdventureState implements GameStateInte
     }
 
     @Override
+    public void skip(ShipBoard shipBoard) {
+        if (!expired && this.shipBoard.equals(shipBoard)) {
+            goNext(shipBoard);
+        }
+    }
+
+    @Override
     public synchronized void addGood(ShipBoard shipBoard, Point position, GoodsType good) {
-        if (!shipBoard.equals(this.shipBoard)) {
+        if (!this.shipBoard.equals(shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
         checkIfExpired();
         if (goodsBuffer.containsKey(good) && goodsBuffer.get(good) > 0) {
-            shipBoard.placeGoods(position, good, 1);
             goodsBuffer.put(good, goodsBuffer.get(good) - 1);
-            game.getEventListener().notifyGoodsUpdateEvent(shipBoard,position,good,true);
+            shipBoard.placeGoods(position, good, 1);
         } else {
             throw new IllegalArgumentException("You don't have goods of this type to add");
         }
@@ -32,12 +38,11 @@ public final class AddGoodsState extends AdventureState implements GameStateInte
 
     @Override
     public synchronized void removeGood(ShipBoard shipBoard, Point position, GoodsType good) {
-        if (!shipBoard.equals(this.shipBoard)) {
+        if (!this.shipBoard.equals(shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
         checkIfExpired();
         shipBoard.removeGoods(position, good, 1);
-        game.getEventListener().notifyGoodsUpdateEvent(shipBoard,position,good,false);
         if (goodsBuffer.containsKey(good)) {
             goodsBuffer.put(good, goodsBuffer.get(good) + 1);
         } else {

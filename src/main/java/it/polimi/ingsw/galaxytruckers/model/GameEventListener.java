@@ -7,21 +7,52 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.DtoConverter;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.GameSnapshot;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.LobbyDetailsDTO;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.ShipBoardDTO;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
+import it.polimi.ingsw.galaxytruckers.serverController.utils.ConversionUtils;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class GameEventListener {
     private final EventListener<LobbyEvent> controllerListener;
+    private final Supplier<LobbyDetailsDTO> lobbyDetailsSupplier;
 
-    public GameEventListener(EventListener<LobbyEvent> controllerListener) {
+    public GameEventListener(EventListener<LobbyEvent> controllerListener, Supplier<LobbyDetailsDTO> lobbyDetailsSupplier) {
         this.controllerListener = controllerListener;
+        this.lobbyDetailsSupplier = lobbyDetailsSupplier;
+    }
+
+    public void requestSnapshot(Game game, ShipBoard shipBoard) {
+        controllerListener.notifyEvent(new GameSnapshotEvent(
+                Player.getPlayer(shipBoard).getNickname(),
+                lobbyDetailsSupplier.get(),
+                getGameSnapshot(game)
+        ));
+    }
+
+    private GameSnapshot getGameSnapshot(Game game) {
+        Map<String, ShipBoardDTO> ships = new HashMap<>();
+        for (ShipBoard s : game.getShipBoards()) {
+            ships.put(ConversionUtils.convert(s),DtoConverter.getShipBoard(s));
+        }
+        return new GameSnapshot(
+                DtoConverter.getFlightBoard(game.getFlightBoard()),
+                DtoConverter.getComplexState(game.getCurrentState()),
+                ships,
+                (game.getDeck().getCurrentCard() != null)
+                        ? game.getDeck().getCurrentCard().getId()
+                        : -1
+        );
     }
 
     public void notifyActivateComponentEvent(ShipBoard shipBoard, Point point, boolean active) {
@@ -77,7 +108,7 @@ public class GameEventListener {
     }
 
     public void notifyCabinInitializationEvent(ShipBoard shipBoard, Point point, CrewType crewType) {
-        controllerListener.notifyEvent(new InitializeCabinEvent(Player.getPlayer(shipBoard).getNickname(),point, crewType));
+        controllerListener.notifyEvent(new InitializeCabinEvent(Player.getPlayer(shipBoard).getNickname(), point, crewType));
     }
 
     public void notifyLoseCrewEvent(ShipBoard shipBoard, Point point) {
@@ -106,7 +137,7 @@ public class GameEventListener {
     }
 
     public void notifyPlanetChoiceEvent(ShipBoard shipBoard, int planetId, ShipBoard nextShip) {
-        controllerListener.notifyEvent(PlanetChoiceEvent.from(shipBoard,planetId, nextShip));
+        controllerListener.notifyEvent(PlanetChoiceEvent.from(shipBoard, planetId, nextShip));
     }
 
     public void notifyRejectComponentEvent(ShipBoard shipBoard) {
@@ -119,15 +150,15 @@ public class GameEventListener {
     }
 
     public void notifyRemoveComponentEvent(ShipBoard shipBoard, Point point) {
-        controllerListener.notifyEvent(RemoveComponentEvent.from(shipBoard,point));
+        controllerListener.notifyEvent(RemoveComponentEvent.from(shipBoard, point));
     }
 
     public void notifyRequestFaceDownComponentEvent(ShipBoard shipBoard, Component component) {
-        controllerListener.notifyEvent(RequestFaceDownComponentEvent.from(shipBoard,component));
+        controllerListener.notifyEvent(RequestFaceDownComponentEvent.from(shipBoard, component));
     }
 
     public void notifyRequestFaceUpComponentEvent(ShipBoard shipBoard, Component component) {
-        controllerListener.notifyEvent(RequestFaceUpComponentEvent.from(shipBoard,component));
+        controllerListener.notifyEvent(RequestFaceUpComponentEvent.from(shipBoard, component));
     }
 
     public void notifyShipNotConnectedEvent(ShipBoard shipBoard, List<Set<Point>> shipPieces) {

@@ -3,7 +3,6 @@ package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
 import it.polimi.ingsw.galaxytruckers.model.GameInterface;
-import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -122,13 +121,8 @@ public class Lobby implements LobbyInterface {
     }
 
     public void notifyPlayerReconnection(Player player) {
-        eventQueue.notifyEvent(
-                new GameSnapshotEvent(
-                        player.getNickname(),
-                        DtoConverter.getLobbyDetails(this),
-                        (state == LobbyState.INGAME) ? game.getSnapshot() : null
-                )
-        );
+        checkLobbyState(LobbyState.INGAME);
+        game.requestSnapshot(player.getShipBoard().orElseThrow());
     }
 
     public void notifyPlayerExit(Player player) {
@@ -159,9 +153,15 @@ public class Lobby implements LobbyInterface {
             ShipBoard ship = game.addShipBoard(playerColors.get(player));
             player.setShipBoard(ship);
         }
-        game.setEventListener(new GameEventListener(this.eventQueue));
+        game.setEventListener(new GameEventListener(this.eventQueue, () -> DtoConverter.getLobbyDetails(this)));
         game.start();
         setState(LobbyState.INGAME);
+    }
+
+    public void skip(Player player) {
+        if (state == LobbyState.INGAME) {
+            game.skip(player.getShipBoard().orElseThrow());
+        }
     }
 
     @Override

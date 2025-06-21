@@ -10,6 +10,23 @@ import java.util.*;
 
 public non-sealed class ShipInitializationState extends GameState implements GameStateInterface {
     private final Map<ShipBoard, Map<CrewType, Set<Point>>> shipRelevantCabins = new HashMap<>();
+    private final Set<ShipBoard> pendingShipBoards = new HashSet<>();
+
+    private final Object lock = new Object();
+
+    @Override
+    public void skip(ShipBoard shipBoard) {
+        synchronized (lock) {
+            pendingShipBoards.add(shipBoard);
+        }
+    }
+
+    @Override
+    public void cancelSkip(ShipBoard shipBoard) {
+        synchronized (lock) {
+            pendingShipBoards.remove(shipBoard);
+        }
+    }
 
     @Override
     public void setGame(Game game) {
@@ -64,22 +81,23 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
                     shipBoard.initializeCabin(p, CrewType.HUMAN);
                     game.getEventListener().notifyCabinInitializationEvent(shipBoard,p,CrewType.HUMAN);
                 });
-        synchronized (shipRelevantCabins) {
+        synchronized (lock) {
             shipRelevantCabins.remove(shipBoard);
             if (stateTransition) tryStateTransition();
         }
     }
 
     private void tryStateTransition() {
-        synchronized (shipRelevantCabins) {
-            if (shipRelevantCabins.isEmpty()) {
+        synchronized (lock) {
+            if (shipRelevantCabins.isEmpty() || shipRelevantCabins.keySet().equals(pendingShipBoards)) {
+                pendingShipBoards.forEach(s -> initHumans(s,false));
                 game.submitStateTransition(() -> game.setCurrentState(new DrawCardState()));
             }
         }
     }
 
     public Map<ShipBoard, Map<CrewType, Set<Point>>> getShipRelevantCabins() {
-        synchronized (shipRelevantCabins) {
+        synchronized (lock) {
             Map<ShipBoard, Map<CrewType, Set<Point>>> mapCopy = new HashMap<>();
             for (ShipBoard ship : shipRelevantCabins.keySet()) {
                 mapCopy.put(ship, new HashMap<>(shipRelevantCabins.get(ship)));
@@ -89,7 +107,7 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
     }
 
     public Map<CrewType, Set<Point>> getCrewTypeMap(ShipBoard shipBoard) {
-        synchronized (shipRelevantCabins) {
+        synchronized (lock) {
             return shipRelevantCabins.get(shipBoard);
         }
     }

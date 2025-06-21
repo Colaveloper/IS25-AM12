@@ -14,28 +14,10 @@ public class Hourglass {
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture;
-    private long duration = DURATION;
     private final AtomicLong timeLeft = new AtomicLong(0);
-    private Runnable onEndCallback;
 
     public Hourglass(int rounds) {
         this.flipsLeft = rounds;
-    }
-
-    public Hourglass() {
-        this.flipsLeft = -1;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
-    /**
-     * @return {@code true} if the next hourglass flip is the last one,
-     * {@code false} otherwise
-     */
-    public boolean isLastFlip() {
-        return this.flipsLeft == 1;
     }
 
     /**
@@ -48,10 +30,28 @@ public class Hourglass {
             throw new IllegalStateException("Hourglass is already running");
         }
 
-        timeLeft.set(duration);
-        isRunning.set(true);
+        timeLeft.set(DURATION);
         flipsLeft--;
 
+        start();
+    }
+
+    public void end() {
+        isRunning.set(false);
+        if (scheduledFuture != null) {
+            scheduledFuture.cancel(true);
+        }
+    }
+
+    public void setup(int flipsLeft, int timeLeft, boolean isRunning) {
+        end();
+        this.flipsLeft = flipsLeft;
+        this.timeLeft.set(timeLeft);
+        if (isRunning) start();
+    }
+
+    private void start() {
+        isRunning.set(true);
         scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
             long currentTime = timeLeft.decrementAndGet();
             if (currentTime < 0) {
@@ -60,28 +60,12 @@ public class Hourglass {
         }, 0, 1, TimeUnit.SECONDS);
     }
 
-    public void end() {
-        if (isRunning.get()) {
-            isRunning.set(false);
-            if (scheduledFuture != null) {
-                scheduledFuture.cancel(true);
-            }
-            if (onEndCallback != null) {
-                onEndCallback.run();
-            }
-        }
-    }
-
     public int getFlipsLeft() {
         return flipsLeft;
     }
 
     public boolean getIsRunning() {
         return isRunning.get();
-    }
-
-    public long getDuration() {
-        return duration;
     }
 
     public long getTimeLeft() {

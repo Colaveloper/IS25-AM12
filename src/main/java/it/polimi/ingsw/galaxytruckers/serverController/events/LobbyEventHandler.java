@@ -34,15 +34,20 @@ public class LobbyEventHandler extends EventQueueHandler<LobbyEvent> {
             ClientHandler clientHandler = SessionManager.getInstance().getClient(player);
             if (clientHandler != null) {
                 clientHandler.notifyEvent(event);
+            } else {
+                lobby.skip(player);
             }
         }
     }
 
     private void sendEvent(String playerName, LobbyEvent event) {
-        ClientHandler clientHandler = SessionManager.getInstance().getClient(Player.getPlayer(playerName));
+        Player player = Player.getPlayer(playerName);
+        ClientHandler clientHandler = SessionManager.getInstance().getClient(player);
         if (clientHandler != null) {
             if (event.shouldResume()) clientHandler.resume();
             clientHandler.notifyEvent(event);
+        } else {
+            lobby.skip(player);
         }
     }
 }

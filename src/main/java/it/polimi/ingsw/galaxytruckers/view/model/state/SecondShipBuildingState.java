@@ -18,11 +18,9 @@ public final class SecondShipBuildingState extends ShipBuildingState {
     private final Map<ShipBoard,Integer> shipToForecast = new HashMap<>();
     private final Hourglass hourglass = new Hourglass(3);
     private boolean forecastAcquired = false;
-    private boolean hourglassEndTriggered = false;
 
-    @Override
-    public void setGame(Game game) {
-        super.setGame(game);
+    public SecondShipBuildingState() {
+        super();
         hourglass.flip();
     }
 

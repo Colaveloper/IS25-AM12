@@ -103,6 +103,7 @@ public abstract class ShipBoard {
     public void offerComponent(Component component) {
         weldLastComponent();
         lastComponent = component;
+        if (component == null) System.out.println("Offering null component");
         lastPosition = null;
     }
 

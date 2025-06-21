@@ -4,19 +4,20 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.serverController.dto.GameSnapshot;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 
 public interface GameInterface {
-    GameSnapshot getSnapshot();
+    void requestSnapshot(ShipBoard shipBoard);
 
     ShipBoard addShipBoard(GameColor color);
 
     void setEventListener(GameEventListener eventListener);
 
     void start();
+
+    void skip(ShipBoard shipBoard);
 
     void requestRandComponent(ShipBoard shipBoard);
 

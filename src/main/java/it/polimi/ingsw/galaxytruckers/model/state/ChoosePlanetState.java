@@ -23,6 +23,16 @@ public final class ChoosePlanetState extends AdventureState implements GameState
     }
 
     @Override
+    public synchronized void skip(ShipBoard shipBoard) {
+        if (!expired && shipBoard.equals(getCurrentShip())) {
+            ShipBoard nextShipBoard = nextShip();
+            if (nextShipBoard != null) {
+                game.getEventListener().notifyCurrentPlayerUpdateEvent(nextShipBoard);
+            }
+        }
+    }
+
+    @Override
     public void setGame(Game game) {
         this.game = game;
         this.orderedShipBoards.addAll(game.getFlightBoard().getOrderedShips());

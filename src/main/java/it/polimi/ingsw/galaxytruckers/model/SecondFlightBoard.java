@@ -28,7 +28,10 @@ public class SecondFlightBoard extends FlightBoard{
             }
             startingPositionsLeft.remove((Integer) startingPosition);
         }
-        shipToPlace.put(shipBoard, startingPosition);
+        synchronized (shipToPlace) {
+            shipToPlace.put(shipBoard, startingPosition);
+        }
+        if (gameEventListener != null) gameEventListener.notifyFlightBoardUpdateEvent(shipBoard, startingPosition);
     }
 
     @Override

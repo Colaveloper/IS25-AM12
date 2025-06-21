@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.List;
 
 public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor {
+    private static final Point center = new Point(7,7);
     protected GameEventListener gameEventListener;
 
     protected final Map<Point, Component> componentMap;
@@ -72,7 +73,25 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     public void gainCredits (int credits) {
         this.credits += credits;
-        //if (gameEventListener != null) gameEventListener.notifyGrabCreditsEvent(this, credits);
+        if (gameEventListener != null) gameEventListener.notifyGrabCreditsEvent(this, credits);
+    }
+
+    public void removeAll(boolean discard) {
+        Set<Point> points = new HashSet<>(componentMap.keySet());
+        points.remove(getCenter());
+        for (Point p : points) {
+            if (discard) discardComponent(p);
+            else removeComponent(p);
+        }
+    }
+
+    public void keepShipPiece(List<Set<Point>> shipPieces, int pieceIndex, boolean discard) {
+        Set<Point> componentsToRemove = getComponentMap().keySet();
+        componentsToRemove.removeAll(shipPieces.get(pieceIndex));
+        for (Point point : componentsToRemove) {
+            removeComponent(point, discard);
+        }
+        if (gameEventListener != null) gameEventListener.notifyShipPieceRemovalEvent(this, pieceIndex);
     }
 
     //CliComponentBank interaction methods
@@ -101,6 +120,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
         lastPosition = newPosition;
         lastComponent.setOrientation(orientation);
+        if (gameEventListener != null) gameEventListener.notifyPlaceComponentEvent(this,orientation,newPosition);
     }
 
     public void stashComponent() {}
@@ -110,6 +130,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     public void grabPlacedComponent() {
         if (lastComponent != null && lastPosition != null) {
             lastPosition = null;
+            if (gameEventListener != null) gameEventListener.notifyGrabPlacedComponentEvent(this);
         } else {
             throw new IllegalStateException("You don't have a placed component to grab");
         }
@@ -128,14 +149,20 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     }
 
     public void discardComponent(Point position) {
-        removeComponent(position);
-        losses++;
+        removeComponent(position,true);
+        if (gameEventListener != null) gameEventListener.notifyRemoveComponentEvent(this,position);
     }
 
     public void removeComponent(Point position) {
+        removeComponent(position, false);
+        if (gameEventListener != null) gameEventListener.notifyRemoveComponentEvent(this,position);
+    }
+
+    private void removeComponent(Point position, boolean discard) {
         lastPosition = position;
         componentMap.remove(lastPosition).removeFromVisitor(this);
         lastPosition = null;
+        if (discard) losses++;
     }
 
     public void finishBuilding() {
@@ -200,6 +227,10 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     // Components Observers
 
+    protected Point getCenter() {
+        return center;
+    }
+
     public Map<Point, Component> getComponentMap() {
         return new HashMap<>(componentMap);
     }
@@ -260,6 +291,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         } else {
             this.goods.put(goods, this.goods.get(goods) + amount);
         }
+        if (gameEventListener != null) gameEventListener.notifyGoodsUpdateEvent(this,position,goods,true);
     }
 
     public void removeGoods(Point position, GoodsType goods, int amount) {
@@ -268,6 +300,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
         cargoHolds.get(position).removeGoods(goods, amount);
         this.goods.put(goods, this.goods.get(goods) - amount);
+        if (gameEventListener != null) gameEventListener.notifyGoodsUpdateEvent(this,position,goods,false);
     }
 
     //Batteries methods
@@ -278,6 +311,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
         batteries.get(position).useBatteries();
         numBatteries--;
+        if (gameEventListener != null) gameEventListener.notifyUseBatteryEvent(this,position);
     }
 
     //Cabin (and LifeSupport) methods
@@ -298,6 +332,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
         cabins.get(position).initialize(crewType);
         crewSize += cabins.get(position).getNumResidents();
+        if (gameEventListener != null) gameEventListener.notifyCabinInitializationEvent(this,position,crewType);
     }
 
     public void loseCrew(Point position) {
@@ -317,6 +352,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
         if (!activatables.get(position).isActive()) {
             activatables.get(position).activate(this);
+            if (gameEventListener != null) gameEventListener.notifyActivateComponentEvent(this,position,true);
             return true;
         }
         return false;

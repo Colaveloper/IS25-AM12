@@ -8,6 +8,7 @@ import java.util.Map;
 public record GameSnapshot(
         FlightBoardDTO flightBoardDTO,
         ComplexStateDTO state,
-        Map<String, ShipBoardDTO> ships
+        Map<String, ShipBoardDTO> ships,
+        int currentCardId
 ) implements Serializable {
 }

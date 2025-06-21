@@ -3,7 +3,8 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 
 public abstract class ActivateState extends AdventureState {
     protected final Set<Point> availablePositions;
@@ -19,8 +20,34 @@ public abstract class ActivateState extends AdventureState {
     }
 
     @Override
+    public synchronized void skip(ShipBoard shipBoard) {
+        if (!expired && this.shipBoard.equals(shipBoard)) {
+            if (batteriesToSpend > 0) {
+                Iterator<Point> positions = shipBoard.getBatteries().keySet().iterator();
+                Point currentPosition = positions.next();
+                while (batteriesToSpend > 0) {
+                    try {
+                        shipBoard.useBatteries(currentPosition);
+                        batteriesToSpend--;
+                    } catch (IllegalArgumentException e) {
+                        currentPosition = positions.next();
+                    }
+                }
+            } else if (batteriesToSpend < 0) {
+                Iterator<Point> positions = getAvailablePositions().iterator();
+                Point currentPosition = positions.next();
+                while (batteriesToSpend < 0) {
+                    if (shipBoard.activateComponent(currentPosition)) batteriesToSpend++;
+                    currentPosition = positions.next();
+                }
+            }
+            endStateAction();
+        }
+    }
+
+    @Override
     public synchronized void activateComponent(ShipBoard shipBoard, Point position) {
-        if (!shipBoard.equals(this.shipBoard)) {
+        if (!this.shipBoard.equals(shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
         checkIfExpired();
@@ -31,14 +58,13 @@ public abstract class ActivateState extends AdventureState {
             if (shipBoard.activateComponent(position)) {
                 batteriesToSpend++;
                 activatedComponents++;
-                game.getEventListener().notifyActivateComponentEvent(shipBoard,position,true);
             }
         }
     }
 
     @Override
     public synchronized void spendBatteries(ShipBoard shipBoard, Point point) {
-        if (!shipBoard.equals(this.shipBoard)) {
+        if (!this.shipBoard.equals(shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
         checkIfExpired();
@@ -47,12 +73,11 @@ public abstract class ActivateState extends AdventureState {
         }
         shipBoard.useBatteries(point);
         batteriesToSpend--;
-        game.getEventListener().notifyUseBatteryEvent(shipBoard,point);
     }
 
     @Override
     public synchronized void goNext(ShipBoard shipBoard) {
-        if (!shipBoard.equals(this.shipBoard)) {
+        if (!this.shipBoard.equals(shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
         checkIfExpired();
@@ -61,6 +86,10 @@ public abstract class ActivateState extends AdventureState {
         } else if (batteriesToSpend < 0) {
             throw new IllegalStateException("You still have to activate components");
         }
+        endStateAction();
+    }
+
+    protected void endStateAction() {
         getNextState();
     }
 

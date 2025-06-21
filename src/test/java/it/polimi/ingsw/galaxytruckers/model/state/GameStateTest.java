@@ -38,6 +38,9 @@ class GameStateTest {
     @Test
     void giveUpThrowsExceptionWhenUsingInvalidState() {
         testState = new GameState() {
+            @Override
+            public void skip(ShipBoard shipBoard) {
+            }
         };
         assertThrows(IllegalStateException.class, () -> testState.giveUp(ship1));
     }
@@ -116,6 +119,9 @@ class GameStateTest {
         @BeforeEach
         void setup() {
             testState = new GameState() {
+                @Override
+                public void skip(ShipBoard shipBoard) {
+                }
             };
         }
 

@@ -11,11 +11,13 @@ import java.util.List;
 public class CliNewCardScreen extends CliAdventureScreen {
 
     private CliAdventureCard adventureCard;
-    private boolean hasDrown;
+    private boolean hasDrawn;
     public CliNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState gameState){
         super(model, controller, gameState);
-        hasDrown = false;
-        //adventureCard = new CliAdventureCard(gameState.getGame().getCurrentAdventureCard());
+        hasDrawn = gameState.hasDrawn();
+        if (hasDrawn) {
+            adventureCard = new CliAdventureCard(gameState.getCurrentCard());
+        }
     }
 
     @Override
@@ -25,10 +27,10 @@ public class CliNewCardScreen extends CliAdventureScreen {
             System.out.println("you surrendered");
             return;
         }
-        if(!hasDrown && !isMyTurn){
+        if(!hasDrawn && !isMyTurn){
             System.out.println("Wait for leader to draw");
         }
-        if (hasDrown) {
+        if (hasDrawn) {
             System.out.println("A new card has been drawn:\n");
             List<String> descriptions = adventureCard.getDescription();
             descriptions.forEach(System.out::println);
@@ -44,7 +46,7 @@ public class CliNewCardScreen extends CliAdventureScreen {
                 controller.giveUp();
                 break;
             case "":
-                if(isMyTurn && hasDrown){
+                if(isMyTurn && hasDrawn){
                     controller.goNext();
                 }
                 else if(isMyTurn){
@@ -58,7 +60,7 @@ public class CliNewCardScreen extends CliAdventureScreen {
 
     @Override
     public void notifyDrawCard(AdventureCard adventureCard) {
-        hasDrown = adventureCard != null;
+        hasDrawn = adventureCard != null;
 //        if(adventureCard == null) this.adventureCard = null; else
         this.adventureCard = new CliAdventureCard(adventureCard);
     }

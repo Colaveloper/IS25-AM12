@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.model;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.view.ModelObserver;
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
@@ -20,6 +21,7 @@ public class Game {
     private final Set<ShipBoard> shipBoards = new HashSet<>();
     private final Set<ShipBoard> givenUpShips = new HashSet<>();
     private final FlightBoard flightBoard;
+    private AdventureCard currentCard;
     private ShipBoard myShip;
     private GameState currentState = null;
 
@@ -109,4 +111,11 @@ public class Game {
         return gameFactory;
     }
 
+    public AdventureCard getCurrentCard() {
+        return currentCard;
+    }
+
+    public void setCurrentCard(AdventureCard currentCard) {
+        this.currentCard = currentCard;
+    }
 }

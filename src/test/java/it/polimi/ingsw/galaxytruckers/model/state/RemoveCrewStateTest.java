@@ -120,7 +120,6 @@ class RemoveCrewStateTest {
             }
         };
         testState.setGame(game);
-        testState.loseCrew(ship1, new Point(7,7));
         StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 

@@ -8,13 +8,17 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 
-public non-sealed class GameState implements GameStateInterface {
+public abstract non-sealed class GameState implements GameStateInterface {
     protected Game game;
 
     public void setGame(Game game) {
         this.game = game;
         game.getEventListener().notifyGameStateUpdateEvent(this);
     }
+
+    public abstract void skip(ShipBoard shipBoard);
+
+    public void cancelSkip(ShipBoard shipBoard) {}
 
     public void activateComponent(ShipBoard shipBoard, Point position) {
         throw new IllegalStateException("This action is unsupported in this state");

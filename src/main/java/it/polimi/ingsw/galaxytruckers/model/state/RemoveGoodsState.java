@@ -6,6 +6,8 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.awt.*;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
 public final class RemoveGoodsState extends AdventureState implements GameStateInterface{
     int goodsToLose;
@@ -25,18 +27,38 @@ public final class RemoveGoodsState extends AdventureState implements GameStateI
     }
 
     @Override
+    public synchronized void skip(ShipBoard shipBoard) {
+        if (!expired && this.shipBoard.equals(shipBoard)) {
+            while (goodsToLose > 0) {
+                if (mostValuableGood != null) {
+                    shipBoard.getCargoHolds().keySet().stream()
+                            .filter(p -> shipBoard.getCargoHolds().get(p).getGoods().containsKey(mostValuableGood))
+                            .findAny()
+                            .ifPresent(p -> shipBoard.removeGoods(p,mostValuableGood,1));
+                    computeMostValuableGood();
+                } else {
+                    shipBoard.getBatteries().keySet().stream()
+                            .filter(p -> shipBoard.getBatteries().get(p).getNumBatteries() > 0)
+                            .findAny()
+                            .ifPresent(shipBoard::useBatteries);
+                }
+                goodsToLose--;
+                tryStateTransition();
+            }
+        }
+    }
+
+    @Override
     public synchronized void loseGood(ShipBoard shipBoard, Point position) {
-        if (!shipBoard.equals(this.shipBoard)) {
+        if (!this.shipBoard.equals(shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
         checkIfExpired();
         computeMostValuableGood();
         if (mostValuableGood != null) {
             shipBoard.removeGoods(position, mostValuableGood, 1);
-            game.getEventListener().notifyGoodsUpdateEvent(shipBoard, position, mostValuableGood, false);
         } else {
             shipBoard.useBatteries(position);
-            game.getEventListener().notifyUseBatteryEvent(shipBoard, position);
         }
         goodsToLose--;
         tryStateTransition();

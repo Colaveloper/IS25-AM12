@@ -88,6 +88,7 @@ public class SecondShipBoard extends ShipBoard {
         stashedComponents.add(lastComponent);
         lastComponent = null;
         lastPosition = null;
+        if (gameEventListener != null) gameEventListener.notifyStashComponentEvent(this);
     }
 
     public void grabStashedComponent(int index) {
@@ -98,6 +99,7 @@ public class SecondShipBoard extends ShipBoard {
             throw new IllegalArgumentException("The stashed component index is out of bounds");
         }
         isStashed = true;
+        if (gameEventListener != null) gameEventListener.notifyGrabStashedComponentEvent(this, index);
     }
 
     @Override
@@ -167,10 +169,6 @@ public class SecondShipBoard extends ShipBoard {
         if (crewType != CrewType.HUMAN) {
             aliens.add(crewType);
         }
-    }
-
-    public void loseCrew(Point position) {
-        super.loseCrew(position);
     }
 
     //Visitor pattern methods

@@ -13,15 +13,30 @@ import java.util.Set;
 
 public abstract class ShipBuildingState extends GameState{
     private final ComponentBank componentBank;
-    protected final Set<ShipBoard> completedShipBoards;
+    protected final Set<ShipBoard> completedShipBoards = new HashSet<>();
+    protected final Set<ShipBoard> pendingShipBoards = new HashSet<>();
 
     private final Object coveredLock = new Object();
     private final Object uncoveredLock = new Object();
 
+    private final Object endLock = new Object();
+
     public ShipBuildingState() {
-        this.completedShipBoards = new HashSet<>();
         this.componentBank = new ComponentBank();
         this.componentBank.initialize();
+    }
+
+    @Override
+    public void skip(ShipBoard shipBoard) {
+        synchronized (endLock) {
+            pendingShipBoards.add(shipBoard);
+            tryToEnd();
+        }
+    }
+
+    @Override
+    public void cancelSkip(ShipBoard shipBoard) {
+        removePending(shipBoard);
     }
 
     @Override
@@ -84,7 +99,6 @@ public abstract class ShipBuildingState extends GameState{
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.grabPlacedComponent();
-        game.getEventListener().notifyGrabPlacedComponentEvent(shipBoard);
     }
 
     @Override
@@ -98,7 +112,6 @@ public abstract class ShipBuildingState extends GameState{
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.placeComponent(point, orientation);
-        game.getEventListener().notifyPlaceComponentEvent(shipBoard,orientation, point);
     }
 
     @Override
@@ -116,8 +129,7 @@ public abstract class ShipBuildingState extends GameState{
         if (getCompletedShipBoards().contains(shipBoard)) {
             throw new IllegalStateException("Ship Board already completed");
         }
-        int position = game.getFlightBoard().placeShipOnFlightBoard(shipBoard);
-        game.getEventListener().notifyFlightBoardUpdateEvent(shipBoard,position);
+        game.getFlightBoard().placeShipOnFlightBoard(shipBoard);
         completeShipBoard(shipBoard);
     }
 
@@ -134,11 +146,24 @@ public abstract class ShipBuildingState extends GameState{
     protected abstract void endBuilding();
 
     protected void completeShipBoard(ShipBoard shipBoard) {
-        synchronized (completedShipBoards) {
+        synchronized (endLock) {
             completedShipBoards.add(shipBoard);
-            if (completedShipBoards.size() == game.getShipBoards().size()) {
-                endBuilding();
-            }
+            tryToEnd();
+        }
+    }
+
+    private void tryToEnd() {
+        Set<ShipBoard> missingShips = new HashSet<>(game.getShipBoards());
+        missingShips.removeAll(completedShipBoards);
+        missingShips.removeAll(pendingShipBoards);
+        if (missingShips.isEmpty()) {
+            endBuilding();
+        }
+    }
+
+    private void removePending(ShipBoard shipBoard) {
+        synchronized (endLock) {
+            pendingShipBoards.remove(shipBoard);
         }
     }
 
@@ -147,14 +172,13 @@ public abstract class ShipBuildingState extends GameState{
     }
 
     public Set<ShipBoard> getCompletedShipBoards() {
-        synchronized (completedShipBoards) {
+        synchronized (endLock) {
             return new HashSet<>(completedShipBoards);
         }
     }
 
     @VisibleForTesting
     protected ShipBuildingState(ComponentBank testBank) {
-        this.completedShipBoards = new HashSet<>();
         this.componentBank = testBank;
         this.componentBank.initialize();
     }

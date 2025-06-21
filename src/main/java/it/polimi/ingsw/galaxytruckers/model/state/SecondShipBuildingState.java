@@ -56,7 +56,6 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.stashComponent();
-        game.getEventListener().notifyStashComponentEvent(shipBoard);
     }
 
     @Override
@@ -65,7 +64,6 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
             throw new IllegalStateException("Ship Board already completed");
         }
         shipBoard.grabStashedComponent(index);
-        game.getEventListener().notifyGrabStashedComponentEvent(shipBoard, index);
     }
 
     @Override
@@ -75,7 +73,6 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
         }
         releaseForecast(shipBoard);
         game.getFlightBoard().placeShipOnFlightBoard(shipBoard, startingPosition);
-        game.getEventListener().notifyFlightBoardUpdateEvent(shipBoard, startingPosition);
         completeShipBoard(shipBoard);
     }
 

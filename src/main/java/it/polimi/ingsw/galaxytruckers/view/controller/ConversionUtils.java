@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.controller;
 
 import it.polimi.ingsw.galaxytruckers.serverController.dto.ComponentDTO;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.HourglassDTO;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.states.*;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
@@ -168,6 +169,14 @@ public class ConversionUtils {
                 SecondShipBuildingState state = new SecondShipBuildingState();
                 convertBuildingData(state,secondShipBuildingDTO.baseData());
                 state.setMyShip(clientModel.getMyShip());
+                //Set blocked forecasts
+                Map<ShipBoard, Integer> blockedForecasts = convertMap(secondShipBuildingDTO.blockedForecasts());
+                for (ShipBoard shipBoard : blockedForecasts.keySet()) {
+                    state.getBlockedForecasts()[blockedForecasts.get(shipBoard)] = shipBoard;
+                }
+                //Set hourglass
+                HourglassDTO hourglassDTO = secondShipBuildingDTO.hourglass();
+                state.getHourglass().setup(hourglassDTO.flipsLeft(), hourglassDTO.timeLeft(), hourglassDTO.isRunning());
                 return state;
             }
             case TestShipBuildingDTO testShipBuildingDTO -> {

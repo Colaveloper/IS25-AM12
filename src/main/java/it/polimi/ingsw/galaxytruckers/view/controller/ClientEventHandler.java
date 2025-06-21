@@ -7,7 +7,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.EventHandler;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import it.polimi.ingsw.galaxytruckers.view.model.*;
-import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
@@ -15,7 +15,6 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ClientEventHandler implements EventHandler<Event> {
     private final ClientModel clientModel;
@@ -225,6 +224,12 @@ public class ClientEventHandler implements EventHandler<Event> {
                         shipBoard.setCredits(ship.credits());
                         shipBoard.setLosses(ship.losses());
                     }
+
+                    //Set current card
+                    AdventureCard adventureCard = (gameSnapshot.currentCardId() != -1)
+                            ? AdventureCardRegistry.getInstance().getCard(gameSnapshot.currentCardId())
+                            : null;
+                    clientModel.getGame().setCurrentCard(adventureCard);
 
                     //Set Game State
                     updateGameState(gameSnapshot.state());

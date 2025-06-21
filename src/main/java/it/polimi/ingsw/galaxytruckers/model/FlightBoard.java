@@ -50,7 +50,7 @@ public abstract class FlightBoard {
      * @param shipBoard the ship to be placed
      * @return the position the ship was placed at
      * */
-    public int placeShipOnFlightBoard(ShipBoard shipBoard) {
+    public void placeShipOnFlightBoard(ShipBoard shipBoard) {
         int position;
         synchronized (startingPositionsLeft) {
             position = startingPositionsLeft.removeFirst();
@@ -58,7 +58,7 @@ public abstract class FlightBoard {
         synchronized (shipToPlace) {
             shipToPlace.put(shipBoard, position);
         }
-        return position;
+        if (gameEventListener != null) gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,position);
     }
 
     /**

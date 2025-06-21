@@ -20,14 +20,13 @@ public sealed abstract class AdventureState extends GameState permits
 
     protected boolean imOut;
     protected ShipBoard currentShip;
-    protected AdventureCard currentCard;
 
     public boolean getImOut() {
         return imOut;
     }
 
     public AdventureCard getCurrentCard() {
-        return currentCard;
+        return game.getCurrentCard();
     }
 
     @Override

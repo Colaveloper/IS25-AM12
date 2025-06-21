@@ -9,13 +9,30 @@ public final class DrawCardState extends AdventureState implements GameStateInte
     private boolean hasDrawn = false;
 
     @Override
+    public synchronized void skip(ShipBoard shipBoard) {
+        if (!expired && this.shipBoard.equals(shipBoard)) {
+            if (hasDrawn) {
+                getNextState();
+            } else {
+                game.getDeck().tryDrawCard();
+                game.getDeck().getCurrentCard().initialize();
+                game.getEventListener().notifyNewCardEvent(game.getDeck().getCurrentCard());
+                getNextState();
+            }
+        }
+    }
+
+    @Override
     public void setGame(Game game) {
         this.game = game;
         SurrenderPolicy surrenderPolicy = game.getSurrenderPolicy();
         if (surrenderPolicy.isSurrenderEnabled()) {
             surrenderPolicy.confirmSurrender(game.getFlightBoard());
         }
-        if (game.tryEndGame()) return;
+        if (game.tryEndGame()) {
+            expired = true;
+            return;
+        }
         shipBoard = game.getFlightBoard().getOrderedShips().getFirst();
         game.getEventListener().notifyGameStateUpdateEvent(this);
     }
@@ -23,7 +40,7 @@ public final class DrawCardState extends AdventureState implements GameStateInte
     @Override
     public synchronized void drawCard(ShipBoard shipBoard) {
         checkIfExpired();
-        if (!shipBoard.equals(this.shipBoard)) {
+        if (!this.shipBoard.equals(shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
         if (hasDrawn) {
@@ -40,7 +57,7 @@ public final class DrawCardState extends AdventureState implements GameStateInte
 
     @Override
     public synchronized void goNext(ShipBoard shipBoard) {
-        if (!shipBoard.equals(this.shipBoard)) {
+        if (!this.shipBoard.equals(shipBoard)) {
             throw new IllegalStateException("It's not your turn");
         }
         checkIfExpired();

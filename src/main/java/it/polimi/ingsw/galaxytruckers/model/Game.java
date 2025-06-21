@@ -61,17 +61,12 @@ public class Game implements GameInterface {
     }
 
     @Override
-    public GameSnapshot getSnapshot() {
-        return withStateWriteLock(() -> {
-            Map<String, ShipBoardDTO> ships = new HashMap<>();
-            for (ShipBoard shipBoard : shipBoards) {
-                ships.put(ConversionUtils.convert(shipBoard),DtoConverter.getShipBoard(shipBoard));
+    public void requestSnapshot(ShipBoard shipBoard) {
+        withStateWriteLock(() -> {
+            if (!isGameOver()) {
+                getCurrentState().cancelSkip(shipBoard);
+                eventListener.requestSnapshot(this, shipBoard);
             }
-            return new GameSnapshot(
-                    DtoConverter.getFlightBoard(flightBoard),
-                    DtoConverter.getComplexState(getCurrentState()),
-                    ships
-            );
         });
     }
 
@@ -255,6 +250,16 @@ public class Game implements GameInterface {
     //endregion
 
     //region Player requests
+
+
+    @Override
+    public void skip(ShipBoard shipBoard) {
+        withStateReadLock(() -> {
+            if (!gameOver) {
+                currentState.skip(shipBoard);
+            }
+        });
+    }
 
     @Override
     public void requestRandComponent(ShipBoard shipBoard) {

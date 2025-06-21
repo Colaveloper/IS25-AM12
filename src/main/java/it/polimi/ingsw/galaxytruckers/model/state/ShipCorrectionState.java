@@ -6,11 +6,29 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public non-sealed class ShipCorrectionState extends GameState implements GameStateInterface {
     private final Set<ShipBoard> validShipBoards;
     private final Map<ShipBoard, List<Set<Point>>> shipPiecesMap;
     private final boolean shouldDiscard;
+    private final Set<ShipBoard> pendingShipBoards = new HashSet<>();
+    private final Object lock = new Object();
+
+    @Override
+    public void skip(ShipBoard shipBoard) {
+        synchronized (lock) {
+            pendingShipBoards.add(shipBoard);
+            tryStateTransition();
+        }
+    }
+
+    @Override
+    public void cancelSkip(ShipBoard shipBoard) {
+        synchronized (lock) {
+            pendingShipBoards.remove(shipBoard);
+        }
+    }
 
     public ShipCorrectionState(boolean shouldDiscard) {
         this.shouldDiscard = shouldDiscard;
@@ -18,7 +36,7 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
         this.shipPiecesMap = new HashMap<>();
     }
 
-    protected void removeAt(ShipBoard shipBoard, Point point) {
+    private void removeAt(ShipBoard shipBoard, Point point) {
         if (shouldDiscard) shipBoard.discardComponent(point);
         else shipBoard.removeComponent(point);
     }
@@ -35,26 +53,41 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
         tryStateTransition();
     }
 
-    protected void tryStateTransition() {
-        if (getValidShipBoards().size() == game.getShipBoards().size() && getShipPiecesMap().isEmpty()) {
-            game.submitStateTransition(() -> game.setCurrentState(new ShipInitializationState()));
+    private void tryStateTransition() {
+        synchronized (lock) {
+            Set<ShipBoard> remainingShipBoards = game.getShipBoards().stream()
+                    .filter(s -> !getValidShipBoards().contains(s) || getShipPieces(s) != null)
+                    .filter(s -> !pendingShipBoards.contains(s))
+                    .collect(Collectors.toSet());
+            if (remainingShipBoards.isEmpty()) {
+                pendingShipBoards.forEach(this::defaultAction);
+                game.submitStateTransition(() -> game.setCurrentState(new ShipInitializationState()));
+            }
+        }
+    }
+
+    private void defaultAction(ShipBoard shipBoard) {
+        synchronized (lock) {
+            if (!validShipBoards.contains(shipBoard)) {
+                shipBoard.removeAll(shouldDiscard);
+            } else if (getShipPieces(shipBoard) != null) {
+                shipBoard.keepShipPiece(getShipPieces(shipBoard),0,shouldDiscard);
+            }
         }
     }
 
     private boolean checkShipValidity(ShipBoard shipBoard) {
         if (shipBoard.checkValidity()) {
-            synchronized (validShipBoards) {
-                validShipBoards.add(shipBoard);
-            }
+            validShipBoards.add(shipBoard);
             return true;
         }
         return false;
     }
-    
+
     private boolean checkShipConnection(ShipBoard shipBoard) {
         List<Set<Point>> currentShipPieces = shipBoard.getConnectedSets();
         if (currentShipPieces.size() > 1) {
-            synchronized (shipPiecesMap) {
+            synchronized (lock) {
                 shipPiecesMap.put(shipBoard, currentShipPieces);
             }
             return false;
@@ -64,21 +97,23 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
 
     @Override
     public void removeComponent(ShipBoard shipBoard, Point point) {
-        synchronized (validShipBoards) {
+        synchronized (lock) {
             if (validShipBoards.contains(shipBoard)) {
                 throw new IllegalStateException("Ship Board is already valid");
             }
         }
         removeAt(shipBoard, point);
         game.getEventListener().notifyRemoveComponentEvent(shipBoard, point);
-        if (checkShipValidity(shipBoard)) {
-            if (!checkShipConnection(shipBoard)) {
-                game.getEventListener().notifyShipNotConnectedEvent(shipBoard, shipPiecesMap.get(shipBoard));
-            } else {
-                game.getEventListener().notifyValidateShipEvent(shipBoard);
+        synchronized (lock) {
+            if (checkShipValidity(shipBoard)) {
+                if (!checkShipConnection(shipBoard)) {
+                    game.getEventListener().notifyShipNotConnectedEvent(shipBoard, shipPiecesMap.get(shipBoard));
+                } else {
+                    game.getEventListener().notifyValidateShipEvent(shipBoard);
+                }
             }
+            tryStateTransition();
         }
-        tryStateTransition();
     }
 
     @Override
@@ -90,26 +125,21 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
         if (pieceIndex < 0 || pieceIndex >= shipPieces.size()) {
             throw new IllegalArgumentException("Invalid piece index");
         }
-        Set<Point> componentsToRemove = shipBoard.getComponentMap().keySet();
-        componentsToRemove.removeAll(shipPieces.get(pieceIndex));
-        for (Point point : componentsToRemove) {
-            removeAt(shipBoard, point);
-        }
-        synchronized (shipPiecesMap) {
+        shipBoard.keepShipPiece(shipPieces, pieceIndex, shouldDiscard);
+        synchronized (lock) {
             shipPiecesMap.remove(shipBoard);
+            tryStateTransition();
         }
-        game.getEventListener().notifyShipPieceRemovalEvent(shipBoard,pieceIndex);
-        tryStateTransition();
     }
 
     public Set<ShipBoard> getValidShipBoards() {
-        synchronized (validShipBoards) {
+        synchronized (lock) {
             return new HashSet<>(validShipBoards);
         }
     }
 
     public Map<ShipBoard, List<Set<Point>>> getShipPiecesMap() {
-        synchronized (shipPiecesMap) {
+        synchronized (lock) {
             Map<ShipBoard, List<Set<Point>>> mapCopy = new HashMap<>();
             for (ShipBoard ship : shipPiecesMap.keySet()) {
                 mapCopy.put(ship, new ArrayList<>(shipPiecesMap.get(ship)));
@@ -119,7 +149,7 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
     }
 
     public List<Set<Point>> getShipPieces(ShipBoard shipBoard) {
-        synchronized (shipPiecesMap) {
+        synchronized (lock) {
             return shipPiecesMap.get(shipBoard);
         }
     }
