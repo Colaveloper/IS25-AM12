@@ -74,12 +74,13 @@ public class ClientModel {
     public void addPlayer(Player player, GameColor color) {
         synchronized (playersLock) {
             synchronized (gameLock) {
-                players.add(player);
-                player.setShipBoard(game.addShipBoard(color));
-                shipToPlayer.put(player.getShipBoard(), player);
-                //TODO: fix myShipLogic to not be included in the states
-                if (getClientPlayer().equals(player)) {
-                    game.setMyShip(player.getShipBoard());
+                if (players.add(player)) {
+                    player.setShipBoard(game.addShipBoard(color));
+                    shipToPlayer.put(player.getShipBoard(), player);
+                    //TODO: fix myShipLogic to not be included in the states
+                    if (getClientPlayer().equals(player)) {
+                        game.setMyShip(player.getShipBoard());
+                    }
                 }
             }
         }

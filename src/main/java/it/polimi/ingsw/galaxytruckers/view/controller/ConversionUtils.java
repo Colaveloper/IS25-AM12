@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.controller;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.ComponentDTO;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.states.*;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
@@ -10,13 +11,20 @@ import it.polimi.ingsw.galaxytruckers.serverController.dto.BuildingDataDTO;
 
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class ConversionUtils {
     private final PlayerRegistry playerRegistry;
 
     public ConversionUtils(PlayerRegistry playerRegistry) {
         this.playerRegistry = playerRegistry;
+    }
+
+    public <T> Map<Player,T> convertPlayerMap(Map<String,T> map) {
+        Map<Player, T> convertedMap = new HashMap<>();
+        for (String name : map.keySet()) {
+            convertedMap.put(playerRegistry.getByNickname(name), map.get(name));
+        }
+        return convertedMap;
     }
 
     public <T> Map<ShipBoard, T> convertMap(Map<String, T> map) {
@@ -82,7 +90,6 @@ public class ConversionUtils {
                 return getAddGoodsState(addGoodsDTO, myShip);
             }
             case ChoosePlanetDTO choosePlanetDTO -> {
-                ShipBoard ship = playerRegistry.getByNickname(choosePlanetDTO.playerName()).getShipBoard();
                 return getChoosePlanetState(choosePlanetDTO, myShip);
             }
             case ChooseShipPieceDTO chooseShipPieceDTO -> {
@@ -173,7 +180,7 @@ public class ConversionUtils {
     }
 
     private AdventureState getSimpleState(SimpleStateDTO simpleStateDTO, ShipBoard myShip) {
-        ShipBoard shipBoard = playerRegistry.getByNickname(simpleStateDTO.playerName()).getShipBoard();
+        ShipBoard shipBoard = convertName(simpleStateDTO.playerName());
         switch (simpleStateDTO.type()) {
             case DECLARE_ENGINE_POWER -> {
                 return new DeclareEnginePowerState(myShip, shipBoard);
@@ -203,14 +210,8 @@ public class ConversionUtils {
     private ShipCorrectionState getShipCorrectionState(ShipCorrectionDTO shipCorrectionDTO, ShipBoard myShip) {
         return new ShipCorrectionState(
                 myShip,
-                shipCorrectionDTO.validShips().stream()
-                        .map(name -> playerRegistry.getByNickname(name).getShipBoard())
-                        .collect(Collectors.toSet()),
-                shipCorrectionDTO.shipPieces().entrySet().stream()
-                        .collect(Collectors.toMap(
-                                e -> playerRegistry.getByNickname(e.getKey()).getShipBoard(),
-                                Map.Entry::getValue
-                        )),
+                convertCollection(shipCorrectionDTO.validShips(),HashSet::new),
+                convertMap(shipCorrectionDTO.shipPieces()),
                 shipCorrectionDTO.shouldDiscard());
     }
 
@@ -225,7 +226,7 @@ public class ConversionUtils {
         return new RemoveGoodsState(
                 myShip,
                 removeGoodsDTO.goodsLoss(),
-                playerRegistry.getByNickname(removeGoodsDTO.playerName()).getShipBoard()
+                convertName(removeGoodsDTO.playerName())
         );
     }
 
@@ -233,14 +234,14 @@ public class ConversionUtils {
         return new RemoveCrewState(
                 myShip,
                 removeCrewDTO.crewLoss(),
-                playerRegistry.getByNickname(removeCrewDTO.playerName()).getShipBoard()
+                convertName(removeCrewDTO.playerName())
         );
     }
 
     private HandleProjectileState getHandleProjectileState(HandleProjectileDTO handleProjectileDTO, ShipBoard myShip) {
         return new HandleProjectileState(
                 myShip,
-                playerRegistry.getByNickname(handleProjectileDTO.playerName()).getShipBoard(),
+                convertName(handleProjectileDTO.playerName()),
                 new Projectile(handleProjectileDTO.diceRoll(), handleProjectileDTO.direction(), handleProjectileDTO.projectileType()),
                 handleProjectileDTO.availablePoints()
         );
@@ -250,7 +251,7 @@ public class ConversionUtils {
         return new ChooseShipPieceState(
                 myShip,
                 chooseShipPieceDTO.shipPieces(),
-                playerRegistry.getByNickname(chooseShipPieceDTO.playerName()).getShipBoard()
+                convertName(chooseShipPieceDTO.playerName())
         );
     }
 
@@ -266,7 +267,7 @@ public class ConversionUtils {
         return new AddGoodsState(
                 myShip,
                 addGoodsDTO.goodsBuffer(),
-                playerRegistry.getByNickname(addGoodsDTO.playerName()).getShipBoard()
+                convertName(addGoodsDTO.playerName())
         );
     }
 }

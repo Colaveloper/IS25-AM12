@@ -38,15 +38,15 @@ public class ClientEventHandler implements EventHandler<Event> {
     public void handleEvent(Event event) {
         switch (event) {
             case ActivateComponentEvent activateComponentEvent -> clientModel.notifyActivateComponent(
-                    playerRegistry.getByNickname(activateComponentEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(activateComponentEvent.playerName()),
                     activateComponentEvent.point()
             );
             case FlightBoardUpdateEvent flightBoardUpdateEvent -> clientModel.notifyFlightBoardPosition(
-                    playerRegistry.getByNickname(flightBoardUpdateEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(flightBoardUpdateEvent.playerName()),
                     flightBoardUpdateEvent.position()
             );
             case FlipHourglassEvent flipHourglassEvent -> clientModel.notifyFlipHourglass(
-                    playerRegistry.getByNickname(flipHourglassEvent.playerName()).getShipBoard()
+                    conversionUtils.convertName(flipHourglassEvent.playerName())
             );
             case ForecastDetailsEvent forecastDetailsEvent -> clientModel.setForecastDeck(
                     forecastDetailsEvent.forecastDeckIds().stream()
@@ -55,43 +55,39 @@ public class ClientEventHandler implements EventHandler<Event> {
             );
             case GameEndEvent gameEndEvent -> {
                 clientModel.setFinalScores(
-                        gameEndEvent.playerToScore().entrySet().stream()
-                                .collect(Collectors.toMap(
-                                        e -> playerRegistry.getByNickname(e.getKey()), Map.Entry::getValue))
+                        conversionUtils.convertPlayerMap(gameEndEvent.playerToScore())
                 );
                 clientModel.setMetaState(MetaState.ENDGAME);
             }
             case GoodsUpdateEvent goodsUpdateEvent -> {
                 if (goodsUpdateEvent.add()) {
                     clientModel.notifyPlaceGoods(
-                            playerRegistry.getByNickname(goodsUpdateEvent.playerName()).getShipBoard(),
+                            conversionUtils.convertName(goodsUpdateEvent.playerName()),
                             goodsUpdateEvent.point(),
                             goodsUpdateEvent.goodsType()
                     );
                 } else {
                     clientModel.notifyRemoveGoods(
-                            playerRegistry.getByNickname(goodsUpdateEvent.playerName()).getShipBoard(),
+                            conversionUtils.convertName(goodsUpdateEvent.playerName()),
                             goodsUpdateEvent.point(),
                             goodsUpdateEvent.goodsType()
                     );
                 }
             }
             case GrabStashedComponentEvent grabStashedComponentEvent -> clientModel.notifyGrabStashedComponent(
-                    playerRegistry.getByNickname(grabStashedComponentEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(grabStashedComponentEvent.playerName()),
                     grabStashedComponentEvent.index()
             );
-            case HourglassEndEvent hourglassEndEvent -> clientModel.notifyHourglassEnd();
+            case HourglassEndEvent _ -> clientModel.notifyHourglassEnd();
             case InitializeCabinEvent initializeCabinEvent -> clientModel.notifyInitializeCabin(
-                    playerRegistry.getByNickname(initializeCabinEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(initializeCabinEvent.playerName()),
                     initializeCabinEvent.point(),
                     initializeCabinEvent.crewType()
             );
-            case JoinLobbyEvent joinLobbyEvent -> {
-                Player player = playerRegistry.addPlayer(joinLobbyEvent.playerName());
-                if(!clientModel.getPlayers().contains(player)) {
-                    clientModel.addPlayer(player, joinLobbyEvent.color());
-                }
-            }
+            case JoinLobbyEvent joinLobbyEvent -> clientModel.addPlayer(
+                    playerRegistry.addPlayer(joinLobbyEvent.playerName()),
+                    joinLobbyEvent.color()
+            );
             case LobbyDetailsEvent lobbyDetailsEvent -> {
                 LobbyDetailsDTO details = lobbyDetailsEvent.details();
                 setupLobby(details,true);
@@ -100,75 +96,72 @@ public class ClientEventHandler implements EventHandler<Event> {
                     AdventureCardRegistry.getInstance().getCard(newCardEvent.cardId())
             );
             case PeekForecastEvent peekForecastEvent -> clientModel.notifyPeekForecast(
-                    playerRegistry.getByNickname(peekForecastEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(peekForecastEvent.playerName()),
                     peekForecastEvent.forecastIndex()
             );
             case PlaceComponentEvent placeComponentEvent -> clientModel.notifyPlaceComponent(
-                    playerRegistry.getByNickname(placeComponentEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(placeComponentEvent.playerName()),
                     placeComponentEvent.position(),
                     placeComponentEvent.rotation()
             );
             case PlanetChoiceEvent planetChoiceEvent -> clientModel.notifyChoosePlanet(
-                    playerRegistry.getByNickname(planetChoiceEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(planetChoiceEvent.playerName()),
                     planetChoiceEvent.planetId(),
-                    playerRegistry.getByNickname(planetChoiceEvent.nextPlayerName()).getShipBoard()
+                    conversionUtils.convertName(planetChoiceEvent.nextPlayerName())
             );
             case PlayerDisconnectionEvent playerDisconnectionEvent -> {
                 //TODO: handle player disconnection
             }
             case PlayerExitEvent playerExitEvent -> {
-                //TODO: handle player exit
+                //TODO: handle player exit (maybe we can treat exit like disconnection)
             }
             case RejectComponentEvent rejectComponentEvent -> clientModel.notifyRejectComponent(
-                    playerRegistry.getByNickname(rejectComponentEvent.playerName()).getShipBoard()
+                    conversionUtils.convertName(rejectComponentEvent.playerName())
             );
             case ReleaseForecastEvent releaseForecastEvent -> clientModel.notifyReleaseForecast(
-                    playerRegistry.getByNickname(releaseForecastEvent.playerName()).getShipBoard()
+                    conversionUtils.convertName(releaseForecastEvent.playerName())
             );
             case RemoveComponentEvent removeComponentEvent -> clientModel.notifyRemoveComponent(
-                    playerRegistry.getByNickname(removeComponentEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(removeComponentEvent.playerName()),
                     removeComponentEvent.point()
             );
             case RequestFaceDownComponentEvent requestFaceDownComponentEvent -> clientModel.notifyRequestRandComponent(
-                    playerRegistry.getByNickname(requestFaceDownComponentEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(requestFaceDownComponentEvent.playerName()),
                     ComponentRegistry.getInstance().getComponent(requestFaceDownComponentEvent.componentId())
             );
             case RequestFaceUpComponentEvent requestFaceUpComponentEvent -> clientModel.notifyRequestComponent(
-                    playerRegistry.getByNickname(requestFaceUpComponentEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(requestFaceUpComponentEvent.playerName()),
                     ComponentRegistry.getInstance().getComponent(requestFaceUpComponentEvent.componentId())
             );
             case ShipNotConnectedEvent shipNotConnectedEvent -> clientModel.notifyShipNotConnected(
-                    playerRegistry.getByNickname(shipNotConnectedEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(shipNotConnectedEvent.playerName()),
                     shipNotConnectedEvent.shipPieces()
             );
             case ShipPieceRemoveEvent shipPieceRemoveEvent -> clientModel.notifyChooseShipPiece(
-                    playerRegistry.getByNickname(shipPieceRemoveEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(shipPieceRemoveEvent.playerName()),
                     shipPieceRemoveEvent.index()
             );
             case GrabCreditsEvent grabCreditsEvent -> clientModel.notifyGrabCredits(
-                    playerRegistry.getByNickname(grabCreditsEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(grabCreditsEvent.playerName()),
                     grabCreditsEvent.value()
             );
             case StashComponentEvent stashComponentEvent -> clientModel.notifyStashComponent(
-                    playerRegistry.getByNickname(stashComponentEvent.playerName()).getShipBoard()
+                    conversionUtils.convertName(stashComponentEvent.playerName())
             );
             case SurrenderEvent surrenderEvent -> //TODO: handle player surrender
                     clientModel.notifySurrenderShip(
-                            surrenderEvent.playerNames().stream()
-                                    .map(playerRegistry::getByNickname)
-                                    .map(Player::getShipBoard)
-                                    .collect(Collectors.toSet())
+                            conversionUtils.convertCollection(surrenderEvent.playerNames(), HashSet::new)
                     );
             case UseBatteryEvent useBatteryEvent -> clientModel.notifyUseBattery(
-                    playerRegistry.getByNickname(useBatteryEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(useBatteryEvent.playerName()),
                     useBatteryEvent.point()
             );
             case ValidateShipEvent validateShipEvent -> clientModel.notifyShipValidated(
-                    playerRegistry.getByNickname(validateShipEvent.playerName()).getShipBoard()
+                    conversionUtils.convertName(validateShipEvent.playerName())
             );
             case GameStateUpdateEvent gameStateUpdateEvent -> updateGameState(gameStateUpdateEvent.stateDTO());
             case LoseCrewEvent loseCrewEvent -> clientModel.notifyLoseCrew(
-                    playerRegistry.getByNickname(loseCrewEvent.playerName()).getShipBoard(),
+                    conversionUtils.convertName(loseCrewEvent.playerName()),
                     loseCrewEvent.point()
             );
             case AddActiveLobbyEvent addActiveLobbyEvent -> {
@@ -183,14 +176,14 @@ public class ClientEventHandler implements EventHandler<Event> {
                 clientModel.setMetaState(MetaState.JOINORCREATE);
             }
             case CurrentPlayerUpdateEvent currentPlayerUpdateEvent -> clientModel.notifyCurrentPlayerUpdate(
-                    playerRegistry.getByNickname(currentPlayerUpdateEvent.playerName()).getShipBoard()
+                    conversionUtils.convertName(currentPlayerUpdateEvent.playerName())
             );
             case SurrenderRequestEvent surrenderRequestEvent -> clientModel.notifySurrenderRequest(
-                    playerRegistry.getByNickname(surrenderRequestEvent.playerName()));
-
+                    playerRegistry.getByNickname(surrenderRequestEvent.playerName())
+            );
             case GrabPlacedComponentEvent grabPlacedComponentEvent -> {
                 clientModel.notifyGrabPlacedComponent(
-                        playerRegistry.getByNickname(grabPlacedComponentEvent.playerName()).getShipBoard()
+                        conversionUtils.convertName(grabPlacedComponentEvent.playerName())
                 );
             }
             case GameSnapshotEvent gameSnapshotEvent -> {
@@ -245,10 +238,7 @@ public class ClientEventHandler implements EventHandler<Event> {
     private void setupLobby(LobbyDetailsDTO details, boolean setMetaState) {
         clientModel.createGame(details.level());
         for (String name : details.playerColors().keySet()) {
-            Player player = playerRegistry.addPlayer(name);
-            if(!clientModel.getPlayers().contains(player)) {
-                clientModel.addPlayer(player, details.playerColors().get(name));
-            }
+            clientModel.addPlayer(playerRegistry.addPlayer(name), details.playerColors().get(name));
         }
         if (setMetaState) clientModel.setMetaState(MetaState.INLOBBY);
     }
