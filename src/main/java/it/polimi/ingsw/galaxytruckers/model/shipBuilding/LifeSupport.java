@@ -36,6 +36,12 @@ public non-sealed class LifeSupport extends Component implements ComponentInterf
         }
     }
 
+    @VisibleForTesting
+    public LifeSupport(CrewType crewType) {
+        super();
+        this.crewType = crewType;
+    }
+
     public CrewType getAlienType() {
         return crewType;
     }

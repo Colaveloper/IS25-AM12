@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
@@ -55,13 +56,16 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
 
     private void tryStateTransition() {
         synchronized (lock) {
-            Set<ShipBoard> remainingShipBoards = game.getShipBoards().stream()
-                    .filter(s -> !getValidShipBoards().contains(s) || getShipPieces(s) != null)
-                    .filter(s -> !pendingShipBoards.contains(s))
-                    .collect(Collectors.toSet());
-            if (remainingShipBoards.isEmpty()) {
-                pendingShipBoards.forEach(this::defaultAction);
-                game.submitStateTransition(() -> game.setCurrentState(new ShipInitializationState()));
+            if (!expired) {
+                Set<ShipBoard> remainingShipBoards = game.getShipBoards().stream()
+                        .filter(s -> !getValidShipBoards().contains(s) || getShipPieces(s) != null)
+                        .filter(s -> !pendingShipBoards.contains(s))
+                        .collect(Collectors.toSet());
+                if (remainingShipBoards.isEmpty()) {
+                    expired = true;
+                    pendingShipBoards.forEach(this::defaultAction);
+                    game.submitStateTransition(() -> game.setCurrentState(new ShipInitializationState()));
+                }
             }
         }
     }
@@ -133,28 +137,41 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
     }
 
     public Set<ShipBoard> getValidShipBoards() {
+        Set<ShipBoard> res;
         synchronized (lock) {
-            return new HashSet<>(validShipBoards);
+            res = new HashSet<>(validShipBoards);
         }
+        return res;
     }
 
     public Map<ShipBoard, List<Set<Point>>> getShipPiecesMap() {
+        Map<ShipBoard, List<Set<Point>>> mapCopy = new HashMap<>();
         synchronized (lock) {
-            Map<ShipBoard, List<Set<Point>>> mapCopy = new HashMap<>();
             for (ShipBoard ship : shipPiecesMap.keySet()) {
                 mapCopy.put(ship, new ArrayList<>(shipPiecesMap.get(ship)));
             }
-            return mapCopy;
         }
+        return mapCopy;
     }
 
     public List<Set<Point>> getShipPieces(ShipBoard shipBoard) {
+        List<Set<Point>> res;
         synchronized (lock) {
-            return shipPiecesMap.get(shipBoard);
+            res = shipPiecesMap.get(shipBoard);
         }
+        return res;
     }
 
     public boolean getShouldDiscard() {
         return shouldDiscard;
+    }
+
+    @VisibleForTesting
+    public Set<ShipBoard> getPendingShipBoards() {
+        Set<ShipBoard> res;
+        synchronized (lock) {
+            res = pendingShipBoards;
+        }
+        return res;
     }
 }

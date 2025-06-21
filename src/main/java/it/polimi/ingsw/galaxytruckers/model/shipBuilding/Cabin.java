@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import java.util.Map;
 
 public non-sealed class Cabin extends Component implements ComponentInterface{
-    private boolean initialized;
     private CrewType crewType;
     private int numResidents;
 
@@ -14,7 +13,6 @@ public non-sealed class Cabin extends Component implements ComponentInterface{
         super(connectors,id);
         this.crewType = CrewType.HUMAN;
         this.numResidents = 0;
-        this.initialized = false;
     }
 
     @VisibleForTesting
@@ -22,7 +20,13 @@ public non-sealed class Cabin extends Component implements ComponentInterface{
         super(connectors);
         this.crewType = CrewType.HUMAN;
         this.numResidents = 0;
-        this.initialized = false;
+    }
+
+    @VisibleForTesting
+    public Cabin() {
+        super();
+        this.crewType = CrewType.HUMAN;
+        this.numResidents = 0;
     }
 
     public void initialize(CrewType crewType) {
@@ -32,7 +36,6 @@ public non-sealed class Cabin extends Component implements ComponentInterface{
         } else {
             this.numResidents = 1;
         }
-        this.initialized = true;
     }
 
     public int getNumResidents() {

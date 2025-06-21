@@ -94,6 +94,16 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         if (gameEventListener != null) gameEventListener.notifyShipPieceRemovalEvent(this, pieceIndex);
     }
 
+    public void addWeldedComponent(Component component, Point position, Direction direction) {
+        if (!componentMap.containsKey(position)) {
+            lastPosition = position;
+            component.setOrientation(direction);
+            componentMap.put(position,component);
+            component.addToVisitor(this);
+            lastPosition = null;
+        }
+    }
+
     //CliComponentBank interaction methods
 
     public void offerComponent(Component component) {

@@ -8,8 +8,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public final class RemoveCrewState extends AdventureState implements GameStateInterface {
-    int crewSacrifice;
-    ShipBoard shipBoard;
+    private int crewSacrifice;
+    private final ShipBoard shipBoard;
 
     public RemoveCrewState(int crewSacrifice, ShipBoard shipBoard) {
         this.crewSacrifice = crewSacrifice;
@@ -23,13 +23,14 @@ public final class RemoveCrewState extends AdventureState implements GameStateIn
     }
 
     @Override
-    public void skip(ShipBoard shipBoard) {
+    public synchronized void skip(ShipBoard shipBoard) {
         if (!expired && this.shipBoard.equals(shipBoard)) {
             Iterator<Point> positions = new HashSet<>(shipBoard.getCabins().keySet()).iterator();
             Point currentPosition = positions.next();
             while (crewSacrifice > 0) {
                 try {
                     shipBoard.loseCrew(currentPosition);
+                    crewSacrifice--;
                 } catch (IllegalStateException e) {
                     if (positions.hasNext()) currentPosition = positions.next();
                     else {
@@ -38,6 +39,7 @@ public final class RemoveCrewState extends AdventureState implements GameStateIn
                     }
                 }
             }
+            getNextState();
         }
     }
 
@@ -47,10 +49,8 @@ public final class RemoveCrewState extends AdventureState implements GameStateIn
             throw new IllegalStateException("It's not your turn");
         }
         checkIfExpired();
-        if (shipBoard.getCrewSize() > 0 && crewSacrifice > 0) {
-            shipBoard.loseCrew(position);
-            crewSacrifice--;
-        }
+        shipBoard.loseCrew(position);
+        crewSacrifice--;
         if (crewSacrifice <= 0 || shipBoard.getCrewSize() <= 0) {
             getNextState();
         }

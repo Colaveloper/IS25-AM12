@@ -17,6 +17,11 @@ public non-sealed class Cannon extends Component implements ComponentInterface{
         super(connectors);
     }
 
+    @VisibleForTesting
+    public Cannon() {
+        super();
+    }
+
     public int getFirePower() {
         return (getOrientation() == Direction.UP) ? 2 : 1;
     }

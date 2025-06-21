@@ -13,8 +13,6 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.model.factory.SecondFactory;
-import it.polimi.ingsw.galaxytruckers.model.factory.TestFactory;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.io.File;
@@ -61,15 +59,9 @@ public abstract class Deck {
 
     /**
      * Removes a card from the master deck and sets it as current
-     * @return true if there are still cards, false otherwise
      */
-    public boolean tryDrawCard() {
-        if (masterDeck.isEmpty()) {
-            return false;
-        } else {
-            currentCard = masterDeck.removeLast();
-            return true;
-        }
+    public void drawCard() {
+        currentCard = masterDeck.removeLast();
     }
 
     public boolean isEmpty() {

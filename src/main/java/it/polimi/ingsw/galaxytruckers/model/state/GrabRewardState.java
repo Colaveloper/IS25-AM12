@@ -3,8 +3,8 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 public final class GrabRewardState extends AdventureState implements GameStateInterface{
-    Runnable rewardMethod;
-    ShipBoard shipBoard;
+    private final Runnable rewardMethod;
+    private final ShipBoard shipBoard;
 
     public GrabRewardState(ShipBoard shipBoard, Runnable rewardMethod) {
         this.rewardMethod = rewardMethod;

@@ -9,8 +9,10 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import org.checkerframework.dataflow.qual.AssertMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
@@ -25,15 +27,63 @@ class GrabRewardStateTest {
     Game game;
     Deck deck;
     AdventureCard adventureCard;
+    CountDownLatch latch;
 
     @BeforeEach
-    void setup(){
+    void setup() throws IOException {
         ship1 = new SecondShipBoard(GameColor.BLUE);
         ship2 = new SecondShipBoard(GameColor.RED);
-        rewardMethod = () ->{
-            // mock
-        };
+        rewardMethod = Mockito.mock(Runnable.class);
         testState = new GrabRewardState(ship1, rewardMethod);
+        game = new Game(Level.SECOND);
+        game.setEventListener(new GameEventListenerStub());
+        game.setDeck(new Deck(game) {
+            /**
+             * Returns the current card to be played.
+             *
+             * @return the deck's current card
+             */
+            @Override
+            public AdventureCard getCurrentCard() {
+                return new AdventureCard(game,Level.TEST,0) {
+                    @Override
+                    public AdventureState getNextState() {
+                        return new AdventureStateStub();
+                    }
+                };
+            }
+        });
+        latch = StateTransitionUtils.setupLatch(game);
+        game.setCurrentState(testState);
+    }
+
+    @AssertMethod
+    void assertNoTransition() {
+        StateTransitionUtils.assertNoTransition(latch,game,testState);
+    }
+
+    @Test
+    void getShipBoard() {
+        assertEquals(ship1, testState.getShipBoard());
+    }
+
+    @Test
+    void skipDoesNothingWhenExpired() {
+        testState.expired = true;
+        testState.skip(ship1);
+        assertNoTransition();
+    }
+
+    @Test
+    void skipDoesNothingWhenOutOfTurn() {
+        testState.skip(ship2);
+        assertNoTransition();
+    }
+
+    @Test
+    void skipChangesState() {
+        testState.skip(ship1);
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
     @Test

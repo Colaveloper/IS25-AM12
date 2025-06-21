@@ -14,7 +14,7 @@ public class StateTransitionUtils {
         game.setAfterEach(() -> {
             latch.countDown();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1050);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

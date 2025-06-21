@@ -22,13 +22,13 @@ class AdventureStateTest {
     FlightBoard flightBoard;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         testAdventureState = new AdventureStateStub();
         ship1 = new SecondShipBoard(GameColor.RED);
     }
 
     @Test
-    void giveUpThrowsExceptionWhenNotInSecondLevel(){
+    void giveUpThrowsExceptionWhenNotInSecondLevel() {
         game = new Game(Level.TEST);
         game.setEventListener(new GameEventListenerStub());
         testAdventureState.setGame(game);
@@ -36,7 +36,7 @@ class AdventureStateTest {
     }
 
     @Test
-    void giveUpThrowsExceptionIfShipHasAlreadyGivenUp(){
+    void giveUpThrowsExceptionIfShipHasAlreadyGivenUp() {
         game = new Game(Level.SECOND);
         game.setEventListener(new GameEventListenerStub());
         testAdventureState.setGame(game);
@@ -68,7 +68,7 @@ class AdventureStateTest {
                  */
                 @Override
                 public AdventureCard getCurrentCard() {
-                    return new AdventureCard(game,Level.TEST,0) {
+                    return new AdventureCard(game, Level.TEST, 0) {
                         @Override
                         public AdventureState getNextState() {
                             return new AdventureStateStub();
@@ -84,6 +84,46 @@ class AdventureStateTest {
         game.setCurrentState(testAdventureState);
         testAdventureState.getNextState();
         assertThrows(IllegalStateException.class, () -> testAdventureState.checkIfExpired());
-        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
+        StateTransitionUtils.assertTransition(latch, game, AdventureStateStub.class);
+    }
+
+    @Test
+    void getNextStateWhenExpiredDoesNothing() throws IOException {
+        game = new Game(Level.SECOND);
+        game.setDeck(new Deck(game) {
+                         /**
+                          * Returns the current card to be played.
+                          *
+                          * @return the deck's current card
+                          */
+                         @Override
+                         public AdventureCard getCurrentCard() {
+                             return new AdventureCard(game, Level.TEST, 0) {
+                                 @Override
+                                 public AdventureState getNextState() {
+                                     return new AdventureStateStub();
+                                 }
+                             };
+                         }
+                     }
+        );
+        game.setEventListener(new GameEventListenerStub());
+        CountDownLatch latch = StateTransitionUtils.setupLatch(game);
+        game.setCurrentState(testAdventureState);
+        testAdventureState.expired = true;
+        testAdventureState.getNextState();
+        StateTransitionUtils.assertNoTransition(latch, game, testAdventureState);
+    }
+
+    @Test
+    void checkExpiredThrowsExceptionWhenExpired() {
+        testAdventureState.expired = true;
+        assertThrows(IllegalStateException.class, () -> testAdventureState.checkIfExpired());
+    }
+
+    @Test
+    void checkExpiredWhenNotExpiredDoesNotThrow() {
+        testAdventureState.expired = false;
+        assertDoesNotThrow(() -> testAdventureState.checkIfExpired());
     }
 }

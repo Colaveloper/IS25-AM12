@@ -227,6 +227,27 @@ class ShipBuildingStateTest {
             assertTrue(shipBoards.getFirst().getLastPosition().isEmpty());
         }
 
+        @Test
+        void skipUpdatesPendingShips () {
+            shipBuildingState.skip(shipBoards.getFirst());
+            assertTrue(shipBuildingState.getPendingShipBoards().contains(shipBoards.getFirst()));
+        }
+
+        @Test
+        void cancelSkipRemovesFromPendingShips() {
+            shipBuildingState.skip(shipBoards.getFirst());
+            shipBuildingState.cancelSkip(shipBoards.getFirst());
+            assertTrue(shipBuildingState.getPendingShipBoards().isEmpty());
+        }
+
+        @Test
+        void skipWithAllPendingChangesState() {
+            for (ShipBoard shipBoard : shipBoards) {
+                shipBuildingState.skip(shipBoard);
+            }
+            assertTransition();
+        }
+
         @Nested
         class CompletedShipsExceptionTest {
             @BeforeEach
@@ -403,6 +424,14 @@ class ShipBuildingStateTest {
             shipBuildingState.placeShipOnFlightBoard(shipBoards.getFirst());
             shipBuildingState.placeShipOnFlightBoard(shipBoards.getLast());
             assertTransition();
+        }
+
+        @Test
+        void placeShipOnFlightBoardWhenExpiredDoesNothing() {
+            shipBuildingState.expired = true;
+            shipBuildingState.placeShipOnFlightBoard(shipBoards.getFirst());
+            shipBuildingState.placeShipOnFlightBoard(shipBoards.getLast());
+            assertNoTransition();
         }
 
         @Test

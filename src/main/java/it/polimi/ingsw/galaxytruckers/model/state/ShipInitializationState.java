@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Cabin;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -18,6 +19,7 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
     public void skip(ShipBoard shipBoard) {
         synchronized (lock) {
             pendingShipBoards.add(shipBoard);
+            tryStateTransition();
         }
     }
 
@@ -59,7 +61,6 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
         if (crewTypeMap != null && crewTypeMap.containsKey(crewType) && crewTypeMap.get(crewType).contains(point)) {
             shipBoard.initializeCabin(point, crewType);
             crewTypeMap.remove(crewType);
-            game.getEventListener().notifyCabinInitializationEvent(shipBoard,point,crewType);
             if (crewTypeMap.isEmpty()) {
                 initHumans(shipBoard,true);
             }
@@ -79,7 +80,6 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
                 .filter(p -> cabins.get(p).getNumResidents() == 0)
                 .forEach(p -> {
                     shipBoard.initializeCabin(p, CrewType.HUMAN);
-                    game.getEventListener().notifyCabinInitializationEvent(shipBoard,p,CrewType.HUMAN);
                 });
         synchronized (lock) {
             shipRelevantCabins.remove(shipBoard);
@@ -89,7 +89,8 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
 
     private void tryStateTransition() {
         synchronized (lock) {
-            if (shipRelevantCabins.isEmpty() || shipRelevantCabins.keySet().equals(pendingShipBoards)) {
+            if (!expired && (shipRelevantCabins.isEmpty() || pendingShipBoards.containsAll(shipRelevantCabins.keySet()))) {
+                expired = true;
                 pendingShipBoards.forEach(s -> initHumans(s,false));
                 game.submitStateTransition(() -> game.setCurrentState(new DrawCardState()));
             }
@@ -97,18 +98,29 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
     }
 
     public Map<ShipBoard, Map<CrewType, Set<Point>>> getShipRelevantCabins() {
+        Map<ShipBoard, Map<CrewType, Set<Point>>> mapCopy = new HashMap<>();
         synchronized (lock) {
-            Map<ShipBoard, Map<CrewType, Set<Point>>> mapCopy = new HashMap<>();
             for (ShipBoard ship : shipRelevantCabins.keySet()) {
                 mapCopy.put(ship, new HashMap<>(shipRelevantCabins.get(ship)));
             }
-            return mapCopy;
         }
+        return mapCopy;
     }
 
     public Map<CrewType, Set<Point>> getCrewTypeMap(ShipBoard shipBoard) {
+        Map<CrewType, Set<Point>> res;
         synchronized (lock) {
-            return shipRelevantCabins.get(shipBoard);
+            res = shipRelevantCabins.get(shipBoard);
         }
+        return res;
+    }
+
+    @VisibleForTesting
+    public Set<ShipBoard> getPendingShipBoards() {
+        Set<ShipBoard> res;
+        synchronized (lock) {
+            res = new HashSet<>(pendingShipBoards);
+        }
+        return res;
     }
 }

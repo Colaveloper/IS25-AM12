@@ -320,7 +320,14 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     }
 
     @Override
-    public void notifyHourglassEnd() {}
+    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
+        cliForecast.setBlockedForecasts(deckIndex,shipBoard.getColor());
+    }
+
+    @Override
+    public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
+        cliForecast.removeBlockedForecast(index);
+    }
 
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards) {

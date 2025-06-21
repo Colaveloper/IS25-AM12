@@ -11,6 +11,8 @@ import java.awt.*;
 public abstract non-sealed class GameState implements GameStateInterface {
     protected Game game;
 
+    protected boolean expired = false;
+
     public void setGame(Game game) {
         this.game = game;
         game.getEventListener().notifyGameStateUpdateEvent(this);

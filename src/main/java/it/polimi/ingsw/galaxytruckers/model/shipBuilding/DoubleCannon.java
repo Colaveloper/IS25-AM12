@@ -20,6 +20,12 @@ public non-sealed class DoubleCannon extends Cannon implements Activatable {
         this.active = false;
     }
 
+    @VisibleForTesting
+    public DoubleCannon() {
+        super();
+        this.active = false;
+    }
+
     @Override
     public int getFirePower() {
         int power = this.active ? 2 : 0;

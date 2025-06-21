@@ -5,8 +5,6 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.SurrenderCause;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 public abstract class AdventureState extends GameState {
-    protected boolean expired = false;
-
     protected void checkIfExpired() {
         if (expired) throw new IllegalStateException("It's too late to take this action");
     }
@@ -23,8 +21,10 @@ public abstract class AdventureState extends GameState {
     }
 
     public synchronized void getNextState() {
-        game.submitStateTransition(() ->
-                game.setCurrentState(game.getDeck().getCurrentCard().getNextState()));
-        expired = true;
+        if (!expired) {
+            game.submitStateTransition(() ->
+                    game.setCurrentState(game.getDeck().getCurrentCard().getNextState()));
+            expired = true;
+        }
     }
 }

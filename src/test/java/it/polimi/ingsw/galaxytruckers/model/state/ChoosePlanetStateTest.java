@@ -33,7 +33,7 @@ class ChoosePlanetStateTest {
     CountDownLatch latch;
 
     @BeforeEach
-    void setup(){
+    void setup() throws IOException {
         ship1 = new SecondShipBoard(GameColor.RED);
         ship2 = new SecondShipBoard(GameColor.BLUE);
         options = new HashSet<>();
@@ -60,9 +60,56 @@ class ChoosePlanetStateTest {
             }
         });
         game.setEventListener(new GameEventListenerStub());
+        game.setDeck(new Deck(game) {
+            /**
+             * Returns the current card to be played.
+             *
+             * @return the deck's current card
+             */
+            @Override
+            public AdventureCard getCurrentCard() {
+                return new AdventureCard(game,Level.TEST,0) {
+                    @Override
+                    public AdventureState getNextState() {
+                        return new AdventureStateStub();
+                    }
+                };
+            }
+        });
         latch = StateTransitionUtils.setupLatch(game);
         testChoosePlanetState = new ChoosePlanetState(choosePlanetMethod, options.size());
         game.setCurrentState(testChoosePlanetState);
+    }
+
+    @Test
+    void getNumPlanets() {
+        assertEquals(2,testChoosePlanetState.getNumPlanets());
+    }
+
+    @Test
+    void skipDoesNothingWhenExpired() {
+        testChoosePlanetState.expired = true;
+        testChoosePlanetState.skip(ship1);
+        StateTransitionUtils.assertNoTransition(latch,game,testChoosePlanetState);
+    }
+
+    @Test
+    void skipDoesNothingWhenOutOfTurn() {
+        testChoosePlanetState.skip(ship2);
+        StateTransitionUtils.assertNoTransition(latch,game,testChoosePlanetState);
+    }
+
+    @Test
+    void skipUpdatesCurrentShip() {
+        testChoosePlanetState.skip(ship1);
+        assertEquals(ship2, testChoosePlanetState.getCurrentShip());
+    }
+
+    @Test
+    void skipUpdatesGameState() {
+        testChoosePlanetState.skip(ship1);
+        testChoosePlanetState.skip(ship2);
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
     @Test

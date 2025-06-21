@@ -14,7 +14,7 @@ public final class DrawCardState extends AdventureState implements GameStateInte
             if (hasDrawn) {
                 getNextState();
             } else {
-                game.getDeck().tryDrawCard();
+                game.getDeck().drawCard();
                 game.getDeck().getCurrentCard().initialize();
                 game.getEventListener().notifyNewCardEvent(game.getDeck().getCurrentCard());
                 getNextState();
@@ -47,12 +47,9 @@ public final class DrawCardState extends AdventureState implements GameStateInte
             throw new IllegalStateException("It's already drawn");
         }
         hasDrawn = true;
-        if (game.getDeck().tryDrawCard()) {
-            game.getDeck().getCurrentCard().initialize();
-            game.getEventListener().notifyNewCardEvent(game.getDeck().getCurrentCard());
-        } else {
-            throw new IllegalStateException("There are no more cards to draw");
-        }
+        game.getDeck().drawCard();
+        game.getDeck().getCurrentCard().initialize();
+        game.getEventListener().notifyNewCardEvent(game.getDeck().getCurrentCard());
     }
 
     @Override

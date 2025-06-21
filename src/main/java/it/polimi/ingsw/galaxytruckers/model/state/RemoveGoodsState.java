@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 public final class RemoveGoodsState extends AdventureState implements GameStateInterface{
-    int goodsToLose;
-    ShipBoard shipBoard;
-    GoodsType mostValuableGood;
+    private int goodsToLose;
+    private final ShipBoard shipBoard;
+    private GoodsType mostValuableGood;
 
     public RemoveGoodsState(int goodsToLose, ShipBoard shipBoard) {
         this.goodsToLose = goodsToLose;

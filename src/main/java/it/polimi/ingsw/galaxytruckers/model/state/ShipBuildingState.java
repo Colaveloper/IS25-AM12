@@ -19,7 +19,7 @@ public abstract class ShipBuildingState extends GameState{
     private final Object coveredLock = new Object();
     private final Object uncoveredLock = new Object();
 
-    private final Object endLock = new Object();
+    protected final Object endLock = new Object();
 
     public ShipBuildingState() {
         this.componentBank = new ComponentBank();
@@ -172,14 +172,25 @@ public abstract class ShipBuildingState extends GameState{
     }
 
     public Set<ShipBoard> getCompletedShipBoards() {
+        Set<ShipBoard> res;
         synchronized (endLock) {
-            return new HashSet<>(completedShipBoards);
+            res = new HashSet<>(completedShipBoards);
         }
+        return res;
     }
 
     @VisibleForTesting
     protected ShipBuildingState(ComponentBank testBank) {
         this.componentBank = testBank;
         this.componentBank.initialize();
+    }
+
+    @VisibleForTesting
+    public Set<ShipBoard> getPendingShipBoards() {
+        Set<ShipBoard> res;
+        synchronized (endLock) {
+            res = new HashSet<>(pendingShipBoards);
+        }
+        return res;
     }
 }

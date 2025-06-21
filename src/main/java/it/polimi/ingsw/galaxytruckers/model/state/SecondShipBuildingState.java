@@ -18,11 +18,15 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
 
     private final Object forecastLock = new Object();
 
-    private final AtomicBoolean alreadyTransitioned = new AtomicBoolean(false);
-
     public SecondShipBuildingState() {
         super();
         this.hourglass = new Hourglass(3);
+    }
+
+    @Override
+    public void setGame(Game game) {
+        super.setGame(game);
+        hourglass.flip(this::notifyHourglassEnd);
     }
 
     @Override
@@ -42,12 +46,6 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
             }
             game.getEventListener().notifyFlipHourglassEvent(shipBoard);
         }
-    }
-
-    @Override
-    public void setGame(Game game) {
-        super.setGame(game);
-        hourglass.flip(this::notifyHourglassEnd);
     }
 
     @Override
@@ -105,18 +103,21 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
 
     @Override
     protected void endBuilding() {
-        if (alreadyTransitioned.compareAndSet(false,true)) {
-            game.submitStateTransition(() -> {
-                hourglass.stop();
-                Set<ShipBoard> unfinishedShipBoards = new HashSet<>(game.getShipBoards());
-                unfinishedShipBoards.removeAll(completedShipBoards);
-                for (ShipBoard shipBoard : unfinishedShipBoards) {
-                    releaseForecast(shipBoard);
-                    placeShipOnFlightBoard(shipBoard);
-                }
-                game.getShipBoards().forEach(ShipBoard::finishBuilding);
-                game.setCurrentState(game.getGameFactory().createShipCorrectionState());
-            });
+        synchronized (endLock) {
+            if (!expired) {
+                expired = true;
+                game.submitStateTransition(() -> {
+                    hourglass.stop();
+                    Set<ShipBoard> unfinishedShipBoards = new HashSet<>(game.getShipBoards());
+                    unfinishedShipBoards.removeAll(completedShipBoards);
+                    for (ShipBoard shipBoard : unfinishedShipBoards) {
+                        releaseForecast(shipBoard);
+                        placeShipOnFlightBoard(shipBoard);
+                    }
+                    game.getShipBoards().forEach(ShipBoard::finishBuilding);
+                    game.setCurrentState(game.getGameFactory().createShipCorrectionState());
+                });
+            }
         }
     }
 

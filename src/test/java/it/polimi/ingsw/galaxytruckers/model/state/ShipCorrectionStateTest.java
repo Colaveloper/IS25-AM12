@@ -106,6 +106,32 @@ class ShipCorrectionStateTest {
         }
 
         @Test
+        void skipAddsToPendingShips() {
+            shipCorrectionState.skip(shipBoards.getFirst());
+            assertTrue(shipCorrectionState.getPendingShipBoards().contains(shipBoards.getFirst()));
+        }
+
+        @Test
+        void cancelSkipRemovesFromPendingShips() {
+            shipCorrectionState.skip(shipBoards.getFirst());
+            shipCorrectionState.cancelSkip(shipBoards.getFirst());
+            assertTrue(shipCorrectionState.getPendingShipBoards().isEmpty());
+        }
+
+        @Test
+        void skipForAllShipsChangesState() {
+            shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
+            for (ShipBoard shipBoard : shipBoards) {
+                shipCorrectionState.skip(shipBoard);
+            }
+            assertTransition();
+            for (ShipBoard shipBoard : shipBoards) {
+                assertTrue(shipBoard.checkValidity());
+                assertEquals(1, shipBoard.getConnectedSets().size());
+            }
+        }
+
+        @Test
         void removeComponentWithCorrectShipThrowsException() {
             assertThrows(IllegalStateException.class, () -> shipCorrectionState.removeComponent(shipBoards.getFirst(), new Point(7, 7)));
         }
@@ -121,6 +147,7 @@ class ShipCorrectionStateTest {
         @Test
         void removeComponentDoesNotUpdateLosses() {
             shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
+            assertFalse(shipCorrectionState.getShouldDiscard());
             assertEquals(0, shipBoards.get(1).getLosses());
             assertNoTransition();
         }
@@ -145,6 +172,15 @@ class ShipCorrectionStateTest {
             shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
             shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
             assertTransition();
+        }
+
+        @Test
+        void whenExpiredStateIsNotUpdated() {
+            shipCorrectionState.expired = true;
+            shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
+            shipCorrectionState.chooseShipPiece(shipBoards.get(2), 0);
+            shipCorrectionState.removeComponent(shipBoards.get(1), new Point(7, 7));
+            assertNoTransition();
         }
 
         @Test
@@ -211,6 +247,7 @@ class ShipCorrectionStateTest {
         @Test
         void removeIncrementsLosses() {
             shipCorrectionState.removeComponent(shipBoards.get(1), new Point(8, 7));
+            assertTrue(shipCorrectionState.getShouldDiscard());
             assertEquals(1, shipBoards.get(1).getLosses());
         }
     }

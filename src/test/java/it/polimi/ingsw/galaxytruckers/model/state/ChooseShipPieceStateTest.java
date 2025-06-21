@@ -29,9 +29,10 @@ class ChooseShipPieceStateTest {
     Game game;
     AdventureCard adventureCard;
     Deck deck;
+    CountDownLatch latch;
 
     @BeforeEach
-    void setup(){
+    void setup() throws IOException {
         ship1 = new SecondShipBoard(GameColor.BLUE){
             @Override
             public void discardComponent(Point p){
@@ -42,15 +43,6 @@ class ChooseShipPieceStateTest {
         shipPieces = new ArrayList<>();
         shipPieces.add(Set.of(new Point(7,7)));
         testChooseShipPieceState = new ChooseShipPieceState(shipPieces, ship1);
-    }
-
-    @Test
-    void chooseShipPieceThrowsExceptionWhenOutOfTurn(){
-        assertThrows(IllegalStateException.class, () -> testChooseShipPieceState.chooseShipPiece(ship2, 2));
-    }
-
-    @Test
-    void chooseShipPieceRemovesPieceAndChangesAdventureState() throws IOException {
         game = new Game(Level.SECOND){
             @Override
             public Deck getDeck(){
@@ -70,9 +62,43 @@ class ChooseShipPieceStateTest {
                 return adventureCard;
             }
         };
-        CountDownLatch latch = StateTransitionUtils.setupLatch(game);
+        latch = StateTransitionUtils.setupLatch(game);
         game.setEventListener(new GameEventListenerStub());
         game.setCurrentState(testChooseShipPieceState);
+    }
+
+    @Test
+    void gettersTest() {
+        assertEquals(shipPieces,testChooseShipPieceState.getShipPieces());
+        assertEquals(ship1,testChooseShipPieceState.getShipBoard());
+    }
+
+    @Test
+    void skipDoesNothingWhenExpired() {
+        testChooseShipPieceState.expired = true;
+        testChooseShipPieceState.skip(ship1);
+        StateTransitionUtils.assertNoTransition(latch,game,testChooseShipPieceState);
+    }
+
+    @Test
+    void skipDoesNothingWhenOutOfTurn() {
+        testChooseShipPieceState.skip(ship2);
+        StateTransitionUtils.assertNoTransition(latch,game,testChooseShipPieceState);
+    }
+
+    @Test
+    void skipChangesState() {
+        testChooseShipPieceState.skip(ship1);
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
+    }
+
+    @Test
+    void chooseShipPieceThrowsExceptionWhenOutOfTurn(){
+        assertThrows(IllegalStateException.class, () -> testChooseShipPieceState.chooseShipPiece(ship2, 2));
+    }
+
+    @Test
+    void chooseShipPieceRemovesPieceAndChangesAdventureState() {
         testChooseShipPieceState.chooseShipPiece(ship1, 0);
         StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }

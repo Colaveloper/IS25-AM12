@@ -5,7 +5,6 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public non-sealed class CargoHold extends Component implements ComponentInterface{
@@ -29,6 +28,15 @@ public non-sealed class CargoHold extends Component implements ComponentInterfac
         this.numGoods = 0;
         this.goods = new HashMap<>();
         this.isSpecial = isSpecial;
+    }
+
+    @VisibleForTesting
+    public CargoHold(int size) {
+        super();
+        this.size = size;
+        this.numGoods = 0;
+        this.goods = new HashMap<>();
+        this.isSpecial = false;
     }
 
     public Boolean getIsSpecial() { return isSpecial; }

@@ -20,6 +20,7 @@ public final class ChooseShipPieceState extends AdventureState implements GameSt
     public synchronized void skip(ShipBoard shipBoard) {
         if (!expired && this.shipBoard.equals(shipBoard)) {
             shipBoard.keepShipPiece(shipPieces,0,true);
+            getNextState();
         }
     }
 

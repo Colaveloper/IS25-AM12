@@ -4,17 +4,16 @@ import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.SurrenderCause;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,13 +26,16 @@ class DrawCardStateTest {
     Deck deck;
     AdventureCard adventureCard;
     CountDownLatch latch;
+    SurrenderPolicyStub surrenderPolicy;
 
     @BeforeEach
     void setup() throws IOException{
+        surrenderPolicy = new SurrenderPolicyStub();
+        surrenderPolicy.surrenderEnabled = false;
         game = new Game(Level.SECOND) {
             @Override
             public SurrenderPolicy getSurrenderPolicy() {
-                return new NoSurrenderPolicy();
+                return surrenderPolicy;
             }
 
             @Override
@@ -54,11 +56,86 @@ class DrawCardStateTest {
         game.setFlightBoard(flightBoard);
         testState = new DrawCardState();
         game.setCurrentState(testState);
+        adventureCard = new AdventureCard(game, Level.SECOND, 1) {
+            @Override
+            public void initialize(){
+                // mock
+            }
+            @Override
+            public AdventureState getNextState() {
+                return new AdventureStateStub();
+            }
+        };
+        deck = new SecondDeck(game){
+            @Override
+            public void drawCard(){
+            }
+            @Override
+            public AdventureCard getCurrentCard(){
+                return adventureCard;
+            }
+            @Override
+            public boolean isEmpty(){
+                return false;
+            }
+        };
+        game.setDeck(deck);
+    }
+
+    @Test
+    void getShipBoardReturnsLeader() {
+        assertEquals(ship1, testState.getShipBoard());
+    }
+
+    @Test
+    void setGameConfirmsSurrenderIfEnabled() {
+        assertFalse(surrenderPolicy.surrenderConfirmed);
+        surrenderPolicy.surrenderEnabled = true;
+        testState.setGame(game);
+        assertTrue(surrenderPolicy.surrenderConfirmed);
+    }
+
+    @Test
+    void skipDoesNothingWhenExpired() {
+        testState.expired = true;
+        testState.skip(ship1);
+        StateTransitionUtils.assertNoTransition(latch,game,testState);
+    }
+
+    @Test
+    void skipDoesNothingWhenOutOfTurn() {
+        testState.skip(ship2);
+        StateTransitionUtils.assertNoTransition(latch,game,testState);
+    }
+
+    @Test
+    void skipDrawsAndChangesState() {
+        testState.skip(ship1);
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
+    }
+
+    @Test
+    void skipAfterDrawChangesState() {
+        testState.drawCard(ship1);
+        testState.skip(ship1);
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
+    }
+
+    @Test
+    void drawCardUpdatesState() {
+        testState.drawCard(ship1);
+        assertTrue(testState.hasDrawn());
     }
 
     @Test
     void drawCardThrowsExceptionWhenOutOfTurn(){
         assertThrows(IllegalStateException.class, () -> testState.drawCard(ship2));
+    }
+
+    @Test
+    void drawCardThrowsExceptionWhenAlreadyDrawn() {
+        testState.drawCard(ship1);
+        assertThrows(IllegalStateException.class, () -> testState.drawCard(ship1));
     }
 
     @Test
@@ -76,35 +153,49 @@ class DrawCardStateTest {
     }
 
     @Test
-    void goNextChangesState() throws IOException, InterruptedException {
-        adventureCard = new AdventureCard(game, Level.SECOND, 1) {
-            @Override
-            public void initialize(){
-                // mock
-            }
-            @Override
-            public AdventureState getNextState() {
-                return new AdventureStateStub();
-            }
-        };
-        deck = new SecondDeck(game){
-            @Override
-            public boolean tryDrawCard(){
-                return true;
-            }
-            @Override
-            public AdventureCard getCurrentCard(){
-                return adventureCard;
-            }
-            @Override
-            public boolean isEmpty(){
-                return false;
-            }
-        };
-        game.setDeck(deck);
+    void goNextThrowsIfOutOfTurn() {
+        assertThrows(IllegalStateException.class, () -> testState.goNext(ship2));
+    }
+
+    @Test
+    void goNextThrowsIfNotDrawn() {
+        assertThrows(IllegalStateException.class, () -> testState.goNext(ship1));
+    }
+
+    @Test
+    void goNextChangesState() {
         testState.drawCard(ship1);
         testState.goNext(ship1);
         StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
+}
 
+class SurrenderPolicyStub implements SurrenderPolicy {
+    boolean surrenderEnabled = false;
+    boolean surrenderConfirmed = false;
+
+    @Override
+    public void setEventListener(GameEventListener gameEventListener) {
+    }
+
+    @Override
+    public boolean isSurrenderEnabled() {
+        return surrenderEnabled;
+    }
+
+    @Override
+    public boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause) {
+        return false;
+    }
+
+    @Override
+    public Set<ShipBoard> confirmSurrender(FlightBoard flightBoard) {
+        surrenderConfirmed = true;
+        return Set.of();
+    }
+
+    @Override
+    public Set<ShipBoard> getSurrenderedShips() {
+        return Set.of();
+    }
 }

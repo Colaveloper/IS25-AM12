@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 public non-sealed class HandleProjectileState extends ActivateState implements GameStateInterface{
-    Projectile projectile;
+    private final Projectile projectile;
 
     public HandleProjectileState(ShipBoard shipBoard, Projectile projectile) {
         super(shipBoard, projectile.getActivatablePoints(shipBoard));

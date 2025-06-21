@@ -24,21 +24,22 @@ public abstract class ActivateState extends AdventureState {
         if (!expired && this.shipBoard.equals(shipBoard)) {
             if (batteriesToSpend > 0) {
                 Iterator<Point> positions = shipBoard.getBatteries().keySet().iterator();
-                Point currentPosition = positions.next();
                 while (batteriesToSpend > 0) {
-                    try {
+                    Point currentPosition = positions.next();
+                    int min = Integer.min(batteriesToSpend, shipBoard.getBatteries().get(currentPosition).getNumBatteries());
+                    for (int i = 0; i < min; i++) {
                         shipBoard.useBatteries(currentPosition);
                         batteriesToSpend--;
-                    } catch (IllegalArgumentException e) {
-                        currentPosition = positions.next();
                     }
                 }
             } else if (batteriesToSpend < 0) {
-                Iterator<Point> positions = getAvailablePositions().iterator();
-                Point currentPosition = positions.next();
+                Iterator<Point> positions = getAvailablePositions().stream()
+                        .filter(p -> !shipBoard.getActivatables().get(p).isActive())
+                        .iterator();
                 while (batteriesToSpend < 0) {
-                    if (shipBoard.activateComponent(currentPosition)) batteriesToSpend++;
-                    currentPosition = positions.next();
+                    Point currentPosition = positions.next();
+                    shipBoard.activateComponent(currentPosition);
+                    batteriesToSpend++;
                 }
             }
             endStateAction();

@@ -36,6 +36,12 @@ class GameStateTest {
     }
 
     @Test
+    void cancelSkipDoesNothing() {
+        testState = new AdventureStateStub();
+        assertDoesNotThrow(() -> testState.cancelSkip(ship1));
+    }
+
+    @Test
     void giveUpThrowsExceptionWhenUsingInvalidState() {
         testState = new GameState() {
             @Override

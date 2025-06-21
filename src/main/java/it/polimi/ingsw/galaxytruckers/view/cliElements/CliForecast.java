@@ -23,10 +23,12 @@ public class CliForecast extends CliElement {
 
     public void removeBlockedForecast(int index) {
         this.blockedForecasts[index] = null;
+        setDirty();
     }
 
     public void setBlockedForecasts(int index, GameColor gameColor) {
         this.blockedForecasts[index] = gameColor;
+        setDirty();
     }
 
     @Override

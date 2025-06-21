@@ -8,8 +8,11 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Battery;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CargoHold;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.checkerframework.dataflow.qual.AssertMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +36,7 @@ class RemoveGoodsStateTest {
     Map<GoodsType, Integer> testGoods;
 
     @BeforeEach
-    void setup(){
+    void setup() throws IOException {
         ship1 = new SecondShipBoard(GameColor.BLUE);
         testGoods = new HashMap<>();
     }
@@ -61,6 +64,17 @@ class RemoveGoodsStateTest {
         };
     }
 
+    void setupShip() {
+        ship1 = new SecondShipBoard(GameColor.BLUE);
+        ship1.offerComponent(new CargoHold(3));
+        ship1.placeComponent(new Point(7,8), Direction.UP);
+        ship1.weldLastComponent();
+        ship1.offerComponent(new Battery(1));
+        ship1.placeComponent(new Point(8,7), Direction.UP);
+        ship1.weldLastComponent();
+        ship1.placeGoods(new Point(7,8),GoodsType.YELLOW,1);
+    }
+
     @AssertMethod
     void assertNoTransition() {
         StateTransitionUtils.assertNoTransition(latch,game,testState);
@@ -69,6 +83,39 @@ class RemoveGoodsStateTest {
     @AssertMethod
     void assertTransition() {
         StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
+    }
+
+    @Test
+    void skipDoesNothingWhenExpired() throws IOException {
+        setupShip();
+        setupGame();
+        testState = new RemoveGoodsState(3,ship1);
+        game.setCurrentState(testState);
+        testState.expired = true;
+        testState.skip(ship1);
+        assertNoTransition();
+        assertTrue(ship1.getGoodsValue() > 0 && ship1.getNumBatteries() > 0);
+    }
+
+    @Test
+    void skipDoesNothingWhenOutOfTurn() throws IOException {
+        setupShip();
+        setupGame();
+        testState = new RemoveGoodsState(3,ship1);
+        game.setCurrentState(testState);
+        testState.skip(new SecondShipBoard(GameColor.RED));
+        assertNoTransition();
+        assertTrue(ship1.getGoodsValue() > 0 && ship1.getNumBatteries() > 0);
+    }
+
+    @Test
+    void skipChangesState() throws IOException {
+        setupShip();
+        setupGame();
+        testState = new RemoveGoodsState(3,ship1);
+        game.setCurrentState(testState);
+        testState.skip(ship1);
+        assertTransition();
     }
 
     @Test
@@ -95,6 +142,7 @@ class RemoveGoodsStateTest {
         testState = new RemoveGoodsState(1, ship1);
         game.setCurrentState(testState);
         assertNoTransition();
+        assertEquals(ship1, testState.getShipBoard());
     }
 
     @Test
@@ -116,7 +164,7 @@ class RemoveGoodsStateTest {
     }
 
     @Test
-    void setGameChangesStateWhenShipHasRunOutOfBatteries() throws IOException, InterruptedException {
+    void setGameChangesStateWhenShipHasRunOutOfBatteries() throws IOException {
         ship1 = new SecondShipBoard(GameColor.BLUE){
             @Override
             public int getGoodsValue(){
@@ -162,7 +210,7 @@ class RemoveGoodsStateTest {
         latch = StateTransitionUtils.setupLatch(game);
         game.setCurrentState(testState);
         testState.loseGood(ship1, new Point(7,7));
-        assertEquals(1, testState.goodsToLose);
+        assertEquals(1, testState.getGoodsToLose());
         assertNoTransition();
     }
 
@@ -196,7 +244,7 @@ class RemoveGoodsStateTest {
         game.setCurrentState(testState);
         game.setEventListener(new GameEventListenerStub());
         testState.loseGood(ship1, new Point(7,7));
-        assertEquals(1, testState.goodsToLose);
+        assertEquals(1, testState.getGoodsToLose());
         assertNoTransition();
     }
 
@@ -226,7 +274,7 @@ class RemoveGoodsStateTest {
         game.setEventListener(new GameEventListenerStub());
         game.setCurrentState(testState);
         testState.loseGood(ship1, new Point(7,7));
-        assertEquals(1, testState.goodsToLose);
+        assertEquals(1, testState.getGoodsToLose());
         assertNoTransition();
     }
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import org.checkerframework.common.returnsreceiver.qual.This;
 
 import java.util.Map;
 
@@ -22,6 +23,12 @@ public non-sealed class Battery extends Component implements ComponentInterface{
         if (numBatteries != 2 && numBatteries != 3) {
             throw new IllegalArgumentException("Number of batteries must be 2 or 3");
         }
+        this.numBatteries = numBatteries;
+    }
+
+    @VisibleForTesting
+    public Battery(int numBatteries) {
+        super();
         this.numBatteries = numBatteries;
     }
 

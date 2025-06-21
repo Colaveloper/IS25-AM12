@@ -9,6 +9,7 @@ import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventListener;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyEvent;
+import org.mockito.Mockito;
 
 import java.awt.*;
 import java.util.List;
@@ -16,6 +17,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class GameEventListenerStub extends GameEventListener{
+
+    public static GameEventListener getMock() {
+        return Mockito.mock(GameEventListener.class);
+    }
 
     public GameEventListenerStub() {
         super(null,null);

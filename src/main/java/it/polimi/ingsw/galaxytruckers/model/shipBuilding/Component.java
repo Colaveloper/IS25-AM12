@@ -25,7 +25,13 @@ public non-sealed class Component implements ComponentInterface {
 
     @VisibleForTesting
     public Component() {
-        this.connectors = Map.of();
+        this.connectors = new HashMap<>();
+        this.connectors.putAll(Map.of(
+                Direction.UP, Connector.UNIVERSAL,
+                Direction.RIGHT, Connector.UNIVERSAL,
+                Direction.DOWN, Connector.UNIVERSAL,
+                Direction.LEFT, Connector.UNIVERSAL
+        ));
         this.orientation = Direction.UP;
         this.id = 0;
     }

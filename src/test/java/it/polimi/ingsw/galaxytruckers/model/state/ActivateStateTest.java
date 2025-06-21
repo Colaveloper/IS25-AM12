@@ -7,8 +7,11 @@ import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Battery;
+import it.polimi.ingsw.galaxytruckers.model.shipBuilding.DoubleCannon;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +19,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,12 +30,15 @@ class ActivateStateTest {
     Game game;
     Deck deck;
     AdventureCard adventureCard;
+    CountDownLatch latch;
 
     @BeforeEach
-    void setup() {
+    void setup() throws IOException {
         game = new Game(Level.SECOND);
         game.setEventListener(new  GameEventListenerStub());
         ship1 = new SecondShipBoard(GameColor.RED);
+        ship1.addWeldedComponent(new DoubleCannon(), new Point(8,7), Direction.UP);
+        ship1.addWeldedComponent(new Battery(3), new Point(6,7),Direction.UP);
         ship2 = new SecondShipBoard(GameColor.BLUE){
             @Override
             public int getNumBatteries() {
@@ -46,13 +53,60 @@ class ActivateStateTest {
                 // mock
             }
         };
-        testActivateState = new ActivateStateStub(ship1) {
+        game.setDeck(new Deck(game) {
+            /**
+             * Returns the current card to be played.
+             *
+             * @return the deck's current card
+             */
             @Override
-            public void activateComponent(ShipBoard shipBoard, Point position) {
-                super.activateComponent(shipBoard, position);
+            public AdventureCard getCurrentCard() {
+                return new AdventureCard(game,Level.TEST,0) {
+                    @Override
+                    public AdventureState getNextState() {
+                        return new AdventureStateStub();
+                    }
+                };
             }
-        };
-        testActivateState.setGame(game);
+        });
+        latch = StateTransitionUtils.setupLatch(game);
+        testActivateState = new ActivateState(ship1, ship1.getActivatables().keySet()) {};
+        game.setCurrentState(testActivateState);
+    }
+
+    @Test
+    void skipDoesNothingWhenWhenExpired() {
+        testActivateState.expired = true;
+        testActivateState.skip(ship1);
+        StateTransitionUtils.assertNoTransition(latch,game,testActivateState);
+    }
+
+    @Test
+    void skipDoesNothingWhenOutOfTurn() {
+        testActivateState.skip(ship2);
+        StateTransitionUtils.assertNoTransition(latch,game,testActivateState);
+    }
+
+    @Test
+    void skipChangesState() {
+        testActivateState.skip(ship1);
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
+    }
+
+    @Test
+    void skipActivatesComponentsAndUpdatesState() {
+        testActivateState.spendBatteries(ship1,new Point(6,7));
+        testActivateState.skip(ship1);
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
+        assertTrue(ship1.getActivatables().get(new Point(8,7)).isActive());
+    }
+
+    @Test
+    void skipSpendsBatteriesAndUpdatesState() {
+        testActivateState.activateComponent(ship1,new Point(8,7));
+        testActivateState.skip(ship1);
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
+        assertEquals(2, ship1.getBatteries().get(new Point(6,7)).getNumBatteries());
     }
 
     @Test
@@ -71,6 +125,8 @@ class ActivateStateTest {
 
     @Test
     void activateComponentWithInsufficientBatteriesThrowsException(){
+        ship1.removeComponent(new Point(6,7
+        ));
         assertThrows(IllegalStateException.class, () -> testActivateState.activateComponent(ship1, new Point(7,7)));
     }
 

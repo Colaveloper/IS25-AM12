@@ -9,6 +9,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import org.checkerframework.dataflow.qual.AssertMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -53,23 +54,32 @@ class HandleProjectileStateTest {
             }
         };
         dice = new Dice(){};
-        projectile = new SmallMeteor(dice, Direction.LEFT){ // 1
+        projectile = new SmallMeteor(dice, Direction.LEFT){
+            @Override
+            public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
+                return Set.of(new Point(7,7));
+            }
+
             @Override
             public boolean fireAt(ShipBoard ship){
                 return true;
             }
         };
-        testState = new HandleProjectileState(ship1, projectile){
-            @Override
-            public void activateComponent(ShipBoard shipBoard, Point position) {
-                availablePositions.add(position);
-                super.activateComponent(shipBoard, position);
-            }
-        };
+        testState = new HandleProjectileState(ship1, projectile);
         game = new Game(Level.SECOND);
         game.setEventListener(new GameEventListenerStub());
         latch = StateTransitionUtils.setupLatch(game);
         testState.setGame(game);
+    }
+
+    @AssertMethod
+    void assertNoTransition() {
+        StateTransitionUtils.assertNoTransition(latch,game,testState);
+    }
+
+    @Test
+    void getProjectile() {
+        assertEquals(projectile, testState.getProjectile());
     }
 
     @Test
@@ -83,6 +93,32 @@ class HandleProjectileStateTest {
     void activateComponentActivatesComponent(){
         testState.activateComponent(ship1, new Point(7,7));
         assertEquals(1, testState.batteriesToSpend);
+    }
+
+    @Test
+    void activateComponentChangesStateWhenHandlingIsDone() {
+        testState.spendBatteries(ship1, new Point(7,7));
+        testState.activateComponent(ship1, new Point(7,7));
+        StateTransitionUtils.assertTransition(latch,game,ChooseShipPieceState.class);
+    }
+
+    @Test
+    void spendBatteriesRemovesBattery() {
+        testState.spendBatteries(ship1, new Point(7,7));
+        assertEquals(-1, testState.batteriesToSpend);
+    }
+
+    @Test
+    void spendBatteriesThrowsIfDoneMoreThanOnce() {
+        testState.spendBatteries(ship1, new Point(7,7));
+        assertThrows(IllegalStateException.class, () -> testState.spendBatteries(ship1, new Point(7,7)));
+    }
+
+    @Test
+    void spendBatteriesChangesStateWhenHandlingIsDone() {
+        testState.activateComponent(ship1, new Point(7,7));
+        testState.spendBatteries(ship1, new Point(7,7));
+        StateTransitionUtils.assertTransition(latch,game,ChooseShipPieceState.class);
     }
 
     @Test

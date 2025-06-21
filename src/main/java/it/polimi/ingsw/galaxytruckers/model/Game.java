@@ -79,11 +79,12 @@ public class Game implements GameInterface {
      */
     @Override
     public ShipBoard addShipBoard(GameColor color) {
+        ShipBoard shipBoard;
         synchronized (shipBoards) {
-            ShipBoard shipBoard = gameFactory.createShipBoard(color);
+            shipBoard = gameFactory.createShipBoard(color);
             shipBoards.add(shipBoard);
-            return shipBoard;
         }
+        return shipBoard;
     }
 
     /**
@@ -112,8 +113,12 @@ public class Game implements GameInterface {
 
     public void submitStateTransition(Runnable runnable) {
         transitionExecutor.submit(() -> {
-            withStateWriteLock(runnable);
-            afterEach.run();
+            try {
+                withStateWriteLock(runnable);
+                afterEach.run();
+            } catch (Exception ex) {
+                ex.printStackTrace(System.err);
+            }
         });
     }
     /**

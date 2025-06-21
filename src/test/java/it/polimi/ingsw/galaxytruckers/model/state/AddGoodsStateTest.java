@@ -32,7 +32,7 @@ class AddGoodsStateTest {
     CountDownLatch latch;
 
     @BeforeEach
-    void setup(){
+    void setup() throws IOException {
         ship1 = new SecondShipBoard(GameColor.RED){
             @Override
             public void placeGoods(Point pos, GoodsType goods, int num){
@@ -50,8 +50,45 @@ class AddGoodsStateTest {
         testAddGoodState = new AddGoodsState(goodsBuffer, ship1);
         game = new Game(Level.SECOND);
         game.setEventListener(new GameEventListenerStub());
+        adventureCard = new AdventureCard(game, Level.SECOND, 1) {
+            @Override
+            public AdventureState getNextState() {
+                return new AdventureStateStub();
+            }
+        };
+        deck = new SecondDeck(game){
+            @Override
+            public AdventureCard getCurrentCard(){
+                return adventureCard;
+            }
+        };
+        game.setDeck(deck);
         latch = StateTransitionUtils.setupLatch(game);
         game.setCurrentState(testAddGoodState);
+    }
+
+    @Test
+    void getShipBoard() {
+        assertEquals(ship1, testAddGoodState.getShipBoard());
+    }
+
+    @Test
+    void skipDoesNothingWhenExpired() {
+        testAddGoodState.expired = true;
+        testAddGoodState.skip(ship1);
+        StateTransitionUtils.assertNoTransition(latch,game,testAddGoodState);
+    }
+
+    @Test
+    void skipDoesNothingWhenOutOfTurn() {
+        testAddGoodState.skip(ship2);
+        StateTransitionUtils.assertNoTransition(latch,game,testAddGoodState);
+    }
+
+    @Test
+    void skipUpdatesState() {
+        testAddGoodState.skip(ship1);
+        StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
     @Test
@@ -98,28 +135,7 @@ class AddGoodsStateTest {
     }
 
     @Test
-    void goNextChangesGameState() throws IOException {
-        game = new Game(Level.SECOND){
-            @Override
-            public Deck getDeck(){
-                return deck;
-            }
-        };
-        game.setEventListener(new GameEventListenerStub());
-        adventureCard = new AdventureCard(game, Level.SECOND, 1) {
-            @Override
-            public AdventureState getNextState() {
-                return new AdventureStateStub();
-            }
-        };
-        deck = new SecondDeck(game){
-            @Override
-            public AdventureCard getCurrentCard(){
-                return adventureCard;
-            }
-        };
-        latch = StateTransitionUtils.setupLatch(game);
-        game.setCurrentState(testAddGoodState);
+    void goNextChangesGameState() {
         testAddGoodState.goNext(ship1);
         assertThrows(IllegalStateException.class, () -> testAddGoodState.goNext(ship1));
         assertThrows(IllegalStateException.class, () -> testAddGoodState.addGood(ship1, new Point(7,7), GoodsType.GREEN));
