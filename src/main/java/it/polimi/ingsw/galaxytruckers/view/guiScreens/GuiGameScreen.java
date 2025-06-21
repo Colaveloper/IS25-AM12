@@ -183,4 +183,9 @@ public abstract class GuiGameScreen extends GuiScreen {
     public void notifyComponentChange(ShipBoard shipBoard, Point point) {
         guiShipBoards.get(shipBoard).notifyComponentChange(point);
     }
+
+    @Override
+    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
+        super.notifyRemoveComponent(shipBoard, point);
+    }
 }

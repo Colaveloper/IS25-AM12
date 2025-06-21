@@ -118,11 +118,6 @@ public class GuiCorrectionScreen extends GuiGameScreen {
     }
 
     @Override
-    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        guiShipBoards.get(shipBoard).notifyRemoveComponent(point);
-    }
-
-    @Override
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List<Point> removed) {
         for (Point piece : removed) {
             guiShipBoards.get(shipBoard).notifyRemoveComponent(piece);

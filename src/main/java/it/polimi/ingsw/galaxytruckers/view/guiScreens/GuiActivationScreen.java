@@ -5,6 +5,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -14,16 +17,18 @@ import java.awt.*;
 import java.util.Set;
 
 public abstract class GuiActivationScreen extends GuiAdventureScreen {
-    private int batteriesToSpend;
+    private final IntegerProperty batteriesToSpend;
     private final Button goNextButton = new Button("FINISH ACTIVATION") ;
 
     public GuiActivationScreen(ClientModel model, ControllerToServer controller, AdventureState gameState) {
         super(model, controller, gameState);
-        batteriesToSpend = 0;
+        batteriesToSpend = new SimpleIntegerProperty(0);
         if (isMyTurn()) {
             guiContextBox.getChildren().setAll(new Label("Spend the batteries you want to activate components, then press OK"));
             goNextButton.setOnAction(_ -> getGuiController().goNext());
-        } else {
+            goNextButton.disableProperty().bind(
+                    Bindings.createBooleanBinding(() -> (batteriesToSpend.get() != 0), batteriesToSpend)
+            );
             guiContextBox.getChildren().setAll(new Label("Wait for your turn"));
         }
     }
@@ -66,10 +71,10 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
             @Override
             public void goNext() {
                 if (isMyTurn()) {
-                    if(batteriesToSpend > 0) {
-                        guiContextBox.getChildren().setAll(new Label("You need to use " + batteriesToSpend + " batteries"));
-                    } else if(batteriesToSpend < 0) {
-                        guiContextBox.getChildren().setAll(new Label("You need to activate " + (batteriesToSpend * (-1)) + " components"));
+                    if(batteriesToSpend.get() > 0) {
+                        guiContextBox.getChildren().setAll(new Label("You need to use " + batteriesToSpend.get() + " batteries"));
+                    } else if(batteriesToSpend.get() < 0) {
+                        guiContextBox.getChildren().setAll(new Label("You need to activate " + (batteriesToSpend.get() * (-1)) + " components"));
                     } else {
                         if (state.getAvailableActions().contains(StateActions.GO_NEXT)) {
                             controller.goNext();
@@ -82,16 +87,14 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
 
     @Override
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
-        batteriesToSpend ++;
+        batteriesToSpend.add(1);
         guiShipBoards.get(myShipBoard).highlightPoints(Set.of(point), Color.BLUE);
-        goNextButton.setDisable(batteriesToSpend != 0);
     }
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        batteriesToSpend --;
+        batteriesToSpend.add(-1);
         guiShipBoards.get(myShipBoard).highlightPoints(Set.of(point), Color.GREEN);
-        goNextButton.setDisable(batteriesToSpend != 0);
     }
 //
 //    private void highlightComponent(ShipBoard shipBoard, Point point, CliHighlights color) {

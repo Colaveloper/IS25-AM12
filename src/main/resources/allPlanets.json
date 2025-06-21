@@ -1,0 +1,1289 @@
+[
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 0,
+    "level": "TEST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 1,
+    "level": "TEST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 2,
+    "level": "TEST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 3,
+    "level": "TEST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 4,
+    "level": "TEST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 5,
+    "level": "TEST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 6,
+    "level": "TEST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 7,
+    "level": "TEST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 8,
+    "level": "FIRST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 9,
+    "level": "FIRST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 10,
+    "level": "FIRST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 11,
+    "level": "FIRST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 12,
+    "level": "FIRST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 13,
+    "level": "FIRST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 14,
+    "level": "FIRST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 15,
+    "level": "FIRST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 16,
+    "level": "FIRST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 17,
+    "level": "FIRST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 18,
+    "level": "FIRST"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 19,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 20,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 21,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 22,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 23,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 24,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 25,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 26,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 27,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 28,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 29,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 30,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 31,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 32,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 33,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 34,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 35,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 36,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 37,
+    "level": "SECOND"
+  },
+  {
+    "type": "planets",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 1,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
+    "id": 38,
+    "level": "SECOND"
+  }
+]
