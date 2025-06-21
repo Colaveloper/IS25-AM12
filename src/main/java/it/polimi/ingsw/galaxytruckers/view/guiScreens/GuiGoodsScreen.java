@@ -26,13 +26,17 @@ import java.util.function.Predicate;
 public class GuiGoodsScreen extends GuiAdventureScreen {
     private final GoodsBuffer goodsBuffer;
     private final VBox bufferInfoBox = new VBox(2);
-    private ObjectProperty<Point> selectedPoint;
-    private ObjectProperty<GoodsType> selectedGoodsType;
+    private final ObjectProperty<Point> selectedPoint;
+    private final ObjectProperty<GoodsType> selectedGoodsType;
 
     public GuiGoodsScreen(ClientModel model, ControllerToServer controller, AddGoodsState addGoodsState) {
         super(model, controller, addGoodsState);
         this.goodsBuffer = addGoodsState.getGoodsBuffer();
         this.selectedPoint = new SimpleObjectProperty<>();
+        selectedPoint.addListener((_, _, newVal) -> {
+            guiShipBoards.get(myShipBoard).clearHighlights();
+            guiShipBoards.get(myShipBoard).highlightPoints(Set.of(newVal), Color.BLUE);
+        });
         this.selectedGoodsType = new SimpleObjectProperty<>();
         if (isMyTurn()) {
             guiContextBox.getChildren().setAll(
