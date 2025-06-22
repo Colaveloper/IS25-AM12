@@ -87,8 +87,8 @@ public class SocketTest {
 class ServerControllerStub implements ServerControllerInterface {
 
     @Override
-    public <T extends ClientHandler> T registerNickname(String nickname, Function<Player, T> handlerFunction) {
-        return null;
+    public void registerNickname(String nickname, ClientHandler handler) {
+
     }
 
     /**

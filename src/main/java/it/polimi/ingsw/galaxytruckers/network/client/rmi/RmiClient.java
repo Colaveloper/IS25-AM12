@@ -5,6 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
+import it.polimi.ingsw.galaxytruckers.network.client.ServerHandler;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteServer;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteController;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
@@ -23,12 +24,16 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class RmiClient extends UnicastRemoteObject implements RemoteClient, VirtualServer {
+public class RmiClient extends UnicastRemoteObject implements RemoteClient, ServerHandler {
     private RemoteServer server;
     private RemoteController remoteController;
     private ClientControllerInterface clientController;
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    private ScheduledFuture<?> scheduleTask;
+    private final ScheduledExecutorService pingScheduler = Executors.newScheduledThreadPool(1);
+    private ScheduledFuture<?> pingTask;
+
+    private String serverName;
+    private String serverAddress;
+    private int serverPort;
 
     boolean connected = false;
     private final Object connectionLock = new Object();
@@ -39,10 +44,39 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
 
     public void start(String serverName, String serverAddress, int serverPort) {
         try {
+            this.serverName = serverName;
+            this.serverAddress = serverAddress;
+            this.serverPort = serverPort;
+            connect();
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed to locate RMI server", e);
+        }
+    }
+
+    public boolean reconnect() {
+        synchronized (connectionLock) {
+            try {
+                connect();
+                return true;
+            } catch (RemoteException e) {
+                System.out.println("Failed to reconnect: " + e.getMessage());
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public void dropConnection() {
+        handleNetworkError(new RemoteException("Simulated Network Exception"));
+    }
+
+    private void connect() throws RemoteException {
+        try {
             Registry registry = LocateRegistry.getRegistry(serverAddress, serverPort);
             this.server = (RemoteServer) registry.lookup(serverName);
-        } catch (RemoteException | NotBoundException e) {
-            throw new RuntimeException("Failed to locate RMI server", e);
+            connected = true;
+        } catch (NotBoundException e) {
+            throw new RuntimeException("Server not bound, config error");
         }
     }
 
@@ -51,16 +85,14 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     }
 
     private void handleNetworkError(RemoteException e) {
-        e.printStackTrace(System.err);
         synchronized (connectionLock) {
+            System.err.println("RemoteException: " + e.getMessage());
             if (connected) {
                 connected = false;
-                scheduler.shutdownNow();
-                scheduleTask.cancel(true);
-                //TODO: finish implementing reconnection on network failure
+                pingTask.cancel(true);
+                clientController.signalDisconnection();
             }
         }
-        throw new IllegalStateException("Client is not connected");
     }
 
     private void ping() {
@@ -75,7 +107,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     public void registerNickname(String myNickname) {
         runRemoteMethod(() -> {
             this.remoteController = server.registerNickname(this, myNickname);
-            this.scheduleTask = this.scheduler.scheduleAtFixedRate(this::ping,5,5, TimeUnit.SECONDS);
+            this.pingTask = this.pingScheduler.scheduleAtFixedRate(this::ping,5,5, TimeUnit.SECONDS);
         });
     }
 
@@ -226,7 +258,10 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
 
     private void runRemoteMethod(RemoteRunnable remoteRunnable) {
         try {
-            remoteRunnable.run();
+            synchronized (connectionLock) {
+                if (!connected) return;
+                remoteRunnable.run();
+            }
         } catch (RemoteException e) {
             handleNetworkError(e);
         }

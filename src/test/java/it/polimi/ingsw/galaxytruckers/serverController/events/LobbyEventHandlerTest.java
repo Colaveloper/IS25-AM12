@@ -97,6 +97,10 @@ class VirtualClientStub implements ClientHandler {
     List<Event> receivedEvents = new ArrayList<>();
 
     @Override
+    public void setPlayer(Player player) {
+    }
+
+    @Override
     public void notifyEvent(Event event) {
         //mock
         if (Objects.requireNonNull(event) instanceof LobbyEvent) {
@@ -110,9 +114,5 @@ class VirtualClientStub implements ClientHandler {
 
     @Override
     public void pauseEvents() {
-    }
-
-    @Override
-    public void start() {
     }
 }

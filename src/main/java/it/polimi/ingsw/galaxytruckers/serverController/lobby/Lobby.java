@@ -21,7 +21,7 @@ import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 public class Lobby implements LobbyInterface {
-    private static final long removalDelay = 5;
+    private static final long removalDelay = 10000;
 
     private final Object paramLock = new Object();
 
@@ -192,6 +192,9 @@ public class Lobby implements LobbyInterface {
     }
 
     public void skip(Player player) {
+        synchronized (paramLock) {
+            if (disconnectedPlayers.size() == players.size()) return;
+        }
         if (state == LobbyState.INGAME) {
             game.skip(player.getShipBoard().orElseThrow());
         }

@@ -40,7 +40,7 @@ class RmiClientHandlerTest {
         RemoteClient remoteClient = new RemoteClientStub(checker);
         sessionManager = mock(SessionManager.class);
         player = new Player("x");
-        rmiClientHandler = new RmiClientHandler(remoteClient,player, controller);
+        rmiClientHandler = new RmiClientHandler(remoteClient, controller);
         player.setLobby(lobby);
         rmiClientHandler.setSessionManager(sessionManager);
     }
@@ -251,7 +251,7 @@ class RmiClientHandlerTest {
     class FailedConnection {
         @BeforeEach
         void setUp() throws RemoteException {
-            rmiClientHandler = new RmiClientHandler(new DisconnectedClientStub(),player,controller);
+            rmiClientHandler = new RmiClientHandler(new DisconnectedClientStub(), controller);
         }
 
         @Test

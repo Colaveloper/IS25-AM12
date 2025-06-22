@@ -35,29 +35,25 @@ public class ServerController implements ServerControllerInterface {
     }
 
     @Override
-    public <T extends ClientHandler> T registerNickname(String nickname, Function<Player, T> handlerFunction) {
+    public void registerNickname(String nickname, ClientHandler clientHandler) {
         Player player;
-        T clientHandler;
         synchronized (lock) {
             boolean reconnect = false;
             player = Player.getPlayer(nickname);
             if (player != null && !SessionManager.getInstance().isPlayerActive(player)) {
-                clientHandler = handlerFunction.apply(player);
                 clientHandler.pauseEvents();
                 reconnect = true;
             } else {
                 player = Player.addPlayer(nickname);
-                clientHandler = handlerFunction.apply(player);
             }
+            clientHandler.setPlayer(player);
             SessionManager.getInstance().registerClient(player, clientHandler);
-            clientHandler.start();
             requestActiveLobbies(player, reconnect);
             if (reconnect) {
                 Player finalPlayer = player;
                 player.getLobby().ifPresent(lobby -> lobby.notifyPlayerReconnection(finalPlayer));
             }
         }
-        return clientHandler;
     }
 
     private void requestActiveLobbies(Player player, boolean reconnect) {

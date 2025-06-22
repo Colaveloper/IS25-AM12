@@ -15,12 +15,21 @@ import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class ClientController implements ClientControllerInterface, ControllerToServer {
     private ClientModel model;
-    private VirtualServer server;
+    private ServerHandler server;
     private ErrorReporter view;
     private final PlayerRegistry playerRegistry = new PlayerRegistry();
+
+    private boolean connected = true;
+    private final Object connectionLock = new Object();
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private ScheduledFuture<?> connectionFuture;
 
     private ClientEventHandler eventHandler;
 
@@ -28,7 +37,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         this.model = model;
     }
 
-    public void setServer(VirtualServer server) {
+    public void setServer(ServerHandler server) {
         this.server = server;
     }
 
@@ -55,6 +64,36 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         Player player = model.getClientPlayer();
         playerRegistry.removePlayer(player);
         model.setPlayer(null);
+    }
+
+    public void dropConnection() {
+        server.dropConnection();
+    }
+
+    public void signalDisconnection() {
+        synchronized (connectionLock) {
+            if (connected) {
+                view.reportError("You have been disconnected, trying to reconnect...");
+                connected = false;
+                connectionFuture = scheduler.scheduleAtFixedRate(this::reconnect,3,3, TimeUnit.SECONDS);
+            }
+        }
+    }
+
+    private void reconnect() {
+        synchronized (connectionLock) {
+            try {
+                if (connected || server.reconnect()) {
+                    connected = true;
+                    if (model.getClientPlayer() != null) {
+                        server.registerNickname(model.getClientPlayer().getNickname());
+                    }
+                    connectionFuture.cancel(true);
+                }
+            } catch (Exception e) {
+                view.reportError("Failed to reconnect");
+            }
+        }
     }
 
     //--------------------------------------UPDATES FROM THE SERVER----------------------------------
@@ -85,7 +124,11 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 
     @Override
     public void requestNewGame(Level level, int playersN) {
-        server.requestNewGame(level, playersN);
+        try {
+            server.requestNewGame(level, playersN);
+        } catch (RuntimeException e) {
+            view.reportError(e.getMessage());
+        }
     }
 
     @Override

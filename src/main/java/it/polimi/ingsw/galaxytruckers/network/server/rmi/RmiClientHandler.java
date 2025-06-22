@@ -9,9 +9,7 @@ import it.polimi.ingsw.galaxytruckers.network.server.ClientEventQueue;
 import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.ControllerEvent;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyEvent;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
@@ -21,8 +19,6 @@ import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class RmiClientHandler extends UnicastRemoteObject implements RemoteController, ClientHandler {
     private final RemoteClient remoteClient;
@@ -35,15 +31,14 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
     private boolean running = false;
     private final ClientEventQueue eventQueue = new ClientEventQueue();
 
-    private final Player player;
+    private Player player;
 
     private final Object requestLock = new Object();
     private final Object eventLock = new Object();
 
-    public RmiClientHandler(RemoteClient remoteClient, Player player, ServerControllerInterface controller) throws RemoteException {
+    public RmiClientHandler(RemoteClient remoteClient, ServerControllerInterface controller) throws RemoteException {
         super();
         this.remoteClient = remoteClient;
-        this.player = player;
         this.controller = controller;
         this.updateThread = new Thread(this::runUpdateThread, "UpdateThread");
         this.sessionManager = SessionManager.getInstance();
@@ -56,6 +51,11 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
                 updateThread.start();
             }
         }
+    }
+
+    @Override
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     @Override

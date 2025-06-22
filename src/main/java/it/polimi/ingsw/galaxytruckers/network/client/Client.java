@@ -43,7 +43,7 @@ public class Client {
                     model.activateCheats(choice);
                     choice = Integer.parseInt(CheatCodes.cheat());
                 }
-                VirtualServer server;
+                ServerHandler server;
                 if (choice == 0) {
                     chosen = true;
                     RmiClient rmiClient = new RmiClient();

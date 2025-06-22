@@ -9,5 +9,6 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 public interface ClientControllerInterface {
 
     void notifyEvent(Event event);
+    void signalDisconnection();
 
 }
