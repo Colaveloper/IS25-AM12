@@ -34,7 +34,6 @@ public class SocketClient implements ServerHandler, VirtualClient {
 
     private final ScheduledExecutorService scheduler =  Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> pingTask;
-    private Object pingLock;
 
     private final Map<UUID, CompletableFuture<Response>> responses = new ConcurrentHashMap<>();
 

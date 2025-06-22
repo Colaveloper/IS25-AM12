@@ -1,9 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
 
 import java.awt.*;
 import java.util.*;
@@ -17,7 +20,7 @@ class ShipBoardTest {
 
     @Nested
     @DisplayName("Ship-building tests")
-    class ShipBuildingTest {
+    class SecondShipBoardTests {
         Component componentToAdd;
 
         @BeforeEach
@@ -123,6 +126,11 @@ class ShipBoardTest {
         }
 
         @Test
+        void stashWithNoComponentThrowsException() {
+            assertThrows(IllegalStateException.class, () -> shipBoard.stashComponent());
+        }
+
+        @Test
         void stashedComponentIsGrabbed() {
             shipBoard.offerComponent(componentToAdd);
             shipBoard.stashComponent();
@@ -136,6 +144,111 @@ class ShipBoardTest {
             shipBoard.offerComponent(componentToAdd);
             shipBoard.stashComponent();
             assertThrows(IllegalArgumentException.class, () -> shipBoard.grabStashedComponent(1));
+        }
+
+        @Test
+        void rejectComponentReturnsLastComponent() {
+            Component component = new Component();
+            shipBoard.offerComponent(component);
+            assertEquals(component, shipBoard.rejectComponent());
+            assertTrue(shipBoard.getLastComponent().isEmpty());
+            assertTrue(shipBoard.getLastPosition().isEmpty());
+        }
+
+        @Test
+        void rejectThrowsWhenStashed() {
+            shipBoard.offerComponent(new Component());
+            shipBoard.stashComponent();
+            shipBoard.grabStashedComponent(0);
+            assertThrows(IllegalStateException.class, () -> shipBoard.rejectComponent());
+        }
+
+        @Test
+        void finishBuildingWelds() {
+            Component component = new Component();
+            Point point = new Point(6,7);
+            shipBoard.offerComponent(component);
+            shipBoard.placeComponent(point,Direction.UP);
+            shipBoard.finishBuilding();
+            assertEquals(component, shipBoard.getComponentMap().get(point));
+        }
+
+        @Test
+        void finishBuildingRejects() {
+            Map<Point, Component> expMap = new HashMap<>(shipBoard.getComponentMap());
+            Component component = new Component();
+            Point point = new Point(6,7);
+            shipBoard.offerComponent(component);
+            shipBoard.finishBuilding();
+            assertEquals(expMap, shipBoard.getComponentMap());
+            assertTrue(shipBoard.getLastComponent().isEmpty());
+            assertTrue(shipBoard.getLastPosition().isEmpty());
+        }
+
+        @Test
+        void getFirePowerWithAliensIsIncreased() {
+            Point p1 = new Point(8,7);
+            Point p2 = new Point(9,7);
+            shipBoard.addWeldedComponent(new Cabin(), p1, Direction.UP);
+            shipBoard.addWeldedComponent(new Cannon(), p2, Direction.UP);
+            shipBoard.initializeCabin(p1,CrewType.PURPLE);
+            assertEquals(6, shipBoard.getFirePower());
+        }
+
+        @Test
+        void getFirePowerWithAliensIsNotIncreased() {
+            Point p1 = new Point(8,7);
+            shipBoard.addWeldedComponent(new Cabin(), p1, Direction.UP);
+            shipBoard.initializeCabin(p1,CrewType.PURPLE);
+            assertEquals(0, shipBoard.getFirePower());
+        }
+
+        @Test
+        void getEnginePowerWithAliensIsIncreased() {
+            Point p1 = new Point(8,7);
+            Point p2 = new Point(9,7);
+            shipBoard.addWeldedComponent(new Cabin(), p1, Direction.UP);
+            shipBoard.addWeldedComponent(new Engine(), p2, Direction.UP);
+            shipBoard.initializeCabin(p1,CrewType.BROWN);
+            assertEquals(3, shipBoard.getEnginePower());
+        }
+
+        @Test
+        void getEnginePowerWithAliensIsNotIncreased() {
+            Point p1 = new Point(8,7);
+            shipBoard.addWeldedComponent(new Cabin(), p1, Direction.UP);
+            shipBoard.initializeCabin(p1,CrewType.BROWN);
+            assertEquals(0, shipBoard.getEnginePower());
+        }
+    }
+
+    @Nested
+    class TestShipBoardTests {
+        @BeforeEach
+        void setup() {
+            shipBoard = new TestShipBoard(GameColor.RED);
+        }
+
+        @Test
+        void stashDoNothingInTestLevel() {
+            shipBoard.offerComponent(new Component());
+            shipBoard.stashComponent();
+            assertTrue(shipBoard.getLastComponent().isPresent());
+            assertTrue(shipBoard.getStashedComponents().isEmpty());
+        }
+
+        @Test
+        void grabStashedDoesNothingInTestLevel() {
+            shipBoard.grabStashedComponent(0);
+            assertTrue(shipBoard.getLastComponent().isEmpty());
+        }
+
+        @Test
+        void lifeSupportsAreNotConsideredInTest() {
+            shipBoard.addWeldedComponent(new LifeSupport(CrewType.PURPLE),new Point(7,8),Direction.UP);
+            assertTrue(shipBoard.getLifeSupports().isEmpty());
+            shipBoard.removeComponent(new Point(7,8));
+            assertTrue(shipBoard.getLifeSupports().isEmpty());
         }
     }
 
@@ -571,14 +684,11 @@ class ShipBoardTest {
                 // ensure that if the cabin has been initialized with a human, numResidents is 2
                 shipBoard.initializeCabin(new Point(7,7), CrewType.HUMAN);
                 assertEquals(2,shipBoard.getCrewSize());
+            }
 
-                // ensure that if the cabin has been initialized with a purple alien, an exception is thrown
-                // since the cabin is not connected to a life support component
-                assertThrows(IllegalStateException.class, ()-> shipBoard.initializeCabin(new Point(7,7), CrewType.PURPLE));
-
-                // ensure that if the cabin has been initialized with a brown alien, an exception is thrown
-                // since the cabin is not connected to a life support component
-                assertThrows(IllegalStateException.class, ()-> shipBoard.initializeCabin(new Point(7,7), CrewType.BROWN));
+            @Test
+            void initializeCabinThrowsWithInvalidPosition() {
+                assertThrows(IllegalStateException.class, () -> shipBoard.initializeCabin(new Point(7,7), CrewType.HUMAN));
             }
 
             @Test
@@ -786,6 +896,18 @@ class ShipBoardTest {
                 assertThrows(IllegalStateException.class, () -> shipBoard.removeGoods(new Point(7,7), GoodsType.GREEN, 2));
                 assertTrue(restIsUnchanged());
             }
+
+            @Test
+            void removeCargoHoldUpdatesGoodsMap() {
+                Point p1 = new Point(6,7);
+                Point p2 = new Point(8,7);
+                shipBoard.addWeldedComponent(new CargoHold(3), p1,Direction.UP);
+                shipBoard.addWeldedComponent(new CargoHold(3), p2,Direction.UP);
+                shipBoard.placeGoods(p1, GoodsType.GREEN,1);
+                shipBoard.placeGoods(p2, GoodsType.GREEN,1);
+                shipBoard.removeComponent(p1);
+                assertEquals(Map.of(GoodsType.GREEN, 1), shipBoard.getGoods());
+            }
         }
 
         @Nested
@@ -828,6 +950,27 @@ class ShipBoardTest {
                 assertTrue(restIsUnchanged());
                 shipBoard.discardComponent(new Point(7,7));
                 assertEquals(0, shipBoard.getLifeSupports().size());
+            }
+
+            @Test
+            void removeLifeSupportUpdatesAdjacentCabins() {
+                LifeSupport ls = new LifeSupport(CrewType.PURPLE);
+                Cabin cabin = new Cabin();
+                Point p1 = new Point(8,7);
+                Point p2 = new Point(9,7);
+                Point p3 = new Point(8,8);
+                shipBoard.addWeldedComponent(ls,p1,Direction.UP);
+                shipBoard.addWeldedComponent(cabin,p2,Direction.UP);
+                shipBoard.addWeldedComponent(new Cabin(),ShipBoard.center,Direction.UP);
+                shipBoard.addWeldedComponent(new Cannon(),new Point(6,7),Direction.UP);
+                shipBoard.addWeldedComponent(new Cabin(),p3, Direction.UP);
+                shipBoard.initializeCabin(p3, CrewType.PURPLE);
+                shipBoard.loseCrew(p3);
+                shipBoard.initializeCabin(p2, CrewType.PURPLE);
+                shipBoard.initializeCabin(ShipBoard.center, CrewType.HUMAN);
+                shipBoard.removeComponent(p1);
+                assertEquals(2, shipBoard.getCrewSize());
+                assertEquals(2, shipBoard.getFirePower());
             }
         }
 
@@ -1000,8 +1143,109 @@ class ShipBoardTest {
             placeCannon(new Point(7,8));
             assertFalse(shipBoard.checkValidity());
         }
+
+        @Test
+        void shipIsNotValidWithRotatedEngine() {
+            shipBoard.addWeldedComponent(new Engine(), new Point(8,7), Direction.LEFT);
+            assertFalse(shipBoard.checkValidity());
+        }
+
+        @Test
+        void shipIsNotValidWithWrongEngine() {
+            shipBoard.addWeldedComponent(new Engine(), new Point(8,7), Direction.UP);
+            shipBoard.addWeldedComponent(new Component(), new Point(8,8), Direction.UP);
+            assertFalse(shipBoard.checkValidity());
+        }
     }
 
+    @Nested
+    class GeneralTests {
+        @BeforeEach
+        void setup() {
+            shipBoard = new TestShipBoard(GameColor.RED);
+        }
 
+        @Test
+        void gainCredits() {
+            shipBoard.gainCredits(10);
+            assertEquals(10, shipBoard.getCredits());
+        }
+
+        @Test
+        void removeAll() {
+            shipBoard.addWeldedComponent(new Component(), new Point(8, 7), Direction.UP);
+            shipBoard.removeAll(false);
+            assertEquals(1, shipBoard.getComponentMap().size());
+            assertTrue(shipBoard.getComponentMap().containsKey(ShipBoard.center));
+            assertEquals(0, shipBoard.getLosses());
+        }
+
+        @Test
+        void discardAll() {
+            shipBoard.addWeldedComponent(new Component(), new Point(8, 7), Direction.UP);
+            shipBoard.removeAll(true);
+            assertEquals(1, shipBoard.getComponentMap().size());
+            assertTrue(shipBoard.getComponentMap().containsKey(ShipBoard.center));
+            assertEquals(1, shipBoard.getLosses());
+        }
+
+        @Test
+        void keepShipPieceNoDiscard() {
+            Point point = new Point(9, 7);
+            shipBoard.addWeldedComponent(new Component(), point, Direction.UP);
+            shipBoard.keepShipPiece(List.of(Set.of(ShipBoard.center), Set.of(point)), 0, false);
+            assertEquals(1, shipBoard.getComponentMap().size());
+            assertTrue(shipBoard.getComponentMap().containsKey(ShipBoard.center));
+            assertEquals(0, shipBoard.getLosses());
+        }
+
+        @Test
+        void keepShipPieceWithDiscard() {
+            Point point = new Point(9, 7);
+            shipBoard.addWeldedComponent(new Component(), point, Direction.UP);
+            shipBoard.keepShipPiece(List.of(Set.of(ShipBoard.center), Set.of(point)), 0, true);
+            assertEquals(1, shipBoard.getComponentMap().size());
+            assertTrue(shipBoard.getComponentMap().containsKey(ShipBoard.center));
+            assertEquals(1, shipBoard.getLosses());
+        }
+
+        @Test
+        void getExposedConnectors() {
+            Point p1 = new Point(8, 7);
+            Point p2 = new Point(9, 7);
+            shipBoard.addWeldedComponent(new Component(Map.of(
+                    Direction.UP, Connector.NONE,
+                    Direction.DOWN, Connector.NONE,
+                    Direction.LEFT, Connector.UNIVERSAL,
+                    Direction.RIGHT, Connector.NONE
+            )), p1, Direction.UP);
+            shipBoard.addWeldedComponent(new Component(Map.of(
+                    Direction.UP, Connector.NONE,
+                    Direction.DOWN, Connector.NONE,
+                    Direction.LEFT, Connector.NONE,
+                    Direction.RIGHT, Connector.NONE
+            )), p2, Direction.UP);
+            assertEquals(3, shipBoard.getExposedConnectorsNumber());
+        }
+
+        @Test
+        void activateThrowsExceptionWithInvalidPosition() {
+            assertThrows(IllegalStateException.class, () -> shipBoard.activateComponent(new Point(7, 7)));
+        }
+
+        @Test
+        void deactivateThrowsExceptionWithInvalidPosition() {
+            assertThrows(IllegalStateException.class, () -> shipBoard.deactivateComponent(new Point(7, 7)));
+        }
+
+        @Test
+        void deactivateAll() {
+            shipBoard.addWeldedComponent(new DoubleCannon(), new Point(8, 7), Direction.UP);
+            shipBoard.addWeldedComponent(new DoubleCannon(), new Point(9, 7), Direction.UP);
+            shipBoard.activateComponent(new Point(8, 7));
+            shipBoard.deactivateAll();
+            assertEquals(0, shipBoard.getFirePower());
+        }
+    }
 
 }

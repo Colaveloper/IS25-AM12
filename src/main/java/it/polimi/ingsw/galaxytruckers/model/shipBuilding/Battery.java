@@ -11,9 +11,6 @@ public non-sealed class Battery extends Component implements ComponentInterface{
 
     public Battery(Map<Direction, Connector> connectors, int id, int numBatteries) {
         super(connectors,id);
-        if (numBatteries != 2 && numBatteries != 3) {
-            throw new IllegalArgumentException("Number of batteries must be 2 or 3");
-        }
         this.numBatteries = numBatteries;
     }
 

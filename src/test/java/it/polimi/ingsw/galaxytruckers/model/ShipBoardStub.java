@@ -35,11 +35,6 @@ public class ShipBoardStub implements ComponentVisitor, ActivatableVisitor {
     }
 
     @Override
-    public void add(Component component) {
-
-    }
-
-    @Override
     public void add(Cannon cannon) {
 
     }
@@ -81,11 +76,6 @@ public class ShipBoardStub implements ComponentVisitor, ActivatableVisitor {
 
     @Override
     public void add(DoubleEngine doubleEngine) {
-
-    }
-
-    @Override
-    public void remove(Component component) {
 
     }
 

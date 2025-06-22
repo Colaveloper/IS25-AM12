@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 public interface ComponentVisitor {
-    void add(Component component);
     void add(Cannon cannon);
     void add(Engine engine);
     void add(Battery battery);
@@ -12,8 +11,6 @@ public interface ComponentVisitor {
     void add(DoubleCannon doubleCannon);
     void add(DoubleEngine doubleEngine);
 
-
-    void remove(Component component);
     void remove(Cannon cannon);
     void remove(Engine engine);
     void remove(Battery battery);

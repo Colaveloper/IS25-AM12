@@ -5,8 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="663e43fb-7c2d-4edd-be6d-afd39e028acc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ComponentBankTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ConnectorTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/Battery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/Battery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/CargoHold.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/CargoHold.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ComponentVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ComponentVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/Engine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/LifeSupport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/LifeSupport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/SecondShipBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/SecondShipBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ShipBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ShipBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/ShipCorrectionState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/ShipCorrectionState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/client/socket/SocketClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/client/socket/SocketClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/ShipBoardStub.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/ShipBoardStub.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/CargoHoldTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/CargoHoldTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ShipBoardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ShipBoardTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,10 +29,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JUnit5 Test Class" />
         <option value="Record" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -52,16 +65,19 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.LocalClient1.executor": "Debug",
-    "Application.LocalClient2.executor": "Debug",
+    "Application.LocalClient1.executor": "Run",
+    "Application.LocalClient2.executor": "Run",
     "Application.LocalServer.executor": "Run",
-    "JUnit.ALL-TESTS.executor": "Run",
+    "JUnit.ALL-TESTS.executor": "Coverage",
     "JUnit.ActivateStateTest.executor": "Coverage",
     "JUnit.ActivateStateTest.skipActivatesComponentsAndUpdatesState.executor": "Run",
     "JUnit.ActivateStateTest.skipSpendsBatteriesAndUpdatesState.executor": "Run",
     "JUnit.AddGoodsStateTest.executor": "Coverage",
     "JUnit.AdventureStateTest.checkExpiredThrowsExceptionWhenExpired.executor": "Run",
     "JUnit.AdventureStateTest.executor": "Coverage",
+    "JUnit.BigMeteorTest.executor": "Coverage",
+    "JUnit.CargoHoldTest.addingAndRemoving.executor": "Run",
+    "JUnit.CargoHoldTest.executor": "Coverage",
     "JUnit.ChoosePlanetStateTest.executor": "Coverage",
     "JUnit.ChoosePlanetStateTest.getNumPlanets.executor": "Run",
     "JUnit.ChoosePlanetStateTest.skipUpdatesCurrentShip.executor": "Run",
@@ -69,6 +85,14 @@
     "JUnit.ChooseShipPieceStateTest.executor": "Coverage",
     "JUnit.ChooseShipPieceStateTest.gettersTest.executor": "Run",
     "JUnit.ChooseShipPieceStateTest.skipDoesNothingWhenExpired.executor": "Run",
+    "JUnit.CombatZoneCardTest.getNextStateWithOnePlayerLeftReturnsDrawCard.executor": "Run",
+    "JUnit.ComponentBankTest.addToCoveredComponentsAddsToCoveredComponents.executor": "Run",
+    "JUnit.ComponentBankTest.addToUncoveredComponentsAddsToUncoveredComponents.executor": "Run",
+    "JUnit.ComponentBankTest.drawRandComponentReturnsRandomComponent.executor": "Run",
+    "JUnit.ComponentBankTest.executor": "Coverage",
+    "JUnit.ComponentBankTest.removeUncoveredRemovesComponent.executor": "Run",
+    "JUnit.ComponentBankTest.removeUncoveredThrowsWithInvalidId.executor": "Run",
+    "JUnit.ConnectorTest.executor": "Coverage",
     "JUnit.DrawCardStateTest.drawCardThrowsExceptionWhenAlreadyDrawn.executor": "Run",
     "JUnit.DrawCardStateTest.executor": "Coverage",
     "JUnit.DrawCardStateTest.getShipBoardReturnsLeader.executor": "Run",
@@ -89,6 +113,9 @@
     "JUnit.HandleProjectileStateTest.spendBatteriesChangesStateWhenHandlingIsDone.executor": "Run",
     "JUnit.HandleProjectileStateTest.spendBatteriesRemovesBattery.executor": "Run",
     "JUnit.HandleProjectileStateTest.spendBatteriesThrowsIfDoneMoreThanOnce.executor": "Run",
+    "JUnit.Model tests.executor": "Coverage",
+    "JUnit.OpenSpaceCardTest.executor": "Run",
+    "JUnit.OpenSpaceCardTest.shipWithNoEnginePowerIsForcedToGiveUp.executor": "Run",
     "JUnit.RemoveCrewStateTest.executor": "Coverage",
     "JUnit.RemoveCrewStateTest.loseCrewChangesAdventureStateWhenNoMoreCrew.executor": "Run",
     "JUnit.RemoveCrewStateTest.skipChangesState.executor": "Run",
@@ -99,6 +126,34 @@
     "JUnit.RemoveGoodsStateTest.skipChangesState.executor": "Run",
     "JUnit.RemoveGoodsStateTest.skipDoesNothingWhenExpired.executor": "Run",
     "JUnit.RemoveGoodsStateTest.skipDoesNothingWhenOutOfTurn.executor": "Run",
+    "JUnit.ShipBoardTest$GeneralTests.activateThrowsExceptionWithInvalidPosition.executor": "Run",
+    "JUnit.ShipBoardTest$GeneralTests.deactivateAll.executor": "Run",
+    "JUnit.ShipBoardTest$GeneralTests.deactivateThrowsExceptionWithInvalidPosition.executor": "Run",
+    "JUnit.ShipBoardTest$GeneralTests.discardAll.executor": "Run",
+    "JUnit.ShipBoardTest$GeneralTests.gainCreditsSendsEvent.executor": "Run",
+    "JUnit.ShipBoardTest$GeneralTests.getExposedConnectors.executor": "Run",
+    "JUnit.ShipBoardTest$GeneralTests.keepShipPieceNoDiscard.executor": "Run",
+    "JUnit.ShipBoardTest$GeneralTests.keepShipPieceWithDiscard.executor": "Run",
+    "JUnit.ShipBoardTest$GeneralTests.removeAll.executor": "Run",
+    "JUnit.ShipBoardTest$GeneralTests.removeComponentSendsEvent.executor": "Run",
+    "JUnit.ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsIncreased.executor": "Run",
+    "JUnit.ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsNotIncreased.executor": "Run",
+    "JUnit.ShipBoardTest$SecondShipBoardTests.getFirePowerWithAliensIsIncreased.executor": "Run",
+    "JUnit.ShipBoardTest$SecondShipBoardTests.getFirePowerWithAliensIsNotIncreased.executor": "Run",
+    "JUnit.ShipBoardTest$ShipBuildingTest.finishBuildingRejects.executor": "Run",
+    "JUnit.ShipBoardTest$ShipBuildingTest.finishBuildingWelds.executor": "Run",
+    "JUnit.ShipBoardTest$ShipBuildingTest.grabStashedDoesNothingInTestLevel.executor": "Run",
+    "JUnit.ShipBoardTest$ShipBuildingTest.rejectComponentReturnsLastComponent.executor": "Run",
+    "JUnit.ShipBoardTest$ShipBuildingTest.rejectThrowsWhenStashed.executor": "Run",
+    "JUnit.ShipBoardTest$ShipBuildingTest.stashMethodsDoNothingInTestLevel.executor": "Run",
+    "JUnit.ShipBoardTest$ShipBuildingTest.stashWithNoComponentThrowsException.executor": "Run",
+    "JUnit.ShipBoardTest$ShipValidityTests.shipIsNotValidWithRotatedEngine.executor": "Run",
+    "JUnit.ShipBoardTest$ShipValidityTests.shipIsNotValidWithWrongEngine.executor": "Run",
+    "JUnit.ShipBoardTest$SpecificComponentTests$CabinTests.initializeCabinThrowsWithInvalidPosition.executor": "Coverage",
+    "JUnit.ShipBoardTest$SpecificComponentTests$CargoHoldTests.removeCargoHoldUpdatesGoodsMap.executor": "Run",
+    "JUnit.ShipBoardTest$SpecificComponentTests$LifeSupportTests.removeLifeSupportUpdatesAdjacentCabins.executor": "Run",
+    "JUnit.ShipBoardTest$TestShipBoardTests.lifeSupportsAreNotConsideredInTest.executor": "Run",
+    "JUnit.ShipBoardTest.executor": "Coverage",
     "JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.cancelSkipRemovesFromPendingShips.executor": "Run",
     "JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.skipUpdatesPendingShips.executor": "Run",
     "JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.skipWithAllPendingChangesState.executor": "Run",
@@ -157,84 +212,96 @@
       <recent name="it.polimi.ingsw.galaxytruckers.serverController.dto.reconnection" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="it.polimi.ingsw.galaxytruckers.model.shipBuilding" />
       <recent name="it.polimi.ingsw.galaxytruckers.model.state" />
     </key>
   </component>
-  <component name="RunManager" selected="Compound.2ClientsLocal">
-    <configuration name="ActivateStateTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.ShipBoardTest$GeneralTests.removeComponentSendsEvent">
+    <configuration name="Model tests" type="JUnit" factoryName="JUnit">
       <module name="GalaxyTruckers" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.model.state.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.model.state" />
-      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.model.state.ActivateStateTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ActivateStateTest.skipSpendsBatteriesAndUpdatesState" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="GalaxyTruckers" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.model.state.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.model.state" />
-      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.model.state.ActivateStateTest" />
-      <option name="METHOD_NAME" value="skipSpendsBatteriesAndUpdatesState" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SocketTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="GalaxyTruckers" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.network.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.network" />
-      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.network.SocketTest" />
+      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.model" />
+      <option name="MAIN_CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="package" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SocketTest.joinLobby" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ShipBoardTest$GeneralTests.gainCreditsSendsEvent" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GalaxyTruckers" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.network.*" />
+          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.network" />
-      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.network.SocketTest" />
-      <option name="METHOD_NAME" value="joinLobby" />
+      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoardTest" />
+      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoardTest$GeneralTests" />
+      <option name="METHOD_NAME" value="gainCreditsSendsEvent" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SocketTest.requestNewGame" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ShipBoardTest$GeneralTests.removeComponentSendsEvent" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GalaxyTruckers" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.network.*" />
+          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.network" />
-      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.network.SocketTest" />
-      <option name="METHOD_NAME" value="requestNewGame" />
+      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoardTest" />
+      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoardTest$GeneralTests" />
+      <option name="METHOD_NAME" value="removeComponentSendsEvent" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsIncreased" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GalaxyTruckers" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoardTest" />
+      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoardTest$SecondShipBoardTests" />
+      <option name="METHOD_NAME" value="getEnginePowerWithAliensIsIncreased" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsNotIncreased" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GalaxyTruckers" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoardTest" />
+      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoardTest$SecondShipBoardTests" />
+      <option name="METHOD_NAME" value="getEnginePowerWithAliensIsNotIncreased" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ShipBoardTest$SpecificComponentTests$LifeSupportTests.removeLifeSupportUpdatesAdjacentCabins" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GalaxyTruckers" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoardTest.SpecificComponentTests" />
+      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoardTest$SpecificComponentTests$LifeSupportTests" />
+      <option name="METHOD_NAME" value="removeLifeSupportUpdatesAdjacentCabins" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -270,19 +337,20 @@
       <item itemvalue="Compound.Server-TwoClients" />
       <item itemvalue="JUnit.StateTests" />
       <item itemvalue="JUnit.ALL-TESTS" />
-      <item itemvalue="JUnit.SocketTest" />
-      <item itemvalue="JUnit.SocketTest.joinLobby" />
-      <item itemvalue="JUnit.SocketTest.requestNewGame" />
-      <item itemvalue="JUnit.ActivateStateTest" />
-      <item itemvalue="JUnit.ActivateStateTest.skipSpendsBatteriesAndUpdatesState" />
+      <item itemvalue="JUnit.Model tests" />
+      <item itemvalue="JUnit.ShipBoardTest$GeneralTests.gainCreditsSendsEvent" />
+      <item itemvalue="JUnit.ShipBoardTest$GeneralTests.removeComponentSendsEvent" />
+      <item itemvalue="JUnit.ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsIncreased" />
+      <item itemvalue="JUnit.ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsNotIncreased" />
+      <item itemvalue="JUnit.ShipBoardTest$SpecificComponentTests$LifeSupportTests.removeLifeSupportUpdatesAdjacentCabins" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.SocketTest" />
-        <item itemvalue="JUnit.SocketTest.joinLobby" />
-        <item itemvalue="JUnit.SocketTest.requestNewGame" />
-        <item itemvalue="JUnit.ActivateStateTest" />
-        <item itemvalue="JUnit.ActivateStateTest.skipSpendsBatteriesAndUpdatesState" />
+        <item itemvalue="JUnit.ShipBoardTest$GeneralTests.removeComponentSendsEvent" />
+        <item itemvalue="JUnit.ShipBoardTest$GeneralTests.gainCreditsSendsEvent" />
+        <item itemvalue="JUnit.ShipBoardTest$SpecificComponentTests$LifeSupportTests.removeLifeSupportUpdatesAdjacentCabins" />
+        <item itemvalue="JUnit.ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsNotIncreased" />
+        <item itemvalue="JUnit.ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsIncreased" />
       </list>
     </recent_temporary>
   </component>
@@ -307,7 +375,7 @@
       <workItem from="1750482685499" duration="8469000" />
       <workItem from="1750538544967" duration="238000" />
       <workItem from="1750573134392" duration="23293000" />
-      <workItem from="1750623200593" duration="79000" />
+      <workItem from="1750623200593" duration="12076000" />
     </task>
     <servers />
   </component>
@@ -343,6 +411,9 @@
     <SUITE FILE_PATH="coverage/IS25_AM12$HandleProjectileStateTest.ic" NAME="HandleProjectileStateTest Coverage Results" MODIFIED="1750529137368" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
     </SUITE>
+    <SUITE FILE_PATH="coverage/IS25_AM12$ComponentBankTest.ic" NAME="ComponentBankTest Coverage Results" MODIFIED="1750628782827" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>
+    </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$ShipBuildingStateTest.ic" NAME="ShipBuildingStateTest Coverage Results" MODIFIED="1750513119668" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
     </SUITE>
@@ -356,11 +427,24 @@
     <SUITE FILE_PATH="coverage/IS25_AM12$ActivateStateTest.ic" NAME="ActivateStateTest Coverage Results" MODIFIED="1750536664119" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
     </SUITE>
+    <SUITE FILE_PATH="coverage/IS25_AM12$BigMeteorTest.ic" NAME="BigMeteorTest Coverage Results" MODIFIED="1750626793218" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/IS25_AM12$CargoHoldTest.ic" NAME="CargoHoldTest Coverage Results" MODIFIED="1750627918759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>
+    </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$ChooseShipPieceStateTest.ic" NAME="ChooseShipPieceStateTest Coverage Results" MODIFIED="1750531200283" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$GrabRewardStateTest.ic" NAME="GrabRewardStateTest Coverage Results" MODIFIED="1750529604499" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/IS25_AM12$ShipBoardTest_SpecificComponentTests_CabinTests_initializeCabinThrowsWithInvalidPosition.ic" NAME="ShipBoardTest$SpecificComponentTests$CabinTests.initializeCabinThrowsWithInvalidPosition Coverage Results" MODIFIED="1750631788239" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/IS25_AM12$Model_tests.ic" NAME="Model tests Coverage Results" MODIFIED="1750634780123" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/IS25_AM12$ConnectorTest.ic" NAME="ConnectorTest Coverage Results" MODIFIED="1750628137963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$ShipCorrectionStateTest.ic" NAME="ShipCorrectionStateTest Coverage Results" MODIFIED="1750513757349" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
@@ -379,6 +463,10 @@
     </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$AddGoodsStateTest.ic" NAME="AddGoodsStateTest Coverage Results" MODIFIED="1750534379283" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/IS25_AM12$ALL_TESTS.ic" NAME="ALL-TESTS Coverage Results" MODIFIED="1750624108890" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/IS25_AM12$ShipBoardTest.ic" NAME="ShipBoardTest Coverage Results" MODIFIED="1750629533253" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>
     </SUITE>
   </component>
 </project>

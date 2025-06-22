@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.List;
 
 public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor {
-    private static final Point center = new Point(7,7);
+    protected static final Point center = new Point(7,7);
     protected GameEventListener gameEventListener;
 
     protected final Map<Point, Component> componentMap;
@@ -60,9 +60,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         this.cabins = new HashMap<>();
         this.activatables = new HashMap<>();
 
-        offerComponent(ComponentRegistry.getInstance().getStartingCabin(color));
-        placeComponent(new Point(7,7),Direction.UP);
-        weldLastComponent();
+        addWeldedComponent(ComponentRegistry.getInstance().getStartingCabin(color), center, Direction.UP);
     }
 
     public void setGameEventListener(GameEventListener gameEventListener) {
@@ -270,7 +268,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     }
 
     public Map<Point, LifeSupport> getLifeSupports() {
-        return null;
+        return new HashMap<>();
     }
 
     public Map<Point, Activatable> getActivatables() {
@@ -296,11 +294,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
             throw new IllegalStateException("There is no cargo hold for this position");
         }
         cargoHolds.get(position).addGoods(goods, amount);
-        if (!this.goods.containsKey(goods)) {
-            this.goods.put(goods, amount);
-        } else {
-            this.goods.put(goods, this.goods.get(goods) + amount);
-        }
+        this.goods.merge(goods, amount, Integer::sum);
         if (gameEventListener != null) gameEventListener.notifyGoodsUpdateEvent(this,position,goods,true);
     }
 
@@ -336,12 +330,9 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         if (!cabins.containsKey(position)) {
             throw new IllegalStateException("There is no cabin for this position");
         }
-        //this block is probably not needed, controller can handle crewType
-        if (!getCrewTypeOptions(position).contains(crewType)) {
-            throw new IllegalStateException("This alien cannot to survive here");
-        }
-        cabins.get(position).initialize(crewType);
-        crewSize += cabins.get(position).getNumResidents();
+        Cabin cabin = cabins.get(position);
+        cabin.initialize(crewType);
+        crewSize += cabin.getNumResidents();
         if (gameEventListener != null) gameEventListener.notifyCabinInitializationEvent(this,position,crewType);
     }
 
@@ -487,9 +478,6 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     }
 
     @Override
-    public void add(Component component) {}
-
-    @Override
     public void add(Cannon cannon) {
         this.cannons.put(this.lastPosition, cannon);
         this.firePower += cannon.getFirePower();
@@ -539,9 +527,6 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     }
 
     @Override
-    public void remove(Component component) {}
-
-    @Override
     public void remove(Cannon cannon) {
         this.cannons.remove(this.lastPosition);
         this.firePower -= cannon.getFirePower();
@@ -579,7 +564,8 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     public void remove(CargoHold cargoHold) {
         Map<GoodsType, Integer> lostGoods = this.cargoHolds.get(lastPosition).getGoods();
         for (GoodsType goods: lostGoods.keySet()) {
-            removeGoods(lastPosition, goods, lostGoods.get(goods));
+            this.goods.put(goods, this.goods.get(goods) - lostGoods.get(goods));
+            if (this.goods.get(goods) <= 0) this.goods.remove(goods);
         }
         this.cargoHolds.remove(this.lastPosition);
     }
@@ -596,9 +582,5 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         doubleEngine.deactivate(this);
         this.engines.remove(this.lastPosition);
         this.activatables.remove(this.lastPosition);
-    }
-
-    public GameColor getColor() {
-        return color;
     }
 }

@@ -16,6 +16,11 @@ public non-sealed class Engine extends Component implements ComponentInterface{
         super(connectors);
     }
 
+    @VisibleForTesting
+    public Engine() {
+        super();
+    }
+
     public boolean isValid() {
         return getOrientation() == Direction.UP;
     }

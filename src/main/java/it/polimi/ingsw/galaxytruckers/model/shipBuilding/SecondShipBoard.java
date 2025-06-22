@@ -104,11 +104,7 @@ public class SecondShipBoard extends ShipBoard {
 
     @Override
     public void finishBuilding() {
-        try {
-            super.finishBuilding();
-        } catch (IllegalStateException e) {
-            this.losses++;
-        }
+        super.finishBuilding();
         this.losses += stashedComponents.size();
         stashedComponents.clear();
     }
@@ -119,11 +115,13 @@ public class SecondShipBoard extends ShipBoard {
 
     @Override
     public int getFirePower() {
-        return (firePower > 0 && aliens.contains(CrewType.PURPLE)) ? firePower+2 : firePower;
+        int firePower = super.getFirePower();
+        return (firePower > 0 && aliens.contains(CrewType.PURPLE)) ? firePower+4 : firePower;
     }
 
     @Override
     public int getEnginePower() {
+        int enginePower = super.getEnginePower();
         return (enginePower > 0 && aliens.contains(CrewType.BROWN)) ? enginePower+2 : enginePower;
     }
 
