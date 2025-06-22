@@ -330,7 +330,7 @@ public class Game {
     }
 
     public void loseGood(ShipBoard shipBoard, Point point) {
-        runRequest(() -> loseGood(shipBoard, point));
+        runRequest(() -> currentState.loseGood(shipBoard, point));
     }
 
     public void goNext(ShipBoard shipBoard) {

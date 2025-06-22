@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiShipBoard;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.PurpleVBox;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.CargoHold;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
@@ -24,6 +25,7 @@ import java.awt.*;
 public class GuiLoseGoodsScreen extends GuiAdventureScreen {
     private final ObjectProperty<Point> selectedPoint;
     private final ObjectProperty<GoodsType> selectedGoodsType;
+    private VBox cargoInfoBox = new VBox(2);
 
     public GuiLoseGoodsScreen(ClientModel model, ControllerToServer controller, RemoveGoodsState removeGoodsState) {
         super(model, controller, removeGoodsState);
@@ -34,8 +36,24 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
             guiLog.log("Select a cargo hold to remove goods from");
             guiLog.log("Select a goods type to remove");
             guiLog.log("Then select remove action");
+            setupButtonBox();
         } else {
             guiLog.log("Wait for others to lose goods");
+        }
+    }
+
+    private void setupButtonBox() {
+        if (isMyTurn()) {
+            guiButtonBox.getChildren().clear();
+            guiButtonBox.getChildren().add(getButtonsBox());
+            updateButtonsState();
+        }
+    }
+
+    private void updateButtonsState() {
+        boolean hasGoodsToLose = countCargoHoldsWithGoods() > 0;
+        if (!hasGoodsToLose) {
+            guiLog.log("No goods to lose. You can proceed to the next screen (batteries will be used if available).");
         }
     }
 
@@ -64,26 +82,30 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
     }
 
     @Override
-    public Pane getNode() {
-        Pane superPane = super.getNode();
+    protected VBox getFreeUseVBox() {
+        VBox freeUseVBox = new PurpleVBox(10);
+        freeUseVBox.setAlignment(Pos.CENTER);
 
         if (isMyTurn()) {
-            HBox bottomBox = new HBox(10);
-            bottomBox.setAlignment(Pos.CENTER);
-
-            VBox cargoInfoBox = new VBox(2);
-            updateCargoInfoBox(cargoInfoBox);
-
-            bottomBox.getChildren().addAll(cargoInfoBox, getButtonsBox());
-
-            superPane.getChildren().add(bottomBox);
-            superPane.setScaleX(0.9);
-            superPane.setScaleY(0.9);
+            updateCargoInfoBox();
+            freeUseVBox.getChildren().add(cargoInfoBox);
         }
-        return superPane;
+
+        return freeUseVBox;
     }
 
-    private void updateCargoInfoBox(VBox cargoInfoBox) {
+    @Override
+    protected VBox getShipBoardVBox(ShipBoard shipBoard) {
+        VBox shipBoardVBox = new VBox(5);
+        shipBoardVBox.setAlignment(Pos.CENTER);
+
+        PurpleVBox guiShipBoardBox = guiShipBoards.get(shipBoard);
+        shipBoardVBox.getChildren().add(guiShipBoardBox);
+
+        return shipBoardVBox;
+    }
+
+    private void updateCargoInfoBox() {
         cargoInfoBox.getChildren().clear();
         cargoInfoBox.getChildren().add(new Label("Cargo holds with goods: " + countCargoHoldsWithGoods()));
 
@@ -164,12 +186,39 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         });
 
         Button nextButton = new Button("Done");
-        nextButton.setOnAction(_ -> getGuiController().goNext());
+        nextButton.setOnAction(_ -> {
+            boolean hasGoodsToLose = countCargoHoldsWithGoods() > 0;
+
+            // only prevent proceeding if player has goods
+            if (hasGoodsToLose) {
+                guiLog.log("You need to lose goods before proceeding.");
+                return;
+            }
+
+            // automatically use batteries if available
+            int batteries = countBatteries();
+            if (batteries > 0) {
+                for (Point batteryPoint : myShipBoard.getBatteries().keySet()) {
+                    guiLog.log("Using battery at position (" + batteryPoint.x + "," + batteryPoint.y + ")");
+                    controller.loseGoods(batteryPoint);
+                    break;
+                }
+            }
+
+            getGuiController().goNext();
+        });
 
         actionButtons.getChildren().addAll(removeButton, nextButton);
-
         buttonsBox.getChildren().addAll(goodsTypeBox, actionButtons);
         return buttonsBox;
+    }
+
+    private int countBatteries() {
+        int totalBatteries = 0;
+        for (Point point : myShipBoard.getBatteries().keySet()) {
+            totalBatteries += myShipBoard.getBatteries().get(point).getNumBatteries();
+        }
+        return totalBatteries;
     }
 
     private int countCargoHoldsWithGoods() {
@@ -187,10 +236,7 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
     public void notifyComponentChange(ShipBoard shipBoard, Point point) {
         super.notifyComponentChange(shipBoard, point);
         if (isMyTurn()) {
-            Platform.runLater(() -> {
-                VBox cargoInfoBox = new VBox(2);
-                updateCargoInfoBox(cargoInfoBox);
-            });
+            updateCargoInfoBox();
         }
     }
 }
