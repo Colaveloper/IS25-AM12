@@ -2,13 +2,14 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.enums.CliHighlights;
-import it.polimi.ingsw.galaxytruckers.view.guiElements.GuiHighlights;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.CircularToggleButton;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.PurpleHBox;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.AddGoodsState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GoodsBuffer;
 import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -21,28 +22,30 @@ import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public class GuiGoodsScreen extends GuiAdventureScreen {
     private final GoodsBuffer goodsBuffer;
-    private final VBox bufferInfoBox = new VBox(2);
-    private ObjectProperty<Point> selectedPoint;
-    private ObjectProperty<GoodsType> selectedGoodsType;
+    private final PurpleHBox bufferInfoBox = new PurpleHBox(5);
+    private final ObjectProperty<Point> selectedPoint;
+    private final ObjectProperty<GoodsType> selectedGoodsType;
 
     public GuiGoodsScreen(ClientModel model, ControllerToServer controller, AddGoodsState addGoodsState) {
         super(model, controller, addGoodsState);
         this.goodsBuffer = addGoodsState.getGoodsBuffer();
         this.selectedPoint = new SimpleObjectProperty<>();
+        selectedPoint.addListener((_, _, newVal) -> {
+            guiShipBoards.get(myShipBoard).clearHighlights();
+            if (newVal != null) guiShipBoards.get(myShipBoard).highlightPoints(Set.of(newVal), Color.BLUE);
+        });
         this.selectedGoodsType = new SimpleObjectProperty<>();
         if (isMyTurn()) {
-            guiContextBox.getChildren().setAll(
-                    new Label("Your turn to manage goods"),
-                    new Label("Select a position as a source or a destination"),
-                    new Label("Select a goods type to place or remove"),
-                    new Label("Then select the action")
-            );
+            guiLog.log("Your turn to manage goods");
+            guiLog.log("Select a position as a source or a destination");
+            guiLog.log("Select a goods type to place or remove");
+            guiLog.log("Then select the action");
+            guiButtonBox.getChildren().setAll(getButtonsBox());
         } else {
-            guiContextBox.getChildren().setAll(new Label("Wait for others to manage goods"));
+            guiLog.log("Wait for others to manage goods");
         }
     }
 
@@ -57,9 +60,9 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
                 ) {
                     if (myShipBoard.getCargoHolds().containsKey(point)) {
                         selectedPoint.set(point);
-                        guiContextBox.getChildren().setAll(new Label("Action to be performed at "+ point.x + "," + point.y));
+                        guiLog.log("Action to be performed at "+ point.x + "," + point.y);
                     } else {
-                        guiContextBox.getChildren().setAll(new Label("No cargo hold at " + point.x + "," + point.y));
+                        guiLog.log("No cargo hold at " + point.x + "," + point.y);
                     }
                 }
             }
@@ -74,31 +77,31 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
     }
 
     @Override
-    public Pane getNode() {
-        Pane superPane = super.getNode();
-
-        if (isMyTurn()) {
-            HBox bottomBox = new HBox(10);
-            bottomBox.setAlignment(Pos.CENTER);
-
-            updateBufferInfoBox();
-
-            bottomBox.getChildren().addAll(bufferInfoBox, getButtonsBox());
-
-            superPane.getChildren().add(bottomBox);
-            superPane.setScaleX(0.9);
-            superPane.setScaleY(0.9);
-        }
-        return superPane;
+    protected final VBox getFreeUseVBox() {
+        VBox superBox = super.getFreeUseVBox();
+        superBox.getChildren().add(bufferInfoBox);
+        updateBufferBox();
+        return superBox;
     }
 
-    private void updateBufferInfoBox() {
+    private void updateBufferBox() {
         bufferInfoBox.getChildren().clear();
+        Label bufferLabel = new Label("Buffer:");
+        bufferLabel.setTextFill(Color.WHITE);
+        bufferLabel.setPadding(new Insets(5));
+        bufferInfoBox.getChildren().add(bufferLabel);
         for (GoodsType type : GoodsType.values()) {
-            int amount = goodsBuffer.getGoodsBuffer().getOrDefault(type, 0);
-            if (amount > 0) {
-                Label goodsLabel = new Label(type + ": " + amount);
-                bufferInfoBox.getChildren().add(goodsLabel);
+            for (int i = 0; i < goodsBuffer.getGoodsBuffer().getOrDefault(type, 0); i++) {
+                CircularToggleButton bufferedGood = new CircularToggleButton(switch (type) {
+                    case RED -> Color.RED;
+                    case BLUE -> Color.BLUE;
+                    case GREEN -> Color.GREEN;
+                    case YELLOW -> Color.GOLD;
+                });
+                bufferedGood.setScaleX(.5);
+                bufferedGood.setScaleY(.5);
+                bufferedGood.setActive(true);
+                bufferInfoBox.getChildren().add(bufferedGood);
             }
         }
     }
@@ -115,29 +118,20 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
         goodsTypeBox.getChildren().add(selectGoodsLabel);
 
         for (GoodsType type : GoodsType.values()) {
-            Button typeButton = new Button(type.toString());
+            CircularToggleButton typeButton = new CircularToggleButton(switch (type) {
+                case RED -> Color.RED;
+                case BLUE -> Color.BLUE;
+                case GREEN -> Color.GREEN;
+                case YELLOW -> Color.GOLD;
+            });
             typeButton.setOnAction(_ -> {
-                guiContextBox.getChildren().setAll(new Label("The action will be performed on a "+type+" good"));
+                guiLog.log("The action will be performed on a "+type+" good");
                 selectedGoodsType.set(type);
             });
-            Background defaultBackground = new Background(new BackgroundFill(
-                    Color.LIGHTGRAY, new CornerRadii(5.0), null
+            typeButton.isActiveProperty().bind(Bindings.createBooleanBinding(
+                    ()->selectedGoodsType.get() == type,
+                    selectedGoodsType
             ));
-            Background focusedBackground = new Background(new BackgroundFill(
-                    switch (type) {
-                        case RED -> Color.RED;
-                        case BLUE -> Color.BLUE;
-                        case GREEN -> Color.GREEN;
-                        case YELLOW -> Color.GOLD;
-                    }, new CornerRadii(5.0), null));
-            typeButton.backgroundProperty().bind(
-                Bindings.createObjectBinding(
-                        () -> (selectedGoodsType.get() == type
-                                ? focusedBackground
-                                : defaultBackground
-                        ), selectedGoodsType
-                )
-            );
             goodsTypeBox.getChildren().add(typeButton);
         }
 
@@ -160,7 +154,7 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
             if (selectedGoodsType.get() == GoodsType.RED &&
                 !myShipBoard.getCargoHolds().get(selectedPoint.get()).isSpecial()
             ) {
-                guiContextBox.getChildren().add(new Label("Cannot add special cargo to a regular cargo hold!"));
+                guiLog.log("Cannot add special cargo to a regular cargo hold!");
             } else {
                 controller.placeGoods(selectedPoint.get(), selectedGoodsType.get());
                 selectedPoint.set(null);
@@ -198,6 +192,6 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
     @Override
     public void notifyComponentChange(ShipBoard shipBoard, Point point) {
         super.notifyComponentChange(shipBoard, point);
-        updateBufferInfoBox();
+        Platform.runLater(this::updateBufferBox);
     }
 }

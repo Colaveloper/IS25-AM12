@@ -1,24 +1,19 @@
 package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
-import it.polimi.ingsw.galaxytruckers.view.Direction;
-import it.polimi.ingsw.galaxytruckers.view.cliElements.CliShipBoard;
-import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.PurpleVBox;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.Projectile;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.HandleProjectileState;
-import javafx.scene.Node;
-import javafx.scene.Parent;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-import java.awt.*;
 import java.io.InputStream;
 
 public class GuiProjectilesScreen extends GuiActivationScreen {
@@ -32,19 +27,23 @@ public class GuiProjectilesScreen extends GuiActivationScreen {
         super(model, controller, handleProjectileState);
         this.projectile = handleProjectileState.getProjectile();
         if (isMyTurn()) {
-            guiContextBox.getChildren().setAll(new Label("Select a component to activate or a battery to use"));
+            guiLog.log("Select a shield to activate or a battery to use");
         }
     }
 
     @Override
-    protected VBox getFullShip(ShipBoard shipBoard) {
-        VBox layout = super.getFullShip(shipBoard);
-        layout.getChildren().add(createGuiProjectile());
-        return layout;
+    protected VBox getShipBoardVBox(ShipBoard shipBoard) {
+        VBox shipBoardVBox = new VBox(5);
+        shipBoardVBox.setAlignment(Pos.CENTER);
+
+        PurpleVBox projectileVBox = getProjectileVBox();
+
+        shipBoardVBox.getChildren().addAll(guiShipBoards.get(shipBoard), projectileVBox);
+        return shipBoardVBox;
     }
 
-    private Node createGuiProjectile() {
-        HBox projectileBox = new HBox(5);
+    private PurpleVBox getProjectileVBox() {
+        PurpleVBox projectileBox = new PurpleVBox(5);
         Image projectileImage = new Image(switch (projectile.type()) {
             case BIGMETEOR -> bigMeteorPath;
             case SMALLMETEOR -> smallMeteorPath;
@@ -62,10 +61,5 @@ public class GuiProjectilesScreen extends GuiActivationScreen {
 
         projectileBox.getChildren().addAll(projectileView, rollLabel);
         return projectileBox;
-    }
-
-    @Override
-    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        guiShipBoards.get(shipBoard).notifyRemoveComponent(point);
     }
 }

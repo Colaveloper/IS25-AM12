@@ -29,7 +29,7 @@ public class GuiComponent extends StackPane {
 
         contentBox = new HBox(2);
 
-        setPrefSize(50, 50);
+        setMaxSize(50, 50);
         setAlignment(Pos.CENTER);
         getChildren().addAll(componentView, contentBox);
     }
@@ -90,15 +90,15 @@ public class GuiComponent extends StackPane {
         contentBox.setBorder(Border.EMPTY);
     }
 
-    private String getColorString(CliHighlights highlight) {
-        return switch (highlight) {
-            case GREEN -> "green";
-            case BLUE -> "blue";
-            case RED -> "red";
-            case YELLOW -> "yellow";
-            default -> "transparent";
-        };
-    }
+//    private String getColorString(CliHighlights highlight) {
+//        return switch (highlight) {
+//            case GREEN -> "green";
+//            case BLUE -> "blue";
+//            case RED -> "red";
+//            case YELLOW -> "yellow";
+//            default -> "transparent";
+//        };
+//    }
 
     public void notifyContentChange() {}
 }

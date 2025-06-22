@@ -43,7 +43,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             shipNotConnected(ship, state.getShipPieces().get(ship));
         }
 
-        String message = "";
+        String message;
         if (shipBroken) {
             message = "Your ship is broken. Choose a piece to keep by clicking on any component in that piece.";
         } else if (!shipValid) {
@@ -51,12 +51,12 @@ public class GuiCorrectionScreen extends GuiGameScreen {
         } else {
             message = "Your ship is valid. Wait for other players to correct their ships.";
         }
-        guiContextBox.getChildren().setAll(new Label(message));
+        guiLog.log(message);
     }
 
     private void showConfirmationButton(String message) {
         Platform.runLater(() -> {
-            guiContextBox.getChildren().clear();
+            guiLog.getChildren().clear();
 
             VBox content = new VBox(10);
             Label label = new Label(message);
@@ -68,8 +68,8 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             content.getChildren().addAll(label, confirmButton);
             content.setAlignment(Pos.CENTER);
 
-            guiContextBox.getChildren().add(content);
-            guiContextBox.setAlignment(Pos.CENTER);
+            guiLog.getChildren().add(content);
+            guiLog.setAlignment(Pos.CENTER);
         });
     }
 
@@ -105,7 +105,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             } else {
                 message = "Your ship is valid. Wait for other players to correct their ships.";
             }
-            guiContextBox.getChildren().setAll(new Label(message));
+            guiLog.log(message);
         }
     }
 
@@ -118,11 +118,6 @@ public class GuiCorrectionScreen extends GuiGameScreen {
     }
 
     @Override
-    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
-        guiShipBoards.get(shipBoard).notifyRemoveComponent(point);
-    }
-
-    @Override
     public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List<Point> removed) {
         for (Point piece : removed) {
             guiShipBoards.get(shipBoard).notifyRemoveComponent(piece);
@@ -132,7 +127,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             shipBroken = false;
             shipValid = true;
             String message = "Your ship is valid. Wait for other players to correct their ships.";
-            guiContextBox.getChildren().setAll(new Label(message));
+            guiLog.log(message);
         }
     }
 
@@ -144,7 +139,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             shipBroken = true;
             shipValid = true;
             String message = "Your ship is broken. Choose a piece to keep by clicking on any component in that piece.";
-            guiContextBox.getChildren().setAll(new Label(message));
+            guiLog.log(message);
         }
         shipNotConnected(shipBoard, pieces);
     }
@@ -155,9 +150,22 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             shipBroken = false;
             shipValid = true;
             String message = "Your ship is valid. Wait for other players to correct their ships.";
-            guiContextBox.getChildren().setAll(new Label(message));
+            guiLog.log(message);
         }
         guiShipBoards.get(shipBoard).clearHighlights();
+    }
+
+    @Override
+    protected VBox getFreeUseVBox() {
+        return new VBox();
+    }
+
+    @Override
+    protected VBox getShipBoardVBox(ShipBoard shipBoard) {
+        VBox getShipBoardVBox = new VBox(5);
+        getShipBoardVBox.setAlignment(Pos.CENTER);
+        getShipBoardVBox.getChildren().addAll(guiShipBoards.get(shipBoard));
+        return getShipBoardVBox;
     }
 
     @Override

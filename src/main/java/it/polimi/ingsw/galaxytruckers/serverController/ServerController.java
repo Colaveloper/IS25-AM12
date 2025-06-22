@@ -63,6 +63,7 @@ public class ServerController implements ServerControllerInterface {
     private void requestActiveLobbies(Player player, boolean reconnect) {
         synchronized (idToLobby) {
             List<ActiveLobbyDTO> activeLobbyDTOS = idToLobby.values().stream()
+                    .filter(activeLobbies::contains)
                     .map(DtoConverter::getActiveLobby).toList();
             this.eventQueue.notifyEvent(new SetActiveLobbiesEvent(player.getNickname(), activeLobbyDTOS, reconnect));
         }

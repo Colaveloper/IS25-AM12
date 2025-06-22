@@ -3,7 +3,6 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiForecastScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
@@ -15,6 +14,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
@@ -44,13 +44,19 @@ public class GuiView extends View<GuiScreen> {
     public void setStage(Stage stage) {
         this.contentPane = new StackPane();
         contentPane.setPadding(new Insets(10));
-        this.contentPane.getChildren().setAll(currentScreen.getNode());
+        contentPane.getChildren().setAll(currentScreen.getNode());
+        contentPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        StackPane.setAlignment(contentPane, Pos.CENTER);
 
         StackPane rootPane = createRootWithBackground();
         rootPane.getChildren().add(contentPane);
 
+        rootPane.setPrefSize(1280, 720);
+        rootPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        Scene scene = new Scene(rootPane);
         stage.setTitle("Galaxy Truckers");
-        stage.setScene(new Scene(rootPane, 1280, 720));
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -145,11 +151,7 @@ public class GuiView extends View<GuiScreen> {
 
     @Override
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        if (model.getMyShip().equals(shipBoard)) {
-            Platform.runLater(() -> switchToScreen(new GuiForecastScreen(model, controller)));
-        } else {
-            currentScreen.notifyPeekForecast(shipBoard,deckIndex);
-        }
+        currentScreen.notifyPeekForecast(shipBoard,deckIndex);
     }
 
     @Override
@@ -159,12 +161,7 @@ public class GuiView extends View<GuiScreen> {
 
     @Override
     public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
-        if (model.getMyShip().equals(shipBoard)) {
-            // back to ship building screen
-            notifyCurrentState(model.getGame().getCurrentState());
-        } else {
-            currentScreen.notifyReleaseForecast(shipBoard, index);
-        }
+        currentScreen.notifyReleaseForecast(shipBoard, index);
     }
 
     @Override
