@@ -15,9 +15,11 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -38,6 +40,7 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
     private final SecondShipBuildingState gameState;
     private boolean isFirstRender = true;
     private boolean hasLoggedEndMessage = false;
+    private HBox cardsHBox;
 
     public GuiSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState state) {
         super(model, controller, state);
@@ -116,6 +119,7 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
                 }
             }
         });
+        cardsHBox = new HBox(20);
     }
 
     @Override
@@ -182,17 +186,44 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
 
     @Override
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        guiForecast.notifyPeekForecast(shipBoard, deckIndex);
+        if (shipBoard == myShipBoard) {
+            guiForecast.notifyMePeekForecast();
+            Platform.runLater(() -> {
+                guiLog.log("See the forecast and release it to continue building");
+
+                Button releaseButton = new Button("Release");
+                releaseButton.setOnAction(e -> controller.releaseForecast());
+
+                guiButtonBox.getChildren().clear();
+                guiButtonBox.getChildren().add(releaseButton);
+            });
+        } else {
+            Platform.runLater(() -> {
+                guiForecast.notifyOtherPeekForecast(shipBoard, deckIndex);
+                guiLog.log("The deck number "+(deckIndex+1)+ " has been taken");
+            });
+        }
     }
 
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards) {
-        throw new RuntimeException("NOOOOOOOOO");
+        guiForecast.setForecastDeck(adventureCards);
     }
 
     @Override
     public void notifyReleaseForecast(ShipBoard shipBoard, int deckIndex) {
-        guiForecast.notifyReleaseForecast(deckIndex);
+        if (shipBoard == myShipBoard) {
+            guiForecast.notifyMeReleaseForecast();
+            Platform.runLater(() -> {
+                guiLog.log("Now you can continue builing");
+                guiButtonBox.getChildren().clear();
+            });
+        } else {
+            Platform.runLater(() -> {
+                guiForecast.notifyOtherReleaseForecast(shipBoard, deckIndex);
+                guiLog.log("The deck number "+(deckIndex+1)+ " has been released");
+            });
+        }
     }
 
     @Override

@@ -3,7 +3,6 @@ package it.polimi.ingsw.galaxytruckers.view;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
-import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiForecastScreen;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiScreen;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
@@ -152,11 +151,7 @@ public class GuiView extends View<GuiScreen> {
 
     @Override
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
-        if (model.getMyShip().equals(shipBoard)) {
-            Platform.runLater(() -> switchToScreen(new GuiForecastScreen(model, controller, null)));
-        } else {
-            currentScreen.notifyPeekForecast(shipBoard,deckIndex);
-        }
+        currentScreen.notifyPeekForecast(shipBoard,deckIndex);
     }
 
     @Override
@@ -166,12 +161,7 @@ public class GuiView extends View<GuiScreen> {
 
     @Override
     public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
-        if (model.getMyShip().equals(shipBoard)) {
-            // back to ship building screen
-            notifyCurrentState(model.getGame().getCurrentState());
-        } else {
-            currentScreen.notifyReleaseForecast(shipBoard, index);
-        }
+        currentScreen.notifyReleaseForecast(shipBoard, index);
     }
 
     @Override

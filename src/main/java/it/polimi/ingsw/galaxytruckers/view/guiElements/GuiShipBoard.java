@@ -157,19 +157,19 @@ public class GuiShipBoard extends PurpleVBox {
         areaPane.setOnMouseClicked(_-> controller.handlePointPress(position));
         return areaPane;
     }
-
-    public GuiComponent getGuiComponent(Point position) {
-        return getChildren().stream()
-                .filter(node -> node instanceof GuiComponent)
-                .map(node -> (GuiComponent) node)
-                .filter(node -> {
-                    int col = GridPane.getColumnIndex(node) - 1;
-                    int row = GridPane.getRowIndex(node) - 1;
-                    return col + minX == position.x && row + minY == position.y;
-                })
-                .findFirst()
-                .orElse(null); // or throw exception if needed
-    }
+//
+//    public GuiComponent getGuiComponent(Point position) {
+//        return getChildren().stream()
+//                .filter(node -> node instanceof GuiComponent)
+//                .map(node -> (GuiComponent) node)
+//                .filter(node -> {
+//                    int col = GridPane.getColumnIndex(node) - 1;
+//                    int row = GridPane.getRowIndex(node) - 1;
+//                    return col + minX == position.x && row + minY == position.y;
+//                })
+//                .findFirst()
+//                .orElse(null); // or throw exception if needed
+//    }
 
     public void notifyComponentChange(Point point) {
         shipGrid.getChildren().stream()
