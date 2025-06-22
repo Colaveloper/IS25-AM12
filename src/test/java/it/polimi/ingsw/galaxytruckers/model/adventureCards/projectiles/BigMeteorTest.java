@@ -2,9 +2,8 @@ package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
-import javafx.scene.image.Image;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,19 +20,8 @@ class BigMeteorTest {
     DoubleCannon ineffectiveActiveDoubleCannon;
     DoubleCannon effectiveActiveDoubleCannon;
 
-    Cannon positionTestCannon;
     Point firstFoundComponentPosition;
-    DoubleCannon activeDoubleCannon;
-
     Cannon directedCannon;
-    Map.Entry<Point, Cannon> cannon00;
-    Map.Entry<Point, Cannon> cannon02;
-    Map.Entry<Point, Cannon> cannon20;
-    Map<Point, Cannon> cannonPositions;
-
-    Cannon impossibleCannon;
-    BigMeteor impossibleBigMeteor;
-
     Cannon protectingCannon;
 
     // doublecannon
@@ -44,6 +32,11 @@ class BigMeteorTest {
     @BeforeEach
     void setUp() {
 
+    }
+
+    @Test
+    void getProjectileType() {
+        assertEquals(ProjectileType.BIGMETEOR, new BigMeteor(Direction.UP).getProjectileType());
     }
 
     @Test

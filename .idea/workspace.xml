@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="663e43fb-7c2d-4edd-be6d-afd39e028acc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/client/socket/SocketClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/client/socket/SocketClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/messages/Ping.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/messages/Ping.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/socket/SocketClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/socket/SocketClientHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +54,7 @@
   "keyToString": {
     "Application.LocalClient1.executor": "Debug",
     "Application.LocalClient2.executor": "Debug",
-    "Application.LocalServer.executor": "Debug",
+    "Application.LocalServer.executor": "Run",
     "JUnit.ALL-TESTS.executor": "Run",
     "JUnit.ActivateStateTest.executor": "Coverage",
     "JUnit.ActivateStateTest.skipActivatesComponentsAndUpdatesState.executor": "Run",
@@ -128,10 +126,11 @@
     "Maven.GalaxyTruckers [compile].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "feature/client-reconnection",
+    "git-widget-placeholder": "test/server-model",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/Ing_del_software/Progetto/IS25-AM12/.run",
@@ -308,6 +307,7 @@
       <workItem from="1750482685499" duration="8469000" />
       <workItem from="1750538544967" duration="238000" />
       <workItem from="1750573134392" duration="23293000" />
+      <workItem from="1750623200593" duration="79000" />
     </task>
     <servers />
   </component>
@@ -336,11 +336,6 @@
           <properties class="java.io.EOFException" package="java.io" />
           <option name="timeStamp" value="49" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/client/socket/SocketClient.java</url>
-          <line>155</line>
-          <option name="timeStamp" value="70" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

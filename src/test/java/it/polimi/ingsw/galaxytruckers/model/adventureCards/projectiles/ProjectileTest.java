@@ -21,9 +21,26 @@ class ProjectileTest {
     ShipBoard myShipBoard;
     Component up, right, down, left;
     Point upp, rightp, downp, leftp;
+    Projectile projectile;
 
     @BeforeEach
     void setUp() {
+        projectile = new Projectile(() -> 0, Direction.UP) {
+            @Override
+            public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
+                return Set.of();
+            }
+
+            @Override
+            protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
+                return Optional.empty();
+            }
+
+            @Override
+            public ProjectileType getProjectileType() {
+                return null;
+            }
+        };
         up = new Component(new EnumMap<>(Direction.class));
         right = new Component(new EnumMap<>(Direction.class));
         down = new Component(new EnumMap<>(Direction.class));
@@ -50,6 +67,16 @@ class ProjectileTest {
                 );
             }
         };
+    }
+
+    @Test
+    void getDirection() {
+        assertEquals(Direction.UP, projectile.getDirection());
+    }
+
+    @Test
+    void getDiceRoll() {
+        assertEquals(0,  projectile.getDiceRoll());
     }
 
     @Test

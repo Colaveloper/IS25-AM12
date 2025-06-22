@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -121,6 +122,12 @@ class CombatZoneCardTest {
 
         card = new CombatZoneCard(game, Level.SECOND, checks, penalties, 1);
         card.initialize();
+    }
+
+    @Test
+    void getNextStateWithOnePlayerLeftReturnsDrawCard() {
+        game.getFlightBoard().removeShips(new HashSet<>(shipBoards.subList(0, shipBoards.size()-1)));
+        assertInstanceOf(DrawCardState.class, card.getNextState());
     }
 
     @Test

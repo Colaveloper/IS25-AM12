@@ -5,7 +5,9 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Shield;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import javafx.scene.image.Image;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -18,6 +20,11 @@ class SmallFireTest {
     SmallFire smallFire;
     Point firstFoundComponentPosition;
     Map<Point, Shield> fakeShields;
+
+    @BeforeEach
+    void setUp() {
+        smallFire = new SmallFire(() -> 0, Direction.UP);
+    }
 
     @Test
     void getActivatablePoints() {
@@ -35,6 +42,11 @@ class SmallFireTest {
         };
         smallFire = new SmallFire(()->0, Direction.UP);
         assertEquals(fakeShields.keySet(), smallFire.getActivatablePoints(shipBoard));
+    }
+
+    @Test
+    void getProjectileType() {
+        assertEquals(ProjectileType.SMALLFIRE, smallFire.getProjectileType());
     }
 
     @Test

@@ -6,13 +6,12 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Shield;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
-import javafx.scene.image.Image;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,8 +20,6 @@ class SmallMeteorTest {
     ShipBoard myShipBoard;
     Point point1;
     Point point2;
-    Shield shield1;
-    Shield shield2;
     Map<Point, Shield> myShields;
     Set<Point> testActivablePositions;
     Map<Direction, Connector> noneConnectors;
@@ -31,9 +28,11 @@ class SmallMeteorTest {
     Component sturdyComponent;
     Point weakPosition;
     Component weakComponent;
+    SmallMeteor smallMeteor;
 
     @BeforeEach
     void setUp() {
+        smallMeteor = new SmallMeteor(Direction.UP);
         point1 = new Point(0, 0);
         point2 = new Point(1, 0);
         sturdyPosition = new Point(10, 11);
@@ -82,6 +81,11 @@ class SmallMeteorTest {
                 return new HashMap<>(Map.of(weakPosition, weakComponent, sturdyPosition, sturdyComponent));
             }
         };
+    }
+
+    @Test
+    void getProjectileType() {
+        assertEquals(ProjectileType.SMALLMETEOR, smallMeteor.getProjectileType());
     }
 
     @Test
