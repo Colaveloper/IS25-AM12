@@ -8,13 +8,12 @@ import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.messages.*;
 import it.polimi.ingsw.galaxytruckers.network.messages.requests.*;
 import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
+import it.polimi.ingsw.galaxytruckers.network.SafeSocket;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 
 import java.awt.*;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,11 +21,7 @@ import java.util.UUID;
 import java.util.concurrent.*;
 
 public class SocketClient implements VirtualServer, VirtualClient {
-    private Socket socket;
-    private ObjectInputStream inputStream;
-    private final Object outputLock = new Object();
-    private ObjectOutputStream outputStream;
-    private final Object inputLock = new Object();
+    private SafeSocket socket;
     private ClientControllerInterface controller;
     private boolean isRunning;
 
@@ -42,14 +37,8 @@ public class SocketClient implements VirtualServer, VirtualClient {
 
     public void start(String ip, int port) {
         try {
-            socket = new Socket(ip, port);
-            synchronized (outputLock) {
-                outputStream = new ObjectOutputStream(socket.getOutputStream());
-                outputStream.flush();
-            }
-            synchronized (inputLock) {
-                inputStream = new ObjectInputStream(socket.getInputStream());
-            }
+            Socket socket = new Socket(ip, port);
+            this.socket = new SafeSocket(socket);
             isRunning = true;
             inputThread = new Thread(this::inputThreadTask);
             inputThread.start();
@@ -72,10 +61,7 @@ public class SocketClient implements VirtualServer, VirtualClient {
     private void inputThreadTask() {
         while (isRunning) {
             try {
-                Message message;
-                synchronized (inputLock) {
-                    message = (Message) inputStream.readObject();
-                }
+                Message message = socket.read();
                 switch (message) {
                     case EventMessage eventMessage -> {
                         notifyEvent(eventMessage.event());
@@ -104,10 +90,7 @@ public class SocketClient implements VirtualServer, VirtualClient {
     private void sendRequest(Request request) {
         responses.put(request.getUuid(), new CompletableFuture<>());
         try {
-            synchronized (outputLock) {
-                outputStream.writeObject(request);
-                outputStream.flush();
-            }
+            socket.write(request);
             Response response = responses.get(request.getUuid()).get();
             responses.remove(response.getUuid());
             if (response.isError()) throw new RuntimeException(response.getError());
@@ -120,10 +103,7 @@ public class SocketClient implements VirtualServer, VirtualClient {
 
     private void ping() {
         try {
-            synchronized (outputLock) {
-                outputStream.writeObject(new Ping());
-                outputStream.flush();
-            }
+            socket.write(new Ping());
         } catch (IOException e) {
             handleIOException(e);
         }

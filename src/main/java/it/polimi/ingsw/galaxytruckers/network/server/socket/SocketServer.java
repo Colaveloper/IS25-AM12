@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.server.socket;
 
+import it.polimi.ingsw.galaxytruckers.network.SafeSocket;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
 
 import java.io.*;
@@ -44,11 +45,8 @@ public class SocketServer {
         while (running) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-                ObjectInputStream inputStream = new ObjectInputStream(clientSocket.getInputStream());
                 NotRegisteredSocketHandler handler = new NotRegisteredSocketHandler(
-                        inputStream,
-                        outputStream,
+                        new SafeSocket(clientSocket),
                         this::removeHandler,
                         serverController);
                 addHandler(handler);

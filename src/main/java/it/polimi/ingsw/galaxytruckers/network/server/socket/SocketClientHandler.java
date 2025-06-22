@@ -3,43 +3,38 @@ package it.polimi.ingsw.galaxytruckers.network.server.socket;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.network.SafeSocket;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.messages.*;
 import it.polimi.ingsw.galaxytruckers.network.server.ClientEventQueue;
 import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.ControllerEvent;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyEvent;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.UUID;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 class SocketClientHandler implements VirtualServer, ClientHandler {
     private final Player player;
     private final ServerControllerInterface controller;
-    private final ObjectInputStream inputStream;
-    private final ObjectOutputStream outputStream;
+    private final SafeSocket socket;
 
     private final Thread updateThread;
-    private volatile boolean isUpdating = false;
     private final Thread requestThread;
-    private volatile boolean isRunning = false;
+    private final AtomicBoolean isRunning = new AtomicBoolean(false);
+
+    private final Object requestLock = new Object();
 
     private final ClientEventQueue eventQueue = new ClientEventQueue();
 
-    public SocketClientHandler(ObjectInputStream inputStream, ObjectOutputStream outputStream, Player player, ServerControllerInterface controller) {
-        this.inputStream = inputStream;
-        this.outputStream = outputStream;
+    public SocketClientHandler(SafeSocket socket, Player player, ServerControllerInterface controller) {
+        this.socket = socket;
         this.player = player;
         this.controller = controller;
         this.requestThread = new Thread(this::requestTask, "RequestThread");
@@ -47,9 +42,8 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
     }
 
     public void start() {
-        isRunning = true;
+        isRunning.set(true);
         requestThread.start();
-        isUpdating = true;
         updateThread.start();
         System.out.println("Started Socket Client Handler");
     }
@@ -61,29 +55,25 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     @Override
     public void stop() {
-        isRunning = false;
-        isUpdating = false;
-        requestThread.interrupt();
-        updateThread.interrupt();
-    }
-
-
-    public void stopUpdateThread() {
-        isUpdating = false;
-    }
-
-    public void stopRequestThread() {
-        isRunning = false;
+        if (isRunning.compareAndSet(true, false)) {
+            synchronized (requestLock) {
+                requestThread.interrupt();
+            }
+            updateThread.interrupt();
+            try {
+                socket.close();
+            } catch (IOException e) {
+                System.err.println("Error closing socket");
+                e.printStackTrace(System.err);
+            }
+        }
     }
 
     private void updateTask() {
-        while (isUpdating) {
+        while (isRunning.get()) {
             try {
                 Event event = eventQueue.poll();
-                synchronized (outputStream) {
-                    outputStream.writeObject(new EventMessage(event));
-                    outputStream.flush();
-                }
+                socket.write(new EventMessage(event));
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             } catch (IOException e) {
@@ -94,34 +84,26 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
     }
 
     private void requestTask() {
-        while (isRunning) {
+        while (isRunning.get()) {
             try {
-                Message message;
-                synchronized (inputStream) {
-                    message = (Message) inputStream.readObject();
-                }
-                switch (message) {
-                    case Request request -> {
-                        Response response = runRequest(request);
-                        synchronized (outputStream) {
-                            outputStream.writeObject(response);
-                            outputStream.flush();
+                Message message = socket.read();
+                synchronized (requestLock) {
+                    switch (message) {
+                        case Request request -> {
+                            Response response = runRequest(request);
+                            socket.write(response);
                         }
-                    }
-                    case Ping _ -> {
-                        SessionManager.getInstance().ping(player);
-                    }
-                    default -> {
-                        System.err.println("ERROR: the server received a message of type " + message.getClass().getName());
-                        stopRequestThread();
-                        stopUpdateThread();
+                        case Ping _ -> {
+                            SessionManager.getInstance().ping(player);
+                        }
+                        case EventMessage _, Response _ -> System.err.println("The SocketHandler received invalid request " + message.getClass());
                     }
                 }
             } catch (IOException e) {
                 handleIOException(e);
             } catch (ClassNotFoundException e) {
                 System.err.println("Class not found, check that the socket classes are configured correctly");
-                stopRequestThread();
+                stop();
             }
         }
     }

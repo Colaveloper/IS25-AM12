@@ -144,7 +144,7 @@ public class ServerController implements ServerControllerInterface {
     }
 
     @VisibleForTesting
-    protected Map<UUID, Lobby> getIdToLobby() {
+    public Map<UUID, Lobby> getIdToLobby() {
         synchronized (lock) {
             return new HashMap<>(idToLobby);
         }

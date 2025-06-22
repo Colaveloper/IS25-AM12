@@ -1,10 +1,13 @@
 package it.polimi.ingsw.galaxytruckers.network;
 
+import it.polimi.ingsw.galaxytruckers.model.GameModel;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
 import it.polimi.ingsw.galaxytruckers.network.client.socket.SocketClient;
 import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
+import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.server.socket.SocketServer;
+import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
@@ -16,20 +19,21 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class SocketTest {
     SocketClient socketClient;
     SocketServer socketServer;
     ClientControllerInterface clientController;
-    ServerControllerInterface serverController;
+    ServerController serverController;
     String address = "127.0.0.1";
     int port = 12346;
 
     @BeforeEach
     public void setup() throws InterruptedException {
         clientController = mock(ClientControllerInterface.class);
-        serverController = mock(ServerControllerInterface.class);
+        serverController = new ServerController(new GameModel());
         socketClient = new SocketClient();
         socketClient.setController(clientController);
         socketServer = new SocketServer(serverController);
@@ -50,31 +54,32 @@ public class SocketTest {
 
     @Test
     void registerNickname() {
-//        socketClient.registerNickname("x");
-//        System.out.println("Server controller: " + serverController);
-//        verify(serverController).requestActiveLobbies(Player.getPlayer("x"));
-//        System.out.println("VERIFIED");
+        socketClient.registerNickname("x");
+        assertNotNull(Player.getPlayer("x"));
+        assertNotNull(SessionManager.getInstance().getClient(Player.getPlayer("x")));
     }
 
     @Test
     void requestNewGame() {
         socketClient.registerNickname("x");
         socketClient.requestNewGame(Level.SECOND, 2);
-        verify(serverController).newGame(Player.getPlayer("x"),Level.SECOND,2);
+        assertTrue(Player.getPlayer("x").getLobby().isPresent());
     }
 
     @Test
     void joinLobby() {
-        UUID id = UUID.randomUUID();
+        serverController.newGame(new Player("other"),Level.SECOND,2);
         socketClient.registerNickname("x");
+        UUID id = serverController.getIdToLobby().keySet().iterator().next();
         socketClient.joinLobby(id);
-        verify(serverController).joinLobby(Player.getPlayer("x"),id);
+        assertEquals(id, Player.getPlayer("x").getLobby().get().getId());
     }
 
     @AfterEach
     void cleanup() {
-        socketClient.stop();
+        System.out.println("TEST: cleanup");
         socketServer.stop();
+        SessionManager.getInstance().unregisterClient(Player.getPlayer("x"));
         Player.removePlayer("x");
     }
 }

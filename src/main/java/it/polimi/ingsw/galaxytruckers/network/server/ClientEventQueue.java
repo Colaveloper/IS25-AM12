@@ -12,13 +12,13 @@ public class ClientEventQueue extends EventQueue<Event> {
     private final Object controllerLock = new Object();
     private final Object lobbyLock = new Object();
 
-    public void pause() {
+    public synchronized void pause() {
         pausedController = true;
         pausedLobby = true;
     }
 
     @Override
-    public void notifyEvent(Event event) {
+    public synchronized void notifyEvent(Event event) {
         switch (event) {
             case ControllerEvent controllerEvent -> {
                 synchronized (controllerLock) {
