@@ -34,6 +34,7 @@ public class SocketClient implements ServerHandler, VirtualClient {
 
     private final ScheduledExecutorService scheduler =  Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> pingTask;
+    private Object pingLock;
 
     private final Map<UUID, CompletableFuture<Response>> responses = new ConcurrentHashMap<>();
 
@@ -133,13 +134,15 @@ public class SocketClient implements ServerHandler, VirtualClient {
             responses.put(request.getUuid(), new CompletableFuture<>());
             try {
                 socket.write(request);
-                Response response = responses.get(request.getUuid()).get();
+                Response response = responses.get(request.getUuid()).get(2, TimeUnit.SECONDS);
                 responses.remove(response.getUuid());
                 if (response.isError()) throw new RuntimeException(response.getError());
             } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {
                 handleIOException(e);
+            } catch (TimeoutException e) {
+                handleIOException(new SocketException("Timed out waiting for request"));
             }
         }
     }
@@ -147,9 +150,17 @@ public class SocketClient implements ServerHandler, VirtualClient {
     private void ping() {
         synchronized (connectionLock) {
             try {
-                socket.write(new Ping());
+                Ping ping = new Ping();
+                responses.put(ping.id(), new CompletableFuture<>());
+                socket.write(ping);
+                responses.get(ping.id()).get(100, TimeUnit.SECONDS);
+                responses.remove(ping.id());
             } catch (IOException e) {
                 handleIOException(e);
+            } catch (ExecutionException | InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (TimeoutException e) {
+                handleIOException(new SocketException("Timed out waiting for Ping"));
             }
         }
     }

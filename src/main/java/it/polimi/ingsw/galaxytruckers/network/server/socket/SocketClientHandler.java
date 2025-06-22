@@ -107,8 +107,11 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
                             }
                             socket.write(response);
                         }
-                        case Ping _ -> {
-                            if (player != null) SessionManager.getInstance().ping(player);
+                        case Ping ping -> {
+                            if (player != null) {
+                                SessionManager.getInstance().ping(player);
+                                socket.write(new Response(ping.id()));
+                            }
                         }
                         case EventMessage _, Response _ -> System.err.println("The SocketHandler received invalid request " + message.getClass());
                     }
