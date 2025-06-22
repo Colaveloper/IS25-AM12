@@ -153,7 +153,7 @@ public class GuiView extends View<GuiScreen> {
     @Override
     public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
         if (model.getMyShip().equals(shipBoard)) {
-            Platform.runLater(() -> switchToScreen(new GuiForecastScreen(model, controller)));
+            Platform.runLater(() -> switchToScreen(new GuiForecastScreen(model, controller, null)));
         } else {
             currentScreen.notifyPeekForecast(shipBoard,deckIndex);
         }

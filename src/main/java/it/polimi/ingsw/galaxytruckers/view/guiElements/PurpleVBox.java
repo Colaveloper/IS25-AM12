@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
 /**
@@ -24,6 +25,11 @@ public class PurpleVBox extends VBox {
      */
     public PurpleVBox(double spacing) {
         super(spacing);
+        setPurpleStyle();
+    }
+
+    public PurpleVBox(Node node) {
+        super(node);
         setPurpleStyle();
     }
 

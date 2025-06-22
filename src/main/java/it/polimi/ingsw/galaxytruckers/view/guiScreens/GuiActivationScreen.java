@@ -18,34 +18,22 @@ import java.util.Set;
 
 public abstract class GuiActivationScreen extends GuiAdventureScreen {
     private final IntegerProperty batteriesToSpend;
-    private final Button goNextButton = new Button("FINISH ACTIVATION") ;
 
     public GuiActivationScreen(ClientModel model, ControllerToServer controller, AdventureState gameState) {
         super(model, controller, gameState);
         batteriesToSpend = new SimpleIntegerProperty(0);
         if (isMyTurn()) {
-            guiLog.getChildren().setAll(new Label("Spend the batteries you want to activate components, then press OK"));
-        } else {
-            guiLog.getChildren().setAll(new Label("Wait for your turn"));
-        }
-    }
-
-    @Override
-    public Pane getNode() {
-        Pane superGroup = super.getNode();
-        if (isMyTurn()) {
-            batteriesToSpend.set(0);
-
+            Button goNextButton = new Button("FINISH ACTIVATION");
             goNextButton.setOnAction(_ -> getGuiController().goNext());
             goNextButton.disableProperty().bind(
                     Bindings.createBooleanBinding(() -> (batteriesToSpend.get() != 0), batteriesToSpend)
             );
-            superGroup.getChildren().add(goNextButton);
             goNextButton.setVisible(true);
-
-            guiLog.log("Spend the batteries you want to activate components, then press FINISH ACTIVATION");
+            guiButtonBox.getChildren().add(goNextButton);
+            guiLog.log("Spend the batteries you want to activate components, then press OK");
+        } else {
+            guiLog.log("Wait for your turn");
         }
-        return superGroup;
     }
 
     @Override
@@ -60,7 +48,7 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
                                 controller.activateComponent(point);
                             }
                         } else {
-                            guiLog.getChildren().setAll(new Label("This component is already active"));
+                            guiLog.log("This component is already active");
                         }
                     } else if (model.getMyShip().getBatteries().containsKey(point)) {
                         if (model.getMyShip().getBatteries().get(point).getNumBatteries() > 0) {
@@ -68,7 +56,7 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
                                 controller.useBattery(point);
                             }
                         } else {
-                            guiLog.getChildren().setAll(new Label("Out of batteries at this position"));
+                            guiLog.log("Out of batteries at this position");
                         }
                     }
                 }
@@ -78,9 +66,9 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
             public void goNext() {
                 if (isMyTurn()) {
                     if(batteriesToSpend.get() > 0) {
-                        guiLog.getChildren().setAll(new Label("You need to use " + batteriesToSpend.get() + " batteries"));
+                        guiLog.log("You need to use " + batteriesToSpend.get() + " batteries");
                     } else if(batteriesToSpend.get() < 0) {
-                        guiLog.getChildren().setAll(new Label("You need to activate " + (batteriesToSpend.get() * (-1)) + " components"));
+                        guiLog.log("You need to activate " + (batteriesToSpend.get() * (-1)) + " components");
                     } else {
                         if (state.getAvailableActions().contains(StateActions.GO_NEXT)) {
                             controller.goNext();

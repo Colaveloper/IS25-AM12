@@ -51,7 +51,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
         } else {
             message = "Your ship is valid. Wait for other players to correct their ships.";
         }
-        guiLog.getChildren().setAll(new Label(message));
+        guiLog.log(message);
     }
 
     private void showConfirmationButton(String message) {
@@ -105,7 +105,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             } else {
                 message = "Your ship is valid. Wait for other players to correct their ships.";
             }
-            guiLog.getChildren().setAll(new Label(message));
+            guiLog.log(message);
         }
     }
 
@@ -127,7 +127,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             shipBroken = false;
             shipValid = true;
             String message = "Your ship is valid. Wait for other players to correct their ships.";
-            guiLog.getChildren().setAll(new Label(message));
+            guiLog.log(message);
         }
     }
 
@@ -139,7 +139,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             shipBroken = true;
             shipValid = true;
             String message = "Your ship is broken. Choose a piece to keep by clicking on any component in that piece.";
-            guiLog.getChildren().setAll(new Label(message));
+            guiLog.log(message);
         }
         shipNotConnected(shipBoard, pieces);
     }
@@ -150,7 +150,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             shipBroken = false;
             shipValid = true;
             String message = "Your ship is valid. Wait for other players to correct their ships.";
-            guiLog.getChildren().setAll(new Label(message));
+            guiLog.log(message);
         }
         guiShipBoards.get(shipBoard).clearHighlights();
     }

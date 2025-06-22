@@ -38,7 +38,7 @@ public abstract class GuiGameScreen extends GuiScreen {
         guiButtonBox.setAlignment(Pos.CENTER);
     }
 
-    public Pane getNode() {
+    public final Pane getNode() {
         VBox layout = new VBox(10);
 
         PurpleVBox guiFlightBoard = this.guiFlightBoard;
@@ -55,8 +55,12 @@ public abstract class GuiGameScreen extends GuiScreen {
         HBox bottomBox = new HBox(10);
 
         PurpleVBox othersShipsVBox = getOtherShipsVBox();
-        ScrollPane scrollPane = new ScrollPane(othersShipsVBox);
-        scrollPane.setStyle("-fx-background-color: transparent;");
+        othersShipsVBox.setScaleX(0.7);
+        othersShipsVBox.setScaleY(0.7);
+        Group rescalingOtherShipsGroup = new Group(othersShipsVBox);
+
+        VBox leftVBox = new PurpleVBox(rescalingOtherShipsGroup);
+        VBox.setVgrow(leftVBox, Priority.ALWAYS); // if HBox is in a VBox
 
         VBox centralVBox = getCentralVBox();
         HBox.setHgrow(centralVBox, Priority.ALWAYS);
@@ -66,7 +70,7 @@ public abstract class GuiGameScreen extends GuiScreen {
         HBox.setHgrow(sidePanel, Priority.ALWAYS);
         centralVBox.setPrefWidth(0);
 
-        bottomBox.getChildren().addAll(scrollPane, centralVBox, sidePanel);
+        bottomBox.getChildren().addAll(leftVBox, centralVBox, sidePanel);
         return bottomBox;
     }
 
@@ -75,7 +79,9 @@ public abstract class GuiGameScreen extends GuiScreen {
 
         for (ShipBoard shipBoard : guiShipBoards.keySet()) {
             if (!shipBoard.equals(myShipBoard)) {
-                otherShipsVBox.getChildren().add(getShipBoardVBox(shipBoard));
+                VBox shipBoardVBox = getShipBoardVBox(shipBoard);
+                shipBoardVBox.setMaxWidth(300);
+                otherShipsVBox.getChildren().add(shipBoardVBox);
                 VBox.setVgrow(otherShipsVBox, Priority.ALWAYS);
                 otherShipsVBox.setPrefHeight(0); // parent sets the real height
             }

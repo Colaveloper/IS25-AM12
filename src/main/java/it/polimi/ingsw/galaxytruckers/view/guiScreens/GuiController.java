@@ -38,6 +38,8 @@ public abstract class GuiController {
 
     public void removeGood(Point point) {}
 
+    public void choosePlanet(int i) {}
+
 //                    case ACTIVATE_COMPONENT ->      actions.add("P[x][y] Activate component        ");
 //                    case SPEND_BATTERIES ->         actions.add("B[x][y] Spend battery on component");
 //                    case GRAB_REWARD ->             actions.add("P       To pick reward            ");

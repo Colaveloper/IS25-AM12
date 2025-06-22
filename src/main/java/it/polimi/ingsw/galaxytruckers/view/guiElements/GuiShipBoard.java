@@ -172,7 +172,7 @@ public class GuiShipBoard extends PurpleVBox {
     }
 
     public void notifyComponentChange(Point point) {
-        getChildren().stream()
+        shipGrid.getChildren().stream()
                 .filter(node -> node instanceof GuiComponent)
                 .map(node -> (GuiComponent) node)
                 .filter(node -> {
