@@ -3,11 +3,13 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.CircularToggleButton;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.PurpleHBox;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.AddGoodsState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GoodsBuffer;
 import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -23,7 +25,7 @@ import java.util.Set;
 
 public class GuiGoodsScreen extends GuiAdventureScreen {
     private final GoodsBuffer goodsBuffer;
-    private final VBox bufferInfoBox = new VBox(2);
+    private final PurpleHBox bufferInfoBox = new PurpleHBox(5);
     private final ObjectProperty<Point> selectedPoint;
     private final ObjectProperty<GoodsType> selectedGoodsType;
 
@@ -33,7 +35,7 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
         this.selectedPoint = new SimpleObjectProperty<>();
         selectedPoint.addListener((_, _, newVal) -> {
             guiShipBoards.get(myShipBoard).clearHighlights();
-            guiShipBoards.get(myShipBoard).highlightPoints(Set.of(newVal), Color.BLUE);
+            if (newVal != null) guiShipBoards.get(myShipBoard).highlightPoints(Set.of(newVal), Color.BLUE);
         });
         this.selectedGoodsType = new SimpleObjectProperty<>();
         if (isMyTurn()) {
@@ -74,13 +76,32 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
         };
     }
 
-    private void updateBufferInfoBox() {
+    @Override
+    protected final VBox getFreeUseVBox() {
+        VBox superBox = super.getFreeUseVBox();
+        superBox.getChildren().add(bufferInfoBox);
+        updateBufferBox();
+        return superBox;
+    }
+
+    private void updateBufferBox() {
         bufferInfoBox.getChildren().clear();
+        Label bufferLabel = new Label("Buffer:");
+        bufferLabel.setTextFill(Color.WHITE);
+        bufferLabel.setPadding(new Insets(5));
+        bufferInfoBox.getChildren().add(bufferLabel);
         for (GoodsType type : GoodsType.values()) {
-            int amount = goodsBuffer.getGoodsBuffer().getOrDefault(type, 0);
-            if (amount > 0) {
-                Label goodsLabel = new Label(type + ": " + amount);
-                bufferInfoBox.getChildren().add(goodsLabel);
+            for (int i = 0; i < goodsBuffer.getGoodsBuffer().getOrDefault(type, 0); i++) {
+                CircularToggleButton bufferedGood = new CircularToggleButton(switch (type) {
+                    case RED -> Color.RED;
+                    case BLUE -> Color.BLUE;
+                    case GREEN -> Color.GREEN;
+                    case YELLOW -> Color.GOLD;
+                });
+                bufferedGood.setScaleX(.5);
+                bufferedGood.setScaleY(.5);
+                bufferedGood.setActive(true);
+                bufferInfoBox.getChildren().add(bufferedGood);
             }
         }
     }
@@ -133,7 +154,7 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
             if (selectedGoodsType.get() == GoodsType.RED &&
                 !myShipBoard.getCargoHolds().get(selectedPoint.get()).isSpecial()
             ) {
-                guiLog.getChildren().add(new Label("Cannot add special cargo to a regular cargo hold!"));
+                guiLog.log("Cannot add special cargo to a regular cargo hold!");
             } else {
                 controller.placeGoods(selectedPoint.get(), selectedGoodsType.get());
                 selectedPoint.set(null);
@@ -171,6 +192,6 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
     @Override
     public void notifyComponentChange(ShipBoard shipBoard, Point point) {
         super.notifyComponentChange(shipBoard, point);
-        updateBufferInfoBox();
+        Platform.runLater(this::updateBufferBox);
     }
 }

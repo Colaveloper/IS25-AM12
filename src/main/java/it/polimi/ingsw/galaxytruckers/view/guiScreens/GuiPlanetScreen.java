@@ -32,22 +32,29 @@ public class GuiPlanetScreen extends GuiAdventureScreen {
         guiLog.log(isMyTurn() ? "Your turn to choose a planet" : "Waiting for other player");
 
         currentShipBoard = new SimpleObjectProperty<>(choosePlanetState.getShipBoard());
+        planetToShip = new SimpleListProperty<>(FXCollections.observableArrayList(choosePlanetState.getOptions()));
+
+        VBox verticalButtonBox = new VBox(10);
+        verticalButtonBox.setAlignment(Pos.CENTER);
 
         HBox planetsButtons = new HBox(10);
         planetsButtons.setAlignment(Pos.CENTER);
 
-        planetToShip = new SimpleListProperty<>(FXCollections.observableArrayList(choosePlanetState.getOptions()));
         for (int i = 0; i < planetToShip.size(); i++) {
             CircularToggleButton planetButton = createPlanetButton(i);
             planetsButtons.getChildren().add(planetButton);
         }
         guiButtonBox.getChildren().add(planetsButtons);
 
-        if (choosePlanetState.isMyTurn()) {
-            Button skipBtn = new Button("Skip");
-            skipBtn.setOnAction(e -> getGuiController().goNext());
-            guiButtonBox.getChildren().add(skipBtn);
-        }
+        Button skipBtn = new Button("Skip");
+        skipBtn.setOnAction(e -> getGuiController().goNext());
+        skipBtn.disableProperty().bind(Bindings.createBooleanBinding(
+                () -> currentShipBoard.get() != myShipBoard,
+                currentShipBoard
+        ));
+
+        verticalButtonBox.getChildren().addAll(planetsButtons, skipBtn);
+        guiButtonBox.getChildren().add(verticalButtonBox);
     }
 
     @Override
@@ -112,23 +119,3 @@ public class GuiPlanetScreen extends GuiAdventureScreen {
         });
     }
 }
-
-//        if (landedShipBoard != null) {
-//            String playerName = "A player";
-//            for (Map.Entry<ShipBoard, Player> entry : model.getShipToPlayer().entrySet()) {
-//                if (entry.getKey().equals(landedShipBoard)) {
-//                    playerName = entry.getValue().getNickname();
-//                    break;
-//                }
-//            }
-//            planetButton.setText("Planet " + (planetIndex + 1) + "\n" + playerName + " landed here");
-//            planetButton.setDisable(true);
-//            planetButton.setStyle("-fx-text-fill: white;");
-//        } else {
-//            planetButton.setText("Planet " + (planetIndex + 1));
-//            planetButton.setDisable(!isMyTurn());
-//            planetButton.setOnAction(e -> {
-//                if (isMyTurn()) {
-//                    controller.choosePlanet(planetIndex);
-//                }
-//            });
