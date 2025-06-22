@@ -217,6 +217,7 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
             Platform.runLater(() -> {
                 guiLog.log("Now you can continue builing");
                 guiButtonBox.getChildren().clear();
+                setupHourglassButton();
             });
         } else {
             Platform.runLater(() -> {
