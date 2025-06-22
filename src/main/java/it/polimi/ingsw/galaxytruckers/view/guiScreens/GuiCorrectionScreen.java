@@ -156,6 +156,16 @@ public class GuiCorrectionScreen extends GuiGameScreen {
     }
 
     @Override
+    public void notifyRemoveComponent(ShipBoard shipBoard, Point removedPoint) {
+        guiShipBoards.get(shipBoard).notifyRemoveComponent(removedPoint);
+        if (model.getMyShip().equals(shipBoard)) {
+            selectedPoint = null;
+            selectedPieceIndex = null;
+            clearSelection();
+        }
+    }
+
+    @Override
     protected VBox getFreeUseVBox() {
         return new VBox();
     }
@@ -174,6 +184,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             @Override
             public void handlePointPress(Point point) {
                 if (state.getAvailableActions().contains(StateActions.REMOVE_COMPONENT) && !shipValid) {
+                    guiShipBoards.get(model.getMyShip()).clearHighlights();
                     selectedPoint = point;
                     guiShipBoards.get(model.getMyShip()).highlightPoints(
                             Collections.singleton(point), javafx.scene.paint.Color.YELLOW);
@@ -194,4 +205,3 @@ public class GuiCorrectionScreen extends GuiGameScreen {
         };
     }
 }
-
