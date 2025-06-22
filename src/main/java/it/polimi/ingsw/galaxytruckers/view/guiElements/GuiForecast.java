@@ -1,7 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiController;
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import javafx.application.Platform;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -12,14 +14,19 @@ import java.util.List;
 public class GuiForecast extends PurpleHBox {
     private final GuiController controller;
     private final List<StackPane> slots;
+    private final ShipBoard[] blockedForecasts;
+    private boolean meWatching;
 
     private static final int SLOT_SIZE = 30;
+    double cardWidth = 60;
+    double cardHeight = 90;
 
 
     public GuiForecast(ShipBoard[] blockedForecasts, GuiController controller) {
         super(10);
         this.controller = controller;
         this.slots = new ArrayList<>();
+        this.blockedForecasts = blockedForecasts;
 
         for (int i = 0; i < blockedForecasts.length; i++) {
             StackPane slot = new StackPane();
@@ -27,19 +34,24 @@ public class GuiForecast extends PurpleHBox {
             slots.add(slot);
             getChildren().add(slot);
 
+        }
+        updateCoveredDecks();
+    }
+
+    private void updateCoveredDecks() {
+        for (int i = 0; i < blockedForecasts.length; i++) {
+
             ShipBoard shipBoard = blockedForecasts[i];
             if (shipBoard == null) {
-                slot.getChildren().add(createFreeForecast());
+                slots.get(i).getChildren().add(createFreeForecast());
             } else {
-                slot.getChildren().add(createTakenForecast(shipBoard));
+                slots.get(i).getChildren().add(createTakenForecast(shipBoard));
             }
 
             int finalI = i;
-            slot.setOnMouseClicked(_ -> controller.acquireForecast(finalI));
+            slots.get(i).setOnMouseClicked(_ -> controller.acquireForecast(finalI));
         }
     }
-
-
 
     private Rectangle createFreeForecast() {
         return createCardBase(Color.LIGHTGRAY);
@@ -52,26 +64,52 @@ public class GuiForecast extends PurpleHBox {
     }
 
     private Rectangle createCardBase(Color fillColor) {
-        double width = 60;
-        double height = 90;
         double arc = 12;
 
-        Rectangle card = new Rectangle(width, height);
+        Rectangle card = new Rectangle(cardWidth, cardHeight);
         card.setArcWidth(arc);
         card.setArcHeight(arc);
         card.setFill(fillColor);
         return card;
     }
 
-    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
+    public void notifyOtherPeekForecast(ShipBoard shipBoard, int deckIndex) {
         Platform.runLater(()-> {
-            slots.get(deckIndex).getChildren().setAll(createTakenForecast(shipBoard));
+            if (meWatching) return;
+            updateCoveredDecks();
         });
     }
 
-    public void notifyReleaseForecast(int deckIndex) {
+    public void notifyOtherReleaseForecast(ShipBoard shipBoard, int deckIndex) {
         Platform.runLater(()-> {
-            slots.get(deckIndex).getChildren().setAll(createFreeForecast());
+            if (meWatching) return;
+            updateCoveredDecks();
         });
     }
+
+    public void notifyMePeekForecast() {
+        meWatching = true;
+    }
+
+    public void setForecastDeck(List<AdventureCard> adventureCards) {
+        Platform.runLater(() -> {
+            for (int i = 0; i < slots.size(); i++) {
+                AdventureCard adventureCard = adventureCards.get(i);
+                ImageView adventureCardView = new GuiAdventureCard(adventureCard.getId());
+                adventureCardView.setFitWidth(cardWidth);
+                adventureCardView.setFitHeight(cardHeight);
+                slots.get(i).getChildren().setAll(adventureCardView);
+            }
+        });
+    }
+
+    public void notifyMeReleaseForecast() {
+        Platform.runLater(()-> {
+            meWatching = false;
+            for (StackPane slot : slots) {
+                slot.getChildren().setAll(createFreeForecast());
+            }
+        });
+    }
+
 }
