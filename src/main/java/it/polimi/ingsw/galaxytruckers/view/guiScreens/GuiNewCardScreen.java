@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public class GuiNewCardScreen extends GuiAdventureScreen {
     Button actionButton = new Button("Draw Card");
-    VBox freeUseVBox = new VBox(10);
+    VBox freeUseVBox = super.getFreeUseVBox();
 
     public GuiNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState drawCardState) {
         super(model, controller, drawCardState);

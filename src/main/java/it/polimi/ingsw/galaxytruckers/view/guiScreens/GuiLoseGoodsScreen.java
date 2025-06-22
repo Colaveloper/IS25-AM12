@@ -83,7 +83,7 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
 
     @Override
     protected VBox getFreeUseVBox() {
-        VBox freeUseVBox = new PurpleVBox(10);
+        VBox freeUseVBox = super.getFreeUseVBox();
         freeUseVBox.setAlignment(Pos.CENTER);
 
         if (isMyTurn()) {
