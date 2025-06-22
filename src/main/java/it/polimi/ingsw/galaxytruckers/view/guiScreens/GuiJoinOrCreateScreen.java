@@ -96,19 +96,14 @@ public class GuiJoinOrCreateScreen extends GuiScreen {
             levelLabel.setTextFill(Color.WHITE);
             levelLabel.setPrefWidth(130);  // Increased width
 
-            // connected players column
-            Label playersLabel = new Label("Connected");
-            playersLabel.setFont(new Font("Arial", 14));
-            playersLabel.setTextFill(Color.WHITE);
-            playersLabel.setPrefWidth(140);
-
-            headerRow.getChildren().addAll(hostLabel, levelLabel, playersLabel);
+            headerRow.getChildren().addAll(hostLabel, levelLabel);
             tableContainer.getChildren().add(headerRow);
 
             // adding each lobby as a row
             for (UUID id : ids) {
                 Lobby lobby = model.getActiveLobbies().get(id);
-                if (lobby != null) {
+                // Only show lobbies that are not full (still joinable)
+                if (lobby != null && lobby.getPlayers().size() < lobby.getPlayersN()) {
                     HBox lobbyRow = createLobbyRow(lobby, id);
                     tableContainer.getChildren().add(lobbyRow);
                 }
@@ -152,14 +147,7 @@ public class GuiJoinOrCreateScreen extends GuiScreen {
         levelValue.setTextFill(Color.WHITE);
         levelValue.setPrefWidth(140);
 
-        // connected players column
-        int connectedPlayers = lobby.getPlayers().size();
-        Label playersValue = new Label(connectedPlayers + "/" + lobby.getPlayersN());
-        playersValue.setFont(new Font("Arial", 14));
-        playersValue.setTextFill(Color.WHITE);
-        playersValue.setPrefWidth(120);
-
-        rowContent.getChildren().addAll(hostValue, levelValue, playersValue);
+        rowContent.getChildren().addAll(hostValue, levelValue);
         rowContent.setOnMouseClicked(e -> controller.joinLobby(id));
         rowContent.setCursor(javafx.scene.Cursor.HAND);
 

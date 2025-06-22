@@ -172,7 +172,7 @@ public class GuiShipBoard extends PurpleVBox {
     }
 
     public void notifyComponentChange(Point point) {
-        getChildren().stream()
+        shipGrid.getChildren().stream()
                 .filter(node -> node instanceof GuiComponent)
                 .map(node -> (GuiComponent) node)
                 .filter(node -> {
@@ -187,7 +187,7 @@ public class GuiShipBoard extends PurpleVBox {
     public void highlightPoints(Set<Point> points, Color color) {
         Platform.runLater(() -> {
             for (Point point : points) {
-                getChildren().stream()
+                shipGrid.getChildren().stream()
                         .filter(node -> node instanceof GuiComponent)
                         .map(node -> (GuiComponent) node)
                         .filter(node -> {
@@ -206,7 +206,7 @@ public class GuiShipBoard extends PurpleVBox {
 
     public void clearHighlights() {
         Platform.runLater(() -> {
-            getChildren().stream()
+            shipGrid.getChildren().stream()
                     .filter(node -> node instanceof GuiComponent)
                     .map(node -> (GuiComponent) node)
                     .forEach(GuiComponent::clearHighlight);

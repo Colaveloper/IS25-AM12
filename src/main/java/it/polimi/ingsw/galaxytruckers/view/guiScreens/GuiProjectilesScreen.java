@@ -27,7 +27,7 @@ public class GuiProjectilesScreen extends GuiActivationScreen {
         super(model, controller, handleProjectileState);
         this.projectile = handleProjectileState.getProjectile();
         if (isMyTurn()) {
-            guiLog.getChildren().setAll(new Label("Select a shield to activate or a battery to use"));
+            guiLog.log("Select a shield to activate or a battery to use");
         }
     }
 

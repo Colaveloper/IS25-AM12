@@ -16,31 +16,27 @@ import javafx.scene.layout.VBox;
 import java.util.Optional;
 
 public class GuiNewCardScreen extends GuiAdventureScreen {
-    VBox layout = new VBox(20);
     Button actionButton = new Button("Draw Card");
+    VBox freeUseVBox = new VBox(10);
 
     public GuiNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState drawCardState) {
         super(model, controller, drawCardState);
-    }
-
-    @Override
-    public Pane getNode() {
-        layout.setAlignment(Pos.CENTER);
-        layout.getChildren().add(guiLog);
 
         if(isMyTurn()) {
             actionButton.setOnAction(e -> getGuiController().drawCard());
-            layout.getChildren().add(actionButton);
-            guiLog.getChildren().setAll(new Label("Draw and start a new adventure!"));
+            guiButtonBox.getChildren().clear();
+            guiButtonBox.getChildren().add(actionButton);
+            guiLog.log("Draw and start a new adventure!");
         } else {
-            actionButton.setDisable(true);
-            guiLog.getChildren().setAll(new Label("Wait for the leader to draw"));
+            guiLog.log("Wait for the leader to draw and start the next adventure");
         }
+    }
 
+    @Override
+    protected VBox getFreeUseVBox() {
         Optional<GuiAdventureCard> guiAdventureCard = guiAdventureCard();
-        guiAdventureCard.ifPresent(layout.getChildren()::add);
-
-        return layout;
+        guiAdventureCard.ifPresent(freeUseVBox.getChildren()::add);
+        return freeUseVBox;
     }
 
     @Override
@@ -66,7 +62,7 @@ public class GuiNewCardScreen extends GuiAdventureScreen {
     public void notifyDrawCard(AdventureCard adventureCard) {
         Platform.runLater(()->{
             Optional<GuiAdventureCard> guiAdventureCard = guiAdventureCard();
-            guiAdventureCard.ifPresent(layout.getChildren()::add);
+            guiAdventureCard.ifPresent(freeUseVBox.getChildren()::add);
             actionButton.setText("Start Adventure");
             actionButton.setOnAction(e -> getGuiController().goNext());
         });

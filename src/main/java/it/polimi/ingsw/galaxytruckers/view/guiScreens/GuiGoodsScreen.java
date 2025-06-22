@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.CircularToggleButton;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.AddGoodsState;
@@ -96,29 +97,20 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
         goodsTypeBox.getChildren().add(selectGoodsLabel);
 
         for (GoodsType type : GoodsType.values()) {
-            Button typeButton = new Button(type.toString());
+            CircularToggleButton typeButton = new CircularToggleButton(switch (type) {
+                case RED -> Color.RED;
+                case BLUE -> Color.BLUE;
+                case GREEN -> Color.GREEN;
+                case YELLOW -> Color.GOLD;
+            });
             typeButton.setOnAction(_ -> {
                 guiLog.log("The action will be performed on a "+type+" good");
                 selectedGoodsType.set(type);
             });
-            Background defaultBackground = new Background(new BackgroundFill(
-                    Color.LIGHTGRAY, new CornerRadii(5.0), null
+            typeButton.isActiveProperty().bind(Bindings.createBooleanBinding(
+                    ()->selectedGoodsType.get() == type,
+                    selectedGoodsType
             ));
-            Background focusedBackground = new Background(new BackgroundFill(
-                    switch (type) {
-                        case RED -> Color.RED;
-                        case BLUE -> Color.BLUE;
-                        case GREEN -> Color.GREEN;
-                        case YELLOW -> Color.GOLD;
-                    }, new CornerRadii(5.0), null));
-            typeButton.backgroundProperty().bind(
-                Bindings.createObjectBinding(
-                        () -> (selectedGoodsType.get() == type
-                                ? focusedBackground
-                                : defaultBackground
-                        ), selectedGoodsType
-                )
-            );
             goodsTypeBox.getChildren().add(typeButton);
         }
 

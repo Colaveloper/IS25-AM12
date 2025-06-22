@@ -4,16 +4,26 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.guiElements.*;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.view.model.Hourglass;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.SecondShipBuildingState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.StateActions;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.util.Duration;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -23,17 +33,89 @@ import java.util.Map;
 public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
 
     private final GuiForecast guiForecast;
-    private final GuiHourglass guiHourglass;
-    protected final Map<ShipBoard, GuiStash> guiStashes;
+    private final Map<ShipBoard, GuiStash> guiStashes;
+    private Button hourglassButton;
+    private final SecondShipBuildingState gameState;
+    private boolean isFirstRender = true;
+    private boolean hasLoggedEndMessage = false;
 
     public GuiSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState state) {
         super(model, controller, state);
+        this.gameState = state;
         guiForecast = new GuiForecast(state.getBlockedForecasts(), getGuiController());
-        guiHourglass = new GuiHourglass(getGuiController());
         guiStashes = new HashMap<>();
         for (ShipBoard shipBoard : model.getGame().getShipBoards()) {
             guiStashes.put(shipBoard, new GuiStash(shipBoard.getStashedComponents(), getGuiController()));
         }
+
+        setupHourglassButton();
+    }
+
+    private void setupHourglassButton() {
+        hourglassButton = new Button("⏳ 60");
+        hourglassButton.setFont(Font.font("System", FontWeight.BOLD, 14));
+        hourglassButton.setPadding(new Insets(5, 10, 5, 10));
+        hourglassButton.setOnAction(e -> {
+            SecondShipBuildingState gameState = (SecondShipBuildingState) state;
+            Hourglass hourglass = gameState.getHourglass();
+
+            if (hourglass != null && !hourglass.getIsRunning()) {
+                if (hourglass.getFlipsLeft() == 1) {
+                    guiLog.log("This is the FINAL hourglass flip! You must place your ship on the flight board to use it.");
+                }
+                if (state.getAvailableActions().contains(StateActions.FLIP_HOURGLASS)) {
+                    controller.flipHourglass();
+                }
+            }
+        });
+
+        updateHourglassButton();
+        guiButtonBox.getChildren().add(hourglassButton);
+
+        Timeline hourglassTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateHourglassButton()));
+        hourglassTimeline.setCycleCount(Timeline.INDEFINITE);
+        hourglassTimeline.play();
+    }
+
+    private void updateHourglassButton() {
+        Platform.runLater(() -> {
+            Hourglass hourglass = gameState.getHourglass();
+
+            if (hourglass != null) {
+                if (hourglass.getIsRunning()) {
+                    long timeLeft = hourglass.getTimeLeft();
+                    hourglassButton.setText("⏳ " + timeLeft);
+
+                    if (timeLeft <= 10) {
+                        hourglassButton.setTextFill(Color.RED);
+                      } else if (timeLeft <= 20) {
+                        hourglassButton.setTextFill(Color.ORANGE);
+                      } else {
+                        hourglassButton.setTextFill(Color.BLACK);
+                      }
+
+                      if (isFirstRender && hourglass.getFlipsLeft() == 0) {
+                        guiLog.log("WARNING: This is the FINAL hourglass flip!");
+                        isFirstRender = false;
+                      }
+                      hasLoggedEndMessage = false;
+                } else {
+                    hourglassButton.setText("⏳");
+                    hourglassButton.setTextFill(Color.BLACK);
+
+                    isFirstRender = true;
+
+                    if (!hasLoggedEndMessage && hourglass.getFlipsLeft() < 3) {
+                        if (hourglass.getFlipsLeft() == 1) {
+                            guiLog.log("Hourglass ended, ready for another flip. Final flip available once you place your ship on the flight board.");
+                        } else {
+                            guiLog.log("Hourglass ended, ready for another flip.");
+                        }
+                        hasLoggedEndMessage = true;
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -78,12 +160,24 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
 
     @Override
     public void notifyFlipHourglass(ShipBoard shipBoard) {
-        guiHourglass.notifyFlipHourglass();
+        updateHourglassButton();
+
+        // Log a message similar to CLI implementation
+        SecondShipBuildingState gameState = (SecondShipBuildingState) state;
+        Hourglass hourglass = gameState.getHourglass();
+        if (hourglass != null) {
+            if (hourglass.getFlipsLeft() == 0) {
+                guiLog.log("Hourglass flipped for the FINAL time!");
+                guiLog.log("All players must complete their ships before the timer ends!");
+            } else {
+                guiLog.log("Hourglass flipped!");
+            }
+        }
     }
 
     @Override
     public void notifyHourglassEnd() {
-        guiHourglass.notifyHourglassEnd();
+        updateHourglassButton();
     }
 
     @Override
@@ -204,3 +298,4 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
         };
     }
 }
+

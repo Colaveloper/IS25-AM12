@@ -18,10 +18,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.awt.*;
+import java.util.Set;
 
 public class GuiRemoveCrewScreen extends GuiAdventureScreen {
-    private ObjectProperty<Point> selectedPoint;
-    private VBox cabinInfoBox;
+    private final ObjectProperty<Point> selectedPoint;
+    private final VBox cabinInfoBox;
 
     public GuiRemoveCrewScreen(ClientModel model, ControllerToServer controller, RemoveCrewState removeCrewState) {
         super(model, controller, removeCrewState);
@@ -81,6 +82,7 @@ public class GuiRemoveCrewScreen extends GuiAdventureScreen {
                         selectedPoint.set(point);
                         updateCabinInfoBox();
                         guiLog.log("Action to be performed at "+ point.x + "," + point.y);
+                        guiShipBoards.get(myShipBoard).highlightPoints(Set.of(point), Color.YELLOW);
                     } else {
                         guiLog.log("No cabin at " + point.x + "," + point.y);
                     }
@@ -139,6 +141,7 @@ public class GuiRemoveCrewScreen extends GuiAdventureScreen {
     @Override
     public void notifyComponentChange(ShipBoard shipBoard, Point point) {
         super.notifyComponentChange(shipBoard, point);
+        guiShipBoards.get(myShipBoard).clearHighlights();
         updateCabinInfoBox();
     }
 }

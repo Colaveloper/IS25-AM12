@@ -15,6 +15,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+import java.util.Arrays;
+
 public class GuiGameCreationScreen extends GuiScreen {
     public GuiGameCreationScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
@@ -43,7 +45,11 @@ public class GuiGameCreationScreen extends GuiScreen {
                 "-fx-font-size: 14px;";
 
         ComboBox<Level> levelComboBox = new ComboBox<>();
-        levelComboBox.getItems().addAll(Level.values());
+        levelComboBox.getItems().addAll(
+            Arrays.stream(Level.values())
+                  .filter(level -> level != Level.FIRST)
+                  .toArray(Level[]::new)
+        );
         levelComboBox.setPromptText("Select Level");
         levelComboBox.setMaxWidth(Double.MAX_VALUE);
         levelComboBox.setStyle(comboBoxStyle);

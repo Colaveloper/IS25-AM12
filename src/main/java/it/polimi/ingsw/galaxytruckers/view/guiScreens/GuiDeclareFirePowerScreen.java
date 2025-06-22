@@ -9,7 +9,7 @@ public class GuiDeclareFirePowerScreen extends GuiActivationScreen {
     public GuiDeclareFirePowerScreen(ClientModel model, ControllerToServer controller, DeclareFirePowerState declareFirePowerState) {
         super(model, controller, declareFirePowerState);
         if (isMyTurn()) {
-            guiLog.getChildren().setAll(new Label("Select an double-cannon to activate or a battery to use"));
+            guiLog.log("Select an double-cannon to activate or a battery to use");
         }
     }
 }

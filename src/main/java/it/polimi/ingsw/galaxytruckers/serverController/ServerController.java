@@ -36,9 +36,10 @@ public class ServerController implements ServerControllerInterface {
         List<LobbyDTO> lobbyDTOS;
         synchronized (idToLobby) {
             lobbyDTOS = idToLobby.values().stream()
+                    .filter(activeLobbies::contains)
                     .map(LobbyDTO::from).toList();
         }
-        this.eventQueue.notifyEvent(new SetActiveLobbiesEvent(player.getNickname(),lobbyDTOS));
+        this.eventQueue.notifyEvent(new SetActiveLobbiesEvent(player.getNickname(), lobbyDTOS));
 
     }
 
