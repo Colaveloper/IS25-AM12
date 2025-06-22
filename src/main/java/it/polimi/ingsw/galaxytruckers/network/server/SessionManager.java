@@ -59,6 +59,12 @@ public class SessionManager {
         }
     }
 
+    public boolean isPlayerActive(Player player) {
+        synchronized (activeSessions) {
+            return activeSessions.containsKey(player);
+        }
+    }
+
     public void ping(Player player) {
         synchronized (activeSessions) {
             if (activeSessions.containsKey(player)) {

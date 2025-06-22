@@ -75,11 +75,10 @@ public class NotRegisteredSocketHandler {
 
     private void registerNickname(RegisterNickname message) throws IOException{
         try {
-            Player player = Player.addPlayer(message.getNickname());
-            SocketClientHandler clientHandler = new SocketClientHandler(inputStream,outputStream,player,controller);
-            SessionManager.getInstance().registerClient(player, clientHandler);
-            clientHandler.start();
-            controller.requestActiveLobbies(player);
+            controller.registerNickname(
+                    message.getNickname(),
+                    p -> new SocketClientHandler(inputStream,outputStream,p,controller)
+            );
             Response response = new Response(message.getUuid());
             synchronized (outputStream) {
                 outputStream.writeObject(response);

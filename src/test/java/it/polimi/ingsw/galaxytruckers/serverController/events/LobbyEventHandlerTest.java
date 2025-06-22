@@ -32,10 +32,10 @@ class LobbyEventHandlerTest {
         client2 = new VirtualClientStub();
         p1 = Player.addPlayer("p1");
         p2 = Player.addPlayer("p2");
-        SessionManager.getInstance().registerClient(p1,client1);
-        SessionManager.getInstance().registerClient(p2,client2);
+        SessionManager.getInstance().registerClient(p1, client1);
+        SessionManager.getInstance().registerClient(p2, client2);
         eventQueue = new EventQueue<>();
-        lobbyEventHandler = new LobbyEventHandler(eventQueue, new LobbyStub(List.of(p1,p2)));
+        lobbyEventHandler = new LobbyEventHandler(eventQueue, new LobbyStub(List.of(p1, p2)));
         lobbyEventHandler.start();
     }
 
@@ -82,7 +82,8 @@ class LobbyStub extends Lobby {
     private final List<Player> players;
 
     public LobbyStub(List<Player> players) {
-        super(null,players.getFirst(), Level.SECOND,2,(_) -> {});
+        super(null, players.getFirst(), Level.SECOND, 2, (_) -> {
+        });
         this.players = players;
     }
 
@@ -108,12 +109,10 @@ class VirtualClientStub implements ClientHandler {
     }
 
     @Override
-    public void pause() {
-
+    public void pauseEvents() {
     }
 
     @Override
-    public void resume() {
-
+    public void start() {
     }
 }

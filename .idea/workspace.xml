@@ -5,50 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="663e43fb-7c2d-4edd-be6d-afd39e028acc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ShipInitializationStateTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/ClientEventQueue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/utils/LockUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/Deck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/Battery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/Battery.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/Cabin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/Cabin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/Cannon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/Cannon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/CargoHold.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/CargoHold.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/Component.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/Component.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/DoubleCannon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/DoubleCannon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/LifeSupport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/LifeSupport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ShipBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ShipBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/ActivateState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/ActivateState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/AdventureState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/AdventureState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/ChooseShipPieceState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/ChooseShipPieceState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/DrawCardState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/DrawCardState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/GameState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/GameState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/GrabRewardState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/GrabRewardState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/HandleProjectileState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/HandleProjectileState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/RemoveCrewState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/RemoveCrewState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/RemoveGoodsState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/RemoveGoodsState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/SecondShipBuildingState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/SecondShipBuildingState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/ShipBuildingState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/ShipBuildingState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/ShipCorrectionState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/ShipCorrectionState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/ShipInitializationState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/ShipInitializationState.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/TestShipBuildingState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/state/TestShipBuildingState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/cliElements/CliForecast.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/cliElements/CliForecast.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/cliScreens/CliSecondShipBuildingScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/cliScreens/CliSecondShipBuildingScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/cardsReference.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/cardsReference.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/GameEventListenerStub.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/GameEventListenerStub.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ActivateStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ActivateStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/AddGoodsStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/AddGoodsStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/AdventureStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/AdventureStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ChoosePlanetStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ChoosePlanetStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ChooseShipPieceStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ChooseShipPieceStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/DrawCardStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/DrawCardStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/GameStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/GameStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/GrabRewardStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/GrabRewardStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/HandleProjectileStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/HandleProjectileStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/RemoveCrewStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/RemoveCrewStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/RemoveGoodsStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/RemoveGoodsStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ShipBuildingStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ShipBuildingStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ShipCorrectionStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ShipCorrectionStateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/StateTransitionUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/StateTransitionUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/client/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/client/ClientController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/ClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/SessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/SessionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/rmi/RmiClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/rmi/RmiClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/rmi/RmiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/rmi/RmiServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/socket/NotRegisteredSocketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/socket/NotRegisteredSocketHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/socket/SocketClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/socket/SocketClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/ServerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/ServerControllerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/ServerControllerInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/events/EventQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/events/EventQueue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/events/LobbyEventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/events/LobbyEventHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/events/types/ControllerEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/events/types/ControllerEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/events/types/LobbyDetailsEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/events/types/LobbyDetailsEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/events/types/SetActiveLobbiesEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/events/types/SetActiveLobbiesEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/lobby/Lobby.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/lobby/Lobby.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/controller/ClientEventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/controller/ClientEventHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/model/ClientModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/model/ClientModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/network/SocketTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/network/SocketTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/serverController/events/LobbyEventHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/serverController/events/LobbyEventHandlerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,9 +39,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
-        <option value="Record" />
         <option value="JUnit5 Test Class" />
+        <option value="Record" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -339,11 +319,24 @@
       <workItem from="1750405193518" duration="28896000" />
       <workItem from="1750445375080" duration="12124000" />
       <workItem from="1750482685499" duration="8469000" />
+      <workItem from="1750538544967" duration="238000" />
+      <workItem from="1750573134392" duration="14473000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -352,6 +345,15 @@
           <url>file://$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/model/state/ShipBuildingState.java</url>
           <line>56</line>
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/VirtualClient.java</url>
+          <line>5</line>
+          <properties class="it.polimi.ingsw.galaxytruckers.network.server.VirtualClient" method="notifyEvent">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -49,7 +49,12 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     public void setMyNickname(String nickname) {
         Player player = playerRegistry.addPlayer(nickname);
         model.setPlayer(player);
-        //model.setMetaState(MetaState.JOINORCREATE);
+    }
+
+    public void clearNickname() {
+        Player player = model.getClientPlayer();
+        playerRegistry.removePlayer(player);
+        model.setPlayer(null);
     }
 
     //--------------------------------------UPDATES FROM THE SERVER----------------------------------
@@ -65,9 +70,10 @@ public class ClientController implements ClientControllerInterface, ControllerTo
     @Override
     public void registerNickname(String nickname) throws IllegalArgumentException {
         try {
-            server.registerNickname(nickname);
             setMyNickname(nickname);
+            server.registerNickname(nickname);
         } catch (IllegalArgumentException | IllegalStateException e) {
+            clearNickname();
             view.reportError(e.getMessage());
         }
     }

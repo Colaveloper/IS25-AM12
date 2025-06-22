@@ -11,9 +11,7 @@ public class EventQueue<T extends Event> implements EventListener<T> {
 
     @Override
     public void notifyEvent(T event) {
-        if (!queue.offer(event)) {
-            throw new RuntimeException("Queue is full");
-        }
+        queue.add(event);
     }
 
     public T poll() throws InterruptedException {

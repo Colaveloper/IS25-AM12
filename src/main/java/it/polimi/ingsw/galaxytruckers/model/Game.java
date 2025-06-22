@@ -12,6 +12,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.dto.DtoConverter;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.GameSnapshot;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.ShipBoardDTO;
 import it.polimi.ingsw.galaxytruckers.serverController.utils.ConversionUtils;
+import it.polimi.ingsw.galaxytruckers.utils.LockUtils;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
@@ -212,7 +213,7 @@ public class Game implements GameInterface {
     public boolean tryEndGame() {
         return withStateWriteLock(() -> {
             if (gameOver) return false;
-            if (surrenderPolicy.getSurrenderedShips().size() == getShipBoards().size() ||
+            if ((surrenderPolicy.isSurrenderEnabled() && surrenderPolicy.getSurrenderedShips().size() == getShipBoards().size()) ||
                     deck.isEmpty()) {
                 endGame();
                 return true;
@@ -388,7 +389,7 @@ public class Game implements GameInterface {
 
     @Override
     public void loseGood(ShipBoard shipBoard, Point point) {
-        runRequest(() -> loseGood(shipBoard, point));
+        runRequest(() -> currentState.loseGood(shipBoard, point));
     }
 
     @Override
@@ -399,40 +400,19 @@ public class Game implements GameInterface {
 
     //region Utility methods
     private <T> T withStateReadLock(Supplier<T> method) {
-        return withStateLock(method, false);
+        return LockUtils.withLock(stateLock, method, false);
     }
 
     private void withStateReadLock(Runnable method) {
-        withStateReadLock(() -> {
-            method.run();
-            return null;
-        });
+        LockUtils.withLock(stateLock, method, false);
     }
 
     private <T> T withStateWriteLock(Supplier<T> method) {
-        return withStateLock(method, true);
+        return LockUtils.withLock(stateLock, method, true);
     }
 
     private void withStateWriteLock(Runnable method) {
-        withStateWriteLock(() -> {
-            method.run();
-            return null;
-        });
-    }
-
-    private  <T> T withStateLock(Supplier<T> method, boolean write) {
-        Lock lock;
-        if (write) {
-            lock = stateLock.writeLock();
-        } else {
-            lock = stateLock.readLock();
-        }
-        lock.lock();
-        try {
-            return method.get();
-        } finally {
-            lock.unlock();
-        }
+        LockUtils.withLock(stateLock, method, true);
     }
 
     private void runRequest(Runnable method) {

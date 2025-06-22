@@ -44,7 +44,6 @@ public class LobbyEventHandler extends EventQueueHandler<LobbyEvent> {
         Player player = Player.getPlayer(playerName);
         ClientHandler clientHandler = SessionManager.getInstance().getClient(player);
         if (clientHandler != null) {
-            if (event.shouldResume()) clientHandler.resume();
             clientHandler.notifyEvent(event);
         } else {
             lobby.skip(player);

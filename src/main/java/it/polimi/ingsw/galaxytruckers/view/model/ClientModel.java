@@ -144,6 +144,7 @@ public class ClientModel {
         synchronized (gameLock) {
             game.setCurrentState(gameState);
         }
+        metaState = MetaState.INGAME;
         observers.forEach(modelObserver -> modelObserver.notifyCurrentState(gameState));
     }
 

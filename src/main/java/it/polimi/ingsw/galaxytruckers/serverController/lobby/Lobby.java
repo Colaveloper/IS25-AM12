@@ -17,10 +17,13 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 public class Lobby implements LobbyInterface {
-    private final Object preparationLock = new Object();
+    private static final long removalDelay = 5;
+
+    private final Object paramLock = new Object();
 
     private final UUID id;
     private final Level level;
@@ -36,7 +39,11 @@ public class Lobby implements LobbyInterface {
     private final EventQueue<LobbyEvent> eventQueue;
     private final LobbyEventHandler lobbyEventHandler;
 
+    private final Set<Player> disconnectedPlayers = new HashSet<>();
+
     private final Consumer<Lobby> removeLobby;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private ScheduledFuture<?> scheduledFuture;
 
     public Lobby(GameInterface game, Player creator, Level level, int numPlayers, Consumer<Lobby> removeLobby) {
         this.game = game;
@@ -75,13 +82,13 @@ public class Lobby implements LobbyInterface {
     }
 
     public List<Player> getPlayers() {
-        synchronized (preparationLock) {
+        synchronized (paramLock) {
             return new ArrayList<>(players);
         }
     }
 
     public Map<Player, GameColor> getPlayerColors() {
-        synchronized (preparationLock) {
+        synchronized (paramLock) {
             return new HashMap<>(playerColors);
         }
     }
@@ -94,7 +101,7 @@ public class Lobby implements LobbyInterface {
      * @param player the player to add
      */
     public boolean addPlayer(Player player) {
-        synchronized (preparationLock) {
+        synchronized (paramLock) {
             checkLobbyState(LobbyState.PREPARATION);
             GameColor chosenColor = Arrays.stream(GameColor.values())
                     .filter(c -> !chosenColors.contains(c))
@@ -103,6 +110,10 @@ public class Lobby implements LobbyInterface {
             players.add(player);
             playerColors.put(player, chosenColor);
             player.setLobby(this);
+            if (scheduledFuture != null) {
+                scheduledFuture.cancel(true);
+                scheduledFuture = null;
+            }
             eventQueue.notifyEvent(new LobbyDetailsEvent(
                     player.getNickname(),
                     DtoConverter.getLobbyDetails(this)
@@ -117,12 +128,34 @@ public class Lobby implements LobbyInterface {
     }
 
     public void notifyPlayerDisconnection(Player player) {
-        eventQueue.notifyEvent(new PlayerDisconnectionEvent(player.getNickname()));
+        synchronized (paramLock) {
+            if (disconnectedPlayers.add(player)) {
+                eventQueue.notifyEvent(new PlayerDisconnectionEvent(player.getNickname()));
+                if (disconnectedPlayers.size() == getPlayers().size()) {
+                    scheduledFuture = scheduler.schedule(this::remove, removalDelay, TimeUnit.SECONDS);
+                    System.out.println("Scheduled lobby " + getId() + " removal");
+                }
+            }
+        }
     }
 
     public void notifyPlayerReconnection(Player player) {
-        checkLobbyState(LobbyState.INGAME);
-        game.requestSnapshot(player.getShipBoard().orElseThrow());
+        synchronized (paramLock) {
+            disconnectedPlayers.remove(player);
+            if (scheduledFuture != null) {
+                scheduledFuture.cancel(true);
+                scheduledFuture = null;
+            }
+            if (state == LobbyState.INGAME) {
+                game.requestSnapshot(player.getShipBoard().orElseThrow());
+            } else {
+                eventQueue.notifyEvent(new GameSnapshotEvent(
+                        player.getNickname(),
+                        DtoConverter.getLobbyDetails(this),
+                        null
+                ));
+            }
+        }
     }
 
     public void notifyPlayerExit(Player player) {

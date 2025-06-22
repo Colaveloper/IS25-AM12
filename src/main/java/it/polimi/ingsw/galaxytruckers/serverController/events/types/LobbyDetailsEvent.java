@@ -8,8 +8,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public record LobbyDetailsEvent(String playerName, LobbyDetailsDTO details) implements
-                                                                                                                        LobbyEvent {
+public record LobbyDetailsEvent(
+        String playerName,
+        LobbyDetailsDTO details
+) implements LobbyEvent {
+    @Override
+    public boolean shouldResume() {
+        return true;
+    }
+
     @Override
     public Optional<String> getReceiverName() {
         return Optional.of(playerName);

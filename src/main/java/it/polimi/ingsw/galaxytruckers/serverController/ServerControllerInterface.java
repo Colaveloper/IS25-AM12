@@ -1,14 +1,16 @@
 package it.polimi.ingsw.galaxytruckers.serverController;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.util.UUID;
+import java.util.function.Function;
 
 public interface ServerControllerInterface {
 
-    void requestActiveLobbies(Player player);
+    <T extends ClientHandler> T registerNickname(String nickname, Function<Player, T> handlerFunction);
 
     /**
      * Creates a new lobby for a game of the chosen level and with
@@ -44,8 +46,6 @@ public interface ServerControllerInterface {
      * @param player the player who has disconnected
      */
     void handlePlayerDisconnection(Player player);
-
-    void notifyPlayerReconnection(Player player);
 
     /**
      * Notifies other players in the lobby of the player's exit and interrupts

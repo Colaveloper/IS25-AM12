@@ -5,10 +5,13 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.messages.*;
+import it.polimi.ingsw.galaxytruckers.network.server.ClientEventQueue;
 import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.ControllerEvent;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyEvent;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
@@ -32,7 +35,7 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
     private final Thread requestThread;
     private volatile boolean isRunning = false;
 
-    private final BlockingDeque<Event> eventQueue = new LinkedBlockingDeque<>();
+    private final ClientEventQueue eventQueue = new ClientEventQueue();
 
     public SocketClientHandler(ObjectInputStream inputStream, ObjectOutputStream outputStream, Player player, ServerControllerInterface controller) {
         this.inputStream = inputStream;
@@ -52,13 +55,8 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
     }
 
     @Override
-    public void pause() {
-        //TODO: define pause mechanism
-    }
-
-    @Override
-    public void resume() {
-
+    public void pauseEvents() {
+        eventQueue.pause();
     }
 
     @Override
@@ -80,9 +78,8 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     private void updateTask() {
         while (isUpdating) {
-            Event event = null;
             try {
-                event = eventQueue.take();
+                Event event = eventQueue.poll();
                 synchronized (outputStream) {
                     outputStream.writeObject(new EventMessage(event));
                     outputStream.flush();
@@ -90,7 +87,7 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             } catch (IOException e) {
-                eventQueue.offerFirst(event);
+                eventQueue.clear();
                 handleIOException(e);
             }
         }
@@ -145,13 +142,12 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
     private void handleIOException(IOException e) {
         System.err.println("An IOException occurred while trying to communicate with the server.");
         e.printStackTrace(System.err);
-        stopRequestThread();
-        stopUpdateThread();
+        controller.handlePlayerDisconnection(player);
     }
 
     @Override
     public void notifyEvent(Event event) {
-        eventQueue.offer(event);
+        eventQueue.notifyEvent(event);
     }
 
     @Override

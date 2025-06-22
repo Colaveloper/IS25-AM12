@@ -5,10 +5,13 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
+import it.polimi.ingsw.galaxytruckers.network.server.ClientEventQueue;
 import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.ControllerEvent;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyEvent;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
@@ -30,43 +33,34 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
 
     private final Thread updateThread;
     private boolean running = false;
-    private final BlockingQueue<Event> events;
+    private final ClientEventQueue eventQueue = new ClientEventQueue();
 
     private final Player player;
 
-    private boolean paused = false;
-
     private final Object requestLock = new Object();
     private final Object eventLock = new Object();
-    private final Object queueLock = new Object();
 
     public RmiClientHandler(RemoteClient remoteClient, Player player, ServerControllerInterface controller) throws RemoteException {
         super();
         this.remoteClient = remoteClient;
         this.player = player;
         this.controller = controller;
-        this.events = new LinkedBlockingQueue<>();
         this.updateThread = new Thread(this::runUpdateThread, "UpdateThread");
         this.sessionManager = SessionManager.getInstance();
     }
 
     public void start() {
-        running = true;
-        updateThread.start();
-    }
-
-    @Override
-    public void pause() {
-        synchronized (queueLock) {
-            paused = true;
+        synchronized (eventLock) {
+            if (!running) {
+                running = true;
+                updateThread.start();
+            }
         }
     }
 
     @Override
-    public void resume() {
-        synchronized (queueLock) {
-            paused = false;
-        }
+    public void pauseEvents() {
+        eventQueue.pause();
     }
 
     @Override
@@ -94,7 +88,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
     protected void runUpdateThread() {
         while (running) {
             try {
-                Event event = events.take();
+                Event event = eventQueue.poll();
                 synchronized (eventLock) {
                     remoteClient.notifyEvent(event);
                 }
@@ -120,15 +114,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
 
     @Override
     public void notifyEvent(Event event) {
-        synchronized (queueLock) {
-            if (!paused) {
-                if (!events.offer(event)) {
-                    System.err.println("ERROR: The update queue for " + player.getNickname() +
-                            " has failed to handle all updates");
-                    stop();
-                }
-            }
-        }
+        eventQueue.notifyEvent(event);
     }
 
     // RemoteController

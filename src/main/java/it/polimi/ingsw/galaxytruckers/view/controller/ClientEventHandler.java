@@ -169,10 +169,11 @@ public class ClientEventHandler implements EventHandler<Event> {
             }
             case RemoveActiveLobbyEvent removeActiveLobbyEvent -> clientModel.notifyRemoveLobby(removeActiveLobbyEvent.lobbyId());
             case SetActiveLobbiesEvent setActiveLobbyEvent -> {
+                clientModel.setPlayer(playerRegistry.addPlayer(setActiveLobbyEvent.playerName()));
                 for(ActiveLobbyDTO lobby : setActiveLobbyEvent.activeLobbies()) {
                     clientModel.notifyNewLobby(new Lobby(lobby.id(), lobby.numPlayers(), lobby.level(), lobby.host()));
                 }
-                clientModel.setMetaState(MetaState.JOINORCREATE);
+                if (!setActiveLobbyEvent.reconnect()) clientModel.setMetaState(MetaState.JOINORCREATE);
             }
             case CurrentPlayerUpdateEvent currentPlayerUpdateEvent -> clientModel.notifyCurrentPlayerUpdate(
                     conversionUtils.convertName(currentPlayerUpdateEvent.playerName())
@@ -253,7 +254,6 @@ public class ClientEventHandler implements EventHandler<Event> {
         if (gameState == null) System.err.println("GameState is null");
         else {
             clientModel.notifyCurrentState(gameState);
-            clientModel.setMetaState(MetaState.INGAME);
         }
     }
 
@@ -262,7 +262,6 @@ public class ClientEventHandler implements EventHandler<Event> {
         if (state == null) System.err.println("GameState is null");
         else {
             clientModel.notifyCurrentState(state);
-            clientModel.setMetaState(MetaState.INGAME);
         }
     }
 }
