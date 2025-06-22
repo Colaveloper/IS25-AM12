@@ -55,12 +55,12 @@ public abstract class GuiGameScreen extends GuiScreen {
         HBox bottomBox = new HBox(10);
 
         PurpleVBox othersShipsVBox = getOtherShipsVBox();
-        othersShipsVBox.setScaleX(0.7);
-        othersShipsVBox.setScaleY(0.7);
+        othersShipsVBox.setScaleX(0.6);
+        othersShipsVBox.setScaleY(0.6);
         Group rescalingOtherShipsGroup = new Group(othersShipsVBox);
 
         VBox leftVBox = new PurpleVBox(rescalingOtherShipsGroup);
-        VBox.setVgrow(leftVBox, Priority.ALWAYS); // if HBox is in a VBox
+        VBox.setVgrow(leftVBox, Priority.ALWAYS);
 
         VBox centralVBox = getCentralVBox();
         HBox.setHgrow(centralVBox, Priority.ALWAYS);
@@ -105,9 +105,10 @@ public abstract class GuiGameScreen extends GuiScreen {
 
     private VBox getSideVBox() {
         VBox sideVBox = new PurpleVBox(10);
-        sideVBox.setAlignment(Pos.BOTTOM_CENTER);
+        sideVBox.setAlignment(Pos.CENTER);
 
         VBox freeUseVBox = getFreeUseVBox();
+        sideVBox.setAlignment(Pos.CENTER);
 
         GuiLog guiLog = this.guiLog;
         VBox.setVgrow(guiLog, Priority.ALWAYS);

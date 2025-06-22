@@ -84,7 +84,7 @@ public class GuiRewardScreen extends GuiAdventureScreen {
 
     @Override
     protected VBox getFreeUseVBox() {
-        VBox cardBox = new VBox(10);
+        VBox cardBox = super.getFreeUseVBox();
         cardBox.setAlignment(Pos.CENTER);
 
         Text title = new Text("Reward Phase");

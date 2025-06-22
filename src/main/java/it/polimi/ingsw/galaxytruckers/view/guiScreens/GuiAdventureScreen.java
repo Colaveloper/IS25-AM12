@@ -25,7 +25,12 @@ public abstract class GuiAdventureScreen extends GuiGameScreen {
 
     @Override
     protected VBox getFreeUseVBox() {
-        VBox cardBox = new VBox(5); // TODO: ADD CURRENT CARD
+        VBox cardBox = new VBox(5);
+        cardBox.setAlignment(Pos.CENTER);
+        guiAdventureCard().ifPresent((guiAdventureCard)->{
+            guiAdventureCard.setFitHeight(200);
+            cardBox.getChildren().add(guiAdventureCard);
+        });
         return cardBox;
     }
 
