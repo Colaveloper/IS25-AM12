@@ -32,12 +32,17 @@ public class GuiNewCardScreen extends GuiAdventureScreen {
         }
     }
 
-    @Override
-    protected VBox getFreeUseVBox() {
-        Optional<GuiAdventureCard> guiAdventureCard = guiAdventureCard();
-        guiAdventureCard.ifPresent(freeUseVBox.getChildren()::add);
-        return freeUseVBox;
-    }
+//    @Override
+//    protected VBox getFreeUseVBox() {
+//        VBox cardBox = new VBox(5);
+//        cardBox.setAlignment(Pos.CENTER);
+//        guiAdventureCard().ifPresent((guiAdventureCard)->{
+//            guiAdventureCard.setScaleX(2);
+//            guiAdventureCard.setScaleY(2);
+//            cardBox.getChildren().add(guiAdventureCard);
+//        });
+//        return freeUseVBox;
+//    }
 
     @Override
     protected GuiController getGuiController() {

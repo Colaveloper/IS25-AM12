@@ -38,7 +38,11 @@ public abstract class GuiAdventureScreen extends GuiGameScreen {
             cardBox.getChildren().add(new Label("You've surrendered, watch other players compete."));
             return cardBox;
         }
-        // TODO: ADD CURRENT CARD
+        cardBox.setAlignment(Pos.CENTER);
+        guiAdventureCard().ifPresent((guiAdventureCard)->{
+            guiAdventureCard.setFitHeight(200);
+            cardBox.getChildren().add(guiAdventureCard);
+        });
         return cardBox;
     }
 
