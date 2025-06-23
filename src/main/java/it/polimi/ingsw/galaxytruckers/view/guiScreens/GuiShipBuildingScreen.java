@@ -63,6 +63,7 @@ public abstract class GuiShipBuildingScreen extends GuiGameScreen {
     public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
         guiComponentBank.notifyRejectComponent(component);
         guiShipBoards.get(shipBoard).notifyRemoveComponent(oldPosition);
+        guiStatBox.notifyChange();
     }
 
     @Override
@@ -70,6 +71,7 @@ public abstract class GuiShipBuildingScreen extends GuiGameScreen {
         Component component = shipBoard.getComponentMap().get(point);
         guiShipBoards.get(shipBoard).notifyPlaceComponent(component, point, orientation);
         guiHands.get(shipBoard).notifyClearHand();
+        guiStatBox.notifyChange();
     }
 
     @Override
@@ -77,6 +79,7 @@ public abstract class GuiShipBuildingScreen extends GuiGameScreen {
         Component component = shipBoard.getComponentMap().get(point);
         guiShipBoards.get(shipBoard).notifyPlaceComponent(component, point, orientation);
         guiShipBoards.get(shipBoard).notifyRemoveComponent(oldPosition);
+        guiStatBox.notifyChange();
     }
 
     @Override

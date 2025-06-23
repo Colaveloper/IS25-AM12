@@ -20,6 +20,7 @@ public abstract class GuiGameScreen extends GuiScreen {
     protected final GuiLog guiLog;
     protected final GuiFlightBoard guiFlightBoard;
     protected final PurpleHBox guiButtonBox;
+    protected final GuiStatBox guiStatBox;
 
     public GuiGameScreen(ClientModel model, ControllerToServer controller, GameState state) {
         super(model, controller, state);
@@ -35,7 +36,7 @@ public abstract class GuiGameScreen extends GuiScreen {
         guiFlightBoard = new GuiFlightBoard(model.getGame().getFlightBoard(), getGuiController());
         guiLog = new GuiLog();
         guiButtonBox = new PurpleHBox(10);
-        guiButtonBox.setAlignment(Pos.CENTER);
+        guiStatBox = new GuiStatBox(myShipBoard);
     }
 
     public final Pane getNode() {
@@ -108,12 +109,14 @@ public abstract class GuiGameScreen extends GuiScreen {
         sideVBox.setAlignment(Pos.CENTER);
 
         VBox freeUseVBox = getFreeUseVBox();
-        sideVBox.setAlignment(Pos.CENTER);
+
+        GuiStatBox guiStatBox = this.guiStatBox;
+
 
         GuiLog guiLog = this.guiLog;
         VBox.setVgrow(guiLog, Priority.ALWAYS);
         guiLog.setMaxHeight(Double.MAX_VALUE);
-        sideVBox.getChildren().addAll(freeUseVBox, guiLog);
+        sideVBox.getChildren().addAll(freeUseVBox, guiStatBox, guiLog);
         return sideVBox;
     }
 
@@ -134,10 +137,12 @@ public abstract class GuiGameScreen extends GuiScreen {
     @Override
     public void notifyComponentChange(ShipBoard shipBoard, Point point) {
         guiShipBoards.get(shipBoard).notifyComponentChange(point);
+        guiStatBox.notifyChange();
     }
 
     @Override
     public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
         super.notifyRemoveComponent(shipBoard, point);
+        guiStatBox.notifyChange();
     }
 }

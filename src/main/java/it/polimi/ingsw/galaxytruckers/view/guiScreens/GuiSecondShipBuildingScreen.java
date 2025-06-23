@@ -154,6 +154,7 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
     public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
         guiStashes.get(shipBoard).notifyStash(component);
         guiShipBoards.get(shipBoard).notifyRemoveComponent(oldPosition);
+        guiStatBox.notifyChange();
     }
 
     @Override

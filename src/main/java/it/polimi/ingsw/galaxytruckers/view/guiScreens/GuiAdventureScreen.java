@@ -39,7 +39,7 @@ public abstract class GuiAdventureScreen extends GuiGameScreen {
             return cardBox;
         }
         cardBox.setAlignment(Pos.CENTER);
-        guiAdventureCard().ifPresent((guiAdventureCard)->{
+        guiAdventureCard().ifPresent((guiAdventureCard)-> {
             guiAdventureCard.setFitHeight(200);
             cardBox.getChildren().add(guiAdventureCard);
         });

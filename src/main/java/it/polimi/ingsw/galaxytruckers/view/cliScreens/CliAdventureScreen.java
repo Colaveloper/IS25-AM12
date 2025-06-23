@@ -19,6 +19,5 @@ public abstract class CliAdventureScreen extends CliScreen{
         imOut = gameState.getImOut();   //if player surrendered
         currentShip = gameState.getShipBoard(); // ship of the current player playing
         isMyTurn = currentShip == myShipBoard;
-
     }
 }

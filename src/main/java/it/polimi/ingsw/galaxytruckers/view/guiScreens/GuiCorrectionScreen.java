@@ -47,7 +47,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
         if (shipBroken) {
             message = "Your ship is broken. Choose a piece to keep by clicking on any component in that piece.";
         } else if (!shipValid) {
-            message = "Your ship has invalid component positioning. Guick on a component to remove it.";
+            message = "Your ship has invalid component positioning. Click on a component to remove it.";
         } else {
             message = "Your ship is valid. Wait for other players to correct their ships.";
         }
@@ -129,6 +129,8 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             String message = "Your ship is valid. Wait for other players to correct their ships.";
             guiLog.log(message);
         }
+
+        guiStatBox.notifyChange();
     }
 
     @Override
