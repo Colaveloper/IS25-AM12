@@ -92,6 +92,9 @@ public abstract class ShipBoard {
     //CliComponentBank interaction methods
 
     protected void resetLastComponent() {
+        if(lastPosition != null && lastComponent != null) {
+            componentMap.remove(lastPosition);
+        }
         this.lastComponent = null;
         this.lastPosition = null;
     }
