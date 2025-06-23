@@ -11,6 +11,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.types.PlayerDiscon
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,12 @@ class RmiClientHandlerTest {
         rmiClientHandler = new RmiClientHandler(remoteClient, controller);
         player.setLobby(lobby);
         rmiClientHandler.setSessionManager(sessionManager);
+    }
+
+    @AfterEach
+    void tearDown() {
+        Player.clear();
+        SessionManager.getInstance().clear();
     }
 
     @Test

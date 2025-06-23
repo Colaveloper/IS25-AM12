@@ -79,8 +79,8 @@ public class SocketTest {
     void cleanup() {
         System.out.println("TEST: cleanup");
         socketServer.stop();
-        SessionManager.getInstance().unregisterClient(Player.getPlayer("x"));
-        Player.removePlayer("x");
+        SessionManager.getInstance().clear();
+        Player.clear();
     }
 }
 

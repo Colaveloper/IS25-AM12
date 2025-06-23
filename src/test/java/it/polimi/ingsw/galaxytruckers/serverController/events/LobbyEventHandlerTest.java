@@ -39,6 +39,12 @@ class LobbyEventHandlerTest {
         lobbyEventHandler.start();
     }
 
+    @AfterEach
+    void tearDown() {
+        SessionManager.getInstance().clear();
+        Player.clear();
+    }
+
     @Test
     void broadCastUpdateTest() throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch(1);
@@ -67,14 +73,6 @@ class LobbyEventHandlerTest {
         } else {
             throw new RuntimeException("Timeout waiting for latch");
         }
-    }
-
-    @AfterEach
-    void tearDown() {
-        SessionManager.getInstance().unregisterClient(p1);
-        SessionManager.getInstance().unregisterClient(p2);
-        Player.removePlayer("p1");
-        Player.removePlayer("p2");
     }
 }
 

@@ -5,13 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="663e43fb-7c2d-4edd-be6d-afd39e028acc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/serverController/lobby/LobbyTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/serverController/lobby/PlayerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/lobby/Lobby.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/lobby/Lobby.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/lobby/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/lobby/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/ShipBoardStub.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/ShipBoardStub.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/SessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/server/SessionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/serverController/ServerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/network/RmiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/network/RmiTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/network/SocketTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/network/SocketTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/network/server/rmi/RmiClientHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/network/server/rmi/RmiClientHandlerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/network/server/rmi/RmiServerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/network/server/rmi/RmiServerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/serverController/ServerControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/serverController/ServerControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/serverController/events/LobbyEventHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/serverController/events/LobbyEventHandlerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/serverController/lobby/LobbyTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/serverController/lobby/LobbyTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/serverController/lobby/PlayerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/serverController/lobby/PlayerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,9 +162,19 @@
     "JUnit.RemoveGoodsStateTest.skipDoesNothingWhenOutOfTurn.executor": "Run",
     "JUnit.SecondDeckTest.initMasterDeck.executor": "Run",
     "JUnit.SecondDeckTest.initMasterDeckThrowsWithInvalidIndex.executor": "Run",
+    "JUnit.ServerControllerTest.executor": "Coverage",
     "JUnit.ServerControllerTest.handlePlayerDisconnectionWhenHandlerNotPresent.executor": "Run",
     "JUnit.ServerControllerTest.handlePlayerDisconnectionWhenPlayerNotPresent.executor": "Run",
     "JUnit.ServerControllerTest.handlePlayerDisconnectionWhenPlayerPresent.executor": "Debug",
+    "JUnit.ServerControllerTest.joinLobby.executor": "Run",
+    "JUnit.ServerControllerTest.joinLobbyThrowsIfNoLobbiesWithGivenId.executor": "Run",
+    "JUnit.ServerControllerTest.joinLobbyThrowsWhenThePlayerIsInAnotherGame.executor": "Run",
+    "JUnit.ServerControllerTest.newGame.executor": "Run",
+    "JUnit.ServerControllerTest.newGameThrowsExceptionIfAlreadyInALobby.executor": "Run",
+    "JUnit.ServerControllerTest.registerNicknameWithDisconnectedPlayerReconnects.executor": "Run",
+    "JUnit.ServerControllerTest.registerNicknameWithInvalidNicknameThrowsException.executor": "Run",
+    "JUnit.ServerControllerTest.registerNicknameWithNewPlayerAddsPlayer.executor": "Run",
+    "JUnit.ServerControllerTest.testProperConstructor.executor": "Run",
     "JUnit.ShipBoardTest$GeneralTests.activateThrowsExceptionWithInvalidPosition.executor": "Run",
     "JUnit.ShipBoardTest$GeneralTests.deactivateAll.executor": "Run",
     "JUnit.ShipBoardTest$GeneralTests.deactivateThrowsExceptionWithInvalidPosition.executor": "Run",
@@ -267,22 +281,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LobbyTest [*]" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true" repeat_mode="Until Failure">
-      <module name="GalaxyTruckers" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.serverController.lobby.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.lobby" />
-      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyTest" />
-      <option name="METHOD_NAME" value="" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Model tests" type="JUnit" factoryName="JUnit">
       <module name="GalaxyTruckers" />
       <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.model" />
@@ -293,64 +291,80 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PlayerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ServerControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GalaxyTruckers" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.serverController.lobby.*" />
+          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.serverController.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.lobby" />
-      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.lobby.PlayerTest" />
+      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.serverController" />
+      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.ServerControllerTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PlayerTest.addPlayerThrowsIfNicknameNotUnique" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ServerControllerTest.joinLobbyThrowsIfNoLobbiesWithGivenId" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GalaxyTruckers" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.serverController.lobby.*" />
+          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.serverController.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.lobby" />
-      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.lobby.PlayerTest" />
-      <option name="METHOD_NAME" value="addPlayerThrowsIfNicknameNotUnique" />
+      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.serverController" />
+      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.ServerControllerTest" />
+      <option name="METHOD_NAME" value="joinLobbyThrowsIfNoLobbiesWithGivenId" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PlayerTest.leaveLobby" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ServerControllerTest.joinLobbyThrowsWhenThePlayerIsInAnotherGame" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GalaxyTruckers" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.serverController.lobby.*" />
+          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.serverController.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.lobby" />
-      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.lobby.PlayerTest" />
-      <option name="METHOD_NAME" value="leaveLobby" />
+      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.serverController" />
+      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.ServerControllerTest" />
+      <option name="METHOD_NAME" value="joinLobbyThrowsWhenThePlayerIsInAnotherGame" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PlayerTest.setShipBoard" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ServerControllerTest.newGameThrowsExceptionIfAlreadyInALobby" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GalaxyTruckers" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.serverController.lobby.*" />
+          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.serverController.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.lobby" />
-      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.lobby.PlayerTest" />
-      <option name="METHOD_NAME" value="setShipBoard" />
+      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.serverController" />
+      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.ServerControllerTest" />
+      <option name="METHOD_NAME" value="newGameThrowsExceptionIfAlreadyInALobby" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServerControllerTest.registerNicknameWithInvalidNicknameThrowsException" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GalaxyTruckers" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.serverController.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.serverController" />
+      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.serverController.ServerControllerTest" />
+      <option name="METHOD_NAME" value="registerNicknameWithInvalidNicknameThrowsException" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -388,19 +402,19 @@
       <item itemvalue="JUnit.ALL-TESTS" />
       <item itemvalue="JUnit.Model tests" />
       <item itemvalue="JUnit.Controller tests" />
-      <item itemvalue="JUnit.PlayerTest" />
-      <item itemvalue="JUnit.PlayerTest.addPlayerThrowsIfNicknameNotUnique" />
-      <item itemvalue="JUnit.PlayerTest.leaveLobby" />
-      <item itemvalue="JUnit.PlayerTest.setShipBoard" />
-      <item itemvalue="JUnit.LobbyTest [*]" />
+      <item itemvalue="JUnit.ServerControllerTest" />
+      <item itemvalue="JUnit.ServerControllerTest.joinLobbyThrowsIfNoLobbiesWithGivenId" />
+      <item itemvalue="JUnit.ServerControllerTest.joinLobbyThrowsWhenThePlayerIsInAnotherGame" />
+      <item itemvalue="JUnit.ServerControllerTest.newGameThrowsExceptionIfAlreadyInALobby" />
+      <item itemvalue="JUnit.ServerControllerTest.registerNicknameWithInvalidNicknameThrowsException" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.PlayerTest" />
-        <item itemvalue="JUnit.PlayerTest.addPlayerThrowsIfNicknameNotUnique" />
-        <item itemvalue="JUnit.PlayerTest.leaveLobby" />
-        <item itemvalue="JUnit.PlayerTest.setShipBoard" />
-        <item itemvalue="JUnit.LobbyTest [*]" />
+        <item itemvalue="JUnit.ServerControllerTest.registerNicknameWithInvalidNicknameThrowsException" />
+        <item itemvalue="JUnit.ServerControllerTest" />
+        <item itemvalue="JUnit.ServerControllerTest.joinLobbyThrowsIfNoLobbiesWithGivenId" />
+        <item itemvalue="JUnit.ServerControllerTest.newGameThrowsExceptionIfAlreadyInALobby" />
+        <item itemvalue="JUnit.ServerControllerTest.joinLobbyThrowsWhenThePlayerIsInAnotherGame" />
       </list>
     </recent_temporary>
   </component>
@@ -465,36 +479,25 @@
     <SUITE FILE_PATH="coverage/IS25_AM12$ComponentBankTest.ic" NAME="ComponentBankTest Coverage Results" MODIFIED="1750628782827" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/IS25_AM12$ShipBuildingStateTest.ic" NAME="ShipBuildingStateTest Coverage Results" MODIFIED="1750513119668" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
-      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
+    <SUITE FILE_PATH="coverage/IS25_AM12$ServerControllerTest.ic" NAME="ServerControllerTest Coverage Results" MODIFIED="1750683995594" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.serverController.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/IS25_AM12$RemoveCrewStateTest.ic" NAME="RemoveCrewStateTest Coverage Results" MODIFIED="1750527532228" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+    <SUITE FILE_PATH="coverage/IS25_AM12$ShipBuildingStateTest.ic" NAME="ShipBuildingStateTest Coverage Results" MODIFIED="1750513119668" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$ShipInitializationStateTest.ic" NAME="ShipInitializationStateTest Coverage Results" MODIFIED="1750524982473" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/IS25_AM12$Controller_tests.ic" NAME="Controller tests Coverage Results" MODIFIED="1750676157435" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/IS25_AM12$StateTests.ic" NAME="StateTests Coverage Results" MODIFIED="1750536673075" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
-    <SUITE FILE_PATH="coverage/IS25_AM12$ActivateStateTest.ic" NAME="ActivateStateTest Coverage Results" MODIFIED="1750536664119" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
-      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
-    </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$BigMeteorTest.ic" NAME="BigMeteorTest Coverage Results" MODIFIED="1750626793218" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/IS25_AM12$CargoHoldTest.ic" NAME="CargoHoldTest Coverage Results" MODIFIED="1750627918759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
-      <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>
-    </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$ChooseShipPieceStateTest.ic" NAME="ChooseShipPieceStateTest Coverage Results" MODIFIED="1750531200283" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
-      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/IS25_AM12$GrabRewardStateTest.ic" NAME="GrabRewardStateTest Coverage Results" MODIFIED="1750529604499" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$ShipBoardTest_SpecificComponentTests_CabinTests_initializeCabinThrowsWithInvalidPosition.ic" NAME="ShipBoardTest$SpecificComponentTests$CabinTests.initializeCabinThrowsWithInvalidPosition Coverage Results" MODIFIED="1750631788239" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/IS25_AM12$Model_tests.ic" NAME="Model tests Coverage Results" MODIFIED="1750667635017" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/IS25_AM12$ConnectorTest.ic" NAME="ConnectorTest Coverage Results" MODIFIED="1750628137963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>
     </SUITE>
@@ -502,9 +505,6 @@
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$ChoosePlanetStateTest.ic" NAME="ChoosePlanetStateTest Coverage Results" MODIFIED="1750531544659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
-      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/IS25_AM12$RemoveGoodsStateTest.ic" NAME="RemoveGoodsStateTest Coverage Results" MODIFIED="1750526415845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$DrawCardStateTest.ic" NAME="DrawCardStateTest Coverage Results" MODIFIED="1750530734994" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
@@ -517,6 +517,26 @@
       <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$ALL_TESTS.ic" NAME="ALL-TESTS Coverage Results" MODIFIED="1750624108890" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/IS25_AM12$RemoveCrewStateTest.ic" NAME="RemoveCrewStateTest Coverage Results" MODIFIED="1750527532228" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/IS25_AM12$Controller_tests.ic" NAME="Controller tests Coverage Results" MODIFIED="1750684756480" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/IS25_AM12$ActivateStateTest.ic" NAME="ActivateStateTest Coverage Results" MODIFIED="1750536664119" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/IS25_AM12$CargoHoldTest.ic" NAME="CargoHoldTest Coverage Results" MODIFIED="1750627918759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/IS25_AM12$PlayerTest.ic" NAME="PlayerTest Coverage Results" MODIFIED="1750676212775" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.serverController.lobby.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/IS25_AM12$GrabRewardStateTest.ic" NAME="GrabRewardStateTest Coverage Results" MODIFIED="1750529604499" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/IS25_AM12$Model_tests.ic" NAME="Model tests Coverage Results" MODIFIED="1750667635017" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/IS25_AM12$RemoveGoodsStateTest.ic" NAME="RemoveGoodsStateTest Coverage Results" MODIFIED="1750526415845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>
+    </SUITE>
     <SUITE FILE_PATH="coverage/IS25_AM12$ShipBoardTest.ic" NAME="ShipBoardTest Coverage Results" MODIFIED="1750629533253" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>
     </SUITE>

@@ -21,7 +21,8 @@ import java.util.function.Function;
 public class ServerController implements ServerControllerInterface {
 
     private final GameModelInterface model;
-    private final EventQueue<ControllerEvent> eventQueue;
+    private EventQueue<ControllerEvent> eventQueue;
+
     private final Map<UUID, Lobby> idToLobby = new HashMap<>();
     private final Set<Lobby> activeLobbies = new HashSet<>();
 
@@ -32,6 +33,12 @@ public class ServerController implements ServerControllerInterface {
         this.eventQueue = new EventQueue<>();
         ControllerEventHandler evenQueueHandler = new ControllerEventHandler(eventQueue);
         evenQueueHandler.start();
+    }
+
+    @VisibleForTesting
+    public ServerController(GameModelInterface model, EventQueue<ControllerEvent> eventQueue) {
+        this.model = model;
+        this.eventQueue = eventQueue;
     }
 
     @Override
@@ -66,22 +73,24 @@ public class ServerController implements ServerControllerInterface {
 
     @Override
     public LobbyInterface newGame(Player creator, Level level, int numPlayers) {
+        Lobby newLobby;
         synchronized (lock) {
             if (creator.getLobby().isPresent()) {
                 throw new IllegalStateException("You are already in a lobby!");
             }
             GameInterface game = model.createGame(level, numPlayers);
-            Lobby newLobby = new Lobby(game, creator, level, numPlayers, this::removeLobby);
+            newLobby = new Lobby(game, creator, level, numPlayers, this::removeLobby);
             idToLobby.put(newLobby.getId(), newLobby);
             activeLobbies.add(newLobby);
             eventQueue.notifyEvent(new AddActiveLobbyEvent(DtoConverter.getActiveLobby(newLobby)));
             System.out.println(creator.getNickname() + " has created a new lobby: " + newLobby.getId());
-            return newLobby;
         }
+        return newLobby;
     }
 
     @Override
     public LobbyInterface joinLobby(Player player, UUID lobbyID) {
+        Lobby lobby;
         synchronized (lock) {
             if (player.getLobby().isPresent()) {
                 throw new IllegalStateException("You are already in a lobby!");
@@ -89,14 +98,14 @@ public class ServerController implements ServerControllerInterface {
             if (!idToLobby.containsKey(lobbyID)) {
                 throw new IllegalArgumentException("Lobby with ID " + lobbyID + " does not exist");
             }
-            Lobby lobby = idToLobby.get(lobbyID);
+            lobby = idToLobby.get(lobbyID);
             if (lobby.addPlayer(player)) {
                 activeLobbies.remove(lobby);
                 eventQueue.notifyEvent(new RemoveActiveLobbyEvent(lobbyID));
             }
             System.out.println(player.getNickname() + " joined the lobby " + lobbyID);
-            return lobby;
         }
+        return lobby;
     }
 
     @Override
@@ -141,8 +150,10 @@ public class ServerController implements ServerControllerInterface {
 
     @VisibleForTesting
     public Map<UUID, Lobby> getIdToLobby() {
+        Map<UUID, Lobby> res;
         synchronized (lock) {
-            return new HashMap<>(idToLobby);
+            res = new HashMap<>(idToLobby);
         }
+        return res;
     }
 }

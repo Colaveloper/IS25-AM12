@@ -20,6 +20,11 @@ class PlayerTest {
         p1 = Player.addPlayer("p1");
     }
 
+    @AfterEach
+    void tearDown() {
+        Player.clear();
+    }
+
     @Test
     void addPlayer() {
         assertEquals(p1, Player.getPlayer("p1"));
@@ -76,10 +81,5 @@ class PlayerTest {
         assertTrue(p1.getLobby().isEmpty());
         assertTrue(p1.getShipBoard().isEmpty());
         assertThrows(IllegalArgumentException.class, () -> Player.getPlayer(shipBoard));
-    }
-
-    @AfterEach
-    void tearDown() {
-        Player.clear();
     }
 }

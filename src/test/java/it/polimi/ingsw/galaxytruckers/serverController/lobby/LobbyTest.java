@@ -55,6 +55,11 @@ class LobbyTest {
         lobby.setEventQueue(eventQueue);
     }
 
+    @AfterEach
+    void cleanup() {
+        Player.clear();
+    }
+
     @Test
     void testSetup() {
         assertEquals(Level.SECOND, lobby.getLevel());
@@ -459,7 +464,7 @@ class LobbyTest {
 
         @Test
         void choosePlanet() {
-            assertThrows(IllegalStateException.class, () -> lobby.choosePlanet(p1,0));
+            assertThrows(IllegalStateException.class, () -> lobby.choosePlanet(p1, 0));
         }
 
         @Test
@@ -471,10 +476,5 @@ class LobbyTest {
         void giveUp() {
             assertThrows(IllegalStateException.class, () -> lobby.giveUp(p1));
         }
-    }
-
-    @AfterEach
-    void cleanup() {
-        Player.clear();
     }
 }

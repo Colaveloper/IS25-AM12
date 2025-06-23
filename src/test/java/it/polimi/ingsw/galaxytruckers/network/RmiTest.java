@@ -80,6 +80,7 @@ public class RmiTest {
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
+            SessionManager.getInstance().clear();
         }
     }
 
