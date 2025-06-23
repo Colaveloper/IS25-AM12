@@ -1,16 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events.types;
 
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
-
 import java.awt.*;
 
+/**
+ * Event representing a player using a battery at a specific location on their ship.
+ *
+ * @param playerName the name of the player using the battery
+ * @param point the location on the ship where the battery is used
+ */
 public record UseBatteryEvent(String playerName, Point point) implements LobbyEvent {
-    public static UseBatteryEvent from(ShipBoard shipBoard, Point point) {
-        return new UseBatteryEvent(
-                Player.getPlayer(shipBoard).getNickname(),
-                point
-        );
-    }
-
 }

@@ -1,13 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events.types;
 
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
-
+/**
+ * Event signaling that a player's ship has become valid.
+ *
+ * @param playerName the name of the player whose ship is being validated
+ */
 public record ValidateShipEvent(String playerName) implements LobbyEvent {
-    public static ValidateShipEvent from(ShipBoard shipBoard) {
-        return new ValidateShipEvent(
-                Player.getPlayer(shipBoard).getNickname()
-        );
-    }
-
 }

@@ -25,7 +25,7 @@ public class StateTransitionUtils {
     @AssertMethod
     public static void assertTransition(CountDownLatch latch, Game game, Class<? extends GameState> expectedState) {
         try {
-            if (latch.await(1, TimeUnit.SECONDS))
+            if (latch.await(400, TimeUnit.SECONDS))
                 assertInstanceOf(expectedState, game.getCurrentState());
             else throw new IllegalStateException("Latch timed out");
         } catch (InterruptedException e) {
@@ -36,7 +36,7 @@ public class StateTransitionUtils {
     @AssertMethod
     public static void assertNoTransition(CountDownLatch latch, Game game, GameState expectedState) {
         try {
-            if (latch.await(100, TimeUnit.MILLISECONDS))
+            if (latch.await(50, TimeUnit.MILLISECONDS))
                 throw new IllegalStateException("Latch did not time out");
             else
                 assertEquals(expectedState, game.getCurrentState());

@@ -7,16 +7,12 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Event signaling the end of the game, containing the final scores for each player.
+ *
+ * @param playerToScore a map from player names to their final scores
+ */
 public record GameEndEvent(Map<String, Integer> playerToScore) implements LobbyEvent {
-    public static GameEndEvent from(Map<ShipBoard, Integer> shipToScore) {
-        return new GameEndEvent(
-                shipToScore.entrySet().stream()
-                        .collect(Collectors.toMap(
-                                e -> Player.getPlayer(e.getKey()).getNickname(),
-                                Map.Entry::getValue))
-        );
-    }
-
     @Override
     public void runLobbyAction(Lobby lobby) {
         lobby.remove();
