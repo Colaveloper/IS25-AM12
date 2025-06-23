@@ -72,6 +72,7 @@ public class GuiGameCreationScreen extends GuiScreen {
             if (selectedLevel != null && selectedPlayers != null) {
                 try {
                     controller.requestNewGame(selectedLevel, selectedPlayers);
+                    createButton.setDisable(true);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }

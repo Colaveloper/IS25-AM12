@@ -53,12 +53,12 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Virt
     private void handleNetworkError(RemoteException e) {
         e.printStackTrace(System.err);
         synchronized (connectionLock) {
-            if (connected) {
-                connected = false;
-                scheduler.shutdownNow();
-                scheduleTask.cancel(true);
-                //TODO: finish implementing reconnection on network failure
-            }
+//            if (connected) { // todo: restore in production
+//                connected = false;
+//                scheduler.shutdownNow();
+//                scheduleTask.cancel(true);
+//                //TODO: finish implementing reconnection on network failure
+//            }
         }
         throw new IllegalStateException("Client is not connected");
     }

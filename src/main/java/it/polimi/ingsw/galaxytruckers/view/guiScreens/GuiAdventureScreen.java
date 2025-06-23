@@ -15,6 +15,7 @@ import java.util.Optional;
 public abstract class GuiAdventureScreen extends GuiGameScreen {
 
     protected final AdventureState state;
+    protected VBox cardBox;
     
     public GuiAdventureScreen(ClientModel model, ControllerToServer controller, AdventureState gameState) {
         super(model, controller, gameState);
@@ -33,7 +34,7 @@ public abstract class GuiAdventureScreen extends GuiGameScreen {
 
     @Override
     protected VBox getFreeUseVBox() {
-        VBox cardBox = new VBox(5);
+        cardBox = new VBox(5);
         if (state.getGame().getGivenUpShips().contains(myShipBoard)) {
             cardBox.getChildren().add(new Label("You've surrendered, watch other players compete."));
             return cardBox;

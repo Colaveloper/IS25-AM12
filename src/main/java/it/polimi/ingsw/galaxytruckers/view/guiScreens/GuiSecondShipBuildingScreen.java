@@ -197,6 +197,8 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
 
                 guiButtonBox.getChildren().clear();
                 guiButtonBox.getChildren().add(releaseButton);
+
+                guiStatBox.notifyChange();
             });
         } else {
             Platform.runLater(() -> {
@@ -209,6 +211,7 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
     @Override
     public void setForecastDeck(List<AdventureCard> adventureCards) {
         guiForecast.setForecastDeck(adventureCards);
+
     }
 
     @Override
@@ -241,7 +244,11 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
             @Override
             public void requestRandComponent() {
                 if (state.getAvailableActions().contains(StateActions.REQUEST_RAND_COMPONENT)) {
-                    controller.requestRandComponent();
+                    if (!state.componentInHand()) {
+                        controller.requestRandComponent();
+                    } else {
+                        guiLog.log("Don't be greedy! Free you hand first");
+                    }
                 }
             }
 

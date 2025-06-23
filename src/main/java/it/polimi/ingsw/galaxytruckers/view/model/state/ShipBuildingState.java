@@ -135,7 +135,7 @@ public sealed abstract class ShipBuildingState extends GameState permits
      *
      * @return true if the player has a component in hand, false otherwise
      */
-    protected boolean componentInHand(){
+    public boolean componentInHand(){
         return myShip.getLastComponent() != null && myShip.getLastPosition() == null;
     }
 

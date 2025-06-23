@@ -40,6 +40,7 @@ public class GuiForecast extends PurpleHBox {
 
     private void updateCoveredDecks() {
         for (int i = 0; i < blockedForecasts.length; i++) {
+            slots.get(i).getChildren().clear();
 
             ShipBoard shipBoard = blockedForecasts[i];
             if (shipBoard == null) {
@@ -106,10 +107,7 @@ public class GuiForecast extends PurpleHBox {
     public void notifyMeReleaseForecast() {
         Platform.runLater(()-> {
             meWatching = false;
-            for (StackPane slot : slots) {
-                slot.getChildren().setAll(createFreeForecast());
-            }
+            updateCoveredDecks();
         });
     }
-
 }
