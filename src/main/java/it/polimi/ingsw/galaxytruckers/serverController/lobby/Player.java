@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
@@ -11,19 +12,19 @@ public class Player {
     private final static Map<ShipBoard, Player> shipToPlayer = new HashMap<>();
 
     private final String nickname;
-    private final AtomicReference<GameColor> color = new AtomicReference<>();
     private final AtomicReference<Lobby> lobby = new AtomicReference<>();
     private final AtomicReference<ShipBoard> shipBoard = new AtomicReference<>();
 
     public static Player addPlayer(String nickname) {
+        Player player;
         synchronized (nicknameToPlayer) {
             if (nicknameToPlayer.containsKey(nickname)) {
                 throw new IllegalArgumentException("Nickname already exists");
             }
-            Player player = new Player(nickname);
+            player = new Player(nickname);
             nicknameToPlayer.put(nickname, player);
-            return player;
         }
+        return player;
     }
 
     public static void removePlayer(String nickname) {
@@ -33,14 +34,28 @@ public class Player {
     }
 
     public static Player getPlayer(String nickname) {
+        Player player;
         synchronized (nicknameToPlayer) {
-            return nicknameToPlayer.get(nickname);
+            player = nicknameToPlayer.get(nickname);
         }
+        return player;
     }
 
     public static Set<Player> getAllPlayers() {
+        Set<Player> res;
         synchronized (nicknameToPlayer) {
-            return new HashSet<>(nicknameToPlayer.values());
+            res = new HashSet<>(nicknameToPlayer.values());
+        }
+        return res;
+    }
+
+    @VisibleForTesting
+    public static void clear() {
+        synchronized (nicknameToPlayer) {
+            nicknameToPlayer.clear();
+        }
+        synchronized (shipToPlayer) {
+            shipToPlayer.clear();
         }
     }
 
@@ -69,16 +84,8 @@ public class Player {
         return Optional.ofNullable(this.shipBoard.get());
     }
 
-    public Optional<GameColor> getColor() {
-        return Optional.ofNullable(this.color.get());
-    }
-
     public void setLobby(Lobby lobby) {
         this.lobby.set(lobby);
-    }
-
-    protected void setColor(GameColor color) {
-        this.color.set(color);
     }
 
     protected void setShipBoard(ShipBoard shipBoard) {
@@ -101,7 +108,9 @@ public class Player {
 
     public void leaveLobby() {
         this.lobby.set(null);
+        synchronized (shipToPlayer) {
+            shipToPlayer.remove(shipBoard.get());
+        }
         this.shipBoard.set(null);
-        this.color.set(null);
     }
 }

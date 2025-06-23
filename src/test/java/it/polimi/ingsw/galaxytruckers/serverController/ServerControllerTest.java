@@ -3,6 +3,8 @@ package it.polimi.ingsw.galaxytruckers.serverController;
 import it.polimi.ingsw.galaxytruckers.model.GameModel;
 import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
+import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
+import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Lobby;
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import org.junit.jupiter.api.AfterEach;
@@ -15,6 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class ServerControllerTest {
     ServerController testController;
@@ -29,8 +32,7 @@ class ServerControllerTest {
     @AfterEach
     void cleanup(){
         testController.getIdToLobby().clear();
-        Player.removePlayer("player1");
-        Player.removePlayer("player2");
+        Player.clear();
     }
 
     @Test
@@ -65,35 +67,22 @@ class ServerControllerTest {
 
     @Test
     void handlePlayerDisconnectionWhenPlayerPresent(){
-        // player 1 creates game
-        Player p1 = Player.addPlayer("player1");
-        testController.newGame(p1, Level.SECOND, 2);
-
-        // grabbing the key
-        Iterator<UUID> iterator = testController.getIdToLobby().keySet().iterator();
-        assertTrue(iterator.hasNext());
-        UUID firstKey = iterator.next();
-        System.out.println("First key: " + firstKey);
-
         // player 2 joins with the key
         Player p2 = Player.addPlayer("player2");
-        testController.joinLobby(p2, firstKey);
+        SessionManager.getInstance().registerClient(p2, mock(ClientHandler.class));
 
         // player 2 disconnects
         testController.handlePlayerDisconnection(p2);
-        assertTrue(testController.getIdToLobby().isEmpty());
+        assertNull(Player.getPlayer("player2"));
     }
 
     @Test
-    void handlePlayerDisconnectionWhenPlayerNotPresent(){
-        // player 1 creates game
-        Player p1 = Player.addPlayer("player1");
-        testController.newGame(p1, Level.SECOND, 2);
-
+    void handlePlayerDisconnectionWhenHandlerNotPresent(){
         // player 2 doesn't join, but tries to disconnect
         Player p2 = Player.addPlayer("player2");
+        Player.removePlayer("player2");
         testController.handlePlayerDisconnection(p2);
-        assertThrows(IllegalArgumentException.class, () -> Player.getPlayer("player2"));
+        assertFalse(SessionManager.getInstance().isPlayerActive(Player.getPlayer("player2")));
     }
 
     @Test
