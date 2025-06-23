@@ -7,6 +7,9 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a life support system component on the spaceship.
+ */
 public final class LifeSupport extends Component {
     private final CrewType crewType;
 

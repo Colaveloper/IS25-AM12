@@ -91,11 +91,6 @@ public abstract class CliScreen extends Screen {
         return description;
     }
 
-    protected void printShips() {
-//        flightBoard.getNewDescription().forEach(System.out::println);
-//        allShips.getNewDescription().forEach(System.out::println);//todo sistemare altri tipi di allships
-    }
-
     protected void printActions() {
         if(!model.getGame().getGivenUpShips().contains(model.getClientPlayer().getShipBoard())) {
             List<String> actions = new ArrayList<>();

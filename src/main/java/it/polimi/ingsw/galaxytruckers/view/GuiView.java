@@ -81,7 +81,6 @@ public class GuiView extends View<GuiScreen> {
         stage.show();
     }
 
-    // TODO: move overrides upwards in view
     //region State-Notify methods
     @Override
     public void notifyMetaState(MetaState metaState) {

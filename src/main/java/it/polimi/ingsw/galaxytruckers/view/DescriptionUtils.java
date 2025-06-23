@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * Utility class for text formatting and manipulation in the Galaxy Truckers game.
+ * Utility class for text formatting and manipulation.
  * This class provides methods for formatting text displays, such as placing text
  * side by side and adding borders with titles around text blocks.
  * It properly handles ANSI escape sequences when calculating text widths.
