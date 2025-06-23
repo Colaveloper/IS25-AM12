@@ -61,7 +61,7 @@ class ShipBuildingStateTest {
 
         @AssertMethod
         public void assertTransition() {
-            StateTransitionUtils.assertTransition(latch,game, ShipCorrectionState.class);
+            StateTransitionUtils.assertTransition(latch,game,ShipCorrectionState.class);
         }
 
         @Test
@@ -162,15 +162,12 @@ class ShipBuildingStateTest {
         }
 
         @Test
-        void lastFlipHourglassThrowsExceptionIfShipIsNotCompleted() {
+        void lastFlipHourglassThrowsExceptionIfShipIsNotCompleted() throws InterruptedException {
             Hourglass hourglass = shipBuildingState.getHourglass();
-            shipBuildingState.getHourglass().setDuration(10);
-            while (!hourglass.isLastFlip()) {
-                try {
-                    shipBuildingState.flipHourglass(shipBoards.getFirst());
-                } catch (IllegalStateException _) {
-                }
-            }
+            hourglass.stop();
+            shipBuildingState.getHourglass().setDuration(100);
+            shipBuildingState.flipHourglass(shipBoards.getFirst());
+            Thread.sleep(300); // wait for the hourglass to expire
             assertThrows(IllegalStateException.class, () -> shipBuildingState.flipHourglass(shipBoards.getFirst()));
         }
 
@@ -294,11 +291,11 @@ class ShipBuildingStateTest {
             @Test
             void lastFlipHourglassEndsBuilding() throws InterruptedException{
                 shipBuildingState.getHourglass().stop();
-                shipBuildingState.getHourglass().setDuration(1);
+                shipBuildingState.getHourglass().setDuration(100);
 
                 for (int i = 1; i < 3; i++) {
                     shipBuildingState.flipHourglass(shipBoards.getFirst());
-                    Thread.sleep(1050);
+                    Thread.sleep(300); // wait for the hourglass to expire
                 }
                 assertTransition();
             }
