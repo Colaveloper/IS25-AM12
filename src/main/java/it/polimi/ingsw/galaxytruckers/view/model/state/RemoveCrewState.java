@@ -7,9 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Represents the state where players must remove crew members in the Galaxy Truckers game.
+ * This state is triggered when a ship encounters a situation that requires crew sacrifice,
+ * such as the slavers card. The player must choose which crew members to remove from their ship.
+ */
 public final class RemoveCrewState extends AdventureState {
+    /** The number of crew members that must be sacrificed in this state */
     int crewSacrifice;
 
+    /**
+     * Creates a new RemoveCrewState with the specified parameters.
+     * Initializes the state with the player's ship, the number of crew members to sacrifice,
+     * and the currently active ship.
+     *
+     * @param myShip The ship board of the local player
+     * @param crewSacrifice The number of crew members that must be sacrificed
+     * @param currentShip The ship board that is currently active
+     */
     public RemoveCrewState(ShipBoard myShip, int crewSacrifice, ShipBoard currentShip) {
         this.myShip = myShip;
         this.crewSacrifice = crewSacrifice;

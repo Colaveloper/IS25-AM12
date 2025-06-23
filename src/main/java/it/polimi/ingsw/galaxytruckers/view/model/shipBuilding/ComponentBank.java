@@ -1,8 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableGeneric;
-import it.polimi.ingsw.galaxytruckers.view.observables.ObservableList;
-
 import java.util.ArrayList;
 import java.util.List;
 

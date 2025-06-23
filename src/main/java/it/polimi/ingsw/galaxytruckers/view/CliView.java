@@ -18,9 +18,22 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Command-line interface implementation of the View.
+ * This class provides the command-line user interface for the Galaxy Truckers game,
+ * handling rendering of game state and user input processing.
+ */
 public class CliView extends View<CliScreen> {
     CliScreen currentScreen;
 
+    /**
+     * Constructs a new command-line interface view.
+     * Initializes the view with the given controller and model,
+     * starts the input processing loop, and sets the initial state to REGISTER.
+     *
+     * @param controller The client controller for handling user commands
+     * @param model The client model containing game data
+     */
     public CliView(ClientController controller, ClientModel model) {
         super(model, controller, new CliScreenFactory());
         startInputLoop();
@@ -247,6 +260,12 @@ public class CliView extends View<CliScreen> {
     }
     //endregion
 
+    /**
+     * Starts a background thread to continuously process user input.
+     * The thread reads input from the console, validates it against the current screen's
+     * requirements, and then invokes the appropriate action. If cheat codes are enabled,
+     * input may be provided by the cheat system instead of user input.
+     */
     private void startInputLoop() {
         new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
