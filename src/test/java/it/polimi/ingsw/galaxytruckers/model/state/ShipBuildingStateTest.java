@@ -23,6 +23,7 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -161,16 +162,14 @@ class ShipBuildingStateTest {
         }
 
         @Test
-        void lastFlipHourglassThrowsExceptionIfShipIsNotCompleted() throws InterruptedException {
+        void lastFlipHourglassThrowsExceptionIfShipIsNotCompleted() {
             Hourglass hourglass = shipBuildingState.getHourglass();
             shipBuildingState.getHourglass().setDuration(10);
-            for (int i = 1; i < 2; i++) {
+            while (!hourglass.isLastFlip()) {
                 try {
                     shipBuildingState.flipHourglass(shipBoards.getFirst());
-                } catch (IllegalStateException e) {
-                    throw new RuntimeException("Timer is still running, i = " + i);
+                } catch (IllegalStateException _) {
                 }
-                Thread.sleep(20);
             }
             assertThrows(IllegalStateException.class, () -> shipBuildingState.flipHourglass(shipBoards.getFirst()));
         }
@@ -447,6 +446,14 @@ class ShipBuildingStateTest {
         @Test
         void releaseForecastIsUnsupported() {
             assertThrows(UnsupportedOperationException.class, () -> shipBuildingState.releaseForecast(shipBoards.getFirst()));
+        }
+
+        @Test
+        void endBuildingPlacesOnFlightBoard() {
+            shipBuildingState.placeShipOnFlightBoard(shipBoards.getFirst());
+            shipBuildingState.endBuilding();
+            assertTransition();
+            assertEquals(new HashSet<>(shipBoards), game.getFlightBoard().getShipToPlace().keySet());
         }
 
         @Nested

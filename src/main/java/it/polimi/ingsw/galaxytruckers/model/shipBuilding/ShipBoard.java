@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.ComponentRegistry;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
@@ -235,8 +236,8 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     // Components Observers
 
-    protected Point getCenter() {
-        return center;
+    public Point getCenter() {
+        return new Point(center);
     }
 
     public Map<Point, Component> getComponentMap() {

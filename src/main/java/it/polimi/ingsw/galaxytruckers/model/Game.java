@@ -169,9 +169,11 @@ public class Game implements GameInterface {
      * @return a {@link Set} containing all the game's ship boards
      */
     public Set<ShipBoard> getShipBoards() {
+        Set<ShipBoard> res;
         synchronized (shipBoards) {
-            return new HashSet<>(shipBoards);
+            res = new HashSet<>(shipBoards);
         }
+        return res;
     }
 
     /**
@@ -207,8 +209,9 @@ public class Game implements GameInterface {
     }
 
     /**
-     * Sets game state to the end game state if there are no
-     * more ships playing
+     * Ends the game and computes the final scores if either the deck is empty or
+     * all ships have surrendered
+     * @return {@code true} if the game was ended, {@code false} otherwise
      */
     public boolean tryEndGame() {
         return withStateWriteLock(() -> {
@@ -227,9 +230,10 @@ public class Game implements GameInterface {
         shipsInPlay.removeAll(surrenderPolicy.getSurrenderedShips());
 
         // Best-looking ship reward
+        int minExposedConnectors = shipsInPlay.stream().mapToInt(ShipBoard::getExposedConnectorsNumber).min().orElse(-1);
         shipsInPlay.stream()
-                .min(Comparator.comparingInt(ShipBoard::getExposedConnectorsNumber))
-                .ifPresent(bestLookingShip ->
+                .filter(s -> s.getExposedConnectorsNumber() == minExposedConnectors)
+                .forEach(bestLookingShip ->
                         finalScores.merge(bestLookingShip, scoresRegistry.getBestLookingShipAward(), Integer::sum));
 
         // Finish order reward
@@ -429,20 +433,6 @@ public class Game implements GameInterface {
         this(level, 4);
     }
 
-    public Game(GameFactory gameFactory) {
-        int shipsN = 4;
-        this.level = null;
-        this.gameFactory = gameFactory;
-        this.surrenderPolicy = this.gameFactory.createSurrenderPolicy();
-        this.scoresRegistry = this.gameFactory.createScoresRegistry();
-        this.flightBoard = gameFactory.createFlightBoard(shipsN);
-        try {
-            this.deck = gameFactory.createDeck(this);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @VisibleForTesting
     public void setFlightBoard(FlightBoard flightBoard) {
         this.flightBoard = flightBoard;
@@ -456,6 +446,21 @@ public class Game implements GameInterface {
     @VisibleForTesting
     public void setAfterEach(Runnable afterEach) {
         this.afterEach = afterEach;
+    }
+
+    @VisibleForTesting
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    @VisibleForTesting
+    public ScoresRegistry getScoresRegistry() {
+        return scoresRegistry;
+    }
+
+    @VisibleForTesting
+    public Map<ShipBoard, Integer> getFinalScores() {
+        return finalScores;
     }
     //endregion
 }

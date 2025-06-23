@@ -35,7 +35,6 @@ public class SecondDeck extends Deck{
     }
     @Override
     public List<AdventureCard> getForecastDeck(int deckIndex) {
-        // TODO: handle concurrency
         try {
             return forecastDecks.get(deckIndex);
         } catch (IndexOutOfBoundsException e) {

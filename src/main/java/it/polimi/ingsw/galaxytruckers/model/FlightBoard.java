@@ -26,9 +26,11 @@ public abstract class FlightBoard {
      * on the flightBoard
      * */
     public Map<ShipBoard, Integer> getShipToPlace() {
+        Map<ShipBoard,Integer> res;
         synchronized (shipToPlace) {
-            return new HashMap<>(shipToPlace);
+            res = new HashMap<>(shipToPlace);
         }
+        return res;
     }
 
     /**
@@ -69,12 +71,14 @@ public abstract class FlightBoard {
      * @return a {@link List} of shipboards in the order that they appear
      * on the flightboard*/
     public List<ShipBoard> getOrderedShips() {
+        List<ShipBoard> res;
         synchronized (shipToPlace) {
-            return shipToPlace.entrySet().stream()
+            res = shipToPlace.entrySet().stream()
                     .sorted(Comparator.<Map.Entry<ShipBoard, Integer>>comparingInt(Map.Entry::getValue).reversed())
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList());
         }
+        return res;
     }
 
     /**
@@ -125,9 +129,11 @@ public abstract class FlightBoard {
      * on the flightboard*/
     @VisibleForTesting
     public List<Integer> getStartingPositionsLeft() {
+        List<Integer> res;
         synchronized (startingPositionsLeft) {
-            return new ArrayList<>(startingPositionsLeft);
+            res = new ArrayList<>(startingPositionsLeft);
         }
+        return res;
     }
 }
 

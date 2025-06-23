@@ -6,15 +6,14 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CrewSizeCheck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.EnginePowerCheck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.FirePowerCheck;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class DeckTest {
     Deck deck;
@@ -32,11 +31,17 @@ class DeckTest {
                 .filter(c -> c instanceof CombatZoneCard)
                 .map(c -> (CombatZoneCard) c)
                 .toList();
-        CombatZoneCard combatZoneCard1 = combatZoneCards.get(0);
-        CombatZoneCard combatZoneCard2 = combatZoneCards.get(1);
+        CombatZoneCard combatZoneCard1 = combatZoneCards.getFirst();
         assertEquals(List.of(CrewSizeCheck.getInstance(),
                 EnginePowerCheck.getInstance(),
                 FirePowerCheck.getInstance()), combatZoneCard1.getChecks());
 
+    }
+
+    @Test
+    void drawCardUpdatesCurrentCard() throws IOException {
+        deck = new TestDeck(game);
+        deck.drawCard();
+        assertNotNull(deck.getCurrentCard());
     }
 }

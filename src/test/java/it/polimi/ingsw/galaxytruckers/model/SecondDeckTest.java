@@ -33,7 +33,14 @@ class SecondDeckTest {
     }
 
     @Test
-    void initMasterDeck() {
+    void initMasterDeckThrowsWithInvalidIndex() {
+        assertThrows(IllegalArgumentException.class, () -> secondDeck.getForecastDeck(-1));
+    }
 
+    @Test
+    void initMasterDeck() {
+        secondDeck.initMasterDeck();
+        secondDeck.drawCard();
+        assertEquals(Level.SECOND, secondDeck.getCurrentCard().getCardLevel());
     }
 }
