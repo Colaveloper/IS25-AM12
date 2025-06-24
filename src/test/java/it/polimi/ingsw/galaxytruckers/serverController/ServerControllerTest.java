@@ -30,10 +30,13 @@ class ServerControllerTest {
     EventQueue<ControllerEvent> eventQueue;
     ClientHandler clientHandler;
 
+    static class MockEventQueue extends EventQueue<ControllerEvent> {
+    }
+
     @BeforeEach
     void setup(){
         model = new GameModel();
-        eventQueue = mock(EventQueue.class);
+        eventQueue = mock(MockEventQueue.class);
         clientHandler = mock(ClientHandler.class);
         controller = new ServerController(model,eventQueue);
     }
@@ -117,6 +120,27 @@ class ServerControllerTest {
 
         assertFalse(controller.getIdToLobby().isEmpty());
         assertEquals(lobby1, lobby2);
+    }
+
+    @Test
+    void removeLobbyUnregistersDisconnectedPlayers() {
+        // player 1 creates game
+        Player p1 = Player.addPlayer("player1");
+        SessionManager.getInstance().registerClient(p1, mock(ClientHandler.class));
+        controller.newGame(p1, Level.SECOND, 2);
+        Lobby lobby = controller.getIdToLobby().values().iterator().next();
+
+        // player 2 joins
+        Player p2 = Player.addPlayer("player2");
+        SessionManager.getInstance().registerClient(p2, mock(ClientHandler.class));
+        controller.joinLobby(p2, lobby.getId());
+
+        // player 2 disconnects and leaves
+        SessionManager.getInstance().unregisterClient(p2);
+        controller.leaveLobby(p2);
+
+        assertTrue(SessionManager.getInstance().isPlayerActive(p1));
+        assertFalse(SessionManager.getInstance().isPlayerActive(p2));
     }
 
     //TODO: fix old tests
