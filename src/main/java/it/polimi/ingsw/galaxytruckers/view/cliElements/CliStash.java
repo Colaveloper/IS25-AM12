@@ -13,16 +13,30 @@ public class CliStash extends CliElement {
 
     protected final List<CliComponent> cliStashedComponents;
 
+    /**
+     * Creates a new CliStash from the given list of components.
+     * Each component is converted to a CliComponent for CLI representation.
+     *
+     * @param stashedComponents The list of components to be stashed
+     */
     public CliStash(List<Component> stashedComponents) {
         this.cliStashedComponents = stashedComponents.stream()
                 .map(CliComponent::of).collect(Collectors.toList());
     }
 
+    /**
+     * Adds a new component to the stash.
+     * @param component
+     */
     public void onStash(Component component) {
         cliStashedComponents.add(CliComponent.of(component));
         setDirty();
     }
 
+    /**
+     * Removes a component from the stash at the specified index.
+     * @param index The index of the component to remove
+     */
     public void onGrab(int index) {
         cliStashedComponents.remove(index);
         setDirty();

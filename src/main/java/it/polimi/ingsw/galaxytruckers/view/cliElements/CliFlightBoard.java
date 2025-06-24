@@ -12,12 +12,22 @@ public class CliFlightBoard extends CliElement {
     private final List<Integer> startingPositions;
     private final Map<ShipBoard, Integer> shipToPlace;
 
+    /**
+     * Creates a new CLI flight board from the given FlightBoard model.
+     *
+     * @param flightBoard The FlightBoard model to create the CLI flight board from
+     */
     public CliFlightBoard(FlightBoard flightBoard) {
         shipToPlace = new HashMap<>(flightBoard.getShipToPlace());
         startingPositions = new ArrayList<>(flightBoard.getStartingPositions());
         loopLength = flightBoard.getLoopLength();
     }
 
+    /**
+     * Sets the position of a ship on the flight board.
+     * @param shipBoard the ShipBoard to place
+     * @param position the position to place the ship at
+     */
     public void setPosition(ShipBoard shipBoard, int position) {
         shipToPlace.put(shipBoard, position);
     }
@@ -41,9 +51,5 @@ public class CliFlightBoard extends CliElement {
         result = DescriptionUtils.borderAndTitle(result, "flight board");
 
         return result;
-    }
-
-    public void updatePositions(ShipBoard shipBoard, int position) {
-        shipToPlace.put(shipBoard, position);
     }
 }

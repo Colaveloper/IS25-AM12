@@ -32,6 +32,12 @@ public class CliShipBoard extends CliElement {
     int minY;
     int maxY;
 
+    /**
+     * Constructs a CLI representation of a ShipBoard.
+     *
+     * @param shipBoard The ShipBoard to be represented in the CLI
+     * @param nickname  The nickname of the player owning this ship board
+     */
     public CliShipBoard(ShipBoard shipBoard, String nickname) {
         this.shipBoard = shipBoard;
         this.nickname = nickname;
@@ -52,33 +58,40 @@ public class CliShipBoard extends CliElement {
         }
     }
 
+    /**
+     * Updates the component at the specified point on the ship board with a new value.
+     * @param p the point on the ship board where the component is to be updated
+     * @param newValue the new component to be placed at the specified point
+     */
     public void onPutComponent(Point p, Component newValue) {
         CliComponent newCliComponent = CliComponent.of(newValue);
         cliComponentMap.put(p, newCliComponent);
         setDirty();
     }
 
+    /**
+     * Removes the component at the specified point on the ship board.
+     * @param p the point on the ship board where the component is to be removed
+     */
     public void onRemoveComponent(Point p) {
         cliComponentMap.remove(p);
         setDirty();
     }
 
+    /**
+     * Returns the CliComponent at the given point on the ship board, or null if there is no such component.
+     * @param p the point on the ship board
+     * @return the CliComponent at the specified point, or null if there is no component
+     */
     public CliComponent getCliComponent(Point p) {
         return cliComponentMap.get(p);
     }
-//
-//    public Map<Point, CliCabin> getCabins() {
-//        return cabins;
-//    }
-//
-//    public Map<Point, CliCargoHold> getCargoHolds() {
-//        return cargoHolds;
-//    }
-//
-//    public Map<Point, CliBattery> getBatteries() {
-//        return batteries;
-//    }
 
+    /**
+     * Highlights the specified points on the ship board with the given color.
+     * @param points the set of points to highlight
+     * @param color the color to use for highlighting
+     */
     public void highlightPoints(Set<Point> points, CliHighlights color){
         for (Point point : points){
             cliComponentMap.get(point).highlight(color);
@@ -86,6 +99,10 @@ public class CliShipBoard extends CliElement {
         setDirty();
     }
 
+    /**
+     * Returns the nickname of the player owning this ship board.
+     * @return
+     */
     public String getNickname() {
         return nickname;
     }

@@ -8,9 +8,13 @@ import java.util.List;
 public class CliAllShips extends CliElement {
     private final List<CliShipBoard> cliShips;
 
+    /**
+     * Creates a new CLI element that composes all {@link CliShipBoard} in the game,
+     * whether they have a stash or not.
+     *
+     * @param ships A list of CliShipBoard objects representing the ships to be displayed
+     */
     public CliAllShips(List<? extends CliShipBoard> ships) {
-        //posso mettere una cliShipBoard qualsiasi invece di specificare se ha stash o no
-        //togliendo anche la necessità di specificare quando uso CliAllShipsHandAndStash
         this.cliShips = new ArrayList<>(ships);
     }
 

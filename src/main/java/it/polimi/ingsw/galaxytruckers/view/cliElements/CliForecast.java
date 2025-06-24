@@ -10,6 +10,12 @@ import java.util.List;
 public class CliForecast extends CliElement {
     private final GameColor[] blockedForecasts;
 
+    /**
+     * Constructs a CliForecast with the given blocked forecasts.
+     * Each blocked forecast is represented by its GameColor.
+     *
+     * @param blockedForecasts Array of ShipBoard objects representing blocked forecasts
+     */
     public CliForecast(ShipBoard[] blockedForecasts) {
         this.blockedForecasts = new GameColor[blockedForecasts.length];
         for (int i = 0; i < blockedForecasts.length; i++) {
@@ -21,11 +27,21 @@ public class CliForecast extends CliElement {
         }
     }
 
+    /**
+     * Releases the blocked forecast at the specified index.
+     * @param index The index of the blocked forecast to retrieve
+     */
     public void removeBlockedForecast(int index) {
         this.blockedForecasts[index] = null;
         setDirty();
     }
 
+    /**
+     * Sets the forecast at the specified index as blocked.
+     *
+     * @param index The index of the blocked forecast to set
+     * @param gameColor The GameColor of the player that took it
+     */
     public void setBlockedForecasts(int index, GameColor gameColor) {
         this.blockedForecasts[index] = gameColor;
         setDirty();
@@ -48,27 +64,3 @@ public class CliForecast extends CliElement {
         return DescriptionUtils.borderAndTitle(result, "forecast decks");
     }
 }
-
-//    //    private final List<AdventureCard> forecastDeck;
-//
-//    @Override
-//    protected List<String> getNewDescription() {
-//        //Visualizza array di booleani per i deck bloccati
-//        for (AdventureCard adventureCard : forecastDeck) {
-//            switch (adventureCard) {
-//                case AbandonedShipCard e -> {
-//                    System.out.println(e.getCardLevel());
-//                    System.out.println(e.getCreditPrize());
-//                    //...
-//                }
-//            }
-//        }
-//        return List.of();
-//    }
-
-//            this.forecastDeck = model.getGame().getCurrentState().getLockedForecasts();
-//        this.coveredComponentN = componentBank.getCoveredComponentsNProperty();
-//        for(Component component : componentBank.getUncoveredComponentsProperty()){
-//            revealedComponents.add(new CliComponent(component));
-//        }
-

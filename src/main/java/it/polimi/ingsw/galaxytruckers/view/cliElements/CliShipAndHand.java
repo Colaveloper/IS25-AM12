@@ -20,11 +20,19 @@ public class CliShipAndHand extends CliShipBoard {
         }
     }
 
+    /**
+     * Clears the hand of the ship.
+     */
     public void clearHand() {
         cliHand.clearHand();
         setDirty();
     }
 
+    /**
+     * Sets the hand of the ship to a specific component.
+     *
+     * @param component The component to set as the hand
+     */
     public void setHand(Component component) {
         cliHand.setHand(component);
         setDirty();

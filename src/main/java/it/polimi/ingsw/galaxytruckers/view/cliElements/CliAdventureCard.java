@@ -14,6 +14,11 @@ import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.penalty.Penalty;
 public class CliAdventureCard extends CliElement{
     AdventureCard card;
 
+    /**
+     * Creates a CLI representation of an adventure card.
+     *
+     * @param card The adventure card to be represented
+     */
     public CliAdventureCard(AdventureCard card) {
         this.card = card;
     }

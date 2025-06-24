@@ -18,6 +18,10 @@ public class CliForecastCards extends CliElement {
         return newDescription;
     }
 
+    /**
+     * Sets the cards in the forecast deck.
+     * @param cards the list of AdventureCard objects to set as the forecast deck
+     */
     public void setCards(List<AdventureCard> cards) {
         forecastDeck = cards;
         setDirty();
