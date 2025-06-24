@@ -36,9 +36,10 @@ public class GuiShipBoard extends PurpleVBox {
     public final static Path emptyAreaImagePath = Path.of("src/main/resources/textures/tiles/empty_area.png");
 
     public GuiShipBoard(String name, ShipBoard shipBoard, GuiController controller) {
+        super(5);
+
         this.controller = controller;
 
-        super(5);
         setAlignment(Pos.CENTER);
 
         shipGrid = new GridPane();
