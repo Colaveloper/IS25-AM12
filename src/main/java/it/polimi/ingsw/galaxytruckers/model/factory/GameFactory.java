@@ -11,11 +11,11 @@ import java.io.IOException;
 
 public interface GameFactory {
     Deck createDeck(Game game) throws IOException;
-    FlightBoard createFlightBoard(int shipsN);
-    ShipBoard createShipBoard(GameColor color);
+    FlightBoard createFlightBoard(int shipsN, GameEventListener gameEventListener);
+    ShipBoard createShipBoard(GameColor color, GameEventListener eventListener);
     ShipBuildingState createShipBuildingState();
     ShipCorrectionState createShipCorrectionState();
-    SurrenderPolicy createSurrenderPolicy();
+    SurrenderPolicy createSurrenderPolicy(GameEventListener gameEventListener);
     ScoresRegistry createScoresRegistry();
 
 

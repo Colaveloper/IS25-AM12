@@ -27,7 +27,6 @@ class NoSurrenderPolicyTest {
         policy.requestSurrender(null,null);
         assertEquals("Requesting surrender when surrender is disabled", baos.toString().trim());
         policy.getSurrenderedShips();
-        policy.setEventListener(null);
     }
 
     @Test

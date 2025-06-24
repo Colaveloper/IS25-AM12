@@ -1,9 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
-import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
@@ -73,7 +70,7 @@ class EpidemicCardTest {
 
         plaguedCabins = new HashSet<>();
 
-        ShipBoard shipBoardA = new SecondShipBoard(GameColor.GREEN) {
+        ShipBoard shipBoardA = new SecondShipBoardForTesting(GameColor.GREEN) {
             @Override
             public Map<Point, Cabin> getCabins() {
                 return testCabins;
@@ -85,7 +82,7 @@ class EpidemicCardTest {
             }
         };
 
-        ShipBoard shipBoardB = new SecondShipBoard(GameColor.GREEN) {
+        ShipBoard shipBoardB = new SecondShipBoardForTesting(GameColor.GREEN) {
             @Override
             public Map<Point, Cabin> getCabins() {
                 return testCabins;
@@ -104,7 +101,7 @@ class EpidemicCardTest {
             shipPlaces.put(ships.get(i), 10-i);
         }
 
-        FlightBoard flightBoard = new FlightBoard() {
+        FlightBoard flightBoard = new FlightBoard(new GameEventListenerForTesting()) {
             @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return shipPlaces;
@@ -131,8 +128,8 @@ class EpidemicCardTest {
             }
         };
 
-        GameEventListener listener = new GameEventListenerStub();
-        game = new Game(Level.SECOND) {
+        GameEventListener listener = new GameEventListenerForTesting();
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoard;
             }

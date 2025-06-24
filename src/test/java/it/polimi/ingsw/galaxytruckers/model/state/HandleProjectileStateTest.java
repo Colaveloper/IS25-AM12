@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectil
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.SmallMeteor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.checkerframework.dataflow.qual.AssertMethod;
@@ -35,7 +34,7 @@ class HandleProjectileStateTest {
 
     @BeforeEach
     void setup(){
-        ship1 = new SecondShipBoard(GameColor.RED){
+        ship1 = new SecondShipBoardForTesting(GameColor.RED){
             @Override
             public int getNumBatteries() {
                 return 2;
@@ -66,8 +65,7 @@ class HandleProjectileStateTest {
             }
         };
         testState = new HandleProjectileState(ship1, projectile);
-        game = new Game(Level.SECOND);
-        game.setEventListener(new GameEventListenerStub());
+        game = new GameStub(Level.SECOND);
         latch = StateTransitionUtils.setupLatch(game);
         testState.setGame(game);
     }
@@ -134,8 +132,7 @@ class HandleProjectileStateTest {
 
     @Test
     void goNextChangesAdventureStateToChooseShipPieceState(){
-        game = new Game(Level.SECOND);
-        game.setEventListener(new GameEventListenerStub());
+        game = new GameStub(Level.SECOND);
         latch = StateTransitionUtils.setupLatch(game);
         testState.setGame(game);
         testState.goNext(ship1);
@@ -150,13 +147,12 @@ class HandleProjectileStateTest {
                 return false;
             }
         };
-        game = new Game(Level.SECOND){
+        game = new GameStub(Level.SECOND){
             @Override
             public Deck getDeck(){
                 return deck;
             }
         };
-        game.setEventListener(new GameEventListenerStub());
         latch = StateTransitionUtils.setupLatch(game);
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
@@ -178,19 +174,18 @@ class HandleProjectileStateTest {
 
     @Test
     void goNextDoesNotSetAdventureStateToChooseShipPieceWithInsufficientShipPieces() throws IOException{
-        ship1 = new SecondShipBoard(GameColor.RED){
+        ship1 = new SecondShipBoardForTesting(GameColor.RED){
             @Override
             public List<Set<Point>> getConnectedSets(){
                 return List.of(Set.of(new Point(7,7)));
             }
         };
-        game = new Game(Level.SECOND){
+        game = new GameStub(Level.SECOND){
             @Override
             public Deck getDeck(){
                 return deck;
             }
         };
-        game.setEventListener(new GameEventListenerStub());
         latch = StateTransitionUtils.setupLatch(game);
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override

@@ -21,7 +21,7 @@ class DeckTest {
 
     @BeforeEach
     void setup(){
-        game = new Game(Level.SECOND);
+        game = new GameStub(Level.SECOND);
     }
 
     @Test

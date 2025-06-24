@@ -8,9 +8,6 @@ import java.util.Set;
 public class NoSurrenderPolicy implements SurrenderPolicy{
 
     @Override
-    public void setEventListener(GameEventListener gameEventListener) {}
-
-    @Override
     public boolean isSurrenderEnabled() {
         return false;
     }

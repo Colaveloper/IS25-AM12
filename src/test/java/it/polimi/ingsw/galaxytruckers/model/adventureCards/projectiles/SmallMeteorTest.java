@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
+import it.polimi.ingsw.galaxytruckers.model.SecondShipBoardForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
@@ -65,7 +66,7 @@ class SmallMeteorTest {
 
         myShields = new HashMap<>();
 
-        myShipBoard = new ShipBoard(GameColor.BLUE) {
+        myShipBoard = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return true;
@@ -146,7 +147,7 @@ class SmallMeteorTest {
 
     @Test
     void getComponentPositionToRemoveReturnsEmptyOptionalIfProtected() {
-        myShipBoard = new ShipBoard(GameColor.BLUE) {
+        myShipBoard = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return true;

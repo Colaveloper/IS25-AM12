@@ -12,8 +12,8 @@ public class SecondFlightBoard extends FlightBoard{
     @VisibleForTesting
     protected static List<Integer> startingPositions;
 
-    public SecondFlightBoard(int shipsN) {
-        super();
+    public SecondFlightBoard(int shipsN, GameEventListener gameEventListener) {
+        super(gameEventListener);
         loopLength = 24;
         startingPositions = Arrays.asList(6, 3, 1, 0).subList(0, shipsN);
         this.startingPositionsLeft.clear();
@@ -31,7 +31,7 @@ public class SecondFlightBoard extends FlightBoard{
         synchronized (shipToPlace) {
             shipToPlace.put(shipBoard, startingPosition);
         }
-        if (gameEventListener != null) gameEventListener.notifyFlightBoardUpdateEvent(shipBoard, startingPosition);
+        gameEventListener.notifyFlightBoardUpdateEvent(shipBoard, startingPosition);
     }
 
     @Override

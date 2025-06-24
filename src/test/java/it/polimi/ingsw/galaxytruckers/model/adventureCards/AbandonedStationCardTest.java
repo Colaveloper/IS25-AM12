@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -49,7 +48,7 @@ class AbandonedStationCardTest {
         ships = new ArrayList<>();
         loserShips = new ArrayList<>();
 
-        ship1 = new SecondShipBoard(GameColor.RED) {
+        ship1 = new SecondShipBoardForTesting(GameColor.RED) {
 
             @Override
             public int getCrewSize() {
@@ -57,21 +56,21 @@ class AbandonedStationCardTest {
             }
         };
 
-        ship2 = new SecondShipBoard(GameColor.GREEN) {
+        ship2 = new SecondShipBoardForTesting(GameColor.GREEN) {
             @Override
             public int getCrewSize() {
                 return 3;
             }
         };
 
-        ship3 = new SecondShipBoard(GameColor.BLUE) {
+        ship3 = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             public int getCrewSize() {
                 return 1;
             }
         };
 
-        ship4 = new SecondShipBoard(GameColor.BLUE) {
+        ship4 = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             public int getCrewSize() {
                 return 5;
@@ -95,7 +94,7 @@ class AbandonedStationCardTest {
             loserShipPlaces.put(loserShips.get(i), 10-i);
         }
 
-        flightBoard = new FlightBoard() {
+        flightBoard = new FlightBoard(new GameEventListenerForTesting()) {
             @Override
             protected int getLoopLength() {
                 return 0;
@@ -121,7 +120,7 @@ class AbandonedStationCardTest {
             }
         };
 
-        flightBoardOfLosers = new FlightBoard() {
+        flightBoardOfLosers = new FlightBoard(new GameEventListenerForTesting()) {
             @Override
             protected int getLoopLength() {
                 return 0;
@@ -147,7 +146,7 @@ class AbandonedStationCardTest {
             }
         };
 
-        game = new Game(Level.SECOND) {
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoard;
             }
@@ -159,7 +158,7 @@ class AbandonedStationCardTest {
 
     @Test
     void noneCanLand() {
-        game = new Game(Level.SECOND) {
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoardOfLosers;
             }

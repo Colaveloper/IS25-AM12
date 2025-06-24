@@ -60,15 +60,14 @@ class GameEventListenerTest {
 
     @BeforeEach
     void setUp() {
+        listener = new GameEventListener(controllerListener,  supplier);
         p1 = Player.addPlayer("p1");
         p2 = Player.addPlayer("p2");
-        game = new Game(Level.SECOND, 1);
+        game = new Game(Level.SECOND, 1, listener);
         s1 = game.addShipBoard(GameColor.RED);
         p1.setShipBoard(s1);
         s2 = game.addShipBoard(GameColor.BLUE);
         p2.setShipBoard(s2);
-        listener = new GameEventListener(controllerListener,  supplier);
-        game.setEventListener(listener);
         game.setCurrentState(new DeclareFirePowerState(s1));
         clearInvocations(controllerListener);
     }

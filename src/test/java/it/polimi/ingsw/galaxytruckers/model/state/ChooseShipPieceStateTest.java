@@ -1,13 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-import it.polimi.ingsw.galaxytruckers.model.Deck;
-import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
-import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,23 +29,22 @@ class ChooseShipPieceStateTest {
 
     @BeforeEach
     void setup() throws IOException {
-        ship1 = new SecondShipBoard(GameColor.BLUE){
+        ship1 = new SecondShipBoardForTesting(GameColor.BLUE){
             @Override
             public void discardComponent(Point p){
                 // mock
             }
         };
-        ship2 = new SecondShipBoard(GameColor.RED);
+        ship2 = new SecondShipBoardForTesting(GameColor.RED);
         shipPieces = new ArrayList<>();
         shipPieces.add(Set.of(new Point(7,7)));
         testChooseShipPieceState = new ChooseShipPieceState(shipPieces, ship1);
-        game = new Game(Level.SECOND){
+        game = new GameStub(Level.SECOND){
             @Override
             public Deck getDeck(){
                 return deck;
             }
         };
-        game.setEventListener(new GameEventListenerStub());
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
@@ -63,7 +58,6 @@ class ChooseShipPieceStateTest {
             }
         };
         latch = StateTransitionUtils.setupLatch(game);
-        game.setEventListener(new GameEventListenerStub());
         game.setCurrentState(testChooseShipPieceState);
     }
 
