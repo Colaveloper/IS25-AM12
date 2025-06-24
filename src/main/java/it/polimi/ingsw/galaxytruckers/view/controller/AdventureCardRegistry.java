@@ -16,12 +16,24 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Singleton registry for adventure cards in the game.
+ * <p>
+ * This class loads adventure card data from a JSON file and provides access to card metadata and image paths.
+ * It supports retrieving the mapping from card IDs to image paths and the total number of cards.
+ * </p>
+ */
 public class AdventureCardRegistry {
     private static AdventureCardRegistry instance;
     private static final String jsonPath = "src/main/resources/cardsReference.json";
 
     private final Map<Integer, JsonNode> adventureCards = new HashMap<>();
 
+    /**
+     * Returns the singleton instance of the registry, creating it if necessary.
+     *
+     * @return the singleton instance
+     */
     public static AdventureCardRegistry getInstance() {
         if (instance == null) {
             instance = new AdventureCardRegistry();
@@ -29,6 +41,9 @@ public class AdventureCardRegistry {
         return instance;
     }
 
+    /**
+     * Constructs the registry and loads adventure card data from the JSON file.
+     */
     private AdventureCardRegistry() {
         try {
             loadRelevantCards();
@@ -37,6 +52,11 @@ public class AdventureCardRegistry {
         }
     }
 
+    /**
+     * Loads adventure card metadata from the JSON file into the registry.
+     *
+     * @throws IOException if the file cannot be read
+     */
     protected void loadRelevantCards() throws IOException {
         File jsonFile = new File(jsonPath);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -47,6 +67,11 @@ public class AdventureCardRegistry {
         }
     }
 
+    /**
+     * Returns a mapping from card IDs to their image file paths.
+     *
+     * @return a map from card ID to image path
+     */
     public Map<Integer, Path> getIdToImagePath() {
         return adventureCards.entrySet().stream()
                 .collect(Collectors.toMap(
@@ -55,10 +80,21 @@ public class AdventureCardRegistry {
                 ));
     }
 
+    /**
+     * Returns the number of adventure cards in the registry.
+     *
+     * @return the number of cards
+     */
     public int getSize() {
         return adventureCards.size();
     }
 
+    /**
+     * Retrieves an adventure card by its ID.
+     *
+     * @param id the ID of the card
+     * @return the {@link AdventureCard} corresponding to the ID
+     */
     public AdventureCard getCard(int id) {
         return parseAdventureCard(adventureCards.get(id));
     }

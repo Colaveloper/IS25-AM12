@@ -1,4 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
+
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.enums.CliHighlights;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.*;
@@ -13,12 +14,24 @@ import javafx.scene.shape.Circle;
 
 import java.util.List;
 
+/**
+ * Base GUI component for ship parts in the game.
+ * <p>
+ * This class provides a visual representation of a ship component, including its image and any content (such as cargo, batteries, or crew).
+ * It is the superclass for more specific GUI components like {@link GuiCargoHold}, {@link GuiBattery}, and {@link GuiCabin}.
+ * </p>
+ */
 public class GuiComponent extends StackPane {
 
     private final int id;
     private final HBox contentBox;
     private final ImageView componentView;
 
+    /**
+     * Constructs a GuiComponent for the given model component.
+     *
+     * @param component the model component to represent
+     */
     protected GuiComponent(Component component) {
         this.id = component.getId();
 
@@ -34,6 +47,12 @@ public class GuiComponent extends StackPane {
         getChildren().addAll(componentView, contentBox);
     }
 
+    /**
+     * Factory method to create the appropriate GuiComponent subclass for a given model component.
+     *
+     * @param component the model component
+     * @return the corresponding GuiComponent
+     */
     public static GuiComponent of(Component component) {
         return switch (component) {
             case CargoHold cargoHold -> new GuiCargoHold(cargoHold);
@@ -43,14 +62,30 @@ public class GuiComponent extends StackPane {
         };
     }
 
+    /**
+     * Checks if this component has the specified ID.
+     *
+     * @param id the ID to check
+     * @return true if the IDs match, false otherwise
+     */
     public boolean hasId(int id) {
         return this.id == id;
     }
 
+    /**
+     * Sets the visual orientation of the component.
+     *
+     * @param direction the direction to set
+     */
     public void setDirection(Direction direction) {
         componentView.setRotate(direction.getAngle());
     }
 
+    /**
+     * Updates the content box with the given list of colors, each represented as a circle.
+     *
+     * @param colors the list of colors to display
+     */
     protected void updateContentBox(List<Color> colors) {
         Platform.runLater(()->{
             contentBox.getChildren().clear();
@@ -69,6 +104,11 @@ public class GuiComponent extends StackPane {
         });
     }
 
+    /**
+     * Sets the highlight color of the component's content box.
+     *
+     * @param color the color to set as highlight, or null to clear the highlight
+     */
     public void setHighlight(Color color) {
         if (color == null) {
             clearHighlight();
@@ -86,20 +126,18 @@ public class GuiComponent extends StackPane {
         contentBox.setBorder(new Border(borderStroke));
     }
 
+    /**
+     * Clears the highlight from the component's content box.
+     */
     public void clearHighlight() {
         contentBox.setBorder(Border.EMPTY);
     }
 
-//    private String getColorString(CliHighlights highlight) {
-//        return switch (highlight) {
-//            case GREEN -> "green";
-//            case BLUE -> "blue";
-//            case RED -> "red";
-//            case YELLOW -> "yellow";
-//            default -> "transparent";
-//        };
-//    }
-
+    /**
+     * Notifies that the content of the component has changed.
+     * <p>
+     * This method can be overridden by subclasses to perform actions when the content changes.
+     * </p>
+     */
     public void notifyContentChange() {}
 }
-

@@ -18,6 +18,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Singleton registry for ship components in the game.
+ * <p>
+ * This class loads component data from a JSON file and provides access to component metadata and image paths.
+ * It supports retrieving components by ID, the mapping from component IDs to image paths, and starting cabins for each color.
+ * </p>
+ */
 public class ComponentRegistry {
     private static ComponentRegistry instance;
     private static final File componentJson = new File("src/main/resources/tiles.json");
@@ -25,6 +32,11 @@ public class ComponentRegistry {
     private final Map<Integer, JsonNode> components;
     private final Map<GameColor, JsonNode> startingCabins;
 
+    /**
+     * Returns the singleton instance of the registry, creating it if necessary.
+     *
+     * @return the singleton instance
+     */
     public static ComponentRegistry getInstance() {
         if (instance == null) {
             instance = new ComponentRegistry();
@@ -42,6 +54,13 @@ public class ComponentRegistry {
         }
     }
 
+    /**
+     * Retrieves a component by its ID.
+     *
+     * @param id the ID of the component
+     * @return the {@link Component} corresponding to the ID
+     * @throws IllegalArgumentException if no component with the given ID exists
+     */
     public Component getComponent(int id) {
         if (!components.containsKey(id))
             throw new IllegalArgumentException("No component with id " + id);
@@ -52,6 +71,11 @@ public class ComponentRegistry {
         }
     }
 
+    /**
+     * Returns a mapping from component IDs to their image file paths.
+     *
+     * @return a map from component ID to image path
+     */
     public Map<Integer, Path> getIdToImagePath() {
         return components.entrySet().stream()
                 .collect(Collectors.toMap(
@@ -60,6 +84,13 @@ public class ComponentRegistry {
                 ));
     }
 
+    /**
+     * Retrieves the starting cabin component for a given player color.
+     *
+     * @param color the color of the player
+     * @return the starting {@link Component} for the player color
+     * @throws RuntimeException if there is an error parsing the component
+     */
     public Component getStartingCabin(GameColor color) {
         try {
             return parseComponent(startingCabins.get(color));
@@ -68,6 +99,11 @@ public class ComponentRegistry {
         }
     }
 
+    /**
+     * Returns the total number of components in the registry.
+     *
+     * @return the number of components
+     */
     public int getSize() {
         return components.size();
     }

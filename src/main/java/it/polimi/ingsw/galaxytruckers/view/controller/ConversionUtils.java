@@ -13,13 +13,32 @@ import it.polimi.ingsw.galaxytruckers.serverController.dto.BuildingDataDTO;
 import java.util.*;
 import java.util.function.Supplier;
 
+/**
+ * Utility class for converting between server and client representations of game data.
+ * <p>
+ * This class provides methods to convert player names, collections, and maps between server-side (String-based)
+ * and client-side (Player, ShipBoard, etc.) representations. It also assists in converting DTOs to client model objects.
+ * </p>
+ */
 public class ConversionUtils {
     private final PlayerRegistry playerRegistry;
 
+    /**
+     * Constructs a ConversionUtils with the given player registry.
+     *
+     * @param playerRegistry the registry for player information
+     */
     public ConversionUtils(PlayerRegistry playerRegistry) {
         this.playerRegistry = playerRegistry;
     }
 
+    /**
+     * Converts a map from player nicknames to values into a map from Player objects to values.
+     *
+     * @param map the map with String keys (nicknames)
+     * @param <T> the type of the values
+     * @return a map with Player keys
+     */
     public <T> Map<Player,T> convertPlayerMap(Map<String,T> map) {
         Map<Player, T> convertedMap = new HashMap<>();
         for (String name : map.keySet()) {
@@ -28,6 +47,13 @@ public class ConversionUtils {
         return convertedMap;
     }
 
+    /**
+     * Converts a map from player nicknames to values into a map from ShipBoard objects to values.
+     *
+     * @param map the map with String keys (nicknames)
+     * @param <T> the type of the values
+     * @return a map with ShipBoard keys
+     */
     public <T> Map<ShipBoard, T> convertMap(Map<String, T> map) {
         Map<ShipBoard, T> convertedMap = new HashMap<>();
         for (String name : map.keySet()) {
@@ -36,20 +62,47 @@ public class ConversionUtils {
         return convertedMap;
     }
 
+    /**
+     * Converts a collection of player nicknames to a collection of ShipBoard objects.
+     *
+     * @param nicknames the collection of player nicknames
+     * @param supplier a supplier for the resulting collection type
+     * @param <T> the type of the input collection
+     * @param <R> the type of the output collection
+     * @return a collection of ShipBoard objects
+     */
     public <T extends Collection<String>, R extends Collection<ShipBoard>> R convertCollection(T nicknames, Supplier<R> supplier) {
         return nicknames.stream()
                 .map(x -> playerRegistry.getByNickname(x).getShipBoard())
                 .collect(supplier,R::add,R::addAll);
     }
 
+    /**
+     * Converts a player nickname to a ShipBoard object.
+     *
+     * @param nickname the player's nickname
+     * @return the corresponding ShipBoard
+     */
     public ShipBoard convertName(String nickname) {
         return playerRegistry.getByNickname(nickname).getShipBoard();
     }
 
+    /**
+     * Converts an array of player nicknames to an array of ShipBoard objects.
+     *
+     * @param nicknames the array of player nicknames
+     * @return an array of ShipBoard objects
+     */
     public ShipBoard[] convertArray(String[] nicknames) {
         return Arrays.stream(nicknames).map(this::convertName).toArray(ShipBoard[]::new);
     }
 
+    /**
+     * Converts building data from a DTO to the client model's ShipBuildingState.
+     *
+     * @param shipBuildingState the client model's ship building state
+     * @param data the DTO containing building data
+     */
     public void convertBuildingData(ShipBuildingState shipBuildingState, BuildingDataDTO data) {
         //Set completed shipboards
         shipBuildingState.setCompletedShipBoards(convertCollection(data.completedNames(), HashSet::new));
@@ -62,6 +115,15 @@ public class ConversionUtils {
                 .toList());
     }
 
+    /**
+     * Converts a ComponentDTO to a Component, updating its properties as needed.
+     * <p>
+     * This method retrieves the component by ID from the registry, sets its orientation, and updates
+     * any additional properties (such as batteries, crew, goods, or activation state) based on the payload.
+     * </p>
+     * @param componentDTO the DTO containing component data
+     * @return the updated Component instance
+     */
     public Component convertComponent(ComponentDTO componentDTO) {
         Component component = ComponentRegistry.getInstance().getComponent(componentDTO.id());
         component.setOrientation(componentDTO.orientation());
@@ -84,6 +146,15 @@ public class ConversionUtils {
         return component;
     }
 
+    /**
+     * Converts a StateDTO to a GameState for the client model.
+     * <p>
+     * This method dispatches to the appropriate state conversion method based on the type of StateDTO.
+     * </p>
+     * @param stateDTO the state DTO to convert
+     * @param clientModel the client model instance
+     * @return the corresponding GameState
+     */
     public GameState getGameState(StateDTO stateDTO, ClientModel clientModel) {
         ShipBoard myShip = clientModel.getMyShip();
         switch (stateDTO) {
@@ -120,6 +191,16 @@ public class ConversionUtils {
         }
     }
 
+    /**
+     * Converts a ComplexStateDTO to a GameState for the client model.
+     * <p>
+     * This method dispatches to the appropriate state conversion method based on the type of ComplexStateDTO.
+     * It handles additional complex state types such as planet choices and draw card states.
+     * </p>
+     * @param stateDTO the complex state DTO to convert
+     * @param clientModel the client model instance
+     * @return the corresponding GameState
+     */
     public GameState getGameState(ComplexStateDTO stateDTO, ClientModel clientModel) {
         ShipBoard myShip = clientModel.getMyShip();
         switch (stateDTO) {

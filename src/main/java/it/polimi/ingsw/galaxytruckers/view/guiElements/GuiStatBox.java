@@ -14,11 +14,23 @@ import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+/**
+ * GUI component for displaying ship statistics in a styled box.
+ * <p>
+ * This class displays various statistics of a {@link ShipBoard} in a grid layout, such as crew, cargo, and other ship attributes.
+ * The box is styled with a background and padding, and updates its display based on the current state of the ship board.
+ * </p>
+ */
 public class GuiStatBox extends PurpleVBox {
 
     private final ShipBoard shipBoard;
     private final GridPane grid;
 
+    /**
+     * Constructs a GuiStatBox for the given ship board.
+     *
+     * @param shipBoard the ship board whose statistics are to be displayed
+     */
     public GuiStatBox(ShipBoard shipBoard) {
         this.shipBoard = shipBoard;
         this.grid = new GridPane();
@@ -26,6 +38,9 @@ public class GuiStatBox extends PurpleVBox {
         buildGrid();
     }
 
+    /**
+     * Sets up the container's layout, background, and padding.
+     */
     private void setupContainer() {
         this.setSpacing(0);
         this.setPadding(new Insets(10));
@@ -40,6 +55,9 @@ public class GuiStatBox extends PurpleVBox {
         this.getChildren().add(grid);
     }
 
+    /**
+     * Builds and populates the statistics grid with the current ship board data.
+     */
     private void buildGrid() {
         // clear old content and constraints
         grid.getChildren().clear();

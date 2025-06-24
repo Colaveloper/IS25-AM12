@@ -16,6 +16,13 @@ import javafx.scene.text.FontWeight;
 
 import java.util.*;
 
+/**
+ * GUI component representing the flight board in the game.
+ * <p>
+ * This class visually displays the flight board, including ship positions and the flight loop.
+ * It uses a horizontal box to represent the board and updates the display based on the current state of the {@link FlightBoard} model.
+ * </p>
+ */
 public class GuiFlightBoard extends PurpleVBox {
     private final GuiController controller;
     private final List<Integer> startingPositions;
@@ -24,8 +31,17 @@ public class GuiFlightBoard extends PurpleVBox {
 
     private static final int SLOT_SIZE = 30;
 
+    /**
+     * The horizontal box containing the visual slots of the flight board.
+     */
     private final HBox flightBoardHBox;
 
+    /**
+     * Constructs a GuiFlightBoard for the given flight board model and controller.
+     *
+     * @param flightBoard the flight board model to represent
+     * @param controller the GUI controller handling actions
+     */
     public GuiFlightBoard(FlightBoard flightBoard, GuiController controller) {
         this.controller = controller;
         this.loopLength = flightBoard.getLoopLength();
@@ -46,6 +62,9 @@ public class GuiFlightBoard extends PurpleVBox {
         getChildren().addAll(flightBoardLabel, flightBoardHBox);
     }
 
+    /**
+     * Updates the visual representation of the flight board slots and ship positions.
+     */
     private void updateFlightBoardHBox() {
         flightBoardHBox.getChildren().clear();
 
@@ -87,6 +106,16 @@ public class GuiFlightBoard extends PurpleVBox {
         }
     }
 
+    /**
+     * Notifies the GUI to update the flight board display when a ship's position changes.
+     * <p>
+     * This method is typically called when a ship moves to a new position on the flight board.
+     * It schedules a UI update on the JavaFX application thread.
+     * </p>
+     *
+     * @param shipBoard the ship whose position has changed
+     * @param position the new position of the ship on the flight board
+     */
     public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
         Platform.runLater(this::updateFlightBoardHBox);
     }

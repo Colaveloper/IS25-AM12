@@ -26,6 +26,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * GUI element representing a ship board in the game.
+ * <p>
+ * This class displays the ship's grid, including its components and empty areas, and allows for interaction with the ship's layout.
+ * It is used to visually represent a player's ship and its current state in the GUI.
+ * </p>
+ */
 public class GuiShipBoard extends PurpleVBox {
     private int minX;
     private int minY;
@@ -33,8 +40,18 @@ public class GuiShipBoard extends PurpleVBox {
     private final GridPane shipGrid;
 
     Image emptyAreaImage = null;
+    /**
+     * The path to the image used for empty areas of the ship.
+     */
     public final static Path emptyAreaImagePath = Path.of("src/main/resources/textures/tiles/empty_area.png");
 
+    /**
+     * Constructs a GuiShipBoard for the given ship name, ship board model, and controller.
+     *
+     * @param name the name of the ship/player
+     * @param shipBoard the ship board model to represent
+     * @param controller the GUI controller handling actions
+     */
     public GuiShipBoard(String name, ShipBoard shipBoard, GuiController controller) {
         super(5);
 
@@ -52,6 +69,11 @@ public class GuiShipBoard extends PurpleVBox {
         this.getChildren().addAll(nameLabel, shipGrid);
     }
 
+    /**
+     * Sets up the ship grid based on the current ship board state.
+     *
+     * @param shipBoard the ship board model to use for layout
+     */
     private void setShipGrid(ShipBoard shipBoard) {
         Set<Point> shipArea = shipBoard.getShipArea();
         Map<Point, Component> componentMap = shipBoard.getComponentMap();
@@ -99,6 +121,17 @@ public class GuiShipBoard extends PurpleVBox {
         }
     }
 
+    /**
+     * Notifies the GUI to place a component at the specified point with the given orientation.
+     * <p>
+     * This method updates the ship grid to visually add the component at the given position.
+     * It schedules the update on the JavaFX application thread.
+     * </p>
+     *
+     * @param component the component to place
+     * @param point the position on the ship grid
+     * @param orientation the orientation of the component
+     */
     public void notifyPlaceComponent(Component component, Point point, Direction orientation) {
         Platform.runLater(() -> {
             Optional<Node> toReplace = shipGrid.getChildren().stream()
@@ -122,6 +155,15 @@ public class GuiShipBoard extends PurpleVBox {
         });
     }
 
+    /**
+     * Notifies the GUI to remove a component from the specified position.
+     * <p>
+     * This method updates the ship grid to visually remove the component at the given position and replace it with an empty area.
+     * It schedules the update on the JavaFX application thread.
+     * </p>
+     *
+     * @param oldPosition the position from which to remove the component
+     */
     public void notifyRemoveComponent(Point oldPosition) {
         Platform.runLater(() -> {
             Optional<Node> toReplace = shipGrid.getChildren().stream()
@@ -149,8 +191,6 @@ public class GuiShipBoard extends PurpleVBox {
         ImageView freeAreaView = new ImageView(emptyAreaImage);
         freeAreaView.setFitWidth(60);
         freeAreaView.setFitHeight(60);
-//        freeAreaView.fitWidthProperty().bind(areaPane.widthProperty());
-//        freeAreaView.fitHeightProperty().bind(areaPane.heightProperty());
 
         areaPane.getChildren().add(freeAreaView);
         areaPane.setMaxSize(60, 60);
@@ -158,20 +198,14 @@ public class GuiShipBoard extends PurpleVBox {
         areaPane.setOnMouseClicked(_-> controller.handlePointPress(position));
         return areaPane;
     }
-//
-//    public GuiComponent getGuiComponent(Point position) {
-//        return getChildren().stream()
-//                .filter(node -> node instanceof GuiComponent)
-//                .map(node -> (GuiComponent) node)
-//                .filter(node -> {
-//                    int col = GridPane.getColumnIndex(node) - 1;
-//                    int row = GridPane.getRowIndex(node) - 1;
-//                    return col + minX == position.x && row + minY == position.y;
-//                })
-//                .findFirst()
-//                .orElse(null); // or throw exception if needed
-//    }
 
+    /**
+     * Notifies the GUI that a component's content has changed at the specified point.
+     * <p>
+     * This method finds the GuiComponent at the given point and calls its notifyContentChange method.
+     * </p>
+     * @param point the position of the component whose content has changed
+     */
     public void notifyComponentChange(Point point) {
         shipGrid.getChildren().stream()
                 .filter(node -> node instanceof GuiComponent)
@@ -185,6 +219,14 @@ public class GuiShipBoard extends PurpleVBox {
                 .ifPresent(GuiComponent::notifyContentChange);
     }
 
+    /**
+     * Highlights the specified points on the ship grid with the given color.
+     * <p>
+     * This method visually highlights the GuiComponents at the given points using the provided color.
+     * </p>
+     * @param points the set of points to highlight
+     * @param color the color to use for highlighting
+     */
     public void highlightPoints(Set<Point> points, Color color) {
         Platform.runLater(() -> {
             for (Point point : points) {
@@ -205,6 +247,12 @@ public class GuiShipBoard extends PurpleVBox {
         });
     }
 
+    /**
+     * Clears all highlights from the ship grid.
+     * <p>
+     * This method removes any visual highlights from all GuiComponents on the ship grid.
+     * </p>
+     */
     public void clearHighlights() {
         Platform.runLater(() -> {
             shipGrid.getChildren().stream()

@@ -2,6 +2,13 @@ package it.polimi.ingsw.galaxytruckers.view.enums;
 
 import java.util.List;
 
+/**
+ * Enum representing the types of ship components in the game.
+ * <p>
+ * Each component type is associated with a list of symbols, which can be used for CLI representation.
+ * The symbols may represent different rotations or visual states of the component.
+ * </p>
+ */
 public enum ComponentType {
     SHIELD(
             List.of("╮", "╯", "╰", "╭")),
@@ -32,11 +39,22 @@ public enum ComponentType {
 
     private final List<String> symbols;
 
+    /**
+     * Constructs a ComponentType with the given list of symbols.
+     *
+     * @param symbol the list of symbols for this component type
+     */
     ComponentType(List<String> symbol) {
         this.symbols = symbol;
     }
 
+    /**
+     * Returns the symbol for the given rotation.
+     *
+     * @param rotation the rotation index
+     * @return the symbol corresponding to the rotation
+     */
     public String getSymbol(int rotation) {
-        return symbols.get(rotation% symbols.size());
+        return symbols.get(rotation % symbols.size());
     }
 }

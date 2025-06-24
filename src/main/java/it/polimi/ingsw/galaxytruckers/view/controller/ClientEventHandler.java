@@ -16,11 +16,26 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Handles events received from the server and updates the client model accordingly.
+ * <p>
+ * This class implements the {@link EventHandler} interface for {@link Event} types. It processes various
+ * game events, converting data as needed and notifying the {@link ClientModel} and related classes to update
+ * the client-side state. The handler uses a {@link PlayerRegistry} and {@link ConversionUtils} to map player
+ * names and data between server and client representations.
+ * </p>
+ */
 public class ClientEventHandler implements EventHandler<Event> {
     private final ClientModel clientModel;
     private final PlayerRegistry playerRegistry;
     private final ConversionUtils conversionUtils;
 
+    /**
+     * Constructs a ClientEventHandler with the given client model and player registry.
+     *
+     * @param clientModel the client-side model to update
+     * @param playerRegistry the registry for player information
+     */
     public ClientEventHandler(ClientModel clientModel, PlayerRegistry playerRegistry) {
         this.clientModel = clientModel;
         this.playerRegistry = playerRegistry;
@@ -29,7 +44,7 @@ public class ClientEventHandler implements EventHandler<Event> {
 
     /**
      * Handles the {@code ModelEvent} passed as the argument, updating all
-     * affected classes
+     * affected classes.
      *
      * @param event the event to be handled
      */

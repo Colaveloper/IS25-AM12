@@ -6,11 +6,29 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+/**
+ * A circular toggle button for JavaFX GUIs.
+ * <p>
+ * This button is styled as a circle and can be toggled between active and inactive states.
+ * The color of the button can be customized, and its active state is exposed as a property.
+ * </p>
+ */
 public class CircularToggleButton extends ToggleButton {
 
+    /**
+     * The base color of the button when active.
+     */
     private Color baseColor;
+    /**
+     * Property representing whether the button is active.
+     */
     private final BooleanProperty active = new SimpleBooleanProperty(false);
 
+    /**
+     * Constructs a CircularToggleButton with the specified base color.
+     *
+     * @param baseColor the color to use when the button is active
+     */
     public CircularToggleButton(Color baseColor) {
         this.baseColor = baseColor;
 
@@ -28,23 +46,48 @@ public class CircularToggleButton extends ToggleButton {
 //        selectedProperty().addListener((obs, oldVal, newVal) -> active.set(newVal));
     }
 
+    /**
+     * Sets the base color of the button.
+     *
+     * @param color the new base color
+     */
     public void setColor(Color color) {
         baseColor = color;
         updateStyle(active.get());
     }
 
+    /**
+     * Returns the property representing the active state.
+     *
+     * @return the active property
+     */
     public BooleanProperty isActiveProperty() {
         return active;
     }
 
+    /**
+     * Returns whether the button is active.
+     *
+     * @return true if active, false otherwise
+     */
     public boolean isActive() {
         return active.get();
     }
 
+    /**
+     * Sets the active state of the button.
+     *
+     * @param value true to activate, false to deactivate
+     */
     public void setActive(boolean value) {
         active.set(value);
     }
 
+    /**
+     * Updates the style of the button based on its active state.
+     *
+     * @param active true if the button is active, false otherwise
+     */
     private void updateStyle(boolean active) {
         String hex = toHex(baseColor);
         String commonStyle = "-fx-text-fill: white;" +

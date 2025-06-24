@@ -3,6 +3,13 @@ package it.polimi.ingsw.galaxytruckers.view.enums;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Enum representing ANSI color codes for CLI highlights.
+ * <p>
+ * Each value corresponds to an ANSI escape code for coloring text in the command-line interface.
+ * Provides utility methods for retrieving the color code and a subset of highlight colors.
+ * </p>
+ */
 public enum CliHighlights {
 
        /*0*/RESET   ("\u001b[0m"),
@@ -25,10 +32,21 @@ public enum CliHighlights {
         this.color = color;
     }
 
+    /**
+     * Returns the ANSI escape code for this highlight color.
+     *
+     * @return the ANSI color code string
+     */
     public String getHighlight() {
         return color;
     }
 
+    /**
+     * Returns the first (i+1) colors as a list.
+     *
+     * @param i index (0-based)
+     * @return a list of the first (i+1) CliHighlights
+     */
     public static List<CliHighlights> getSomeColors(int i) {
         List<CliHighlights> someColors = new ArrayList<CliHighlights>(List.of(CliHighlights.values()));
         return someColors.subList(0, i + 1);

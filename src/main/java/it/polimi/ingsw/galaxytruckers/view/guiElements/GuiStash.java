@@ -13,10 +13,24 @@ import javafx.scene.text.FontWeight;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * GUI component representing the player's stash in the game.
+ * <p>
+ * This class displays the stashed components and provides controls for stashing and grabbing components.
+ * It interacts with the {@link GuiController} to handle user actions and updates the display accordingly.
+ * </p>
+ */
 public class GuiStash extends HBox {
     private final GuiController controller;
     private final HBox stashBox;
 
+    /**
+     * Constructs a GuiStash for the given stashed components and controller.
+     *
+     * @param stashedComponents the list of components currently stashed
+     * @param controller the GUI controller handling actions
+     */
     public GuiStash(List<Component> stashedComponents, GuiController controller) {
         this.controller = controller;
 
@@ -37,6 +51,11 @@ public class GuiStash extends HBox {
         getChildren().addAll(stashButton, stashBox);
     }
 
+    /**
+     * Notifies the GUI to add a component to the stash.
+     *
+     * @param component the component to add to the stash
+     */
     public void notifyStash(Component component) {
         Platform.runLater(()->{
             GuiComponent guiComponent = new GuiComponent(component);
@@ -45,6 +64,11 @@ public class GuiStash extends HBox {
         });
     }
 
+    /**
+     * Notifies the GUI to remove a component from the stash at the specified index.
+     *
+     * @param index the index of the component to remove
+     */
     public void notifyGrab(int index) {
         Platform.runLater(()-> stashBox.getChildren().remove(index));
     }

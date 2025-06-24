@@ -14,12 +14,25 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+/**
+ * GUI component representing the player's component bank in the game.
+ * <p>
+ * This class displays the covered and rejected components, and provides controls for drawing and rejecting components.
+ * It interacts with the {@link GuiController} to handle user actions and updates the display accordingly.
+ * </p>
+ */
 public class GuiComponentBank extends HBox {
 
     private final GuiController controller;
     private final Label coveredNLabel;
     private final FlowPane rejectedContainer; // Changed to FlowPane
 
+    /**
+     * Constructs a GuiComponentBank for the given component bank and controller.
+     *
+     * @param componentBank the component bank model to represent
+     * @param controller the GUI controller handling actions
+     */
     public GuiComponentBank(ComponentBank componentBank, GuiController controller) {
         this.controller = controller;
 
@@ -87,12 +100,20 @@ public class GuiComponentBank extends HBox {
         getChildren().addAll(coveredBox, uncoveredBox);
     }
 
+    /**
+     * Updates the label to reflect one less covered component after a random draw.
+     */
     public void notifyRequestRandComponent() {
         Platform.runLater(()-> coveredNLabel.setText(Integer.toString(
                 Integer.parseInt(coveredNLabel.getText()) - 1)
         ));
     }
 
+    /**
+     * Adds a rejected component to the rejected container in the GUI.
+     *
+     * @param component the component to add to the rejected list
+     */
     public void notifyRejectComponent(Component component) {
         Platform.runLater(()-> {
             GuiComponent newComponent = new GuiComponent(component);
@@ -103,6 +124,11 @@ public class GuiComponentBank extends HBox {
         });
     }
 
+    /**
+     * Removes a component from the rejected container when it is requested by the player.
+     *
+     * @param component the component to remove from the rejected list
+     */
     public void notifyRequestComponent(Component component) {
         Platform.runLater(() -> {
             rejectedContainer.getChildren().stream()
