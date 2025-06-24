@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
@@ -44,7 +45,8 @@ public class AdventureCardRegistry {
     /**
      * Constructs the registry and loads adventure card data from the JSON file.
      */
-    private AdventureCardRegistry() {
+    @VisibleForTesting
+    protected AdventureCardRegistry() {
         try {
             loadRelevantCards();
         } catch (IOException e) {
@@ -104,7 +106,8 @@ public class AdventureCardRegistry {
      * @param projectilesNode the JsonNode from which to load the list of projectiles
      * @return a {@link List} of the loaded projectiles
      * */
-    private List<Projectile> parseProjectiles(JsonNode projectilesNode) {
+    @VisibleForTesting
+    protected List<Projectile> parseProjectiles(JsonNode projectilesNode) {
         List<Projectile> projectiles = new ArrayList<>();
         for (JsonNode node : projectilesNode) {
             Direction direction = Direction.valueOf(node.get(1).asText().toUpperCase());
@@ -126,7 +129,8 @@ public class AdventureCardRegistry {
         return projectiles;
     }
 
-    private AdventureCard parseAdventureCard(JsonNode cardNode) {
+    @VisibleForTesting
+    protected AdventureCard parseAdventureCard(JsonNode cardNode) {
         String type = cardNode.get("type").asText();
         Level level = Level.valueOf(cardNode.get("level").asText().toUpperCase());
         int id = cardNode.get("id").asInt();
@@ -210,7 +214,8 @@ public class AdventureCardRegistry {
      * @param planetsNode the JsonNode from which to load the list of planets
      * @return a {@link List} of the loaded planets
      * */
-    private List<Map<GoodsType, Integer>> parsePlanets(JsonNode planetsNode) {
+    @VisibleForTesting
+    protected List<Map<GoodsType, Integer>> parsePlanets(JsonNode planetsNode) {
         List<Map<GoodsType, Integer>> planets = new ArrayList<>();
         for (JsonNode node : planetsNode) {
             Map<GoodsType, Integer> map = parseGoods(node);
@@ -224,7 +229,8 @@ public class AdventureCardRegistry {
      * @param goodsNode the JsonNode from which to load the map of goods
      * @return a {@link Map} of the loaded goods
      * */
-    private Map<GoodsType, Integer> parseGoods(JsonNode goodsNode) {
+    @VisibleForTesting
+    protected Map<GoodsType, Integer> parseGoods(JsonNode goodsNode) {
         Map<GoodsType, Integer> goods = new HashMap<>();
         for (GoodsType type : GoodsType.values()) {
             goods.put(type, goodsNode.get(type.name().toLowerCase()).asInt());
@@ -232,7 +238,8 @@ public class AdventureCardRegistry {
         return goods;
     }
 
-    private List<CombatZoneCheck> parseChecks(JsonNode checkNode) {
+    @VisibleForTesting
+    protected List<CombatZoneCheck> parseChecks(JsonNode checkNode) {
         List<String> checkNames = new ObjectMapper().convertValue(checkNode, new TypeReference<>(){});
         List<CombatZoneCheck> checks = new ArrayList<>();
         for (String name : checkNames) {
@@ -246,7 +253,8 @@ public class AdventureCardRegistry {
         return checks;
     }
 
-    private List<Penalty> parsePenalties(JsonNode penaltiesNode, JsonNode cardNode) {
+    @VisibleForTesting
+    protected List<Penalty> parsePenalties(JsonNode penaltiesNode, JsonNode cardNode) {
         List<Penalty> penalties = new ArrayList<>();
         List<String> penaltiesNames = new ObjectMapper().convertValue(penaltiesNode, new TypeReference<>(){});
         for (String name : penaltiesNames) {

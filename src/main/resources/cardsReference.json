@@ -147,16 +147,10 @@
     "type": "meteors",
     "level": "SECOND",
     "meteors": [
-<<<<<<< Updated upstream
       ["small meteor","up"],
       ["small meteor","up"],
       ["small meteor","left"],
       ["small meteor","right"],
-=======
-      ["big meteor","up"],
-      ["big meteor","right"],
-      ["small meteor","down"],
->>>>>>> Stashed changes
       ["small meteor","down"]
     ],
     "path": "src/main/resources/textures/cards/GT-cards_II_IT_0110.jpg",
