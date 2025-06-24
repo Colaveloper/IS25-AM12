@@ -21,12 +21,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Abstract GUI screen for the ship building phase of the game.
+ * <p>
+ * This class manages the UI and logic for building ships, including handling the component bank,
+ * player hands, and interactions with the ship board. It provides methods for updating the UI
+ * in response to game events such as requesting components, placing components, and updating the
+ * player's hand. Subclasses should implement specific behaviors for different ship building phases.
+ * </p>
+ *
+ * @author (your name or team)
+ */
 public abstract class GuiShipBuildingScreen extends GuiGameScreen {
 
     protected final GuiComponentBank guiComponentBank;
     protected final Map<ShipBoard, GuiHand> guiHands;
     protected final ShipBuildingState state;
 
+    /**
+     * Constructs a new GuiShipBuildingScreen.
+     *
+     * @param model the client model
+     * @param controller the controller to communicate with the server
+     * @param state the current ship building state
+     */
     public GuiShipBuildingScreen(ClientModel model, ControllerToServer controller, ShipBuildingState state) {
         super(model, controller, state);
         this.state = state;

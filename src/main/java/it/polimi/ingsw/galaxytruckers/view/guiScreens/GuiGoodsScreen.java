@@ -23,12 +23,23 @@ import javafx.scene.paint.Color;
 import java.awt.*;
 import java.util.Set;
 
+/**
+ * GUI screen for managing goods during the adventure phase.
+ * This screen allows players to place goods in cargo holds or remove them.
+ */
 public class GuiGoodsScreen extends GuiAdventureScreen {
     private final GoodsBuffer goodsBuffer;
     private final PurpleHBox bufferInfoBox = new PurpleHBox(5);
     private final ObjectProperty<Point> selectedPoint;
     private final ObjectProperty<GoodsType> selectedGoodsType;
 
+    /**
+     * Constructs a new goods management screen.
+     *
+     * @param model         The client model containing game state
+     * @param controller    The controller for communicating with the server
+     * @param addGoodsState The state containing valid actions and goods buffer for this phase
+     */
     public GuiGoodsScreen(ClientModel model, ControllerToServer controller, AddGoodsState addGoodsState) {
         super(model, controller, addGoodsState);
         this.goodsBuffer = addGoodsState.getGoodsBuffer();
@@ -49,9 +60,22 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Creates and returns a GUI controller that handles point clicks for selecting
+     * cargo holds and navigation to the next screen.
+     *
+     * @return A GUI controller for this screen
+     */
     @Override
     protected GuiController getGuiController() {
         return new GuiController() {
+            /**
+             * Handles a click on a point on the ship board.
+             * Validates if the selected point is a cargo hold and sets it as the current selection.
+             *
+             * @param point The point on the ship board that was clicked
+             */
             @Override
             public void handlePointPress(Point point) {
                 if (
@@ -67,6 +91,9 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
                 }
             }
 
+            /**
+             * Handles navigation to the next screen if allowed by the current state.
+             */
             @Override
             public void goNext() {
                 if (state.getAvailableActions().contains(StateActions.GO_NEXT)) {
@@ -76,6 +103,13 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
         };
     }
 
+    /**
+     * {@inheritDoc}
+     * Creates and returns a VBox containing the goods buffer display
+     * along with the standard free-use area.
+     *
+     * @return A VBox containing the free-use area with goods buffer
+     */
     @Override
     protected final VBox getFreeUseVBox() {
         VBox superBox = super.getFreeUseVBox();
@@ -84,6 +118,10 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
         return superBox;
     }
 
+    /**
+     * Updates the buffer display to reflect the current state of the goods buffer.
+     * Creates colored circular buttons for each good available in the buffer.
+     */
     private void updateBufferBox() {
         bufferInfoBox.getChildren().clear();
         Label bufferLabel = new Label("Buffer:");
@@ -106,6 +144,12 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
         }
     }
 
+    /**
+     * Creates and returns an HBox containing goods type selection buttons
+     * and action buttons for placing or removing goods.
+     *
+     * @return An HBox containing goods management buttons
+     */
     private HBox getButtonsBox() {
         HBox buttonsBox = new HBox(10);
         buttonsBox.setPadding(new Insets(10));
@@ -189,6 +233,14 @@ public class GuiGoodsScreen extends GuiAdventureScreen {
         return buttonsBox;
     }
 
+    /**
+     * {@inheritDoc}
+     * Updates the GUI when a component changes on the ship board,
+     * specifically refreshing the buffer display.
+     *
+     * @param shipBoard The ship board containing the changed component
+     * @param point The position of the changed component
+     */
     @Override
     public void notifyComponentChange(ShipBoard shipBoard, Point point) {
         super.notifyComponentChange(shipBoard, point);

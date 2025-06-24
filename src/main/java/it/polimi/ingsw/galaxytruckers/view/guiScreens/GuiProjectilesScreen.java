@@ -16,6 +16,15 @@ import javafx.scene.text.Font;
 
 import java.io.InputStream;
 
+/**
+ * GUI screen for handling projectile events in the game.
+ * <p>
+ * This screen is shown when a projectile (such as a meteor) needs to be handled by the player.
+ * It displays the projectile and allows the player to select a shield or battery to respond if it is their turn.
+ * </p>
+ *
+ * @author (your name or team)
+ */
 public class GuiProjectilesScreen extends GuiActivationScreen {
     private final Projectile projectile;
     private final InputStream bigFirePath = getClass().getResourceAsStream("/textures/Projectiles/BigFire.png");
@@ -23,6 +32,13 @@ public class GuiProjectilesScreen extends GuiActivationScreen {
     private final InputStream bigMeteorPath = getClass().getResourceAsStream("/textures/Projectiles/BigMeteor.png");
     private final InputStream smallMeteorPath = getClass().getResourceAsStream("/textures/Projectiles/SmallMeteor.png");
 
+    /**
+     * Constructs a new GuiProjectilesScreen.
+     *
+     * @param model the client model
+     * @param controller the controller to communicate with the server
+     * @param handleProjectileState the state containing the projectile to handle
+     */
     public GuiProjectilesScreen(ClientModel model, ControllerToServer controller, HandleProjectileState handleProjectileState) {
         super(model, controller, handleProjectileState);
         this.projectile = handleProjectileState.getProjectile();
@@ -31,6 +47,11 @@ public class GuiProjectilesScreen extends GuiActivationScreen {
         }
     }
 
+    /**
+     * Returns a VBox containing the UI elements for free use actions and the projectile display.
+     *
+     * @return VBox with UI elements
+     */
     @Override
     protected VBox getFreeUseVBox() {
         VBox superVBox = super.getFreeUseVBox();
@@ -38,6 +59,11 @@ public class GuiProjectilesScreen extends GuiActivationScreen {
         return superVBox;
     }
 
+    /**
+     * Creates and returns a PurpleVBox displaying the projectile image and information.
+     *
+     * @return PurpleVBox with projectile details
+     */
     private PurpleVBox getProjectileVBox() {
         PurpleVBox projectileBox = new PurpleVBox(5);
         projectileBox.setAlignment(Pos.CENTER);

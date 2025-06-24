@@ -16,9 +16,25 @@ import javafx.scene.paint.Color;
 import java.awt.*;
 import java.util.Set;
 
+/**
+ * Screen for the component activation phase of the game.
+ * This screen allows players to activate components on their ship by spending batteries.
+ * Players can click on components to activate them or on batteries to spend them.
+ * The screen provides visual feedback about the activation state and controls to complete the activation phase.
+ */
 public abstract class GuiActivationScreen extends GuiAdventureScreen {
     private final IntegerProperty batteriesToSpend;
 
+    /**
+     * Constructs a GuiActivationScreen with the specified model, controller, and game state.
+     * Initializes the battery counter and sets up the UI elements for the activation phase.
+     * If it's the player's turn, a "FINISH ACTIVATION" button is displayed, which is enabled
+     * only when all required batteries have been spent.
+     *
+     * @param model The client model containing all game data
+     * @param controller The controller for sending commands to the server
+     * @param gameState The current adventure state
+     */
     public GuiActivationScreen(ClientModel model, ControllerToServer controller, AdventureState gameState) {
         super(model, controller, gameState);
         batteriesToSpend = new SimpleIntegerProperty(0);
@@ -36,6 +52,13 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
         }
     }
 
+    /**
+     * Provides a custom GuiController implementation for the activation phase.
+     * This controller handles clicks on components and batteries, allowing players to
+     * activate components or spend batteries based on the current game state.
+     *
+     * @return A GuiController implementation for handling activation phase interactions
+     */
     @Override
     protected GuiController getGuiController() {
         return new GuiController() {

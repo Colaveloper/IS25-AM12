@@ -20,10 +20,26 @@ import javafx.scene.paint.Color;
 import java.awt.*;
 import java.util.Set;
 
+/**
+ * GUI screen for handling the removal of crew members from the ship.
+ * <p>
+ * This screen is displayed when a player must remove crew members from their ship.
+ * It allows the player to select a cabin and remove crew, updating the UI accordingly.
+ * </p>
+ *
+ * @author (your name or team)
+ */
 public class GuiRemoveCrewScreen extends GuiAdventureScreen {
     private final ObjectProperty<Point> selectedPoint;
     private final VBox cabinInfoBox;
 
+    /**
+     * Constructs a new GuiRemoveCrewScreen.
+     *
+     * @param model the client model
+     * @param controller the controller to communicate with the server
+     * @param removeCrewState the state containing information about crew removal
+     */
     public GuiRemoveCrewScreen(ClientModel model, ControllerToServer controller, RemoveCrewState removeCrewState) {
         super(model, controller, removeCrewState);
         this.selectedPoint = new SimpleObjectProperty<>();
@@ -43,6 +59,10 @@ public class GuiRemoveCrewScreen extends GuiAdventureScreen {
         }
     }
 
+    /**
+     * Sets up the action buttons for removing crew and finishing the action.
+     * Adds the buttons to the GUI button box and binds their actions.
+     */
     private void setupButtonBox() {
         guiButtonBox.getChildren().clear();
 
@@ -72,6 +92,11 @@ public class GuiRemoveCrewScreen extends GuiAdventureScreen {
         guiButtonBox.getChildren().add(actionButtons);
     }
 
+    /**
+     * Returns a custom GuiController for handling point presses and advancing the state.
+     *
+     * @return a GuiController instance for this screen
+     */
     @Override
     protected GuiController getGuiController() {
         return new GuiController() {
@@ -98,6 +123,9 @@ public class GuiRemoveCrewScreen extends GuiAdventureScreen {
         };
     }
 
+    /**
+     * Updates the cabinInfoBox with information about the selected cabin and crew count.
+     */
     private void updateCabinInfoBox() {
         cabinInfoBox.getChildren().clear();
         Label cabinsWithCrewLabel = new Label("Cabins with crew: " + countCabinsWithCrew());
@@ -116,6 +144,11 @@ public class GuiRemoveCrewScreen extends GuiAdventureScreen {
         }
     }
 
+    /**
+     * Returns a VBox containing UI elements for free use actions and cabin info.
+     *
+     * @return VBox with UI elements
+     */
     @Override
     protected VBox getFreeUseVBox() {
         VBox freeUseVBox = super.getFreeUseVBox();
@@ -127,6 +160,11 @@ public class GuiRemoveCrewScreen extends GuiAdventureScreen {
         return freeUseVBox;
     }
 
+    /**
+     * Counts the number of cabins on the ship that have at least one crew member.
+     *
+     * @return the number of cabins with crew
+     */
     private int countCabinsWithCrew() {
         ShipBoard currentShip = state.getShipBoard();
         int count = 0;
@@ -138,6 +176,12 @@ public class GuiRemoveCrewScreen extends GuiAdventureScreen {
         return count;
     }
 
+    /**
+     * Notifies the screen of a component change, clears highlights, and updates the cabin info box.
+     *
+     * @param shipBoard the ship board that changed
+     * @param point the point (cabin) that changed
+     */
     @Override
     public void notifyComponentChange(ShipBoard shipBoard, Point point) {
         super.notifyComponentChange(shipBoard, point);

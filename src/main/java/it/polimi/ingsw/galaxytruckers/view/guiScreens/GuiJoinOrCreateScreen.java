@@ -22,11 +22,23 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * GUI screen for joining existing game lobbies or creating a new game.
+ * This screen displays a list of available game lobbies that the player can join,
+ * along with a button to create a new game.
+ */
 public class GuiJoinOrCreateScreen extends GuiScreen {
 
     private final List<UUID> ids;
     private final VBox lobbiesBox;
 
+    /**
+     * Constructs a new join or create game screen.
+     *
+     * @param model      The client model containing game state
+     * @param ids        Set of UUIDs for available game lobbies
+     * @param controller The controller for communicating with the server
+     */
     public GuiJoinOrCreateScreen(ClientModel model, Set<UUID> ids, ControllerToServer controller) {
         super(model, controller);
         this.ids = new ArrayList<>(ids);
@@ -34,6 +46,13 @@ public class GuiJoinOrCreateScreen extends GuiScreen {
         this.lobbiesBox.setAlignment(Pos.CENTER);
     }
 
+    /**
+     * {@inheritDoc}
+     * Creates and returns the user interface for joining or creating a game,
+     * including a list of available lobbies and a button to create a new game.
+     *
+     * @return A styled Pane containing the join or create game interface
+     */
     @Override
     public Pane getNode() {
         Label title = new Label("Are you ready for a new adventure?");
@@ -67,6 +86,11 @@ public class GuiJoinOrCreateScreen extends GuiScreen {
         return layout;
     }
 
+    /**
+     * Updates the display of available game lobbies.
+     * This method creates a styled table showing the host and game level
+     * for each available lobby that is not yet full.
+     */
     private void updateLobbyButtons() {
         Platform.runLater(() -> {
             lobbiesBox.getChildren().clear();
@@ -121,6 +145,15 @@ public class GuiJoinOrCreateScreen extends GuiScreen {
         });
     }
 
+    /**
+     * Creates a styled row for a single game lobby in the lobby list.
+     * The row includes information about the host and game level,
+     * and can be clicked to join the lobby.
+     *
+     * @param lobby The lobby to display
+     * @param id    The UUID of the lobby
+     * @return An HBox containing the lobby information with appropriate styling
+     */
     private HBox createLobbyRow(Lobby lobby, UUID id) {
         HBox rowContent = new HBox();
         rowContent.setAlignment(Pos.CENTER_LEFT);
@@ -154,12 +187,24 @@ public class GuiJoinOrCreateScreen extends GuiScreen {
         return rowContent;
     }
 
+    /**
+     * {@inheritDoc}
+     * Updates the screen when a new lobby becomes available.
+     *
+     * @param lobby The newly created lobby
+     */
     @Override
     public void notifyNewLobby(Lobby lobby) {
         ids.add(lobby.getId());
         updateLobbyButtons();
     }
 
+    /**
+     * {@inheritDoc}
+     * Updates the screen when a lobby is no longer available.
+     *
+     * @param lobbyId The UUID of the removed lobby
+     */
     @Override
     public void notifyRemoveLobby(UUID lobbyId) {
         ids.remove(lobbyId);
