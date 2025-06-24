@@ -15,9 +15,21 @@ import javafx.scene.layout.VBox;
 
 import java.util.Optional;
 
+/**
+ * GUI screen for drawing new adventure cards.
+ * This screen allows the leader player to draw a new adventure card
+ * and then start the adventure, while other players wait for the leader's action.
+ */
 public class GuiNewCardScreen extends GuiAdventureScreen {
     Button actionButton = new Button("Draw Card");
 
+    /**
+     * Constructs a new card drawing screen.
+     *
+     * @param model         The client model containing game state
+     * @param controller    The controller for communicating with the server
+     * @param drawCardState The state containing valid actions for this phase
+     */
     public GuiNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState drawCardState) {
         super(model, controller, drawCardState);
 
@@ -31,9 +43,19 @@ public class GuiNewCardScreen extends GuiAdventureScreen {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Creates and returns a GUI controller that handles drawing cards
+     * and navigation to the next screen.
+     *
+     * @return A GUI controller for this screen
+     */
     @Override
     protected GuiController getGuiController() {
         return new GuiController() {
+            /**
+             * Handles navigation to the next screen if allowed by the current state.
+             */
             @Override
             public void goNext() {
                 if(state.getAvailableActions().contains(StateActions.GO_NEXT)) {
@@ -41,6 +63,9 @@ public class GuiNewCardScreen extends GuiAdventureScreen {
                 }
             }
 
+            /**
+             * Handles drawing a card if allowed by the current state.
+             */
             @Override
             public void drawCard() {
                 if(state.getAvailableActions().contains(StateActions.DRAW_CARD)) {
@@ -50,6 +75,13 @@ public class GuiNewCardScreen extends GuiAdventureScreen {
         };
     }
 
+    /**
+     * {@inheritDoc}
+     * Updates the GUI when a card is drawn, displaying the card and
+     * changing the action button to allow starting the adventure.
+     *
+     * @param adventureCard The adventure card that was drawn
+     */
     @Override
     public void notifyDrawCard(AdventureCard adventureCard) {
         Platform.runLater(()->{

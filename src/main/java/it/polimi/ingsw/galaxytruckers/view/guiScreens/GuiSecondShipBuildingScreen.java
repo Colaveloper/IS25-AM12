@@ -32,6 +32,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * GUI screen for the second ship building phase of the game.
+ * <p>
+ * This screen manages the UI and logic for the second round of ship building, including
+ * handling the hourglass timer, forecast display, and player stashes. It extends the base
+ * GuiShipBuildingScreen to provide additional features specific to the second phase.
+ * </p>
+ *
+ * @author (your name or team)
+ */
 public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
 
     private final GuiForecast guiForecast;
@@ -42,6 +52,13 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
     private boolean hasLoggedEndMessage = false;
     private HBox cardsHBox;
 
+    /**
+     * Constructs a new GuiSecondShipBuildingScreen.
+     *
+     * @param model the client model
+     * @param controller the controller to communicate with the server
+     * @param state the state for the second ship building phase
+     */
     public GuiSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState state) {
         super(model, controller, state);
         this.gameState = state;

@@ -11,12 +11,31 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * GUI screen for displaying the game lobby.
+ * This screen shows all players who have joined the game and are waiting
+ * for the game to start. Each player is represented by a visual box containing
+ * their nickname.
+ */
 public class GuiLobbyScreen extends GuiScreen {
 
+    /**
+     * Constructs a new lobby screen.
+     *
+     * @param model      The client model containing game state and player information
+     * @param controller The controller for communicating with the server
+     */
     public GuiLobbyScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
     }
 
+    /**
+     * {@inheritDoc}
+     * Creates and returns the lobby interface displaying all players in the lobby.
+     * Players are shown in a grid layout with their nicknames.
+     *
+     * @return A Pane containing the lobby user interface with player boxes
+     */
     @Override
     public Pane getNode() {
         FlowPane lobbyPane = new FlowPane();
@@ -33,7 +52,12 @@ public class GuiLobbyScreen extends GuiScreen {
         return lobbyPane;
     }
 
-
+    /**
+     * Creates a styled box representing a player in the lobby.
+     *
+     * @param nickname The nickname of the player to display
+     * @return A StackPane containing the player's information with appropriate styling
+     */
     private StackPane createPlayerBox(String nickname) {
         Rectangle background = new Rectangle(150, 100);
         background.setArcWidth(20);

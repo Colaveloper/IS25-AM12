@@ -17,11 +17,30 @@ import javafx.scene.text.Font;
 
 import java.util.Arrays;
 
+/**
+ * GUI screen for creating a new game.
+ * This screen allows the user to select game settings such as flight level
+ * and the number of players before starting a new game session.
+ */
 public class GuiGameCreationScreen extends GuiScreen {
+
+    /**
+     * Constructs a new game creation screen.
+     *
+     * @param model      The client model containing game state
+     * @param controller The controller for communicating with the server
+     */
     public GuiGameCreationScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
     }
 
+    /**
+     * {@inheritDoc}
+     * Creates and returns the game creation interface with level selection,
+     * player count selection, and a start button.
+     *
+     * @return A styled Pane containing the game creation user interface
+     */
     @Override
     public Pane getNode() {
         VBox layout = new VBox(20);

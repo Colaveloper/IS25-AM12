@@ -22,11 +22,23 @@ import javafx.scene.paint.Color;
 
 import java.awt.*;
 
+/**
+ * GUI screen for handling the loss of goods during adverse game events.
+ * This screen allows players to select cargo holds and choose which goods
+ * to discard. Players potentially lose batteries if they have no goods to lose.
+ */
 public class GuiLoseGoodsScreen extends GuiAdventureScreen {
     private final ObjectProperty<Point> selectedPoint;
     private final ObjectProperty<GoodsType> selectedGoodsType;
     private VBox cargoInfoBox = new VBox(2);
 
+    /**
+     * Constructs a new lose goods screen.
+     *
+     * @param model            The client model containing game state
+     * @param controller       The controller for communicating with the server
+     * @param removeGoodsState The state containing valid actions for this phase
+     */
     public GuiLoseGoodsScreen(ClientModel model, ControllerToServer controller, RemoveGoodsState removeGoodsState) {
         super(model, controller, removeGoodsState);
         this.selectedPoint = new SimpleObjectProperty<>();
@@ -42,6 +54,10 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         }
     }
 
+    /**
+     * Sets up the button box with goods type selection and action buttons.
+     * This is only done when it's the current player's turn.
+     */
     private void setupButtonBox() {
         if (isMyTurn()) {
             guiButtonBox.getChildren().clear();
@@ -50,6 +66,10 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         }
     }
 
+    /**
+     * Updates the state of buttons based on whether the player has goods to lose.
+     * If no goods are available to lose, informs the player they can proceed.
+     */
     private void updateButtonsState() {
         boolean hasGoodsToLose = countCargoHoldsWithGoods() > 0;
         if (!hasGoodsToLose) {
@@ -57,6 +77,13 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Creates and returns a GUI controller that handles point clicks for selecting
+     * cargo holds and navigation to the next screen.
+     *
+     * @return A GUI controller for this screen
+     */
     @Override
     protected GuiController getGuiController() {
         return new GuiController() {
@@ -81,6 +108,13 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         };
     }
 
+    /**
+     * {@inheritDoc}
+     * Creates and returns a VBox containing the cargo information display
+     * along with the standard free-use area.
+     *
+     * @return A VBox containing the free-use area with cargo information
+     */
     @Override
     protected VBox getFreeUseVBox() {
         VBox freeUseVBox = super.getFreeUseVBox();
@@ -94,6 +128,13 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         return freeUseVBox;
     }
 
+    /**
+     * {@inheritDoc}
+     * Creates and returns a VBox containing the ship board for a specific ship.
+     *
+     * @param shipBoard The ship board to display
+     * @return A VBox containing the ship board
+     */
     @Override
     protected VBox getShipBoardVBox(ShipBoard shipBoard) {
         VBox shipBoardVBox = new VBox(5);
@@ -105,6 +146,10 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         return shipBoardVBox;
     }
 
+    /**
+     * Updates the cargo information box with details about the selected cargo hold.
+     * Shows the position and contents of the selected cargo hold.
+     */
     private void updateCargoInfoBox() {
         cargoInfoBox.getChildren().clear();
         cargoInfoBox.getChildren().add(new Label("Cargo holds with goods: " + countCargoHoldsWithGoods()));
@@ -126,6 +171,12 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         }
     }
 
+    /**
+     * Creates and returns an HBox containing goods type selection buttons
+     * and action buttons for removing goods or proceeding to the next phase.
+     *
+     * @return An HBox containing goods management buttons
+     */
     private HBox getButtonsBox() {
         HBox buttonsBox = new HBox(10);
         buttonsBox.setPadding(new Insets(10));
@@ -213,6 +264,11 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         return buttonsBox;
     }
 
+    /**
+     * Counts the total number of batteries available on the player's ship.
+     *
+     * @return The total number of batteries available
+     */
     private int countBatteries() {
         int totalBatteries = 0;
         for (Point point : myShipBoard.getBatteries().keySet()) {
@@ -221,6 +277,11 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         return totalBatteries;
     }
 
+    /**
+     * Counts the number of cargo holds that contain goods on the current ship.
+     *
+     * @return The number of cargo holds containing goods
+     */
     private int countCargoHoldsWithGoods() {
         ShipBoard currentShip = state.getShipBoard();
         int count = 0;
@@ -232,6 +293,14 @@ public class GuiLoseGoodsScreen extends GuiAdventureScreen {
         return count;
     }
 
+    /**
+     * {@inheritDoc}
+     * Updates the GUI when a component changes on the ship board,
+     * specifically refreshing the cargo information display.
+     *
+     * @param shipBoard The ship board containing the changed component
+     * @param point The position of the changed component
+     */
     @Override
     public void notifyComponentChange(ShipBoard shipBoard, Point point) {
         super.notifyComponentChange(shipBoard, point);

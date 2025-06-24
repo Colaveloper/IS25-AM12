@@ -23,10 +23,23 @@ import javafx.scene.paint.Color;
 
 import java.util.Map;
 
+/**
+ * GUI screen for the planet selection phase of the adventure.
+ * This screen allows players to choose planets by selecting corresponding
+ * colored buttons. Each player can only choose planets when it's their turn,
+ * and can skip their turn if desired.
+ */
 public class GuiPlanetScreen extends GuiAdventureScreen {
     private final ObjectProperty<ShipBoard> currentShipBoard;
     private final ListProperty<ShipBoard> planetToShip;
 
+    /**
+     * Constructs a new planet selection screen.
+     *
+     * @param model             The client model containing game state
+     * @param controller        The controller for communicating with the server
+     * @param choosePlanetState The state containing valid actions and planet options for this phase
+     */
     public GuiPlanetScreen(ClientModel model, ControllerToServer controller, ChoosePlanetState choosePlanetState) {
         super(model, controller, choosePlanetState);
         guiLog.log(isMyTurn() ? "Your turn to choose a planet" : "Waiting for other player");
@@ -57,9 +70,19 @@ public class GuiPlanetScreen extends GuiAdventureScreen {
         guiButtonBox.getChildren().add(verticalButtonBox);
     }
 
+    /**
+     * {@inheritDoc}
+     * Creates and returns a GUI controller that handles planet selection
+     * and navigation to the next screen.
+     *
+     * @return A GUI controller for this screen
+     */
     @Override
     protected GuiController getGuiController() {
         return new GuiController() {
+            /**
+             * Handles navigation to the next screen if allowed by the current state.
+             */
             @Override
             public void goNext() {
                 if (state.getAvailableActions().contains(StateActions.GO_NEXT)) {
@@ -67,6 +90,11 @@ public class GuiPlanetScreen extends GuiAdventureScreen {
                 }
             }
 
+            /**
+             * Handles planet selection for a specific planet index.
+             *
+             * @param i The index of the planet to choose
+             */
             @Override
             public void choosePlanet(int i) {
                 if (state.getAvailableActions().contains(StateActions.CHOOSE_PLANET)) {
@@ -76,6 +104,14 @@ public class GuiPlanetScreen extends GuiAdventureScreen {
         };
     }
 
+    /**
+     * Creates a circular toggle button representing a planet that can be selected.
+     * The button is colored according to the ship that has chosen it, and is
+     * disabled when it's not the player's turn or the planet is already taken.
+     *
+     * @param planetIndex The index of the planet this button represents
+     * @return A CircularToggleButton configured for planet selection
+     */
     private CircularToggleButton createPlanetButton(int planetIndex) {
         CircularToggleButton planetButton = new CircularToggleButton(Color.GRAY);
         planetButton.setText(String.valueOf(planetIndex + 1));
@@ -104,6 +140,15 @@ public class GuiPlanetScreen extends GuiAdventureScreen {
         return planetButton;
     }
 
+    /**
+     * {@inheritDoc}
+     * Updates the GUI when a player chooses a planet, updating the button colors
+     * and enabling/disabling controls based on whose turn it is next.
+     *
+     * @param shipBoard The ship board that made the choice
+     * @param choice The index of the chosen planet
+     * @param nextShipBoard The ship board that can choose next
+     */
     @Override
     public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard) {
         Platform.runLater(() -> {
@@ -112,6 +157,13 @@ public class GuiPlanetScreen extends GuiAdventureScreen {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     * Updates the GUI when the current player changes, enabling/disabling
+     * controls based on whose turn it is.
+     *
+     * @param shipBoard The ship board that can now make choices
+     */
     @Override
     public void notifyCurrentPlayerUpdate(ShipBoard shipBoard) {
         Platform.runLater(() -> {

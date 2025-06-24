@@ -16,12 +16,30 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * GUI screen for nickname selection.
+ * This screen allows players to enter and submit a unique nickname
+ * before joining a game. It represents the first interactive screen
+ * that players encounter when starting the game.
+ */
 public class GuiNicknameChoiceScreen extends GuiScreen {
 
+    /**
+     * Constructs a new nickname choice screen.
+     *
+     * @param model      The client model containing game state
+     * @param controller The controller for communicating with the server
+     */
     public GuiNicknameChoiceScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
     }
 
+    /**
+     * Submits the entered nickname to the server if it's not empty.
+     * Trims whitespace from the nickname before submission.
+     *
+     * @param field The text field containing the nickname to submit
+     */
     private void submitNickname(TextField field) {
         String nickname = field.getText().trim();
         if (!nickname.isEmpty()) {
@@ -29,6 +47,13 @@ public class GuiNicknameChoiceScreen extends GuiScreen {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Creates and returns the nickname selection interface with a prompt,
+     * text field for input, and a submit button.
+     *
+     * @return A styled Pane containing the nickname selection user interface
+     */
     @Override
     public Pane getNode() {
         VBox layout = new VBox(20);

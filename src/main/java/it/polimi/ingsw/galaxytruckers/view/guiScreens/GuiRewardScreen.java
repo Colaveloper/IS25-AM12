@@ -15,10 +15,23 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
- * GUI screen for handling the reward grabbing phase of the game
+ * GUI screen for handling the reward grabbing phase of the game.
+ * <p>
+ * This screen is shown when a player can grab a reward (credits) or choose to skip during the adventure phase.
+ * It displays the available options and updates the log and UI accordingly.
+ * </p>
+ *
+ * @author (your name or team)
  */
 public class GuiRewardScreen extends GuiAdventureScreen {
 
+    /**
+     * Constructs a new GuiRewardScreen.
+     *
+     * @param model the client model
+     * @param controller the controller to communicate with the server
+     * @param grabRewardState the state containing information about the reward phase
+     */
     public GuiRewardScreen(ClientModel model, ControllerToServer controller, GrabRewardState grabRewardState) {
         super(model, controller, grabRewardState);
         setupButtons();
@@ -26,7 +39,8 @@ public class GuiRewardScreen extends GuiAdventureScreen {
     }
 
     /**
-     * Sets up the buttons for grabbing rewards or skipping
+     * Sets up the buttons for grabbing rewards or skipping.
+     * Adds the buttons to the GUI and binds their actions.
      */
     private void setupButtons() {
         guiButtonBox.getChildren().clear();
@@ -37,6 +51,15 @@ public class GuiRewardScreen extends GuiAdventureScreen {
         }
     }
 
+    /**
+     * Creates and returns an HBox containing the "Grab Reward" and "Skip" buttons.
+     * <p>
+     * The buttons allow the player to either grab the available reward or skip their turn.
+     * Button actions are bound to the appropriate controller methods and log updates.
+     * </p>
+     *
+     * @return HBox with reward action buttons
+     */
     private HBox getButtonsBox() {
         HBox buttonsBox = new HBox(10);
         buttonsBox.setPadding(new Insets(10));
@@ -82,6 +105,14 @@ public class GuiRewardScreen extends GuiAdventureScreen {
         };
     }
 
+    /**
+     * Returns a VBox containing UI elements for the reward phase.
+     * <p>
+     * This includes a title and information about whose turn it is to decide about the reward.
+     * </p>
+     *
+     * @return VBox with reward phase UI elements
+     */
     @Override
     protected VBox getFreeUseVBox() {
         VBox cardBox = super.getFreeUseVBox();
