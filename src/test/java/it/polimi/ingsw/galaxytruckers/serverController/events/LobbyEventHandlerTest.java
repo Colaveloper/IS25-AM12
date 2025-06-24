@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
+import it.polimi.ingsw.galaxytruckers.model.GameModel;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
@@ -39,6 +40,12 @@ class LobbyEventHandlerTest {
         lobbyEventHandler.start();
     }
 
+    @AfterEach
+    void tearDown() {
+        SessionManager.getInstance().clear();
+        Player.clear();
+    }
+
     @Test
     void broadCastUpdateTest() throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch(1);
@@ -68,21 +75,13 @@ class LobbyEventHandlerTest {
             throw new RuntimeException("Timeout waiting for latch");
         }
     }
-
-    @AfterEach
-    void tearDown() {
-        SessionManager.getInstance().unregisterClient(p1);
-        SessionManager.getInstance().unregisterClient(p2);
-        Player.removePlayer("p1");
-        Player.removePlayer("p2");
-    }
 }
 
 class LobbyStub extends Lobby {
     private final List<Player> players;
 
     public LobbyStub(List<Player> players) {
-        super(null, players.getFirst(), Level.SECOND, 2, (_) -> {
+        super(new GameModel(), players.getFirst(), Level.SECOND, 2, (_) -> {
         });
         this.players = players;
     }
@@ -95,6 +94,10 @@ class LobbyStub extends Lobby {
 
 class VirtualClientStub implements ClientHandler {
     List<Event> receivedEvents = new ArrayList<>();
+
+    @Override
+    public void setPlayer(Player player) {
+    }
 
     @Override
     public void notifyEvent(Event event) {
@@ -110,9 +113,5 @@ class VirtualClientStub implements ClientHandler {
 
     @Override
     public void pauseEvents() {
-    }
-
-    @Override
-    public void start() {
     }
 }

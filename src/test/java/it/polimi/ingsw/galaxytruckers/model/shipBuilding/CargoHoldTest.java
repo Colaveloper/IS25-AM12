@@ -30,8 +30,11 @@ class CargoHoldTest extends ComponentTest {
 
     @Test
     void addingAndRemoving() {
-        assertThrows(IllegalArgumentException.class, () -> mySpecialCargoHold.addGoods(GoodsType.BLUE, 4));
         assertThrows(IllegalArgumentException.class, () -> mySpecialCargoHold.removeGoods(GoodsType.BLUE, 1));
+        assertThrows(IllegalArgumentException.class, () -> mySpecialCargoHold.addGoods(GoodsType.BLUE, 4));
+        mySpecialCargoHold.addGoods(GoodsType.BLUE, 1);
+        assertThrows(IllegalArgumentException.class, () -> mySpecialCargoHold.removeGoods(GoodsType.BLUE, 2));
+        mySpecialCargoHold.removeGoods(GoodsType.BLUE, 1);
         assertTrue(mySpecialCargoHold.getGoods().isEmpty());
 
         mySpecialCargoHold.addGoods(GoodsType.RED, 1);
@@ -42,7 +45,8 @@ class CargoHoldTest extends ComponentTest {
         assertThrows(IllegalArgumentException.class, () -> mySpecialCargoHold.addGoods(GoodsType.BLUE, 1));
 
         mySpecialCargoHold.removeGoods(GoodsType.RED, 1);
-        assertEquals(0, mySpecialCargoHold.getGoods().get(GoodsType.RED));
-        assertEquals(2, mySpecialCargoHold.getGoods().get(GoodsType.GREEN));
+        assertFalse(mySpecialCargoHold.getGoods().containsKey(GoodsType.RED));
+        mySpecialCargoHold.removeGoods(GoodsType.GREEN, 1);
+        assertEquals(1, mySpecialCargoHold.getGoods().get(GoodsType.GREEN));
     }
 }

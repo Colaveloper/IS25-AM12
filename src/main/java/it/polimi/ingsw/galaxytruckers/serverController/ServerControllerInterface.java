@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 public interface ServerControllerInterface {
 
-    <T extends ClientHandler> T registerNickname(String nickname, Function<Player, T> handlerFunction);
+    void registerNickname(String nickname, ClientHandler handler);
 
     /**
      * Creates a new lobby for a game of the chosen level and with

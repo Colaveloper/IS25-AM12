@@ -1,0 +1,19 @@
+Index: .run/LocalClient1.run.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><component name=\"ProjectRunConfigurationManager\">\r\n  <configuration default=\"false\" name=\"LocalClient1\" type=\"Application\" factoryName=\"Application\" folderName=\"System2Clients\" singleton=\"false\">\r\n    <option name=\"ALTERNATIVE_JRE_PATH\" value=\"openjdk-23\" />\r\n    <option name=\"ALTERNATIVE_JRE_PATH_ENABLED\" value=\"true\" />\r\n    <option name=\"MAIN_CLASS_NAME\" value=\"it.polimi.ingsw.galaxytruckers.network.client.Client\" />\r\n    <module name=\"Galaxy_Truckers\" />\r\n    <option name=\"PROGRAM_PARAMETERS\" value=\"Galaxy-Truckers-Server 127.0.0.1 12345 12346\" />\r\n    <method v=\"2\">\r\n      <option name=\"Make\" enabled=\"true\" />\r\n    </method>\r\n  </configuration>\r\n</component>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.run/LocalClient1.run.xml b/.run/LocalClient1.run.xml
+--- a/.run/LocalClient1.run.xml	(revision bc8c540c08452ba1dceb725381d42e2bb436a171)
++++ b/.run/LocalClient1.run.xml	(date 1748609293463)
+@@ -3,7 +3,7 @@
+     <option name="ALTERNATIVE_JRE_PATH" value="openjdk-23" />
+     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.network.client.Client" />
+-    <module name="Galaxy_Truckers" />
++    <module name="GalaxyTruckers" />
+     <option name="PROGRAM_PARAMETERS" value="Galaxy-Truckers-Server 127.0.0.1 12345 12346" />
+     <method v="2">
+       <option name="Make" enabled="true" />

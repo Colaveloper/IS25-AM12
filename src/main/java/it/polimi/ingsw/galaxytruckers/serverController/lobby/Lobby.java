@@ -1,8 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
 import it.polimi.ingsw.galaxytruckers.model.GameInterface;
+import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -21,7 +23,7 @@ import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 public class Lobby implements LobbyInterface {
-    private static final long removalDelay = 5;
+    private static final long REMOVAL_DELAY = 15000;
 
     private final Object paramLock = new Object();
 
@@ -36,7 +38,7 @@ public class Lobby implements LobbyInterface {
     private final Set<GameColor> chosenColors;
     private final Map<Player, GameColor> playerColors;
 
-    private final EventQueue<LobbyEvent> eventQueue;
+    private EventQueue<LobbyEvent> eventQueue;
     private final LobbyEventHandler lobbyEventHandler;
 
     private final Set<Player> disconnectedPlayers = new HashSet<>();
@@ -44,9 +46,9 @@ public class Lobby implements LobbyInterface {
     private final Consumer<Lobby> removeLobby;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture;
+    private long removalDelay = REMOVAL_DELAY;
 
-    public Lobby(GameInterface game, Player creator, Level level, int numPlayers, Consumer<Lobby> removeLobby) {
-        this.game = game;
+    public Lobby(GameModelInterface model, Player creator, Level level, int numPlayers, Consumer<Lobby> removeLobby) {
         this.id = UUID.randomUUID();
         this.level = level;
         this.numPlayers = numPlayers;
@@ -60,6 +62,8 @@ public class Lobby implements LobbyInterface {
 
         this.eventQueue = new EventQueue<>();
         this.lobbyEventHandler = new LobbyEventHandler(this.eventQueue, this);
+
+        this.game = model.createGame(level,numPlayers,new GameEventListener(this.eventQueue, () -> DtoConverter.getLobbyDetails(this)));
 
         lobbyEventHandler.start();
         addPlayer(creator);
@@ -82,15 +86,19 @@ public class Lobby implements LobbyInterface {
     }
 
     public List<Player> getPlayers() {
+        List<Player> res;
         synchronized (paramLock) {
-            return new ArrayList<>(players);
+            res = new ArrayList<>(players);
         }
+        return res;
     }
 
     public Map<Player, GameColor> getPlayerColors() {
+        Map<Player, GameColor> res;
         synchronized (paramLock) {
-            return new HashMap<>(playerColors);
+            res = new HashMap<>(playerColors);
         }
+        return res;
     }
 
     /**
@@ -101,6 +109,7 @@ public class Lobby implements LobbyInterface {
      * @param player the player to add
      */
     public boolean addPlayer(Player player) {
+        boolean res;
         synchronized (paramLock) {
             checkLobbyState(LobbyState.PREPARATION);
             GameColor chosenColor = Arrays.stream(GameColor.values())
@@ -121,10 +130,12 @@ public class Lobby implements LobbyInterface {
             eventQueue.notifyEvent(new JoinLobbyEvent(player.getNickname(), playerColors.get(player)));
             if (players.size() == numPlayers) {
                 startGame();
-                return true;
+                res = true;
+            } else {
+                res = false;
             }
-            return false;
         }
+        return res;
     }
 
     public void notifyPlayerDisconnection(Player player) {
@@ -132,7 +143,7 @@ public class Lobby implements LobbyInterface {
             if (disconnectedPlayers.add(player)) {
                 eventQueue.notifyEvent(new PlayerDisconnectionEvent(player.getNickname()));
                 if (disconnectedPlayers.size() == getPlayers().size()) {
-                    scheduledFuture = scheduler.schedule(this::remove, removalDelay, TimeUnit.SECONDS);
+                    scheduledFuture = scheduler.schedule(this::remove, removalDelay, TimeUnit.MILLISECONDS);
                     System.out.println("Scheduled lobby " + getId() + " removal");
                 }
             }
@@ -177,6 +188,10 @@ public class Lobby implements LobbyInterface {
         this.state = state;
     }
 
+    public LobbyState getState() {
+        return state;
+    }
+
     /**
      * Brings the state of the lobby to {@link LobbyState#INGAME}
      * Sets the game of the lobby to a new instance of {@link Game} of the specified level
@@ -186,12 +201,14 @@ public class Lobby implements LobbyInterface {
             ShipBoard ship = game.addShipBoard(playerColors.get(player));
             player.setShipBoard(ship);
         }
-        game.setEventListener(new GameEventListener(this.eventQueue, () -> DtoConverter.getLobbyDetails(this)));
         game.start();
         setState(LobbyState.INGAME);
     }
 
     public void skip(Player player) {
+        synchronized (paramLock) {
+            if (disconnectedPlayers.size() == players.size()) return;
+        }
         if (state == LobbyState.INGAME) {
             game.skip(player.getShipBoard().orElseThrow());
         }
@@ -352,4 +369,19 @@ public class Lobby implements LobbyInterface {
         checkLobbyState(LobbyState.INGAME);
         game.giveUp(player.getShipBoard().orElseThrow());
 	}
+
+    @VisibleForTesting
+    public void setRemovalDelay(long delay) {
+        this.removalDelay = delay;
+    }
+
+    @VisibleForTesting
+    public void setEventQueue(EventQueue<LobbyEvent> eventQueue) {
+        this.eventQueue = eventQueue;
+    }
+
+    @VisibleForTesting
+    public void stopEventHandler() {
+        this.lobbyEventHandler.stop();
+    }
 }

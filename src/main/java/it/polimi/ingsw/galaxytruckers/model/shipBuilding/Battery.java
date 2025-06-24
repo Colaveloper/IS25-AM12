@@ -11,9 +11,6 @@ public non-sealed class Battery extends Component implements ComponentInterface{
 
     public Battery(Map<Direction, Connector> connectors, int id, int numBatteries) {
         super(connectors,id);
-        if (numBatteries != 2 && numBatteries != 3) {
-            throw new IllegalArgumentException("Number of batteries must be 2 or 3");
-        }
         this.numBatteries = numBatteries;
     }
 
@@ -44,12 +41,12 @@ public non-sealed class Battery extends Component implements ComponentInterface{
     }
 
     @Override
-    public void addToVisitor(ComponentVisitor visitor) {
-        visitor.add(this);
+    public void addToVisitor(ComponentVisitor visitor, java.awt.Point point) {
+        visitor.add(this, point);
     }
 
     @Override
-    public void removeFromVisitor(ComponentVisitor visitor) {
-        visitor.remove(this);
+    public void removeFromVisitor(ComponentVisitor visitor, java.awt.Point point) {
+        visitor.remove(this, point);
     }
 }

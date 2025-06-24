@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 
 import java.awt.*;
@@ -28,8 +29,8 @@ public class TestShipBoard extends ShipBoard {
             new Point(9, 8),
             new Point(9, 9)));
 
-    public TestShipBoard(GameColor color) {
-        super(color);
+    public TestShipBoard(GameColor color, GameEventListener eventListener) {
+        super(color, eventListener);
     }
 
     @Override

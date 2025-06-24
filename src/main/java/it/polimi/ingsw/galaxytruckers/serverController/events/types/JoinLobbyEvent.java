@@ -3,9 +3,10 @@ package it.polimi.ingsw.galaxytruckers.serverController.events.types;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 
 /**
- * ModelEvent signaling a player has either joined or left a lobby
+ * Event signaling that a player has joined a lobby.
  *
- * @param playerName the nickname of the player who left/joined
+ * @param playerName the nickname of the player who joined
+ * @param color the color associated with the player
  */
 public record JoinLobbyEvent(String playerName, GameColor color) implements LobbyEvent {
 }

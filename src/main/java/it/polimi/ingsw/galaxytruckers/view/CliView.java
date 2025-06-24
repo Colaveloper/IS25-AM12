@@ -265,7 +265,11 @@ public class CliView extends View<CliScreen> {
 
                 // letting the user correct format errors
                 while (!currentScreen.isInputLegal(input)) {
-                    System.out.println("Invalid format, please check your input");
+                    if (input.equals("drop_connection")) {
+                        controller.dropConnection();
+                    } else {
+                        System.out.println("Invalid format, please check your input");
+                    }
                     input = scanner.nextLine();
                 }
 

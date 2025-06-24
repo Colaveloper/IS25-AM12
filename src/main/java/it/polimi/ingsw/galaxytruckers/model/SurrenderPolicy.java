@@ -6,7 +6,6 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.util.Set;
 
 public interface SurrenderPolicy {
-    void setEventListener(GameEventListener gameEventListener);
     boolean isSurrenderEnabled();
     boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause);
     Set<ShipBoard> confirmSurrender(FlightBoard flightBoard);

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.BigMeteor;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.SmallMeteor;
@@ -34,20 +33,20 @@ class MeteorSwarmCardTest {
 
     @BeforeEach
     void setUp() {
-        ship1 = new SecondShipBoard(GameColor.RED) {
+        ship1 = new SecondShipBoardForTesting(GameColor.RED) {
             @Override
             public List<Set<Point>> getConnectedSets() {
                 return List.of(Set.of(), Set.of()); // breaking
             }
         };
-        ship2 = new SecondShipBoard(GameColor.BLUE) {
+        ship2 = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             public List<Set<Point>> getConnectedSets() {
                 return List.of(Set.of()); // not breaking
             }
         };
         ships = new ArrayList<>(List.of(ship1, ship2));
-        flightBoard = new FlightBoard() {
+        flightBoard = new FlightBoard(new GameEventListenerForTesting()) {
 
             @Override
             public List<ShipBoard> getOrderedShips() {
@@ -76,7 +75,7 @@ class MeteorSwarmCardTest {
             }
         };
 
-        game = new Game(Level.SECOND) {
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoard;
             }

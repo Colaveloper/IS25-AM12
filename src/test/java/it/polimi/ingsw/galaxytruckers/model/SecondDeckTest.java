@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,8 +15,8 @@ class SecondDeckTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        flightBoard = new SecondFlightBoard(0);
-        game = new Game(Level.SECOND) {
+        flightBoard = new SecondFlightBoardForTesting(0);
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoard;
             }
@@ -33,7 +32,14 @@ class SecondDeckTest {
     }
 
     @Test
-    void initMasterDeck() {
+    void initMasterDeckThrowsWithInvalidIndex() {
+        assertThrows(IllegalArgumentException.class, () -> secondDeck.getForecastDeck(-1));
+    }
 
+    @Test
+    void initMasterDeck() {
+        secondDeck.initMasterDeck();
+        secondDeck.drawCard();
+        assertEquals(Level.SECOND, secondDeck.getCurrentCard().getCardLevel());
     }
 }

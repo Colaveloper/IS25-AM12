@@ -49,7 +49,7 @@ public abstract class Deck {
      * @return the requested forecast deck
      */
     public List<AdventureCard> getForecastDeck(int id) {
-        throw new UnsupportedOperationException("This action is unsupported at the selected level");
+        return List.of();
     }
 
     /**
@@ -220,10 +220,7 @@ public abstract class Deck {
         List<Map<GoodsType, Integer>> planets = new ArrayList<>();
         int direction = planetsNode.get(1).asInt();
         for (JsonNode node : planetsNode) {
-            Map<GoodsType, Integer> map = new HashMap<>();
-            for (GoodsType type : GoodsType.values()) {
-                map.put(type, node.get(type.name().toLowerCase()).asInt());
-            }
+            Map<GoodsType, Integer> map = parseGoods(node);
             planets.add(map);
         }
         return planets;

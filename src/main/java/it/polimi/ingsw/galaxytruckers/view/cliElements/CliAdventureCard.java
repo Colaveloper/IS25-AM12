@@ -20,126 +20,97 @@ public class CliAdventureCard extends CliElement{
 
     @Override
     protected List<String> getNewDescription(){
-        StringBuilder result = new StringBuilder();
-        result.append("[NO CARD]"); // default value
+        List<String> description = new ArrayList<>();
+//        description.add("[NO CARD]"); // default value
         switch(card){
             case AbandonedShipCard abandonedShipCard -> {
-                result.setLength(0);
-                result.append("[ABANDONED SHIP]\n");
-                result.append("Flight days lost: ").append(abandonedShipCard.getFlightDaysLoss()).append("\n");
-                result.append("Credits prize: ").append(abandonedShipCard.getCreditPrize()).append("\n");
-                result.append("Required crew sacrifice: ").append(abandonedShipCard.getRequiredCrew()).append("\n");
+                description.add("[ABANDONED SHIP]");
+                description.add("Flight days lost: " + abandonedShipCard.getFlightDaysLoss());
+                description.add("Credits prize: " + abandonedShipCard.getCreditPrize());
+                description.add("Required crew sacrifice: " + abandonedShipCard.getRequiredCrew());
             }
             case AbandonedStationCard abandonedStationCard -> {
-                result.setLength(0);
-                result.append("[ABANDONED STATION]\n");
-                result.append(describeGoods(abandonedStationCard.getGoodsPrize()));
-                result.append("Flight days lost: ").append(abandonedStationCard.getFlightDaysLoss()).append("\n");
-                result.append("Required crew sacrifice: ").append(abandonedStationCard.getRequiredCrew()).append("\n");
+                description.add("[ABANDONED STATION]");
+                description.addAll(describeGoods(abandonedStationCard.getGoodsPrize()));
+                description.add("Flight days lost: " + abandonedStationCard.getFlightDaysLoss());
+                description.add("Required crew sacrifice: " + abandonedStationCard.getRequiredCrew());
             }
             case CombatZoneCard combatZoneCard -> {
-                result.setLength(0);
-                result.append("[COMBAT ZONE]\n");
+                description.add("[COMBAT ZONE]");
                 List<CombatZoneCheck> checks = combatZoneCard.getChecks();
                 List<Penalty> penalties = combatZoneCard.getPenalties();
                 for (int i = 0; i < checks.size(); i++) {
-                    result.append("Whoever has ").append(checks.get(i))
-                            .append(" ")
-                            .append(penalties.get(i)).append("\n");
+                    description.add("Whoever has " + checks.get(i) + " " + penalties.get(i));
                 }
             }
             case EpidemicCard epidemicCard -> {
-                result.setLength(0);
-                result.append("[EPIDEMIC]\n");
-                result.append("An epidemic strikes!\n");
+                description.add("[EPIDEMIC]");
+                description.add("An epidemic strikes!");
             }
             case MeteorSwarmCard meteorSwarmCard -> {
-                result.setLength(0);
-                result.append("[METEOR SWARM]\n");
-                result.append(describeProjectiles(meteorSwarmCard.getProjectiles()));
+                description.add("[METEOR SWARM]");
+                description.add(describeProjectiles(meteorSwarmCard.getProjectiles()));
             }
             case OpenSpaceCard openSpaceCard -> {
-                result.setLength(0);
-                result.append("[OPEN SPACE]\n");
-                result.append("Warm up those engines!\n");
+                description.add("[OPEN SPACE]");
+                description.add("Warm up those engines!");
             }
             case PiratesCard piratesCard -> {
-                result.setLength(0);
-                result.append("[PIRATES]\n");
-                result.append(describeProjectiles(piratesCard.getProjectiles()));
-                result.append("Needed firepower to defeat pirates: ")
-                        .append(piratesCard.getFirePowerThreshold())
-                        .append("\n");
-                result.append("Credits reward for defeating: ")
-                        .append(piratesCard.getCreditPrize())
-                        .append("\n");
-                result.append("Flight days lost: ").append(piratesCard.getFlightDaysLoss());
+                description.add("[PIRATES]");
+                description.add(describeProjectiles(piratesCard.getProjectiles()));
+                description.add("Needed firepower to defeat pirates: " + piratesCard.getFirePowerThreshold());
+                description.add("Credits reward for defeating: " + piratesCard.getCreditPrize());
+                description.add("Flight days lost: " + piratesCard.getFlightDaysLoss());
             }
             case PlanetsCard planetsCard -> {
-                result.setLength(0);
-                result.append("[PLANETS]\n")
-                        .append("Flight days lost for landing: ")
-                        .append(planetsCard.getFlightDaysLoss())
-                        .append("\n")
-                        .append(describePlanets(planetsCard.getPlanets()));
+                description.add("[PLANETS]");
+                description.add("Flight days lost for landing: " + planetsCard.getFlightDaysLoss());
+                description.addAll(describePlanets(planetsCard.getPlanets()));
             }
             case SabotageCard sabotageCard -> {
-                result.setLength(0);
-                result.append("[SABOTAGE]\n")
-                        .append("Sabotage! Tough luck to whoever has the least crew.\n");
+                description.add("[SABOTAGE]");
+                description.add("Sabotage! Tough luck to whoever has the least crew.");
             }
             case SlaversCard slaversCard -> {
-                result.setLength(0);
-                result.append("[SLAVERS]\n")
-                        .append("Firepower needed to defeat slavers: ").append(slaversCard.getFirePowerThreshold())
-                        .append("\n")
-                        .append("Crew lost if not defeated: ").append(slaversCard.getCrewLoss())
-                        .append("\n")
-                        .append("Credits reward for defeating: ").append(slaversCard.getCreditPrize())
-                        .append("\n")
-                        .append("Flight days lost for defeating: ").append(slaversCard.getFlightDaysLoss())
-                        .append("\n");
+                description.add("[SLAVERS]");
+                description.add("Firepower needed to defeat slavers: " + slaversCard.getFirePowerThreshold());
+                description.add("Crew lost if not defeated: " + slaversCard.getCrewLoss());
+                description.add("Credits reward for defeating: " + slaversCard.getCreditPrize());
+                description.add("Flight days lost for defeating: " + slaversCard.getFlightDaysLoss())
+                        ;
             }
             case SmugglersCard smugglersCard -> {
-                result.setLength(0);
-                result.append("[SMUGGLERS]\n")
-                        .append("Firepower needed to defeat smugglers: ")
-                        .append(smugglersCard.getFirePowerThreshold())
-                        .append("\n")
-                        .append("Goods received for defeating smugglers:\n")
-                        .append(describeGoods(smugglersCard.getGoodsPrize()))
-                        .append("\n")
-                        .append("Flight days lost for defeating smugglers: ")
-                        .append(smugglersCard.getFlightDaysLoss())
-                        .append("\n")
-                        .append("Goods lost if not defeated: ")
-                        .append(smugglersCard.getGoodsLoss())
-                        .append("\n");
+                description.add("[SMUGGLERS]");
+                description.add("Firepower needed to defeat smugglers: " + smugglersCard.getFirePowerThreshold());
+                description.add("Goods received for defeating smugglers:" + describeGoods(smugglersCard.getGoodsPrize()));
+                description.add("Flight days lost for defeating smugglers: " + smugglersCard.getFlightDaysLoss());
+                description.add("Goods lost if not defeated: " + smugglersCard.getGoodsLoss())
+                        ;
             }
             case StarDustCard starDustCard -> {
-                result.setLength(0);
-                result.append("[STAR DUST]\n")
-                        .append("Hope you have those connectors sealed!\n");
+                description.add("[STAR DUST]");
+                description.add("Hope you have those connectors sealed!");
             }
         }
-        return List.of(result.toString());
+        return description;
     }
 
-    private static String describePlanets(List<Map<GoodsType, Integer>> planets) {
+    private static List<String> describePlanets(List<Map<GoodsType, Integer>> planets) {
         /*
         * entrySet().stream() — loop over all good types per planet
         * Collections.nCopies() — repeat goods names based on count
         * flatMap() — flatten the repeated names into one stream
         * joining(", ") — turn them into the nice comma-separated string
         * */
-        if (planets.isEmpty()) return "No planets.";
-
-        StringBuilder sb = new StringBuilder();
+        List<String> description = new ArrayList<>();
+        StringBuilder row;
+        if (planets.isEmpty()) return List.of("No planets.");
 
         List<GoodsType> orderedGoods = List.of(GoodsType.BLUE, GoodsType.GREEN, GoodsType.YELLOW, GoodsType.RED);
 
         for (int i = 0; i < planets.size(); i++) {
-            sb.append("planet ").append(i).append(": ");
+            row = new StringBuilder();
+            row.append("planet ").append(i).append(": ");
 
             int finalI = i;
             String goods = orderedGoods.stream()
@@ -149,20 +120,21 @@ public class CliAdventureCard extends CliElement{
                     })
                     .collect(Collectors.joining(", "));
 
-            sb.append(goods).append("\n");
+            row.append(goods);
+            description.add(row.toString());
         }
 
-        return sb.toString().trim();
+        return description;
     }
 
-    private static String describeGoods(Map<GoodsType, Integer> goods) {
-        if (goods.isEmpty()) return "No goods.";
+    private static List<String> describeGoods(Map<GoodsType, Integer> goods) {
+        if (goods.isEmpty()) return List.of("No goods.");
 
         List<GoodsType> orderedGoods = List.of(GoodsType.BLUE, GoodsType.GREEN, GoodsType.YELLOW, GoodsType.RED);
 
         return orderedGoods.stream()
                 .flatMap(type -> Collections.nCopies(goods.getOrDefault(type, 0), type.name().toLowerCase()).stream())
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.toList());
     }
 
     private static String describeProjectiles(List<Projectile> projectiles) {
@@ -172,8 +144,7 @@ public class CliAdventureCard extends CliElement{
         for(Projectile projectile : projectiles) {
             result.append(projectile.type())
                     .append(" coming from ")
-                    .append(projectile.direction())
-                    .append("\n");
+                    .append(projectile.direction());
         }
         return result.toString();
     }

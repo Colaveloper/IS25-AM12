@@ -1,11 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Activatable;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.DoubleCannon;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.DoubleEngine;
-import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Shield;
 
 import java.awt.*;
 import java.util.*;
@@ -50,8 +47,8 @@ public class SecondShipBoard extends ShipBoard {
 
     private final Map<Point, LifeSupport> lifeSupports;
 
-    public SecondShipBoard(GameColor color) {
-        super(color);
+    public SecondShipBoard(GameColor color, GameEventListener eventListener) {
+        super(color,eventListener);
         this.lifeSupports = new HashMap<>();
         this.stashedComponents = new ArrayList<>();
         this.aliens = new HashSet<>();
@@ -88,7 +85,7 @@ public class SecondShipBoard extends ShipBoard {
         stashedComponents.add(lastComponent);
         lastComponent = null;
         lastPosition = null;
-        if (gameEventListener != null) gameEventListener.notifyStashComponentEvent(this);
+        if (eventListener != null) eventListener.notifyStashComponentEvent(this);
     }
 
     public void grabStashedComponent(int index) {
@@ -99,16 +96,12 @@ public class SecondShipBoard extends ShipBoard {
             throw new IllegalArgumentException("The stashed component index is out of bounds");
         }
         isStashed = true;
-        if (gameEventListener != null) gameEventListener.notifyGrabStashedComponentEvent(this, index);
+        if (eventListener != null) eventListener.notifyGrabStashedComponentEvent(this, index);
     }
 
     @Override
     public void finishBuilding() {
-        try {
-            super.finishBuilding();
-        } catch (IllegalStateException e) {
-            this.losses++;
-        }
+        super.finishBuilding();
         this.losses += stashedComponents.size();
         stashedComponents.clear();
     }
@@ -119,11 +112,13 @@ public class SecondShipBoard extends ShipBoard {
 
     @Override
     public int getFirePower() {
-        return (firePower > 0 && aliens.contains(CrewType.PURPLE)) ? firePower+2 : firePower;
+        int firePower = super.getFirePower();
+        return (firePower > 0 && aliens.contains(CrewType.PURPLE)) ? firePower+4 : firePower;
     }
 
     @Override
     public int getEnginePower() {
+        int enginePower = super.getEnginePower();
         return (enginePower > 0 && aliens.contains(CrewType.BROWN)) ? enginePower+2 : enginePower;
     }
 
@@ -174,14 +169,14 @@ public class SecondShipBoard extends ShipBoard {
     //Visitor pattern methods
 
     @Override
-    public void add(LifeSupport lifeSupport) {
-        this.lifeSupports.put(this.lastPosition, lifeSupport);
+    public void add(LifeSupport lifeSupport, Point position) {
+        this.lifeSupports.put(position, lifeSupport);
     }
 
     @Override
-    public void remove(LifeSupport lifeSupport) {
-        this.lifeSupports.remove(this.lastPosition);
-        Set<Point> adjacentCabins = getNeighbours(lastPosition).values().stream()
+    public void remove(LifeSupport lifeSupport, Point position) {
+        this.lifeSupports.remove(position);
+        Set<Point> adjacentCabins = getNeighbours(position).values().stream()
                 .filter(cabins.keySet()::contains)
                 .filter(p -> cabins.get(p).getCrewType() != CrewType.HUMAN)
                 .filter(p -> cabins.get(p).getNumResidents()>0)
@@ -196,8 +191,8 @@ public class SecondShipBoard extends ShipBoard {
     }
 
     @Override
-    public void remove(Cabin cabin) {
-        super.remove(cabin);
+    public void remove(Cabin cabin, Point position) {
+        super.remove(cabin, position);
         this.aliens.remove(cabin.getCrewType());
     }
 }

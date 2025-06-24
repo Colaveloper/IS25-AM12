@@ -1,4 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.network.messages;
 
-public record Ping() implements Message{
+import java.util.UUID;
+
+public record Ping(UUID id) implements Message{
+    public Ping() {
+        this(UUID.randomUUID());
+    }
 }

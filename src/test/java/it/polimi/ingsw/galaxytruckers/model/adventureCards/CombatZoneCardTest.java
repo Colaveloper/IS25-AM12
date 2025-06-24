@@ -1,8 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.SecondFlightBoard;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CombatZoneCheck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CrewSizeCheck;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.EnginePowerCheck;
@@ -20,8 +18,8 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,7 +42,7 @@ class CombatZoneCardTest {
                 new CrewLoss(1),
                 new GoodsLoss(1),
                 new ProjectileThreat(new ArrayList<>(projectiles)));
-        ShipBoard shipBoard1 = new ShipBoard(GameColor.BLUE) {
+        ShipBoard shipBoard1 = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return true;
@@ -65,7 +63,7 @@ class CombatZoneCardTest {
                 return 1;
             }
         };
-        ShipBoard shipBoard2 = new ShipBoard(GameColor.RED) {
+        ShipBoard shipBoard2 = new SecondShipBoardForTesting(GameColor.RED) {
             @Override
             protected boolean containsPoint(Point point) {
                 return true;
@@ -86,7 +84,7 @@ class CombatZoneCardTest {
                 return 2;
             }
         };
-        ShipBoard shipBoard3 = new ShipBoard(GameColor.GREEN) {
+        ShipBoard shipBoard3 = new SecondShipBoardForTesting(GameColor.GREEN) {
             @Override
             protected boolean containsPoint(Point point) {
                 return true;
@@ -108,12 +106,12 @@ class CombatZoneCardTest {
             }
         };
         shipBoards = List.of(shipBoard1, shipBoard2, shipBoard3);
-        FlightBoard flightBoard = new SecondFlightBoard(3);
+        FlightBoard flightBoard = new SecondFlightBoardForTesting(3);
         flightBoard.placeShipOnFlightBoard(shipBoard1,1);
         flightBoard.placeShipOnFlightBoard(shipBoard2,3);
         flightBoard.placeShipOnFlightBoard(shipBoard3,6);
 
-        game = new Game(Level.SECOND) {
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoard;
             }
@@ -121,6 +119,12 @@ class CombatZoneCardTest {
 
         card = new CombatZoneCard(game, Level.SECOND, checks, penalties, 1);
         card.initialize();
+    }
+
+    @Test
+    void getNextStateWithOnePlayerLeftReturnsDrawCard() {
+        game.getFlightBoard().removeShips(new HashSet<>(shipBoards.subList(0, shipBoards.size()-1)));
+        assertInstanceOf(DrawCardState.class, card.getNextState());
     }
 
     @Test

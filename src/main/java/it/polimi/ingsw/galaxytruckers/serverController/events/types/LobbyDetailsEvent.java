@@ -1,13 +1,16 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events.types;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.LobbyDetailsDTO;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
+/**
+ * Event containing details about the lobby for a specific player.
+ * Should be sent when a player joins a lobby
+ *
+ * @param playerName the name of the player receiving the lobby details
+ * @param details the details of the lobby
+ */
 public record LobbyDetailsEvent(
         String playerName,
         LobbyDetailsDTO details

@@ -1,0 +1,673 @@
+Index: src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCardDeprecated.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCardDeprecated.java b/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCardDeprecated.java
+new file mode 100644
+--- /dev/null	(date 1742733483103)
++++ b/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCardDeprecated.java	(date 1742733483103)
+@@ -0,0 +1,78 @@
++package it.polimi.ingsw.galaxytruckers.adventureCards;
++
++
++
++import it.polimi.ingsw.galaxytruckers.FlightBoard;
++import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
++import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
++import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
++
++import java.util.ArrayList;
++import java.util.List;
++
++public class EpidemicCardDeprecated extends AdventureCardDeprecated {
++    public EpidemicCardDeprecated(FlightBoard flightBoard) {
++        super(flightBoard);
++        this.name = "[EPIDEMIC]";
++
++        cardStates = new ArrayList<>();
++        cardStates.add(PlayerAction.START_CARD);
++        cardStates.add(PlayerAction.END_CARD);
++    }
++
++    @Override
++    public PlayerAction nextStep() {
++        if (step == 0) {
++            //model.epidemic();
++        }
++        step ++;
++        return cardStates.get(step);
++    }
++
++
++    //UNUSED METHODS-------------------------------------------
++    @Override
++    public List<Boolean> getPlanets() {
++        return null;
++    }
++
++    @Override
++    public int getFirePowerThreshold() {
++        return 0;
++    }
++
++    @Override
++    public int getCreditPrize() {
++        return 0;
++    }
++
++    @Override
++    public List<GoodsType> getGoods() {
++        return null;
++    }
++
++    @Override
++    public List<Integer> getProjectileDirections() {
++        return null;
++    }
++
++    @Override
++    public List<ProjectileDeprecated> getProjectilesType() {
++        return null;
++    }
++
++    @Override
++    public int getSacrifice() {
++        return 0;
++    }
++
++    @Override
++    public int getFlightDaysLoss() {
++        return 0;
++    }
++
++    @Override
++    public void landOnPlanet(int i) {
++
++    }
++}
+Index: src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCard.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.galaxytruckers.adventureCards;\r\n\r\nimport it.polimi.ingsw.galaxytruckers.FlightBoard;\r\nimport it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;\r\nimport it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;\r\nimport it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class MeteorSwarmCard extends AdventureCardDeprecated {\r\n    //attributes\r\n//    private List<Integer> projectileDirections;\r\n//    private List<ProjectileDeprecated> projectileTypes;\r\n\r\n    public MeteorSwarmCard(FlightBoard flightBoard, List<Integer> projectileDirections, List<ProjectileDeprecated> projectileType){\r\n        //attributes init\r\n        super(flightBoard);\r\n        this.projectileDirections = new ArrayList<>(projectileDirections);\r\n        this.projectileTypes = new ArrayList<>(projectileType);\r\n        this.name = \"[METEOR SWARM]\";\r\n\r\n        //cardState init\r\n        for (int i = 0; i < projectileType.size(); i++) {\r\n            if(projectileType.get(i) == ProjectileDeprecated.SMALL_METEOR){\r\n                cardStates.add(PlayerAction.ROLL_DICE);\r\n                cardStates.add(PlayerAction.ACTIVATE_SHIELDS);\r\n            } else if (projectileType.get(i) == ProjectileDeprecated.LARGE_METEOR) {\r\n                cardStates.add(PlayerAction.ACTIVATE_CANNONS);\r\n            } else {\r\n                //TODO: make this launch some kind of exception or proper error message\r\n                System.out.println(\"ERROR: PROJECTILE OF INCORRECT TYPE IN CONSTRUCTOR\");\r\n            }\r\n        }\r\n        cardStates.add(PlayerAction.END_CARD);\r\n    }\r\n\r\n    //USED METHODS\r\n    @Override\r\n    public PlayerAction nextStep() {\r\n        step++;\r\n        return cardStates.get(step);\r\n    }\r\n    @Override\r\n    public List<Integer> getProjectileDirections() {\r\n        return projectileDirections;\r\n    }\r\n    @Override\r\n    public List<ProjectileDeprecated> getProjectilesType() {\r\n        return projectileTypes;\r\n    }\r\n\r\n\r\n\r\n    //UNUSED METHODS\r\n    @Override\r\n    public List<Boolean> getPlanets() {\r\n        return null;\r\n    }\r\n    @Override\r\n    public int getFirePowerThreshold() {\r\n        return 0;\r\n    }\r\n    @Override\r\n    public int getCreditPrize() {\r\n        return 0;\r\n    }\r\n    @Override\r\n    public List<GoodsType> getGoods() {\r\n        return null;\r\n    }\r\n    @Override\r\n    public int getSacrifice() {\r\n        return 0;\r\n    }\r\n\r\n    @Override\r\n    public int getFlightDaysLoss() {\r\n        return 0;\r\n    }\r\n    @Override\r\n    public void landOnPlanet(int i) {\r\n\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCard.java b/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCard.java
+--- a/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCard.java	(revision ef261c4bebb2dac30e9992e9597bef6b0313374e)
++++ b/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCard.java	(date 1742752315580)
+@@ -1,86 +1,66 @@
+ package it.polimi.ingsw.galaxytruckers.adventureCards;
+ 
+ import it.polimi.ingsw.galaxytruckers.FlightBoard;
++import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
+ import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
+-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
++import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
+ import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
++import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
++import it.polimi.ingsw.galaxytruckers.shipBuilding.ShipBoard;
++import it.polimi.ingsw.galaxytruckers.state.ActivateState;
++import it.polimi.ingsw.galaxytruckers.state.ChooseShipPieceState;
++import it.polimi.ingsw.galaxytruckers.state.DrawCardState;
++import it.polimi.ingsw.galaxytruckers.state.GameState;
++import javafx.scene.image.Image;
+ 
++import java.awt.*;
+ import java.util.ArrayList;
++import java.util.HashSet;
+ import java.util.List;
++import java.util.Set;
+ 
+-public class MeteorSwarmCard extends AdventureCardDeprecated {
++public class MeteorSwarmCard extends AdventureCard {
+     //attributes
+-//    private List<Integer> projectileDirections;
+-//    private List<ProjectileDeprecated> projectileTypes;
++    private List<Projectile> projectiles;
++    private Projectile currentProjectile;
+ 
+-    public MeteorSwarmCard(FlightBoard flightBoard, List<Integer> projectileDirections, List<ProjectileDeprecated> projectileType){
+-        //attributes init
+-        super(flightBoard);
+-        this.projectileDirections = new ArrayList<>(projectileDirections);
+-        this.projectileTypes = new ArrayList<>(projectileType);
+-        this.name = "[METEOR SWARM]";
+ 
+-        //cardState init
+-        for (int i = 0; i < projectileType.size(); i++) {
+-            if(projectileType.get(i) == ProjectileDeprecated.SMALL_METEOR){
+-                cardStates.add(PlayerAction.ROLL_DICE);
+-                cardStates.add(PlayerAction.ACTIVATE_SHIELDS);
+-            } else if (projectileType.get(i) == ProjectileDeprecated.LARGE_METEOR) {
+-                cardStates.add(PlayerAction.ACTIVATE_CANNONS);
++    public MeteorSwarmCard(Image image, Level level, List<Projectile> projectiles) {
++        super(image, level);
++        this.projectiles = projectiles; // list is inverted to be treated as a stack
++        this.currentProjectile = projectiles.removeFirst();
++    }
++
++    @Override
++    public GameState nextStep() {
++        if (currentShipBoard != null) {  // There is a previous player that has to be hit //
++            if (currentProjectile.fireAt(currentShipBoard)) {  // If a component is removed I need to check shipConnection
++                List<Set<Point>> shipPieces = currentShipBoard.getConnectedSets();
++                if (shipPieces.size() > 1) {
++                    ShipBoard tempShipBoard = currentShipBoard;
++                    currentShipBoard = null;
++                    return new ChooseShipPieceState(tempShipBoard.getConnectedSets(), currentShipBoard);
++                }
++            }
++        }
++        // Letting the currentPlayer activate double cannons
++        if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {  // There are other players to evaluate
++            currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
++            currentPlayerIndex++;
++            return new ActivateState(currentProjectile.getActivatablePoints(currentShipBoard), currentShipBoard); // Let the player activate cannon
++        }
++        else {
++            if (projectiles.isEmpty()) {
++                return new DrawCardState();
+             } else {
+-                //TODO: make this launch some kind of exception or proper error message
+-                System.out.println("ERROR: PROJECTILE OF INCORRECT TYPE IN CONSTRUCTOR");
++                currentProjectile = projectiles.removeFirst();
++                return nextStep();
+             }
+         }
+-        cardStates.add(PlayerAction.END_CARD);
++
++
+     }
+-
+     //USED METHODS
+-    @Override
+-    public PlayerAction nextStep() {
+-        step++;
+-        return cardStates.get(step);
+-    }
+-    @Override
+-    public List<Integer> getProjectileDirections() {
+-        return projectileDirections;
+-    }
+-    @Override
+-    public List<ProjectileDeprecated> getProjectilesType() {
+-        return projectileTypes;
+-    }
+-
+-
+-
+-    //UNUSED METHODS
+-    @Override
+-    public List<Boolean> getPlanets() {
+-        return null;
+-    }
+-    @Override
+-    public int getFirePowerThreshold() {
+-        return 0;
+-    }
+-    @Override
+-    public int getCreditPrize() {
+-        return 0;
+-    }
+-    @Override
+-    public List<GoodsType> getGoods() {
+-        return null;
+-    }
+-    @Override
+-    public int getSacrifice() {
+-        return 0;
+-    }
+ 
+-    @Override
+-    public int getFlightDaysLoss() {
+-        return 0;
+-    }
+-    @Override
+-    public void landOnPlanet(int i) {
+-
+-    }
+ 
+ }
+\ No newline at end of file
+Index: src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCardDeprecated.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCardDeprecated.java b/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCardDeprecated.java
+new file mode 100644
+--- /dev/null	(date 1742733767829)
++++ b/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCardDeprecated.java	(date 1742733767829)
+@@ -0,0 +1,86 @@
++package it.polimi.ingsw.galaxytruckers.adventureCards;
++
++import it.polimi.ingsw.galaxytruckers.FlightBoard;
++import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
++import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
++import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
++
++import java.util.ArrayList;
++import java.util.List;
++
++public class MeteorSwarmCardDeprecated extends AdventureCardDeprecated {
++    //attributes
++//    private List<Integer> projectileDirections;
++//    private List<ProjectileDeprecated> projectileTypes;
++
++    public MeteorSwarmCardDeprecated(FlightBoard flightBoard, List<Integer> projectileDirections, List<ProjectileDeprecated> projectileType){
++        //attributes init
++        super(flightBoard);
++        this.projectileDirections = new ArrayList<>(projectileDirections);
++        this.projectileTypes = new ArrayList<>(projectileType);
++        this.name = "[METEOR SWARM]";
++
++        //cardState init
++        for (int i = 0; i < projectileType.size(); i++) {
++            if(projectileType.get(i) == ProjectileDeprecated.SMALL_METEOR){
++                cardStates.add(PlayerAction.ROLL_DICE);
++                cardStates.add(PlayerAction.ACTIVATE_SHIELDS);
++            } else if (projectileType.get(i) == ProjectileDeprecated.LARGE_METEOR) {
++                cardStates.add(PlayerAction.ACTIVATE_CANNONS);
++            } else {
++                //TODO: make this launch some kind of exception or proper error message
++                System.out.println("ERROR: PROJECTILE OF INCORRECT TYPE IN CONSTRUCTOR");
++            }
++        }
++        cardStates.add(PlayerAction.END_CARD);
++    }
++
++    //USED METHODS
++    @Override
++    public PlayerAction nextStep() {
++        step++;
++        return cardStates.get(step);
++    }
++    @Override
++    public List<Integer> getProjectileDirections() {
++        return projectileDirections;
++    }
++    @Override
++    public List<ProjectileDeprecated> getProjectilesType() {
++        return projectileTypes;
++    }
++
++
++
++    //UNUSED METHODS
++    @Override
++    public List<Boolean> getPlanets() {
++        return null;
++    }
++    @Override
++    public int getFirePowerThreshold() {
++        return 0;
++    }
++    @Override
++    public int getCreditPrize() {
++        return 0;
++    }
++    @Override
++    public List<GoodsType> getGoods() {
++        return null;
++    }
++    @Override
++    public int getSacrifice() {
++        return 0;
++    }
++
++    @Override
++    public int getFlightDaysLoss() {
++        return 0;
++    }
++    @Override
++    public void landOnPlanet(int i) {
++
++    }
++
++}
+\ No newline at end of file
+Index: src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCard.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.galaxytruckers.adventureCards;\r\n\r\n\r\n\r\nimport it.polimi.ingsw.galaxytruckers.FlightBoard;\r\nimport it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;\r\nimport it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;\r\nimport it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class EpidemicCard extends AdventureCardDeprecated {\r\n    public EpidemicCard(FlightBoard flightBoard) {\r\n        super(flightBoard);\r\n        this.name = \"[EPIDEMIC]\";\r\n\r\n        cardStates = new ArrayList<>();\r\n        cardStates.add(PlayerAction.START_CARD);\r\n        cardStates.add(PlayerAction.END_CARD);\r\n    }\r\n\r\n    @Override\r\n    public PlayerAction nextStep() {\r\n        if (step == 0) {\r\n            //model.epidemic();\r\n        }\r\n        step ++;\r\n        return cardStates.get(step);\r\n    }\r\n\r\n\r\n    //UNUSED METHODS-------------------------------------------\r\n    @Override\r\n    public List<Boolean> getPlanets() {\r\n        return null;\r\n    }\r\n\r\n    @Override\r\n    public int getFirePowerThreshold() {\r\n        return 0;\r\n    }\r\n\r\n    @Override\r\n    public int getCreditPrize() {\r\n        return 0;\r\n    }\r\n\r\n    @Override\r\n    public List<GoodsType> getGoods() {\r\n        return null;\r\n    }\r\n\r\n    @Override\r\n    public List<Integer> getProjectileDirections() {\r\n        return null;\r\n    }\r\n\r\n    @Override\r\n    public List<ProjectileDeprecated> getProjectilesType() {\r\n        return null;\r\n    }\r\n\r\n    @Override\r\n    public int getSacrifice() {\r\n        return 0;\r\n    }\r\n\r\n    @Override\r\n    public int getFlightDaysLoss() {\r\n        return 0;\r\n    }\r\n\r\n    @Override\r\n    public void landOnPlanet(int i) {\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCard.java b/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCard.java
+--- a/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCard.java	(revision ef261c4bebb2dac30e9992e9597bef6b0313374e)
++++ b/src/main/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCard.java	(date 1742738138456)
+@@ -1,78 +1,70 @@
+ package it.polimi.ingsw.galaxytruckers.adventureCards;
+ 
+-
++import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
++import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
++import it.polimi.ingsw.galaxytruckers.shipBuilding.Cabin;
++import it.polimi.ingsw.galaxytruckers.shipBuilding.Connector;
++import it.polimi.ingsw.galaxytruckers.state.ActivateState;
++import it.polimi.ingsw.galaxytruckers.state.DrawCardState;
++import it.polimi.ingsw.galaxytruckers.state.GameState;
++import javafx.scene.image.Image;
+ 
+-import it.polimi.ingsw.galaxytruckers.FlightBoard;
+-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.PlayerAction;
+-import it.polimi.ingsw.galaxytruckers.adventureCards.utils.ProjectileDeprecated;
+-import it.polimi.ingsw.galaxytruckers.enumTypes.GoodsType;
++import java.awt.*;
++import java.util.Map;
+ 
+-import java.util.ArrayList;
+-import java.util.List;
++public class EpidemicCard extends AdventureCard {
+ 
+-public class EpidemicCard extends AdventureCardDeprecated {
+-    public EpidemicCard(FlightBoard flightBoard) {
+-        super(flightBoard);
+-        this.name = "[EPIDEMIC]";
+ 
+-        cardStates = new ArrayList<>();
+-        cardStates.add(PlayerAction.START_CARD);
+-        cardStates.add(PlayerAction.END_CARD);
++    public EpidemicCard(Image image, Level level) {
++        super(image, level);
+     }
+ 
+     @Override
+-    public PlayerAction nextStep() {
+-        if (step == 0) {
+-            //model.epidemic();
+-        }
+-        step ++;
+-        return cardStates.get(step);
+-    }
+-
+-
+-    //UNUSED METHODS-------------------------------------------
+-    @Override
+-    public List<Boolean> getPlanets() {
+-        return null;
+-    }
+-
+-    @Override
+-    public int getFirePowerThreshold() {
+-        return 0;
+-    }
+-
+-    @Override
+-    public int getCreditPrize() {
+-        return 0;
+-    }
+-
+-    @Override
+-    public List<GoodsType> getGoods() {
+-        return null;
+-    }
+-
+-    @Override
+-    public List<Integer> getProjectileDirections() {
+-        return null;
+-    }
+-
+-    @Override
+-    public List<ProjectileDeprecated> getProjectilesType() {
+-        return null;
+-    }
+-
+-    @Override
+-    public int getSacrifice() {
+-        return 0;
+-    }
+-
+-    @Override
+-    public int getFlightDaysLoss() {
+-        return 0;
+-    }
+-
+-    @Override
+-    public void landOnPlanet(int i) {
+-
++    public GameState nextStep() {
++        if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {  // There are other players to evaluate
++            currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);
++            currentPlayerIndex++;
++
++            // check currentShipboard for cabins
++            Map<Point, Cabin> cabins = currentShipBoard.getCabins();
++            for (Map.Entry<Point, Cabin> cabin : cabins.entrySet()) {
++//                for(int i = 0; i < 4; i++) {
++//                    if (cabin.getValue().getConnectors().get(i + cabin.getValue().getOrientation()) != Connector.NONE) {
++//                        if(cabins.containsKey(new Point(cabin.getKey().x + (i % 2 * ()), cabin.getKey().y + ))){
++//                            currentShipBoard.loseCrew(cabin.getKey(), 1);
++//                        }
++//                    }
++//                }
++                //TODO: can check if the for above can work, idk how to get (0, 1, 2, 3) -> (0, 1, 0, -1)
++                if (cabin.getValue().getConnectors().get(cabin.getValue().getOrientation()) != Connector.NONE) {    //TODO: does it count rotation?
++                    if(cabins.containsKey(new Point(cabin.getKey().x, cabin.getKey().y + 1))){
++                        currentShipBoard.loseCrew(cabin.getKey(), 1);
++                        continue;
++                    }
++                }
++                if (cabin.getValue().getConnectors().get(1 + cabin.getValue().getOrientation()) != Connector.NONE) {
++                    if(cabins.containsKey(new Point(cabin.getKey().x + 1, cabin.getKey().y))){
++                        currentShipBoard.loseCrew(cabin.getKey(), 1);
++                        continue;
++                    }
++                }
++                if (cabin.getValue().getConnectors().get(2 + cabin.getValue().getOrientation()) != Connector.NONE) {
++                    if(cabins.containsKey(new Point(cabin.getKey().x, cabin.getKey().y - 1))){
++                        currentShipBoard.loseCrew(cabin.getKey(), 1);
++                        continue;
++                    }
++                }
++                if (cabin.getValue().getConnectors().get(3 + cabin.getValue().getOrientation()) != Connector.NONE) {
++                    if(cabins.containsKey(new Point(cabin.getKey().x - 1, cabin.getKey().y))){
++                        currentShipBoard.loseCrew(cabin.getKey(), 1);
++                        continue;
++                    }
++                }
++            }
++            return nextStep();
++        }
++        else {
++            return new DrawCardState();
++        }
+     }
+ }
+Index: src/test/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCardTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCardTest.java b/src/test/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCardTest.java
+new file mode 100644
+--- /dev/null	(date 1742739044901)
++++ b/src/test/java/it/polimi/ingsw/galaxytruckers/adventureCards/EpidemicCardTest.java	(date 1742739044901)
+@@ -0,0 +1,12 @@
++package it.polimi.ingsw.galaxytruckers.adventureCards;
++
++import org.junit.jupiter.api.Test;
++
++import static org.junit.jupiter.api.Assertions.*;
++
++class EpidemicCardTest {
++
++    @Test
++    void nextStep() {
++    }
++}
+\ No newline at end of file
+Index: src/test/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCardTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCardTest.java b/src/test/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCardTest.java
+new file mode 100644
+--- /dev/null	(date 1742752315577)
++++ b/src/test/java/it/polimi/ingsw/galaxytruckers/adventureCards/MeteorSwarmCardTest.java	(date 1742752315577)
+@@ -0,0 +1,122 @@
++package it.polimi.ingsw.galaxytruckers.adventureCards;
++
++import it.polimi.ingsw.galaxytruckers.Dice;
++import it.polimi.ingsw.galaxytruckers.FlightBoard;
++import it.polimi.ingsw.galaxytruckers.SecondFlightBoard;
++import it.polimi.ingsw.galaxytruckers.adventureCards.utils.AdventureCard;
++import it.polimi.ingsw.galaxytruckers.adventureCards.utils.BigMeteor;
++import it.polimi.ingsw.galaxytruckers.adventureCards.utils.Projectile;
++import it.polimi.ingsw.galaxytruckers.adventureCards.utils.SmallMeteor;
++import it.polimi.ingsw.galaxytruckers.enumTypes.Colors;
++import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
++import it.polimi.ingsw.galaxytruckers.shipBuilding.*;
++import it.polimi.ingsw.galaxytruckers.shipBuilding.Component;
++import it.polimi.ingsw.galaxytruckers.state.ActivateState;
++import it.polimi.ingsw.galaxytruckers.state.GameState;
++import javafx.application.Platform;
++import javafx.scene.image.Image;
++import org.junit.jupiter.api.BeforeAll;
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++
++import java.awt.*;
++import java.util.*;
++import java.util.List;
++
++import static org.junit.jupiter.api.Assertions.*;
++
++class MeteorSwarmCardTest {
++
++    Component component;
++    ComponentBank componentBank;
++
++    AdventureCard meteorSwarmCard;
++    List<Projectile> projectiles;
++
++    Projectile projectile;
++    //GameState currentGameState;
++
++    SecondShipBoard ship1;
++    SecondShipBoard ship2;
++    SecondShipBoard ship3;
++
++    private void addComponent(ShipBoard shipBoard, Point point) {
++        shipBoard.requestRandComponent();
++        shipBoard.placeComponent(point);
++        shipBoard.weldLastComponent();
++    }
++
++    private void buildLargeShip(ShipBoard shipBoard) {
++        component = new Cannon(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
++        addComponent(shipBoard, new Point(8,6));
++        addComponent(shipBoard, new Point(10,7));
++        addComponent(shipBoard, new Point(6,5));
++
++        component = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
++        addComponent(shipBoard, new Point(7,7));
++        addComponent(shipBoard, new Point(8,7));
++        addComponent(shipBoard, new Point(9,8));
++
++        component = new Cabin(null, Arrays.asList(Connector.UNIVERSAL, Connector.NONE, Connector.UNIVERSAL, Connector.UNIVERSAL));
++        addComponent(shipBoard, new Point(6,7));
++
++        component = new Shield(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
++        addComponent(shipBoard, new Point(6,6));
++        addComponent(shipBoard, new Point(10,9));
++        addComponent(shipBoard, new Point(4,8));
++
++        component = new Engine(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL));
++        addComponent(shipBoard, new Point(7,8));
++        addComponent(shipBoard, new Point(9,9));
++        addComponent(shipBoard, new Point(4,7));
++
++        component = new CargoHold(null, Arrays.asList(Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL, Connector.UNIVERSAL), 2, true);
++        addComponent(shipBoard, new Point(9,7));
++        addComponent(shipBoard, new Point(7,6));
++        addComponent(shipBoard, new Point(5,7));
++    }
++
++    @BeforeAll
++    static void setUpClass() {
++        Platform.startup(() -> {});
++    }
++
++    @BeforeEach
++    void setUp() {
++
++        projectiles = new ArrayList<>(List.of(new SmallMeteor(()->6,0),
++                new SmallMeteor(()->9,0),
++                new BigMeteor(()->8, 1),
++                new BigMeteor(()->5, 2)
++        ));
++
++        meteorSwarmCard = new MeteorSwarmCard(null, Level.FIRST,  projectiles);
++        componentBank = new ComponentBank() {
++            @Override
++            public Component getRanComponent() {
++                return component;
++            }
++        };
++
++        ship1 = new SecondShipBoard(componentBank, Colors.BLUE);
++        ship2 = new SecondShipBoard(componentBank, Colors.RED);
++        ship3 = new SecondShipBoard(componentBank, Colors.GREEN);
++        Set<ShipBoard> allShips = new HashSet<>(List.of(ship1, ship2, ship3));
++        SecondFlightBoard flightBoard = new SecondFlightBoard(allShips);
++
++        for(ShipBoard shipBoard : allShips) {
++            buildLargeShip(shipBoard);
++        }
++
++        //currentGameState = meteorSwarmCard.nextStep();
++
++    }
++
++    @Test
++    void testFirstStep() {
++        GameState activateState = meteorSwarmCard.nextStep();
++        Set<Point> availablePositions = new HashSet<>();
++
++        assertInstanceOf(ActivateState.class, activateState);
++    }
++}
+\ No newline at end of file
+Index: src/main/java/it/polimi/ingsw/galaxytruckers/Deck.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.galaxytruckers;\r\n\r\nimport com.fasterxml.jackson.databind.JsonNode;\r\nimport com.fasterxml.jackson.databind.ObjectMapper;\r\nimport it.polimi.ingsw.galaxytruckers.adventureCards.*;\r\nimport it.polimi.ingsw.galaxytruckers.adventureCards.utils.*;\r\nimport it.polimi.ingsw.galaxytruckers.enumTypes.Level;\r\nimport it.polimi.ingsw.galaxytruckers.shipBuilding.*;\r\nimport javafx.scene.image.Image;\r\n\r\nimport java.io.File;\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic abstract class Deck{\r\n    protected List<AdventureCard> masterDeck;\r\n    private AdventureCard currentCard;\r\n\r\n    public AdventureCard getCurrentCard() {\r\n        return currentCard;\r\n    }\r\n\r\n    /**\r\n     * @param id the id of the forecast deck\r\n     * @return the requested forecast deck\r\n     */\r\n    public List<AdventureCard> getForecastDeck(int id) {\r\n        throw new UnsupportedOperationException(\"This action is unsupported at the selected level\");\r\n    }\r\n\r\n    /**\r\n     * Mixes the forecast and hidden decks  into the master deck\r\n     */\r\n    public void initMasterDeck() {\r\n        throw new UnsupportedOperationException(\"This action is unsupported at the selected level\");\r\n    }\r\n\r\n    /**\r\n     * Removes a card from the master deck and sets it as current\r\n     * @return true if there are still cards, false otherwise\r\n     */\r\n    public boolean tryDrawCard() {\r\n        if (masterDeck.isEmpty()) {\r\n            return false;\r\n        } else {\r\n            currentCard = masterDeck.removeFirst();\r\n            return true;\r\n        }\r\n    }\r\n\r\n    public static List<AdventureCard> loadCards(File jsonFile) throws IOException {\r\n        //reading from json file and returning the list of components\r\n        ObjectMapper objectMapper = new ObjectMapper();\r\n        JsonNode rootNode = objectMapper.readTree(jsonFile);\r\n        FlightBoard flightBoard = null;\r\n\r\n        List<AdventureCard> cards = new ArrayList<>();\r\n\r\n        //iterating through nodes and adding each as a card to list\r\n        for (JsonNode node : rootNode){\r\n            String type = node.get(\"type\").asText();\r\n            AdventureCard card;\r\n            Level level = Level.valueOf(node.get(\"level\").asText());\r\n            Image image = new Image(node.get(\"path\").asText());\r\n\r\n            switch(type){\r\n                case \"planets\":\r\n                    card = null;\r\n                    break;\r\n                case \"pirates\":\r\n                    card = new PiratesCard(\r\n                            image,\r\n                            level,\r\n                            node.get(\"firePowerThreshold\").asInt(),\r\n                            node.get(\"creditPrize\").asInt(),\r\n                            node.get(\"flightDaysLoss\").asInt(),\r\n                            parseProjectiles(node.get(\"projectiles\"))\r\n                            );\r\n                    break;\r\n                case \"smugglers\":\r\n                    card = null;\r\n//                    card = new SmugglersCard();\r\n                    break;\r\n                case \"slavers\":\r\n                    card = null;\r\n//                    card = new SlaversCard();\r\n                    break;\r\n                case \"meteors\":\r\n                    card = null;\r\n//                    card = new MeteorSwarmCard();\r\n                    break;\r\n                case \"epidemic\":\r\n                    card = null;\r\n//                    card = new EpidemicCard();\r\n                    break;\r\n                case \"stardust\":\r\n                    card = null;\r\n//                    card = new StarDustCard();\r\n                    break;\r\n                case \"abandoned Ship\":\r\n                    card = null;\r\n//                    card = new AbandonedShipCard();\r\n                    break;\r\n                case \"abandoned station\":\r\n                    card = null;\r\n//                    card = new AbandonedShipCard();\r\n                    break;\r\n                case \"combat zone\":\r\n                    card = null;\r\n//                    card = new CombatZoneCard();\r\n                    break;\r\n                case \"open space\":\r\n                    card = null;\r\n//                    card = new OpenSpaceCard();\r\n                    break;\r\n                case \"sabotage\":\r\n                    card = null;\r\n//                    card = new SabotageCard();\r\n                    break;\r\n                default:\r\n                    throw new IllegalArgumentException(\"Unknown card type: \" + type);\r\n            }\r\n            cards.add(card);\r\n        }\r\n        return cards;\r\n    }\r\n\r\n    private static List<Projectile> parseProjectiles(JsonNode projectilesNode) {\r\n        List<Projectile> projectiles = new ArrayList<>();\r\n        int direction = projectilesNode.get(1).asInt();\r\n        for (JsonNode node : projectilesNode) {\r\n            switch (node.get(0).asText()) {\r\n                case \"small fire\":\r\n                    projectiles.add(new SmallFire(direction));\r\n                    break;\r\n                case \"big fire\":\r\n                    projectiles.add(new BigFire(direction));\r\n                    break;\r\n                case  \"big meteor\":\r\n                    projectiles.add(new BigMeteor(direction));\r\n                    break;\r\n                case \"small meteor\":\r\n                    projectiles.add(new SmallMeteor(direction));\r\n                    break;\r\n            }\r\n        }\r\n        return projectiles;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/polimi/ingsw/galaxytruckers/Deck.java b/src/main/java/it/polimi/ingsw/galaxytruckers/Deck.java
+--- a/src/main/java/it/polimi/ingsw/galaxytruckers/Deck.java	(revision ef261c4bebb2dac30e9992e9597bef6b0313374e)
++++ b/src/main/java/it/polimi/ingsw/galaxytruckers/Deck.java	(date 1742734365699)
+@@ -5,7 +5,6 @@
+ import it.polimi.ingsw.galaxytruckers.adventureCards.*;
+ import it.polimi.ingsw.galaxytruckers.adventureCards.utils.*;
+ import it.polimi.ingsw.galaxytruckers.enumTypes.Level;
+-import it.polimi.ingsw.galaxytruckers.shipBuilding.*;
+ import javafx.scene.image.Image;
+ 
+ import java.io.File;
+@@ -87,11 +86,18 @@
+ //                    card = new SlaversCard();
+                     break;
+                 case "meteors":
+-                    card = null;
+-//                    card = new MeteorSwarmCard();
++                    card = new MeteorSwarmCard(
++                            image,
++                            level,
++                            parseProjectiles(node.get("meteors"))
++                    );
++//                  card = new MeteorSwarmCard();
+                     break;
+                 case "epidemic":
+-                    card = null;
++                    card = new EpidemicCard(
++                            image,
++                            level
++                    );
+ //                    card = new EpidemicCard();
+                     break;
+                 case "stardust":

@@ -1,15 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-import it.polimi.ingsw.galaxytruckers.model.Deck;
-import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
-import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Cabin;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.checkerframework.dataflow.qual.AssertMethod;
@@ -33,10 +29,9 @@ class RemoveCrewStateTest {
 
     @BeforeEach
     void setup() throws IOException {
-        ship1 = new SecondShipBoard(GameColor.RED);
+        ship1 = new SecondShipBoardForTesting(GameColor.RED);
         ship1.initializeCabin(new Point(7,7), CrewType.HUMAN);
-        game = new Game(Level.SECOND);
-        game.setEventListener(new GameEventListenerStub());
+        game = new GameStub(Level.SECOND);
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
             public AdventureState getNextState() {
@@ -107,7 +102,7 @@ class RemoveCrewStateTest {
 
     @Test
     void loseCrewThrowsExceptionWhenOutOfTurn(){
-        ship2 = new SecondShipBoard(GameColor.BLUE);
+        ship2 = new SecondShipBoardForTesting(GameColor.BLUE);
         assertNotEquals(ship2,testState.getShipBoard());
         assertThrows(IllegalStateException.class, () -> testState.loseCrew(ship2, new Point(7,7)));
     }
@@ -121,7 +116,7 @@ class RemoveCrewStateTest {
     @Test
     void loseCrewChangesAdventureStateWhenFinished() throws IOException {
         testState = new RemoveCrewState(1, ship1);
-        game = new Game(Level.SECOND){
+        game = new GameStub(Level.SECOND){
             @Override
             public Deck getDeck(){
                 return deck;
@@ -139,8 +134,7 @@ class RemoveCrewStateTest {
                 return adventureCard;
             }
         };
-        game = new Game(Level.SECOND);
-        game.setEventListener(new GameEventListenerStub());
+        game = new GameStub(Level.SECOND);
         CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         testState.setGame(game);
         game.setDeck(deck);
@@ -157,7 +151,7 @@ class RemoveCrewStateTest {
 
     @Test
     void loseCrewChangesAdventureStateWhenShipHasNoCrew() throws IOException{
-        ship1 = new SecondShipBoard(GameColor.RED){
+        ship1 = new SecondShipBoardForTesting(GameColor.RED){
             @Override
             public int getCrewSize(){
                 return 0;
@@ -168,13 +162,12 @@ class RemoveCrewStateTest {
             }
         };
         testState = new RemoveCrewState(2, ship1);
-        game = new Game(Level.SECOND){
+        game = new GameStub(Level.SECOND){
             @Override
             public Deck getDeck(){
                 return deck;
             }
         };
-        game.setEventListener(new GameEventListenerStub());
         CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override
@@ -195,13 +188,12 @@ class RemoveCrewStateTest {
     @Test
     void loseCrewDoesNotSacrificeCrewIfNoCrewToSacrificeAndChangesAdventureState() throws IOException{
         testState = new RemoveCrewState(0, ship1);
-        game = new Game(Level.SECOND){
+        game = new GameStub(Level.SECOND){
             @Override
             public Deck getDeck(){
                 return deck;
             }
         };
-        game.setEventListener(new GameEventListenerStub());
         CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override

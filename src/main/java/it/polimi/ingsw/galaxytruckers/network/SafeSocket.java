@@ -20,22 +20,20 @@ public class SafeSocket {
         this.in = new ObjectInputStream(socket.getInputStream());
     }
 
-    public void write (Message message) throws IOException {
-        synchronized (out) {
-            out.writeObject(message);
-            out.flush();
-        }
+    public synchronized void write (Message message) throws IOException {
+        out.writeObject(message);
+        out.flush();
     }
 
     public Message read() throws IOException, ClassNotFoundException {
-        Message message;
-        synchronized (in) {
-            message = (Message) in.readObject();
-        }
-        return message;
+        return (Message) in.readObject();
     }
 
     public synchronized void close() throws IOException {
-        if (!socket.isClosed()) socket.close();
+        if (!socket.isClosed()) {
+            out.close();
+            in.close();
+            socket.close();
+        }
     }
 }

@@ -39,7 +39,7 @@ public class CliGameCreationScreen extends CliScreen {
             return true;
         }
         for (Level level : Level.values()) {
-            if (input.matches("^" + level.name() + "\\s[2-4]$")) {
+            if (input.toUpperCase().matches("^" + level.name() + "\\s[2-4]$")) {
                 return true;
             }
         }

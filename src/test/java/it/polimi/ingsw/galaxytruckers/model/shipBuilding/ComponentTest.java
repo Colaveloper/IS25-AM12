@@ -1,12 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.ShipBoardStub;
+import it.polimi.ingsw.galaxytruckers.model.SecondShipBoardForTesting;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,7 +13,7 @@ class ComponentTest {
 
     protected Component myComponent;
     protected Map<Direction, Connector> myConnectors;
-    protected ShipBoardStub myShipBoard;
+    protected SecondShipBoardForTesting myShipBoard;
 
     @BeforeEach
     void setUp() {
@@ -25,7 +24,7 @@ class ComponentTest {
                 Direction.RIGHT, Connector.DOUBLE
         ));
         myComponent = new Component(myConnectors);
-        myShipBoard = new ShipBoardStub();
+        myShipBoard = new SecondShipBoardForTesting();
     }
 
     @Test

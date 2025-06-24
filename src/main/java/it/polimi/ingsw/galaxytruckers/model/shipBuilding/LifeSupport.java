@@ -14,19 +14,24 @@ public non-sealed class LifeSupport extends Component implements ComponentInterf
     public LifeSupport(Map<Direction, Connector> connectors, int id, CrewType crewType) {
         super(connectors, id);
         this.crewType = crewType;
-        if (crewType == CrewType.HUMAN) {
-            throw new IllegalArgumentException("LifeSupport type cannot be HUMAN, allowed types: " +
-                    Arrays.stream(CrewType.values())
-                            .filter(t -> !t.equals(CrewType.HUMAN))
-                            .map(Object::toString)
-                            .collect(Collectors.joining(",")));
-        }
+        checkCrewType();
     }
 
     @VisibleForTesting
     public LifeSupport(Map<Direction, Connector> connectors, CrewType crewType) throws IllegalArgumentException {
         super(connectors);
         this.crewType = crewType;
+        checkCrewType();
+    }
+
+    @VisibleForTesting
+    public LifeSupport(CrewType crewType) {
+        super();
+        this.crewType = crewType;
+        checkCrewType();
+    }
+
+    private void checkCrewType() {
         if (crewType == CrewType.HUMAN) {
             throw new IllegalArgumentException("LifeSupport type cannot be HUMAN, allowed types: " +
                     Arrays.stream(CrewType.values())
@@ -34,12 +39,6 @@ public non-sealed class LifeSupport extends Component implements ComponentInterf
                             .map(Object::toString)
                             .collect(Collectors.joining(",")));
         }
-    }
-
-    @VisibleForTesting
-    public LifeSupport(CrewType crewType) {
-        super();
-        this.crewType = crewType;
     }
 
     public CrewType getAlienType() {
@@ -47,13 +46,12 @@ public non-sealed class LifeSupport extends Component implements ComponentInterf
     }
 
     @Override
-    public void addToVisitor(ComponentVisitor visitor) {
-        visitor.add(this);
+    public void addToVisitor(ComponentVisitor visitor, java.awt.Point point) {
+        visitor.add(this, point);
     }
 
     @Override
-    public void removeFromVisitor(ComponentVisitor visitor) {
-        visitor.remove(this);
+    public void removeFromVisitor(ComponentVisitor visitor, java.awt.Point point) {
+        visitor.remove(this, point);
     }
-
 }

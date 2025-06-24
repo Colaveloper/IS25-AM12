@@ -14,7 +14,7 @@ import java.util.List;
 
 class ClientControllerTest {
 
-    static VirtualServer server;
+    static ServerHandler server;
     static ClientController controller;
 
     static String myNickname;
@@ -33,7 +33,18 @@ class ClientControllerTest {
         faceUpComponents = new ArrayList<>();
         coveredComponentsN = 44;
 
-        server = new VirtualServer() {
+        server = new ServerHandler() {
+
+            @Override
+            public void dropConnection() {
+
+            }
+
+            @Override
+            public boolean reconnect() {
+                return false;
+            }
+
             @Override
             public void registerNickname(String myNickname) {
                 System.out.println("FAKE SERVER EVENT: successfully registered nickname " + myNickname);

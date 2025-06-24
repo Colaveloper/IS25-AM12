@@ -1,14 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events.types;
 
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
-
+/**
+ * Event representing a player flipping the hourglass.
+ *
+ * @param playerName the name of the player who flipped the hourglass
+ */
 public record FlipHourglassEvent(String playerName) implements LobbyEvent {
-
-    public static FlipHourglassEvent from(ShipBoard shipBoard) {
-        return new FlipHourglassEvent(
-                Player.getPlayer(shipBoard).getNickname()
-        );
-    }
-
 }

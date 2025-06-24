@@ -1,9 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
-import it.polimi.ingsw.galaxytruckers.model.Hourglass;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
@@ -13,13 +10,9 @@ import org.checkerframework.dataflow.qual.AssertMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.awt.*;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -43,10 +36,9 @@ class ShipBuildingStateTest {
 
         @BeforeEach
         void setUp() {
-            game = new Game(Level.SECOND);
+            game = new GameStub(Level.SECOND);
             shipBoards.add(game.addShipBoard(GameColor.BLUE));
             shipBoards.add(game.addShipBoard(GameColor.RED));
-            game.setEventListener(new GameEventListenerStub());
             latch = StateTransitionUtils.setupLatch(game);
             game.start();
             shipBuildingState = (SecondShipBuildingState) game.getCurrentState();
@@ -60,7 +52,7 @@ class ShipBuildingStateTest {
 
         @AssertMethod
         public void assertTransition() {
-            StateTransitionUtils.assertTransition(latch,game, ShipCorrectionState.class);
+            StateTransitionUtils.assertTransition(latch,game,ShipCorrectionState.class);
         }
 
         @Test
@@ -81,6 +73,7 @@ class ShipBuildingStateTest {
             assertEquals(coveredComponents.getLast(), shipBoards.getFirst().getLastComponent().orElse(null));
             assertTrue(shipBuildingState.getComponentBank().getUncoveredComponents().isEmpty());
             assertEquals(coveredComponents.subList(0, coveredComponents.size() - 1), shipBuildingState.getComponentBank().getCoveredComponents());
+            Mockito.verify(game.getEventListener()).notifyRequestFaceDownComponentEvent(shipBoards.getFirst(),shipBoards.getFirst().getLastComponent().orElseThrow());
         }
 
         @Test
@@ -100,6 +93,7 @@ class ShipBuildingStateTest {
             shipBuildingState.requestComponent(shipBoards.getFirst(), requestedComponent.getId());
             assertTrue(shipBuildingState.getComponentBank().getUncoveredComponents().isEmpty());
             assertEquals(requestedComponent, shipBoards.getFirst().getLastComponent().orElse(null));
+            Mockito.verify(game.getEventListener()).notifyRequestFaceUpComponentEvent(shipBoards.getFirst(),shipBoards.getFirst().getLastComponent().orElseThrow());
         }
 
         @Test
@@ -121,11 +115,12 @@ class ShipBuildingStateTest {
             assertEquals(1, shipBuildingState.getComponentBank().getUncoveredComponents().size());
             assertTrue(shipBuildingState.getComponentBank().getUncoveredComponents().containsValue(rejectedComponent));
             assertTrue(shipBoards.getFirst().getLastComponent().isEmpty());
+            Mockito.verify(game.getEventListener()).notifyRejectComponentEvent(shipBoards.getFirst());
         }
 
         @Test
         void rejectComponentThrowsExceptionWhenNoComponentPresent() {
-            assertThrows(IllegalStateException.class, () -> shipBuildingState.rejectComponent(new SecondShipBoard(GameColor.RED)));
+            assertThrows(IllegalStateException.class, () -> shipBuildingState.rejectComponent(new SecondShipBoardForTesting(GameColor.RED)));
         }
 
         @Test
@@ -161,17 +156,20 @@ class ShipBuildingStateTest {
         }
 
         @Test
+        void flipHourglassGeneratesEvent() {
+            shipBuildingState.getHourglass().stop();
+            shipBuildingState.getHourglass().setDuration(100);
+            shipBuildingState.flipHourglass(shipBoards.getFirst());
+            Mockito.verify(game.getEventListener()).notifyFlipHourglassEvent(shipBoards.getFirst());
+        }
+
+        @Test
         void lastFlipHourglassThrowsExceptionIfShipIsNotCompleted() throws InterruptedException {
             Hourglass hourglass = shipBuildingState.getHourglass();
-            shipBuildingState.getHourglass().setDuration(10);
-            for (int i = 1; i < 2; i++) {
-                try {
-                    shipBuildingState.flipHourglass(shipBoards.getFirst());
-                } catch (IllegalStateException e) {
-                    throw new RuntimeException("Timer is still running, i = " + i);
-                }
-                Thread.sleep(20);
-            }
+            hourglass.stop();
+            shipBuildingState.getHourglass().setDuration(100);
+            shipBuildingState.flipHourglass(shipBoards.getFirst());
+            Thread.sleep(300); // wait for the hourglass to expire
             assertThrows(IllegalStateException.class, () -> shipBuildingState.flipHourglass(shipBoards.getFirst()));
         }
 
@@ -202,6 +200,8 @@ class ShipBuildingStateTest {
             assertTrue(shipBuildingState.getBlockedForecasts().contains(0));
             assertEquals(1, shipBuildingState.getShipToForecasts().size());
             assertEquals(0, (int) shipBuildingState.getShipToForecasts().get(shipBoards.getFirst()));
+            Mockito.verify(game.getEventListener()).notifyPeekForecastEvent(shipBoards.getFirst(), 0);
+            Mockito.verify(game.getEventListener()).notifyForecastDetailsEvent(shipBoards.getFirst(), game.getDeck().getForecastDeck(0));
         }
 
         @Test
@@ -216,6 +216,7 @@ class ShipBuildingStateTest {
             shipBuildingState.releaseForecast(shipBoards.getFirst());
             assertTrue(shipBuildingState.getShipToForecasts().isEmpty());
             assertTrue(shipBuildingState.getBlockedForecasts().isEmpty());
+            Mockito.verify(game.getEventListener()).notifyReleaseForecastEvent(shipBoards.getFirst(), 0);
         }
 
         @Test
@@ -295,11 +296,11 @@ class ShipBuildingStateTest {
             @Test
             void lastFlipHourglassEndsBuilding() throws InterruptedException{
                 shipBuildingState.getHourglass().stop();
-                shipBuildingState.getHourglass().setDuration(1);
+                shipBuildingState.getHourglass().setDuration(100);
 
                 for (int i = 1; i < 3; i++) {
                     shipBuildingState.flipHourglass(shipBoards.getFirst());
-                    Thread.sleep(1050);
+                    Thread.sleep(300); // wait for the hourglass to expire
                 }
                 assertTransition();
             }
@@ -326,10 +327,9 @@ class ShipBuildingStateTest {
 
         @BeforeEach
         void setUp() {
-            game = new Game(Level.TEST);
+            game = new GameStub(Level.TEST);
             shipBoards.add(game.addShipBoard(GameColor.BLUE));
             shipBoards.add(game.addShipBoard(GameColor.RED));
-            game.setEventListener(new GameEventListenerStub());
             latch = StateTransitionUtils.setupLatch(game);
             game.start();
             shipBuildingState = (TestShipBuildingState) game.getCurrentState();
@@ -447,6 +447,14 @@ class ShipBuildingStateTest {
         @Test
         void releaseForecastIsUnsupported() {
             assertThrows(UnsupportedOperationException.class, () -> shipBuildingState.releaseForecast(shipBoards.getFirst()));
+        }
+
+        @Test
+        void endBuildingPlacesOnFlightBoard() {
+            shipBuildingState.placeShipOnFlightBoard(shipBoards.getFirst());
+            shipBuildingState.endBuilding();
+            assertTransition();
+            assertEquals(new HashSet<>(shipBoards), game.getFlightBoard().getShipToPlace().keySet());
         }
 
         @Nested

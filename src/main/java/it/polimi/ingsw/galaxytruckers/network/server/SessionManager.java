@@ -49,6 +49,12 @@ public class SessionManager {
         }
     }
 
+    public void clear() {
+        synchronized (activeSessions) {
+            activeSessions.clear();
+        }
+    }
+
     public ClientHandler getClient(Player player) {
         synchronized (activeSessions) {
             if (activeSessions.containsKey(player)) {

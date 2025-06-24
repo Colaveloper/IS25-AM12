@@ -12,12 +12,9 @@ public abstract class FlightBoard {
     protected final List<Integer> startingPositionsLeft;
     protected GameEventListener gameEventListener = null;
 
-    public FlightBoard() {
+    public FlightBoard(GameEventListener gameEventListener) {
         this.shipToPlace = new HashMap<>();
         this.startingPositionsLeft = new ArrayList<>();
-    }
-
-    public void setGameEventListener(GameEventListener gameEventListener) {
         this.gameEventListener = gameEventListener;
     }
 
@@ -26,9 +23,11 @@ public abstract class FlightBoard {
      * on the flightBoard
      * */
     public Map<ShipBoard, Integer> getShipToPlace() {
+        Map<ShipBoard,Integer> res;
         synchronized (shipToPlace) {
-            return new HashMap<>(shipToPlace);
+            res = new HashMap<>(shipToPlace);
         }
+        return res;
     }
 
     /**
@@ -58,7 +57,7 @@ public abstract class FlightBoard {
         synchronized (shipToPlace) {
             shipToPlace.put(shipBoard, position);
         }
-        if (gameEventListener != null) gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,position);
+        gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,position);
     }
 
     /**
@@ -69,12 +68,14 @@ public abstract class FlightBoard {
      * @return a {@link List} of shipboards in the order that they appear
      * on the flightboard*/
     public List<ShipBoard> getOrderedShips() {
+        List<ShipBoard> res;
         synchronized (shipToPlace) {
-            return shipToPlace.entrySet().stream()
+            res = shipToPlace.entrySet().stream()
                     .sorted(Comparator.<Map.Entry<ShipBoard, Integer>>comparingInt(Map.Entry::getValue).reversed())
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList());
         }
+        return res;
     }
 
     /**
@@ -102,7 +103,7 @@ public abstract class FlightBoard {
                 }
             }
             shipToPlace.put(shipBoard, newPosition);
-            if (gameEventListener != null) gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,newPosition);
+            gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,newPosition);
         }
     }
 
@@ -125,9 +126,11 @@ public abstract class FlightBoard {
      * on the flightboard*/
     @VisibleForTesting
     public List<Integer> getStartingPositionsLeft() {
+        List<Integer> res;
         synchronized (startingPositionsLeft) {
-            return new ArrayList<>(startingPositionsLeft);
+            res = new ArrayList<>(startingPositionsLeft);
         }
+        return res;
     }
 }
 

@@ -42,6 +42,7 @@ public class CombatZoneCard extends AdventureCard {
 
     @Override
     public AdventureState getNextState() {
+        if (flightBoard.getShipToPlace().size() <= 1) return new DrawCardState();
         if (penalizedShipBoard == null) {
             if (currentPlayerIndex < flightBoard.getShipToPlace().size()) {
                 currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex++);

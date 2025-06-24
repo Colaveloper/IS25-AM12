@@ -4,6 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
+import it.polimi.ingsw.galaxytruckers.network.client.ServerHandler;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.messages.*;
 import it.polimi.ingsw.galaxytruckers.network.messages.requests.*;
@@ -15,21 +16,29 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 import java.awt.*;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
 
-public class SocketClient implements VirtualServer, VirtualClient {
+public class SocketClient implements ServerHandler, VirtualClient {
     private SafeSocket socket;
     private ClientControllerInterface controller;
+
+    private String ip;
+    private int port;
+
     private boolean isRunning;
-
-    private final ScheduledExecutorService scheduler =  Executors.newScheduledThreadPool(1);
-
     private Thread inputThread;
 
-    private final Map<UUID, CompletableFuture<Response>> responses = new HashMap<>();
+    private final ScheduledExecutorService scheduler =  Executors.newScheduledThreadPool(1);
+    private ScheduledFuture<?> pingTask;
+
+    private final Map<UUID, CompletableFuture<Response>> responses = new ConcurrentHashMap<>();
+
+    private final Object connectionLock = new Object();
+    private boolean connected = false;
 
     public void setController(ClientControllerInterface controller) {
         this.controller = controller;
@@ -37,14 +46,39 @@ public class SocketClient implements VirtualServer, VirtualClient {
 
     public void start(String ip, int port) {
         try {
+            this.ip = ip;
+            this.port = port;
+            connect();
+            System.out.println("Started Socket Client");
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to connect to SocketServer", e);
+        }
+    }
+
+    @Override
+    public boolean reconnect() {
+        try {
+            connect();
+            return true;
+        } catch (IOException e) {
+            System.err.println("Failed to reconnect");
+        }
+        return false;
+    }
+
+    @Override
+    public void dropConnection() {
+        handleIOException(new SocketException("Simulated Network Exception"));
+    }
+
+    private void connect() throws IOException {
+        synchronized (connectionLock) {
             Socket socket = new Socket(ip, port);
             this.socket = new SafeSocket(socket);
             isRunning = true;
             inputThread = new Thread(this::inputThreadTask);
             inputThread.start();
-            System.out.println("Started Socket Client");
-        } catch (IOException e) {
-            handleIOException(e);
+            connected = true;
         }
     }
 
@@ -54,7 +88,7 @@ public class SocketClient implements VirtualServer, VirtualClient {
         try {
             socket.close();
         } catch (IOException e) {
-            handleIOException(e);
+            System.err.println("Error closing socket");
         }
     }
 
@@ -75,7 +109,7 @@ public class SocketClient implements VirtualServer, VirtualClient {
                     }
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                handleIOException(e);
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException("Message class not found, probable misconfiguration");
             }
@@ -83,36 +117,57 @@ public class SocketClient implements VirtualServer, VirtualClient {
     }
 
     private void handleIOException(IOException e) {
-        System.err.println("IOException: " + e.getMessage());
-        //TODO: more elaborate exception handling
+        synchronized (connectionLock) {
+            if (connected) {
+                System.err.println("IOException: " + e.getMessage());
+                stop();
+                if (pingTask != null) pingTask.cancel(true);
+                controller.signalDisconnection();
+            }
+        }
     }
 
     private void sendRequest(Request request) {
-        responses.put(request.getUuid(), new CompletableFuture<>());
-        try {
-            socket.write(request);
-            Response response = responses.get(request.getUuid()).get();
-            responses.remove(response.getUuid());
-            if (response.isError()) throw new RuntimeException(response.getError());
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            handleIOException(e);
+        synchronized (connectionLock) {
+            if (!connected) return;
+            responses.put(request.getUuid(), new CompletableFuture<>());
+            try {
+                socket.write(request);
+                Response response = responses.get(request.getUuid()).get(2, TimeUnit.SECONDS);
+                responses.remove(response.getUuid());
+                if (response.isError()) throw new RuntimeException(response.getError());
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                handleIOException(e);
+            } catch (TimeoutException e) {
+                handleIOException(new SocketException("Timed out waiting for request"));
+            }
         }
     }
 
     private void ping() {
-        try {
-            socket.write(new Ping());
-        } catch (IOException e) {
-            handleIOException(e);
+        synchronized (connectionLock) {
+            try {
+                Ping ping = new Ping();
+                responses.put(ping.id(), new CompletableFuture<>());
+                socket.write(ping);
+                responses.get(ping.id()).get(100, TimeUnit.SECONDS);
+                responses.remove(ping.id());
+            } catch (IOException e) {
+                handleIOException(e);
+            } catch (ExecutionException | InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (TimeoutException e) {
+                handleIOException(new SocketException("Timed out waiting for Ping"));
+            }
         }
     }
 
     @Override
     public void registerNickname(String myNickname) {
         sendRequest(new RegisterNickname(myNickname));
-        scheduler.scheduleAtFixedRate(this::ping, 5,5, TimeUnit.SECONDS);
+        pingTask = scheduler.scheduleAtFixedRate(this::ping, 5,5, TimeUnit.SECONDS);
     }
 
 

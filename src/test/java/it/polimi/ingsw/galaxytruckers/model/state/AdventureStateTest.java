@@ -4,7 +4,6 @@ import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,21 +23,19 @@ class AdventureStateTest {
     @BeforeEach
     void setup() {
         testAdventureState = new AdventureStateStub();
-        ship1 = new SecondShipBoard(GameColor.RED);
+        ship1 = new SecondShipBoardForTesting(GameColor.RED);
     }
 
     @Test
     void giveUpThrowsExceptionWhenNotInSecondLevel() {
-        game = new Game(Level.TEST);
-        game.setEventListener(new GameEventListenerStub());
+        game = new GameStub(Level.TEST);
         testAdventureState.setGame(game);
         assertThrows(UnsupportedOperationException.class, () -> testAdventureState.giveUp(ship1));
     }
 
     @Test
     void giveUpThrowsExceptionIfShipHasAlreadyGivenUp() {
-        game = new Game(Level.SECOND);
-        game.setEventListener(new GameEventListenerStub());
+        game = new GameStub(Level.SECOND);
         testAdventureState.setGame(game);
         testAdventureState.giveUp(ship1);
         assertThrows(IllegalStateException.class, () -> testAdventureState.giveUp(ship1));
@@ -46,9 +43,8 @@ class AdventureStateTest {
 
     @Test
     void giveUpAddsShipToGivenUpShips() {
-        game = new Game(Level.SECOND);
-        game.setEventListener(new GameEventListenerStub());
-        flightBoard = new SecondFlightBoard(1);
+        game = new GameStub(Level.SECOND);
+        flightBoard = new SecondFlightBoardForTesting(1);
         game.setFlightBoard(flightBoard);
         //game.connect();
         testAdventureState.setGame(game);
@@ -58,7 +54,7 @@ class AdventureStateTest {
 
     @Test
     void getNextStateUpdatesGameStateAndExpired() {
-        game = new Game(Level.SECOND);
+        game = new GameStub(Level.SECOND);
         try {
             game.setDeck(new Deck(game) {
                 /**
@@ -79,7 +75,6 @@ class AdventureStateTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        game.setEventListener(new GameEventListenerStub());
         CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         game.setCurrentState(testAdventureState);
         testAdventureState.getNextState();
@@ -89,7 +84,7 @@ class AdventureStateTest {
 
     @Test
     void getNextStateWhenExpiredDoesNothing() throws IOException {
-        game = new Game(Level.SECOND);
+        game = new GameStub(Level.SECOND);
         game.setDeck(new Deck(game) {
                          /**
                           * Returns the current card to be played.
@@ -107,7 +102,6 @@ class AdventureStateTest {
                          }
                      }
         );
-        game.setEventListener(new GameEventListenerStub());
         CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         game.setCurrentState(testAdventureState);
         testAdventureState.expired = true;

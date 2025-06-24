@@ -53,11 +53,7 @@ public non-sealed class CargoHold extends Component implements ComponentInterfac
         if (updatedNumGoods > this.size) {
             throw new IllegalArgumentException("Cannot add the goods because total capacity would be exceeded");
         }
-        if (goods.containsKey(goodsType)) {
-            goods.put(goodsType, goods.get(goodsType) + amount);
-        } else {
-            goods.put(goodsType, amount);
-        }
+        goods.merge(goodsType, amount, Integer::sum);
         this.numGoods = updatedNumGoods;
     }
 
@@ -66,16 +62,17 @@ public non-sealed class CargoHold extends Component implements ComponentInterfac
             throw new IllegalArgumentException("Cannot remove the goods there are not enough");
         }
         goods.put(goodsType, goods.get(goodsType) - amount);
+        if (goods.get(goodsType) <= 0) goods.remove(goodsType);
         this.numGoods -= amount;
     }
 
     @Override
-    public void addToVisitor(ComponentVisitor visitor) {
-        visitor.add(this);
+    public void addToVisitor(ComponentVisitor visitor, java.awt.Point point) {
+        visitor.add(this, point);
     }
 
     @Override
-    public void removeFromVisitor(ComponentVisitor visitor) {
-        visitor.remove(this);
+    public void removeFromVisitor(ComponentVisitor visitor, java.awt.Point point) {
+        visitor.remove(this, point);
     }
 }

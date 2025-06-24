@@ -1,8 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
+import it.polimi.ingsw.galaxytruckers.model.SecondShipBoardForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +21,7 @@ class BigFireTest {
 
     @BeforeEach
     void setUp() {
-        shipBoard = new ShipBoard(GameColor.BLUE) {
+        shipBoard = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return true;
@@ -27,6 +29,12 @@ class BigFireTest {
 
         };
         position = new Point();
+        bigFire = new BigFire(() -> 0, Direction.UP);
+    }
+
+    @Test
+    void getProjectileType() {
+        assertEquals(ProjectileType.BIGFIRE, bigFire.getProjectileType());
     }
 
     @Test

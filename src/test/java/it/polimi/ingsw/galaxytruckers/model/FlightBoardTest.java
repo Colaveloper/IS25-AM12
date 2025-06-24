@@ -3,26 +3,23 @@ package it.polimi.ingsw.galaxytruckers.model;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ComponentBank;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.TestShipBoard;
 import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class FlightBoardTest {
 
     ShipBoard ship1, ship2, ship3;
-    FlightBoard flightBoard;
     ComponentBank componentBank;
     Map<ShipBoard, Integer> shipToPlace;
     Map<ShipBoard, Integer> shipToScore;
     List<ShipBoard> allShips;
     List<Integer> legalStartingPositions;
-
     @BeforeEach
     void setUp() {
         shipToPlace = new HashMap<>();
@@ -32,13 +29,15 @@ class FlightBoardTest {
     @Nested
     @DisplayName("Test-Flight Tests")
     class TestFlightTests {
+        TestFlightBoardForTesting flightBoard;
+
         @BeforeEach
         void setUp() {
-            ship1 = new TestShipBoard(GameColor.BLUE);
-            ship2 = new TestShipBoard(GameColor.RED);
-            ship3 = new TestShipBoard(GameColor.GREEN);
+            ship1 = new TestShipBoardForTesting(GameColor.BLUE);
+            ship2 = new TestShipBoardForTesting(GameColor.RED);
+            ship3 = new TestShipBoardForTesting(GameColor.GREEN);
             allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
-            flightBoard = new TestFlightBoard(3);
+            flightBoard = new TestFlightBoardForTesting(3);
         }
 
         @Test
@@ -57,6 +56,13 @@ class FlightBoardTest {
         }
 
         @Test
+        void placeShipOnFlightBoardGeneratesEvent() {
+            flightBoard.placeShipOnFlightBoard(ship1, 123);
+            shipToPlace.put(ship1, TestFlightBoard.startingPositions.getFirst());
+            verify(flightBoard.getEventListener()).notifyFlightBoardUpdateEvent(ship1, TestFlightBoard.startingPositions.getFirst());
+        }
+
+        @Test
         void invalidCallsThrowExceptions() {
             assertThrows(UnsupportedOperationException.class, () -> flightBoard.removeShips(Set.of(ship1)));
             assertThrows(UnsupportedOperationException.class, () -> flightBoard.getLappedShips());
@@ -72,13 +78,15 @@ class FlightBoardTest {
     @Nested
     @DisplayName("Second-Flight Tests")
     class SecondFlightTests {
+        SecondFlightBoardForTesting flightBoard;
+
         @BeforeEach
         void setUp() {
-            ship1 = new SecondShipBoard(GameColor.BLUE);
-            ship2 = new SecondShipBoard(GameColor.RED);
-            ship3 = new SecondShipBoard(GameColor.GREEN);
+            ship1 = new SecondShipBoardForTesting(GameColor.BLUE);
+            ship2 = new SecondShipBoardForTesting(GameColor.RED);
+            ship3 = new SecondShipBoardForTesting(GameColor.GREEN);
             allShips = new ArrayList<>(List.of(ship1, ship2, ship3));
-            flightBoard = new SecondFlightBoard(3);
+            flightBoard = new SecondFlightBoardForTesting(3);
             legalStartingPositions = new ArrayList<>(SecondFlightBoard.startingPositions
                     .subList(0, allShips.size()));
         }
@@ -98,6 +106,13 @@ class FlightBoardTest {
                     IllegalArgumentException.class,
                     () -> flightBoard.placeShipOnFlightBoard(ship2, legalStartingPositions.get(1))
             );
+        }
+
+        @Test
+        void placeShipOnFlightBoardGeneratesEvent() {
+            flightBoard.placeShipOnFlightBoard(ship1, legalStartingPositions.getFirst());
+            verify(flightBoard.getEventListener())
+                    .notifyFlightBoardUpdateEvent(ship1 , legalStartingPositions.getFirst());
         }
 
         @Test
@@ -155,6 +170,14 @@ class FlightBoardTest {
             for (ShipBoard ship : allShips) {
                 assertEquals(shipToPlace.get(ship), flightBoard.getShipToPlace().get(ship));
             }
+        }
+
+        @Test
+        void displaceShipGeneratesEvent() {
+            flightBoard.placeShipOnFlightBoard(ship1, legalStartingPositions.getFirst());
+            flightBoard.displaceShip(ship1, 10);
+            verify(flightBoard.getEventListener())
+                    .notifyFlightBoardUpdateEvent(ship1, legalStartingPositions.getFirst() + 10);
         }
 
         @Test

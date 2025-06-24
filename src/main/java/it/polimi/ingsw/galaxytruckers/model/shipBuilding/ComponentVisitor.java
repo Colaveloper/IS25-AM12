@@ -1,26 +1,25 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
+import java.awt.Point;
+
 public interface ComponentVisitor {
-    void add(Component component);
-    void add(Cannon cannon);
-    void add(Engine engine);
-    void add(Battery battery);
-    void add(Cabin cabin);
-    void add(Shield shield);
-    void add(LifeSupport lifeSupport);
-    void add(CargoHold cargoHold);
-    void add(DoubleCannon doubleCannon);
-    void add(DoubleEngine doubleEngine);
+    void add(Cannon cannon, Point position);
+    void add(Engine engine, Point position);
+    void add(Battery battery, Point position);
+    void add(Cabin cabin, Point position);
+    void add(Shield shield, Point position);
+    void add(LifeSupport lifeSupport, Point position);
+    void add(CargoHold cargoHold, Point position);
+    void add(DoubleCannon doubleCannon, Point position);
+    void add(DoubleEngine doubleEngine, Point position);
 
-
-    void remove(Component component);
-    void remove(Cannon cannon);
-    void remove(Engine engine);
-    void remove(Battery battery);
-    void remove(Cabin cabin);
-    void remove(Shield shield);
-    void remove(LifeSupport lifeSupport);
-    void remove(CargoHold cargoHold);
-    void remove(DoubleCannon doubleCannon);
-    void remove(DoubleEngine doubleEngine);
+    void remove(Cannon cannon, Point position);
+    void remove(Engine engine, Point position);
+    void remove(Battery battery, Point position);
+    void remove(Cabin cabin, Point position);
+    void remove(Shield shield, Point position);
+    void remove(LifeSupport lifeSupport, Point position);
+    void remove(CargoHold cargoHold, Point position);
+    void remove(DoubleCannon doubleCannon, Point position);
+    void remove(DoubleEngine doubleEngine, Point position);
 }

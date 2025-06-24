@@ -105,7 +105,7 @@ public class ClientEventHandler implements EventHandler<Event> {
             );
             case PlanetChoiceEvent planetChoiceEvent -> clientModel.notifyChoosePlanet(
                     conversionUtils.convertName(planetChoiceEvent.playerName()),
-                    planetChoiceEvent.planetId(),
+                    planetChoiceEvent.planetIndex(),
                     conversionUtils.convertName(planetChoiceEvent.nextPlayerName())
             );
             case PlayerDisconnectionEvent playerDisconnectionEvent -> {

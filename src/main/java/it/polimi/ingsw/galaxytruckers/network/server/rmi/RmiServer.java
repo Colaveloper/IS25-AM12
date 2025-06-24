@@ -1,9 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
-import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
 import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -32,16 +30,10 @@ public class RmiServer extends UnicastRemoteObject implements RemoteServer {
 
     @Override
     public RemoteController registerNickname(RemoteClient client, String nickname) throws RemoteException {
-        return controller.registerNickname(
-                nickname,
-                p -> {
-                    try {
-                        return new RmiClientHandler(client,p,controller);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-        );
+        RmiClientHandler handler = new RmiClientHandler(client, controller);
+        controller.registerNickname(nickname, handler);
+        handler.start();
+        return handler;
     }
 
     public void stop() throws RemoteException {

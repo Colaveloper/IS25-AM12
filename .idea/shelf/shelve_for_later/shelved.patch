@@ -1,0 +1,165 @@
+Index: src/main/java/it/polimi/ingsw/galaxytruckers/view/ClientModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.galaxytruckers.view;\r\n\r\nimport com.google.common.collect.BiMap;\r\nimport com.google.common.collect.HashBiMap;\r\nimport it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;\r\nimport it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;\r\nimport it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;\r\nimport it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;\r\n\r\nimport java.awt.*;\r\nimport java.io.IOException;\r\nimport java.util.*;\r\nimport java.util.List;\r\nimport java.util.stream.Collectors;\r\n\r\npublic class ClientModel {\r\n    private List<String> nicknames;\r\n    private String currentPlayerNickname;\r\n    private String myNickname;\r\n\r\n    private final FlightBoard flightBoard;\r\n    private final LinkedHashMap<String, Shipboard> playerToShip;        // need order to be always the same\r\n    private final BiMap<String, Colors> playerToColor;\r\n    private final List<Point> selectablePoints;\r\n    private Planets planets;\r\n    private CurrentProjectile currentProjectile;\r\n    private GoodsBuffer goodsBuffer;\r\n    private final ComponentBank componentBank;\r\n    private final AllShips allShips;\r\n\r\n    private AdventureCard currentCard;\r\n\r\n    public ClientModel() {\r\n        this.flightBoard = new FlightBoard();\r\n        this.playerToColor = HashBiMap.create();\r\n        this.playerToShip = new LinkedHashMap<>();\r\n        this.selectablePoints = new ArrayList<>();\r\n        this.componentBank = new ComponentBank();\r\n        this.allShips = new AllShips(playerToShip, 5, 3); //TODO: substitute magic numbers\r\n    }\r\n\r\n        // SETUP PHASE\r\n\r\n    public void setPlayerToPlace(Map<String, Integer> playerToPlace) {\r\n        flightBoard.setPlayerToPlace(playerToPlace.entrySet().stream()\r\n                .collect(Collectors.toMap(\r\n                        e -> playerToColor.get(e.getKey()),\r\n                        Map.Entry::getValue)\r\n                ));\r\n    }\r\n\r\n    public void setFlightBoard(int loopLength, List<Integer> startingPositions) {\r\n        flightBoard.setLoopLength(loopLength);\r\n        flightBoard.setStartingPositionLeft(startingPositions);\r\n    }\r\n\r\n    public void setPlayerColor(String nickname, Colors color) {playerToColor.put(nickname, color);}\r\n\r\n    public void setMyNickname(String myNickname) {\r\n        this.myNickname = myNickname;\r\n        addPlayer(myNickname);\r\n    }\r\n\r\n    public void setShipArea(Set<Point> shipArea) {\r\n        for (Shipboard s : playerToShip.values()) {\r\n            s.setShipArea(shipArea);\r\n        }\r\n    }\r\n\r\n        // SHIP BUILDING PHASE\r\n\r\n            // COMPONENT BANK\r\n    public void addRevealedComponent(int componentId) throws IOException {\r\n        componentBank.addRevealedComponent(componentId);\r\n    }\r\n\r\n    public void removeRevealedComponent(int componentId) throws IOException {\r\n        componentBank.removeStashedComponent(componentId);\r\n    }\r\n\r\n    public void setStashedComponents(List<Integer> stashedComponentIds) throws IOException {\r\n        componentBank.setStashedComponents(stashedComponentIds);\r\n    }\r\n\r\n    public void setCurrentComponent(int componentId) throws IOException {\r\n        componentBank.setCurrentComponent(componentId);\r\n    }\r\n\r\n    public void clearCurrentComponent() {\r\n        componentBank.clearCurrentComponent();\r\n    }\r\n\r\n            // SHIPBOARD\r\n    public void removeComponent (Point position, String nickname) throws IOException {\r\n        playerToShip.get(nickname).removeComponent(position);\r\n    }\r\n\r\n    public void setComponent(String nickname, int componentId, int direction, Point position) throws IOException {\r\n        playerToShip.get(nickname).setComponent(position, direction, componentId);\r\n    }\r\n\r\n    public void setCrew(String nickname, Point position, int crew, CrewType crewType) throws IOException {\r\n        playerToShip.get(myNickname).getComponent(position).setCrewRace(crewType);\r\n        playerToShip.get(myNickname).getComponent(position).setStat(crew);\r\n    }\r\n\r\n    public Physical getComponentBank() {\r\n        return componentBank;\r\n    }\r\n\r\n        // ADVENTURE PHASE\r\n    public void setCurrentPlayerNickname(String currentPlayerNickname) {\r\n        this.currentPlayerNickname = currentPlayerNickname;\r\n    }\r\n\r\n    public String getCurrentPlayerNickname() {\r\n        return currentPlayerNickname;\r\n    }\r\n\r\n    public boolean isMyTurn() {\r\n        return currentPlayerNickname != null && currentPlayerNickname.equals(myNickname);\r\n    }\r\n\r\n    public void loseBatteries(String nickname, Point position, int batteriesLost) throws IOException {\r\n        playerToShip.get(myNickname).getComponent(position).subtractStat(batteriesLost);//TODO: update other players too?\r\n    }\r\n\r\n    public void setGoods(String nickname, Point position, List<GoodsType> goods) throws IOException {\r\n        playerToShip.get(nickname).getComponent(position).setGoods(goods);\r\n    }\r\n\r\n    public Physical getPlanets(){ return planets; }\r\n\r\n    public Physical getGoodsBuffer(){ return goodsBuffer; }\r\n\r\n    // remove good from the buffer\r\n    public void updateGoodsBuffer(int index) throws IOException {\r\n        goodsBuffer.takeGood(index);\r\n    }\r\n\r\n    // in case of planets the goodBuffer must be set after the choice, this happens once, other update use updateGoodsBuffer\r\n    public void setPlanetGoodBuffer(int planetId) {\r\n        planets = new Planets(currentCard);\r\n        goodsBuffer = new GoodsBuffer(planets, planetId);\r\n    }\r\n\r\n    public void setProjectile(ProjectileType projectileType, int direction, int roll) {\r\n        currentProjectile = new CurrentProjectile (projectileType, direction, roll);\r\n    }\r\n\r\n    public CurrentProjectile getCurrentProjectile() {\r\n        return currentProjectile;\r\n    }\r\n\r\n    public Physical getCurrentCard() {\r\n        return currentCard;\r\n    }\r\n\r\n    public void setCurrentCard(int cardId) throws IOException {\r\n        currentCard = new AdventureCard(cardId);\r\n        goodsBuffer = new GoodsBuffer(currentCard);\r\n    }\r\n\r\n    public String getCardName() {\r\n        return currentCard.getCardName();\r\n    }\r\n\r\n        // OTHER\r\n\r\n    public Physical getAllShips() {\r\n        return allShips;\r\n    }\r\n\r\n    public Colors getColorFromNickname(String nickname) {return playerToColor.get(nickname);}\r\n\r\n    public Physical getFlightBoard() {\r\n        return flightBoard;\r\n    }\r\n\r\n    public Physical getMyShipBoard() {\r\n        return playerToShip.get(myNickname);\r\n    }\r\n\r\n    public String getMyNickname() {\r\n        return myNickname;\r\n    }\r\n\r\n    public void setSelectablePoints(List<Point> selectablePoints) {\r\n        playerToShip.get(myNickname).setSelectablePoints(selectablePoints);\r\n        this.selectablePoints.addAll(selectablePoints);\r\n    }\r\n\r\n    public String getCurrentLeader() {\r\n        return playerToColor.inverse().get(flightBoard.getCurrentLeaderColor());\r\n    }\r\n\r\n    public List<Point> getSelectablePoints() {\r\n        return selectablePoints;\r\n    }\r\n\r\n    public void addPlayer(String nickname) {\r\n        playerToShip.put(nickname, new Shipboard());\r\n    }\r\n\r\n    public List<String> getNicknames() {\r\n        return nicknames;\r\n    }\r\n\r\n    public void setNicknames(List<String> nicknames) {\r\n        this.nicknames = nicknames;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/polimi/ingsw/galaxytruckers/view/ClientModel.java b/src/main/java/it/polimi/ingsw/galaxytruckers/view/ClientModel.java
+--- a/src/main/java/it/polimi/ingsw/galaxytruckers/view/ClientModel.java	(revision cd18105bffdcd94f06f5dd7468ca0dd8d688b089)
++++ b/src/main/java/it/polimi/ingsw/galaxytruckers/view/ClientModel.java	(date 1746440023532)
+@@ -26,7 +26,7 @@
+     private CurrentProjectile currentProjectile;
+     private GoodsBuffer goodsBuffer;
+     private final ComponentBank componentBank;
+-    private final AllShips allShips;
++    private final AllShips allShips;    //
+ 
+     private AdventureCard currentCard;
+ 
+Index: src/main/java/it/polimi/ingsw/galaxytruckers/view/View.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.galaxytruckers.view;\r\n\r\nimport it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;\r\nimport it.polimi.ingsw.galaxytruckers.view.screens.ScreenStrategy;\r\n\r\nimport java.io.IOException;\r\n\r\npublic interface View {\r\n    // this is not an abstract class in order to let GuiView extend Application\r\n    void setModel(ClientModel model);\r\n    void setServer(VirtualServer server);\r\n\r\n    public View (ClientModel model, VirtualServer server) {\r\n        this.model = model;\r\n        this.server = server;\r\n    }\r\n\r\n    public abstract void refresh();\r\n    /**\r\n     * Provides to the user a contract to interact with the game\r\n     * @throws IOException\r\n     */\r\n    void run(ScreenStrategy strategy) throws IOException;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/polimi/ingsw/galaxytruckers/view/View.java b/src/main/java/it/polimi/ingsw/galaxytruckers/view/View.java
+--- a/src/main/java/it/polimi/ingsw/galaxytruckers/view/View.java	(revision cd18105bffdcd94f06f5dd7468ca0dd8d688b089)
++++ b/src/main/java/it/polimi/ingsw/galaxytruckers/view/View.java	(date 1746430616004)
+@@ -10,10 +10,7 @@
+     void setModel(ClientModel model);
+     void setServer(VirtualServer server);
+ 
+-    public View (ClientModel model, VirtualServer server) {
+-        this.model = model;
+-        this.server = server;
+-    }
++
+ 
+     public abstract void refresh();
+     /**
+Index: src/main/java/it/polimi/ingsw/galaxytruckers/network/client/ClientController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.galaxytruckers.network.client;\r\n\r\nimport it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;\r\nimport it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;\r\nimport it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;\r\nimport it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;\r\nimport it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;\r\nimport it.polimi.ingsw.galaxytruckers.view.*;\r\nimport it.polimi.ingsw.galaxytruckers.view.screens.*;\r\nimport it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;\r\nimport javafx.application.Application;\r\n\r\nimport java.awt.*;\r\nimport java.io.IOException;\r\nimport java.rmi.RemoteException;\r\nimport java.util.*;\r\nimport java.util.List;\r\n\r\npublic class ClientController {\r\n    private ClientModel model;\r\n    private View view;\r\n\r\n    public ClientController(VirtualServer server) {\r\n        this.model = new ClientModel();\r\n    }\r\n\r\n    public void showInterfaceChoice (VirtualServer server) throws IOException {\r\n        // TODO: consider whether to relocate prints and scans\r\n        System.out.println(\"Enter \\\"G\\\" to switch to the Graphical Interface, or press any other key to continue here\");\r\n        if (new Scanner(System.in).nextLine().trim().equalsIgnoreCase(\"G\")) {\r\n            view = new GuiView();\r\n            view.setServer(server);\r\n            view.setModel(model);\r\n            GuiView.firstStrategy = new NicknameChoiceScreen();\r\n            Application.launch(GuiView.class); // calls view.run(...)\r\n        } else {\r\n            view = new CliView();\r\n            view.setServer(server);\r\n            view.setModel(model);\r\n            view.run(new NicknameChoiceScreen());\r\n        }\r\n    }\r\n\r\n    public void setCLIViewManually (VirtualServer server) {\r\n        view = new CliView(model, server);\r\n    }\r\n\r\n\r\n    // UPDATES FROM THE SERVER\r\n\r\n    public void showGameCreation() throws IOException {\r\n        view.run(new GameCreationScreen());\r\n    }\r\n\r\n    public void showLobbyUpdate(List<String> names) throws IOException {\r\n        model.setNicknames(names);\r\n        view.run(new LobbyScreen());\r\n    }\r\n\r\n    public void showConnectedAndNicknameChoice(String tempNickname) throws IOException {\r\n        model.setMyNickname(tempNickname);\r\n        view.run(new NicknameChoiceScreen());\r\n    }\r\n\r\n    public void setNickname(String nickname) { // gets called only after legal registration\r\n        model.setMyNickname(nickname);\r\n    }\r\n\r\n    public void showGameCreation(Level level, int playersNum) {\r\n        // model.update\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    public void showGameJoining(String nickname) {\r\n        model.addPlayer(nickname);\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    public void showColorSelection(String nickname, Colors color){\r\n        model.setPlayerColor(nickname, color);\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    public void setFlightBoard(int loopLength, List<Integer> startingPositions) throws IOException {\r\n        model.setFlightBoard(loopLength, startingPositions);\r\n        //view.run(new PointSelectionScreen());\r\n    }\r\n\r\n    public void setShipArea(Set<Point> shipArea) {\r\n        model.setShipArea(shipArea);\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    // UPDATE FOR SHIP BUILDING\r\n\r\n    public void showStashUpdate(List<Integer> stashedComponentIds) throws IOException {\r\n        model.setStashedComponents(stashedComponentIds);\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    public void showComponentPositioning(String nickname, int componentId, int direction, Point position) throws IOException {\r\n        model.setComponent(nickname, componentId, direction, position);\r\n        view.run(new ShipBuildingScreen());\r\n    }\r\n\r\n    public void showUncoveredUpdate(List<Integer> uncoveredComponentIds, int coveredComponents) {\r\n        // model.update\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    public void addReavealedComponent(int componentId) throws IOException {\r\n        model.addRevealedComponent(componentId);\r\n    }\r\n\r\n    public void showForecast(List<Integer> cardsIds) {\r\n        // model.update\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    public void showNewHourglass() {\r\n        // model.update\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    public void showPlayerToPlaceUpdate(Map<String, Integer> playerToPlace) {\r\n        model.setPlayerToPlace(playerToPlace);\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    public void showComponentRemoval(Point position, String nickname) throws IOException {\r\n        model.removeComponent(position, nickname);\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    public void showChoice(List<String> choices) {\r\n        // model.update\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    // UPDATE FOR COMPONENT (only data update and nothing to ask or show)\r\n\r\n    public void showUpdateBatteries(String nickname, Point position, int batteries) throws IOException {\r\n        model.loseBatteries(nickname, position, batteries);\r\n        view.refresh();\r\n        // view.show(ChosenStrategy);\r\n    }\r\n\r\n    public void showUpdateCrew(String nickname, Point position, int crew, CrewType crewType) throws IOException {\r\n        model.setCrew(nickname, position, crew, crewType);\r\n        view.refresh();\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    public void showUpdateCargoHold(String nickname, Point position, List<GoodsType> goods) throws IOException {\r\n        model.setGoods(nickname, position, goods);\r\n        view.refresh();\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    // UPDATE FOR ADVENTURE\r\n\r\n    public void showNewCard(Integer cardId) throws IOException {\r\n        model.setCurrentCard(cardId);\r\n        model.setCurrentPlayerNickname(model.getCurrentLeader());\r\n        view.run(new NewCardScreen());\r\n    }\r\n\r\n    // first time goods are shown on screen\r\n    public void showPlaceGoods() throws IOException {\r\n        view.run(new GoodsScreen());\r\n    }\r\n\r\n    public void choosePlanet(int planetId) throws IOException {\r\n        model.setPlanetGoodBuffer(planetId);\r\n    }\r\n\r\n    // update each time player picks something, index of good taken in the buffer\r\n    public void updateGoodsBuffer(int index) throws IOException {\r\n        model.updateGoodsBuffer(index);\r\n        //view.refresh();\r\n        view.run(new GoodsScreen());\r\n    }\r\n\r\n    public void setCurrentPlayer(String nickname) {\r\n        model.setCurrentPlayerNickname(nickname);\r\n    }\r\n\r\n    public void showProjectile(ProjectileType projectileType, int direction, int roll) throws IOException {\r\n        model.setProjectile(projectileType, direction, roll);\r\n        view.run(new ProjectilesScreen());\r\n    }\r\n\r\n    public void showStatsUpdate() {\r\n        // model.update\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    // UPDATE FOR ENDGAME\r\n\r\n    public void showFinalStats() {\r\n        // model.update\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    // other updates\r\n\r\n    public void showUpdateGoodBuffer(List<GoodsType> goods) {\r\n        // model.update\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    public void showSelectablePoints(List<Point> points) {\r\n        model.setSelectablePoints(points);\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n    public void reportError(String details) throws RemoteException {\r\n        // model.update\r\n        // view.show(ChosenStrategy)\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/polimi/ingsw/galaxytruckers/network/client/ClientController.java b/src/main/java/it/polimi/ingsw/galaxytruckers/network/client/ClientController.java
+--- a/src/main/java/it/polimi/ingsw/galaxytruckers/network/client/ClientController.java	(revision cd18105bffdcd94f06f5dd7468ca0dd8d688b089)
++++ b/src/main/java/it/polimi/ingsw/galaxytruckers/network/client/ClientController.java	(date 1746435052298)
+@@ -42,7 +42,9 @@
+     }
+ 
+     public void setCLIViewManually (VirtualServer server) {
+-        view = new CliView(model, server);
++        view = new CliView();
++        view.setModel(model);
++        view.setServer(server);
+     }
+ 
+ 
+@@ -93,6 +95,7 @@
+ 
+     // UPDATE FOR SHIP BUILDING
+ 
++    // set only m
+     public void showStashUpdate(List<Integer> stashedComponentIds) throws IOException {
+         model.setStashedComponents(stashedComponentIds);
+         // view.show(ChosenStrategy)
+@@ -170,17 +173,19 @@
+         view.run(new GoodsScreen());
+     }
+ 
++    // planetId is an index and starts from 0, UI listing on screen starts from 1
+     public void choosePlanet(int planetId) throws IOException {
+         model.setPlanetGoodBuffer(planetId);
+     }
+ 
+-    // update each time player picks something, index of good taken in the buffer
++    // update each time player picks something removing good taken in the buffer by index
+     public void updateGoodsBuffer(int index) throws IOException {
+         model.updateGoodsBuffer(index);
+         //view.refresh();
+-        view.run(new GoodsScreen());
++        //view.run(new GoodsScreen());
+     }
+ 
++    // set current player for any action that involves a decision
+     public void setCurrentPlayer(String nickname) {
+         model.setCurrentPlayerNickname(nickname);
+     }
+Index: src/main/java/it/polimi/ingsw/galaxytruckers/view/GameFlowTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.galaxytruckers.view;\r\n\r\nimport it.polimi.ingsw.galaxytruckers.model.enumTypes.Colors;\r\nimport it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;\r\nimport it.polimi.ingsw.galaxytruckers.network.client.ClientController;\r\nimport it.polimi.ingsw.galaxytruckers.network.server.rmi.RmiServer;\r\nimport it.polimi.ingsw.galaxytruckers.network.shared.VirtualServer;\r\nimport it.polimi.ingsw.galaxytruckers.serverController.ServerController;\r\nimport it.polimi.ingsw.galaxytruckers.view.screens.NewCardScreen;\r\nimport it.polimi.ingsw.galaxytruckers.view.viewEnums.ProjectileType;\r\n\r\nimport java.awt.*;\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.HashSet;\r\nimport java.util.List;\r\nimport java.util.Map;\r\n\r\npublic class GameFlowTest {\r\n\r\n    public static void main(String[] args) throws IOException {\r\n        ServerController serverController = new ServerController();\r\n        VirtualServer server = new RmiServer(serverController);\r\n        ClientController controller = new ClientController(server);\r\n        controller.setCLIViewManually(server);\r\n\r\n        List<Point> shipArea = new ArrayList<>(List.of(\r\n                new Point(4, 7), new Point(4, 8), new Point(4, 9),\r\n                new Point(5, 6), new Point(5, 7), new Point(5, 8), new Point(5, 9),\r\n                new Point(6, 5), new Point(6, 6), new Point(6, 7), new Point(6, 8), new Point(6, 9),\r\n                new Point(7, 6), new Point(7, 7), new Point(7, 8),\r\n                new Point(8, 5), new Point(8, 6), new Point(8, 7), new Point(8, 8), new Point(8, 9),\r\n                new Point(9, 6), new Point(9, 7), new Point(9, 8), new Point(9, 9),\r\n                new Point(10, 7),new Point(10, 8),new Point(10, 9)\r\n        ));\r\n        controller.setNickname(\"Roborbio\");\r\n        controller.setShipArea(new HashSet<>(shipArea));\r\n        controller.setFlightBoard(10, List.of(2, 4, 5));\r\n\r\n        for (int i=0 ; i<shipArea.size() - 20 ; i++) {\r\n            controller.showComponentPositioning(\"Roborbio\", i*5, i%4, shipArea.get(i));\r\n            controller.showStashUpdate(new ArrayList<>(List.of(4, 8)));\r\n            controller.addReavealedComponent(i);\r\n        }\r\n\r\n        controller.showUpdateCargoHold(\"Roborbio\", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE));\r\n        controller.showColorSelection(\"Roborbio\", Colors.RED);\r\n        controller.showPlayerToPlaceUpdate(Map.of(\"Roborbio\", 2));\r\n\r\n        //TEST\r\n\r\n        controller.showNewCard(16);\r\n        controller.choosePlanet(1);\r\n        controller.showPlaceGoods();\r\n        controller.updateGoodsBuffer(1);\r\n        controller.updateGoodsBuffer(2);\r\n        controller.updateGoodsBuffer(3);\r\n\r\n    }\r\n\r\n    ClientModel model;\r\n    List<Point> shipArea;\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/polimi/ingsw/galaxytruckers/view/GameFlowTest.java b/src/main/java/it/polimi/ingsw/galaxytruckers/view/GameFlowTest.java
+--- a/src/main/java/it/polimi/ingsw/galaxytruckers/view/GameFlowTest.java	(revision cd18105bffdcd94f06f5dd7468ca0dd8d688b089)
++++ b/src/main/java/it/polimi/ingsw/galaxytruckers/view/GameFlowTest.java	(date 1746436494751)
+@@ -24,6 +24,13 @@
+         ClientController controller = new ClientController(server);
+         controller.setCLIViewManually(server);
+ 
++        List<String> names = new ArrayList<>();
++        names.add("Giuigi");
++        names.add("Gioforchio");
++        controller.setNickname("Roborbio");
++        names.add("Roborbio");
++        controller.showLobbyUpdate(names); //TODO: resetta myNickname erroneamente?
++
+         List<Point> shipArea = new ArrayList<>(List.of(
+                 new Point(4, 7), new Point(4, 8), new Point(4, 9),
+                 new Point(5, 6), new Point(5, 7), new Point(5, 8), new Point(5, 9),
+@@ -33,28 +40,45 @@
+                 new Point(9, 6), new Point(9, 7), new Point(9, 8), new Point(9, 9),
+                 new Point(10, 7),new Point(10, 8),new Point(10, 9)
+         ));
+-        controller.setNickname("Roborbio");
++
+         controller.setShipArea(new HashSet<>(shipArea));
+         controller.setFlightBoard(10, List.of(2, 4, 5));
+ 
+-        for (int i=0 ; i<shipArea.size() - 20 ; i++) {
++
++        for (int i=0 ; i<shipArea.size() - 25; i++) {
+             controller.showComponentPositioning("Roborbio", i*5, i%4, shipArea.get(i));
+             controller.showStashUpdate(new ArrayList<>(List.of(4, 8)));
+             controller.addReavealedComponent(i);
+         }
+ 
+-        controller.showUpdateCargoHold("Roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE));
++
+         controller.showColorSelection("Roborbio", Colors.RED);
+         controller.showPlayerToPlaceUpdate(Map.of("Roborbio", 2));
+ 
+         //TEST
+ 
++        controller.showNewCard(1);
++
++        //controller. //TODO:aggiungere classe player?
++
+         controller.showNewCard(16);
+         controller.choosePlanet(1);
+         controller.showPlaceGoods();
++
+         controller.updateGoodsBuffer(1);
++        controller.showUpdateCargoHold("Roborbio", new Point(9, 7), List.of(GoodsType.RED));
++        controller.showPlaceGoods();
++
+         controller.updateGoodsBuffer(2);
++        controller.showUpdateCargoHold("Roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE));
++        controller.showPlaceGoods();
++
+         controller.updateGoodsBuffer(3);
++        controller.showUpdateCargoHold("Roborbio", new Point(9, 7), List.of(GoodsType.RED, GoodsType.BLUE, GoodsType.YELLOW));
++        controller.showPlaceGoods();
++
++
++
+ 
+     }
+ 

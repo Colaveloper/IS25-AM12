@@ -1,11 +1,12 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
+import it.polimi.ingsw.galaxytruckers.model.SecondShipBoardForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Shield;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
-import javafx.scene.image.Image;
+import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -19,10 +20,15 @@ class SmallFireTest {
     Point firstFoundComponentPosition;
     Map<Point, Shield> fakeShields;
 
+    @BeforeEach
+    void setUp() {
+        smallFire = new SmallFire(() -> 0, Direction.UP);
+    }
+
     @Test
     void getActivatablePoints() {
         fakeShields = new HashMap<>();
-        shipBoard = new ShipBoard(GameColor.BLUE) {
+        shipBoard = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return true;
@@ -38,10 +44,15 @@ class SmallFireTest {
     }
 
     @Test
+    void getProjectileType() {
+        assertEquals(ProjectileType.SMALLFIRE, smallFire.getProjectileType());
+    }
+
+    @Test
     void getComponentPositionToRemoveReturnsEmptyIfProjectileComesFromShieldDirectionElseFirstFound() {
         firstFoundComponentPosition = new Point();
         for (Direction defendedDirection : Direction.values()) {
-            shipBoard = new ShipBoard(GameColor.BLUE) {
+            shipBoard = new SecondShipBoardForTesting(GameColor.BLUE) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return true;

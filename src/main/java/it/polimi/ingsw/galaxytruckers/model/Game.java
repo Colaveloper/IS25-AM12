@@ -8,10 +8,6 @@ import it.polimi.ingsw.galaxytruckers.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
-import it.polimi.ingsw.galaxytruckers.serverController.dto.DtoConverter;
-import it.polimi.ingsw.galaxytruckers.serverController.dto.GameSnapshot;
-import it.polimi.ingsw.galaxytruckers.serverController.dto.ShipBoardDTO;
-import it.polimi.ingsw.galaxytruckers.serverController.utils.ConversionUtils;
 import it.polimi.ingsw.galaxytruckers.utils.LockUtils;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
@@ -21,7 +17,6 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
@@ -41,19 +36,20 @@ public class Game implements GameInterface {
 
     private final Map<ShipBoard, Integer> finalScores = new HashMap<>();
 
-    private volatile GameEventListener eventListener;
+    private final GameEventListener eventListener;
 
     private final ExecutorService transitionExecutor = Executors.newSingleThreadExecutor();
 
     @VisibleForTesting
     private Runnable afterEach = () -> {};
 
-    public Game(Level level, int shipsN) {
+    public Game(Level level, int shipsN, GameEventListener eventListener) {
+        this.eventListener = eventListener;
         this.level = level;
         this.gameFactory = GameFactory.getFactory(level);
-        this.surrenderPolicy = this.gameFactory.createSurrenderPolicy();
+        this.surrenderPolicy = this.gameFactory.createSurrenderPolicy(eventListener);
         this.scoresRegistry = this.gameFactory.createScoresRegistry();
-        this.flightBoard = gameFactory.createFlightBoard(shipsN);
+        this.flightBoard = gameFactory.createFlightBoard(shipsN, eventListener);
         try {
             this.deck = gameFactory.createDeck(this);
         } catch (IOException e) {
@@ -82,22 +78,10 @@ public class Game implements GameInterface {
     public ShipBoard addShipBoard(GameColor color) {
         ShipBoard shipBoard;
         synchronized (shipBoards) {
-            shipBoard = gameFactory.createShipBoard(color);
+            shipBoard = gameFactory.createShipBoard(color, eventListener);
             shipBoards.add(shipBoard);
         }
         return shipBoard;
-    }
-
-    /**
-     * Sets a {@link GameEventListener} for the game
-     * @param eventListener the new {@link GameEventListener}
-     */
-    @Override
-    public void setEventListener(GameEventListener eventListener) {
-        this.eventListener = eventListener;
-        shipBoards.forEach(s -> s.setGameEventListener(eventListener));
-        surrenderPolicy.setEventListener(eventListener);
-        flightBoard.setGameEventListener(eventListener);
     }
 
     /**
@@ -169,9 +153,11 @@ public class Game implements GameInterface {
      * @return a {@link Set} containing all the game's ship boards
      */
     public Set<ShipBoard> getShipBoards() {
+        Set<ShipBoard> res;
         synchronized (shipBoards) {
-            return new HashSet<>(shipBoards);
+            res = new HashSet<>(shipBoards);
         }
+        return res;
     }
 
     /**
@@ -207,8 +193,9 @@ public class Game implements GameInterface {
     }
 
     /**
-     * Sets game state to the end game state if there are no
-     * more ships playing
+     * Ends the game and computes the final scores if either the deck is empty or
+     * all ships have surrendered
+     * @return {@code true} if the game was ended, {@code false} otherwise
      */
     public boolean tryEndGame() {
         return withStateWriteLock(() -> {
@@ -227,9 +214,10 @@ public class Game implements GameInterface {
         shipsInPlay.removeAll(surrenderPolicy.getSurrenderedShips());
 
         // Best-looking ship reward
+        int minExposedConnectors = shipsInPlay.stream().mapToInt(ShipBoard::getExposedConnectorsNumber).min().orElse(-1);
         shipsInPlay.stream()
-                .min(Comparator.comparingInt(ShipBoard::getExposedConnectorsNumber))
-                .ifPresent(bestLookingShip ->
+                .filter(s -> s.getExposedConnectorsNumber() == minExposedConnectors)
+                .forEach(bestLookingShip ->
                         finalScores.merge(bestLookingShip, scoresRegistry.getBestLookingShipAward(), Integer::sum));
 
         // Finish order reward
@@ -424,24 +412,6 @@ public class Game implements GameInterface {
     //endregion
 
     //region Test methods
-    @VisibleForTesting
-    public Game(Level level) {
-        this(level, 4);
-    }
-
-    public Game(GameFactory gameFactory) {
-        int shipsN = 4;
-        this.level = null;
-        this.gameFactory = gameFactory;
-        this.surrenderPolicy = this.gameFactory.createSurrenderPolicy();
-        this.scoresRegistry = this.gameFactory.createScoresRegistry();
-        this.flightBoard = gameFactory.createFlightBoard(shipsN);
-        try {
-            this.deck = gameFactory.createDeck(this);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @VisibleForTesting
     public void setFlightBoard(FlightBoard flightBoard) {
@@ -456,6 +426,21 @@ public class Game implements GameInterface {
     @VisibleForTesting
     public void setAfterEach(Runnable afterEach) {
         this.afterEach = afterEach;
+    }
+
+    @VisibleForTesting
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    @VisibleForTesting
+    public ScoresRegistry getScoresRegistry() {
+        return scoresRegistry;
+    }
+
+    @VisibleForTesting
+    public Map<ShipBoard, Integer> getFinalScores() {
+        return finalScores;
     }
     //endregion
 }

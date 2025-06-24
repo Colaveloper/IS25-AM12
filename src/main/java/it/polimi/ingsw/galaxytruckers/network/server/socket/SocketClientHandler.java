@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 class SocketClientHandler implements VirtualServer, ClientHandler {
-    private final Player player;
+    private Player player;
     private final ServerControllerInterface controller;
     private final SafeSocket socket;
 
@@ -33,9 +33,8 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     private final ClientEventQueue eventQueue = new ClientEventQueue();
 
-    public SocketClientHandler(SafeSocket socket, Player player, ServerControllerInterface controller) {
+    public SocketClientHandler(SafeSocket socket, ServerControllerInterface controller) {
         this.socket = socket;
-        this.player = player;
         this.controller = controller;
         this.requestThread = new Thread(this::requestTask, "RequestThread");
         this.updateThread = new Thread(this::updateTask, "UpdateThread");
@@ -46,6 +45,11 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
         requestThread.start();
         updateThread.start();
         System.out.println("Started Socket Client Handler");
+    }
+
+    @Override
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     @Override
@@ -89,12 +93,25 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
                 Message message = socket.read();
                 synchronized (requestLock) {
                     switch (message) {
-                        case Request request -> {
+                        case RegisterNickname request -> {
                             Response response = runRequest(request);
                             socket.write(response);
                         }
-                        case Ping _ -> {
-                            SessionManager.getInstance().ping(player);
+                        case RegisteredRequest request -> {
+                            Response response;
+                            if (player == null) {
+                                response = new Response(request.getUuid(),
+                                        new IllegalStateException("You have to register first"));
+                            } else {
+                                response = runRequest(request);
+                            }
+                            socket.write(response);
+                        }
+                        case Ping ping -> {
+                            if (player != null) {
+                                SessionManager.getInstance().ping(player);
+                                socket.write(new Response(ping.id()));
+                            }
                         }
                         case EventMessage _, Response _ -> System.err.println("The SocketHandler received invalid request " + message.getClass());
                     }
@@ -134,7 +151,7 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     @Override
     public void registerNickname(String myNickname) {
-        throw new IllegalStateException("You have already registered nickname");
+        controller.registerNickname(myNickname, this);
     }
 
     @Override
