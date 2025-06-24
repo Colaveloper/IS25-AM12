@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
@@ -43,7 +42,7 @@ class SlaversCardTest {
         ships = new ArrayList<>();
         loserShips = new ArrayList<>();
 
-        ship1 = new SecondShipBoard(GameColor.RED) {
+        ship1 = new SecondShipBoardForTesting(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return 0;
@@ -55,7 +54,7 @@ class SlaversCardTest {
             }
         };
 
-        ship2 = new SecondShipBoard(GameColor.RED) {
+        ship2 = new SecondShipBoardForTesting(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return 2;
@@ -67,7 +66,7 @@ class SlaversCardTest {
             }
         };
 
-        ship3 = new SecondShipBoard(GameColor.RED) {
+        ship3 = new SecondShipBoardForTesting(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return 1;
@@ -91,7 +90,7 @@ class SlaversCardTest {
             loserShipPlaces.put(loserShips.get(i), 10-i);
         }
 
-        flightBoard = new FlightBoard() {
+        flightBoard = new FlightBoard(new GameEventListenerForTesting()) {
             @Override
             protected int getLoopLength() {
                 return 0;
@@ -117,7 +116,7 @@ class SlaversCardTest {
             }
         };
 
-        flightBoardOfLosers = new FlightBoard() {
+        flightBoardOfLosers = new FlightBoard(new GameEventListenerForTesting()) {
             @Override
             protected int getLoopLength() {
                 return 0;
@@ -142,7 +141,7 @@ class SlaversCardTest {
             public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
             }
         };
-        game = new Game(Level.SECOND) {
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoard;
             }
@@ -190,7 +189,7 @@ class SlaversCardTest {
 
     @Test
     void noneWins() {
-        game = new Game(Level.SECOND) {
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoardOfLosers;
             }

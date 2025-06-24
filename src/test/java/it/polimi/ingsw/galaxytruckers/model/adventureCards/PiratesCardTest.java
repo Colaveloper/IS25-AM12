@@ -1,12 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.Projectile;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
@@ -37,7 +35,7 @@ class PiratesCardTest {
         shipPieces.add(new HashSet<>());
         removePiece = false;
         lastShipPower = firePowerThreshold+1;
-        ships.add(new SecondShipBoard(GameColor.BLUE) {
+        ships.add(new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             public int getFirePower() {
                 return firePowerThreshold-1;
@@ -48,19 +46,19 @@ class PiratesCardTest {
                 return shipPieces;
             }
         });
-        ships.add(new SecondShipBoard(GameColor.RED) {
+        ships.add(new SecondShipBoardForTesting(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return firePowerThreshold;
             }
         });
-        ships.add(new SecondShipBoard(GameColor.RED) {
+        ships.add(new SecondShipBoardForTesting(GameColor.RED) {
             @Override
             public int getFirePower() {
                 return lastShipPower;
             }
         });
-        FlightBoard flightBoardStub = new FlightBoard() {
+        FlightBoard flightBoardStub = new FlightBoard(new GameEventListenerForTesting()) {
             @Override
             public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
             }
@@ -124,7 +122,7 @@ class PiratesCardTest {
                 }
             });
         }
-        game = new Game(Level.SECOND) {
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoardStub;
             }

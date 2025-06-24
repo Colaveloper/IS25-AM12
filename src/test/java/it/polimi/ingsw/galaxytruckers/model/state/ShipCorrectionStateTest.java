@@ -1,8 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
 import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerForTesting;
+import it.polimi.ingsw.galaxytruckers.model.GameStub;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.factory.SecondFactory;
@@ -14,6 +14,7 @@ import org.checkerframework.dataflow.qual.AssertMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.awt.*;
 import java.io.IOException;
@@ -21,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,14 +42,13 @@ class ShipCorrectionStateTest {
         @BeforeEach
         void setup() throws IOException {
             shipCorrectionState = new TestFactory().createShipCorrectionState();
-            game = new Game(Level.TEST);
+            game = new GameStub(Level.TEST);
             shipBoards.add(game.addShipBoard(GameColor.BLUE));
             shipBoards.add(game.addShipBoard(GameColor.RED));
             shipBoards.add(game.addShipBoard(GameColor.GREEN));
             for (ShipBoard shipBoard : shipBoards) {
                 shipBoard.removeComponent(new Point(7, 7));
             }
-            game.setEventListener(new GameEventListenerStub());
             latch = StateTransitionUtils.setupLatch(game);
             for (ShipBoard shipBoard : shipBoards) {
                 shipBoard.offerComponent(new Cabin(
@@ -142,6 +141,7 @@ class ShipCorrectionStateTest {
             assertEquals(1, shipBoards.get(1).getComponentMap().size());
             assertTrue(shipCorrectionState.getValidShipBoards().contains(shipBoards.get(1)));
             assertNoTransition();
+            Mockito.verify(game.getEventListener()).notifyValidateShipEvent(shipBoards.get(1));
         }
 
         @Test
@@ -157,6 +157,7 @@ class ShipCorrectionStateTest {
             shipCorrectionState.removeComponent(shipBoards.get(2), new Point(8, 7));
             assertTrue(shipCorrectionState.getShipPiecesMap().containsKey(shipBoards.get(2)));
             assertNoTransition();
+            Mockito.verify(game.getEventListener()).notifyShipNotConnectedEvent(shipBoards.get(2), shipCorrectionState.getShipPieces(shipBoards.get(2)));
         }
 
         @Test
@@ -216,8 +217,7 @@ class ShipCorrectionStateTest {
         @BeforeEach
         void setup() throws IOException {
             shipCorrectionState = new SecondFactory().createShipCorrectionState();
-            game = new Game(Level.SECOND);
-            game.setEventListener(new GameEventListenerStub());
+            game = new GameStub(Level.SECOND);
             shipBoards.add(game.addShipBoard(GameColor.BLUE));
             shipBoards.add(game.addShipBoard(GameColor.RED));
             latch = StateTransitionUtils.setupLatch(game);

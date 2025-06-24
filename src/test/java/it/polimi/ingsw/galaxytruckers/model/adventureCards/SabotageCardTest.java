@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
@@ -49,7 +48,7 @@ class SabotageCardTest {
         ships = new ArrayList<>();
         largerShips = new ArrayList<>();
 
-        ship1 = new SecondShipBoard(GameColor.BLUE) {
+        ship1 = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             public int getCrewSize() {
                 return 2;
@@ -61,7 +60,7 @@ class SabotageCardTest {
             }
         };
 
-        ship2 = new SecondShipBoard(GameColor.RED) {
+        ship2 = new SecondShipBoardForTesting(GameColor.RED) {
             @Override
             public int getCrewSize() {
                 return 3;
@@ -73,7 +72,7 @@ class SabotageCardTest {
             }
         };
 
-        ship3 = new SecondShipBoard(GameColor.GREEN) {
+        ship3 = new SecondShipBoardForTesting(GameColor.GREEN) {
             @Override
             public int getCrewSize() {
                 return 1;
@@ -105,7 +104,7 @@ class SabotageCardTest {
         }
 
 
-        flightBoard = new FlightBoard() {
+        flightBoard = new FlightBoard(new GameEventListenerForTesting()) {
             @Override
             protected int getLoopLength() {
                 return 0;
@@ -127,7 +126,7 @@ class SabotageCardTest {
             }
         };
 
-        largerFlightBoard = new FlightBoard() {
+        largerFlightBoard = new FlightBoard(new GameEventListenerForTesting()) {
             @Override
             protected int getLoopLength() {
                 return 0;
@@ -148,7 +147,7 @@ class SabotageCardTest {
             public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
             }
         };
-        game = new Game(Level.SECOND) {
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoard;
             }
@@ -169,7 +168,7 @@ class SabotageCardTest {
 
     @Test
     void otherOrderToCheck() {
-        game = new Game(Level.SECOND) {
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return largerFlightBoard;
             }

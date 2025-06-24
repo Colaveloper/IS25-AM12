@@ -1,10 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.GrabRewardState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
@@ -38,7 +36,7 @@ class AbandonedShipCardTest {
         for (int i = 0; i < ships.size(); i++) {
             shipPlaces.put(ships.get(i), 10-i);
         }
-        FlightBoard flightBoard = new FlightBoard() {
+        FlightBoard flightBoard = new FlightBoard(new GameEventListenerForTesting()) {
             @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return shipPlaces;
@@ -66,7 +64,7 @@ class AbandonedShipCardTest {
 
         };
 
-        game = new Game(Level.SECOND) {
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoard;
             }
@@ -80,13 +78,13 @@ class AbandonedShipCardTest {
     @Test
     void getNextStateReturnChoiceStateIfAtLeastOneShipHasEnoughCrew(){
         // ship 1 does not have enough crew
-        ShipBoard ship1 = new SecondShipBoard(GameColor.BLUE){
+        ShipBoard ship1 = new SecondShipBoardForTesting(GameColor.BLUE){
             @Override
             public int getCrewSize() {return requiredCrew - 1;}
         };
 
         // ship 2 does have enough crew
-        ShipBoard ship2 = new SecondShipBoard(GameColor.RED){
+        ShipBoard ship2 = new SecondShipBoardForTesting(GameColor.RED){
             @Override
             public int getCrewSize() {return requiredCrew;}
         };
@@ -97,13 +95,13 @@ class AbandonedShipCardTest {
     @Test
     void getNextStateReturnsDrawCardStateIfNoPlayersHasEnoughCrew(){
         // ship 1 does not have enough crew
-        ShipBoard ship1 = new SecondShipBoard(GameColor.BLUE){
+        ShipBoard ship1 = new SecondShipBoardForTesting(GameColor.BLUE){
             @Override
             public int getCrewSize() {return requiredCrew - 1;}
         };
 
         // ship 2 does not have enough crew
-        ShipBoard ship2 = new SecondShipBoard(GameColor.RED){
+        ShipBoard ship2 = new SecondShipBoardForTesting(GameColor.RED){
             @Override
             public int getCrewSize() {return requiredCrew - 1;}
         };
@@ -114,13 +112,13 @@ class AbandonedShipCardTest {
     @Test
     void getNextStateReturnsRemoveCrewStateIfShipAcceptsCard(){
         // ship 1 does have enough crew
-        ShipBoard ship1 = new SecondShipBoard(GameColor.BLUE){
+        ShipBoard ship1 = new SecondShipBoardForTesting(GameColor.BLUE){
             @Override
             public int getCrewSize() {return requiredCrew;}
         };
 
         // ship 2 also has enough crew
-        ShipBoard ship2 = new SecondShipBoard(GameColor.RED){
+        ShipBoard ship2 = new SecondShipBoardForTesting(GameColor.RED){
             @Override
             public int getCrewSize() {return requiredCrew;}
         };

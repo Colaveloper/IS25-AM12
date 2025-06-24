@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events;
 
+import it.polimi.ingsw.galaxytruckers.model.GameModel;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
@@ -80,7 +81,7 @@ class LobbyStub extends Lobby {
     private final List<Player> players;
 
     public LobbyStub(List<Player> players) {
-        super(null, players.getFirst(), Level.SECOND, 2, (_) -> {
+        super(new GameModel(), players.getFirst(), Level.SECOND, 2, (_) -> {
         });
         this.players = players;
     }

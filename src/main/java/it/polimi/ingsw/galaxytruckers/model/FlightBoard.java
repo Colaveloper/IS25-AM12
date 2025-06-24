@@ -12,12 +12,9 @@ public abstract class FlightBoard {
     protected final List<Integer> startingPositionsLeft;
     protected GameEventListener gameEventListener = null;
 
-    public FlightBoard() {
+    public FlightBoard(GameEventListener gameEventListener) {
         this.shipToPlace = new HashMap<>();
         this.startingPositionsLeft = new ArrayList<>();
-    }
-
-    public void setGameEventListener(GameEventListener gameEventListener) {
         this.gameEventListener = gameEventListener;
     }
 
@@ -60,7 +57,7 @@ public abstract class FlightBoard {
         synchronized (shipToPlace) {
             shipToPlace.put(shipBoard, position);
         }
-        if (gameEventListener != null) gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,position);
+        gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,position);
     }
 
     /**
@@ -106,7 +103,7 @@ public abstract class FlightBoard {
                 }
             }
             shipToPlace.put(shipBoard, newPosition);
-            if (gameEventListener != null) gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,newPosition);
+            gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,newPosition);
         }
     }
 

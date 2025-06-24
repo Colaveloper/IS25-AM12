@@ -1,14 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events.types;
 
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
-
+/**
+ * Event representing a player releasing a forecast deck.
+ *
+ * @param playerName the name of the player releasing the forecast
+ * @param deckIndex the index of the forecast deck
+ */
 public record ReleaseForecastEvent(String playerName, int deckIndex) implements LobbyEvent {
-    public static ReleaseForecastEvent from(ShipBoard shipBoard, int deckIndex) {
-        return new ReleaseForecastEvent(
-                Player.getPlayer(shipBoard).getNickname(),
-                deckIndex
-        );
-    }
-
 }

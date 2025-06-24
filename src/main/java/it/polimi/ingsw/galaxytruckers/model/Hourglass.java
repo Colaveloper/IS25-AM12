@@ -10,7 +10,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Hourglass {
-    private final static int DURATION = 60;
+    private final static int DURATION = 60000; // 60 seconds in milliseconds
+    private final static int period = 100; // 100 milliseconds
 
     private int flipsLeft;
     private boolean isRunning = false;
@@ -60,7 +61,7 @@ public class Hourglass {
             scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
                 boolean end = false;
                 synchronized (this) {
-                    missingTime--;
+                    missingTime-= period; // Decrement by 100 milliseconds
                     if (missingTime <= 0) {
                         end = true;
                         isRunning = false;
@@ -70,7 +71,7 @@ public class Hourglass {
                     endTask.run();
                     stop();
                 }
-            }, 0, 1, TimeUnit.SECONDS);
+            }, 0, period, TimeUnit.MILLISECONDS);
         } else {
             throw new IllegalStateException("The hourglass is not yet finished");
         }

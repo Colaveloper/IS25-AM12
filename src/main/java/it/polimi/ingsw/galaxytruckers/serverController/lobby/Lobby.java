@@ -4,6 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
 import it.polimi.ingsw.galaxytruckers.model.GameInterface;
+import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -47,8 +48,7 @@ public class Lobby implements LobbyInterface {
     private ScheduledFuture<?> scheduledFuture;
     private long removalDelay = REMOVAL_DELAY;
 
-    public Lobby(GameInterface game, Player creator, Level level, int numPlayers, Consumer<Lobby> removeLobby) {
-        this.game = game;
+    public Lobby(GameModelInterface model, Player creator, Level level, int numPlayers, Consumer<Lobby> removeLobby) {
         this.id = UUID.randomUUID();
         this.level = level;
         this.numPlayers = numPlayers;
@@ -62,6 +62,8 @@ public class Lobby implements LobbyInterface {
 
         this.eventQueue = new EventQueue<>();
         this.lobbyEventHandler = new LobbyEventHandler(this.eventQueue, this);
+
+        this.game = model.createGame(level,numPlayers,new GameEventListener(this.eventQueue, () -> DtoConverter.getLobbyDetails(this)));
 
         lobbyEventHandler.start();
         addPlayer(creator);
@@ -199,7 +201,6 @@ public class Lobby implements LobbyInterface {
             ShipBoard ship = game.addShipBoard(playerColors.get(player));
             player.setShipBoard(ship);
         }
-        game.setEventListener(new GameEventListener(this.eventQueue, () -> DtoConverter.getLobbyDetails(this)));
         game.start();
         setState(LobbyState.INGAME);
     }

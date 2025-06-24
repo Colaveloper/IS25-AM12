@@ -4,12 +4,13 @@ import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 
 public abstract class EventQueueHandler<T extends Event> implements EventHandler<T> {
     private final EventQueue<T> eventQueue;
-    private Thread thread;
+    private final Thread thread;
     private Runnable afterEach = () -> {};
     private boolean isRunning = false;
 
     public EventQueueHandler(EventQueue<T> queue) {
         this.eventQueue = queue;
+        this.thread = new Thread(this::threadTask, this.getClass().getSimpleName()+"-thread");
     }
 
     public void setAfterEach(Runnable afterEach) {
@@ -17,9 +18,6 @@ public abstract class EventQueueHandler<T extends Event> implements EventHandler
     }
 
     public void start() {
-        if (this.thread == null) {
-            this.thread = new Thread(this::threadTask, this.getClass().getSimpleName()+"-thread");
-        }
         isRunning = true;
         this.thread.start();
     }

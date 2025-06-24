@@ -5,10 +5,10 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.SurrenderCause;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,7 +32,7 @@ class DrawCardStateTest {
     void setup() throws IOException{
         surrenderPolicy = new SurrenderPolicyStub();
         surrenderPolicy.surrenderEnabled = false;
-        game = new Game(Level.SECOND) {
+        game = new GameStub(Level.SECOND) {
             @Override
             public SurrenderPolicy getSurrenderPolicy() {
                 return surrenderPolicy;
@@ -43,11 +43,10 @@ class DrawCardStateTest {
                 return Set.of(ship1,ship2);
             }
         };
-        game.setEventListener(new GameEventListenerStub());
         latch = StateTransitionUtils.setupLatch(game);
-        ship1 = new SecondShipBoard(GameColor.RED);
-        ship2 = new SecondShipBoard(GameColor.BLUE);
-        flightBoard = new SecondFlightBoard(2){
+        ship1 = new SecondShipBoardForTesting(GameColor.RED);
+        ship2 = new SecondShipBoardForTesting(GameColor.BLUE);
+        flightBoard = new SecondFlightBoardForTesting(2){
             @Override
             public List<ShipBoard> getOrderedShips(){
                 return List.of(ship1, ship2);
@@ -111,6 +110,7 @@ class DrawCardStateTest {
     @Test
     void skipDrawsAndChangesState() {
         testState.skip(ship1);
+        Mockito.verify(game.getEventListener()).notifyNewCardEvent(adventureCard);
         StateTransitionUtils.assertTransition(latch,game,AdventureStateStub.class);
     }
 
@@ -125,6 +125,7 @@ class DrawCardStateTest {
     void drawCardUpdatesState() {
         testState.drawCard(ship1);
         assertTrue(testState.hasDrawn());
+        Mockito.verify(game.getEventListener()).notifyNewCardEvent(adventureCard);
     }
 
     @Test
@@ -173,10 +174,6 @@ class DrawCardStateTest {
 class SurrenderPolicyStub implements SurrenderPolicy {
     boolean surrenderEnabled = false;
     boolean surrenderConfirmed = false;
-
-    @Override
-    public void setEventListener(GameEventListener gameEventListener) {
-    }
 
     @Override
     public boolean isSurrenderEnabled() {

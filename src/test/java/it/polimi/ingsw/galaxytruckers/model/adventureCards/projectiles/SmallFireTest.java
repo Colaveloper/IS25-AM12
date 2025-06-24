@@ -1,12 +1,11 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
+import it.polimi.ingsw.galaxytruckers.model.SecondShipBoardForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Component;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Shield;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.enums.ProjectileType;
-import javafx.scene.image.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +28,7 @@ class SmallFireTest {
     @Test
     void getActivatablePoints() {
         fakeShields = new HashMap<>();
-        shipBoard = new ShipBoard(GameColor.BLUE) {
+        shipBoard = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return true;
@@ -53,7 +52,7 @@ class SmallFireTest {
     void getComponentPositionToRemoveReturnsEmptyIfProjectileComesFromShieldDirectionElseFirstFound() {
         firstFoundComponentPosition = new Point();
         for (Direction defendedDirection : Direction.values()) {
-            shipBoard = new ShipBoard(GameColor.BLUE) {
+            shipBoard = new SecondShipBoardForTesting(GameColor.BLUE) {
                 @Override
                 protected boolean containsPoint(Point point) {
                     return true;

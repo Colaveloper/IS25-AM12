@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles;
 
+import it.polimi.ingsw.galaxytruckers.model.SecondShipBoardForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
@@ -55,7 +56,7 @@ class BigMeteorTest {
                 return 1;
             }
         };
-        shipBoard = new ShipBoard(GameColor.BLUE) {
+        shipBoard = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return true;
@@ -99,7 +100,7 @@ class BigMeteorTest {
                 return 0;
             }
         };
-        shipBoard = new ShipBoard(GameColor.BLUE) {
+        shipBoard = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return true;
@@ -133,7 +134,7 @@ class BigMeteorTest {
                 return 1;
             }
         };
-        shipBoard = new ShipBoard(GameColor.BLUE) {
+        shipBoard = new SecondShipBoardForTesting(GameColor.BLUE) {
             @Override
             protected boolean containsPoint(Point point) {
                 return true;

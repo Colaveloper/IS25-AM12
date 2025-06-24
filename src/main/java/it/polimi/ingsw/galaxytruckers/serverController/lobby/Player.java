@@ -88,7 +88,7 @@ public class Player {
         this.lobby.set(lobby);
     }
 
-    protected void setShipBoard(ShipBoard shipBoard) {
+    public void setShipBoard(ShipBoard shipBoard) {
         this.shipBoard.set(shipBoard);
         synchronized (shipToPlayer) {
             shipToPlayer.put(shipBoard, this);

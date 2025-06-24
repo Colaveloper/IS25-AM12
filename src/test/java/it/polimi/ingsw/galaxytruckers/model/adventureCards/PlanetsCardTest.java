@@ -1,11 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
-import it.polimi.ingsw.galaxytruckers.model.FlightBoard;
-import it.polimi.ingsw.galaxytruckers.model.Game;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.state.AddGoodsState;
 import it.polimi.ingsw.galaxytruckers.model.state.ChoosePlanetState;
@@ -30,13 +28,13 @@ class PlanetsCardTest {
     @BeforeEach
     void setUp() {
         ships = new ArrayList<>();
-        ships.add(new SecondShipBoard(GameColor.BLUE));
-        ships.add(new SecondShipBoard(GameColor.RED));
+        ships.add(new SecondShipBoardForTesting(GameColor.BLUE));
+        ships.add(new SecondShipBoardForTesting(GameColor.RED));
         shipPlaces = new HashMap<>();
         for (int i = 0; i < ships.size(); i++) {
             shipPlaces.put(ships.get(i), 10-i);
         }
-        FlightBoard flightBoard = new FlightBoard() {
+        FlightBoard flightBoard = new FlightBoard(new GameEventListenerForTesting()) {
             @Override
             public Map<ShipBoard, Integer> getShipToPlace() {
                 return shipPlaces;
@@ -63,7 +61,7 @@ class PlanetsCardTest {
             }
 
         };
-        game = new Game(Level.SECOND) {
+        game = new GameStub(Level.SECOND) {
             @Override public FlightBoard getFlightBoard() {
                 return flightBoard;
             }

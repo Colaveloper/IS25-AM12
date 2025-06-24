@@ -27,9 +27,9 @@
 //        }
 //    }
 //
-//    public GoodsBuffer(Planets planets, int planetId){
+//    public GoodsBuffer(Planets planets, int planetIndex){
 //        goodsBuffer = new ArrayList<>();
-//        planets.getPlanetGoods(planetId).forEach((type, count) ->{
+//        planets.getPlanetGoods(planetIndex).forEach((type, count) ->{
 //            for (int i = 0; i < count; i++){
 //                goodsBuffer.add(Optional.of(type));
 //            }

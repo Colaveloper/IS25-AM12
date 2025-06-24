@@ -19,20 +19,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class EnabledSurrenderPolicyTest {
     EnabledSurrenderPolicy enabledSurrenderPolicy;
     GameEventListener gameEventListener;
-    SurrenderShipBoardStub ship;
+    SurrenderShipBoardForTesting ship;
     FlightBoardStub flightBoard;
 
     @BeforeEach
     void setUp() {
-        ship = new SurrenderShipBoardStub();
+        ship = new SurrenderShipBoardForTesting();
         flightBoard = new FlightBoardStub();
-        enabledSurrenderPolicy = new EnabledSurrenderPolicy();
-        gameEventListener = Mockito.mock(GameEventListener.class);
+        gameEventListener = GameEventListenerForTesting.getMock();
+        enabledSurrenderPolicy = new EnabledSurrenderPolicy(gameEventListener);
     }
 
     @Test
     void setEventListener() {
-        enabledSurrenderPolicy.setEventListener(gameEventListener);
         assertEquals(gameEventListener, enabledSurrenderPolicy.getListener());
     }
 
@@ -58,7 +57,6 @@ class EnabledSurrenderPolicyTest {
     @Test
     void requestSurrenderGeneratesEvent() {
         ship.setCrewSize(0);
-        enabledSurrenderPolicy.setEventListener(gameEventListener);
         enabledSurrenderPolicy.requestSurrender(ship, SurrenderCause.REQUEST);
         Mockito.verify(gameEventListener, Mockito.times(1)).notifySurrenderRequestEvent(ship, SurrenderCause.REQUEST);
     }
@@ -66,7 +64,6 @@ class EnabledSurrenderPolicyTest {
     @Test
     void requestSurrenderDoesNotGenerateEventIfNoSurrenders() {
         ship.setCrewSize(1);
-        enabledSurrenderPolicy.setEventListener(gameEventListener);
         enabledSurrenderPolicy.confirmSurrender(flightBoard);
         Mockito.verifyNoInteractions(gameEventListener);
     }
@@ -95,7 +92,6 @@ class EnabledSurrenderPolicyTest {
 
     @Test
     void confirmSurrenderGeneratesEvent() {
-        enabledSurrenderPolicy.setEventListener(gameEventListener);
         enabledSurrenderPolicy.requestSurrender(ship, SurrenderCause.REQUEST);
         enabledSurrenderPolicy.confirmSurrender(flightBoard);
         Mockito.verify(gameEventListener,Mockito.times(1)).notifySurrenderEvent(List.of(ship));
@@ -111,10 +107,10 @@ class EnabledSurrenderPolicyTest {
 
 }
 
-class SurrenderShipBoardStub extends ShipBoard{
+class SurrenderShipBoardForTesting extends SecondShipBoardForTesting {
     int crewSize;
 
-    public SurrenderShipBoardStub() {
+    public SurrenderShipBoardForTesting() {
         super(GameColor.RED);
     }
 
@@ -138,7 +134,9 @@ class FlightBoardStub extends FlightBoard {
     Set<ShipBoard> removedShips = new HashSet<>();
     Set<ShipBoard> lappedShips = new HashSet<>();
 
-    public FlightBoardStub() {}
+    public FlightBoardStub() {
+        super(new GameEventListenerForTesting());
+    }
 
     /**
      * @return the flightboard's length
