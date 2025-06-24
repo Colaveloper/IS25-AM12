@@ -16,17 +16,10 @@ public class ControllerEventHandler extends EventQueueHandler<ControllerEvent> {
 
     @Override
     public void handleEvent(ControllerEvent event) {
-        switch (event) {
-            case AddActiveLobbyEvent addActiveLobbyEvent -> {
-                broadcastEvent(addActiveLobbyEvent);
-            }
-            case RemoveActiveLobbyEvent removeActiveLobbyEvent -> {
-                broadcastEvent(removeActiveLobbyEvent);
-            }
-            case SetActiveLobbiesEvent setActiveLobbiesEvent -> {
-                sendEvent(setActiveLobbiesEvent, setActiveLobbiesEvent.playerName());
-            }
-        }
+        event.getReceiverName().ifPresentOrElse(
+                name -> sendEvent(event, name),
+                () -> broadcastEvent(event)
+        );
     }
 
     private void broadcastEvent(ControllerEvent event) {
