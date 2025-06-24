@@ -15,6 +15,13 @@ public class CliProjectilesScreen extends CliActivationScreen {
     private final boolean isMyTurn;
     private final ShipBoard currentShip;
 
+    /**
+     * Creates a new projectiles screen with the given game state.
+     *
+     * @param model      The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState  The current handle-projectile state
+     */
     public CliProjectilesScreen(ClientModel model, ControllerToServer controller, HandleProjectileState gameState) {
         super(model, controller, gameState);
         this.gameState = gameState;

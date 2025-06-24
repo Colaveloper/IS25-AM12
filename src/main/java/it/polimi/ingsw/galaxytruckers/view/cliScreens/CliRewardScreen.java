@@ -6,7 +6,13 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.GrabRewardState;
 
 public class CliRewardScreen extends CliAdventureScreen {
 
-
+    /**
+     * Creates a new reward screen with the given game state.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState The current grab-reward state
+     */
     public CliRewardScreen(ClientModel model, ControllerToServer controller, GrabRewardState gameState) {
         super(model, controller, gameState);
     }

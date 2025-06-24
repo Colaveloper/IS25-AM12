@@ -9,21 +9,28 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.ActivateState;
 import java.awt.*;
 import java.util.Set;
 
+/**
+ * Represents the CLI screen for the ship component activation phase.
+ */
 public abstract class CliActivationScreen extends CliAdventureScreen {
 
     private int batteriesToSpend;
 //    protected int activateablesComp;
 //    protected int numBatteriesComp;
 
+    /**
+     * Creates a new activation screen with the given game state.
+     *
+     * @param model      The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param activateState The current activation phase state
+     */
     public CliActivationScreen(ClientModel model, ControllerToServer controller, ActivateState activateState) {
         super(model, controller, activateState);
         batteriesToSpend = 0;
 //        activateablesComp = activateState.getAvailablePositions().size();
 //        numBatteriesComp  = currentShip.getBatteries().size();
     }
-
-    @Override
-    public abstract void render();
 
     @Override
     public void parseAndInvoke(String input) {

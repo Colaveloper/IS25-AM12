@@ -12,6 +12,12 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Base class for all command-line interface screens in the game.
+ * Provides common functionality for managing game state, player ships,
+ * and user interface elements across different game phases.
+ * Each game screen extends this class to implement its unique behavior.
+ */
 public abstract class CliScreen extends Screen {
 
     protected final ClientModel model;
@@ -26,6 +32,14 @@ public abstract class CliScreen extends Screen {
     private String surrenderMessage;
 
 
+    /**
+     * Creates a new CLI screen with the given game state and controller.
+     * Initializes the screen's UI elements, player ships, and available actions.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState The current game state containing available actions and player information
+     */
     public CliScreen(ClientModel model, ControllerToServer controller, GameState gameState) {
         this.model = model;
         this.controller = controller;
@@ -48,29 +62,70 @@ public abstract class CliScreen extends Screen {
         }
     }
 
+    /**
+     * Alternative constructor for screens that don't require a game state.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     */
     public CliScreen(ClientModel model, ControllerToServer controller) {
         this(model, controller, null);
     }
 
+    /**
+     * Gets the current game state associated with this screen.
+     *
+     * @return The current GameState object
+     */
     public GameState getState() {
         return state;
     }
 
+    /**
+     * Renders the current screen content to the command line interface.
+     * Each screen implementation provides its specific rendering logic.
+     */
     public abstract void render();
 
+    /**
+     * Handles notification when a player gives up the game.
+     * Updates the screen with a surrender message.
+     *
+     * @param player The player who has given up
+     */
     @Override
     public void notifyGiveUp(Player player) {
         surrenderMessage = player.getNickname() + " has surrendered!";
     }
 
+    /**
+     * Processes and executes user input commands.
+     * Each screen implementation handles its specific command set.
+     *
+     * @param input The command string entered by the user
+     */
     public abstract void parseAndInvoke(String input);
 
+    /**
+     * Updates the screen when a ship component changes.
+     * Marks affected UI elements as needing to be redrawn.
+     *
+     * @param shipBoard The ship board containing the changed component
+     * @param point The position of the changed component
+     */
     public void notifyComponentChange(ShipBoard shipBoard, Point point) {
         cliAllShips.setDirty();
         shipToCliShip.get(shipBoard).setDirty();
         shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();
     }
 
+    /**
+     * Generates a formatted display of the current ship's statistics and flight board.
+     * Includes information about firepower, engine power, batteries, crew size,
+     * credits, and any losses. Also shows the flight board and component legend.
+     *
+     * @return A list of strings containing the formatted ship and flight statistics
+     */
     protected List<String> printShipFlightStats() {
         List<String> description = new ArrayList<>();
 
@@ -91,6 +146,11 @@ public abstract class CliScreen extends Screen {
         return description;
     }
 
+    /**
+     * Displays all currently available actions to the player based on the game state.
+     * Shows different command options depending on the current phase and available actions.
+     * Includes surrender messages and handles players who have given up.
+     */
     protected void printActions() {
         if(!model.getGame().getGivenUpShips().contains(model.getClientPlayer().getShipBoard())) {
             List<String> actions = new ArrayList<>();
@@ -144,6 +204,15 @@ public abstract class CliScreen extends Screen {
         }
     }
 
+    /**
+     * Extracts x,y coordinates from an input command string.
+     * Parses space-separated input where the second and third tokens are coordinates.
+     *
+     * @param input The command string containing coordinates (format: "command x y")
+     * @return A Point object containing the parsed x,y coordinates
+     * @throws NumberFormatException if the coordinates are not valid integers
+     * @throws ArrayIndexOutOfBoundsException if the input doesn't contain enough parts
+     */
     protected Point getPoint(String input) {
         String[] parts = input.split(" ");
         int x = Integer.parseInt(parts[1]);
@@ -151,11 +220,25 @@ public abstract class CliScreen extends Screen {
         return new Point(x, y);
     }
 
+    /**
+     * Checks if the user input command is legal based on the return value of {@link #isFormatLegal(String)},
+     * as well as the screen's own information (in @Override methods).
+     *
+     * @param input The command string entered by the user
+     * @return true if the input is legal, false otherwise
+     */
     public boolean isInputLegal(String input) {
         return isFormatLegal(input);
     }
 
-    protected boolean isFormatLegal(String input) {
+    /**
+     * Validates the format of a user input command based on the available actions.
+     * Checks if the input matches the expected patterns for each action type.
+     *
+     * @param input The command string entered by the user
+     * @return true if the input format is legal for the current game state, false otherwise
+     */
+    protected final boolean isFormatLegal(String input) {
         input = input.toUpperCase().trim();
         if(input.isEmpty()) input = " "; //to check last case of empty input
         //String[] parts = input.split(" ");

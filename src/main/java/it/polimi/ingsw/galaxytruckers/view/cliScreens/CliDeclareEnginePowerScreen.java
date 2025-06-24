@@ -11,6 +11,13 @@ public class CliDeclareEnginePowerScreen extends CliActivationScreen {
     private final boolean isMyTurn;
     private final ShipBoard currentShip;
 
+    /**
+     * Creates a new declare engine power screen with the given game state.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState The current declare engine power state
+     */
     public CliDeclareEnginePowerScreen(ClientModel model, ControllerToServer controller, DeclareEnginePowerState gameState) {
         super(model, controller, gameState);
         this.gameState = gameState;

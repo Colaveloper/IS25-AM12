@@ -18,10 +18,15 @@ import java.util.List;
 
 public class CliNicknameChoiceScreen extends CliScreen {
 
+    /**
+     * Creates a new nickname choice screen with the given model and controller.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     */
     public CliNicknameChoiceScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
     }
-
 
     @Override
     public void parseAndInvoke(String input) {

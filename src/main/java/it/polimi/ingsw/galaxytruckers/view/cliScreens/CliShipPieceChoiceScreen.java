@@ -17,6 +17,13 @@ public class CliShipPieceChoiceScreen extends CliAdventureScreen {
     private int numPieces;
     private final List<Set<Point>> points;
 
+    /**
+     * Creates a new ship piece choice screen with the given game state.
+     *
+     * @param model      The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState  The current choose-ship-piece state
+     */
     public CliShipPieceChoiceScreen(ClientModel model, ControllerToServer controller, ChooseShipPieceState gameState) {
         super(model, controller, gameState);
         shipBroken = isMyTurn;

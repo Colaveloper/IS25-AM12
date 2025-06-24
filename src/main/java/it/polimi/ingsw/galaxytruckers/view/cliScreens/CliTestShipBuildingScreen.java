@@ -23,8 +23,12 @@ public class CliTestShipBuildingScreen extends CliScreen {
     private final Map<ShipBoard, CliShipAndHand> buildingShipToCliShip;
     private final CliComponentLegend cliComponentLegend;
 
-
-
+    /**
+     * Creates a new test ship building screen with the given game state.
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState The current test ship building state
+     */
     public CliTestShipBuildingScreen(ClientModel model, ControllerToServer controller, TestShipBuildingState gameState) {
         super(model, controller, gameState);
         this.cliComponentBank = new CliComponentBank(gameState.getComponentBank());

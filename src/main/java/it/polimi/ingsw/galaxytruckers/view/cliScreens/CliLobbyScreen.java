@@ -18,6 +18,13 @@ import java.util.List;
 
 public class CliLobbyScreen extends CliScreen {
 
+    /**
+     * Creates a new lobby screen with the given model and controller.
+     * This screen displays the players currently in the lobby.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     */
     public CliLobbyScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
     }

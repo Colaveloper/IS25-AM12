@@ -9,9 +9,16 @@ import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import java.util.List;
 
 public class CliNewCardScreen extends CliAdventureScreen {
-
     private CliAdventureCard adventureCard;
     private boolean hasDrawn;
+
+    /**
+     * Creates a new screen for displaying a newly drawn adventure card.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState The current state of the game, including drawn cards
+     */
     public CliNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState gameState){
         super(model, controller, gameState);
         hasDrawn = gameState.hasDrawn();

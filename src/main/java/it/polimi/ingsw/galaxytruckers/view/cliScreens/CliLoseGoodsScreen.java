@@ -9,7 +9,13 @@ import java.awt.*;
 
 public class CliLoseGoodsScreen extends CliAdventureScreen {
 
-
+    /**
+     * Creates a new lose goods screen with the given game state.
+     *
+     * @param model      The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState  The current remove-goods state
+     */
     public CliLoseGoodsScreen(ClientModel model, ControllerToServer controller, RemoveGoodsState gameState) {
         super(model, controller, gameState);
     }

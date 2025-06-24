@@ -17,6 +17,13 @@ public class CliValidationScreen extends CliScreen {
     private boolean shipBroken;
     private int myShipPieces;
 
+    /**
+     * Creates a new validation screen with the given game state.
+     *
+     * @param model      The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState  The current ship correction state
+     */
     public CliValidationScreen(ClientModel model, ControllerToServer controller, ShipCorrectionState gameState) {
         super(model, controller, gameState);
         shipValid = gameState.getValidShipBoards().contains(myShipBoard);

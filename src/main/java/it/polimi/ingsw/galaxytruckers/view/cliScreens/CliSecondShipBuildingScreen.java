@@ -27,6 +27,13 @@ public class CliSecondShipBuildingScreen extends CliScreen {
     private final SecondShipBuildingState gameState;
     private final Map<ShipBoard, CliShipHandAndStash> buildingShipToCliShip;
 
+    /**
+     * Creates a new second ship building screen with the given game state.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState The current second ship building state
+     */
     public CliSecondShipBuildingScreen(ClientModel model, ControllerToServer controller, SecondShipBuildingState gameState) {
         super(model, controller, gameState);
         this.gameState = gameState;

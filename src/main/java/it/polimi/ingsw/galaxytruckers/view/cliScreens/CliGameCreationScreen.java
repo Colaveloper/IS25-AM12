@@ -20,6 +20,12 @@ import java.util.List;
 
 public class CliGameCreationScreen extends CliScreen {
 
+    /**
+     * Creates a new game creation screen with the given model and controller.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     */
     public CliGameCreationScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
     }

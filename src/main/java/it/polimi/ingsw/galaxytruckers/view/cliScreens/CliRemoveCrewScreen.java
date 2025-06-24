@@ -13,6 +13,13 @@ import java.awt.*;
 public class CliRemoveCrewScreen extends CliAdventureScreen {
 
 
+    /**
+     * Creates a new remove crew screen with the given game state.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState The current remove crew state
+     */
     public CliRemoveCrewScreen(ClientModel model, ControllerToServer controller, RemoveCrewState gameState) {
         super(model, controller, gameState);
     }

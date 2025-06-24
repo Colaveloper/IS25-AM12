@@ -11,6 +11,13 @@ public class CliDeclareFirePowerScreen extends CliActivationScreen {
     private final boolean isMyTurn;
     private final ShipBoard currentShip;
 
+    /**
+     * Creates a new declare firepower screen with the given game state.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState The current declare-firepower state
+     */
     public CliDeclareFirePowerScreen(ClientModel model, ControllerToServer controller, DeclareFirePowerState gameState) {
         super(model, controller, gameState);
         this.gameState = gameState;

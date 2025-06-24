@@ -14,6 +14,12 @@ import java.util.UUID;
 public class CliJoinOrCreateScreen extends CliScreen {
     private final List<UUID> ids;
 
+    /**
+     * Creates a new join-or-create-screen with the given model and controller.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     */
     public CliJoinOrCreateScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
         ids = new ArrayList<>();
@@ -26,12 +32,6 @@ public class CliJoinOrCreateScreen extends CliScreen {
         if (input.equalsIgnoreCase("C")) return true;
         if (input.matches("\\d*") && Integer.parseInt(input) < ids.size()) return true;
         return false;
-//        try {
-//            UUID.fromString(input);
-//            return true;
-//        } catch (IllegalArgumentException e) {
-//            return false;
-//        }
     }
 
     @Override

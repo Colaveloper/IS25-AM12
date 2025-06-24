@@ -17,6 +17,13 @@ public class CliPlanetScreen extends CliAdventureScreen {
     private ShipBoard currentShip;
     private final ShipBoard[] choiceToShip;
 
+    /**
+     * Creates a new planet choice screen with the given game state.
+     *
+     * @param model      The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState  The current choose-planet state
+     */
     public CliPlanetScreen(ClientModel model, ControllerToServer controller, ChoosePlanetState gameState) {
         super(model, controller, gameState);
         this.currentShip = gameState.getShipBoard();

@@ -17,6 +17,12 @@ public class CliCrewInitializationScreen extends CliScreen {
     private CrewType currentCrewType;
     private final Map<CrewType, Set<Point>> crewTypeToPoints;
 
+    /**
+     * Creates a new crew initialization screen with the given game state.
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState The current ship initialization state
+     */
     public CliCrewInitializationScreen(ClientModel model, ControllerToServer controller,  ShipInitializationState gameState) {
         super(model, controller, gameState);
         shipNotValid = gameState.getCrewtypeToPoints().containsKey(model.getMyShip());
