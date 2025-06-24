@@ -135,7 +135,7 @@ public class SocketClient implements ServerHandler, VirtualClient {
                 socket.write(request);
                 Response response = responses.get(request.getUuid()).get(2, TimeUnit.SECONDS);
                 responses.remove(response.getUuid());
-                if (response.isError()) throw new RuntimeException(response.getError());
+                if (response.isError()) throw response.getError();
             } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {

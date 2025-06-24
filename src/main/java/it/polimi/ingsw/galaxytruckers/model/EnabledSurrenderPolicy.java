@@ -10,11 +10,10 @@ import java.util.Set;
 public class EnabledSurrenderPolicy implements SurrenderPolicy {
     private final Set<ShipBoard> requests = new HashSet<>();
     private final Set<ShipBoard> surrenderedShips = new HashSet<>();
-    private GameEventListener listener;
+    private final GameEventListener listener;
 
-    @Override
-    public void setEventListener(GameEventListener gameEventListener) {
-        this.listener = gameEventListener;
+    public EnabledSurrenderPolicy(GameEventListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -26,7 +25,7 @@ public class EnabledSurrenderPolicy implements SurrenderPolicy {
     public synchronized boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause) {
         if (surrenderedShips.contains(shipBoard)) return false;
         boolean res = requests.add(shipBoard);
-        if (res && listener != null) listener.notifySurrenderRequestEvent(shipBoard, cause);
+        if (res) listener.notifySurrenderRequestEvent(shipBoard, cause);
         return res;
     }
 
@@ -43,7 +42,7 @@ public class EnabledSurrenderPolicy implements SurrenderPolicy {
         Set<ShipBoard> newSurrenderedShips = new HashSet<>(this.requests);
         this.requests.clear();
         flightBoard.removeShips(newSurrenderedShips);
-        if (listener !=  null && !newSurrenderedShips.isEmpty()) listener.notifySurrenderEvent(newSurrenderedShips.stream().toList());
+        if (!newSurrenderedShips.isEmpty()) listener.notifySurrenderEvent(newSurrenderedShips.stream().toList());
         return newSurrenderedShips;
     }
 

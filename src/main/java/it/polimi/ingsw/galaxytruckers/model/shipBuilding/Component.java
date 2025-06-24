@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
+import java.awt.*;
 import java.util.*;
 
 public non-sealed class Component implements ComponentInterface {
@@ -54,9 +55,11 @@ public non-sealed class Component implements ComponentInterface {
         this.connectors.putAll(rotatedConnectors);
     }
 
-    public void addToVisitor(ComponentVisitor visitor) {
+    public void addToVisitor(ComponentVisitor visitor, Point point) {
+        // To be implemented by subclasses
     }
 
-    public void removeFromVisitor(ComponentVisitor visitor) {
+    public void removeFromVisitor(ComponentVisitor visitor, Point point) {
+        // To be implemented by subclasses
     }
 }

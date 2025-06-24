@@ -1,0 +1,418 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"663e43fb-7c2d-4edd-be6d-afd39e028acc\" name=\"Changes\" comment=\"\">\r\n      <change afterPath=\"$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/GameModelTest.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/HourglassTest.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/Deck.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/Deck.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/FlightBoard.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/FlightBoard.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/Game.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/Game.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/SecondDeck.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/SecondDeck.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ShipBoard.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ShipBoard.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/DeckTest.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/DeckTest.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/GameTest.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/GameTest.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/SecondDeckTest.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/SecondDeckTest.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/TestDeckTest.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/TestDeckTest.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ShipBuildingStateTest.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ShipBuildingStateTest.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Record\" />\r\n        <option value=\"Interface\" />\r\n        <option value=\"Class\" />\r\n        <option value=\"JUnit5 Test Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;capbros&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/Colaveloper/IS25-AM12.git&quot;,\r\n    &quot;accountId&quot;: &quot;b02a5753-cef9-4f89-8ed7-0cdaa7e613fc&quot;\r\n  }\r\n}</component>\r\n  <component name=\"HighlightingSettingsPerFile\">\r\n    <setting file=\"file://$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/model/state/ShipBuildingState.java\" root0=\"FORCE_HIGHLIGHTING\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 4\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2ylNRZV26lCF5vOIBmw7JTPFVmJ\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Application.LocalClient1.executor\": \"Run\",\r\n    \"Application.LocalClient2.executor\": \"Run\",\r\n    \"Application.LocalServer.executor\": \"Run\",\r\n    \"JUnit.ALL-TESTS.executor\": \"Coverage\",\r\n    \"JUnit.ActivateStateTest.executor\": \"Coverage\",\r\n    \"JUnit.ActivateStateTest.skipActivatesComponentsAndUpdatesState.executor\": \"Run\",\r\n    \"JUnit.ActivateStateTest.skipSpendsBatteriesAndUpdatesState.executor\": \"Run\",\r\n    \"JUnit.AddGoodsStateTest.executor\": \"Coverage\",\r\n    \"JUnit.AdventureStateTest.checkExpiredThrowsExceptionWhenExpired.executor\": \"Run\",\r\n    \"JUnit.AdventureStateTest.executor\": \"Coverage\",\r\n    \"JUnit.BigMeteorTest.executor\": \"Coverage\",\r\n    \"JUnit.CargoHoldTest.addingAndRemoving.executor\": \"Run\",\r\n    \"JUnit.CargoHoldTest.executor\": \"Coverage\",\r\n    \"JUnit.ChoosePlanetStateTest.executor\": \"Coverage\",\r\n    \"JUnit.ChoosePlanetStateTest.getNumPlanets.executor\": \"Run\",\r\n    \"JUnit.ChoosePlanetStateTest.skipUpdatesCurrentShip.executor\": \"Run\",\r\n    \"JUnit.ChoosePlanetStateTest.skipUpdatesGameState.executor\": \"Run\",\r\n    \"JUnit.ChooseShipPieceStateTest.executor\": \"Coverage\",\r\n    \"JUnit.ChooseShipPieceStateTest.gettersTest.executor\": \"Run\",\r\n    \"JUnit.ChooseShipPieceStateTest.skipDoesNothingWhenExpired.executor\": \"Run\",\r\n    \"JUnit.CombatZoneCardTest.getNextStateWithOnePlayerLeftReturnsDrawCard.executor\": \"Run\",\r\n    \"JUnit.ComponentBankTest.addToCoveredComponentsAddsToCoveredComponents.executor\": \"Run\",\r\n    \"JUnit.ComponentBankTest.addToUncoveredComponentsAddsToUncoveredComponents.executor\": \"Run\",\r\n    \"JUnit.ComponentBankTest.drawRandComponentReturnsRandomComponent.executor\": \"Run\",\r\n    \"JUnit.ComponentBankTest.executor\": \"Coverage\",\r\n    \"JUnit.ComponentBankTest.removeUncoveredRemovesComponent.executor\": \"Run\",\r\n    \"JUnit.ComponentBankTest.removeUncoveredThrowsWithInvalidId.executor\": \"Run\",\r\n    \"JUnit.ConnectorTest.executor\": \"Coverage\",\r\n    \"JUnit.DeckTest$GeneralTests.drawCardUpdatesCurrentCard.executor\": \"Run\",\r\n    \"JUnit.DeckTest$LevelTest.executor\": \"Run\",\r\n    \"JUnit.DeckTest.drawCardUpdatesCurrentCard.executor\": \"Run\",\r\n    \"JUnit.DrawCardStateTest.drawCardThrowsExceptionWhenAlreadyDrawn.executor\": \"Run\",\r\n    \"JUnit.DrawCardStateTest.executor\": \"Coverage\",\r\n    \"JUnit.DrawCardStateTest.getShipBoardReturnsLeader.executor\": \"Run\",\r\n    \"JUnit.DrawCardStateTest.goNextThrowsIfNotDrawn.executor\": \"Run\",\r\n    \"JUnit.DrawCardStateTest.goNextThrowsIfOutOfTurn.executor\": \"Run\",\r\n    \"JUnit.DrawCardStateTest.setGameConfirmsSurrenderIfEnabled.executor\": \"Run\",\r\n    \"JUnit.DrawCardStateTest.skipAfterDrawChangesState.executor\": \"Run\",\r\n    \"JUnit.DrawCardStateTest.skipDoesNothingWhenExpired.executor\": \"Run\",\r\n    \"JUnit.DrawCardStateTest.skipDoesNothingWhenOutOfTurn.executor\": \"Run\",\r\n    \"JUnit.DrawCardStateTest.skipDrawsAndChangesState.executor\": \"Run\",\r\n    \"JUnit.GameModelTest.createGame.executor\": \"Run\",\r\n    \"JUnit.GameStateTest.cancelSkipDoesNothing.executor\": \"Run\",\r\n    \"JUnit.GameTest.assignShipRewardsWithCreditsAndLosses.executor\": \"Run\",\r\n    \"JUnit.GameTest.assignShipRewardsWithSurrenderedShips.executor\": \"Run\",\r\n    \"JUnit.GameTest.assignShipRewardsWorksCorrectly.executor\": \"Run\",\r\n    \"JUnit.GameTest.executor\": \"Run\",\r\n    \"JUnit.GameTest.gameStartsCorrectly.executor\": \"Run\",\r\n    \"JUnit.GameTest.requestGameSnapshotDoesNothingIfGameOver.executor\": \"Run\",\r\n    \"JUnit.GameTest.requestGameSnapshotGeneratesEvent.executor\": \"Run\",\r\n    \"JUnit.GameTest.skipDoesNothingWhenGameOver.executor\": \"Run\",\r\n    \"JUnit.GameTest.skipWhenInGame.executor\": \"Run\",\r\n    \"JUnit.GameTest.tryEndGameDoesNotEndIfGameOver.executor\": \"Run\",\r\n    \"JUnit.GameTest.tryEndGameEndsIfDeckIsEmpty.executor\": \"Run\",\r\n    \"JUnit.GameTest.tryEndGameEndsIfShipsSurrendered.executor\": \"Run\",\r\n    \"JUnit.GrabRewardStateTest.executor\": \"Coverage\",\r\n    \"JUnit.GrabRewardStateTest.skipDoesNothingWhenExpired.executor\": \"Run\",\r\n    \"JUnit.GrabRewardStateTest.skipDoesNothingWhenOutOfTurn.executor\": \"Run\",\r\n    \"JUnit.HandleProjectileStateTest.activateComponentChangesStateWhenHandlingIsDone.executor\": \"Run\",\r\n    \"JUnit.HandleProjectileStateTest.executor\": \"Coverage\",\r\n    \"JUnit.HandleProjectileStateTest.goNextThrowsExceptionWhenOutOfTurn.executor\": \"Run\",\r\n    \"JUnit.HandleProjectileStateTest.spendBatteriesChangesStateWhenHandlingIsDone.executor\": \"Run\",\r\n    \"JUnit.HandleProjectileStateTest.spendBatteriesRemovesBattery.executor\": \"Run\",\r\n    \"JUnit.HandleProjectileStateTest.spendBatteriesThrowsIfDoneMoreThanOnce.executor\": \"Run\",\r\n    \"JUnit.HourglassTest.flipHourgalsThrowsWithNoMoreFlips.executor\": \"Run\",\r\n    \"JUnit.HourglassTest.flipThrowsWhenRunning.executor\": \"Run\",\r\n    \"JUnit.Model tests.executor\": \"Coverage\",\r\n    \"JUnit.OpenSpaceCardTest.executor\": \"Run\",\r\n    \"JUnit.OpenSpaceCardTest.shipWithNoEnginePowerIsForcedToGiveUp.executor\": \"Run\",\r\n    \"JUnit.RemoveCrewStateTest.executor\": \"Coverage\",\r\n    \"JUnit.RemoveCrewStateTest.loseCrewChangesAdventureStateWhenNoMoreCrew.executor\": \"Run\",\r\n    \"JUnit.RemoveCrewStateTest.skipChangesState.executor\": \"Run\",\r\n    \"JUnit.RemoveCrewStateTest.skipChangesStateIfThereIsNoCrew.executor\": \"Run\",\r\n    \"JUnit.RemoveCrewStateTest.skipDoesNothingWhenExpired.executor\": \"Run\",\r\n    \"JUnit.RemoveCrewStateTest.skipDoesNothingWhenOutOfTurn.executor\": \"Run\",\r\n    \"JUnit.RemoveGoodsStateTest.executor\": \"Coverage\",\r\n    \"JUnit.RemoveGoodsStateTest.skipChangesState.executor\": \"Run\",\r\n    \"JUnit.RemoveGoodsStateTest.skipDoesNothingWhenExpired.executor\": \"Run\",\r\n    \"JUnit.RemoveGoodsStateTest.skipDoesNothingWhenOutOfTurn.executor\": \"Run\",\r\n    \"JUnit.SecondDeckTest.initMasterDeck.executor\": \"Run\",\r\n    \"JUnit.SecondDeckTest.initMasterDeckThrowsWithInvalidIndex.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$GeneralTests.activateThrowsExceptionWithInvalidPosition.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$GeneralTests.deactivateAll.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$GeneralTests.deactivateThrowsExceptionWithInvalidPosition.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$GeneralTests.discardAll.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$GeneralTests.gainCreditsSendsEvent.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$GeneralTests.getExposedConnectors.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$GeneralTests.keepShipPieceNoDiscard.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$GeneralTests.keepShipPieceWithDiscard.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$GeneralTests.removeAll.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$GeneralTests.removeComponentSendsEvent.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsIncreased.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsNotIncreased.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$SecondShipBoardTests.getFirePowerWithAliensIsIncreased.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$SecondShipBoardTests.getFirePowerWithAliensIsNotIncreased.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$ShipBuildingTest.finishBuildingRejects.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$ShipBuildingTest.finishBuildingWelds.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$ShipBuildingTest.grabStashedDoesNothingInTestLevel.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$ShipBuildingTest.rejectComponentReturnsLastComponent.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$ShipBuildingTest.rejectThrowsWhenStashed.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$ShipBuildingTest.stashMethodsDoNothingInTestLevel.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$ShipBuildingTest.stashWithNoComponentThrowsException.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$ShipValidityTests.shipIsNotValidWithRotatedEngine.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$ShipValidityTests.shipIsNotValidWithWrongEngine.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$SpecificComponentTests$CabinTests.initializeCabinThrowsWithInvalidPosition.executor\": \"Coverage\",\r\n    \"JUnit.ShipBoardTest$SpecificComponentTests$CargoHoldTests.removeCargoHoldUpdatesGoodsMap.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$SpecificComponentTests$LifeSupportTests.removeLifeSupportUpdatesAdjacentCabins.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest$TestShipBoardTests.lifeSupportsAreNotConsideredInTest.executor\": \"Run\",\r\n    \"JUnit.ShipBoardTest.executor\": \"Coverage\",\r\n    \"JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.cancelSkipRemovesFromPendingShips.executor\": \"Run\",\r\n    \"JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.lastFlipHourglassThrowsExceptionIfShipIsNotCompleted.executor\": \"Run\",\r\n    \"JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.skipUpdatesPendingShips.executor\": \"Run\",\r\n    \"JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.skipWithAllPendingChangesState.executor\": \"Run\",\r\n    \"JUnit.ShipBuildingStateTest$TestShipBuildingStateTest.endBuildingPlacesOnFlightBoard.executor\": \"Run\",\r\n    \"JUnit.ShipBuildingStateTest$TestShipBuildingStateTest.placeShipOnFlightBoardWhenExpiredDoesNothing.executor\": \"Run\",\r\n    \"JUnit.ShipBuildingStateTest.executor\": \"Coverage\",\r\n    \"JUnit.ShipCorrectionStateTest$GeneralTests.cancelSkipRemovesFromPendingShips.executor\": \"Run\",\r\n    \"JUnit.ShipCorrectionStateTest$GeneralTests.skipAddsToPendingShips.executor\": \"Run\",\r\n    \"JUnit.ShipCorrectionStateTest$GeneralTests.skipForAllShipsChangesState.executor\": \"Run\",\r\n    \"JUnit.ShipCorrectionStateTest$GeneralTests.whenExpiredStateIsNotUpdated.executor\": \"Run\",\r\n    \"JUnit.ShipCorrectionStateTest.executor\": \"Coverage\",\r\n    \"JUnit.ShipInitializationStateTest.cancelSkipRemovesFromPendingShips.executor\": \"Run\",\r\n    \"JUnit.ShipInitializationStateTest.executor\": \"Coverage\",\r\n    \"JUnit.ShipInitializationStateTest.goNextInitializesToHumans.executor\": \"Run\",\r\n    \"JUnit.ShipInitializationStateTest.goNextInitializesToHumansAndChangesState.executor\": \"Run\",\r\n    \"JUnit.ShipInitializationStateTest.initializeCabin.executor\": \"Run\",\r\n    \"JUnit.ShipInitializationStateTest.initializeCabinChangesState.executor\": \"Run\",\r\n    \"JUnit.ShipInitializationStateTest.initializeCabinThrowsExceptionWhenInvalid.executor\": \"Run\",\r\n    \"JUnit.ShipInitializationStateTest.setGame.executor\": \"Run\",\r\n    \"JUnit.ShipInitializationStateTest.skipAllChangesState.executor\": \"Run\",\r\n    \"JUnit.SocketTest [*].executor\": \"Run\",\r\n    \"JUnit.SocketTest.executor\": \"Run\",\r\n    \"JUnit.SocketTest.joinLobby.executor\": \"Run\",\r\n    \"JUnit.SocketTest.requestNewGame.executor\": \"Run\",\r\n    \"JUnit.StateTests.executor\": \"Coverage\",\r\n    \"JUnit.TestDeckTest.executor\": \"Run\",\r\n    \"Maven.GalaxyTruckers [compile].executor\": \"Run\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary\": \"JUnit5\",\r\n    \"com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5\": \"\",\r\n    \"extract.method.default.visibility\": \"private\",\r\n    \"git-widget-placeholder\": \"test/server-model\",\r\n    \"ignore.virus.scanning.warn.message\": \"true\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"D:/Ing_del_software/Progetto/IS25-AM12/.run\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CreateTestDialog.Recents.Supers\">\r\n      <recent name=\"\" />\r\n    </key>\r\n    <key name=\"ExtractSuperBase.RECENT_KEYS\">\r\n      <recent name=\"it.polimi.ingsw.galaxytruckers.model\" />\r\n    </key>\r\n    <key name=\"MoveClassesOrPackagesDialog.RECENTS_KEY\">\r\n      <recent name=\"it.polimi.ingsw.galaxytruckers.network\" />\r\n      <recent name=\"it.polimi.ingsw.galaxytruckers.serverController.events.types\" />\r\n      <recent name=\"it.polimi.ingsw.galaxytruckers.serverController.dto\" />\r\n      <recent name=\"it.polimi.ingsw.galaxytruckers.serverController.dto.states\" />\r\n      <recent name=\"it.polimi.ingsw.galaxytruckers.serverController.dto.reconnection\" />\r\n    </key>\r\n    <key name=\"CreateTestDialog.RecentsKey\">\r\n      <recent name=\"it.polimi.ingsw.galaxytruckers.model\" />\r\n      <recent name=\"it.polimi.ingsw.galaxytruckers.model.shipBuilding\" />\r\n      <recent name=\"it.polimi.ingsw.galaxytruckers.model.state\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"JUnit.Model tests\">\r\n    <configuration name=\"HourglassTest.flipHourgalsThrowsWithNoMoreFlips\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"GalaxyTruckers\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"it.polimi.ingsw.galaxytruckers.model.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <option name=\"PACKAGE_NAME\" value=\"it.polimi.ingsw.galaxytruckers.model\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"it.polimi.ingsw.galaxytruckers.model.HourglassTest\" />\r\n      <option name=\"METHOD_NAME\" value=\"flipHourgalsThrowsWithNoMoreFlips\" />\r\n      <option name=\"TEST_OBJECT\" value=\"method\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"HourglassTest.flipThrowsWhenRunning\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"GalaxyTruckers\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"it.polimi.ingsw.galaxytruckers.model.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <option name=\"PACKAGE_NAME\" value=\"it.polimi.ingsw.galaxytruckers.model\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"it.polimi.ingsw.galaxytruckers.model.HourglassTest\" />\r\n      <option name=\"METHOD_NAME\" value=\"flipThrowsWhenRunning\" />\r\n      <option name=\"TEST_OBJECT\" value=\"method\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"Model tests\" type=\"JUnit\" factoryName=\"JUnit\">\r\n      <module name=\"GalaxyTruckers\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"it.polimi.ingsw.galaxytruckers.model\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"\" />\r\n      <option name=\"METHOD_NAME\" value=\"\" />\r\n      <option name=\"TEST_OBJECT\" value=\"package\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"SecondDeckTest.initMasterDeck\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"GalaxyTruckers\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"it.polimi.ingsw.galaxytruckers.model.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <option name=\"PACKAGE_NAME\" value=\"it.polimi.ingsw.galaxytruckers.model\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"it.polimi.ingsw.galaxytruckers.model.SecondDeckTest\" />\r\n      <option name=\"METHOD_NAME\" value=\"initMasterDeck\" />\r\n      <option name=\"TEST_OBJECT\" value=\"method\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"ShipBuildingStateTest$SecondShipBuildingStateTest.lastFlipHourglassThrowsExceptionIfShipIsNotCompleted\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"GalaxyTruckers\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"it.polimi.ingsw.galaxytruckers.model.state.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <option name=\"PACKAGE_NAME\" value=\"it.polimi.ingsw.galaxytruckers.model.state.ShipBuildingStateTest\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"it.polimi.ingsw.galaxytruckers.model.state.ShipBuildingStateTest$SecondShipBuildingStateTest\" />\r\n      <option name=\"METHOD_NAME\" value=\"lastFlipHourglassThrowsExceptionIfShipIsNotCompleted\" />\r\n      <option name=\"TEST_OBJECT\" value=\"method\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"ShipBuildingStateTest$TestShipBuildingStateTest.endBuildingPlacesOnFlightBoard\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"GalaxyTruckers\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"it.polimi.ingsw.galaxytruckers.model.state.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <option name=\"PACKAGE_NAME\" value=\"it.polimi.ingsw.galaxytruckers.model.state.ShipBuildingStateTest\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"it.polimi.ingsw.galaxytruckers.model.state.ShipBuildingStateTest$TestShipBuildingStateTest\" />\r\n      <option name=\"METHOD_NAME\" value=\"endBuildingPlacesOnFlightBoard\" />\r\n      <option name=\"TEST_OBJECT\" value=\"method\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"StateTests\" type=\"JUnit\" factoryName=\"JUnit\">\r\n      <module name=\"GalaxyTruckers\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"it.polimi.ingsw.galaxytruckers.model.state\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"\" />\r\n      <option name=\"METHOD_NAME\" value=\"\" />\r\n      <option name=\"TEST_OBJECT\" value=\"package\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"JetRunConfigurationType\">\r\n      <module name=\"IS25-AM12\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"KotlinStandaloneScriptRunConfigurationType\">\r\n      <module name=\"IS25-AM12\" />\r\n      <option name=\"filePath\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"Application.LocalClient2\" />\r\n      <item itemvalue=\"Application.LocalClient1\" />\r\n      <item itemvalue=\"Application.LocalServer\" />\r\n      <item itemvalue=\"Compound.2ClientsLocal\" />\r\n      <item itemvalue=\"Compound.Server-OneClient\" />\r\n      <item itemvalue=\"Compound.Server-TwoClients\" />\r\n      <item itemvalue=\"JUnit.StateTests\" />\r\n      <item itemvalue=\"JUnit.ALL-TESTS\" />\r\n      <item itemvalue=\"JUnit.Model tests\" />\r\n      <item itemvalue=\"JUnit.HourglassTest.flipHourgalsThrowsWithNoMoreFlips\" />\r\n      <item itemvalue=\"JUnit.HourglassTest.flipThrowsWhenRunning\" />\r\n      <item itemvalue=\"JUnit.SecondDeckTest.initMasterDeck\" />\r\n      <item itemvalue=\"JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.lastFlipHourglassThrowsExceptionIfShipIsNotCompleted\" />\r\n      <item itemvalue=\"JUnit.ShipBuildingStateTest$TestShipBuildingStateTest.endBuildingPlacesOnFlightBoard\" />\r\n    </list>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"JUnit.HourglassTest.flipThrowsWhenRunning\" />\r\n        <item itemvalue=\"JUnit.HourglassTest.flipHourgalsThrowsWithNoMoreFlips\" />\r\n        <item itemvalue=\"JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.lastFlipHourglassThrowsExceptionIfShipIsNotCompleted\" />\r\n        <item itemvalue=\"JUnit.ShipBuildingStateTest$TestShipBuildingStateTest.endBuildingPlacesOnFlightBoard\" />\r\n        <item itemvalue=\"JUnit.SecondDeckTest.initMasterDeck\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.24978.46\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-IU-243.24978.46\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"663e43fb-7c2d-4edd-be6d-afd39e028acc\" name=\"Changes\" comment=\"\" />\r\n      <created>1750405192345</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1750405192345</updated>\r\n      <workItem from=\"1750405193518\" duration=\"28896000\" />\r\n      <workItem from=\"1750445375080\" duration=\"12124000\" />\r\n      <workItem from=\"1750482685499\" duration=\"8469000\" />\r\n      <workItem from=\"1750538544967\" duration=\"238000\" />\r\n      <workItem from=\"1750573134392\" duration=\"23293000\" />\r\n      <workItem from=\"1750623200593\" duration=\"12255000\" />\r\n      <workItem from=\"1750662176854\" duration=\"5401000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <breakpoints>\r\n        <breakpoint type=\"java-exception\">\r\n          <properties class=\"java.lang.NullPointerException\" package=\"java.lang\" />\r\n          <option name=\"timeStamp\" value=\"48\" />\r\n        </breakpoint>\r\n        <breakpoint enabled=\"true\" type=\"java-exception\">\r\n          <properties class=\"java.io.EOFException\" package=\"java.io\" />\r\n          <option name=\"timeStamp\" value=\"49\" />\r\n        </breakpoint>\r\n      </breakpoints>\r\n    </breakpoint-manager>\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$HandleProjectileStateTest.ic\" NAME=\"HandleProjectileStateTest Coverage Results\" MODIFIED=\"1750529137368\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$ComponentBankTest.ic\" NAME=\"ComponentBankTest Coverage Results\" MODIFIED=\"1750628782827\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$ShipBuildingStateTest.ic\" NAME=\"ShipBuildingStateTest Coverage Results\" MODIFIED=\"1750513119668\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$RemoveCrewStateTest.ic\" NAME=\"RemoveCrewStateTest Coverage Results\" MODIFIED=\"1750527532228\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$ShipInitializationStateTest.ic\" NAME=\"ShipInitializationStateTest Coverage Results\" MODIFIED=\"1750524982473\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$StateTests.ic\" NAME=\"StateTests Coverage Results\" MODIFIED=\"1750536673075\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\" />\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$ActivateStateTest.ic\" NAME=\"ActivateStateTest Coverage Results\" MODIFIED=\"1750536664119\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$BigMeteorTest.ic\" NAME=\"BigMeteorTest Coverage Results\" MODIFIED=\"1750626793218\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.adventureCards.projectiles.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$CargoHoldTest.ic\" NAME=\"CargoHoldTest Coverage Results\" MODIFIED=\"1750627918759\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$ChooseShipPieceStateTest.ic\" NAME=\"ChooseShipPieceStateTest Coverage Results\" MODIFIED=\"1750531200283\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$GrabRewardStateTest.ic\" NAME=\"GrabRewardStateTest Coverage Results\" MODIFIED=\"1750529604499\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$ShipBoardTest_SpecificComponentTests_CabinTests_initializeCabinThrowsWithInvalidPosition.ic\" NAME=\"ShipBoardTest$SpecificComponentTests$CabinTests.initializeCabinThrowsWithInvalidPosition Coverage Results\" MODIFIED=\"1750631788239\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$Model_tests.ic\" NAME=\"Model tests Coverage Results\" MODIFIED=\"1750667512696\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\" />\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$ConnectorTest.ic\" NAME=\"ConnectorTest Coverage Results\" MODIFIED=\"1750628137963\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$ShipCorrectionStateTest.ic\" NAME=\"ShipCorrectionStateTest Coverage Results\" MODIFIED=\"1750513757349\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$ChoosePlanetStateTest.ic\" NAME=\"ChoosePlanetStateTest Coverage Results\" MODIFIED=\"1750531544659\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$RemoveGoodsStateTest.ic\" NAME=\"RemoveGoodsStateTest Coverage Results\" MODIFIED=\"1750526415845\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$DrawCardStateTest.ic\" NAME=\"DrawCardStateTest Coverage Results\" MODIFIED=\"1750530734994\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$AdventureStateTest.ic\" NAME=\"AdventureStateTest Coverage Results\" MODIFIED=\"1750531704280\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$AddGoodsStateTest.ic\" NAME=\"AddGoodsStateTest Coverage Results\" MODIFIED=\"1750534379283\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.state.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$ALL_TESTS.ic\" NAME=\"ALL-TESTS Coverage Results\" MODIFIED=\"1750624108890\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\" />\r\n    <SUITE FILE_PATH=\"coverage/IS25_AM12$ShipBoardTest.ic\" NAME=\"ShipBoardTest Coverage Results\" MODIFIED=\"1750629533253\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>it.polimi.ingsw.galaxytruckers.model.shipBuilding.*</FILTER>\r\n    </SUITE>\r\n  </component>\r\n</project>
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 61c0b0884c4e17776f1d02353a8d83e89fed06d3)
++++ b/.idea/workspace.xml	(date 1750688905132)
+@@ -5,19 +5,10 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="663e43fb-7c2d-4edd-be6d-afd39e028acc" name="Changes" comment="">
+-      <change afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/GameModelTest.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/HourglassTest.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/Deck.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/FlightBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/FlightBoard.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/Game.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/SecondDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/SecondDeck.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ShipBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/model/shipBuilding/ShipBoard.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/DeckTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/DeckTest.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/GameTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/GameTest.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/SecondDeckTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/SecondDeckTest.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/TestDeckTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/TestDeckTest.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ShipBuildingStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/polimi/ingsw/galaxytruckers/model/state/ShipBuildingStateTest.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/enums/RotationDirection.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/enums/States.java" beforeDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -43,12 +34,12 @@
+     &quot;assignee&quot;: &quot;capbros&quot;
+   }
+ }</component>
+-  <component name="GithubPullRequestsUISettings">{
+-  &quot;selectedUrlAndAccountId&quot;: {
+-    &quot;url&quot;: &quot;https://github.com/Colaveloper/IS25-AM12.git&quot;,
+-    &quot;accountId&quot;: &quot;b02a5753-cef9-4f89-8ed7-0cdaa7e613fc&quot;
+-  }
+-}</component>
++  <component name="GithubPullRequestsUISettings"><![CDATA[{
++  "selectedUrlAndAccountId": {
++    "url": "https://github.com/Colaveloper/IS25-AM12.git",
++    "accountId": "0b4238c2-2220-40fc-9015-cc71d776487e"
++  }
++}]]></component>
+   <component name="HighlightingSettingsPerFile">
+     <setting file="file://$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/model/state/ShipBuildingState.java" root0="FORCE_HIGHLIGHTING" />
+   </component>
+@@ -57,167 +48,170 @@
+   &quot;associatedIndex&quot;: 4
+ }</component>
+   <component name="ProjectId" id="2ylNRZV26lCF5vOIBmw7JTPFVmJ" />
++  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
++    <OptionsSetting value="false" id="Update" />
++  </component>
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "Application.LocalClient1.executor": "Run",
+-    "Application.LocalClient2.executor": "Run",
+-    "Application.LocalServer.executor": "Run",
+-    "JUnit.ALL-TESTS.executor": "Coverage",
+-    "JUnit.ActivateStateTest.executor": "Coverage",
+-    "JUnit.ActivateStateTest.skipActivatesComponentsAndUpdatesState.executor": "Run",
+-    "JUnit.ActivateStateTest.skipSpendsBatteriesAndUpdatesState.executor": "Run",
+-    "JUnit.AddGoodsStateTest.executor": "Coverage",
+-    "JUnit.AdventureStateTest.checkExpiredThrowsExceptionWhenExpired.executor": "Run",
+-    "JUnit.AdventureStateTest.executor": "Coverage",
+-    "JUnit.BigMeteorTest.executor": "Coverage",
+-    "JUnit.CargoHoldTest.addingAndRemoving.executor": "Run",
+-    "JUnit.CargoHoldTest.executor": "Coverage",
+-    "JUnit.ChoosePlanetStateTest.executor": "Coverage",
+-    "JUnit.ChoosePlanetStateTest.getNumPlanets.executor": "Run",
+-    "JUnit.ChoosePlanetStateTest.skipUpdatesCurrentShip.executor": "Run",
+-    "JUnit.ChoosePlanetStateTest.skipUpdatesGameState.executor": "Run",
+-    "JUnit.ChooseShipPieceStateTest.executor": "Coverage",
+-    "JUnit.ChooseShipPieceStateTest.gettersTest.executor": "Run",
+-    "JUnit.ChooseShipPieceStateTest.skipDoesNothingWhenExpired.executor": "Run",
+-    "JUnit.CombatZoneCardTest.getNextStateWithOnePlayerLeftReturnsDrawCard.executor": "Run",
+-    "JUnit.ComponentBankTest.addToCoveredComponentsAddsToCoveredComponents.executor": "Run",
+-    "JUnit.ComponentBankTest.addToUncoveredComponentsAddsToUncoveredComponents.executor": "Run",
+-    "JUnit.ComponentBankTest.drawRandComponentReturnsRandomComponent.executor": "Run",
+-    "JUnit.ComponentBankTest.executor": "Coverage",
+-    "JUnit.ComponentBankTest.removeUncoveredRemovesComponent.executor": "Run",
+-    "JUnit.ComponentBankTest.removeUncoveredThrowsWithInvalidId.executor": "Run",
+-    "JUnit.ConnectorTest.executor": "Coverage",
+-    "JUnit.DeckTest$GeneralTests.drawCardUpdatesCurrentCard.executor": "Run",
+-    "JUnit.DeckTest$LevelTest.executor": "Run",
+-    "JUnit.DeckTest.drawCardUpdatesCurrentCard.executor": "Run",
+-    "JUnit.DrawCardStateTest.drawCardThrowsExceptionWhenAlreadyDrawn.executor": "Run",
+-    "JUnit.DrawCardStateTest.executor": "Coverage",
+-    "JUnit.DrawCardStateTest.getShipBoardReturnsLeader.executor": "Run",
+-    "JUnit.DrawCardStateTest.goNextThrowsIfNotDrawn.executor": "Run",
+-    "JUnit.DrawCardStateTest.goNextThrowsIfOutOfTurn.executor": "Run",
+-    "JUnit.DrawCardStateTest.setGameConfirmsSurrenderIfEnabled.executor": "Run",
+-    "JUnit.DrawCardStateTest.skipAfterDrawChangesState.executor": "Run",
+-    "JUnit.DrawCardStateTest.skipDoesNothingWhenExpired.executor": "Run",
+-    "JUnit.DrawCardStateTest.skipDoesNothingWhenOutOfTurn.executor": "Run",
+-    "JUnit.DrawCardStateTest.skipDrawsAndChangesState.executor": "Run",
+-    "JUnit.GameModelTest.createGame.executor": "Run",
+-    "JUnit.GameStateTest.cancelSkipDoesNothing.executor": "Run",
+-    "JUnit.GameTest.assignShipRewardsWithCreditsAndLosses.executor": "Run",
+-    "JUnit.GameTest.assignShipRewardsWithSurrenderedShips.executor": "Run",
+-    "JUnit.GameTest.assignShipRewardsWorksCorrectly.executor": "Run",
+-    "JUnit.GameTest.executor": "Run",
+-    "JUnit.GameTest.gameStartsCorrectly.executor": "Run",
+-    "JUnit.GameTest.requestGameSnapshotDoesNothingIfGameOver.executor": "Run",
+-    "JUnit.GameTest.requestGameSnapshotGeneratesEvent.executor": "Run",
+-    "JUnit.GameTest.skipDoesNothingWhenGameOver.executor": "Run",
+-    "JUnit.GameTest.skipWhenInGame.executor": "Run",
+-    "JUnit.GameTest.tryEndGameDoesNotEndIfGameOver.executor": "Run",
+-    "JUnit.GameTest.tryEndGameEndsIfDeckIsEmpty.executor": "Run",
+-    "JUnit.GameTest.tryEndGameEndsIfShipsSurrendered.executor": "Run",
+-    "JUnit.GrabRewardStateTest.executor": "Coverage",
+-    "JUnit.GrabRewardStateTest.skipDoesNothingWhenExpired.executor": "Run",
+-    "JUnit.GrabRewardStateTest.skipDoesNothingWhenOutOfTurn.executor": "Run",
+-    "JUnit.HandleProjectileStateTest.activateComponentChangesStateWhenHandlingIsDone.executor": "Run",
+-    "JUnit.HandleProjectileStateTest.executor": "Coverage",
+-    "JUnit.HandleProjectileStateTest.goNextThrowsExceptionWhenOutOfTurn.executor": "Run",
+-    "JUnit.HandleProjectileStateTest.spendBatteriesChangesStateWhenHandlingIsDone.executor": "Run",
+-    "JUnit.HandleProjectileStateTest.spendBatteriesRemovesBattery.executor": "Run",
+-    "JUnit.HandleProjectileStateTest.spendBatteriesThrowsIfDoneMoreThanOnce.executor": "Run",
+-    "JUnit.HourglassTest.flipHourgalsThrowsWithNoMoreFlips.executor": "Run",
+-    "JUnit.HourglassTest.flipThrowsWhenRunning.executor": "Run",
+-    "JUnit.Model tests.executor": "Coverage",
+-    "JUnit.OpenSpaceCardTest.executor": "Run",
+-    "JUnit.OpenSpaceCardTest.shipWithNoEnginePowerIsForcedToGiveUp.executor": "Run",
+-    "JUnit.RemoveCrewStateTest.executor": "Coverage",
+-    "JUnit.RemoveCrewStateTest.loseCrewChangesAdventureStateWhenNoMoreCrew.executor": "Run",
+-    "JUnit.RemoveCrewStateTest.skipChangesState.executor": "Run",
+-    "JUnit.RemoveCrewStateTest.skipChangesStateIfThereIsNoCrew.executor": "Run",
+-    "JUnit.RemoveCrewStateTest.skipDoesNothingWhenExpired.executor": "Run",
+-    "JUnit.RemoveCrewStateTest.skipDoesNothingWhenOutOfTurn.executor": "Run",
+-    "JUnit.RemoveGoodsStateTest.executor": "Coverage",
+-    "JUnit.RemoveGoodsStateTest.skipChangesState.executor": "Run",
+-    "JUnit.RemoveGoodsStateTest.skipDoesNothingWhenExpired.executor": "Run",
+-    "JUnit.RemoveGoodsStateTest.skipDoesNothingWhenOutOfTurn.executor": "Run",
+-    "JUnit.SecondDeckTest.initMasterDeck.executor": "Run",
+-    "JUnit.SecondDeckTest.initMasterDeckThrowsWithInvalidIndex.executor": "Run",
+-    "JUnit.ShipBoardTest$GeneralTests.activateThrowsExceptionWithInvalidPosition.executor": "Run",
+-    "JUnit.ShipBoardTest$GeneralTests.deactivateAll.executor": "Run",
+-    "JUnit.ShipBoardTest$GeneralTests.deactivateThrowsExceptionWithInvalidPosition.executor": "Run",
+-    "JUnit.ShipBoardTest$GeneralTests.discardAll.executor": "Run",
+-    "JUnit.ShipBoardTest$GeneralTests.gainCreditsSendsEvent.executor": "Run",
+-    "JUnit.ShipBoardTest$GeneralTests.getExposedConnectors.executor": "Run",
+-    "JUnit.ShipBoardTest$GeneralTests.keepShipPieceNoDiscard.executor": "Run",
+-    "JUnit.ShipBoardTest$GeneralTests.keepShipPieceWithDiscard.executor": "Run",
+-    "JUnit.ShipBoardTest$GeneralTests.removeAll.executor": "Run",
+-    "JUnit.ShipBoardTest$GeneralTests.removeComponentSendsEvent.executor": "Run",
+-    "JUnit.ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsIncreased.executor": "Run",
+-    "JUnit.ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsNotIncreased.executor": "Run",
+-    "JUnit.ShipBoardTest$SecondShipBoardTests.getFirePowerWithAliensIsIncreased.executor": "Run",
+-    "JUnit.ShipBoardTest$SecondShipBoardTests.getFirePowerWithAliensIsNotIncreased.executor": "Run",
+-    "JUnit.ShipBoardTest$ShipBuildingTest.finishBuildingRejects.executor": "Run",
+-    "JUnit.ShipBoardTest$ShipBuildingTest.finishBuildingWelds.executor": "Run",
+-    "JUnit.ShipBoardTest$ShipBuildingTest.grabStashedDoesNothingInTestLevel.executor": "Run",
+-    "JUnit.ShipBoardTest$ShipBuildingTest.rejectComponentReturnsLastComponent.executor": "Run",
+-    "JUnit.ShipBoardTest$ShipBuildingTest.rejectThrowsWhenStashed.executor": "Run",
+-    "JUnit.ShipBoardTest$ShipBuildingTest.stashMethodsDoNothingInTestLevel.executor": "Run",
+-    "JUnit.ShipBoardTest$ShipBuildingTest.stashWithNoComponentThrowsException.executor": "Run",
+-    "JUnit.ShipBoardTest$ShipValidityTests.shipIsNotValidWithRotatedEngine.executor": "Run",
+-    "JUnit.ShipBoardTest$ShipValidityTests.shipIsNotValidWithWrongEngine.executor": "Run",
+-    "JUnit.ShipBoardTest$SpecificComponentTests$CabinTests.initializeCabinThrowsWithInvalidPosition.executor": "Coverage",
+-    "JUnit.ShipBoardTest$SpecificComponentTests$CargoHoldTests.removeCargoHoldUpdatesGoodsMap.executor": "Run",
+-    "JUnit.ShipBoardTest$SpecificComponentTests$LifeSupportTests.removeLifeSupportUpdatesAdjacentCabins.executor": "Run",
+-    "JUnit.ShipBoardTest$TestShipBoardTests.lifeSupportsAreNotConsideredInTest.executor": "Run",
+-    "JUnit.ShipBoardTest.executor": "Coverage",
+-    "JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.cancelSkipRemovesFromPendingShips.executor": "Run",
+-    "JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.lastFlipHourglassThrowsExceptionIfShipIsNotCompleted.executor": "Run",
+-    "JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.skipUpdatesPendingShips.executor": "Run",
+-    "JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.skipWithAllPendingChangesState.executor": "Run",
+-    "JUnit.ShipBuildingStateTest$TestShipBuildingStateTest.endBuildingPlacesOnFlightBoard.executor": "Run",
+-    "JUnit.ShipBuildingStateTest$TestShipBuildingStateTest.placeShipOnFlightBoardWhenExpiredDoesNothing.executor": "Run",
+-    "JUnit.ShipBuildingStateTest.executor": "Coverage",
+-    "JUnit.ShipCorrectionStateTest$GeneralTests.cancelSkipRemovesFromPendingShips.executor": "Run",
+-    "JUnit.ShipCorrectionStateTest$GeneralTests.skipAddsToPendingShips.executor": "Run",
+-    "JUnit.ShipCorrectionStateTest$GeneralTests.skipForAllShipsChangesState.executor": "Run",
+-    "JUnit.ShipCorrectionStateTest$GeneralTests.whenExpiredStateIsNotUpdated.executor": "Run",
+-    "JUnit.ShipCorrectionStateTest.executor": "Coverage",
+-    "JUnit.ShipInitializationStateTest.cancelSkipRemovesFromPendingShips.executor": "Run",
+-    "JUnit.ShipInitializationStateTest.executor": "Coverage",
+-    "JUnit.ShipInitializationStateTest.goNextInitializesToHumans.executor": "Run",
+-    "JUnit.ShipInitializationStateTest.goNextInitializesToHumansAndChangesState.executor": "Run",
+-    "JUnit.ShipInitializationStateTest.initializeCabin.executor": "Run",
+-    "JUnit.ShipInitializationStateTest.initializeCabinChangesState.executor": "Run",
+-    "JUnit.ShipInitializationStateTest.initializeCabinThrowsExceptionWhenInvalid.executor": "Run",
+-    "JUnit.ShipInitializationStateTest.setGame.executor": "Run",
+-    "JUnit.ShipInitializationStateTest.skipAllChangesState.executor": "Run",
+-    "JUnit.SocketTest [*].executor": "Run",
+-    "JUnit.SocketTest.executor": "Run",
+-    "JUnit.SocketTest.joinLobby.executor": "Run",
+-    "JUnit.SocketTest.requestNewGame.executor": "Run",
+-    "JUnit.StateTests.executor": "Coverage",
+-    "JUnit.TestDeckTest.executor": "Run",
+-    "Maven.GalaxyTruckers [compile].executor": "Run",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "RunOnceActivity.git.unshallow": "true",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+-    "extract.method.default.visibility": "private",
+-    "git-widget-placeholder": "test/server-model",
+-    "ignore.virus.scanning.warn.message": "true",
+-    "kotlin-language-version-configured": "true",
+-    "last_opened_file_path": "D:/Ing_del_software/Progetto/IS25-AM12/.run",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;Application.LocalClient1.executor&quot;: &quot;Run&quot;,
++    &quot;Application.LocalClient2.executor&quot;: &quot;Run&quot;,
++    &quot;Application.LocalServer.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ALL-TESTS.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.ActivateStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.ActivateStateTest.skipActivatesComponentsAndUpdatesState.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ActivateStateTest.skipSpendsBatteriesAndUpdatesState.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.AddGoodsStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.AdventureStateTest.checkExpiredThrowsExceptionWhenExpired.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.AdventureStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.BigMeteorTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.CargoHoldTest.addingAndRemoving.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.CargoHoldTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.ChoosePlanetStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.ChoosePlanetStateTest.getNumPlanets.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ChoosePlanetStateTest.skipUpdatesCurrentShip.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ChoosePlanetStateTest.skipUpdatesGameState.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ChooseShipPieceStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.ChooseShipPieceStateTest.gettersTest.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ChooseShipPieceStateTest.skipDoesNothingWhenExpired.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.CombatZoneCardTest.getNextStateWithOnePlayerLeftReturnsDrawCard.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ComponentBankTest.addToCoveredComponentsAddsToCoveredComponents.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ComponentBankTest.addToUncoveredComponentsAddsToUncoveredComponents.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ComponentBankTest.drawRandComponentReturnsRandomComponent.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ComponentBankTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.ComponentBankTest.removeUncoveredRemovesComponent.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ComponentBankTest.removeUncoveredThrowsWithInvalidId.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ConnectorTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.DeckTest$GeneralTests.drawCardUpdatesCurrentCard.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.DeckTest$LevelTest.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.DeckTest.drawCardUpdatesCurrentCard.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.DrawCardStateTest.drawCardThrowsExceptionWhenAlreadyDrawn.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.DrawCardStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.DrawCardStateTest.getShipBoardReturnsLeader.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.DrawCardStateTest.goNextThrowsIfNotDrawn.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.DrawCardStateTest.goNextThrowsIfOutOfTurn.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.DrawCardStateTest.setGameConfirmsSurrenderIfEnabled.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.DrawCardStateTest.skipAfterDrawChangesState.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.DrawCardStateTest.skipDoesNothingWhenExpired.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.DrawCardStateTest.skipDoesNothingWhenOutOfTurn.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.DrawCardStateTest.skipDrawsAndChangesState.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameModelTest.createGame.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameStateTest.cancelSkipDoesNothing.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameTest.assignShipRewardsWithCreditsAndLosses.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameTest.assignShipRewardsWithSurrenderedShips.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameTest.assignShipRewardsWorksCorrectly.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameTest.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameTest.gameStartsCorrectly.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameTest.requestGameSnapshotDoesNothingIfGameOver.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameTest.requestGameSnapshotGeneratesEvent.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameTest.skipDoesNothingWhenGameOver.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameTest.skipWhenInGame.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameTest.tryEndGameDoesNotEndIfGameOver.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameTest.tryEndGameEndsIfDeckIsEmpty.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GameTest.tryEndGameEndsIfShipsSurrendered.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GrabRewardStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.GrabRewardStateTest.skipDoesNothingWhenExpired.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.GrabRewardStateTest.skipDoesNothingWhenOutOfTurn.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.HandleProjectileStateTest.activateComponentChangesStateWhenHandlingIsDone.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.HandleProjectileStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.HandleProjectileStateTest.goNextThrowsExceptionWhenOutOfTurn.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.HandleProjectileStateTest.spendBatteriesChangesStateWhenHandlingIsDone.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.HandleProjectileStateTest.spendBatteriesRemovesBattery.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.HandleProjectileStateTest.spendBatteriesThrowsIfDoneMoreThanOnce.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.HourglassTest.flipHourgalsThrowsWithNoMoreFlips.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.HourglassTest.flipThrowsWhenRunning.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.Model tests.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.OpenSpaceCardTest.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.OpenSpaceCardTest.shipWithNoEnginePowerIsForcedToGiveUp.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.RemoveCrewStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.RemoveCrewStateTest.loseCrewChangesAdventureStateWhenNoMoreCrew.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.RemoveCrewStateTest.skipChangesState.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.RemoveCrewStateTest.skipChangesStateIfThereIsNoCrew.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.RemoveCrewStateTest.skipDoesNothingWhenExpired.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.RemoveCrewStateTest.skipDoesNothingWhenOutOfTurn.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.RemoveGoodsStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.RemoveGoodsStateTest.skipChangesState.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.RemoveGoodsStateTest.skipDoesNothingWhenExpired.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.RemoveGoodsStateTest.skipDoesNothingWhenOutOfTurn.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.SecondDeckTest.initMasterDeck.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.SecondDeckTest.initMasterDeckThrowsWithInvalidIndex.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$GeneralTests.activateThrowsExceptionWithInvalidPosition.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$GeneralTests.deactivateAll.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$GeneralTests.deactivateThrowsExceptionWithInvalidPosition.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$GeneralTests.discardAll.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$GeneralTests.gainCreditsSendsEvent.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$GeneralTests.getExposedConnectors.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$GeneralTests.keepShipPieceNoDiscard.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$GeneralTests.keepShipPieceWithDiscard.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$GeneralTests.removeAll.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$GeneralTests.removeComponentSendsEvent.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsIncreased.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$SecondShipBoardTests.getEnginePowerWithAliensIsNotIncreased.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$SecondShipBoardTests.getFirePowerWithAliensIsIncreased.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$SecondShipBoardTests.getFirePowerWithAliensIsNotIncreased.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$ShipBuildingTest.finishBuildingRejects.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$ShipBuildingTest.finishBuildingWelds.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$ShipBuildingTest.grabStashedDoesNothingInTestLevel.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$ShipBuildingTest.rejectComponentReturnsLastComponent.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$ShipBuildingTest.rejectThrowsWhenStashed.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$ShipBuildingTest.stashMethodsDoNothingInTestLevel.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$ShipBuildingTest.stashWithNoComponentThrowsException.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$ShipValidityTests.shipIsNotValidWithRotatedEngine.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$ShipValidityTests.shipIsNotValidWithWrongEngine.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$SpecificComponentTests$CabinTests.initializeCabinThrowsWithInvalidPosition.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.ShipBoardTest$SpecificComponentTests$CargoHoldTests.removeCargoHoldUpdatesGoodsMap.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$SpecificComponentTests$LifeSupportTests.removeLifeSupportUpdatesAdjacentCabins.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest$TestShipBoardTests.lifeSupportsAreNotConsideredInTest.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBoardTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.cancelSkipRemovesFromPendingShips.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.lastFlipHourglassThrowsExceptionIfShipIsNotCompleted.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.skipUpdatesPendingShips.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBuildingStateTest$SecondShipBuildingStateTest.skipWithAllPendingChangesState.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBuildingStateTest$TestShipBuildingStateTest.endBuildingPlacesOnFlightBoard.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBuildingStateTest$TestShipBuildingStateTest.placeShipOnFlightBoardWhenExpiredDoesNothing.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipBuildingStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.ShipCorrectionStateTest$GeneralTests.cancelSkipRemovesFromPendingShips.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipCorrectionStateTest$GeneralTests.skipAddsToPendingShips.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipCorrectionStateTest$GeneralTests.skipForAllShipsChangesState.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipCorrectionStateTest$GeneralTests.whenExpiredStateIsNotUpdated.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipCorrectionStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.ShipInitializationStateTest.cancelSkipRemovesFromPendingShips.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipInitializationStateTest.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.ShipInitializationStateTest.goNextInitializesToHumans.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipInitializationStateTest.goNextInitializesToHumansAndChangesState.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipInitializationStateTest.initializeCabin.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipInitializationStateTest.initializeCabinChangesState.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipInitializationStateTest.initializeCabinThrowsExceptionWhenInvalid.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipInitializationStateTest.setGame.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.ShipInitializationStateTest.skipAllChangesState.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.SocketTest [*].executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.SocketTest.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.SocketTest.joinLobby.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.SocketTest.requestNewGame.executor&quot;: &quot;Run&quot;,
++    &quot;JUnit.StateTests.executor&quot;: &quot;Coverage&quot;,
++    &quot;JUnit.TestDeckTest.executor&quot;: &quot;Run&quot;,
++    &quot;Maven.GalaxyTruckers [compile].executor&quot;: &quot;Run&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
++    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
++    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
++    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
++    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;D:/Ing_del_software/Progetto/IS25-AM12/.run&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RecentsManager">
+     <key name="CreateTestDialog.Recents.Supers">
+       <recent name="" />
+@@ -238,7 +232,7 @@
+       <recent name="it.polimi.ingsw.galaxytruckers.model.state" />
+     </key>
+   </component>
+-  <component name="RunManager" selected="JUnit.Model tests">
++  <component name="RunManager" selected="Compound.2ClientsLocal">
+     <configuration name="HourglassTest.flipHourgalsThrowsWithNoMoreFlips" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+       <module name="GalaxyTruckers" />
+       <extension name="coverage">
+@@ -379,8 +373,8 @@
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+-        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.24978.46" />
+-        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-IU-243.24978.46" />
++        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
++        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
+       </set>
+     </attachedChunks>
+   </component>
+@@ -399,6 +393,7 @@
+       <workItem from="1750573134392" duration="23293000" />
+       <workItem from="1750623200593" duration="12255000" />
+       <workItem from="1750662176854" duration="5401000" />
++      <workItem from="1750688508154" duration="397000" />
+     </task>
+     <servers />
+   </component>
+@@ -429,6 +424,12 @@
+         </breakpoint>
+       </breakpoints>
+     </breakpoint-manager>
++    <pin-to-top-manager>
++      <pinned-members>
++        <PinnedItemInfo parentTag="it.polimi.ingsw.galaxytruckers.view.model.state.DrawCardState" memberName="myShip" />
++        <PinnedItemInfo parentTag="it.polimi.ingsw.galaxytruckers.view.model.state.ShipCorrectionState" memberName="myShip" />
++      </pinned-members>
++    </pin-to-top-manager>
+   </component>
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+     <SUITE FILE_PATH="coverage/IS25_AM12$HandleProjectileStateTest.ic" NAME="HandleProjectileStateTest Coverage Results" MODIFIED="1750529137368" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">

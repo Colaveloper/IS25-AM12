@@ -4,17 +4,16 @@ import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,8 +33,8 @@ class ChoosePlanetStateTest {
 
     @BeforeEach
     void setup() throws IOException {
-        ship1 = new SecondShipBoard(GameColor.RED);
-        ship2 = new SecondShipBoard(GameColor.BLUE);
+        ship1 = new SecondShipBoardForTesting(GameColor.RED);
+        ship2 = new SecondShipBoardForTesting(GameColor.BLUE);
         options = new HashSet<>();
         options.add(1);
         options.add(2);
@@ -43,8 +42,8 @@ class ChoosePlanetStateTest {
             methodShipBoard = ship;
             choice = num;
         };
-        this.game = new Game(Level.SECOND);
-        this.game.setFlightBoard(new FlightBoard() {
+        this.game = new GameStub(Level.SECOND);
+        this.game.setFlightBoard(new FlightBoard(new GameEventListenerForTesting()) {
             @Override
             protected int getLoopLength() {
                 return 0;
@@ -59,7 +58,6 @@ class ChoosePlanetStateTest {
                 return List.of(ship1, ship2);
             }
         });
-        game.setEventListener(new GameEventListenerStub());
         game.setDeck(new Deck(game) {
             /**
              * Returns the current card to be played.
@@ -103,6 +101,7 @@ class ChoosePlanetStateTest {
     void skipUpdatesCurrentShip() {
         testChoosePlanetState.skip(ship1);
         assertEquals(ship2, testChoosePlanetState.getCurrentShip());
+        Mockito.verify(game.getEventListener()).notifyCurrentPlayerUpdateEvent(ship2);
     }
 
     @Test
@@ -130,6 +129,7 @@ class ChoosePlanetStateTest {
         assertEquals(ship1,methodShipBoard);
         assertEquals(ship2, testChoosePlanetState.getCurrentShip());
         assertEquals(testChoosePlanetState,game.getCurrentState());
+        Mockito.verify(game.getEventListener()).notifyPlanetChoiceEvent(ship1, 0, ship2);
     }
 
     @Test

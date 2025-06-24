@@ -1,0 +1,41 @@
+Index: src/main/java/it/polimi/ingsw/galaxytruckers/view/cliScreens/CliNewCardScreen.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.galaxytruckers.view.cliScreens;\r\n\r\nimport it.polimi.ingsw.galaxytruckers.view.model.state.DrawCardState;\r\nimport it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;\r\nimport it.polimi.ingsw.galaxytruckers.view.cliElements.CliAdventureCard;\r\nimport it.polimi.ingsw.galaxytruckers.view.model.ClientModel;\r\nimport it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;\r\n\r\nimport java.util.List;\r\n\r\npublic class CliNewCardScreen extends CliAdventureScreen {\r\n\r\n    private CliAdventureCard adventureCard;\r\n    private boolean hasDrown;\r\n    public CliNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState gameState){\r\n        super(model, controller, gameState);\r\n        hasDrown = false;\r\n        //adventureCard = new CliAdventureCard(gameState.getGame().getCurrentAdventureCard());\r\n    }\r\n\r\n    @Override\r\n    public void render() {\r\n        printShipFlightStats().forEach(System.out::println);\r\n        if(imOut) {\r\n            System.out.println(\"you surrendered\");\r\n            return;\r\n        }\r\n        if(!hasDrown && !isMyTurn){\r\n            System.out.println(\"Wait for leader to draw\");\r\n        }\r\n        if (hasDrown) {\r\n            System.out.println(\"A new card has been drawn:\\n\");\r\n            List<String> descriptions = adventureCard.getDescription();\r\n            descriptions.forEach(System.out::println);\r\n        }\r\n        printActions();\r\n    }\r\n\r\n    @Override\r\n    public void parseAndInvoke(String input) {\r\n        String command = input.split(\" \")[0];\r\n        switch (command.toUpperCase()) {\r\n            case \"Y\":\r\n                controller.giveUp();\r\n                break;\r\n            case \"\":\r\n                if(isMyTurn && hasDrown){\r\n                    controller.goNext();\r\n                }\r\n                else if(isMyTurn){\r\n                    controller.drawCard();\r\n                }\r\n                else{\r\n                    System.out.println(\"wait for the leader to continue\");\r\n                }\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void notifyDrawCard(AdventureCard adventureCard) {\r\n        hasDrown = adventureCard != null;\r\n        if(adventureCard == null) this.adventureCard = null;\r\n        else this.adventureCard = new CliAdventureCard(adventureCard);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/polimi/ingsw/galaxytruckers/view/cliScreens/CliNewCardScreen.java b/src/main/java/it/polimi/ingsw/galaxytruckers/view/cliScreens/CliNewCardScreen.java
+--- a/src/main/java/it/polimi/ingsw/galaxytruckers/view/cliScreens/CliNewCardScreen.java	(revision 9ac2e79e82d266b7057e83bf0e17b899dd046f21)
++++ b/src/main/java/it/polimi/ingsw/galaxytruckers/view/cliScreens/CliNewCardScreen.java	(date 1750325118423)
+@@ -59,7 +59,8 @@
+     @Override
+     public void notifyDrawCard(AdventureCard adventureCard) {
+         hasDrown = adventureCard != null;
+-        if(adventureCard == null) this.adventureCard = null;
+-        else this.adventureCard = new CliAdventureCard(adventureCard);
++//        if(adventureCard == null) this.adventureCard = null;
++//        else
++            this.adventureCard = new CliAdventureCard(adventureCard);
+     }
+ }
+\ No newline at end of file
+Index: src/main/java/it/polimi/ingsw/galaxytruckers/view/cliScreens/CheatCodes.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.galaxytruckers.view.cliScreens;\r\n\r\nimport it.polimi.ingsw.galaxytruckers.utils.Logger;\r\nimport it.polimi.ingsw.galaxytruckers.view.model.ClientModel;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.util.UUID;\r\n\r\npublic class CheatCodes {\r\n    private static final List<String> startToBuild = new ArrayList<>(List.of(\"0\", \"\", \"player1\", \"C\", \"TEST 2\"));\r\n    private static final List<String> secondToBuild =new ArrayList<>(List.of(\"0\", \"\", \"player2\", \"0\"));\r\n    private static List<String> cheatString;\r\n    private static boolean isCheatOn;\r\n\r\n    static {\r\n//        for(int i = 0; i < 20; i++){\r\n//            secondToBuild.add(\"C\");\r\n//            secondToBuild.add(\"R\");\r\n//        }\r\n//        secondToBuild.add(\"e 3\");\r\n    }\r\n\r\n    public static void activateCheats(int input) {\r\n        isCheatOn = true;\r\n        switch (input) {\r\n            case 2 -> cheatString = startToBuild;\r\n            case 3 -> cheatString = secondToBuild;\r\n        }\r\n    }\r\n\r\n    public static boolean cheatEmpty() {\r\n        return cheatString.isEmpty();\r\n    }\r\n\r\n    public static String cheat() throws InterruptedException {\r\n        Thread.sleep(200);\r\n        Logger.println(4, cheatString.getFirst());\r\n        return cheatString.removeFirst();\r\n    }\r\n\r\n    public static void setCheats(boolean cheat) {\r\n        isCheatOn = cheat;\r\n    }\r\n\r\n    public static boolean isCheatOn() {\r\n        return isCheatOn;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/polimi/ingsw/galaxytruckers/view/cliScreens/CheatCodes.java b/src/main/java/it/polimi/ingsw/galaxytruckers/view/cliScreens/CheatCodes.java
+--- a/src/main/java/it/polimi/ingsw/galaxytruckers/view/cliScreens/CheatCodes.java	(revision 9ac2e79e82d266b7057e83bf0e17b899dd046f21)
++++ b/src/main/java/it/polimi/ingsw/galaxytruckers/view/cliScreens/CheatCodes.java	(date 1750325118428)
+@@ -8,7 +8,7 @@
+ import java.util.UUID;
+ 
+ public class CheatCodes {
+-    private static final List<String> startToBuild = new ArrayList<>(List.of("0", "", "player1", "C", "TEST 2"));
++    private static final List<String> startToBuild = new ArrayList<>(List.of("0", "", "player1", "C", "SECOND 2"));
+     private static final List<String> secondToBuild =new ArrayList<>(List.of("0", "", "player2", "0"));
+     private static List<String> cheatString;
+     private static boolean isCheatOn;

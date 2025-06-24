@@ -1,7 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 
-import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.ShipBoardStub;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -29,28 +28,38 @@ class LobbyTest {
     Lobby lobby;
     Game game;
     Player p1;
-    Consumer<Lobby> removeLobby;
+    SafeConsumer removeLobby;
     Runnable customRunnable;
     EventQueue<LobbyEvent> eventQueue;
+
+    static class QueueMock extends EventQueue<LobbyEvent> {}
+    interface SafeConsumer extends Consumer<Lobby> {}
 
     Point p = new Point(0, 0);
     CrewType crewType = CrewType.HUMAN;
     GoodsType goodsType = GoodsType.RED;
 
+    class ModelStub implements GameModelInterface {
+        @Override
+        public GameInterface createGame(Level level, int shipsN, GameEventListener gameEventListener) {
+            return game;
+        }
+    }
+
     @BeforeEach
     void setUp() {
-        eventQueue = mock(EventQueue.class);
+        eventQueue = mock(QueueMock.class);
         game = mock(Game.class);
         p1 = Player.addPlayer("p1");
-        when(game.addShipBoard(any(GameColor.class))).thenAnswer(i -> new ShipBoardStub(i.getArgument(0)));
-        removeLobby = mock(Consumer.class);
+        when(game.addShipBoard(any(GameColor.class))).thenAnswer(i -> new SecondShipBoardForTesting(i.getArgument(0)));
+        removeLobby = mock(SafeConsumer.class);
         customRunnable = () -> {
         };
         doAnswer(_ -> {
             customRunnable.run();
             return null;
         }).when(removeLobby).accept(any(Lobby.class));
-        lobby = new Lobby(game, p1, Level.SECOND, 2, removeLobby);
+        lobby = new Lobby(new ModelStub(), p1, Level.SECOND, 2, removeLobby);
         lobby.stopEventHandler();
         lobby.setEventQueue(eventQueue);
     }

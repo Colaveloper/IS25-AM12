@@ -3,10 +3,10 @@ package it.polimi.ingsw.galaxytruckers.serverController.events.types;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.ActiveLobbyDTO;
 
 /**
- * Event that represents the addition of a new active lobby to the system.
- * This event is dispatched when a new lobby is created and becomes active in the game.
+ * Event representing the addition of a new active lobby.
+ * This event is used to notify listeners that a new lobby has been created and is available for players to join.
  *
- * @param newLobby The DTO containing information about the newly created active lobby
+ * @param newLobby the data transfer object containing information about the newly added lobby
  */
 public record AddActiveLobbyEvent(ActiveLobbyDTO newLobby) implements ControllerEvent {
 }

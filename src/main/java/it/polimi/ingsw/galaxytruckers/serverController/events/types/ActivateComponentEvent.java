@@ -1,32 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.serverController.events.types;
 
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
-
 import java.awt.*;
 
 /**
- * An event that represents the activation or deactivation of a component on a player's ship board.
- * This event is used to notify the system about component state changes in the game.
+ * Event representing the activation or deactivation of a component
+ * by a player at a specific point on the board.
  *
- * @param playerName The name of the player who owns the ship board
- * @param point The coordinates of the component on the ship board
- * @param active Whether the component is being activated (true) or deactivated (false)
+ * @param playerName the name of the player performing the action
+ * @param point the location of the component to activate/deactivate
+ * @param active true if the component is being activated, false if deactivated
  */
 public record ActivateComponentEvent(String playerName, Point point, boolean active) implements LobbyEvent {
-    /**
-     * Creates an ActivateComponentEvent from a ship board and component information.
-     *
-     * @param shipBoard The ship board containing the component
-     * @param point The coordinates of the component on the ship board
-     * @param active Whether the component is being activated (true) or deactivated (false)
-     * @return A new ActivateComponentEvent with the player's name extracted from the ship board
-     */
-    public static ActivateComponentEvent from(ShipBoard shipBoard, Point point, boolean active) {
-        return new ActivateComponentEvent(
-                Player.getPlayer(shipBoard).getNickname(),
-                point,
-                active
-        );
-    }
 }

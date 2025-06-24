@@ -11,13 +11,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestDeckTest {
-    Game game = new Game(Level.TEST);
+    Game game = new GameStub(Level.TEST);
     Deck deck;
     FlightBoard flightBoard;
 
     @Test
     void masterDeckHasTheEightTestCards() throws IOException {
-        flightBoard = new SecondFlightBoard(0);
+        flightBoard = new SecondFlightBoardForTesting(0);
         deck = new TestDeck(game);
         assertEquals(8, deck.getMasterDeck().size());
     }

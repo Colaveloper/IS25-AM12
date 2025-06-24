@@ -68,6 +68,7 @@ public class SecondShipBoard extends ShipBoard {
 
     public void stashComponent() {
         stashedComponents.add(lastComponent);
+        if (lastPosition != null) componentMap.remove(lastPosition);
         resetLastComponent();
     }
 

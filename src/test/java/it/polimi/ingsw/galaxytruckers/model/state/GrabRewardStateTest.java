@@ -1,13 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.model.state;
 
-import it.polimi.ingsw.galaxytruckers.model.Deck;
-import it.polimi.ingsw.galaxytruckers.model.Game;
-import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
-import it.polimi.ingsw.galaxytruckers.model.SecondDeck;
+import it.polimi.ingsw.galaxytruckers.model.*;
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.AdventureCard;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.SecondShipBoard;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.checkerframework.dataflow.qual.AssertMethod;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,12 +27,11 @@ class GrabRewardStateTest {
 
     @BeforeEach
     void setup() throws IOException {
-        ship1 = new SecondShipBoard(GameColor.BLUE);
-        ship2 = new SecondShipBoard(GameColor.RED);
+        ship1 = new SecondShipBoardForTesting(GameColor.BLUE);
+        ship2 = new SecondShipBoardForTesting(GameColor.RED);
         rewardMethod = Mockito.mock(Runnable.class);
         testState = new GrabRewardState(ship1, rewardMethod);
-        game = new Game(Level.SECOND);
-        game.setEventListener(new GameEventListenerStub());
+        game = new GameStub(Level.SECOND);
         game.setDeck(new Deck(game) {
             /**
              * Returns the current card to be played.
@@ -93,13 +88,12 @@ class GrabRewardStateTest {
 
     @Test
     void grabRewardRunsRewardMethodAndChangesAdventureState() throws IOException {
-        game = new Game(Level.SECOND){
+        game = new GameStub(Level.SECOND){
             @Override
             public Deck getDeck(){
                 return deck;
             }
         };
-        game.setEventListener(new GameEventListenerStub());
         CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         adventureCard = new AdventureCard(game, Level.SECOND,1) {
             @Override
@@ -125,13 +119,12 @@ class GrabRewardStateTest {
 
     @Test
     void goNextChangesAdventureState() throws  IOException{
-        game = new Game(Level.SECOND){
+        game = new GameStub(Level.SECOND){
             @Override
             public Deck getDeck(){
                 return deck;
             }
         };
-        game.setEventListener(new GameEventListenerStub());
         CountDownLatch latch = StateTransitionUtils.setupLatch(game);
         adventureCard = new AdventureCard(game, Level.SECOND, 1) {
             @Override

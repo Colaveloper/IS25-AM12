@@ -13,8 +13,6 @@ public interface GameInterface {
 
     ShipBoard addShipBoard(GameColor color);
 
-    void setEventListener(GameEventListener eventListener);
-
     void start();
 
     void skip(ShipBoard shipBoard);

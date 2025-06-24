@@ -17,13 +17,13 @@ public class TestFactory implements GameFactory{
     }
 
     @Override
-    public FlightBoard createFlightBoard(int shipsN) {
-         return new TestFlightBoard(shipsN);
+    public FlightBoard createFlightBoard(int shipsN, GameEventListener gameEventListener) {
+         return new TestFlightBoard(shipsN, gameEventListener);
     }
 
     @Override
-    public ShipBoard createShipBoard(GameColor color) {
-        return new TestShipBoard(color);
+    public ShipBoard createShipBoard(GameColor color, GameEventListener eventListener) {
+        return new TestShipBoard(color, eventListener);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class TestFactory implements GameFactory{
     }
 
     @Override
-    public SurrenderPolicy createSurrenderPolicy() {
+    public SurrenderPolicy createSurrenderPolicy(GameEventListener gameEventListener) {
         return new NoSurrenderPolicy();
     }
 

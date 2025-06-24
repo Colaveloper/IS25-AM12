@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.ComponentRegistry;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     protected static final Point center = new Point(7,7);
-    protected GameEventListener gameEventListener;
+    protected final GameEventListener eventListener;
 
     protected final Map<Point, Component> componentMap;
     protected Component lastComponent;  // can be null
@@ -39,7 +38,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     protected final Map<Point, Cabin> cabins;
     protected final Map<Point, Activatable> activatables;
 
-    public ShipBoard(GameColor color) { // (, Color color)
+    public ShipBoard(GameColor color, GameEventListener eventListener) { // (, Color color)
         this.componentMap = new HashMap<>();
         this.lastComponent = null;
         this.lastPosition = null;
@@ -61,18 +60,16 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         this.cabins = new HashMap<>();
         this.activatables = new HashMap<>();
 
-        addWeldedComponent(ComponentRegistry.getInstance().getStartingCabin(color), center, Direction.UP);
-    }
+        this.eventListener = eventListener;
 
-    public void setGameEventListener(GameEventListener gameEventListener) {
-        this.gameEventListener = gameEventListener;
+        addWeldedComponent(ComponentRegistry.getInstance().getStartingCabin(color), center, Direction.UP);
     }
 
     protected abstract boolean containsPoint(Point point);
 
     public void gainCredits (int credits) {
         this.credits += credits;
-        if (gameEventListener != null) gameEventListener.notifyGrabCreditsEvent(this, credits);
+        eventListener.notifyGrabCreditsEvent(this, credits);
     }
 
     public void removeAll(boolean discard) {
@@ -90,7 +87,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         for (Point point : componentsToRemove) {
             removeComponent(point, discard);
         }
-        if (gameEventListener != null) gameEventListener.notifyShipPieceRemovalEvent(this, pieceIndex);
+        eventListener.notifyShipPieceRemovalEvent(this, pieceIndex);
     }
 
     public void addWeldedComponent(Component component, Point position, Direction direction) {
@@ -98,7 +95,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
             lastPosition = position;
             component.setOrientation(direction);
             componentMap.put(position,component);
-            component.addToVisitor(this);
+            component.addToVisitor(this, position);
             lastPosition = null;
         }
     }
@@ -129,7 +126,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
         lastPosition = newPosition;
         lastComponent.setOrientation(orientation);
-        if (gameEventListener != null) gameEventListener.notifyPlaceComponentEvent(this,orientation,newPosition);
+        eventListener.notifyPlaceComponentEvent(this,orientation,newPosition);
     }
 
     public void stashComponent() {}
@@ -139,7 +136,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     public void grabPlacedComponent() {
         if (lastComponent != null && lastPosition != null) {
             lastPosition = null;
-            if (gameEventListener != null) gameEventListener.notifyGrabPlacedComponentEvent(this);
+            eventListener.notifyGrabPlacedComponentEvent(this);
         } else {
             throw new IllegalStateException("You don't have a placed component to grab");
         }
@@ -151,7 +148,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
                 throw new IllegalStateException("You cannot weld last component without setting its position");
             }
             componentMap.put(lastPosition, lastComponent);
-            lastComponent.addToVisitor(this);
+            lastComponent.addToVisitor(this, lastPosition);
             lastComponent = null;
             lastPosition = null;
         }
@@ -159,26 +156,28 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     public void discardComponent(Point position) {
         removeComponent(position,true);
-        if (gameEventListener != null) gameEventListener.notifyRemoveComponentEvent(this,position);
+        eventListener.notifyRemoveComponentEvent(this,position);
     }
 
     public void removeComponent(Point position) {
         removeComponent(position, false);
-        if (gameEventListener != null) gameEventListener.notifyRemoveComponentEvent(this,position);
+        eventListener.notifyRemoveComponentEvent(this,position);
     }
 
     private void removeComponent(Point position, boolean discard) {
         lastPosition = position;
-        componentMap.remove(lastPosition).removeFromVisitor(this);
+        componentMap.remove(lastPosition).removeFromVisitor(this, position);
         lastPosition = null;
         if (discard) losses++;
     }
 
     public void finishBuilding() {
-        try {
-            weldLastComponent();
-        } catch (IllegalStateException e) {
-            rejectComponent();
+        if (lastComponent != null) {
+            if (lastPosition != null) {
+                weldLastComponent();
+                lastPosition = null;
+            }
+            lastComponent = null;
         }
     }
 
@@ -296,7 +295,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
         cargoHolds.get(position).addGoods(goods, amount);
         this.goods.merge(goods, amount, Integer::sum);
-        if (gameEventListener != null) gameEventListener.notifyGoodsUpdateEvent(this,position,goods,true);
+        eventListener.notifyGoodsUpdateEvent(this,position,goods,true);
     }
 
     public void removeGoods(Point position, GoodsType goods, int amount) {
@@ -305,7 +304,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
         cargoHolds.get(position).removeGoods(goods, amount);
         this.goods.put(goods, this.goods.get(goods) - amount);
-        if (gameEventListener != null) gameEventListener.notifyGoodsUpdateEvent(this,position,goods,false);
+        eventListener.notifyGoodsUpdateEvent(this,position,goods,false);
     }
 
     //Batteries methods
@@ -316,7 +315,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
         batteries.get(position).useBatteries();
         numBatteries--;
-        if (gameEventListener != null) gameEventListener.notifyUseBatteryEvent(this,position);
+        eventListener.notifyUseBatteryEvent(this,position);
     }
 
     //Cabin (and LifeSupport) methods
@@ -334,7 +333,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         Cabin cabin = cabins.get(position);
         cabin.initialize(crewType);
         crewSize += cabin.getNumResidents();
-        if (gameEventListener != null) gameEventListener.notifyCabinInitializationEvent(this,position,crewType);
+        eventListener.notifyCabinInitializationEvent(this,position,crewType);
     }
 
     public void loseCrew(Point position) {
@@ -343,7 +342,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
         cabins.get(position).loseResidents();
         crewSize--;
-        if (gameEventListener != null) gameEventListener.notifyLoseCrewEvent(this,position);
+        eventListener.notifyLoseCrewEvent(this,position);
     }
 
     // Activatables methods
@@ -354,7 +353,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
         if (!activatables.get(position).isActive()) {
             activatables.get(position).activate(this);
-            if (gameEventListener != null) gameEventListener.notifyActivateComponentEvent(this,position,true);
+            eventListener.notifyActivateComponentEvent(this,position,true);
             return true;
         }
         return false;
@@ -479,109 +478,109 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     }
 
     @Override
-    public void add(Cannon cannon) {
-        this.cannons.put(this.lastPosition, cannon);
+    public void add(Cannon cannon, Point position) {
+        this.cannons.put(position, cannon);
         this.firePower += cannon.getFirePower();
     }
 
     @Override
-    public void add(Engine engine) {
-        this.engines.put(this.lastPosition, engine);
+    public void add(Engine engine, Point position) {
+        this.engines.put(position, engine);
         this.enginePower += engine.getEnginePower();
     }
 
     @Override
-    public void add(Battery battery) {
-        this.batteries.put(this.lastPosition, battery);
+    public void add(Battery battery, Point position) {
+        this.batteries.put(position, battery);
         this.numBatteries += battery.getNumBatteries();
     }
 
     @Override
-    public void add(Cabin cabin) {
-        this.cabins.put(this.lastPosition, cabin);
+    public void add(Cabin cabin, Point position) {
+        this.cabins.put(position, cabin);
     }
 
     @Override
-    public void add(Shield shield) {
-        this.shields.put(this.lastPosition, shield);
-        this.activatables.put(this.lastPosition, shield);
+    public void add(Shield shield, Point position) {
+        this.shields.put(position, shield);
+        this.activatables.put(position, shield);
     }
 
     @Override
-    public void add(LifeSupport lifeSupport) {}
+    public void add(LifeSupport lifeSupport, Point position) {}
 
     @Override
-    public void add(CargoHold cargoHold) {
-        this.cargoHolds.put(this.lastPosition, cargoHold);
+    public void add(CargoHold cargoHold, Point position) {
+        this.cargoHolds.put(position, cargoHold);
     }
 
     @Override
-    public void add(DoubleCannon doubleCannon) {
-        this.cannons.put(this.lastPosition, doubleCannon);
-        this.activatables.put(this.lastPosition, doubleCannon);
+    public void add(DoubleCannon doubleCannon, Point position) {
+        this.cannons.put(position, doubleCannon);
+        this.activatables.put(position, doubleCannon);
     }
 
     @Override
-    public void add(DoubleEngine doubleEngine) {
-        this.engines.put(this.lastPosition, doubleEngine);
-        this.activatables.put(this.lastPosition, doubleEngine);
+    public void add(DoubleEngine doubleEngine, Point position) {
+        this.engines.put(position, doubleEngine);
+        this.activatables.put(position, doubleEngine);
     }
 
     @Override
-    public void remove(Cannon cannon) {
-        this.cannons.remove(this.lastPosition);
+    public void remove(Cannon cannon, Point position) {
+        this.cannons.remove(position);
         this.firePower -= cannon.getFirePower();
     }
 
     @Override
-    public void remove(Engine engine) {
-        this.engines.remove(this.lastPosition);
+    public void remove(Engine engine, Point position) {
+        this.engines.remove(position);
         this.enginePower -= engine.getEnginePower();
     }
 
     @Override
-    public void remove(Battery battery) {
-        this.batteries.remove(this.lastPosition);
+    public void remove(Battery battery, Point position) {
+        this.batteries.remove(position);
         this.numBatteries -= battery.getNumBatteries();
     }
 
     @Override
-    public void remove(Cabin cabin) {
+    public void remove(Cabin cabin, Point position) {
         this.crewSize -= cabin.getNumResidents();
-        this.cabins.remove(this.lastPosition);
+        this.cabins.remove(position);
     }
 
     @Override
-    public void remove(Shield shield) {
+    public void remove(Shield shield, Point position) {
         shield.deactivate(this);
-        this.shields.remove(this.lastPosition);
-        this.activatables.remove(this.lastPosition);
+        this.shields.remove(position);
+        this.activatables.remove(position);
     }
 
     @Override
-    public void remove(LifeSupport lifeSupport) {}
+    public void remove(LifeSupport lifeSupport, Point position) {}
 
     @Override
-    public void remove(CargoHold cargoHold) {
-        Map<GoodsType, Integer> lostGoods = this.cargoHolds.get(lastPosition).getGoods();
+    public void remove(CargoHold cargoHold, Point position) {
+        Map<GoodsType, Integer> lostGoods = this.cargoHolds.get(position).getGoods();
         for (GoodsType goods: lostGoods.keySet()) {
             this.goods.put(goods, this.goods.get(goods) - lostGoods.get(goods));
             if (this.goods.get(goods) <= 0) this.goods.remove(goods);
         }
-        this.cargoHolds.remove(this.lastPosition);
+        this.cargoHolds.remove(position);
     }
 
     @Override
-    public void remove(DoubleCannon doubleCannon) {
+    public void remove(DoubleCannon doubleCannon, Point position) {
         doubleCannon.deactivate(this);
-        this.cannons.remove(this.lastPosition);
-        this.activatables.remove(this.lastPosition);
+        this.cannons.remove(position);
+        this.activatables.remove(position);
     }
 
     @Override
-    public void remove(DoubleEngine doubleEngine) {
+    public void remove(DoubleEngine doubleEngine, Point position) {
         doubleEngine.deactivate(this);
-        this.engines.remove(this.lastPosition);
-        this.activatables.remove(this.lastPosition);
+        this.engines.remove(position);
+        this.activatables.remove(position);
     }
 }

@@ -2,7 +2,8 @@ package it.polimi.ingsw.galaxytruckers.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
-import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
+import it.polimi.ingsw.galaxytruckers.model.GameEventListenerForTesting;
+import it.polimi.ingsw.galaxytruckers.model.GameStub;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.*;
@@ -26,19 +27,18 @@ class ShipInitializationStateTest {
     ShipBoard alienShip;
     ShipBoard otherShip;
     Map<CrewType, Set<Point>> crewTypeMap;
-    GameEventListener listener = GameEventListenerStub.getMock();
+    GameEventListener listener = GameEventListenerForTesting.getMock();
 
     @BeforeEach
     void setUp() {
         crewTypeMap = new HashMap<>();
         ships = new ArrayList<>();
-        game = new Game(Level.SECOND);
+        game = new GameStub(Level.SECOND);
         ships.add(game.addShipBoard(GameColor.RED));
         ships.add(game.addShipBoard(GameColor.YELLOW));
         setupShip(ships.getFirst());
         otherShip = ships.getLast();
         latch = StateTransitionUtils.setupLatch(game);
-        game.setEventListener(listener);
         shipInitializationState = new ShipInitializationState();
         game.setCurrentState(shipInitializationState);
         for (ShipBoard ship : ships) {

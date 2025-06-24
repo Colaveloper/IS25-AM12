@@ -1,22 +1,21 @@
 package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
-import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
-import it.polimi.ingsw.galaxytruckers.model.GameEventListenerStub;
+import it.polimi.ingsw.galaxytruckers.model.SecondShipBoardForTesting;
+import it.polimi.ingsw.galaxytruckers.model.TestShipBoardForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class ShipBoardTest {
-
-    ShipBoard shipBoard;
+    SecondShipBoardForTesting shipBoard;
 
     @Nested
     @DisplayName("Ship-building tests")
@@ -25,7 +24,7 @@ class ShipBoardTest {
 
         @BeforeEach
         void setup() {
-            shipBoard = new SecondShipBoard(GameColor.BLUE);
+            shipBoard = new SecondShipBoardForTesting(GameColor.BLUE);
             shipBoard.removeComponent(new Point(7,7));
             componentToAdd = new Component(Map.of(
                     Direction.UP, Connector.UNIVERSAL,
@@ -41,6 +40,7 @@ class ShipBoardTest {
             shipBoard.offerComponent(componentToAdd);
             shipBoard.placeComponent(new Point(7,7),Direction.UP);
             assertEquals(prevMap, shipBoard.getComponentMap());
+
         }
 
         @Test
@@ -57,6 +57,14 @@ class ShipBoardTest {
         @Test
         void placeWithoutComponentThrowsException() {
             assertThrows(IllegalStateException.class, () -> shipBoard.placeComponent(new Point(7,7),Direction.UP));
+        }
+
+        @Test
+        void placeGeneratesEvent() {
+            shipBoard.offerComponent(componentToAdd);
+            shipBoard.placeComponent(new Point(7,7),Direction.UP);
+            verify(shipBoard.getEventListener(), times(1))
+                    .notifyPlaceComponentEvent(shipBoard, Direction.UP,  new Point(7,7));
         }
 
         @Test
@@ -102,6 +110,15 @@ class ShipBoardTest {
         }
 
         @Test
+        void grabPlacedComponentGeneratesEvent() {
+            shipBoard.offerComponent(componentToAdd);
+            shipBoard.placeComponent(new Point(7,7),Direction.UP);
+            shipBoard.grabPlacedComponent();
+            verify(shipBoard.getEventListener(), times(1))
+                    .notifyGrabPlacedComponentEvent(shipBoard);
+        }
+
+        @Test
         void grabPlacedComponentThrowsIfThereIsNoPlacedComponentToGrab() {
             assertThrows(IllegalStateException.class, () -> shipBoard.grabPlacedComponent());
             shipBoard.offerComponent(componentToAdd);
@@ -113,6 +130,14 @@ class ShipBoardTest {
             shipBoard.offerComponent(componentToAdd);
             shipBoard.stashComponent();
             assertTrue(shipBoard.getStashedComponents().contains(componentToAdd));
+        }
+
+        @Test
+        void stashGeneratesEvent() {
+            shipBoard.offerComponent(componentToAdd);
+            shipBoard.stashComponent();
+            verify(shipBoard.getEventListener(), times(1))
+                    .notifyStashComponentEvent(shipBoard);
         }
 
         @Test
@@ -137,6 +162,15 @@ class ShipBoardTest {
             assertFalse(shipBoard.getLastComponent().isPresent());
             shipBoard.grabStashedComponent(0);
             assertEquals(componentToAdd, shipBoard.getLastComponent().orElse(null));
+        }
+
+        @Test
+        void grabStashedComponentGeneratesEvent() {
+            shipBoard.offerComponent(componentToAdd);
+            shipBoard.stashComponent();
+            shipBoard.grabStashedComponent(0);
+            verify(shipBoard.getEventListener(), times(1))
+                    .notifyGrabStashedComponentEvent(shipBoard, 0);
         }
 
         @Test
@@ -171,6 +205,26 @@ class ShipBoardTest {
             shipBoard.placeComponent(point,Direction.UP);
             shipBoard.finishBuilding();
             assertEquals(component, shipBoard.getComponentMap().get(point));
+        }
+
+        @Test
+        void removeComponentGeneratesEvent() {
+            Point point = new Point(6,7);
+            shipBoard.offerComponent(componentToAdd);
+            shipBoard.placeComponent(point,Direction.UP);
+            shipBoard.weldLastComponent();
+            shipBoard.removeComponent(point);
+            verify(shipBoard.getEventListener(), times(1))
+                    .notifyRemoveComponentEvent(shipBoard, point);
+        }
+
+        @Test
+        void activateComponentGeneratesEvent() {
+            Point point = new Point(6,7);
+            shipBoard.addWeldedComponent(new DoubleCannon(), point, Direction.UP);
+            shipBoard.activateComponent(point);
+            verify(shipBoard.getEventListener(), times(1))
+                    .notifyActivateComponentEvent(shipBoard, point, true);
         }
 
         @Test
@@ -224,9 +278,11 @@ class ShipBoardTest {
 
     @Nested
     class TestShipBoardTests {
+        TestShipBoardForTesting shipBoard;
+
         @BeforeEach
         void setup() {
-            shipBoard = new TestShipBoard(GameColor.RED);
+            shipBoard = new TestShipBoardForTesting(GameColor.RED);
         }
 
         @Test
@@ -270,7 +326,7 @@ class ShipBoardTest {
 
         @BeforeEach
         void setup() {
-            shipBoard = new SecondShipBoard(GameColor.BLUE);
+            shipBoard = new SecondShipBoardForTesting(GameColor.BLUE);
             shipBoard.removeComponent(new Point(7,7));
         }
 
@@ -687,6 +743,14 @@ class ShipBoardTest {
             }
 
             @Test
+            void initializeCabinGeneratesEvent() {
+                addComponent(new Point(7,7));
+                shipBoard.initializeCabin(new Point(7,7), CrewType.HUMAN);
+                verify(shipBoard.getEventListener())
+                        .notifyCabinInitializationEvent(shipBoard, new Point(7,7), CrewType.HUMAN);
+            }
+
+            @Test
             void initializeCabinThrowsWithInvalidPosition() {
                 assertThrows(IllegalStateException.class, () -> shipBoard.initializeCabin(new Point(7,7), CrewType.HUMAN));
             }
@@ -704,6 +768,16 @@ class ShipBoardTest {
                 shipBoard.initializeCabin(new Point(7,7),CrewType.HUMAN);
                 shipBoard.loseCrew(new Point(7,7));
                 assertEquals(1,shipBoard.getCrewSize());
+            }
+
+            @Test
+            void loseCrewGeneratesEvent() {
+                addComponent( new Point(7,7));
+                assertTrue(restIsUnchanged());
+                shipBoard.initializeCabin(new Point(7,7), CrewType.HUMAN);
+                shipBoard.loseCrew(new Point(7,7));
+                verify(shipBoard.getEventListener())
+                        .notifyLoseCrewEvent(shipBoard, new Point(7,7));
             }
         }
 
@@ -824,6 +898,21 @@ class ShipBoardTest {
                 assertThrows(IllegalStateException.class, () -> shipBoard.useBatteries(new Point(7,7)));
                 assertTrue(restIsUnchanged());
             }
+
+            @Test
+            void useBatteriesGeneratesEvent() {
+                battery = new Battery(Map.of(
+                        Direction.UP, Connector.UNIVERSAL,
+                        Direction.LEFT, Connector.UNIVERSAL,
+                        Direction.DOWN, Connector.UNIVERSAL,
+                        Direction.RIGHT, Connector.UNIVERSAL
+                ), 3);
+                component = battery;
+                addComponent(new Point(7,7));
+                shipBoard.useBatteries(new Point(7,7));
+                verify(shipBoard.getEventListener(), times(1))
+                        .notifyUseBatteryEvent(shipBoard, new Point(7,7));
+            }
         }
 
         @Nested
@@ -877,6 +966,14 @@ class ShipBoardTest {
             }
 
             @Test
+            void placeGoodsUpdatesGoodsMap() {
+                addComponent(new Point(7,7));
+                shipBoard.placeGoods(new Point(7,7), GoodsType.GREEN,3);
+                verify(shipBoard.getEventListener(), times(1))
+                        .notifyGoodsUpdateEvent(shipBoard, new Point(7,7), GoodsType.GREEN, true);
+            }
+
+            @Test
             void noCargoHoldThrowsException(){
                 assertThrows(IllegalStateException.class, () -> shipBoard.placeGoods(new Point(7,7), GoodsType.GREEN, 3));
                 assertTrue(restIsUnchanged());
@@ -889,6 +986,16 @@ class ShipBoardTest {
                 shipBoard.placeGoods(new Point(7,7), GoodsType.GREEN, 3);
                 shipBoard.removeGoods(new Point(7,7),GoodsType.GREEN,1);
                 assertEquals(4, shipBoard.getGoodsValue());
+            }
+
+            @Test
+            void removeGoodsGeneratesEvent() {
+                addComponent(new Point(7,7));
+                shipBoard.placeGoods(new Point(7,7), GoodsType.GREEN,3);
+                clearInvocations(shipBoard.getEventListener());
+                shipBoard.removeGoods(new Point(7,7),GoodsType.GREEN,1);
+                verify(shipBoard.getEventListener(), times(1))
+                        .notifyGoodsUpdateEvent(shipBoard, new Point(7,7), GoodsType.GREEN, false);
             }
 
             @Test
@@ -1072,7 +1179,7 @@ class ShipBoardTest {
                     Direction.DOWN, Connector.UNIVERSAL,
                     Direction.RIGHT, Connector.UNIVERSAL
             ));
-            shipBoard = new SecondShipBoard(GameColor.BLUE);
+            shipBoard = new SecondShipBoardForTesting(GameColor.BLUE);
             shipBoard.removeComponent(new Point(7,7));
             for (int i = 5; i <= 9; i++) {
                 shipBoard.offerComponent(component);
@@ -1118,7 +1225,7 @@ class ShipBoardTest {
     class ShipValidityTests {
         @BeforeEach
         void setup() {
-            shipBoard = new SecondShipBoard(GameColor.BLUE);
+            shipBoard = new SecondShipBoardForTesting(GameColor.BLUE);
         }
 
         void placeCannon(Point point) {
@@ -1160,9 +1267,11 @@ class ShipBoardTest {
 
     @Nested
     class GeneralTests {
+        TestShipBoardForTesting shipBoard;
+
         @BeforeEach
         void setup() {
-            shipBoard = new TestShipBoard(GameColor.RED);
+            shipBoard = new TestShipBoardForTesting(GameColor.RED);
         }
 
         @Test

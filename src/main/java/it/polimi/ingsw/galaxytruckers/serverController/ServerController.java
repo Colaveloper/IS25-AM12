@@ -16,7 +16,6 @@ import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 
 import java.util.*;
-import java.util.function.Function;
 
 /**
  * Server controller that manages game lobbies, player connections, and game sessions.
@@ -26,7 +25,7 @@ import java.util.function.Function;
 public class ServerController implements ServerControllerInterface {
 
     private final GameModelInterface model;
-    private EventQueue<ControllerEvent> eventQueue;
+    private final EventQueue<ControllerEvent> eventQueue;
 
     private final Map<UUID, Lobby> idToLobby = new HashMap<>();
     private final Set<Lobby> activeLobbies = new HashSet<>();
@@ -97,8 +96,7 @@ public class ServerController implements ServerControllerInterface {
             if (creator.getLobby().isPresent()) {
                 throw new IllegalStateException("You are already in a lobby!");
             }
-            GameInterface game = model.createGame(level, numPlayers);
-            newLobby = new Lobby(game, creator, level, numPlayers, this::removeLobby);
+            newLobby = new Lobby(model, creator, level, numPlayers, this::removeLobby);
             idToLobby.put(newLobby.getId(), newLobby);
             activeLobbies.add(newLobby);
             eventQueue.notifyEvent(new AddActiveLobbyEvent(DtoConverter.getActiveLobby(newLobby)));
@@ -167,7 +165,14 @@ public class ServerController implements ServerControllerInterface {
     private void removeLobby(Lobby lobby) {
         synchronized (lock) {
             if (idToLobby.remove(lobby.getId()) != null) {
-                lobby.getPlayers().forEach(Player::leaveLobby);
+                SessionManager sessionManager = SessionManager.getInstance();
+                lobby.getPlayers().forEach(p -> {
+                    p.leaveLobby();
+                    if (!sessionManager.isPlayerActive(p)) {
+                        Player.removePlayer(p.getNickname());
+                        System.out.println("The player " + p.getNickname() + " has been removed");
+                    }
+                });
             }
             if (activeLobbies.remove(lobby)) {
                 eventQueue.notifyEvent(new RemoveActiveLobbyEvent(lobby.getId()));

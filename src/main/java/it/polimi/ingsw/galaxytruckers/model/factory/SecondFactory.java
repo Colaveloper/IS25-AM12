@@ -19,13 +19,13 @@ public class SecondFactory implements GameFactory{
     }
 
     @Override
-    public FlightBoard createFlightBoard(int shipsN) {
-        return new SecondFlightBoard(shipsN);
+    public FlightBoard createFlightBoard(int shipsN, GameEventListener gameEventListener) {
+        return new SecondFlightBoard(shipsN, gameEventListener);
     }
 
     @Override
-    public ShipBoard createShipBoard(GameColor color) {
-         return new SecondShipBoard(color);
+    public ShipBoard createShipBoard(GameColor color, GameEventListener eventListener) {
+         return new SecondShipBoard(color,eventListener);
     }
 
     @Override
@@ -39,8 +39,8 @@ public class SecondFactory implements GameFactory{
     }
 
     @Override
-    public SurrenderPolicy createSurrenderPolicy() {
-        return new EnabledSurrenderPolicy();
+    public SurrenderPolicy createSurrenderPolicy(GameEventListener gameEventListener) {
+        return new EnabledSurrenderPolicy(gameEventListener);
     }
 
     @Override

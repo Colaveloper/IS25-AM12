@@ -12,8 +12,8 @@ public class TestFlightBoard extends FlightBoard {
     protected static List<Integer> startingPositions;
 
 
-    public TestFlightBoard(int shipsN) {
-        super();
+    public TestFlightBoard(int shipsN, GameEventListener gameEventListener) {
+        super(gameEventListener);
         loopLength = 18;
         startingPositions = Arrays.asList(4, 2, 1, 0).subList(0, shipsN);
         this.startingPositionsLeft.clear();

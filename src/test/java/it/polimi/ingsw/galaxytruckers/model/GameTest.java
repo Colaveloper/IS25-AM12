@@ -32,7 +32,7 @@ class GameTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game(Level.SECOND);
+        game = new GameStub(Level.SECOND);
         shipBoards = new ArrayList<>();
         shipBoards.add(game.addShipBoard(GameColor.BLUE));
         shipBoards.add(game.addShipBoard(GameColor.GREEN));
@@ -40,22 +40,22 @@ class GameTest {
             s.initializeCabin(new Point(7,7), CrewType.HUMAN);
             game.getFlightBoard().placeShipOnFlightBoard(s);
         }
-        gameEventListener = GameEventListenerStub.getMock();
-        game.setEventListener(gameEventListener);
         gameState = mock(GameState.class);
         game.setCurrentState(gameState);
         clearInvocations(gameState);
+        gameEventListener = game.getEventListener();
     }
 
     @Test
     void gameIsCreatedCorrectly() {
         assertInstanceOf(SecondFactory.class, game.getGameFactory());
-        game = new Game(Level.TEST);
+        game = new GameStub(Level.TEST);
         assertInstanceOf(TestFactory.class, game.getGameFactory());
     }
 
     @Test
     void requestGameSnapshotDoesNothingIfGameOver() {
+        clearInvocations(gameEventListener);
         game.setGameOver(true);
         game.requestSnapshot(shipBoards.getFirst());
         verifyNoInteractions(gameEventListener);
@@ -64,12 +64,12 @@ class GameTest {
     @Test
     void requestGameSnapshotGeneratesEvent() {
         game.requestSnapshot(shipBoards.getFirst());
-        verify(gameEventListener).requestSnapshot(game, shipBoards.getFirst());
+        verify(game.getEventListener()).requestSnapshot(game, shipBoards.getFirst());
     }
 
     @Test
     void gameIsNotCreatedIfLevelIsNotValid() {
-        assertThrows(IllegalArgumentException.class, () -> new Game(Level.FIRST));
+        assertThrows(IllegalArgumentException.class, () -> new GameStub(Level.FIRST));
     }
 
     @Test

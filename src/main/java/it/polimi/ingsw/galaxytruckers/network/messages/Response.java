@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public final class Response implements Message{
     private final UUID uuid;
-    private final Throwable error;
+    private final RuntimeException error;
 
-    public Response(UUID uuid, Throwable error) {
+    public Response(UUID uuid, RuntimeException error) {
         this.uuid = uuid;
         this.error = error;
     }
@@ -24,7 +24,7 @@ public final class Response implements Message{
         return error != null;
     }
 
-    public Throwable getError() {
+    public RuntimeException getError() {
         return error;
     }
 }
