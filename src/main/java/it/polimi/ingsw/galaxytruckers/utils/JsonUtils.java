@@ -9,8 +9,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Utility class for JSON-related operations in the Galaxy Truckers project.
+ * Provides helper methods to convert JSON nodes to model objects.
+ */
 public class JsonUtils {
 
+    /**
+     * Converts a JSON array node representing connectors into a map of directions to connectors.
+     * The order of connectors in the array is assumed to be [UP, LEFT, DOWN, RIGHT].
+     *
+     * @param connectorNode the JSON node containing connector information as an array
+     * @return a map associating each direction with its corresponding connector
+     */
     public static Map<Direction, Connector> nodeToConnector(JsonNode connectorNode) {
         Direction[] directions = {Direction.UP, Direction.LEFT, Direction.DOWN, Direction.RIGHT};
         Map<Direction, Connector> connectors = new HashMap<>();

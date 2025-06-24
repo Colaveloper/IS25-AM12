@@ -20,6 +20,11 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
+/**
+ * Represents a game lobby where players can gather before starting a game.
+ * Manages player connections, game setup, and coordinates game events.
+ * Each lobby has a unique ID, a host player, and supports a specified number of players.
+ */
 public class Lobby implements LobbyInterface {
     private static final long removalDelay = 5;
 
@@ -45,6 +50,16 @@ public class Lobby implements LobbyInterface {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture;
 
+    /**
+     * Creates a new lobby with the specified game, creator, level, and player count.
+     * Initializes the lobby with the creator as the host and sets up event handling.
+     *
+     * @param game the game interface that will manage game state
+     * @param creator the player who created this lobby
+     * @param level the difficulty level of the game
+     * @param numPlayers the maximum number of players allowed in this lobby
+     * @param removeLobby callback function to remove the lobby when it's no longer needed
+     */
     public Lobby(GameInterface game, Player creator, Level level, int numPlayers, Consumer<Lobby> removeLobby) {
         this.game = game;
         this.id = UUID.randomUUID();
@@ -65,28 +80,58 @@ public class Lobby implements LobbyInterface {
         addPlayer(creator);
     }
 
+    /**
+     * Gets the host player of this lobby.
+     *
+     * @return the player who created this lobby
+     */
     public Player getHost() {
         return host;
     }
 
+    /**
+     * Gets the unique identifier for this lobby.
+     *
+     * @return the UUID of this lobby
+     */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * Gets the flight level of the game in this lobby.
+     *
+     * @return the level of the game
+     */
     public Level getLevel() {
         return level;
     }
 
+    /**
+     * Gets the maximum number of players allowed in this lobby.
+     *
+     * @return the maximum number of players
+     */
     public int getNumPlayers() {
         return numPlayers;
     }
 
+    /**
+     * Gets a copy of the list of players currently in the lobby.
+     *
+     * @return a list containing all players in the lobby
+     */
     public List<Player> getPlayers() {
         synchronized (paramLock) {
             return new ArrayList<>(players);
         }
     }
 
+    /**
+     * Gets a copy of the map associating players with their game colors.
+     *
+     * @return a map of players to their assigned colors
+     */
     public Map<Player, GameColor> getPlayerColors() {
         synchronized (paramLock) {
             return new HashMap<>(playerColors);
@@ -99,6 +144,7 @@ public class Lobby implements LobbyInterface {
      * otherwise calls {@link #startGame()}
      *
      * @param player the player to add
+     * @return true if adding this player fills the lobby and starts the game, false otherwise
      */
     public boolean addPlayer(Player player) {
         synchronized (paramLock) {
@@ -127,6 +173,13 @@ public class Lobby implements LobbyInterface {
         }
     }
 
+    /**
+     * Handles a player disconnection from the lobby.
+     * Notifies other players of the disconnection and schedules lobby removal
+     * if all players are disconnected.
+     *
+     * @param player the player who disconnected
+     */
     public void notifyPlayerDisconnection(Player player) {
         synchronized (paramLock) {
             if (disconnectedPlayers.add(player)) {
@@ -139,6 +192,12 @@ public class Lobby implements LobbyInterface {
         }
     }
 
+    /**
+     * Handles a player reconnection to the lobby.
+     * Cancels any scheduled lobby removal and sends the current game state to the reconnected player.
+     *
+     * @param player the player who reconnected
+     */
     public void notifyPlayerReconnection(Player player) {
         synchronized (paramLock) {
             disconnectedPlayers.remove(player);
@@ -158,21 +217,42 @@ public class Lobby implements LobbyInterface {
         }
     }
 
+    /**
+     * Notifies other players that a player has left the lobby.
+     *
+     * @param player the player who left
+     */
     public void notifyPlayerExit(Player player) {
         eventQueue.notifyEvent(new PlayerExitEvent(player.getNickname()));
     }
 
+    /**
+     * Removes this lobby from the server and stops the event handler.
+     * Called when the lobby is no longer needed (e.g., when all players have left).
+     */
     public void remove() {
         this.removeLobby.accept(this);
         this.lobbyEventHandler.stop();
     }
 
+    /**
+     * Verifies that the lobby is in the expected state.
+     * Throws an exception if the current state doesn't match the expected one.
+     *
+     * @param lobbyState the expected state of the lobby
+     * @throws IllegalStateException if the lobby is not in the expected state
+     */
     private void checkLobbyState(LobbyState lobbyState) {
         if (state != lobbyState) {
             throw new IllegalStateException("The lobby is not in " + lobbyState.toString());
         }
     }
 
+    /**
+     * Sets the current state of the lobby.
+     *
+     * @param state the new state for the lobby
+     */
     public void setState(LobbyState state) {
         this.state = state;
     }
@@ -191,6 +271,12 @@ public class Lobby implements LobbyInterface {
         setState(LobbyState.INGAME);
     }
 
+    /**
+     * Allows a player to skip their turn in the game.
+     * Only works when the lobby is in the {@link LobbyState#INGAME} state.
+     *
+     * @param player the player wishing to skip their turn
+     */
     public void skip(Player player) {
         if (state == LobbyState.INGAME) {
             game.skip(player.getShipBoard().orElseThrow());
