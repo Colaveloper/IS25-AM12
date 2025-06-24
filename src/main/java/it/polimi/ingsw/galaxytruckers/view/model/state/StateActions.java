@@ -1,5 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.view.model.state;
 
+/**
+ * Enumeration of all possible actions that players can take during different game states
+ * in the Galaxy Truckers game. Each action represents a specific interaction with the game
+ * that is available in one or more game states.
+ */
 public enum StateActions {
     GRAB_PLACED_COMPONENT,
     ACTIVATE_COMPONENT,

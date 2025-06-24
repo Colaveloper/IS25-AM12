@@ -32,18 +32,15 @@ public class GuiProjectilesScreen extends GuiActivationScreen {
     }
 
     @Override
-    protected VBox getShipBoardVBox(ShipBoard shipBoard) {
-        VBox shipBoardVBox = new VBox(5);
-        shipBoardVBox.setAlignment(Pos.CENTER);
-
-        PurpleVBox projectileVBox = getProjectileVBox();
-
-        shipBoardVBox.getChildren().addAll(guiShipBoards.get(shipBoard), projectileVBox);
-        return shipBoardVBox;
+    protected VBox getFreeUseVBox() {
+        VBox superVBox = super.getFreeUseVBox();
+        superVBox.getChildren().add(getProjectileVBox());
+        return superVBox;
     }
 
     private PurpleVBox getProjectileVBox() {
         PurpleVBox projectileBox = new PurpleVBox(5);
+        projectileBox.setAlignment(Pos.CENTER);
         Image projectileImage = new Image(switch (projectile.type()) {
             case BIGMETEOR -> bigMeteorPath;
             case SMALLMETEOR -> smallMeteorPath;

@@ -87,7 +87,7 @@ public class GuiShipBoard extends PurpleVBox {
                     StackPane areaPane;
                     if (componentMap.containsKey(currentPoint)) {
                         areaPane = GuiComponent.of(componentMap.get(currentPoint));
-                        areaPane.setMaxSize(50, 50);
+                        areaPane.setMaxSize(60, 60);
                         areaPane.setOnMouseClicked(_->controller.handlePointPress(currentPoint));
                     } else {
                         areaPane = getEmptyAreaPane(currentPoint);
@@ -114,7 +114,7 @@ public class GuiShipBoard extends PurpleVBox {
             toReplace.ifPresent(node -> {
                 shipGrid.getChildren().remove(node);
                 GuiComponent guiComponent = new GuiComponent(component);
-                guiComponent.setMaxSize(50, 50);
+                guiComponent.setMaxSize(60, 60);
                 guiComponent.setOnMouseClicked(_ -> controller.handlePointPress(point));
                 shipGrid.add(guiComponent, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));
             });
@@ -146,13 +146,13 @@ public class GuiShipBoard extends PurpleVBox {
         StackPane areaPane = new StackPane();
 
         ImageView freeAreaView = new ImageView(emptyAreaImage);
-        freeAreaView.setFitWidth(50);
-        freeAreaView.setFitHeight(50);
+        freeAreaView.setFitWidth(60);
+        freeAreaView.setFitHeight(60);
 //        freeAreaView.fitWidthProperty().bind(areaPane.widthProperty());
 //        freeAreaView.fitHeightProperty().bind(areaPane.heightProperty());
 
         areaPane.getChildren().add(freeAreaView);
-        areaPane.setMaxSize(50, 50);
+        areaPane.setMaxSize(60, 60);
         areaPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         areaPane.setOnMouseClicked(_-> controller.handlePointPress(position));
         return areaPane;

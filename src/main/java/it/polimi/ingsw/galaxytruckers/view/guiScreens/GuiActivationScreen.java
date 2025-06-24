@@ -83,6 +83,7 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
     public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
         batteriesToSpend.add(-1);
         guiShipBoards.get(myShipBoard).highlightPoints(Set.of(point), Color.BLUE);
+        guiStatBox.notifyChange();
     }
 
     @Override
@@ -90,5 +91,6 @@ public abstract class GuiActivationScreen extends GuiAdventureScreen {
         batteriesToSpend.add(1);
         guiShipBoards.get(myShipBoard).notifyComponentChange(point);
         guiShipBoards.get(myShipBoard).highlightPoints(Set.of(point), Color.GREEN);
+        guiStatBox.notifyChange();
     }
 }

@@ -9,7 +9,6 @@ public class GuiAdventureCard extends ImageView {
 
     public GuiAdventureCard(int id) {
         super(GuiAdventureCardRegistry.getInstance().getImage(id));
-        setFitWidth(60);
         setFitHeight(90);
         setPreserveRatio(true);
     }

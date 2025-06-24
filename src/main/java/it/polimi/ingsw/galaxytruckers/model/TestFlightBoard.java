@@ -5,7 +5,7 @@ import com.google.common.annotations.VisibleForTesting;
 import java.util.*;
 import java.util.List;
 
-public class TestFlightBoard extends FlightBoard{
+public class TestFlightBoard extends FlightBoard {
     @VisibleForTesting
     protected static int loopLength;
     @VisibleForTesting

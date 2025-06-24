@@ -24,7 +24,7 @@ public class GuiComponentBank extends HBox {
         this.controller = controller;
 
         setMaxWidth(Double.MAX_VALUE);
-        setSpacing(20);
+        setSpacing(5);
         setPadding(new Insets(5));
         setAlignment(Pos.TOP_LEFT);
         HBox.setHgrow(this, Priority.ALWAYS);
@@ -56,8 +56,8 @@ public class GuiComponentBank extends HBox {
 
         // flowpane for rejected components
         rejectedContainer = new FlowPane();
-        rejectedContainer.setHgap(10);
-        rejectedContainer.setVgap(10);
+        rejectedContainer.setHgap(0);
+        rejectedContainer.setVgap(0);
         rejectedContainer.setPrefWidth(Control.USE_COMPUTED_SIZE);
         rejectedContainer.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(rejectedContainer, Priority.ALWAYS);
@@ -72,7 +72,7 @@ public class GuiComponentBank extends HBox {
         );
 
         VBox.setVgrow(rejectedContainer, Priority.ALWAYS);
-        rejectedContainer.setPrefWrapLength(1200);
+        rejectedContainer.setPrefWrapLength(1500);
 
         componentBank.getUncoveredComponents().forEach(component -> {
             GuiComponent newComponent = new GuiComponent(component);

@@ -17,7 +17,6 @@ import java.util.Optional;
 
 public class GuiNewCardScreen extends GuiAdventureScreen {
     Button actionButton = new Button("Draw Card");
-    VBox freeUseVBox = new VBox(10);
 
     public GuiNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState drawCardState) {
         super(model, controller, drawCardState);
@@ -30,13 +29,6 @@ public class GuiNewCardScreen extends GuiAdventureScreen {
         } else {
             guiLog.log("Wait for the leader to draw and start the next adventure");
         }
-    }
-
-    @Override
-    protected VBox getFreeUseVBox() {
-        Optional<GuiAdventureCard> guiAdventureCard = guiAdventureCard();
-        guiAdventureCard.ifPresent(freeUseVBox.getChildren()::add);
-        return freeUseVBox;
     }
 
     @Override
@@ -61,8 +53,11 @@ public class GuiNewCardScreen extends GuiAdventureScreen {
     @Override
     public void notifyDrawCard(AdventureCard adventureCard) {
         Platform.runLater(()->{
-            Optional<GuiAdventureCard> guiAdventureCard = guiAdventureCard();
-            guiAdventureCard.ifPresent(freeUseVBox.getChildren()::add);
+            guiAdventureCard().ifPresent((guiAdventureCard)-> {
+                guiAdventureCard.setFitHeight(400);
+                cardBox.getChildren().clear();
+                cardBox.getChildren().add(guiAdventureCard);
+            });
             actionButton.setText("Start Adventure");
             actionButton.setOnAction(e -> getGuiController().goNext());
         });

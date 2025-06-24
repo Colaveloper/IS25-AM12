@@ -23,13 +23,13 @@ public class GuiComponent extends StackPane {
         this.id = component.getId();
 
         componentView = new ImageView(GuiComponentRegistry.getInstance().getImage(component.getId()));
-        componentView.setFitWidth(50);
-        componentView.setFitHeight(50);
+        componentView.setFitWidth(60);
+        componentView.setFitHeight(60);
         componentView.setRotate(component.getOrientation().getAngle());
 
         contentBox = new HBox(2);
 
-        setMaxSize(50, 50);
+        setMaxSize(60, 60);
         setAlignment(Pos.CENTER);
         getChildren().addAll(componentView, contentBox);
     }

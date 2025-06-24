@@ -48,7 +48,7 @@ public class GuiTestShipBuildingScreen extends GuiShipBuildingScreen {
     protected GuiController getGuiController() {
         return new GuiController() {
             @Override
-            public void placeShipOnFlightboard(int position) {
+            public void placeShipOnFlightBoard(int position) {
                 if (state.getAvailableActions().contains(StateActions.PLACE_SHIP_FOR_TEST)) {
                     controller.placeShipOnFlightBoard();
                 }

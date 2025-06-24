@@ -30,17 +30,38 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * JavaFX GUI implementation of the View for the Galaxy Truckers game.
+ * This class manages the graphical user interface, handling screen transitions
+ * and user interaction through a JavaFX application.
+ */
 public class GuiView extends View<GuiScreen> {
 
+    /** The current screen being displayed to the user */
     private GuiScreen currentScreen;
+
+    /** The main content pane where screen nodes are displayed */
     private StackPane contentPane;
 
+    /**
+     * Constructs a new GUI view with the specified controller and model.
+     * Initializes the view with the REGISTER meta state.
+     *
+     * @param controller The client controller for handling user commands
+     * @param model The client model containing game data
+     */
     public GuiView(ClientController controller, ClientModel model) {
         super(model, controller, new GuiScreenFactory());
         this.currentScreen = screenFactory.createScreen(MetaState.REGISTER, model, controller);
     }
 
-    // called by JFXApp thread, no need of runLater()
+    /**
+     * Sets up the main stage for the JavaFX application.
+     * This method creates the scene hierarchy, adds the background,
+     * configures the main content pane, and displays the initial screen.
+     *
+     * @param stage The JavaFX stage to set up
+     */
     public void setStage(Stage stage) {
         this.contentPane = new StackPane();
         contentPane.setPadding(new Insets(10));
@@ -60,7 +81,6 @@ public class GuiView extends View<GuiScreen> {
         stage.show();
     }
 
-    // TODO: move overrides upwards in view
     //region State-Notify methods
     @Override
     public void notifyMetaState(MetaState metaState) {
@@ -257,11 +277,25 @@ public class GuiView extends View<GuiScreen> {
         });
     }
 
+    /**
+     * Switches the current screen to a new screen.
+     * Updates the currentScreen reference and replaces the node
+     * in the content pane with the new screen's node.
+     *
+     * @param newScreen The new screen to display
+     */
     private void switchToScreen(GuiScreen newScreen) {
         this.currentScreen = newScreen;
         contentPane.getChildren().setAll(currentScreen.getNode());
     }
 
+    /**
+     * Creates a root pane with a background image.
+     * The background image is loaded from resources and sized to fill the pane.
+     * If the image loading fails, a black background is used as a fallback.
+     *
+     * @return A StackPane with the background image set
+     */
     private StackPane createRootWithBackground() {
         StackPane pane = new StackPane();
 

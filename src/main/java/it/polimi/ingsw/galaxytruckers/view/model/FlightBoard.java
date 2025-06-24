@@ -4,17 +4,39 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.*;
 
+/**
+ * Represents the flight board in the Galaxy Truckers game.
+ * The flight board is a track on which player ships advance during the flight phase of the game.
+ * It maintains the positions of all ships on the board and defines the length of the track.
+ */
 public class FlightBoard {
+    /** Maps each ship to its current position on the flight board */
     private final Map<ShipBoard, Integer> shipToPlace;
+
+    /** The total length of the flight board track */
     private final int loopLength;
+
+    /** List of valid starting positions for ships on the flight board */
     private final List<Integer> startingPositions;
 
+    /**
+     * Constructs a new flight board with specified starting positions and length.
+     *
+     * @param startingPositions List of valid starting positions for ships
+     * @param loopLength The total length of the flight board track
+     */
     public FlightBoard(List<Integer> startingPositions, int loopLength) {
         this.shipToPlace = new HashMap<>();
         this.startingPositions = startingPositions;
         this.loopLength = loopLength;
     }
 
+    /**
+     * Sets the positions of all ships on the flight board.
+     * This method replaces all current ship positions with the provided mapping.
+     *
+     * @param shipToPlace A map containing ships and their positions
+     */
     public void setShipToPlace(Map<ShipBoard, Integer> shipToPlace) {
         this.shipToPlace.clear();
         this.shipToPlace.putAll(shipToPlace);
@@ -60,5 +82,3 @@ public class FlightBoard {
         return startingPositions;
     }
 }
-
-

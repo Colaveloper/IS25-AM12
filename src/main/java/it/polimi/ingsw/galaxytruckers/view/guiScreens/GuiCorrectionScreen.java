@@ -47,7 +47,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
         if (shipBroken) {
             message = "Your ship is broken. Choose a piece to keep by clicking on any component in that piece.";
         } else if (!shipValid) {
-            message = "Your ship has invalid component positioning. Guick on a component to remove it.";
+            message = "Your ship has invalid component positioning. Click on a component to remove it.";
         } else {
             message = "Your ship is valid. Wait for other players to correct their ships.";
         }
@@ -129,6 +129,8 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             String message = "Your ship is valid. Wait for other players to correct their ships.";
             guiLog.log(message);
         }
+
+        guiStatBox.notifyChange();
     }
 
     @Override
@@ -156,6 +158,16 @@ public class GuiCorrectionScreen extends GuiGameScreen {
     }
 
     @Override
+    public void notifyRemoveComponent(ShipBoard shipBoard, Point removedPoint) {
+        guiShipBoards.get(shipBoard).notifyRemoveComponent(removedPoint);
+        if (model.getMyShip().equals(shipBoard)) {
+            selectedPoint = null;
+            selectedPieceIndex = null;
+            clearSelection();
+        }
+    }
+
+    @Override
     protected VBox getFreeUseVBox() {
         return new VBox();
     }
@@ -174,6 +186,7 @@ public class GuiCorrectionScreen extends GuiGameScreen {
             @Override
             public void handlePointPress(Point point) {
                 if (state.getAvailableActions().contains(StateActions.REMOVE_COMPONENT) && !shipValid) {
+                    guiShipBoards.get(model.getMyShip()).clearHighlights();
                     selectedPoint = point;
                     guiShipBoards.get(model.getMyShip()).highlightPoints(
                             Collections.singleton(point), javafx.scene.paint.Color.YELLOW);
@@ -194,4 +207,3 @@ public class GuiCorrectionScreen extends GuiGameScreen {
         };
     }
 }
-
