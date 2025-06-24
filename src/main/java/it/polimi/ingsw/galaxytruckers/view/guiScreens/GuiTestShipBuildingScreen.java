@@ -19,8 +19,25 @@ import javafx.geometry.Insets;
 import java.awt.*;
 import java.util.Map;
 
+/**
+ * GUI screen for the test ship building phase of the game.
+ * <p>
+ * This screen manages the UI and logic for ship building in the test flight, allowing players to
+ * interact with their ship board and hand. It extends GuiShipBuildingScreen and customizes the
+ * layout for the test phase, providing a simplified interface for testing ship construction.
+ * </p>
+ *
+ * @author (your name or team)
+ */
 public class GuiTestShipBuildingScreen extends GuiShipBuildingScreen {
 
+    /**
+     * Constructs a new GuiTestShipBuildingScreen.
+     *
+     * @param model the client model
+     * @param controller the controller to communicate with the server
+     * @param state the test ship building state
+     */
     public GuiTestShipBuildingScreen(ClientModel model, ControllerToServer controller, TestShipBuildingState state) {
         super(model, controller, state);
     }

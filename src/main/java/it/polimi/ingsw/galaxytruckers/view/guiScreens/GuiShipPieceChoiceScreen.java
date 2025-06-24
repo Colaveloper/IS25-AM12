@@ -18,10 +18,27 @@ import java.awt.Point;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * GUI screen for handling the selection and removal of disconnected ship pieces.
+ * <p>
+ * This screen is shown when a player must choose a disconnected piece of their ship to keep.
+ * It highlights all available ship pieces, allows the player to select one, and provides UI controls
+ * for confirming. The screen updates the log and UI based on the player's turn.
+ * </p>
+ *
+ * @author (your name or team)
+ */
 public class GuiShipPieceChoiceScreen extends GuiAdventureScreen {
     private final IntegerProperty selectedPieceIndex = new SimpleIntegerProperty(-1);
     private final List<Set<Point>> shipPieces;
 
+    /**
+     * Constructs a new GuiShipPieceChoiceScreen.
+     *
+     * @param model the client model
+     * @param controller the controller to communicate with the server
+     * @param gameState the current adventure state (should be ChooseShipPieceState)
+     */
     public GuiShipPieceChoiceScreen(ClientModel model, ControllerToServer controller, AdventureState gameState) {
         super(model, controller, gameState);
         ChooseShipPieceState chooseState = (ChooseShipPieceState) gameState;

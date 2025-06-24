@@ -20,6 +20,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
+/**
+ * Screen for the ship correction phase of the game.
+ * This screen is displayed when players need to fix issues with their ship construction,
+ * either due to invalid component placement or disconnected ship pieces.
+ * Players can select which ship piece to keep or which components to remove to fix their ship.
+ */
 public class GuiCorrectionScreen extends GuiGameScreen {
     private final List<Set<Point>> shipPieces;
     private boolean shipValid;
@@ -27,6 +33,16 @@ public class GuiCorrectionScreen extends GuiGameScreen {
     private Point selectedPoint;
     private Integer selectedPieceIndex;
 
+    /**
+     * Constructs a GuiCorrectionScreen with the specified model, controller, and correction state.
+     * Initializes the screen based on the current state of the player's ship,
+     * displaying appropriate messages and controls based on whether the ship is valid,
+     * broken (disconnected), or has invalid component placement.
+     *
+     * @param model The client model containing all game data
+     * @param controller The controller for sending commands to the server
+     * @param state The current ship correction state
+     */
     public GuiCorrectionScreen(ClientModel model, ControllerToServer controller, ShipCorrectionState state) {
         super(model, controller, state);
         this.shipPieces = new ArrayList<>(state.getShipPieces().getOrDefault(model.getMyShip(), Collections.emptyList()));
@@ -54,6 +70,13 @@ public class GuiCorrectionScreen extends GuiGameScreen {
         guiLog.log(message);
     }
 
+    /**
+     * Displays a confirmation button with the specified message.
+     * This method is called when the player needs to confirm a selection
+     * or action during the ship correction process.
+     *
+     * @param message The message to display with the confirmation button
+     */
     private void showConfirmationButton(String message) {
         Platform.runLater(() -> {
             guiLog.getChildren().clear();
@@ -180,6 +203,17 @@ public class GuiCorrectionScreen extends GuiGameScreen {
         return getShipBoardVBox;
     }
 
+    /**
+     * Provides a custom GuiController implementation for the ship correction phase.
+     * This controller handles:
+     * 1. Component removal selection when the ship has invalid component placement
+     * 2. Ship piece selection when the ship has disconnected pieces
+     *
+     * When a point is clicked, the controller highlights the selection and displays
+     * a confirmation button to confirm the action.
+     *
+     * @return A GuiController implementation for handling correction phase interactions
+     */
     @Override
     protected GuiController getGuiController() {
         return new GuiController() {

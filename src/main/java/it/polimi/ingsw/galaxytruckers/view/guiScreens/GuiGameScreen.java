@@ -15,6 +15,17 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Abstract base class for all game screens in the GUI version of Galaxy Truckers.
+ * This class provides the common layout and functionality for the main gameplay screens,
+ * organizing the visual elements such as ship boards, flight boards, statistics, and logs.
+ *
+ * The screen is divided into several sections:
+ * - Top: Flight board showing all players' positions
+ * - Left: Miniature views of other players' ships
+ * - Center: The current player's ship and action buttons
+ * - Right: Game information panel with statistics and log
+ */
 public abstract class GuiGameScreen extends GuiScreen {
     protected final Map<ShipBoard, GuiShipBoard> guiShipBoards;
     protected final GuiLog guiLog;
@@ -22,6 +33,19 @@ public abstract class GuiGameScreen extends GuiScreen {
     protected final PurpleHBox guiButtonBox;
     protected final GuiStatBox guiStatBox;
 
+    /**
+     * Constructs a GuiGameScreen with the specified model, controller, and game state.
+     * Initializes all the visual components needed for gameplay, including:
+     * - Ship boards for all players
+     * - Flight board
+     * - Game log
+     * - Button container
+     * - Statistics display
+     *
+     * @param model The client model containing all game data
+     * @param controller The controller for sending commands to the server
+     * @param state The current game state
+     */
     public GuiGameScreen(ClientModel model, ControllerToServer controller, GameState state) {
         super(model, controller, state);
 
@@ -39,6 +63,13 @@ public abstract class GuiGameScreen extends GuiScreen {
         guiStatBox = new GuiStatBox(myShipBoard);
     }
 
+    /**
+     * Creates and returns the complete game screen layout.
+     * Arranges all UI components in a vertical layout with the flight board at the top
+     * and the main game area (player ships, controls, and info panel) below.
+     *
+     * @return A Pane containing the complete game screen UI
+     */
     public final Pane getNode() {
         VBox layout = new VBox(10);
 
@@ -52,6 +83,12 @@ public abstract class GuiGameScreen extends GuiScreen {
         return layout;
     }
 
+    /**
+     * Creates the main horizontal layout containing other players' ships,
+     * the current player's ship, and the side information panel.
+     *
+     * @return An HBox containing the three main vertical sections of the game UI
+     */
     private HBox getBottomBox() {
         HBox bottomBox = new HBox(10);
 
@@ -75,6 +112,12 @@ public abstract class GuiGameScreen extends GuiScreen {
         return bottomBox;
     }
 
+    /**
+     * Creates a vertical panel containing miniature views of all other players' ships.
+     * These are scaled down to save space while still providing visibility of other players' progress.
+     *
+     * @return A VBox containing scaled-down views of other players' ship boards
+     */
     private PurpleVBox getOtherShipsVBox() {
         PurpleVBox otherShipsVBox = new PurpleVBox(10);
 
@@ -91,6 +134,12 @@ public abstract class GuiGameScreen extends GuiScreen {
         return otherShipsVBox;
     }
 
+    /**
+     * Creates the central vertical panel containing the current player's ship board
+     * and the action buttons below it.
+     *
+     * @return A VBox containing the player's ship board and action buttons
+     */
     private VBox getCentralVBox() {
         VBox centralVBox = new PurpleVBox(10);
 
@@ -104,6 +153,12 @@ public abstract class GuiGameScreen extends GuiScreen {
         return centralVBox;
     }
 
+    /**
+     * Creates the side information panel containing game-specific controls,
+     * player statistics, and the game event log.
+     *
+     * @return A VBox containing game controls, statistics, and the log
+     */
     private VBox getSideVBox() {
         VBox sideVBox = new PurpleVBox(10);
         sideVBox.setAlignment(Pos.CENTER);
@@ -121,17 +176,28 @@ public abstract class GuiGameScreen extends GuiScreen {
     }
 
     /**
-     * @return a VBox with any of the following: forecast, hourglass, rejected components, current card
+     * Creates a vertical box containing game-specific UI elements that vary by game phase.
+     * Subclasses implement this to provide appropriate controls for different game phases.
+     *
+     * @return A VBox with phase-specific UI elements.
      */
     protected abstract VBox getFreeUseVBox();
 
     /**
+     * Creates a vertical box containing a ship board and associated UI elements.
+     * The specific elements included depend on the ship board and game phase.
      *
-     * @param shipBoard the ship board to be displayed
-     * @return a VBox with the GuiShipBoard and any of the following: GuiHand, GuiStash
+     * @param shipBoard The ship board to be displayed
+     * @return A VBox with the ship board and associated elements like hand or stash
      */
     protected abstract VBox getShipBoardVBox(ShipBoard shipBoard);
 
+    /**
+     * Provides the appropriate GuiController for handling user interactions.
+     * Different game phases require different controllers to handle phase-specific actions.
+     *
+     * @return A GuiController implementation appropriate for the current game phase
+     */
     protected abstract GuiController getGuiController();
 
     @Override

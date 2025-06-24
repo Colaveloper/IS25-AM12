@@ -16,12 +16,29 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * GUI screen displayed at the end of the game.
+ * This screen shows the final scores for all players in a formatted table
+ * and provides a button to start a new game.
+ */
 public class GuiEndGameScreen extends GuiScreen {
 
+    /**
+     * Constructs a new end game screen.
+     *
+     * @param model      The client model containing game state and final scores
+     * @param controller The controller for communicating with the server
+     */
     public GuiEndGameScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
     }
 
+    /**
+     * {@inheritDoc}
+     * Creates and returns the game over screen with the final scores table and a new game button.
+     *
+     * @return A styled Pane containing the end game user interface
+     */
     @Override
     public Pane getNode() {
         Label title = new Label("GAME OVER");
@@ -80,6 +97,13 @@ public class GuiEndGameScreen extends GuiScreen {
         return layout;
     }
 
+    /**
+     * Creates a styled row for the score table.
+     *
+     * @param playerName The name of the player
+     * @param score      The final score of the player
+     * @return An HBox containing the player name and score with appropriate styling
+     */
     private HBox createScoreRow(String playerName, Integer score) {
         HBox rowContent = new HBox();
         rowContent.setAlignment(Pos.CENTER_LEFT);
