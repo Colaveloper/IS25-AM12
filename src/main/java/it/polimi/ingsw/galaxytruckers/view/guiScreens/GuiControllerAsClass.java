@@ -17,9 +17,9 @@
 //        this.availableActions = availableActions;
 //    }
 //
-//    public void placeShipOnFlightboard(int position) {
+//    public void placeShipOnFlightBoard(int position) {
 //        if (availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD)) {
-//            controller.placeShipOnFlightboard(position);
+//            controller.placeShipOnFlightBoard(position);
 //        }
 //    };
 //

@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.*;
 import java.util.stream.IntStream;
 
+/**
+ * Abstract base class representing a player's ship board.
+ */
 public abstract class ShipBoard {
 
     protected final Map<Point, Component> componentMap;
@@ -61,6 +64,12 @@ public abstract class ShipBoard {
         weldLastComponent();
     }
 
+    /**
+     * Gets the valid placement area for components on this ship board.
+     * Each ship type defines its own specific valid area for component placement.
+     *
+     * @return Set of Points representing valid component placement locations
+     */
     public abstract Set<Point> getShipArea();
 
     //region Setup methods
@@ -92,6 +101,9 @@ public abstract class ShipBoard {
     //CliComponentBank interaction methods
 
     protected void resetLastComponent() {
+        if(lastPosition != null && lastComponent != null) {
+            componentMap.remove(lastPosition);
+        }
         this.lastComponent = null;
         this.lastPosition = null;
     }
@@ -100,6 +112,13 @@ public abstract class ShipBoard {
 
     //CliComponentBank interaction methods
 
+    /**
+     * Handles a new component being offered for placement.
+     * Finalizes any previous component placement and prepares for placing
+     * the new component.
+     *
+     * @param component The component being offered for placement
+     */
     public void offerComponent(Component component) {
         weldLastComponent();
         lastComponent = component;
@@ -107,11 +126,21 @@ public abstract class ShipBoard {
         lastPosition = null;
     }
 
+    /**
+     * Removes the current component from its placed position,
+     * making it available for repositioning.
+     */
     public void grabPlacedComponent() {
         componentMap.remove(lastPosition);
         lastPosition = null;
     }
 
+    /**
+     * Rejects and returns the currently held component.
+     * Removes it from any current position and clears component trackers.
+     *
+     * @return The rejected component
+     */
     public Component rejectComponent() {
         if (lastPosition != null) {
             componentMap.remove(lastPosition);
@@ -191,6 +220,13 @@ public abstract class ShipBoard {
         }
     }
 
+    /**
+     * Removes a component at the specified position.
+     * Updates all relevant ship statistics and specialized collections
+     * to reflect the component's removal.
+     *
+     * @param position The position of the component to remove
+     */
     public void removeComponent(Point position) {
         Component removedComponent = componentMap.remove(position);
         switch (removedComponent) {
@@ -230,6 +266,15 @@ public abstract class ShipBoard {
         }
     }
 
+    /**
+     * Removes sections of the ship while keeping a specified piece.
+     * Used during damage resolution when the ship becomes disconnected
+     * and a piece must be chosen to keep.
+     *
+     * @param shipPieces List of connected component groups
+     * @param pieceIndex Index of the piece to keep
+     * @return List of points where components were removed
+     */
     public List<Point> removeShipPiece(List<Set<Point>> shipPieces, int pieceIndex) {
         List<Point> pointsToRemove = IntStream.range(0, shipPieces.size())
                 .filter(i -> i != pieceIndex)
@@ -240,10 +285,22 @@ public abstract class ShipBoard {
         return pointsToRemove;
     }
 
+    /**
+     * Places goods in a cargo hold at the specified position.
+     *
+     * @param position Location of the cargo hold
+     * @param goods Type of goods to add
+     */
     public void placeGoods(Point position, GoodsType goods) {
         cargoHolds.get(position).addGoods(goods);
     }
 
+    /**
+     * Removes goods from a cargo hold at the specified position.
+     *
+     * @param position Location of the cargo hold
+     * @param goods Type of goods to remove
+     */
     public void removeGoods(Point position, GoodsType goods) {
         cargoHolds.get(position).removeGoods(goods);
     }
@@ -270,6 +327,13 @@ public abstract class ShipBoard {
 
     // Activatables methods
 
+    /**
+     * Activates a component at the specified position.
+     * Updates ship statistics based on the activated component's effects.
+     * Only applies to components that implement the Activatable interface.
+     *
+     * @param position Location of the component to activate
+     */
     public void activateComponent(Point position) {
         Activatable component = activatables.get(position);
         component.setActive(true);
@@ -280,6 +344,13 @@ public abstract class ShipBoard {
         }
     }
 
+    /**
+     * Deactivates a component at the specified position.
+     * Reverts any statistical changes applied when the
+     * component was activated.
+     *
+     * @param position Location of the component to deactivate
+     */
     public void deactivateComponent(Point position) {
         Activatable component = activatables.get(position);
         switch (component) {
@@ -290,6 +361,10 @@ public abstract class ShipBoard {
         component.setActive(false);
     }
 
+    /**
+     * Deactivates all activatable components on the ship.
+     * Updates all relevant ship statistics to reflect the deactivation.
+     */
     public void deactivateAll() {
         for (Point p : activatables.keySet()) {
             if (activatables.get(p).isActive()) deactivateComponent(p);

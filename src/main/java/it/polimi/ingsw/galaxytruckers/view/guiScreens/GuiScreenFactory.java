@@ -1,4 +1,4 @@
-package it.polimi.ingsw.galaxytruckers.view.guiScreens;
-
-public class GuiScreenFactory {
-}
+//package it.polimi.ingsw.galaxytruckers.view.guiScreens;
+//
+//public class GuiScreenFactory {
+//}

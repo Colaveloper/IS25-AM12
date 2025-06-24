@@ -10,38 +10,25 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.util.Optional;
 
 public class GuiNewCardScreen extends GuiAdventureScreen {
-    VBox layout = new VBox(20);
     Button actionButton = new Button("Draw Card");
 
     public GuiNewCardScreen(ClientModel model, ControllerToServer controller, DrawCardState drawCardState) {
         super(model, controller, drawCardState);
-    }
-
-    @Override
-    public Pane getNode() {
-        layout.setAlignment(Pos.CENTER);
-        layout.getChildren().add(guiContextBox);
 
         if(isMyTurn()) {
             actionButton.setOnAction(e -> getGuiController().drawCard());
-            layout.getChildren().add(actionButton);
-            guiContextBox.getChildren().setAll(new Label("Draw and start a new adventure!"));
+            guiButtonBox.getChildren().clear();
+            guiButtonBox.getChildren().add(actionButton);
+            guiLog.log("Draw and start a new adventure!");
         } else {
-            actionButton.setDisable(true);
-            guiContextBox.getChildren().setAll(new Label("Wait for the leader to draw"));
+            guiLog.log("Wait for the leader to draw and start the next adventure");
         }
-
-        Optional<GuiAdventureCard> guiAdventureCard = guiAdventureCard();
-        guiAdventureCard.ifPresent(layout.getChildren()::add);
-
-        return layout;
     }
 
     @Override
@@ -66,8 +53,11 @@ public class GuiNewCardScreen extends GuiAdventureScreen {
     @Override
     public void notifyDrawCard(AdventureCard adventureCard) {
         Platform.runLater(()->{
-            Optional<GuiAdventureCard> guiAdventureCard = guiAdventureCard();
-            guiAdventureCard.ifPresent(layout.getChildren()::add);
+            guiAdventureCard().ifPresent((guiAdventureCard)-> {
+                guiAdventureCard.setFitHeight(400);
+                cardBox.getChildren().clear();
+                cardBox.getChildren().add(guiAdventureCard);
+            });
             actionButton.setText("Start Adventure");
             actionButton.setOnAction(e -> getGuiController().goNext());
         });

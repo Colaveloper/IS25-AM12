@@ -18,6 +18,11 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import java.util.*;
 import java.util.function.Function;
 
+/**
+ * Server controller that manages game lobbies, player connections, and game sessions.
+ * Handles player registration, lobby creation, player joining/leaving, and disconnections.
+ * Acts as an intermediary between the client handlers and the game model.
+ */
 public class ServerController implements ServerControllerInterface {
 
     private final GameModelInterface model;
@@ -28,6 +33,12 @@ public class ServerController implements ServerControllerInterface {
 
     private final Object lock = new Object();
 
+    /**
+     * Creates a new server controller with the specified game model.
+     * Initializes the event queue and starts the controller event handler.
+     *
+     * @param model The game model interface to be used by this controller
+     */
     public ServerController(GameModelInterface model) {
         this.model = model;
         this.eventQueue = new EventQueue<>();
@@ -63,9 +74,17 @@ public class ServerController implements ServerControllerInterface {
         }
     }
 
+    /**
+     * Sends a list of active lobbies to the specified player.
+     * Used when a player first connects or reconnects to the server.
+     *
+     * @param player The player to send the active lobbies list to
+     * @param reconnect Flag indicating if this is a reconnection attempt
+     */
     private void requestActiveLobbies(Player player, boolean reconnect) {
         synchronized (idToLobby) {
             List<ActiveLobbyDTO> activeLobbyDTOS = idToLobby.values().stream()
+                    .filter(activeLobbies::contains)
                     .map(DtoConverter::getActiveLobby).toList();
             this.eventQueue.notifyEvent(new SetActiveLobbiesEvent(player.getNickname(), activeLobbyDTOS, reconnect));
         }
@@ -137,6 +156,14 @@ public class ServerController implements ServerControllerInterface {
         }
     }
 
+    /**
+     * Removes a lobby from the server controller.
+     * Cleans up by removing the lobby from all collections and notifies
+     * all related players that they are no longer in the lobby.
+     * Triggers a RemoveActiveLobbyEvent to update connected clients.
+     *
+     * @param lobby The lobby to be removed
+     */
     private void removeLobby(Lobby lobby) {
         synchronized (lock) {
             if (idToLobby.remove(lobby.getId()) != null) {
@@ -148,6 +175,12 @@ public class ServerController implements ServerControllerInterface {
         }
     }
 
+    /**
+     * Returns a copy of the map containing all lobbies indexed by their UUID.
+     * This method is primarily used for testing purposes.
+     *
+     * @return A copy of the map associating lobby IDs to lobby instances
+     */
     @VisibleForTesting
     public Map<UUID, Lobby> getIdToLobby() {
         Map<UUID, Lobby> res;

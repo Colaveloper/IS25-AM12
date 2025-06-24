@@ -1,10 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Control;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
 /**
@@ -12,12 +9,12 @@ import javafx.scene.layout.VBox;
  * This container extends VBox and applies the same styling used for the
  * rejected components container in GuiComponentBank.
  */
-public class PurpleContainer extends VBox {
+public class PurpleVBox extends VBox {
 
     /**
      * Creates a new purple container with default settings.
      */
-    public PurpleContainer() {
+    public PurpleVBox() {
         setPurpleStyle();
     }
 
@@ -26,8 +23,13 @@ public class PurpleContainer extends VBox {
      *
      * @param spacing the spacing between elements
      */
-    public PurpleContainer(double spacing) {
+    public PurpleVBox(double spacing) {
         super(spacing);
+        setPurpleStyle();
+    }
+
+    public PurpleVBox(Node node) {
+        super(node);
         setPurpleStyle();
     }
 
@@ -35,6 +37,7 @@ public class PurpleContainer extends VBox {
      * Configures the container with purple styling.
      */
     private void setPurpleStyle() {
+        setAlignment(Pos.CENTER);
         setStyle(
             "-fx-background-color: rgba(20, 20, 40, 0.7);" +
             "-fx-border-color: rgba(100, 100, 200, 0.8);" +

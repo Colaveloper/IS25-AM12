@@ -11,16 +11,35 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Abstract base class for ship building states in the Galaxy Truckers game.
+ * This class represents the phase where players build their ships by selecting,
+ * placing, and arranging components. It manages the component bank and tracks
+ * the status of ship construction.
+ * <p>
+ * The class is sealed to restrict subclassing to specific ship building states.
+ * </p>
+ */
 public sealed abstract class ShipBuildingState extends GameState permits
         SecondShipBuildingState,
         TestShipBuildingState
 {
+    /** The bank of components available for selection by players */
     private final ComponentBank componentBank;
+
+    /** Set of ship boards that have completed the building phase */
     protected final Set<ShipBoard> completedShipBoards;
+
+    /** Flag indicating whether the player has stashed a component in this turn */
     protected boolean hasStashed = false;
+
+    /** Flag indicating whether the player has finished ship building */
     protected boolean hasFinished = false;
 
-
+    /**
+     * Creates a new ShipBuildingState.
+     * Initializes the component bank and an empty set of completed ship boards.
+     */
     public ShipBuildingState() {
         this.completedShipBoards = new HashSet<>();
         this.componentBank = new ComponentBank();
@@ -98,15 +117,34 @@ public sealed abstract class ShipBuildingState extends GameState permits
         }
     }
 
+    /**
+     * Updates the set of ship boards that have completed the building phase.
+     * This method clears the existing set and replaces it with the provided set.
+     *
+     * @param completedShipBoards The set of ship boards that have completed building
+     */
     public void setCompletedShipBoards(Set<ShipBoard> completedShipBoards) {
         this.completedShipBoards.clear();
         this.completedShipBoards.addAll(completedShipBoards);
     }
 
-    protected boolean componentInHand(){
+    /**
+     * Checks whether the player currently has a component in hand (not placed).
+     * A component is considered "in hand" if it has been selected but not yet placed
+     * on the ship board or stashed.
+     *
+     * @return true if the player has a component in hand, false otherwise
+     */
+    public boolean componentInHand(){
         return myShip.getLastComponent() != null && myShip.getLastPosition() == null;
     }
 
+    /**
+     * Gets the component bank that contains available components for selection.
+     * The component bank manages both covered (random) and uncovered (visible) components.
+     *
+     * @return The component bank for this building phase
+     */
     public ComponentBank getComponentBank(){
         return componentBank;
     }

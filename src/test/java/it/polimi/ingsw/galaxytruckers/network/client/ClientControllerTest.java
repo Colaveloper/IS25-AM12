@@ -284,7 +284,7 @@ class ClientControllerTest {
 //
 //                //Thread.sleep(1000);
 //                System.out.println("FAKE SERVER EVENT: OtherPlayer1 is watching forecast");
-//                controller.notifyPeekForecast("OtherPlayer1", 2);
+//                controller.notifyOtherPeekForecast("OtherPlayer1", 2);
 //
 //                //Thread.sleep(1000);
 //                System.out.println("FAKE SERVER EVENT: OtherPlayer1 stopped watching forecast");

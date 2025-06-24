@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.guiElements.PurpleVBox;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
@@ -25,61 +26,29 @@ public class GuiTestShipBuildingScreen extends GuiShipBuildingScreen {
     }
 
     @Override
-    protected VBox getFullShip(ShipBoard shipBoard) {
-        VBox layout = new VBox(5);
-        layout.setAlignment(Pos.CENTER);
-        layout.setMaxWidth(100);
-        layout.setMaxHeight(120);
+    protected VBox getShipBoardVBox(ShipBoard shipBoard) {
+        VBox getShipBoardVBox = new VBox(5);
+        getShipBoardVBox.setAlignment(Pos.CENTER);
 
-        layout.getChildren().add(guiShipBoards.get(shipBoard));
+        PurpleVBox shipBoardVBox = guiShipBoards.get(shipBoard);
 
-        HBox handBox = new HBox();
-        handBox.getChildren().add(guiHands.get(shipBoard));
-        layout.getChildren().add(handBox);
+        getShipBoardVBox.getChildren().addAll(shipBoardVBox, guiHands.get(shipBoard));
 
-        Player player = null;
-        for (Map.Entry<ShipBoard, Player> entry : model.getShipToPlayer().entrySet()) {
-            if (entry.getKey().equals(shipBoard)) {
-                player = entry.getValue();
-                break;
-            }
-        }
-
-        if (player != null) {
-            Label nicknameLabel = new Label(player.getNickname());
-            nicknameLabel.setStyle(
-                "-fx-font-size: 16px;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-weight: bold;"
-            );
-            layout.getChildren().add(nicknameLabel);
-        }
-
-        return layout;
+        return getShipBoardVBox;
     }
 
     @Override
-    public Pane getNode() {
-        VBox layout = new VBox(10);
-        layout.setAlignment(Pos.TOP_CENTER);
-        layout.setPadding(new Insets(5, 0, 0, 0));
-
-        HBox topRow = new HBox(15);
-        topRow.setAlignment(Pos.CENTER);
-        topRow.getChildren().addAll(guiComponentBank, getGuiFlightBoard());
-
-        layout.getChildren().addAll(
-            topRow,
-            getGuiAllShips()
-        );
-        return layout;
+    protected VBox getFreeUseVBox() {
+        VBox freeUseVBox = new VBox(5);
+        freeUseVBox.getChildren().add(guiComponentBank);
+        return freeUseVBox;
     }
 
     @Override
     protected GuiController getGuiController() {
         return new GuiController() {
             @Override
-            public void placeShipOnFlightboard(int position) {
+            public void placeShipOnFlightBoard(int position) {
                 if (state.getAvailableActions().contains(StateActions.PLACE_SHIP_FOR_TEST)) {
                     controller.placeShipOnFlightBoard();
                 }

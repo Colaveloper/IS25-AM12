@@ -47,7 +47,7 @@
     },
     "flight day loss": 1,
     "people": 5,
-    "path": "src/main/resources/textures/cardsonedStation/GT-cards_I_IT_0119.jpg",
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_0119.jpg",
     "id": 4
   },
   {
@@ -152,7 +152,7 @@
       ["small meteor","down"],
       ["small meteor","down"]
     ],
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_110.jpg",
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0110.jpg",
     "id": 12
   },
   {
@@ -559,5 +559,4 @@
     "path": "src/main/resources/textures/cards/GT-cards_II_IT_0116.jpg",
     "id": 38
   }
-
 ]
