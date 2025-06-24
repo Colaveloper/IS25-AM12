@@ -21,11 +21,10 @@ import java.util.Set;
 public class GuiShipPieceChoiceScreen extends GuiAdventureScreen {
     private final IntegerProperty selectedPieceIndex = new SimpleIntegerProperty(-1);
     private final List<Set<Point>> shipPieces;
-    private final ChooseShipPieceState chooseState;
 
     public GuiShipPieceChoiceScreen(ClientModel model, ControllerToServer controller, AdventureState gameState) {
         super(model, controller, gameState);
-        this.chooseState = (ChooseShipPieceState) gameState;
+        ChooseShipPieceState chooseState = (ChooseShipPieceState) gameState;
         this.shipPieces = chooseState.getShipPieces();
         highlightShipPieces();
         if (isMyTurn()) {

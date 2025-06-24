@@ -235,7 +235,7 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
     protected GuiController getGuiController() {
         return new GuiController() {
             @Override
-            public void placeShipOnFlightboard(int position) {
+            public void placeShipOnFlightBoard(int position) {
                 if (state.getAvailableActions().contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD)) {
                     controller.placeShipOnFlightboard(position);
                 }
@@ -273,13 +273,6 @@ public class GuiSecondShipBuildingScreen extends GuiShipBuildingScreen {
                     Direction newDirection = currentDirection.getLeft();
                     myShipBoard.getLastComponent().setOrientation(newDirection);
                     guiHands.get(myShipBoard).setComponentDirection(newDirection);
-                }
-            }
-
-            @Override
-            public void flipHourglass() {
-                if (state.getAvailableActions().contains(StateActions.FLIP_HOURGLASS)) {
-                    controller.flipHourglass();
                 }
             }
 

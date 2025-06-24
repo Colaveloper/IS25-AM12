@@ -76,7 +76,7 @@ public class GuiFlightBoard extends PurpleVBox {
                                     triangle.setFill(Color.WHITE);
                                     triangle.setStroke(null);
                                     triangle.onMouseClickedProperty().set(_ -> {
-                                        controller.placeShipOnFlightboard(position);
+                                        controller.placeShipOnFlightBoard(position);
                                     });
                                 } else {
                                     triangle.setFill(Color.TRANSPARENT);
