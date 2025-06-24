@@ -82,7 +82,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
     private void handleNetworkError(RemoteException e) {
         System.out.println("WARNING: Failed to contact player " + player.getNickname() + "\n" +
                 "A remote exception was thrown: " + e.getMessage());
-//        controller.handlePlayerDisconnection(player); // todo: restore in production
+        controller.handlePlayerDisconnection(player);
     }
 
     protected void runUpdateThread() {
