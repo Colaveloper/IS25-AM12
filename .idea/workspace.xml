@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="663e43fb-7c2d-4edd-be6d-afd39e028acc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/guiElements/GuiShipBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/guiElements/GuiShipBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/SafeSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/network/SafeSocket.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,11 +23,6 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="main" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -51,10 +45,6 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2ylNRZV26lCF5vOIBmw7JTPFVmJ" />
-  <component name="ProjectLevelVcsManager">
-    <OptionsSetting value="false" id="Update" />
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -138,7 +128,7 @@
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "gui-adventure",
+    "git-widget-placeholder": "feature/client-reconnection",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/Ing_del_software/Progetto/IS25-AM12/.run",
@@ -168,7 +158,7 @@
       <recent name="it.polimi.ingsw.galaxytruckers.model.state" />
     </key>
   </component>
-  <component name="RunManager" selected="Compound.2ClientsLocal">
+  <component name="RunManager" selected="JUnit.SocketTest">
     <configuration name="ActivateStateTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GalaxyTruckers" />
       <extension name="coverage">
@@ -184,17 +174,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="FlightBoardTest$TestFlightTests.looping" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ActivateStateTest.skipSpendsBatteriesAndUpdatesState" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GalaxyTruckers" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.model.*" />
+          <option name="PATTERN" value="it.polimi.ingsw.galaxytruckers.model.state.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.model.FlightBoardTest" />
-      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.model.FlightBoardTest$TestFlightTests" />
-      <option name="METHOD_NAME" value="looping" />
+      <option name="PACKAGE_NAME" value="it.polimi.ingsw.galaxytruckers.model.state" />
+      <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.galaxytruckers.model.state.ActivateStateTest" />
+      <option name="METHOD_NAME" value="skipSpendsBatteriesAndUpdatesState" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -278,19 +268,19 @@
       <item itemvalue="Compound.Server-TwoClients" />
       <item itemvalue="JUnit.StateTests" />
       <item itemvalue="JUnit.ALL-TESTS" />
-      <item itemvalue="JUnit.FlightBoardTest$TestFlightTests.looping" />
       <item itemvalue="JUnit.SocketTest" />
       <item itemvalue="JUnit.SocketTest.joinLobby" />
       <item itemvalue="JUnit.SocketTest.requestNewGame" />
       <item itemvalue="JUnit.ActivateStateTest" />
+      <item itemvalue="JUnit.ActivateStateTest.skipSpendsBatteriesAndUpdatesState" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ActivateStateTest" />
-        <item itemvalue="JUnit.SocketTest.requestNewGame" />
-        <item itemvalue="JUnit.SocketTest.joinLobby" />
         <item itemvalue="JUnit.SocketTest" />
-        <item itemvalue="JUnit.FlightBoardTest$TestFlightTests.looping" />
+        <item itemvalue="JUnit.SocketTest.joinLobby" />
+        <item itemvalue="JUnit.SocketTest.requestNewGame" />
+        <item itemvalue="JUnit.ActivateStateTest" />
+        <item itemvalue="JUnit.ActivateStateTest.skipSpendsBatteriesAndUpdatesState" />
       </list>
     </recent_temporary>
   </component>
@@ -333,12 +323,19 @@
     </option>
   </component>
   <component name="XDebuggerManager">
-    <pin-to-top-manager>
-      <pinned-members>
-        <PinnedItemInfo parentTag="it.polimi.ingsw.galaxytruckers.adventureCards.MeteorSwarmCard" memberName="projectiles" />
-        <PinnedItemInfo parentTag="javafx.beans.property.SimpleObjectProperty" memberName="value" />
-      </pinned-members>
-    </pin-to-top-manager>
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/it/polimi/ingsw/galaxytruckers/view/model/state/ShipBuildingState.java</url>
+          <line>56</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.io.EOFException" package="java.io" />
+          <option name="timeStamp" value="35" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/IS25_AM12$HandleProjectileStateTest.ic" NAME="HandleProjectileStateTest Coverage Results" MODIFIED="1750529137368" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
