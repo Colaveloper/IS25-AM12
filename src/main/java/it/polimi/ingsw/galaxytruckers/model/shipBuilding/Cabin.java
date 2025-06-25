@@ -29,6 +29,11 @@ public non-sealed class Cabin extends Component implements ComponentInterface{
         this.numResidents = 0;
     }
 
+    /**
+     * Initializes the cabin with a specific crew type and sets the number of residents based on the crew type.
+     *
+     * @param crewType The type of crew that will occupy the cabin.
+     */
     public void initialize(CrewType crewType) {
         this.crewType = crewType;
         if (this.crewType == CrewType.HUMAN) {
@@ -46,6 +51,9 @@ public non-sealed class Cabin extends Component implements ComponentInterface{
         return crewType;
     }
 
+    /**
+     * Method to remove a resident from the cabin.
+     */
     public void loseResidents() {
         if (this.numResidents <= 0) {
             throw new IllegalStateException("There are no more residents here");

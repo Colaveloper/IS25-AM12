@@ -45,6 +45,12 @@ public non-sealed class CargoHold extends Component implements ComponentInterfac
         return new HashMap<>(goods);
     }
 
+    /**
+     * Adds goods to the cargo hold.
+     * @param goodsType the type of goods to add
+     * @param amount the number of goods to add
+     * @throws IllegalArgumentException
+     */
     public void addGoods(GoodsType goodsType, int amount) throws IllegalArgumentException {
         if (goodsType == GoodsType.RED && !isSpecial) {
             throw new IllegalArgumentException("Cannot add special goods in non-special CargoHold");
@@ -57,6 +63,12 @@ public non-sealed class CargoHold extends Component implements ComponentInterfac
         this.numGoods = updatedNumGoods;
     }
 
+    /**
+     * Removes goods from the cargo hold.
+     * @param goodsType the type of goods to remove
+     * @param amount the number of goods to remove
+     * @throws IllegalArgumentException if there are not enough goods to remove
+     */
     public void removeGoods(GoodsType goodsType, int amount) throws IllegalArgumentException {
         if (!goods.containsKey(goodsType) || goods.get(goodsType) < amount) {
             throw new IllegalArgumentException("Cannot remove the goods there are not enough");

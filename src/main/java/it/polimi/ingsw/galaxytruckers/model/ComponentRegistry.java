@@ -23,6 +23,12 @@ public class ComponentRegistry {
     private final List<JsonNode> bankComponents = new ArrayList<>();
     private final Map<GameColor, JsonNode> startingCabins = new HashMap<>();
 
+    /**
+     * Returns the singleton instance of ComponentRegistry.
+     * If the instance is null, it creates a new instance and loads the components from the JSON file.
+     *
+     * @return the singleton instance of ComponentRegistry
+     */
     public static ComponentRegistry getInstance() {
         if (instance == null) instance = new ComponentRegistry();
         return instance;
@@ -36,6 +42,12 @@ public class ComponentRegistry {
         }
     }
 
+    /**
+     * Returns a list of all components available in the bank.
+     * Each component is parsed from the JSON nodes stored in the bankComponents list.
+     *
+     * @return a list of components available in the bank
+     */
     public List<Component> getBankComponents() {
         List<Component> res = new ArrayList<>();
         for (JsonNode node: bankComponents) {
@@ -48,6 +60,13 @@ public class ComponentRegistry {
         return res;
     }
 
+    /**
+     * Returns the starting cabin for a given player color.
+     * The starting cabin is parsed from the JSON node stored in the startingCabins map.
+     *
+     * @param color the GameColor of the player
+     * @return the starting cabin component for the specified player color
+     */
     public Component getStartingCabin(GameColor color) {
         try {
             return parseComponent(startingCabins.get(color));

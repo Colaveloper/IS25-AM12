@@ -8,6 +8,10 @@ import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import java.util.Comparator;
 import java.util.Optional;
 
+/**
+ * Singleton class that implements the CombatZoneCheck interface to determine the weakest player based on crew size.
+ * It provides a method to get the weakest player's ShipBoard and an empty optional of AdventureState.
+ */
 public class CrewSizeCheck implements CombatZoneCheck {
     private static CrewSizeCheck instance = null;
 

@@ -22,6 +22,13 @@ public class BigMeteor extends Projectile {
         super(direction);
     }
 
+    /**
+     * {@inheritDoc}
+     * Returns a set of points where cannons can be activated to defend against the Big Meteor.
+     *
+     * @param shipBoard the ship board to check for activatable points
+     * @return a set of points where cannons can be activated
+     */
     @Override
     public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
         return shipBoard.getCannons().entrySet().stream()
@@ -34,6 +41,14 @@ public class BigMeteor extends Projectile {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     * This method returns the first found component position if there
+     * are no cannons effectively firing at the projectile.
+     *
+     * @param shipBoard the ship that is threatened by the projectile
+     * @return an Optional containing the position of the component to be removed, if any
+     */
     @Override
     protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
         return getFirstFoundComponentPosition(shipBoard).filter(
@@ -45,8 +60,12 @@ public class BigMeteor extends Projectile {
                 .noneMatch(this::cannonPositionIsEffective));
     }
 
-    // returns firstFoundComponent if there's an effective cannon with non-zero firepower
-
+    /**
+     * Checks if the cannon's position is effective against the Big Meteor based on its direction and dice roll.
+     *
+     * @param e the entry containing the cannon's position and its properties
+     * @return true if the cannon's position is effective, false otherwise
+     */
     @VisibleForTesting
     protected boolean cannonPositionIsEffective(Map.Entry<Point, Cannon> e) {
         return e.getValue().getOrientation() == direction && switch (direction) {
@@ -56,6 +75,12 @@ public class BigMeteor extends Projectile {
         };
     }
 
+    /**
+     * {@inheritDoc}
+     * This method returns the type of the projectile, which is BIGMETEOR.
+     *
+     * @return the ProjectileType BIGMETEOR
+     */
     @Override
     public ProjectileType getProjectileType() {
         return ProjectileType.BIGMETEOR;

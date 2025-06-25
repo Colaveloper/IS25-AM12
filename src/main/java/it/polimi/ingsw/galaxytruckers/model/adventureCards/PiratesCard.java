@@ -89,6 +89,9 @@ public class PiratesCard extends AdventureCard {
         }
     }
 
+    /**
+     * Method to apply the reward of the card, which consists of gaining credits and displacing the ship.
+     */
     public void getReward() {
         winnerShipBoard.gainCredits(creditPrize);
         flightBoard.displaceShip(winnerShipBoard, -flightDaysLoss);

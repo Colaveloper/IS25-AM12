@@ -10,6 +10,9 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Abstract class representing a ship board in the game.
+ */
 public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor {
     protected static final Point center = new Point(7,7);
     protected final GameEventListener eventListener;
@@ -25,10 +28,9 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     protected int crewSize;
     protected int credits;
     protected int losses;
+
     protected final Set<Direction> shieldDirections;
     protected final Map<GoodsType, Integer> goods;
-    // We might need this attribute to handle meteors and cannon hits better
-    // protected List<Map<Integer, Integer>> cannonDirections;
 
     protected final Map<Point, Cannon> cannons;
     protected final Map<Point, Engine> engines;
@@ -38,7 +40,13 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     protected final Map<Point, Cabin> cabins;
     protected final Map<Point, Activatable> activatables;
 
-    public ShipBoard(GameColor color, GameEventListener eventListener) { // (, Color color)
+    /**
+     * Constructor for ShipBoard.
+     *
+     * @param color The color of the ship board.
+     * @param eventListener The event listener to notify about ship events.
+     */
+    public ShipBoard(GameColor color, GameEventListener eventListener) {
         this.componentMap = new HashMap<>();
         this.lastComponent = null;
         this.lastPosition = null;
@@ -65,13 +73,30 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         addWeldedComponent(ComponentRegistry.getInstance().getStartingCabin(color), center, Direction.UP);
     }
 
+    /**
+     * Checks if the ship board contains a specific point by using static ship area
+     * defined only in subclasses.
+     *
+     * @param point The point to check.
+     * @return true if the ship board contains the point, false otherwise.
+     */
     protected abstract boolean containsPoint(Point point);
 
+    /**
+     * Gains credits for the ship board.
+     *
+     * @param credits The number of credits to gain.
+     */
     public void gainCredits (int credits) {
         this.credits += credits;
         eventListener.notifyGrabCreditsEvent(this, credits);
     }
 
+    /**
+     * Removes all components from the ship board, optionally discarding them.
+     *
+     * @param discard If true, components are discarded; otherwise, they are removed.
+     */
     public void removeAll(boolean discard) {
         Set<Point> points = new HashSet<>(componentMap.keySet());
         points.remove(getCenter());
@@ -81,6 +106,13 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
     }
 
+    /**
+     * Keeps a specific ship piece by removing all components not in the piece.
+     *
+     * @param shipPieces The list of ship pieces.
+     * @param pieceIndex The index of the piece to keep.
+     * @param discard If true, components are discarded; otherwise, they are removed.
+     */
     public void keepShipPiece(List<Set<Point>> shipPieces, int pieceIndex, boolean discard) {
         Set<Point> componentsToRemove = getComponentMap().keySet();
         componentsToRemove.removeAll(shipPieces.get(pieceIndex));
@@ -90,6 +122,13 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         eventListener.notifyShipPieceRemovalEvent(this, pieceIndex);
     }
 
+    /**
+     * Adds a component to the ship board at a specific position and orientation.
+     *
+     * @param component The component to add.
+     * @param position The position where the component should be placed.
+     * @param direction The direction/orientation of the component.
+     */
     public void addWeldedComponent(Component component, Point position, Direction direction) {
         if (!componentMap.containsKey(position)) {
             lastPosition = position;
@@ -102,11 +141,22 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     //CliComponentBank interaction methods
 
+    /**
+     * Offers a component to the player (represented by the {@link ShipBoard}),
+     * so that it has exclusive control over it (i.e., he holds it in his hand).
+     *
+     * @param component The component to offer.
+     */
     public void offerComponent(Component component) {
         weldLastComponent();
         lastComponent = component;
     }
 
+    /**
+     * Rejects the last offered component, returning it to the component bank.
+     *
+     * @return The rejected component.
+     */
     public Component rejectComponent() {
         Component rejectedComponent = lastComponent;
         lastComponent = null;
@@ -116,6 +166,12 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     //Ship building methods
 
+    /**
+     * Places the last offered component at a specific position and orientation on the ship board.
+     *
+     * @param newPosition The position where the component should be placed.
+     * @param orientation The orientation of the component.
+     */
     public void placeComponent(Point newPosition, Direction orientation) {
         if (lastComponent == null) {
             throw new IllegalStateException("There is no component to place");
@@ -129,10 +185,24 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         eventListener.notifyPlaceComponentEvent(this,orientation,newPosition);
     }
 
+    /**
+     * Stashes the last placed component, making it available for later retrieval.
+     * This method is a placeholder and is implemented only by subclasses that support stashing.
+     */
     public void stashComponent() {}
 
+    /**
+     * Grabs a stashed component by its index, making it available for placement.
+     * This method is a placeholder and is implemented only by subclasses that support stashing.
+     *
+     * @param index The index of the stashed component to grab.
+     */
     public void grabStashedComponent(int index) {}
 
+    /**
+     * Grabs the last placed component, making it available for placement.
+     * This method is called when the player decides to place a component that was previously placed.
+     */
     public void grabPlacedComponent() {
         if (lastComponent != null && lastPosition != null) {
             lastPosition = null;
@@ -142,6 +212,10 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
     }
 
+    /**
+     * Welds the last placed component to the ship board at its current position.
+     * This method finalizes the placement of the component.
+     */
     public void weldLastComponent() {
         if (lastComponent != null) {
             if (lastPosition == null) {
@@ -154,16 +228,35 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
     }
 
+    /**
+     * Discards the last placed component, removing it from the ship board and notifying the event listener.
+     * This method is called when the player decides to discard a component instead of placing it.
+     *
+     * @param position The position of the component to discard.
+     */
     public void discardComponent(Point position) {
         removeComponent(position,true);
         eventListener.notifyRemoveComponentEvent(this,position);
     }
 
+    /**
+     * Removes a component from the ship board at a specific position and notifies the event listener.
+     * This method is called when the player decides to remove a component from the ship board during ship building.
+     *
+     * @param position The position of the component to remove.
+     */
     public void removeComponent(Point position) {
         removeComponent(position, false);
         eventListener.notifyRemoveComponentEvent(this,position);
     }
 
+    /**
+     * Removes a component from the ship board at a specific position, optionally discarding it.
+     * This method is called when a game event (e.g., a projectile hit) requires the removal of a component.
+     *
+     * @param position The position of the component to remove.
+     * @param discard If true, the component is discarded; otherwise, it is simply removed.
+     */
     private void removeComponent(Point position, boolean discard) {
         lastPosition = position;
         componentMap.remove(lastPosition).removeFromVisitor(this, position);
@@ -171,6 +264,10 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         if (discard) losses++;
     }
 
+    /**
+     * Finalizes the ship building process by welding the last component if it exists.
+     * This method is called when the player has finished placing components on the ship board.
+     */
     public void finishBuilding() {
         if (lastComponent != null) {
             if (lastPosition != null) {
@@ -289,6 +386,13 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     //CargoHold methods
 
+    /**
+     * Places goods of a specific type and amount in the cargo hold at a given position.
+     *
+     * @param position The position of the cargo hold.
+     * @param goods The type of goods to place.
+     * @param amount The amount of goods to place.
+     */
     public void placeGoods(Point position, GoodsType goods, int amount) {
         if (!cargoHolds.containsKey(position)) {
             throw new IllegalStateException("There is no cargo hold for this position");
@@ -298,6 +402,13 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         eventListener.notifyGoodsUpdateEvent(this,position,goods,true);
     }
 
+    /**
+     * Removes goods of a specific type and amount from the cargo hold at a given position.
+     *
+     * @param position The position of the cargo hold.
+     * @param goods The type of goods to remove.
+     * @param amount The amount of goods to remove.
+     */
     public void removeGoods(Point position, GoodsType goods, int amount) {
         if (!cargoHolds.containsKey(position)) {
             throw new IllegalStateException("There is no cargo hold for this position");
@@ -309,6 +420,11 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     //Batteries methods
 
+    /**
+     * Uses a battery at a specific position, reducing the number of batteries available.
+     *
+     * @param position The position of the battery to use.
+     */
     public void useBatteries(Point position) {
         if (!batteries.containsKey(position)) {
             throw new IllegalStateException("There is no battery for this position");
@@ -319,13 +435,27 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     }
 
     //Cabin (and LifeSupport) methods
-
+    /**
+     * Returns the set of crew type options available for a cabin at a specific position.
+     * Generally, only the HUMAN crew-type is supported, but subclasses can override
+     * this method to provide additional crew types.
+     *
+     * @param position The position of the cabin.
+     * @return A set containing the available crew types.
+     */
     public Set<CrewType> getCrewTypeOptions(Point position) {
         Set<CrewType> res = new HashSet<>();
         res.add(CrewType.HUMAN);
         return res;
     }
 
+    /**
+     * Initializes a cabin at a specific position with a crew type.
+     * This method sets the crew type for the cabin and updates the crew size.
+     *
+     * @param position The position of the cabin to initialize.
+     * @param crewType The crew type to assign to the cabin.
+     */
     public void initializeCabin(Point position, CrewType crewType) {
         if (!cabins.containsKey(position)) {
             throw new IllegalStateException("There is no cabin for this position");
@@ -336,6 +466,10 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         eventListener.notifyCabinInitializationEvent(this,position,crewType);
     }
 
+    /**
+     * Loses crew from a cabin at a specific position.
+     * @param position The position of the cabin from which to lose crew.
+     */
     public void loseCrew(Point position) {
         if (!cabins.containsKey(position)) {
             throw new IllegalStateException("There is no cabin for this position");
@@ -347,6 +481,13 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     // Activatables methods
 
+    /**
+     * Activates a component at a specific position if it is not already active.
+     * This method checks if the activatable exists and activates it, notifying the event listener.
+     *
+     * @param position The position of the component to activate.
+     * @return true if the component was successfully activated, false if it was already active.
+     */
     public boolean activateComponent(Point position) {
         if (!activatables.containsKey(position)) {
             throw new IllegalStateException("There is no activatable for this position");
@@ -359,6 +500,12 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         return false;
     }
 
+    /**
+     * Deactivates a component at a specific position.
+     * This method checks if the activatable exists and deactivates it, notifying the event listener.
+     *
+     * @param position The position of the component to deactivate.
+     */
     public void deactivateComponent(Point position) {
         if (!activatables.containsKey(position)) {
             throw new IllegalStateException("There is no activatable for this position");
@@ -368,6 +515,10 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         }
     }
 
+    /**
+     * Deactivates all active components on the ship board.
+     * This method iterates through all activatables and deactivates them if they are active.
+     */
     public void deactivateAll() {
         for (Point p : activatables.keySet()) {
             if (activatables.get(p).isActive()) {
@@ -378,6 +529,12 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
 
     // Ship validity methods
 
+    /**
+     * Checks the validity of the ship board.
+     * This method verifies that all components are correctly connected and that cannons and engines are valid.
+     *
+     * @return true if the ship board is valid, false otherwise.
+     */
     public boolean checkValidity() {
         for (Point point : componentMap.keySet()) {
             Map<Direction, Point> neighbours = getNeighbours(point);
@@ -405,6 +562,12 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         return true;
     }
 
+    /**
+     * Returns a list of connected sets of points on the ship board.
+     * Each set represents a group of points that are connected through components.
+     *
+     * @return A list of sets of connected points.
+     */
     public List<Set<Point>> getConnectedSets() {
         Set<Point> toVisit = new HashSet<>(componentMap.keySet());
         List<Set<Point>> res = new ArrayList<>();

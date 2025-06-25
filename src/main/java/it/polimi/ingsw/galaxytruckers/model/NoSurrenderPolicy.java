@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.util.Set;
 
-public class NoSurrenderPolicy implements SurrenderPolicy{
+public class NoSurrenderPolicy implements SurrenderPolicy {
 
     @Override
     public boolean isSurrenderEnabled() {

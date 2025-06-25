@@ -11,6 +11,14 @@ public class SecondDeck extends Deck{
     private final List<List<AdventureCard>> forecastDecks;
     private final List<AdventureCard> hiddenDeck;
 
+    /**
+     * Constructor for the SecondDeck class.
+     * It initializes the deck with adventure cards of levels TEST, FIRST, and SECOND.
+     * The deck is divided into three forecast decks and a hidden deck.
+     *
+     * @param game the game instance to which this deck belongs
+     * @throws IOException if there is an error reading the adventure cards
+     */
     public SecondDeck(Game game) throws IOException {
         super(game);
         List<AdventureCard> easyCards = relevantCards.stream()
@@ -33,6 +41,7 @@ public class SecondDeck extends Deck{
         hiddenDeck.addAll(easyCards.subList(3, 4));
         hiddenDeck.addAll(hardCards.subList(6, 8));
     }
+
     @Override
     public List<AdventureCard> getForecastDeck(int deckIndex) {
         try {

@@ -7,6 +7,10 @@ import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
 import java.util.Optional;
 
+/**
+ * Class representing a penalty that causes the player to lose a certain number of flight days.
+ * Implements the Penalty interface.
+ */
 public class FlightDaysLoss implements Penalty {
     int flightDaysToLose;
 

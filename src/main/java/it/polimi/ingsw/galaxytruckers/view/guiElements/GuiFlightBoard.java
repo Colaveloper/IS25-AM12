@@ -82,7 +82,7 @@ public class GuiFlightBoard extends PurpleVBox {
                     .ifPresentOrElse(
                             (s)-> {
                                 Circle circle = new Circle(SLOT_SIZE / 2.0);
-                                circle.setFill(s.getColor().getJfxColor());
+                                circle.setFill(GameColorGuiMapper.toJfxColor(s.getColor()));
                                 slot.getChildren().add(circle);
                             },
                             () -> {

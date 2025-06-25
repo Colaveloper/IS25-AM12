@@ -20,6 +20,13 @@ public class SmallFire extends Projectile {
         super(direction);
     }
 
+    /**
+     * {@inheritDoc}
+     * Returns a set of points where shields can be activated to defend against the Small Fire.
+     *
+     * @param shipBoard the ship board to check for activatable points
+     * @return a set of points where shields can be activated
+     */
     @Override
     public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
         return shipBoard.getShields().entrySet().stream()
@@ -28,6 +35,13 @@ public class SmallFire extends Projectile {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     * This method returns the first found component position if there are no shields effectively defending against the projectile.
+     *
+     * @param shipBoard the ship that is threatened by the projectile
+     * @return an Optional containing the position of the component to be removed, if any
+     */
     @Override
     protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
         if (shipBoard.getShieldDirections().contains(direction)) {
@@ -36,6 +50,12 @@ public class SmallFire extends Projectile {
         return getFirstFoundComponentPosition(shipBoard);
     }
 
+    /**
+     * {@inheritDoc}
+     * This method returns the type of the projectile, which is SMALLFIRE.
+     *
+     * @return the ProjectileType SMALLFIRE
+     */
     @Override
     public ProjectileType getProjectileType() {
         return ProjectileType.SMALLFIRE;

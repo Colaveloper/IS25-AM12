@@ -22,6 +22,13 @@ public class SmallMeteor extends Projectile {
         super(direction);
     }
 
+    /**
+     * {@inheritDoc}
+     * Returns a set of points where cannons can be activated to defend against the Small Meteor.
+     *
+     * @param shipBoard the ship board to check for activatable points
+     * @return a set of points where cannons can be activated
+     */
     @Override
     public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
         return shipBoard.getShields().entrySet().stream()
@@ -30,6 +37,14 @@ public class SmallMeteor extends Projectile {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     * This method returns the first found component position if there are no shields effectively defending against the projectile,
+     * and there are exposed connectors.
+     *
+     * @param shipBoard the ship that is threatened by the projectile
+     * @return an Optional containing the position of the component to be removed, if any
+     */
     @Override
     protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
         if (shipBoard.getShieldDirections().contains(direction)) {
@@ -39,6 +54,12 @@ public class SmallMeteor extends Projectile {
                 .filter(c -> shipBoard.getComponentMap().get(c).getConnectors().get(direction) != Connector.NONE);
     }
 
+    /**
+     * {@inheritDoc}
+     * This method returns the type of the projectile, which is SMALLMETEOR.
+     *
+     * @return the ProjectileType SMALLMETEOR
+     */
     @Override
     public ProjectileType getProjectileType() {
         return ProjectileType.SMALLMETEOR;

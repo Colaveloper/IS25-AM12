@@ -8,6 +8,10 @@ import it.polimi.ingsw.galaxytruckers.model.state.RemoveGoodsState;
 
 import java.util.Optional;
 
+/**
+ * Class representing a penalty that causes the player to lose a certain amount of goods.
+ * Implements the Penalty interface.
+ */
 public class GoodsLoss implements Penalty {
     private int goodsToLose;
 

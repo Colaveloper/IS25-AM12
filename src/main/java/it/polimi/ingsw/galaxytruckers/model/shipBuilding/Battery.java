@@ -4,6 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.checkerframework.common.returnsreceiver.qual.This;
 
+import java.awt.*;
 import java.util.Map;
 
 public non-sealed class Battery extends Component implements ComponentInterface{
@@ -33,6 +34,10 @@ public non-sealed class Battery extends Component implements ComponentInterface{
         return numBatteries;
     }
 
+    /**
+     * Decreases the number of batteries by one.
+     * @throws IllegalArgumentException if there are no more batteries left.
+     */
     public void useBatteries() throws IllegalArgumentException {
         if (this.numBatteries <= 0) {
             throw new IllegalArgumentException("There are no more batteries here");
@@ -41,12 +46,12 @@ public non-sealed class Battery extends Component implements ComponentInterface{
     }
 
     @Override
-    public void addToVisitor(ComponentVisitor visitor, java.awt.Point point) {
+    public void addToVisitor(ComponentVisitor visitor, Point point) {
         visitor.add(this, point);
     }
 
     @Override
-    public void removeFromVisitor(ComponentVisitor visitor, java.awt.Point point) {
+    public void removeFromVisitor(ComponentVisitor visitor, Point point) {
         visitor.remove(this, point);
     }
 }

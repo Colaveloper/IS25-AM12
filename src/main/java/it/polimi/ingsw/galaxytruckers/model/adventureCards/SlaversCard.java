@@ -62,6 +62,9 @@ public class SlaversCard extends AdventureCard {
         }
     }
 
+    /**
+     * Method to apply the reward of the card, which consists of gaining credits and displacing the ship.
+     */
     public void getReward() {
         currentShipBoard.gainCredits(creditPrize);
         flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);

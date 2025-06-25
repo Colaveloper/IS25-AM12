@@ -31,6 +31,10 @@ public non-sealed class LifeSupport extends Component implements ComponentInterf
         checkCrewType();
     }
 
+    /**
+     * Checks if the crew type is valid for a LifeSupport component.
+     * Throws an IllegalArgumentException if the crew type is HUMAN
+     */
     private void checkCrewType() {
         if (crewType == CrewType.HUMAN) {
             throw new IllegalArgumentException("LifeSupport type cannot be HUMAN, allowed types: " +

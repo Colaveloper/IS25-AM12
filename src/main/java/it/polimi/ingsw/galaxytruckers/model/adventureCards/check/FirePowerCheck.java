@@ -8,6 +8,10 @@ import it.polimi.ingsw.galaxytruckers.model.state.DeclareFirePowerState;
 import java.util.Comparator;
 import java.util.Optional;
 
+/**
+ * Singleton class that implements the CombatZoneCheck interface to determine the weakest player based on fire-power.
+ * It provides a method to get the weakest player's ShipBoard and an AdventureState for declaring fire-power.
+ */
 public class FirePowerCheck implements CombatZoneCheck {
     private static FirePowerCheck instance = null;
 

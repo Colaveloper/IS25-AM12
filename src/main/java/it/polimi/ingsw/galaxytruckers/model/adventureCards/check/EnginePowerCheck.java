@@ -8,6 +8,10 @@ import it.polimi.ingsw.galaxytruckers.model.state.DeclareEnginePowerState;
 import java.util.Comparator;
 import java.util.Optional;
 
+/**
+ * Singleton class that implements the CombatZoneCheck interface to determine the weakest player based on engine power.
+ * It provides a method to get the weakest player's ShipBoard and an AdventureState for declaring engine power.
+ */
 public class EnginePowerCheck implements CombatZoneCheck {
     private static EnginePowerCheck instance;
 

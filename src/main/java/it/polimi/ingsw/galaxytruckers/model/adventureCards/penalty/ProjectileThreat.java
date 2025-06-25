@@ -10,6 +10,11 @@ import it.polimi.ingsw.galaxytruckers.model.state.HandleProjectileState;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Represents a penalty that involves handling a projectile threat.
+ * This class implements the Penalty interface and is used to manage the projectiles
+ * that threaten the player's ship during the adventure.
+ */
 public class ProjectileThreat implements Penalty {
     private final List<Projectile> projectiles;
 

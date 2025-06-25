@@ -14,22 +14,42 @@ import java.util.Set;
 import java.util.function.IntSupplier;
 import java.util.stream.Stream;
 
+/**
+ * Represents a projectile that can be fired at a ship.
+ * It has a direction and a dice roll that determine its origin.
+ */
 public abstract class Projectile {
 
     protected final Direction direction;
     protected int diceRoll;
     private static final Dice dice = new Dice() {};
 
+    /**
+     * Constructs a Projectile with a specified dice roll and direction.
+     * (used for testing purposes)
+     *
+     * @param dice the dice roll that determines the projectile's origin
+     * @param direction the direction in which the projectile is fired
+     */
     public Projectile(IntSupplier dice, Direction direction) {
         this.direction = direction;
         this.diceRoll = dice.getAsInt();
     }
 
+    /**
+     * Constructs a Projectile with a specified direction and a random dice roll.
+     *
+     * @param direction the direction in which the projectile is fired
+     */
     public Projectile(Direction direction) {
         this(dice, direction);
     }
 
     /**
+     * After any activation took place, this method is called to remove
+     * the component at {@code getComponentPositionToRemove}, if any.
+     * The return value indicates whether a component was actually removed.
+     *
      * @param shipBoard the ship that is threatened by the projectile
      * @return true if a component is removed (in that case a check on the connectivity should take place), false otherwise
      */
@@ -40,14 +60,18 @@ public abstract class Projectile {
     }
 
     /**
+     * Returns the set of locations of the activatable components to protect from a specific projectile.
+     *
      * @param shipBoard the ship that is threatened by the projectile
      * @return the set of locations of the activatable components of the right type to protect from a projectile
      */
     public abstract Set<Point> getActivatablePoints(ShipBoard shipBoard);
 
     /**
+     * Returns the first found component position, if any,that the projectile hits.
+     *
      * @param shipBoard the ship that is threatened by the projectile
-     * @return an optional with the component position to be eliminated
+     * @return an optional with the component position found, if any
      */
     protected Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
         Stream<Map.Entry<Point, Component>> line = shipBoard.getComponentMap().entrySet().stream()
@@ -66,6 +90,12 @@ public abstract class Projectile {
         };
     }
 
+    /**
+     * Returns the position of the component to remove, if any, based on {@code getFirstFoundComponentPosition}.
+     *
+     * @param shipBoard the ship that is threatened by the projectile
+     * @return an optional with the position of the component to remove, if any
+     */
     protected abstract Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard);
 
     public abstract ProjectileType getProjectileType();

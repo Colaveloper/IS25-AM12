@@ -7,6 +7,10 @@ import it.polimi.ingsw.galaxytruckers.model.state.RemoveCrewState;
 
 import java.util.Optional;
 
+/**
+ * Represents a penalty that causes the player to lose a specified number of crew members.
+ * If the number of crew members to lose is zero, no penalty is inflicted.
+ */
 public class CrewLoss implements  Penalty {
     int crewToLose;
 

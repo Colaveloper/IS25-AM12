@@ -18,16 +18,33 @@ public class BigFire extends Projectile{
         super(direction);
     }
 
+    /** * {@inheritDoc}
+     * Returns an empty set, as you cannot defend from a big fire.
+     *
+     * @param shipBoard the ship board to check for activatable points
+     * @return an empty set of points
+     */
     @Override
     public Set<Point> getActivatablePoints(ShipBoard shipBoard) {
         return Set.of();
     }
 
+    /** * {@inheritDoc}
+     * This method always returns the first found component position
+     *
+     * @param shipBoard the ship that is threatened by the projectile
+     * @return an Optional containing the position of the component to be removed, if any
+     */
     @Override
     protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
         return getFirstFoundComponentPosition(shipBoard);
     }
-
+    /**
+     * {@inheritDoc}
+     * This method returns the type of the projectile, which is BIGFIRE.
+     *
+     * @return the ProjectileType BIGFIRE
+     */
     @Override
     public ProjectileType getProjectileType() {
         return ProjectileType.BIGFIRE;

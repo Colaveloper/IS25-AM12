@@ -140,7 +140,7 @@ public class CliShipBoard extends CliElement {
 
         result = DescriptionUtils.borderAndTitle(
                 result,
-                color.getDescription()+" "+nickname
+                GameColorCliMapper.toAnsiBullet(color)+" "+nickname
         );
         return result;
     }

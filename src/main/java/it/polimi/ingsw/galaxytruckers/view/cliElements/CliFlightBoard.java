@@ -45,7 +45,7 @@ public class CliFlightBoard extends CliElement {
                 .map(pos -> Map.entry(
                         pos.getKey().getColor(),
                         Math.floorMod(pos.getValue(), loopLength)))
-                .forEach(e -> asArray[e.getValue()] = e.getKey().getDescription());
+                .forEach(e -> asArray[e.getValue()] = GameColorCliMapper.toAnsiBullet(e.getKey()));
 
         List<String> result = new ArrayList<>(List.of(String.join("", asArray)));
         result = DescriptionUtils.borderAndTitle(result, "flight board");

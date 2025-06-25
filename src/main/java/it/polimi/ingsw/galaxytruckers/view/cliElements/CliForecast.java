@@ -54,7 +54,7 @@ public class CliForecast extends CliElement {
         for (int i=0; i<blockedForecasts.length; i++) {
             List<String> forecastDescription = new ArrayList<>();
             forecastDescription.add(blockedForecasts[i] != null
-                            ? "   "+blockedForecasts[i].getDescription()+"   "
+                            ? "   "+GameColorCliMapper.toAnsiBullet(blockedForecasts[i])+"   "
                             : " free  "
                     );
             forecastDescription.add("   "+i+"   ");

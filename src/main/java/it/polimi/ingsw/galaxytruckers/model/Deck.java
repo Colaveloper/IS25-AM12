@@ -76,7 +76,6 @@ public abstract class Deck {
      * */
     @VisibleForTesting
     protected static List<AdventureCard> loadRelevantCards(Game game) throws IOException {
-        //reading from json file and returning the list of components
         File jsonFile = new File(jsonPath);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(jsonFile);
@@ -89,7 +88,7 @@ public abstract class Deck {
             default -> throw new IllegalArgumentException("Unexpected level in game: " + game.getLevel());
         }
 
-        //iterating through nodes and adding each as a card to list
+        //iterating through nodes and adding each as a card to the list
         for(int i = 0; i < rootNode.size(); i++){
             Level level = Level.valueOf(rootNode.get(i).get("level").asText());
             if (levels.contains(level)) {

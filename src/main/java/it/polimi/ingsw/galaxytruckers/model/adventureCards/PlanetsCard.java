@@ -50,6 +50,12 @@ public class PlanetsCard extends AdventureCard {
         }
     }
 
+    /**
+     * Method to choose a planet for the current shipBoard.
+     *
+     * @param shipBoard the shipBoard that is choosing a planet
+     * @param index     the index of the planet chosen
+     */
     void choosePlanet(ShipBoard shipBoard, int index) {
         planetChoices.put(shipBoard, index);
         landedShips.add(shipBoard);

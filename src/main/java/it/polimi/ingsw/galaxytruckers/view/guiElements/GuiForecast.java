@@ -75,7 +75,7 @@ public class GuiForecast extends PurpleHBox {
     }
 
     private Rectangle createTakenForecast(ShipBoard shipBoard) {
-        Rectangle card = createCardBase(shipBoard.getColor().getJfxColor());
+        Rectangle card = createCardBase(GameColorGuiMapper.toJfxColor(shipBoard.getColor()));
         card.setOnMouseClicked(_->controller.releaseForecast());
         return card;
     }
