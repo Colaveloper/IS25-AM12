@@ -207,16 +207,21 @@ public class GuiShipBoard extends PurpleVBox {
      * @param point the position of the component whose content has changed
      */
     public void notifyComponentChange(Point point) {
-        shipGrid.getChildren().stream()
-                .filter(node -> node instanceof GuiComponent)
-                .map(node -> (GuiComponent) node)
-                .filter(node -> {
-                    int col = GridPane.getColumnIndex(node) - 1;
-                    int row = GridPane.getRowIndex(node) - 1;
-                    return col + minX == point.x && row + minY == point.y;
-                })
-                .findFirst()
-                .ifPresent(GuiComponent::notifyContentChange);
+        Platform.runLater(()->{
+            shipGrid.getChildren().stream()
+                    .filter(node -> node instanceof GuiComponent)
+                    .map(node -> (GuiComponent) node)
+                    .filter(component -> {
+                        Integer col = GridPane.getColumnIndex(component);
+                        Integer row = GridPane.getRowIndex(component);
+                        if (col == null || row == null) return false;
+                        col -= 1;
+                        row -= 1;
+                        return col + minX == point.x && row + minY == point.y;
+                    })
+                    .findFirst()
+                    .ifPresent(GuiComponent::notifyContentChange);
+        });
     }
 
     /**

@@ -127,21 +127,23 @@ public class GuiRemoveCrewScreen extends GuiAdventureScreen {
      * Updates the cabinInfoBox with information about the selected cabin and crew count.
      */
     private void updateCabinInfoBox() {
-        cabinInfoBox.getChildren().clear();
-        Label cabinsWithCrewLabel = new Label("Cabins with crew: " + countCabinsWithCrew());
-        cabinsWithCrewLabel.setTextFill(Color.WHITE);
-        cabinInfoBox.getChildren().add(cabinsWithCrewLabel);
+        Platform.runLater(()->{
+            cabinInfoBox.getChildren().clear();
+            Label cabinsWithCrewLabel = new Label("Cabins with crew: " + countCabinsWithCrew());
+            cabinsWithCrewLabel.setTextFill(Color.WHITE);
+            cabinInfoBox.getChildren().add(cabinsWithCrewLabel);
 
-        if (selectedPoint.get() != null && myShipBoard.getCabins().containsKey(selectedPoint.get())) {
-            Label positionLabel = new Label("Selected position: (" + selectedPoint.get().x + "," + selectedPoint.get().y + ")");
-            positionLabel.setTextFill(Color.WHITE);
-            cabinInfoBox.getChildren().add(positionLabel);
+            if (selectedPoint.get() != null && myShipBoard.getCabins().containsKey(selectedPoint.get())) {
+                Label positionLabel = new Label("Selected position: (" + selectedPoint.get().x + "," + selectedPoint.get().y + ")");
+                positionLabel.setTextFill(Color.WHITE);
+                cabinInfoBox.getChildren().add(positionLabel);
 
-            int crewCount = myShipBoard.getCabins().get(selectedPoint.get()).getNumResidents();
-            Label crewLabel = new Label("Crew members: " + crewCount);
-            crewLabel.setTextFill(Color.WHITE);
-            cabinInfoBox.getChildren().add(crewLabel);
-        }
+                int crewCount = myShipBoard.getCabins().get(selectedPoint.get()).getNumResidents();
+                Label crewLabel = new Label("Crew members: " + crewCount);
+                crewLabel.setTextFill(Color.WHITE);
+                cabinInfoBox.getChildren().add(crewLabel);
+            }
+        });
     }
 
     /**

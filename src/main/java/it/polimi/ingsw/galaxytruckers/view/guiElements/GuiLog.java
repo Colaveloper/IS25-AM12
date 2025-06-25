@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.guiElements;
 
+import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -39,7 +40,9 @@ public class GuiLog extends VBox {
      * @param text the message to log
      */
     public void log(String text) {
-        textArea.appendText(text + "\n");
-        textArea.setScrollTop(Double.MAX_VALUE); // ensures it scrolls to the bottom
+        Platform.runLater(() -> {
+            textArea.appendText(text + "\n");
+            textArea.setScrollTop(Double.MAX_VALUE); // ensures it scrolls to the bottom
+        });
     }
 }
