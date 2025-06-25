@@ -571,7 +571,7 @@ class DtoConverterTest {
         @Test
         void getActivatableComponent() {
             Activatable activatable = new DoubleCannon();
-            activatable.activate(Mockito.mock(ActivatableVisitor.class));
+//            activatable.activate(Mockito.mock(ActivatableVisitor.class));
             ComponentDTO dto = DtoConverter.getComponent(activatable);
             assertEquals(activatable.getId(), dto.id());
             assertEquals(activatable.getOrientation(), dto.orientation());

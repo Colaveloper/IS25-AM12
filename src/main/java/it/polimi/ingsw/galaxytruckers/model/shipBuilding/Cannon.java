@@ -25,14 +25,4 @@ public non-sealed class Cannon extends Component implements ComponentInterface{
     public int getFirePower() {
         return (getOrientation() == Direction.UP) ? 2 : 1;
     }
-
-    @Override
-    public void addToVisitor(ComponentVisitor visitor, java.awt.Point point) {
-        visitor.add(this, point);
-    }
-
-    @Override
-    public void removeFromVisitor(ComponentVisitor visitor, java.awt.Point point) {
-        visitor.remove(this, point);
-    }
 }

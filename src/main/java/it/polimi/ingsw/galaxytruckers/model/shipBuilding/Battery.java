@@ -48,14 +48,4 @@ public non-sealed class Battery extends Component implements ComponentInterface{
         }
         this.numBatteries--;
     }
-
-    @Override
-    public void addToVisitor(ComponentVisitor visitor, Point point) {
-        visitor.add(this, point);
-    }
-
-    @Override
-    public void removeFromVisitor(ComponentVisitor visitor, Point point) {
-        visitor.remove(this, point);
-    }
 }

@@ -28,14 +28,4 @@ public non-sealed class Engine extends Component implements ComponentInterface{
     public int getEnginePower() {
         return 1;
     }
-
-    @Override
-    public void addToVisitor(ComponentVisitor visitor, java.awt.Point point) {
-        visitor.add(this, point);
-    }
-
-    @Override
-    public void removeFromVisitor(ComponentVisitor visitor, java.awt.Point point) {
-        visitor.remove(this, point);
-    }
 }

@@ -19,14 +19,14 @@ class DoubleCannonTest extends CannonTest {
     @Test
     void firePowerIsPositiveOnlyWhenActive() {
         assertEquals(0, myDoubleCannon.getFirePower());
-        myDoubleCannon.activate(myShipBoard);
+        myDoubleCannon.activate();
         assertEquals(4, myDoubleCannon.getFirePower());
     }
 
     @Test
     @Override
     void firePowerConformsWithDirection() {
-        myDoubleCannon.activate(myShipBoard);
+        myDoubleCannon.activate();
         assertEquals(4, myDoubleCannon.getFirePower());
         myDoubleCannon.setOrientation(Direction.LEFT);
         assertEquals(2, myDoubleCannon.getFirePower());

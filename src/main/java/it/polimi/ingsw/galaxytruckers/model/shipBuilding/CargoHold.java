@@ -83,14 +83,4 @@ public non-sealed class CargoHold extends Component implements ComponentInterfac
         if (goods.get(goodsType) <= 0) goods.remove(goodsType);
         this.numGoods -= amount;
     }
-
-    @Override
-    public void addToVisitor(ComponentVisitor visitor, java.awt.Point point) {
-        visitor.add(this, point);
-    }
-
-    @Override
-    public void removeFromVisitor(ComponentVisitor visitor, java.awt.Point point) {
-        visitor.remove(this, point);
-    }
 }

@@ -169,7 +169,7 @@ public class SecondShipBoard extends ShipBoard {
     //Visitor pattern methods
 
     @Override
-    public void add(LifeSupport lifeSupport, Point position) {
+    protected void add(LifeSupport lifeSupport, Point position) {
         this.lifeSupports.put(position, lifeSupport);
     }
 
@@ -191,7 +191,7 @@ public class SecondShipBoard extends ShipBoard {
     }
 
     @Override
-    public void remove(Cabin cabin, Point position) {
+    protected void remove(Cabin cabin, Point position) {
         super.remove(cabin, position);
         this.aliens.remove(cabin.getCrewType());
     }

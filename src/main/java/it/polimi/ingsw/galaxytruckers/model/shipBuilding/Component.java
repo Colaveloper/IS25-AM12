@@ -54,12 +54,4 @@ public non-sealed class Component implements ComponentInterface {
         this.orientation = orientation;
         this.connectors.putAll(rotatedConnectors);
     }
-
-    public void addToVisitor(ComponentVisitor visitor, Point point) {
-        // To be implemented by subclasses
-    }
-
-    public void removeFromVisitor(ComponentVisitor visitor, Point point) {
-        // To be implemented by subclasses
-    }
 }

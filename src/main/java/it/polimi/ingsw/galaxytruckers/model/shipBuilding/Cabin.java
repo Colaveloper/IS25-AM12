@@ -68,14 +68,4 @@ public non-sealed class Cabin extends Component implements ComponentInterface{
         }
         this.numResidents--;
     }
-
-    @Override
-    public void addToVisitor(ComponentVisitor visitor, java.awt.Point point) {
-        visitor.add(this, point);
-    }
-
-    @Override
-    public void removeFromVisitor(ComponentVisitor visitor, java.awt.Point point) {
-        visitor.remove(this, point);
-    }
 }

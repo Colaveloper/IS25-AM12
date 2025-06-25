@@ -18,9 +18,9 @@ class DoubleEngineTest extends EngineTest {
     @Test @Override
     void getEnginePower() {
         assertEquals(0, myDoubleEngine.getEnginePower());
-        myDoubleEngine.activate(myShipBoard);
+        myDoubleEngine.activate();
         assertEquals(2, myDoubleEngine.getEnginePower());
-        myDoubleEngine.deactivate(myShipBoard);
+        myDoubleEngine.deactivate();
         assertEquals(0, myDoubleEngine.getEnginePower());
     }
 }

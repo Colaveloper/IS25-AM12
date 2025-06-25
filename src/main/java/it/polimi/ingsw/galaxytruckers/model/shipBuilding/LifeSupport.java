@@ -48,14 +48,4 @@ public non-sealed class LifeSupport extends Component implements ComponentInterf
     public CrewType getAlienType() {
         return crewType;
     }
-
-    @Override
-    public void addToVisitor(ComponentVisitor visitor, java.awt.Point point) {
-        visitor.add(this, point);
-    }
-
-    @Override
-    public void removeFromVisitor(ComponentVisitor visitor, java.awt.Point point) {
-        visitor.remove(this, point);
-    }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Abstract class representing a ship board in the game.
  */
-public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor {
+public abstract class ShipBoard {
     protected static final Point center = new Point(7,7);
     protected final GameEventListener eventListener;
 
@@ -144,12 +144,12 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
             lastPosition = position;
             component.setOrientation(direction);
             componentMap.put(position,component);
-            component.addToVisitor(this, position);
+            add(component);
             lastPosition = null;
         }
     }
 
-    //CliComponentBank interaction methods
+    //region interaction methods with the component bank
 
     /**
      * Offers a component to the player (represented by the {@link ShipBoard}),
@@ -173,8 +173,9 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         lastPosition = null;
         return rejectedComponent;
     }
+    // endregion
 
-    //Ship building methods
+    //region ship building methods
 
     /**
      * Places the last offered component at a specific position and orientation on the ship board.
@@ -232,7 +233,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
                 throw new IllegalStateException("You cannot weld last component without setting its position");
             }
             componentMap.put(lastPosition, lastComponent);
-            lastComponent.addToVisitor(this, lastPosition);
+            add(lastComponent);
             lastComponent = null;
             lastPosition = null;
         }
@@ -269,7 +270,19 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
      */
     private void removeComponent(Point position, boolean discard) {
         lastPosition = position;
-        componentMap.remove(lastPosition).removeFromVisitor(this, position);
+        switch (componentMap.get(position)) {
+            case DoubleCannon doubleCannon -> remove(doubleCannon, position);
+            case Cannon cannon -> remove(cannon, position);
+            case DoubleEngine doubleEngine -> remove(doubleEngine, position);
+            case Engine engine -> remove(engine, position);
+            case Battery battery -> remove(battery, position);
+            case Cabin cabin -> remove(cabin, position);
+            case Shield shield -> remove(shield, position);
+            case LifeSupport lifeSupport -> remove(lifeSupport, position);
+            case CargoHold cargoHold -> remove(cargoHold, position);
+            case Component _ -> {}
+        }
+        componentMap.remove(lastPosition);
         lastPosition = null;
         if (discard) losses++;
     }
@@ -287,10 +300,9 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
             lastComponent = null;
         }
     }
+    // endregion
 
-    //Observers
-
-    // Ship stats observers
+    //region ship stats observers
 
     public int getFirePower() {
         return firePower;
@@ -340,7 +352,9 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         return new HashSet<>(shieldDirections);
     }
 
-    // Components Observers
+    // endregion
+
+    //region components observers
 
     public Point getCenter() {
         return new Point(center);
@@ -393,8 +407,9 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     public List<Component> getStashedComponents() {
         return List.of();
     }
+    // endregion
 
-    //CargoHold methods
+    //region cargo hold methods
 
     /**
      * Places goods of a specific type and amount in the cargo hold at a given position.
@@ -427,8 +442,9 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         this.goods.put(goods, this.goods.get(goods) - amount);
         eventListener.notifyGoodsUpdateEvent(this,position,goods,false);
     }
+    // endregion
 
-    //Batteries methods
+    //region batteries methods
 
     /**
      * Uses a battery at a specific position, reducing the number of batteries available.
@@ -443,8 +459,9 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         numBatteries--;
         eventListener.notifyUseBatteryEvent(this,position);
     }
+    // endregion
 
-    //Cabin (and LifeSupport) methods
+    //region cabin and life support methods
     /**
      * Returns the set of crew type options available for a cabin at a specific position.
      * Generally, only the HUMAN crew-type is supported, but subclasses can override
@@ -488,6 +505,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         crewSize--;
         eventListener.notifyLoseCrewEvent(this,position);
     }
+    // endregion
 
     // Activatables methods
 
@@ -502,8 +520,14 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         if (!activatables.containsKey(position)) {
             throw new IllegalStateException("There is no activatable for this position");
         }
-        if (!activatables.get(position).isActive()) {
-            activatables.get(position).activate(this);
+        Activatable activatingComponent = activatables.get(position);
+        if (!activatingComponent.isActive()) {
+            activatingComponent.activate();
+            switch (activatingComponent) {
+                case DoubleCannon doubleCannon -> activate(doubleCannon);
+                case DoubleEngine doubleEngine -> activate(doubleEngine);
+                case Shield shield -> activate(shield);
+            }
             eventListener.notifyActivateComponentEvent(this,position,true);
             return true;
         }
@@ -520,8 +544,14 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         if (!activatables.containsKey(position)) {
             throw new IllegalStateException("There is no activatable for this position");
         }
-        if (activatables.get(position).isActive()) {
-            activatables.get(position).deactivate(this);
+        Activatable deactivatingComponent = activatables.get(position);
+        if (deactivatingComponent.isActive()) {
+            switch (deactivatingComponent) {
+                case DoubleCannon doubleCannon -> deactivate(doubleCannon);
+                case DoubleEngine doubleEngine -> deactivate(doubleEngine);
+                case Shield shield -> deactivate(shield);
+            }
+            deactivatingComponent.deactivate();
         }
     }
 
@@ -532,7 +562,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     public void deactivateAll() {
         for (Point p : activatables.keySet()) {
             if (activatables.get(p).isActive()) {
-                activatables.get(p).deactivate(this);
+                deactivateComponent(p);
             }
         }
     }
@@ -605,7 +635,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         return res;
     }
 
-    //Utilities methods
+    // region utilities methods
 
     protected Map<Direction, Point> getNeighbours(Point position) {
         Map<Direction, Point> res = new HashMap<>();
@@ -615,130 +645,133 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         res.put(Direction.RIGHT, new Point(position.x+1, position.y));
         return res;
     }
+    // endregion
 
-    //Visitor pattern methods
+    // region private activation methods
 
-    @Override
-    public void activate(DoubleCannon doubleCannon) {
+    private void activate(DoubleCannon doubleCannon) {
         this.firePower += doubleCannon.getFirePower();
     }
 
-    @Override
-    public void activate(DoubleEngine doubleEngine) {
+    private void activate(DoubleEngine doubleEngine) {
         this.enginePower += doubleEngine.getEnginePower();
     }
 
-    @Override
-    public void activate(Shield shield) {
+    private void activate(Shield shield) {
         this.shieldDirections.addAll(shield.getDefensibleDirections());
     }
+    // endregion
 
-    @Override
-    public void deactivate(DoubleCannon doubleCannon) {
+    // region private deactivation methods
+    private void deactivate(DoubleCannon doubleCannon) {
         this.firePower -= doubleCannon.getFirePower();
     }
 
-    @Override
-    public void deactivate(DoubleEngine doubleEngine) {
+    private void deactivate(DoubleEngine doubleEngine) {
         this.enginePower -= doubleEngine.getEnginePower();
     }
 
-    @Override
-    public void deactivate(Shield shield) {
+    private void deactivate(Shield shield) {
         for (Direction direction : shield.getDefensibleDirections()) {
             this.shieldDirections.remove(direction);
         }
     }
+    // endregion
 
-    @Override
-    public void add(Cannon cannon, Point position) {
+    // region private add methods for components
+
+    private void add(Component component) {
+        switch (component) {
+            case DoubleCannon doubleCannon -> add(doubleCannon, lastPosition);
+            case Cannon cannon -> add(cannon, lastPosition);
+            case DoubleEngine doubleEngine -> add(doubleEngine, lastPosition);
+            case Engine engine -> add(engine, lastPosition);
+            case Battery battery -> add(battery, lastPosition);
+            case Cabin cabin -> add(cabin, lastPosition);
+            case Shield shield -> add(shield, lastPosition);
+            case CargoHold cargoHold -> add(cargoHold, lastPosition);
+            case LifeSupport lifeSupport -> add(lifeSupport, lastPosition);
+            case Component _ -> {}
+        }
+    }
+
+    private void add(Cannon cannon, Point position) {
         this.cannons.put(position, cannon);
         this.firePower += cannon.getFirePower();
     }
 
-    @Override
-    public void add(Engine engine, Point position) {
+    private void add(Engine engine, Point position) {
         this.engines.put(position, engine);
         this.enginePower += engine.getEnginePower();
     }
 
-    @Override
-    public void add(Battery battery, Point position) {
+    private void add(Battery battery, Point position) {
         this.batteries.put(position, battery);
         this.numBatteries += battery.getNumBatteries();
     }
 
-    @Override
-    public void add(Cabin cabin, Point position) {
+    private void add(Cabin cabin, Point position) {
         this.cabins.put(position, cabin);
         this.crewSize += cabin.getNumResidents();
     }
 
-    @Override
-    public void add(Shield shield, Point position) {
+    private void add(Shield shield, Point position) {
         this.shields.put(position, shield);
         this.activatables.put(position, shield);
     }
 
-    @Override
-    public void add(LifeSupport lifeSupport, Point position) {}
+    protected void add(LifeSupport lifeSupport, Point position) {}
 
-    @Override
-    public void add(CargoHold cargoHold, Point position) {
+    private void add(CargoHold cargoHold, Point position) {
         this.cargoHolds.put(position, cargoHold);
         for (GoodsType goodsType : cargoHold.getGoods().keySet()) {
             this.goods.merge(goodsType, cargoHold.getGoods().get(goodsType), Integer::sum);
         }
     }
 
-    @Override
-    public void add(DoubleCannon doubleCannon, Point position) {
+    private void add(DoubleCannon doubleCannon, Point position) {
         add((Cannon) doubleCannon, position);
         this.activatables.put(position, doubleCannon);
     }
 
-    @Override
-    public void add(DoubleEngine doubleEngine, Point position) {
+    private void add(DoubleEngine doubleEngine, Point position) {
         add((Engine) doubleEngine, position);
         this.activatables.put(position, doubleEngine);
     }
 
-    @Override
-    public void remove(Cannon cannon, Point position) {
+    //endregion
+
+    // region remove methods for components
+
+    private void remove(Cannon cannon, Point position) {
         this.cannons.remove(position);
         this.firePower -= cannon.getFirePower();
     }
 
-    @Override
-    public void remove(Engine engine, Point position) {
+    private void remove(Engine engine, Point position) {
         this.engines.remove(position);
         this.enginePower -= engine.getEnginePower();
     }
 
-    @Override
-    public void remove(Battery battery, Point position) {
+    private void remove(Battery battery, Point position) {
         this.batteries.remove(position);
         this.numBatteries -= battery.getNumBatteries();
     }
 
-    @Override
-    public void remove(Cabin cabin, Point position) {
+    protected void remove(Cabin cabin, Point position) {
         this.crewSize -= cabin.getNumResidents();
         this.cabins.remove(position);
     }
 
-    @Override
-    public void remove(Shield shield, Point position) {
-        shield.deactivate(this);
+    private void remove(Shield shield, Point position) {
+        deactivate(shield);
         this.shields.remove(position);
         this.activatables.remove(position);
     }
 
-    @Override
-    public void remove(LifeSupport lifeSupport, Point position) {}
+    protected void remove(LifeSupport lifeSupport, Point position) {}
 
-    @Override
-    public void remove(CargoHold cargoHold, Point position) {
+    private void remove(CargoHold cargoHold, Point position) {
         Map<GoodsType, Integer> lostGoods = this.cargoHolds.get(position).getGoods();
         for (GoodsType goods: lostGoods.keySet()) {
             this.goods.put(goods, this.goods.get(goods) - lostGoods.get(goods));
@@ -747,17 +780,16 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         this.cargoHolds.remove(position);
     }
 
-    @Override
-    public void remove(DoubleCannon doubleCannon, Point position) {
-        doubleCannon.deactivate(this);
+    private void remove(DoubleCannon doubleCannon, Point position) {
+        deactivate(doubleCannon);
         this.cannons.remove(position);
         this.activatables.remove(position);
     }
 
-    @Override
-    public void remove(DoubleEngine doubleEngine, Point position) {
-        doubleEngine.deactivate(this);
+    private void remove(DoubleEngine doubleEngine, Point position) {
+        deactivate(doubleEngine);
         this.engines.remove(position);
         this.activatables.remove(position);
     }
+    //endregion
 }

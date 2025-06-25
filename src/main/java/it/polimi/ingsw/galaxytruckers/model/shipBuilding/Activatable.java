@@ -5,7 +5,7 @@ package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
  * This interface is implemented by components such as DoubleCannon, DoubleEngine, and Shield.
  */
 public sealed interface Activatable extends ComponentInterface permits DoubleCannon, DoubleEngine, Shield {
-    void activate(ActivatableVisitor visitor);
-    void deactivate(ActivatableVisitor visitor);
+    void activate();
+    void deactivate();
     boolean isActive();
 }

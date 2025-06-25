@@ -27,29 +27,17 @@ public non-sealed class Shield extends Component implements Activatable{
     }
 
     @Override
-    public void activate(ActivatableVisitor visitor) {
+    public void activate() {
         this.active = true;
-        visitor.activate(this);
     }
 
     @Override
-    public void deactivate(ActivatableVisitor visitor) {
-        visitor.deactivate(this);
+    public void deactivate() {
         this.active = false;
     }
 
     @Override
     public boolean isActive() {
         return this.active;
-    }
-
-    @Override
-    public void addToVisitor(ComponentVisitor visitor, java.awt.Point point) {
-        visitor.add(this, point);
-    }
-
-    @Override
-    public void removeFromVisitor(ComponentVisitor visitor, java.awt.Point point) {
-        visitor.remove(this, point);
     }
 }

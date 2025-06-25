@@ -20,7 +20,7 @@ class ShieldTest extends ComponentTest {
 
     @Test
     void protectedDirectionChangesWithRotation() {
-        myShield.activate(myShipBoard);
+        myShield.activate();
         for (Direction direction : Direction.values()) {
             myShield.setOrientation(direction);
             assertEquals(Set.of(direction, direction.getRight()), myShield.getDefensibleDirections());
