@@ -34,7 +34,37 @@ public class Main {
     }
 
     private static void startServer() {
-        Server server = new Server(SERVER_NAME, RMI_PORT, SOCKET_PORT);
+        Scanner input = new Scanner(System.in);
+        System.out.println("Do you want to use demo mode? (yes/no)");
+        boolean demoMode = false;
+        boolean editScenario = false;
+        do {
+            String choice = input.nextLine().trim().toLowerCase();
+            if (choice.equals("yes")) {
+                System.out.println("Demo mode enabled.");
+                demoMode = true;
+                break;
+            } else if (choice.equals("no")) {
+                System.out.println("Demo mode disabled.");
+                break;
+            } else {
+                System.out.println("Invalid choice. Please enter 'yes' or 'no'.");
+            }
+        } while (true);
+        System.out.println("Do you want to edit a scenario? (yes/no)");
+        if (!demoMode) {
+            do {
+                String choice = input.nextLine().trim();
+                if (choice.equals("yes")) {
+                    editScenario = true;
+                    break;
+                } else if (choice.equals("no")) {
+                    System.out.println("Scenario editing disabled.");
+                    break;
+                }
+            } while (true);
+        }
+        Server server = new Server(SERVER_NAME, RMI_PORT, SOCKET_PORT, demoMode, editScenario);
         server.start();
     }
 

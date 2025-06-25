@@ -20,6 +20,7 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -30,10 +31,15 @@ import java.util.stream.Collectors;
 public class GameEventListener {
     private final EventListener<LobbyEvent> controllerListener;
     private final Supplier<LobbyDetailsDTO> lobbyDetailsSupplier;
+    private Runnable startAdventureCallback = () -> {};
 
     public GameEventListener(EventListener<LobbyEvent> controllerListener, Supplier<LobbyDetailsDTO> lobbyDetailsSupplier) {
         this.controllerListener = controllerListener;
         this.lobbyDetailsSupplier = lobbyDetailsSupplier;
+    }
+
+    public void setStartAdventureCallback(Runnable startAdventureCallback) {
+        this.startAdventureCallback = startAdventureCallback;
     }
 
     /**
@@ -64,6 +70,10 @@ public class GameEventListener {
                         ? game.getDeck().getCurrentCard().getId()
                         : -1
         );
+    }
+
+    public void notifyStartAdventure() {
+        startAdventureCallback.run();
     }
 
     /**

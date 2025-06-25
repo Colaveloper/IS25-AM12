@@ -1,0 +1,35 @@
+[ {
+  "componentMap" : {
+    "(7,7)" : {
+      "id" : 52,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "cabin",
+        "crewType" : "HUMAN",
+        "numResidents" : 0
+      }
+    }
+  },
+  "lastComponent" : -1,
+  "lastPosition" : null,
+  "stashedComponents" : [ ],
+  "credits" : 0,
+  "losses" : 0
+}, {
+  "componentMap" : {
+    "(7,7)" : {
+      "id" : 33,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "cabin",
+        "crewType" : "HUMAN",
+        "numResidents" : 0
+      }
+    }
+  },
+  "lastComponent" : -1,
+  "lastPosition" : null,
+  "stashedComponents" : [ ],
+  "credits" : 0,
+  "losses" : 0
+} ]

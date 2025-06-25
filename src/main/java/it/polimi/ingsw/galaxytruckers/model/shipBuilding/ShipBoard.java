@@ -73,6 +73,16 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
         addWeldedComponent(ComponentRegistry.getInstance().getStartingCabin(color), center, Direction.UP);
     }
 
+    public void setup(Map<Point, Component> components, int credits, int losses) {
+        componentMap.clear();
+        for (Point point : components.keySet()) {
+            Component component = components.get(point);
+            addWeldedComponent(component, point, component.getOrientation());
+        }
+        this.credits = credits;
+        this.losses = losses;
+    }
+
     /**
      * Checks if the ship board contains a specific point by using static ship area
      * defined only in subclasses.
@@ -661,6 +671,7 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     @Override
     public void add(Cabin cabin, Point position) {
         this.cabins.put(position, cabin);
+        this.crewSize += cabin.getNumResidents();
     }
 
     @Override
@@ -675,17 +686,20 @@ public abstract class ShipBoard implements ComponentVisitor, ActivatableVisitor 
     @Override
     public void add(CargoHold cargoHold, Point position) {
         this.cargoHolds.put(position, cargoHold);
+        for (GoodsType goodsType : cargoHold.getGoods().keySet()) {
+            this.goods.merge(goodsType, cargoHold.getGoods().get(goodsType), Integer::sum);
+        }
     }
 
     @Override
     public void add(DoubleCannon doubleCannon, Point position) {
-        this.cannons.put(position, doubleCannon);
+        add((Cannon) doubleCannon, position);
         this.activatables.put(position, doubleCannon);
     }
 
     @Override
     public void add(DoubleEngine doubleEngine, Point position) {
-        this.engines.put(position, doubleEngine);
+        add((Engine) doubleEngine, position);
         this.activatables.put(position, doubleEngine);
     }
 

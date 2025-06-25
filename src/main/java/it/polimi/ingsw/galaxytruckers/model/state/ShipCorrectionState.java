@@ -44,13 +44,12 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
 
     @Override
     public void setGame(Game game) {
-        this.game = game;
+        super.setGame(game);
         for (ShipBoard shipBoard : game.getShipBoards()) {
             if (checkShipValidity(shipBoard)) {
                 checkShipConnection(shipBoard);
             }
         }
-        game.getEventListener().notifyGameStateUpdateEvent(this);
         tryStateTransition();
     }
 

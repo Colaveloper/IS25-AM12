@@ -32,7 +32,7 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
 
     @Override
     public void setGame(Game game) {
-        this.game = game;
+        super.setGame(game);
         for (ShipBoard shipBoard : game.getShipBoards()) {
             shipRelevantCabins.put(shipBoard, new HashMap<>());
             Map<CrewType, Set<Point>> crewTypeCabin = shipRelevantCabins.get(shipBoard);
@@ -51,7 +51,6 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
                 initHumans(shipBoard,false);
             }
         }
-        game.getEventListener().notifyGameStateUpdateEvent(this);
         tryStateTransition();
     }
 
@@ -91,8 +90,11 @@ public non-sealed class ShipInitializationState extends GameState implements Gam
         synchronized (lock) {
             if (!expired && (shipRelevantCabins.isEmpty() || pendingShipBoards.containsAll(shipRelevantCabins.keySet()))) {
                 expired = true;
-                pendingShipBoards.forEach(s -> initHumans(s,false));
-                game.submitStateTransition(() -> game.setCurrentState(new DrawCardState()));
+                game.submitStateTransition(() -> {
+                    pendingShipBoards.forEach(s -> initHumans(s,false));
+                    game.getEventListener().notifyStartAdventure();
+                    game.setCurrentState(new DrawCardState());
+                });
             }
         }
     }

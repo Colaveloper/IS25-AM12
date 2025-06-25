@@ -27,10 +27,14 @@ public interface GameInterface {
      */
     ShipBoard addShipBoard(GameColor color);
 
+    void setStartAdventureCallback(Runnable startAdventureCallback);
+
     /**
      * Starts the game, setting the game state to the initial state.
      */
     void start();
+
+    void skipBuilding();
 
     /**
      * Skips the available actions for the given ship board.

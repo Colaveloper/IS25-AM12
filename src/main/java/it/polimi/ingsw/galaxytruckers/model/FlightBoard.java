@@ -18,6 +18,23 @@ public abstract class FlightBoard {
         this.gameEventListener = gameEventListener;
     }
 
+    public void setup(Set<ShipBoard> shipBoards) {
+        for (ShipBoard shipBoard : shipBoards) {
+            placeInternal(shipBoard);
+        }
+    }
+
+    private int placeInternal(ShipBoard shipBoard) {
+        int position;
+        synchronized (startingPositionsLeft) {
+            position = startingPositionsLeft.removeFirst();
+        }
+        synchronized (shipToPlace) {
+            shipToPlace.put(shipBoard, position);
+        }
+        return position;
+    }
+
     /**
      * @return a map containing for each ship still in play their position
      * on the flightBoard
@@ -50,13 +67,7 @@ public abstract class FlightBoard {
      * @return the position the ship was placed at
      * */
     public void placeShipOnFlightBoard(ShipBoard shipBoard) {
-        int position;
-        synchronized (startingPositionsLeft) {
-            position = startingPositionsLeft.removeFirst();
-        }
-        synchronized (shipToPlace) {
-            shipToPlace.put(shipBoard, position);
-        }
+        int position = placeInternal(shipBoard);
         gameEventListener.notifyFlightBoardUpdateEvent(shipBoard,position);
     }
 

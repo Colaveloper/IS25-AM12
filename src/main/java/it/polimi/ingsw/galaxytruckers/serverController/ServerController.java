@@ -27,6 +27,9 @@ public class ServerController implements ServerControllerInterface {
     private final GameModelInterface model;
     private final EventQueue<ControllerEvent> eventQueue;
 
+    private final boolean demoMode;
+    private final boolean editScenario;
+
     private final Map<UUID, Lobby> idToLobby = new HashMap<>();
     private final Set<Lobby> activeLobbies = new HashSet<>();
 
@@ -39,7 +42,13 @@ public class ServerController implements ServerControllerInterface {
      * @param model The game model interface to be used by this controller
      */
     public ServerController(GameModelInterface model) {
+        this(model, false, false);
+    }
+
+    public ServerController(GameModelInterface model, boolean demoMode, boolean editScenario) {
         this.model = model;
+        this.demoMode = demoMode;
+        this.editScenario = editScenario;
         this.eventQueue = new EventQueue<>();
         ControllerEventHandler evenQueueHandler = new ControllerEventHandler(eventQueue);
         evenQueueHandler.start();
@@ -49,6 +58,8 @@ public class ServerController implements ServerControllerInterface {
     public ServerController(GameModelInterface model, EventQueue<ControllerEvent> eventQueue) {
         this.model = model;
         this.eventQueue = eventQueue;
+        this.demoMode = false;
+        this.editScenario = false;
     }
 
     @Override
@@ -96,7 +107,7 @@ public class ServerController implements ServerControllerInterface {
             if (creator.getLobby().isPresent()) {
                 throw new IllegalStateException("You are already in a lobby!");
             }
-            newLobby = new Lobby(model, creator, level, numPlayers, this::removeLobby);
+            newLobby = new Lobby(demoMode, editScenario, model, creator, level, numPlayers, this::removeLobby);
             idToLobby.put(newLobby.getId(), newLobby);
             activeLobbies.add(newLobby);
             eventQueue.notifyEvent(new AddActiveLobbyEvent(DtoConverter.getActiveLobby(newLobby)));

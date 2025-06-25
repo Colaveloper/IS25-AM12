@@ -34,9 +34,8 @@ public final class ChoosePlanetState extends AdventureState implements GameState
 
     @Override
     public void setGame(Game game) {
-        this.game = game;
+        super.setGame(game);
         this.orderedShipBoards.addAll(game.getFlightBoard().getOrderedShips());
-        game.getEventListener().notifyGameStateUpdateEvent(this);
     }
 
     @Override

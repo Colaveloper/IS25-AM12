@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.factory.GameFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.utils.LockUtils;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
@@ -92,6 +93,24 @@ public class Game implements GameInterface {
         setCurrentState(gameFactory.createShipBuildingState());
     }
 
+    @Override
+    public void skipBuilding() {
+        withStateWriteLock(() -> {
+            deck.initMasterDeck();
+            flightBoard.setup(shipBoards);
+            currentState = new DrawCardState();
+            currentState.setGame(this);
+            for (ShipBoard shipBoard : shipBoards) {
+                eventListener.requestSnapshot(this, shipBoard);
+            }
+        });
+    }
+
+    @Override
+    public void setStartAdventureCallback(Runnable startAdventureCallback) {
+        eventListener.setStartAdventureCallback(startAdventureCallback);
+    }
+
     //endregion
 
     //region State methods
@@ -115,6 +134,7 @@ public class Game implements GameInterface {
         withStateWriteLock(() -> {
             this.currentState = state;
             state.setGame(this);
+            eventListener.notifyGameStateUpdateEvent(this.currentState);
         });
     }
 

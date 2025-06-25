@@ -51,6 +51,14 @@ public non-sealed class Cabin extends Component implements ComponentInterface{
         return crewType;
     }
 
+    public void setCrewType(CrewType crewType) {
+        this.crewType = crewType;
+    }
+
+    public void setNumResidents(int numResidents) {
+        this.numResidents = numResidents;
+    }
+
     /**
      * Method to remove a resident from the cabin.
      */

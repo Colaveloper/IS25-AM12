@@ -45,6 +45,12 @@ public non-sealed class CargoHold extends Component implements ComponentInterfac
         return new HashMap<>(goods);
     }
 
+    public void setGoods(Map<GoodsType, Integer> goods) {
+        this.goods.clear();
+        this.goods.putAll(goods);
+        this.numGoods = goods.values().stream().mapToInt(Integer::intValue).sum();
+    }
+
     /**
      * Adds goods to the cargo hold.
      * @param goodsType the type of goods to add
