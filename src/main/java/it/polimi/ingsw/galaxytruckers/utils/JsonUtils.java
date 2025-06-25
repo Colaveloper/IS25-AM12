@@ -1,9 +1,15 @@
 package it.polimi.ingsw.galaxytruckers.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.Connector;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.ShipBoardDTO;
+import it.polimi.ingsw.galaxytruckers.utils.json.PointKeyDeserializer;
+import it.polimi.ingsw.galaxytruckers.utils.json.PointSerializer;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,4 +53,22 @@ public class JsonUtils {
 //        }
 //    }
 //        return connectors;
+
+    public static JsonNode serializeShipBoardDTO(ShipBoardDTO shipBoardDTO) {
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addKeySerializer(Point.class, new PointSerializer());
+        module.addKeyDeserializer(Point.class, new PointKeyDeserializer());
+        mapper.registerModule(module);
+        return mapper.valueToTree(shipBoardDTO);
+    }
+
+    public static ShipBoardDTO deserializeShipBoardDTO(JsonNode shipBoardDTO) {
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addKeySerializer(Point.class, new PointSerializer());
+        module.addKeyDeserializer(Point.class, new PointKeyDeserializer());
+        mapper.registerModule(module);
+        return mapper.convertValue(shipBoardDTO, ShipBoardDTO.class);
+    }
 }

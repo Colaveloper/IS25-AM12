@@ -46,6 +46,14 @@ public non-sealed class Cabin extends Component implements ComponentInterface{
         return crewType;
     }
 
+    public void setCrewType(CrewType crewType) {
+        this.crewType = crewType;
+    }
+
+    public void setNumResidents(int numResidents) {
+        this.numResidents = numResidents;
+    }
+
     public void loseResidents() {
         if (this.numResidents <= 0) {
             throw new IllegalStateException("There are no more residents here");

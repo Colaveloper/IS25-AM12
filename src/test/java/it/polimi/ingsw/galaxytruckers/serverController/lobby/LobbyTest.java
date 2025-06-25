@@ -16,6 +16,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -346,6 +350,38 @@ class LobbyTest {
         }
 
 
+    }
+
+    @Nested
+    class ScenarioConfigTests {
+        final String scenarioPath = "src/main/resources/testScenario.json";
+        @Test
+        void editScenario() throws IOException {
+            lobby = new Lobby(false, true, new ModelStub(), p1, Level.SECOND, 2, removeLobby) {
+                @Override
+                protected String getScenarioPath() {
+                    return scenarioPath;
+                }
+            };
+            lobby.addPlayer(Player.addPlayer("p2"));
+            lobby.saveShips();
+            File file = new File(scenarioPath);
+            assertTrue(file.exists());
+            assertTrue(file.isFile());
+            assertTrue(Files.size(Paths.get(scenarioPath)) > 0);
+        }
+
+        @Test
+        void loadScenario() throws IOException {
+            lobby = new Lobby(true, false, new ModelStub(), p1, Level.SECOND, 2, removeLobby) {
+                @Override
+                protected String getScenarioPath() {
+                    return scenarioPath;
+                }
+            };
+            lobby.addPlayer(Player.addPlayer("p2"));
+            verify(game).skipBuilding();
+        }
     }
 
     @Nested

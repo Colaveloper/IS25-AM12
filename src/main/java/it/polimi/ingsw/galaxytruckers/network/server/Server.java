@@ -12,15 +12,19 @@ public class Server {
     private final String name;
     private final int rmiPort;
     private final int socketPort;
+    private final boolean demoMode;
+    private final boolean editScenario;
 
-    public Server(String name, int rmiPort, int socketPort) {
+    public Server(String name, int rmiPort, int socketPort, boolean demoMode, boolean editScenario) {
         this.name = name;
         this.rmiPort = rmiPort;
         this.socketPort = socketPort;
+        this.demoMode = demoMode;
+        this.editScenario = editScenario;
     }
 
     public void start() {
-        ServerController controller = new ServerController(new GameModel()); // TODO: consider making ServerControllerInterface
+        ServerController controller = new ServerController(new GameModel(), demoMode, editScenario);
         SessionManager.getInstance().setServerController(controller);
         try {
             RmiServer rmiServer = new RmiServer(controller);
@@ -43,7 +47,7 @@ public class Server {
         if (args.length != 3) {
             throw new IllegalArgumentException("Wrong number of arguments");
         }
-        Server server = new Server(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+        Server server = new Server(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), false, false);
         server.start();
         System.out.println("The server has been started...");
     }

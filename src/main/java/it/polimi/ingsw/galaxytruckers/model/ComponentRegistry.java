@@ -20,6 +20,7 @@ public class ComponentRegistry {
 
     private final File componentJson = new File("src/main/resources/tiles.json");
 
+    private final Map<Integer, JsonNode> idToComponent = new HashMap<>();
     private final List<JsonNode> bankComponents = new ArrayList<>();
     private final Map<GameColor, JsonNode> startingCabins = new HashMap<>();
 
@@ -56,12 +57,24 @@ public class ComponentRegistry {
         }
     }
 
+    public Component getComponentById(int id) {
+        if (idToComponent.containsKey(id)) {
+            try {
+                return parseComponent(idToComponent.get(id));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        throw new IllegalArgumentException("No component found with id: " + id);
+    }
+
     private void loadFile() throws IOException {
         //reading from json file and returning the list of components
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(componentJson);
 
         for (JsonNode node : rootNode) {
+            int id = node.get("id").asInt();
             String type = node.get("type").asText();
             if (type.equals("cabin")) {
                 if (node.get("color") != null) {
@@ -73,6 +86,7 @@ public class ComponentRegistry {
             } else {
                 bankComponents.add(node);
             }
+            idToComponent.put(id, node);
         }
     }
 

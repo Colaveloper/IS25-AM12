@@ -13,7 +13,11 @@ public interface GameInterface {
 
     ShipBoard addShipBoard(GameColor color);
 
+    void setStartAdventureCallback(Runnable startAdventureCallback);
+
     void start();
+
+    void skipBuilding();
 
     void skip(ShipBoard shipBoard);
 

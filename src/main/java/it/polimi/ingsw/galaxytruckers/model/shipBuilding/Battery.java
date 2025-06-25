@@ -33,6 +33,10 @@ public non-sealed class Battery extends Component implements ComponentInterface{
         return numBatteries;
     }
 
+    public void setNumBatteries(int numBatteries) {
+        this.numBatteries = numBatteries;
+    }
+
     public void useBatteries() throws IllegalArgumentException {
         if (this.numBatteries <= 0) {
             throw new IllegalArgumentException("There are no more batteries here");

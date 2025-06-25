@@ -34,7 +34,6 @@ class GameStateTest {
         testState = new AdventureStateStub();
         testState.setGame(game);
         assertEquals(game, testState.game);
-        Mockito.verify(game.getEventListener()).notifyGameStateUpdateEvent(testState);
     }
 
     @Test

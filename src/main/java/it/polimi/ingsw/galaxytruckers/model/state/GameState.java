@@ -15,7 +15,6 @@ public abstract non-sealed class GameState implements GameStateInterface {
 
     public void setGame(Game game) {
         this.game = game;
-        game.getEventListener().notifyGameStateUpdateEvent(this);
     }
 
     public abstract void skip(ShipBoard shipBoard);

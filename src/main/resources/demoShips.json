@@ -1,0 +1,313 @@
+[ {
+  "componentMap" : {
+    "(8,8)" : {
+      "id" : 5,
+      "orientation" : "LEFT",
+      "payload" : {
+        "type" : "battery",
+        "numBatteries" : 2
+      }
+    },
+    "(9,8)" : {
+      "id" : 46,
+      "orientation" : "LEFT",
+      "payload" : {
+        "type" : "cabin",
+        "crewType" : "BROWN",
+        "numResidents" : 1
+      }
+    },
+    "(8,7)" : {
+      "id" : 112,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(10,8)" : {
+      "id" : 139,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(9,7)" : {
+      "id" : 128,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "activatable",
+        "active" : false
+      }
+    },
+    "(5,9)" : {
+      "id" : 83,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(4,9)" : {
+      "id" : 75,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(6,6)" : {
+      "id" : 24,
+      "orientation" : "RIGHT",
+      "payload" : {
+        "type" : "cargoHold",
+        "goods" : { }
+      }
+    },
+    "(5,7)" : {
+      "id" : 143,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(4,8)" : {
+      "id" : 150,
+      "orientation" : "DOWN",
+      "payload" : {
+        "type" : "activatable",
+        "active" : false
+      }
+    },
+    "(7,6)" : {
+      "id" : 102,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(4,7)" : {
+      "id" : 67,
+      "orientation" : "DOWN",
+      "payload" : {
+        "type" : "cargoHold",
+        "goods" : { }
+      }
+    },
+    "(6,5)" : {
+      "id" : 70,
+      "orientation" : "LEFT",
+      "payload" : {
+        "type" : "cargoHold",
+        "goods" : { }
+      }
+    },
+    "(5,8)" : {
+      "id" : 15,
+      "orientation" : "DOWN",
+      "payload" : {
+        "type" : "battery",
+        "numBatteries" : 3
+      }
+    },
+    "(7,7)" : {
+      "id" : 52,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "cabin",
+        "crewType" : "HUMAN",
+        "numResidents" : 2
+      }
+    },
+    "(6,8)" : {
+      "id" : 1,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "battery",
+        "numBatteries" : 2
+      }
+    },
+    "(6,7)" : {
+      "id" : 43,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "cabin",
+        "crewType" : "PURPLE",
+        "numResidents" : 1
+      }
+    },
+    "(7,8)" : {
+      "id" : 57,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(5,6)" : {
+      "id" : 101,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(9,9)" : {
+      "id" : 96,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "activatable",
+        "active" : false
+      }
+    },
+    "(8,9)" : {
+      "id" : 48,
+      "orientation" : "RIGHT",
+      "payload" : {
+        "type" : "cabin",
+        "crewType" : "HUMAN",
+        "numResidents" : 2
+      }
+    }
+  },
+  "lastComponent" : -1,
+  "lastPosition" : null,
+  "stashedComponents" : [ ],
+  "credits" : 0,
+  "losses" : 1
+}, {
+  "componentMap" : {
+    "(8,8)" : {
+      "id" : 56,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(9,8)" : {
+      "id" : 25,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "cargoHold",
+        "goods" : { }
+      }
+    },
+    "(8,7)" : {
+      "id" : 64,
+      "orientation" : "DOWN",
+      "payload" : {
+        "type" : "cargoHold",
+        "goods" : { }
+      }
+    },
+    "(10,8)" : {
+      "id" : 140,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(9,7)" : {
+      "id" : 152,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "activatable",
+        "active" : false
+      }
+    },
+    "(8,6)" : {
+      "id" : 107,
+      "orientation" : "RIGHT",
+      "payload" : null
+    },
+    "(4,9)" : {
+      "id" : 85,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(5,7)" : {
+      "id" : 58,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(4,8)" : {
+      "id" : 23,
+      "orientation" : "RIGHT",
+      "payload" : {
+        "type" : "cargoHold",
+        "goods" : { }
+      }
+    },
+    "(6,6)" : {
+      "id" : 130,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "activatable",
+        "active" : false
+      }
+    },
+    "(7,6)" : {
+      "id" : 116,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(5,8)" : {
+      "id" : 148,
+      "orientation" : "RIGHT",
+      "payload" : null
+    },
+    "(4,7)" : {
+      "id" : 2,
+      "orientation" : "RIGHT",
+      "payload" : {
+        "type" : "battery",
+        "numBatteries" : 2
+      }
+    },
+    "(7,7)" : {
+      "id" : 33,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "cabin",
+        "crewType" : "HUMAN",
+        "numResidents" : 2
+      }
+    },
+    "(6,8)" : {
+      "id" : 49,
+      "orientation" : "RIGHT",
+      "payload" : {
+        "type" : "cabin",
+        "crewType" : "PURPLE",
+        "numResidents" : 1
+      }
+    },
+    "(10,9)" : {
+      "id" : 47,
+      "orientation" : "RIGHT",
+      "payload" : {
+        "type" : "cabin",
+        "crewType" : "BROWN",
+        "numResidents" : 1
+      }
+    },
+    "(6,7)" : {
+      "id" : 4,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "battery",
+        "numBatteries" : 2
+      }
+    },
+    "(7,8)" : {
+      "id" : 81,
+      "orientation" : "UP",
+      "payload" : null
+    },
+    "(5,6)" : {
+      "id" : 68,
+      "orientation" : "LEFT",
+      "payload" : {
+        "type" : "cargoHold",
+        "goods" : { }
+      }
+    },
+    "(9,9)" : {
+      "id" : 100,
+      "orientation" : "UP",
+      "payload" : {
+        "type" : "activatable",
+        "active" : false
+      }
+    },
+    "(8,9)" : {
+      "id" : 35,
+      "orientation" : "DOWN",
+      "payload" : {
+        "type" : "cabin",
+        "crewType" : "HUMAN",
+        "numResidents" : 2
+      }
+    }
+  },
+  "lastComponent" : -1,
+  "lastPosition" : null,
+  "stashedComponents" : [ ],
+  "credits" : 0,
+  "losses" : 0
+} ]

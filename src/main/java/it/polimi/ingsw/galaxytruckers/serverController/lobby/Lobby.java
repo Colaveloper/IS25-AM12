@@ -1,5 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.serverController.lobby;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
@@ -11,12 +14,19 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.DtoConverter;
+import it.polimi.ingsw.galaxytruckers.serverController.dto.ShipBoardDTO;
 import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
+import it.polimi.ingsw.galaxytruckers.serverController.utils.SetupUtils;
+import it.polimi.ingsw.galaxytruckers.utils.JsonUtils;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
@@ -24,6 +34,7 @@ import java.util.function.Consumer;
 
 public class Lobby implements LobbyInterface {
     private static final long REMOVAL_DELAY = 15000;
+    private static final String demoPath = "src/main/resources/demoShips.json";
 
     private final Object paramLock = new Object();
 
@@ -31,6 +42,9 @@ public class Lobby implements LobbyInterface {
     private final Level level;
     private final int numPlayers;
     private final Player host;
+
+    private final boolean demoMode;
+    private final boolean editScenario;
 
     private volatile LobbyState state;
     private final GameInterface game;
@@ -49,6 +63,13 @@ public class Lobby implements LobbyInterface {
     private long removalDelay = REMOVAL_DELAY;
 
     public Lobby(GameModelInterface model, Player creator, Level level, int numPlayers, Consumer<Lobby> removeLobby) {
+        this(false, false, model, creator, level, numPlayers, removeLobby);
+    }
+
+    public Lobby(boolean demoMode, boolean editScenario, GameModelInterface model, Player creator, Level level, int numPlayers, Consumer<Lobby> removeLobby) {
+        this.demoMode = demoMode;
+        this.editScenario = editScenario;
+
         this.id = UUID.randomUUID();
         this.level = level;
         this.numPlayers = numPlayers;
@@ -201,8 +222,33 @@ public class Lobby implements LobbyInterface {
             ShipBoard ship = game.addShipBoard(playerColors.get(player));
             player.setShipBoard(ship);
         }
-        game.start();
+        if (demoMode) {
+            loadScenario();
+        } else {
+            if (editScenario) game.setStartAdventureCallback(this::saveShips);
+            game.start();
+        }
         setState(LobbyState.INGAME);
+    }
+
+    protected String getScenarioPath() {
+        return demoPath;
+    }
+
+    private void loadScenario() {
+        ObjectMapper mapper = new ObjectMapper();
+        File file = Paths.get(getScenarioPath()).toFile();
+        try {
+            JsonNode root = mapper.readTree(file);
+            for (int i = 0; i < numPlayers; i++) {
+                ShipBoardDTO shipBoardDTO = JsonUtils.deserializeShipBoardDTO(root.get(i));
+                ShipBoard shipBoard = getPlayers().get(i).getShipBoard().orElseThrow();
+                SetupUtils.setupShipBoard(shipBoard, shipBoardDTO);
+            }
+            game.skipBuilding();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     public void skip(Player player) {
@@ -211,6 +257,30 @@ public class Lobby implements LobbyInterface {
         }
         if (state == LobbyState.INGAME) {
             game.skip(player.getShipBoard().orElseThrow());
+        }
+    }
+
+
+    @VisibleForTesting
+    protected void saveShips() {
+        List<JsonNode> nodes = new ArrayList<>();
+        checkLobbyState(LobbyState.INGAME);
+        for (Player player : getPlayers()) {
+            ShipBoard shipBoard = player.getShipBoard().orElseThrow();
+            ShipBoardDTO shipBoardDTO = DtoConverter.getShipBoard(shipBoard);
+            nodes.add(JsonUtils.serializeShipBoardDTO(shipBoardDTO));
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode fileNode = mapper.createArrayNode();
+        fileNode.addAll(nodes);
+        try {
+            mapper.writerWithDefaultPrettyPrinter()
+                    .writeValue(
+                            Paths.get(getScenarioPath()).toFile(),
+                            fileNode
+                    );
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
