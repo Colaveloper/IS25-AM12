@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
+import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import it.polimi.ingsw.galaxytruckers.view.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.cliElements.CliAdventureCard;
@@ -39,8 +40,7 @@ public class CliNewCardScreen extends CliAdventureScreen {
         }
         if (hasDrawn) {
             System.out.println("A new card has been drawn:\n");
-            List<String> descriptions = adventureCard.getDescription();
-            descriptions.forEach(System.out::println);
+            DescriptionUtils.borderAndTitle(adventureCard.getDescription(), "Current card").forEach(System.out::println);
         }
         printActions();
     }

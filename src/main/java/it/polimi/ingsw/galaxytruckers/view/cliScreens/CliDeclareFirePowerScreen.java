@@ -28,6 +28,7 @@ public class CliDeclareFirePowerScreen extends CliActivationScreen {
     @Override
     public void render() {
         printShipFlightStats().forEach(System.out::println);
+        printCurrentCard().forEach(System.out::println);
         if(imOut) {
             System.out.println("you surrendered");
             return;

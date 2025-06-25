@@ -28,24 +28,15 @@ public class CliLoseGoodsScreen extends CliAdventureScreen {
             return;
         }
         if (isMyTurn) {
-            System.out.println("Your turn to lose goods");
+            if(myShipBoard.getCargoOnShip() == 0) System.out.println("Your turn to lose batteries");
+            else System.out.println("Your turn to lose goods");
             System.out.println("Select cargo holds to discard goods from");
-            System.out.println("Cargo holds with goods: " + countCargoHoldsWithGoods());
         } else {
             System.out.println("Waiting for " + currentShip.getColor() + " ship to lose goods");
         }
         printActions();
     }
 
-    private int countCargoHoldsWithGoods() {
-        int count = 0;
-        for (CargoHold cargoHold : currentShip.getCargoHolds().values()) {
-            if (!cargoHold.getGoods().isEmpty()) {
-                count++;
-            }
-        }
-        return count;
-    }
 
     @Override
     public void parseAndInvoke(String input) {
@@ -58,16 +49,28 @@ public class CliLoseGoodsScreen extends CliAdventureScreen {
             System.out.println("It's not your turn, this line should never be reached");
             return;
         }
-        if (parts[0].equalsIgnoreCase("R")) {
+        if (parts[0].equalsIgnoreCase("L")) {
             Point p = getPoint(input);
-            if (!currentShip.getCargoHolds().containsKey(p)) {
-                System.out.println("No cargo hold at this position");
-                return;
+            if(myShipBoard.getCargoOnShip() == 0) {
+                if (!myShipBoard.getBatteries().containsKey(p)){
+                    System.out.println("No battery at this position");
+                    return;
+                }
+                if(myShipBoard.getBatteries().get(p).getNumBatteries() == 0) {
+                    System.out.println("Battery at this position is not active");
+                    return;
+                }
             }
+            else {
+                if (!myShipBoard.getCargoHolds().containsKey(p)) {
+                    System.out.println("No cargo hold at this position");
+                    return;
+                }
+                if (myShipBoard.getCargoHolds().get(p).getGoods().isEmpty()) {
+                    System.out.println("No goods in this cargo hold");
+                    return;
+                }
 
-            if (currentShip.getCargoHolds().get(p).getGoods().isEmpty()) {
-                System.out.println("No goods in this cargo hold");
-                return;
             }
             controller.loseGoods(p);
         }

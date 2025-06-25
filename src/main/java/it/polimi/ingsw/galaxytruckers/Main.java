@@ -6,7 +6,7 @@ import it.polimi.ingsw.galaxytruckers.network.server.Server;
 import java.util.Scanner;
 
 public class Main {
-    private final static int RMI_PORT = 12345; // Default RMI port
+    private final static int RMI_PORT = 52480; // Default RMI port
     private final static int SOCKET_PORT = 12346; // Default socket port
     private final static String SERVER_ADDRESS = "localhost"; // Default server address
     private final static String SERVER_NAME = "Galaxy-Truckers-Server"; // Default server name

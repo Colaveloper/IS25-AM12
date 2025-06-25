@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 public abstract class ShipBoard {
 
     protected final Map<Point, Component> componentMap;
-    protected Component lastComponent;  // content can be null
+    protected Component lastComponent;  // can be null
     protected Point lastPosition;  // can be null
     protected final GameColor color;
 
@@ -28,6 +28,7 @@ public abstract class ShipBoard {
     protected int crewSize;
     protected int credits;
     protected int losses;
+    protected int cargoOnShip;
 
     protected final Map<Point, Cannon> cannons;
     protected final Map<Point, Engine> engines;
@@ -255,8 +256,11 @@ public abstract class ShipBoard {
                 engines.remove(position);
                 enginePower -= engine.getEnginePower();
             }
-            case CargoHold _ -> {
+            case CargoHold cargoHold -> {
                 cargoHolds.remove(position);
+                cargoOnShip -= cargoHold.getGoods().values().stream()
+                        .mapToInt(Integer::intValue)
+                        .sum();
             }
             case Shield _ -> {
                 shields.remove(position);
@@ -293,6 +297,7 @@ public abstract class ShipBoard {
      */
     public void placeGoods(Point position, GoodsType goods) {
         cargoHolds.get(position).addGoods(goods);
+        cargoOnShip += 1;
     }
 
     /**
@@ -303,6 +308,7 @@ public abstract class ShipBoard {
      */
     public void removeGoods(Point position, GoodsType goods) {
         cargoHolds.get(position).removeGoods(goods);
+        cargoOnShip -= 1;
     }
 
     //Batteries methods
@@ -415,6 +421,10 @@ public abstract class ShipBoard {
 
     public Map<Point, Battery> getBatteries() {
         return batteries;
+    }
+
+    public int getCargoOnShip() {
+        return cargoOnShip;
     }
 
     public Map<Point, Shield> getShields() {

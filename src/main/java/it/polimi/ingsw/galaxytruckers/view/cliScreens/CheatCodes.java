@@ -19,11 +19,11 @@ public class CheatCodes {
     private static boolean isCheatOn;
 
     static {
-//        for(int i = 0; i < 20; i++){
-//            secondToBuild.add("C");
-//            secondToBuild.add("R");
-//        }
-//        secondToBuild.add("e 3");
+        for(int i = 0; i < 20; i++){
+            secondToBuild.add("C");
+            secondToBuild.add("R");
+        }
+        secondToBuild.add("e 3");
     }
 
     /**
