@@ -11,7 +11,7 @@ import java.util.List;
  * This state allows the lead player to draw a card that determines the next encounter.
  * Only the leader of the current flight group can draw a card.
  */
-public final class DrawCardState extends AdventureState {
+public final class DrawCardState extends AdventureState implements GameStateInterface, AdventureStateInterface {
 
     /** Flag indicating whether the local player is the leader of the flight group */
     private final boolean imLeader;

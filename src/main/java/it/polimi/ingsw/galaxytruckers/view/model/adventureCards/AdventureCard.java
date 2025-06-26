@@ -2,20 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 
-public abstract sealed class AdventureCard permits
-        AbandonedShipCard,
-        AbandonedStationCard,
-        CombatZoneCard,
-        EpidemicCard,
-        MeteorSwarmCard,
-        OpenSpaceCard,
-        PiratesCard,
-        PlanetsCard,
-        SabotageCard,
-        SlaversCard,
-        SmugglersCard,
-        StarDustCard
-{
+public abstract non-sealed class AdventureCard implements AdventureCardInterface {
     private final Level cardLevel;
     private final int id;
 

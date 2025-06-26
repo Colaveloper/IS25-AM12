@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * This is a specific implementation of the ActivateState focused on engine activation.
  * </p>
  */
-public final class DeclareEnginePowerState extends ActivateState {
+public final class DeclareEnginePowerState extends ActivateState implements GameStateInterface {
 
     /**
      * Creates a new DeclareEnginePowerState for engine power declaration.

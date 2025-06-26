@@ -15,15 +15,7 @@ import java.util.List;
  * The class is sealed to restrict subclassing to the predefined set of adventure states.
  * </p>
  */
-public sealed abstract class AdventureState extends GameState permits
-                                                              ActivateState,
-                                                              AddGoodsState,
-                                                              ChoosePlanetState,
-                                                              ChooseShipPieceState,
-                                                              DrawCardState,
-                                                              GrabRewardState,
-                                                              RemoveCrewState,
-                                                              RemoveGoodsState {
+public non-sealed abstract class AdventureState extends GameState implements AdventureStateInterface {
 
     /** Flag indicating whether this player is out of the adventure phase */
     protected boolean imOut;

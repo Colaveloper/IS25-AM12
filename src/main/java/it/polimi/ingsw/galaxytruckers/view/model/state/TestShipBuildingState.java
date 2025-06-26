@@ -8,7 +8,7 @@ import java.util.List;
  * This state extends the standard ship building functionality with additional actions
  * that allow placing ships for test scenarios.
  */
-public final class TestShipBuildingState extends ShipBuildingState {
+public final class TestShipBuildingState extends ShipBuildingState implements GameStateInterface {
     /**
      * Creates a new TestShipBuildingState.
      * Initializes the state with the default ship building configuration.

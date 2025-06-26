@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 
 import java.util.Map;
 
-public final class AbandonedStationCard extends AdventureCard {
+public final class AbandonedStationCard extends AdventureCard implements AdventureCardInterface {
     private final int flightDaysLoss;
     private final Map<GoodsType, Integer> goodsPrize;
     private final int requiredCrew;

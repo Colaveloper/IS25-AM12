@@ -13,7 +13,7 @@ import java.util.*;
  * or rule violations. Players must fix these issues by either removing problematic components
  * or choosing which ship piece to keep when disconnected.
  */
-public final class ShipCorrectionState extends GameState {
+public final class ShipCorrectionState extends GameState implements GameStateInterface {
     /** Set of ship boards that have passed validation */
     private final Set<ShipBoard> validShipBoards;
 

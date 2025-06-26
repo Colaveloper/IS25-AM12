@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * This is a specific implementation of the ActivateState focused on cannon activation.
  * </p>
  */
-public final class DeclareFirePowerState extends ActivateState {
+public final class DeclareFirePowerState extends ActivateState implements GameStateInterface {
 
     /**
      * Creates a new DeclareFirePowerState for firepower declaration.
