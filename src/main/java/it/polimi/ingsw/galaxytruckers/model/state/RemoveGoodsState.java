@@ -75,7 +75,11 @@ public final class RemoveGoodsState extends AdventureState implements GameStateI
         checkIfExpired();
         computeMostValuableGood();
         if (mostValuableGood != null) {
-            shipBoard.removeGoods(position, mostValuableGood);
+            try {
+                shipBoard.removeGoods(position, mostValuableGood);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("You have to remove the most valuable good first: " + mostValuableGood.name());
+            }
         } else {
             shipBoard.useBatteries(position);
         }

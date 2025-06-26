@@ -218,8 +218,7 @@ public class CliView extends View<CliScreen> {
 
     @Override
     public void notifyUseBattery(ShipBoard shipBoard, Point point) {
-        currentScreen.notifyComponentChange(shipBoard, point);
-        //currentScreen.notifyUseBattery(shipBoard, point);
+        currentScreen.notifyUseBattery(shipBoard, point);
         currentScreen.render();
     }
 
