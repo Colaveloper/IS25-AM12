@@ -11,7 +11,7 @@ public class Main {
     private final static String SERVER_ADDRESS = "localhost"; // Default server address
     private final static String SERVER_NAME = "Galaxy-Truckers-Server"; // Default server name
 
-    public static void main(String[] args) {
+    public static void main() {
         // This is the entry point of the Galaxy Truckers game application.
         // You can initialize your game logic here, set up the server, or start the client interface.
         System.out.println("Welcome to Galaxy Truckers!");
@@ -35,7 +35,8 @@ public class Main {
 
     private static void startServer() {
         Scanner input = new Scanner(System.in);
-        System.out.println("Do you want to use demo mode? (yes/no)");
+        System.out.println("Do you want to use demo mode (meaning created games will " +
+                "skip ship building and load ships from the scenario file)? (yes/no)");
         boolean demoMode = false;
         boolean editScenario = false;
         do {
@@ -51,8 +52,9 @@ public class Main {
                 System.out.println("Invalid choice. Please enter 'yes' or 'no'.");
             }
         } while (true);
-        System.out.println("Do you want to edit a scenario? (yes/no)");
         if (!demoMode) {
+            System.out.println("Do you want to edit a scenario (meaning at the end of the " +
+                    "building phase phase the ships will be saved to the scenario file for later used)? (yes/no)");
             do {
                 String choice = input.nextLine().trim();
                 if (choice.equals("yes")) {

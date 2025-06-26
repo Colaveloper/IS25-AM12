@@ -33,7 +33,7 @@ import java.util.function.Consumer;
 
 public class Lobby implements LobbyInterface {
     private static final long REMOVAL_DELAY = 15000;
-    private static final String demoPath = "src/main/resources/demoShips.json";
+    private static final String demoPath = "src/main/resources/demoShips_%s.json";
 
     private final Object paramLock = new Object();
 
@@ -303,7 +303,7 @@ public class Lobby implements LobbyInterface {
      */
     @VisibleForTesting
     protected String getScenarioPath() {
-        return demoPath;
+        return String.format(demoPath, level.toString());
     }
 
     private void loadScenario() {
