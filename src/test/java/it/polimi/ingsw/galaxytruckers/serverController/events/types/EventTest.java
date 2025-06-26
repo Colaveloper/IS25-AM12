@@ -27,6 +27,18 @@ class EventTest {
     }
 
     @Test
+    void shouldNotResume() {
+        GameEndEvent gameEndEvent = new GameEndEvent(null);
+        assertFalse(gameEndEvent.shouldResume());
+        PlayerExitEvent playerExitEvent = new PlayerExitEvent(null);
+        assertFalse(playerExitEvent.shouldResume());
+        ForecastDetailsEvent forecastDetailsEvent = new ForecastDetailsEvent(null, null);
+        assertFalse(forecastDetailsEvent.shouldResume());
+        LobbyDetailsEvent lobbyDetailsEvent = new LobbyDetailsEvent(null, null);
+        assertFalse(lobbyDetailsEvent.shouldResume());
+    }
+
+    @Test
     void getReceiverName() {
         String name = "name";
         GameSnapshotEvent gameSnapshotEvent = new GameSnapshotEvent(

@@ -10,12 +10,9 @@ import it.polimi.ingsw.galaxytruckers.serverController.dto.DtoConverter;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.ShipBoardDTO;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestClassOrder;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +21,7 @@ class SetupUtilsTest {
     @Test
     void setupComponent() {
         List<Component> components = new ArrayList<>();
-        List<Integer> ids = List.of(60, 125, 91, 148, 136); //IDs of Components to test
+        List<Integer> ids = List.of(60, 125, 91, 148); //IDs of Components to test
         for (int id : ids) {
             Component component = ComponentRegistry.getInstance().getComponentById(id);  //ID of a Component
             component.setOrientation(Direction.LEFT);
@@ -64,6 +61,19 @@ class SetupUtilsTest {
         Component result = SetupUtils.setupComponent(cargoHoldDTO);
         assertInstanceOf(CargoHold.class, result);
         assertEquals(cargoHold.getGoods(), ((CargoHold) result).getGoods());
+    }
+
+    @Test
+    void setupActivatable() {
+        Activatable activatable = (Activatable) ComponentRegistry.getInstance().getComponentById(136);  //ID of an Activatable
+        ComponentDTO activatableDTO = DtoConverter.getComponent(activatable);
+        Component result = SetupUtils.setupComponent(activatableDTO);
+        assertInstanceOf(Activatable.class, result);
+        assertFalse(((Activatable) result).isActive());
+        activatable.activate();
+        activatableDTO = DtoConverter.getComponent(activatable);
+        result = SetupUtils.setupComponent(activatableDTO);
+        assertTrue(((Activatable) result).isActive());
     }
 
     @Test

@@ -2,6 +2,9 @@ package it.polimi.ingsw.galaxytruckers.serverController.dto.states;
 
 import java.util.Set;
 
+/**
+ * Enum representing the types of state DTOs represented by {@link SimpleStateDTO}.
+ */
 public enum StateDTOType {
     DECLARE_ENGINE_POWER,
     DECLARE_FIRE_POWER,

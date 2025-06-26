@@ -26,10 +26,9 @@ public class ControllerEventHandler extends EventQueueHandler<ControllerEvent> {
     }
 
     /**
-     * Handles controller events based on their specific type.
-     * - For AddActiveLobbyEvent: broadcasts the event to all connected players
-     * - For RemoveActiveLobbyEvent: broadcasts the event to all connected players
-     * - For SetActiveLobbiesEvent: sends the event only to the specified player
+     * Handles controller events based on their specific type. If the event
+     * specifies a receiver name, it sends the event to that specific player,
+     * otherwise it is sent broadcast.
      *
      * @param event the controller event to be handled
      */

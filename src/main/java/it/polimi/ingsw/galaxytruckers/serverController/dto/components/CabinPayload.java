@@ -3,10 +3,11 @@ package it.polimi.ingsw.galaxytruckers.serverController.dto.components;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 
 /**
- * Additional parameters for {@link it.polimi.ingsw.galaxytruckers.serverController.dto.ComponentDTO}
- * instances of type {@link it.polimi.ingsw.galaxytruckers.model.shipBuilding.Cabin}
- * @param crewType cabin's crew type
- * @param numResidents cabin's number of residents
+ * Represents the payload for a cabin component in the Galaxy Truckers game.
+ * This record contains the crew type and the number of residents in the cabin.
+ *
+ * @param crewType the type of crew in the cabin
+ * @param numResidents the number of residents in the cabin
  */
 public record CabinPayload(CrewType crewType, int numResidents) implements ComponentPayload {
 }

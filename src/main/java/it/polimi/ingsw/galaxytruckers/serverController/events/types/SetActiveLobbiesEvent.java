@@ -13,6 +13,10 @@ import java.util.Optional;
  * @param reconnect true if this event is sent as part of a reconnection process
  */
 public record SetActiveLobbiesEvent(String playerName, List<ActiveLobbyDTO> activeLobbies, boolean reconnect) implements ControllerEvent {
+    /**
+     * {@inheritDoc}
+     * @return true
+     */
     @Override
     public boolean shouldResume() {
         return true;

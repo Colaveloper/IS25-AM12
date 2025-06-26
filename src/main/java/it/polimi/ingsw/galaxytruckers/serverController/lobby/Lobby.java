@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.GameEventListener;
 import it.polimi.ingsw.galaxytruckers.model.GameInterface;
 import it.polimi.ingsw.galaxytruckers.model.GameModelInterface;
@@ -62,10 +61,32 @@ public class Lobby implements LobbyInterface {
     private ScheduledFuture<?> scheduledFuture;
     private long removalDelay = REMOVAL_DELAY;
 
+    /**
+     * Creates a new Lobby instance.
+     *
+     * @param model       the game model interface to use for creating the game
+     * @param creator     the player who created the lobby
+     * @param level       the level of the game
+     * @param numPlayers  the number of players allowed in the lobby
+     * @param removeLobby the method to call when the lobby is removed
+     */
     public Lobby(GameModelInterface model, Player creator, Level level, int numPlayers, Consumer<Lobby> removeLobby) {
         this(false, false, model, creator, level, numPlayers, removeLobby);
     }
 
+    /**
+     * Creates a new Lobby instance with additional parameters for demo mode and scenario editing.
+     *
+     * @param demoMode     true if the lobby should skip building and load a demo scenario, false otherwise
+     * @param editScenario true if the lobby should edit the scenario by saving
+     *                     ships to a file at the end of the building phase,
+     *                     false otherwise
+     * @param model        the game model interface to use for creating the game
+     * @param creator      the player who created the lobby
+     * @param level        the level of the game
+     * @param numPlayers   the number of players allowed in the lobby
+     * @param removeLobby  the method to call when the lobby is removed
+     */
     public Lobby(boolean demoMode, boolean editScenario, GameModelInterface model, Player creator, Level level, int numPlayers, Consumer<Lobby> removeLobby) {
         this.demoMode = demoMode;
         this.editScenario = editScenario;
@@ -84,28 +105,43 @@ public class Lobby implements LobbyInterface {
         this.eventQueue = new EventQueue<>();
         this.lobbyEventHandler = new LobbyEventHandler(this.eventQueue, this);
 
-        this.game = model.createGame(level,numPlayers,new GameEventListener(this.eventQueue, () -> DtoConverter.getLobbyDetails(this)));
+        this.game = model.createGame(level, numPlayers, new GameEventListener(this.eventQueue, () -> DtoConverter.getLobbyDetails(this)));
 
         lobbyEventHandler.start();
         addPlayer(creator);
     }
 
+    /**
+     * @return the host player of the lobby
+     */
     public Player getHost() {
         return host;
     }
 
+    /**
+     * @return the unique identifier of the lobby
+     */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * @return the level of the game in this lobby
+     */
     public Level getLevel() {
         return level;
     }
 
+    /**
+     * @return the number of players allowed in this lobby
+     */
     public int getNumPlayers() {
         return numPlayers;
     }
 
+    /**
+     * @return the players currently in the lobby
+     */
     public List<Player> getPlayers() {
         List<Player> res;
         synchronized (paramLock) {
@@ -114,6 +150,9 @@ public class Lobby implements LobbyInterface {
         return res;
     }
 
+    /**
+     * @return a map of players and their assigned colors in the lobby
+     */
     public Map<Player, GameColor> getPlayerColors() {
         Map<Player, GameColor> res;
         synchronized (paramLock) {
@@ -124,8 +163,9 @@ public class Lobby implements LobbyInterface {
 
     /**
      * Adds a player to the lobby, assigning a color among the remaining ones.
-     * If {@link #numPlayers} is not reached, enqueues the joining event,
-     * otherwise calls {@link #startGame()}
+     * If {@link Lobby#numPlayers} is not reached, enqueues the joining event,
+     * otherwise starts the game. If the lobby is in demo mode it skips
+     * building.
      *
      * @param player the player to add
      */
@@ -159,6 +199,12 @@ public class Lobby implements LobbyInterface {
         return res;
     }
 
+    /**
+     * Notifies the lobby and its players that a player has disconnected. If
+     * all players have disconnected it schedules the removal of the lobby
+     *
+     * @param player the player who has disconnected
+     */
     public void notifyPlayerDisconnection(Player player) {
         synchronized (paramLock) {
             if (disconnectedPlayers.add(player)) {
@@ -171,6 +217,12 @@ public class Lobby implements LobbyInterface {
         }
     }
 
+    /**
+     * Notifies the lobby and its players that a player has reconnected. Cancels
+     * the scheduled removal of the lobby if necessary.
+     *
+     * @param player the player who has reconnected
+     */
     public void notifyPlayerReconnection(Player player) {
         synchronized (paramLock) {
             disconnectedPlayers.remove(player);
@@ -190,10 +242,18 @@ public class Lobby implements LobbyInterface {
         }
     }
 
+    /**
+     * Notifies the lobby and its players that a player has exited the lobby.
+     *
+     * @param player the player who has exited
+     */
     public void notifyPlayerExit(Player player) {
         eventQueue.notifyEvent(new PlayerExitEvent(player.getNickname()));
     }
 
+    /**
+     * Removes the lobby from the server, notifying all players
+     */
     public void remove() {
         this.removeLobby.accept(this);
         this.lobbyEventHandler.stop();
@@ -205,18 +265,21 @@ public class Lobby implements LobbyInterface {
         }
     }
 
+    /**
+     * Sets the state of the lobby to the specified state.
+     * @param state the new state of the lobby
+     */
     public void setState(LobbyState state) {
         this.state = state;
     }
 
+    /**
+     * @return the current state of the lobby
+     */
     public LobbyState getState() {
         return state;
     }
 
-    /**
-     * Brings the state of the lobby to {@link LobbyState#INGAME}
-     * Sets the game of the lobby to a new instance of {@link Game} of the specified level
-     */
     private void startGame() {
         for (Player player : getPlayers()) {
             ShipBoard ship = game.addShipBoard(playerColors.get(player));
@@ -231,6 +294,14 @@ public class Lobby implements LobbyInterface {
         setState(LobbyState.INGAME);
     }
 
+    /**
+     * This method is used to get the path to the scenario file when loading and
+     * saving ship boards in demo mode. It is visible only to allow test classes
+     * to override the path and test without modifying the main file.
+     *
+     * @return the path to the scenario file
+     */
+    @VisibleForTesting
     protected String getScenarioPath() {
         return demoPath;
     }
@@ -251,6 +322,12 @@ public class Lobby implements LobbyInterface {
         }
     }
 
+    /**
+     * Calls {@link GameInterface#skip(ShipBoard)} on the game. Should be
+     * used when a player is disconnected and the game needs to skip their turn.
+     *
+     * @param player the player who is skipping their turn
+     */
     public void skip(Player player) {
         synchronized (paramLock) {
             if (disconnectedPlayers.size() == players.size()) return;
@@ -260,7 +337,10 @@ public class Lobby implements LobbyInterface {
         }
     }
 
-
+    /**
+     * Saves the players ships to the scenario file. The method is visible
+     * for testing purposes but should not be called outside the class.
+     */
     @VisibleForTesting
     protected void saveShips() {
         List<JsonNode> nodes = new ArrayList<>();
@@ -438,18 +518,34 @@ public class Lobby implements LobbyInterface {
     public void giveUp(Player player) {
         checkLobbyState(LobbyState.INGAME);
         game.giveUp(player.getShipBoard().orElseThrow());
-	}
+    }
 
+    /**
+     * Sets the delay for the removal of the lobby.
+     * This method is used for testing only.
+     *
+     * @param delay the delay in milliseconds before the lobby is removed
+     */
     @VisibleForTesting
     public void setRemovalDelay(long delay) {
         this.removalDelay = delay;
     }
 
+    /**
+     * Sets the event queue for the lobby.
+     * This method is used for testing only.
+     *
+     * @param eventQueue the event queue to set for the lobby
+     */
     @VisibleForTesting
     public void setEventQueue(EventQueue<LobbyEvent> eventQueue) {
         this.eventQueue = eventQueue;
     }
 
+    /**
+     * Stops the event handler for the lobby.
+     * This method is visible for testing purposes only.
+     */
     @VisibleForTesting
     public void stopEventHandler() {
         this.lobbyEventHandler.stop();
