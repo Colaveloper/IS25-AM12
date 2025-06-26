@@ -6,6 +6,11 @@ import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface
 import java.io.*;
 import java.net.*;
 
+/**
+ * A simple socket server that listens for incoming client connections and handles them using
+ * {@link SocketClientHandler}. It is designed to run in a separate thread and can be started
+ * and stopped as needed.
+ */
 public class SocketServer {
     private final ServerControllerInterface serverController;
 
@@ -13,12 +18,23 @@ public class SocketServer {
     private ServerSocket serverSocket;
     private Thread listenThread;
 
+    /**
+     * Constructs a new SocketServer with the specified server controller.
+     *
+     * @param serverController the controller that manages server operations
+     */
     public SocketServer(ServerControllerInterface serverController) {
         this.running = false;
         this.listenThread = null;
         this.serverController = serverController;
     }
 
+    /**
+     * Starts the socket server on the specified port.
+     *
+     * @param port the port on which the server will listen for incoming connections
+     * @throws IOException if an I/O error occurs when opening the socket
+     */
     public void start(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
         this.running = true;
@@ -27,13 +43,16 @@ public class SocketServer {
         System.out.println("Socket server: started ✅");
     }
 
+    /**
+     * Stops the socket server, closing the server socket and interrupting the listening thread.
+     */
     public void stop() {
         try {
             this.running = false;
             this.serverSocket.close();
             this.listenThread.interrupt();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Closing socket server: " + e.getMessage());
         }
     }
 

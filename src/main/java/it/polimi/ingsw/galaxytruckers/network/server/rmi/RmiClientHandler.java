@@ -20,10 +20,13 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
 
+/**
+ * Handles communication with a client over RMI.
+ * It processes requests from the client and sends events back to the client.
+ */
 public class RmiClientHandler extends UnicastRemoteObject implements RemoteController, ClientHandler {
     private final RemoteClient remoteClient;
     private final ServerControllerInterface controller;
-    private SessionManager sessionManager;
     private Runnable afterEach = () -> {
     };
 
@@ -36,14 +39,24 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
     private final Object requestLock = new Object();
     private final Object eventLock = new Object();
 
+    /**
+     * Creates a new RmiClientHandler that handles communication with a client.
+     *
+     * @param remoteClient the remote client interface for sending events
+     * @param controller   the controller that manages server operations
+     * @throws RemoteException if there is an error during RMI export
+     */
     public RmiClientHandler(RemoteClient remoteClient, ServerControllerInterface controller) throws RemoteException {
         super();
         this.remoteClient = remoteClient;
         this.controller = controller;
         this.updateThread = new Thread(this::runUpdateThread, "UpdateThread");
-        this.sessionManager = SessionManager.getInstance();
     }
 
+    /**
+     * Starts the update thread to send events to the client.
+     * This method should be called after setting the player.
+     */
     public void start() {
         synchronized (eventLock) {
             if (!running) {
@@ -85,7 +98,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
         controller.handlePlayerDisconnection(player);
     }
 
-    protected void runUpdateThread() {
+    private void runUpdateThread() {
         while (running) {
             try {
                 Event event = eventQueue.poll();
@@ -107,7 +120,7 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
 
     @Override
     public void ping() throws RemoteException {
-        sessionManager.ping(player);
+        SessionManager.getInstance().ping(player);
     }
 
     // VirtualClient
@@ -325,11 +338,6 @@ public class RmiClientHandler extends UnicastRemoteObject implements RemoteContr
 
     private LobbyInterface getLobby() {
         return player.getLobby().orElseThrow(() -> new IllegalStateException("You are not in a lobby"));
-    }
-
-    @VisibleForTesting
-    protected void setSessionManager(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
     }
 
     @VisibleForTesting

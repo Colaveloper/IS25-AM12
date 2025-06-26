@@ -20,6 +20,10 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Handles communication with a client over a socket connection.
+ * It processes requests from the client and sends events back to the client.
+ */
 class SocketClientHandler implements VirtualServer, ClientHandler {
     private Player player;
     private final ServerControllerInterface controller;
@@ -33,6 +37,12 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     private final ClientEventQueue eventQueue = new ClientEventQueue();
 
+    /**
+     * Creates a new SocketClientHandler that handles communication with a client
+     *
+     * @param socket the socket through which the client communicates
+     * @param controller the controller that manages server operations
+     */
     public SocketClientHandler(SafeSocket socket, ServerControllerInterface controller) {
         this.socket = socket;
         this.controller = controller;
@@ -40,6 +50,10 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
         this.updateThread = new Thread(this::updateTask, "UpdateThread");
     }
 
+    /**
+     * Starts the request and update threads to handle client communication.
+     * This method should be called after setting the player.
+     */
     public void start() {
         isRunning.set(true);
         requestThread.start();
@@ -57,6 +71,11 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
         eventQueue.pause();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The socket is closed and the threads are interrupted</p>
+     */
     @Override
     public void stop() {
         if (isRunning.compareAndSet(true, false)) {

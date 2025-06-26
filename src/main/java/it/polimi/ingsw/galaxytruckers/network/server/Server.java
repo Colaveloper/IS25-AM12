@@ -8,6 +8,10 @@ import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
+/**
+ * The Server class initializes and starts the RMI and socket servers for the Galaxy Trucker game.
+ * It sets up the game model and the server controller, allowing clients to connect and interact with the app.
+ */
 public class Server {
     private final String name;
     private final int rmiPort;
@@ -15,6 +19,15 @@ public class Server {
     private final boolean demoMode;
     private final boolean editScenario;
 
+    /**
+     * Constructor for the Server class.
+     *
+     * @param name name of the server (used for RMI binding)
+     * @param rmiPort the port for the RMI server
+     * @param socketPort the port for the socket server
+     * @param demoMode true if the server should run in demo mode, false otherwise
+     * @param editScenario true if the server should allow editing the scenario, false otherwise
+     */
     public Server(String name, int rmiPort, int socketPort, boolean demoMode, boolean editScenario) {
         this.name = name;
         this.rmiPort = rmiPort;
@@ -23,6 +36,10 @@ public class Server {
         this.editScenario = editScenario;
     }
 
+    /**
+     * Starts the server by initializing the ServerController with a new GameModel,
+     * and then starting both the RMI and socket servers.
+     */
     public void start() {
         ServerController controller = new ServerController(new GameModel(), demoMode, editScenario);
         SessionManager.getInstance().setServerController(controller);
