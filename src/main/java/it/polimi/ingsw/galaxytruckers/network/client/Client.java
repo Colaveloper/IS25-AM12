@@ -14,10 +14,14 @@ import javafx.application.Application;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
+/**
+ * Client class that initializes the connection to the server and launches the user interface.
+ * It allows the user to choose between RMI or Socket communication methods and provides and to
+ * select the preferred user interface (CLI or GUI).
+ */
 public class Client {
     private final ClientController controller = new ClientController();
     private final ClientModel model = new ClientModel();
-    //TODO: add socket implementation
 
     public static void main(String[] args) {
         Client client = new Client();
@@ -29,6 +33,14 @@ public class Client {
         client.launchUI();
     }
 
+    /**
+     * Connects to the server using either RMI or Socket communication.
+     *
+     * @param serverName    the name of the server exported to the RMI registry
+     * @param serverAddress the address of the server to connect to
+     * @param rmiPort       the port number for RMI communication
+     * @param socketPort    the port number for Socket communication
+     */
     public void connect(String serverName, String serverAddress, int rmiPort, int socketPort) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Do you wish to use RMI (0) or Socket (1) for communication with the server?");
@@ -39,7 +51,7 @@ public class Client {
         do {
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
-                if(choice > 1 && choice <= 3) {
+                if (choice > 1 && choice <= 3) {
                     model.activateCheats(choice);
                     choice = Integer.parseInt(CheatCodes.cheat());
                 }
@@ -71,11 +83,15 @@ public class Client {
         System.out.println("Successfully connected to the server");
     }
 
+    /**
+     * Launches the user interface for the client.
+     * This method allows the user to choose between a graphical interface (GUI) or a command-line interface (CLI).
+     */
     public void launchUI() {
         System.out.println("Enter \"G\" to switch to the Graphical Interface, or press any other key to continue here");
 
         String command;
-        if(CheatCodes.isCheatOn()){
+        if (CheatCodes.isCheatOn()) {
             try {
                 command = CheatCodes.cheat();
             } catch (InterruptedException e) {

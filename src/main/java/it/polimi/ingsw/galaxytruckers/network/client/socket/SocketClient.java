@@ -22,6 +22,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
 
+/**
+ * SocketClient is the client-side handler for socket communication.
+ * Exposes methods to interact with the server via sockets.
+ */
 public class SocketClient implements ServerHandler, VirtualClient {
     private SafeSocket socket;
     private ClientControllerInterface controller;
@@ -32,7 +36,7 @@ public class SocketClient implements ServerHandler, VirtualClient {
     private boolean isRunning;
     private Thread inputThread;
 
-    private final ScheduledExecutorService scheduler =  Executors.newScheduledThreadPool(1);
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> pingTask;
 
     private final Map<UUID, CompletableFuture<Response>> responses = new ConcurrentHashMap<>();
@@ -40,10 +44,21 @@ public class SocketClient implements ServerHandler, VirtualClient {
     private final Object connectionLock = new Object();
     private boolean connected = false;
 
+    /**
+     * Sets the client controller reference for handling events and updates.
+     *
+     * @param controller the controller to set
+     */
     public void setController(ClientControllerInterface controller) {
         this.controller = controller;
     }
 
+    /**
+     * Starts the SocketClient and connects to the server at the specified IP and port.
+     *
+     * @param ip   the IP address of the server
+     * @param port the port number of the server
+     */
     public void start(String ip, int port) {
         try {
             this.ip = ip;
@@ -82,6 +97,9 @@ public class SocketClient implements ServerHandler, VirtualClient {
         }
     }
 
+    /**
+     * Stops the SocketClient, closing the socket and interrupting the input thread.
+     */
     public void stop() {
         isRunning = false;
         inputThread.interrupt();
@@ -167,7 +185,7 @@ public class SocketClient implements ServerHandler, VirtualClient {
     @Override
     public void registerNickname(String myNickname) {
         sendRequest(new RegisterNickname(myNickname));
-        pingTask = scheduler.scheduleAtFixedRate(this::ping, 5,5, TimeUnit.SECONDS);
+        pingTask = scheduler.scheduleAtFixedRate(this::ping, 5, 5, TimeUnit.SECONDS);
     }
 
 

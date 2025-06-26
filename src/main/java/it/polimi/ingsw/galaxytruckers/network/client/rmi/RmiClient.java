@@ -1,6 +1,5 @@
 package it.polimi.ingsw.galaxytruckers.network.client.rmi;
 
-import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
@@ -8,7 +7,6 @@ import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
 import it.polimi.ingsw.galaxytruckers.network.client.ServerHandler;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteServer;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteController;
-import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
 
@@ -24,6 +22,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * RMIClient is the client-side implementation of the RMI protocol for Galaxy Truckers.
+ * It allows the client to connect to a remote server and interact with it through remote method calls.
+ */
 public class RmiClient extends UnicastRemoteObject implements RemoteClient, ServerHandler {
     private RemoteServer server;
     private RemoteController remoteController;
@@ -42,6 +44,13 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Serv
         super();
     }
 
+    /**
+     * Starts the RMI client by connecting to the specified server.
+     *
+     * @param serverName    the name of the RMI server
+     * @param serverAddress the address of the RMI server
+     * @param serverPort    the port of the RMI server
+     */
     public void start(String serverName, String serverAddress, int serverPort) {
         try {
             this.serverName = serverName;
@@ -53,6 +62,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Serv
         }
     }
 
+    @Override
     public boolean reconnect() {
         synchronized (connectionLock) {
             try {
@@ -80,6 +90,11 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Serv
         }
     }
 
+    /**
+     * Sets the client controller for handling client-side events.
+     *
+     * @param clientController the client controller interface to set
+     */
     public void setClientController(ClientControllerInterface clientController) {
         this.clientController = clientController;
     }
@@ -107,7 +122,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Serv
     public void registerNickname(String myNickname) {
         runRemoteMethod(() -> {
             this.remoteController = server.registerNickname(this, myNickname);
-            this.pingTask = this.pingScheduler.scheduleAtFixedRate(this::ping,5,5, TimeUnit.SECONDS);
+            this.pingTask = this.pingScheduler.scheduleAtFixedRate(this::ping, 5, 5, TimeUnit.SECONDS);
         });
     }
 
@@ -273,33 +288,8 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Serv
     @Override
     public void notifyEvent(Event event) throws RemoteException {
         clientController.notifyEvent(event);
-        
     }
 
-    @VisibleForTesting
-    public ClientControllerInterface getClientController() {
-        return clientController;
-    }
-
-    @VisibleForTesting
-    public void setServerController(RemoteServer serverController) {
-        this.server = serverController;
-    }
-
-    @VisibleForTesting
-    public RemoteServer getServer() {
-        return server;
-    }
-
-    @VisibleForTesting
-    public RemoteController getRemoteController() {
-        return remoteController;
-    }
-
-    @VisibleForTesting
-    public void setRemoteController(RemoteController remoteController) {
-        this.remoteController = remoteController;
-    }
 }
 
 @FunctionalInterface
