@@ -42,6 +42,6 @@ public class CliEndGameScreen extends CliScreen {
      */
     @Override
     public void parseAndInvoke(String input) {
-        if(input.isEmpty()) model.setMetaState(MetaState.JOINORCREATE);
+        if(input.isEmpty()) controller.clearModel();
     }
 }

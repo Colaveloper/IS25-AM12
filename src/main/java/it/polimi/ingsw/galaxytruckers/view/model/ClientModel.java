@@ -197,7 +197,7 @@ public class ClientModel {
      */
     public Set<Player> getPlayers() {
         synchronized (playersLock) {
-            return players;
+            return new HashSet<>(players);
         }
     }
 
@@ -594,5 +594,17 @@ public class ClientModel {
     public void setMetaState(MetaState metaState) {
         this.metaState = metaState;
         observers.forEach(observer -> observer.notifyMetaState(metaState));
+    }
+
+    public void clearGame() {
+        synchronized (gameLock) {
+            game = null;
+        }
+        synchronized (playersLock) {
+            this.players.clear();
+            shipToPlayer.clear();
+        }
+        finalScores = null;
+        setMetaState(MetaState.JOINORCREATE);
     }
 }

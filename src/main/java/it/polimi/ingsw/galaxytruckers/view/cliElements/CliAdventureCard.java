@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.*;
-import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.penalty.Penalty;
+import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.penalty.*;
 
 public class CliAdventureCard extends CliElement{
     AdventureCard card;
@@ -44,8 +44,18 @@ public class CliAdventureCard extends CliElement{
                 description.add("[COMBAT ZONE]");
                 List<CombatZoneCheck> checks = combatZoneCard.getChecks();
                 List<Penalty> penalties = combatZoneCard.getPenalties();
+                List<String> penaltyStrings = new ArrayList<>();
+                for(Penalty penalty : penalties){
+                    switch (penalty) {
+                        case ProjectileThreat projectileThreat -> penaltyStrings.add(" penalty: projectile threat");
+                        case CrewLoss crewLoss -> penaltyStrings.add(" penalty: crew loss");
+                        case FlightDaysLoss flightDaysLoss -> penaltyStrings.add(" penalty: flight days loss");
+                        case GoodsLoss goodsLoss -> penaltyStrings.add(" penalty: goods loss");
+                        default -> throw new IllegalStateException("Unexpected value: " + penalty);
+                    }
+                }
                 for (int i = 0; i < checks.size(); i++) {
-                    description.add("Whoever has " + checks.get(i) + " " + penalties.get(i));
+                    description.add("Check the " + checks.get(i) + penaltyStrings.get(i));
                 }
             }
             case EpidemicCard epidemicCard -> {

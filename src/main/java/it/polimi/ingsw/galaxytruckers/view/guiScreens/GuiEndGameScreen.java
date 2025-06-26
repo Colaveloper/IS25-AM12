@@ -82,7 +82,7 @@ public class GuiEndGameScreen extends GuiScreen {
         newGameButton.setStyle(
                 "-fx-background-color: rgba(80, 0, 200, 0.6); -fx-text-fill: white; -fx-background-radius: 8;"
         );
-        newGameButton.setOnAction(e -> model.setMetaState(MetaState.JOINORCREATE));
+        newGameButton.setOnAction(e -> controller.clearModel());
 
         VBox layout = new VBox(20, title, tableContainer, newGameButton);
         layout.setMinHeight(Region.USE_PREF_SIZE);
