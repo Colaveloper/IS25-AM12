@@ -1,10 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.model;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-
 import java.io.IOException;
-import java.util.Set;
 
+/**
+ * TestDeck is a subclass of Deck used for games of level TEST.
+ */
 public class TestDeck extends Deck{
     public TestDeck(Game game) throws IOException {
         super(game);

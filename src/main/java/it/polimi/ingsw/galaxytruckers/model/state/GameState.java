@@ -8,6 +8,12 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 
 import java.awt.*;
 
+/**
+ * Represents the base class for all game states in the Galaxy Truckers game.
+ * This class provides methods that can be overridden by specific game states
+ * to handle various actions that players can take during the game. Methods that
+ * are not applicable in a specific state throw an {@link IllegalStateException}
+ */
 public abstract non-sealed class GameState implements GameStateInterface {
     protected Game game;
 
@@ -15,6 +21,7 @@ public abstract non-sealed class GameState implements GameStateInterface {
 
     /**
      * Sets the game associated with this state and initializes the state.
+     *
      * @param game the game to associate with this state
      */
     public void setGame(Game game) {
@@ -22,22 +29,26 @@ public abstract non-sealed class GameState implements GameStateInterface {
     }
 
     /**
-     * If allowed, lets the player with the specified ship board skip to the next state.
+     * Skips the current state for the specified ship board.
+     *
      * @param shipBoard the ship board of the player who wants to skip
      */
     public abstract void skip(ShipBoard shipBoard);
 
     /**
-     * Ensures the state will not be granted to the player for the specified ship board.
-     * (e.g., if the player has no actions to perform)
-     * @param shipBoard
+     * Undoes the skip action for the specified ship board.
+     *
+     * @param shipBoard the ship board of the player for whom
+     *                  the skip action should be canceled
      */
-    public void cancelSkip(ShipBoard shipBoard) {}
+    public void cancelSkip(ShipBoard shipBoard) {
+    }
 
     /**
      * Activates a component at the specified position on the ship board.
+     *
      * @param shipBoard the ship board on which the component is located
-     * @param position the position of the component to activate
+     * @param position  the position of the component to activate
      */
     public void activateComponent(ShipBoard shipBoard, Point position) {
         throw new IllegalStateException("This action is unsupported in this state");
@@ -45,10 +56,9 @@ public abstract non-sealed class GameState implements GameStateInterface {
 
     /**
      * Spends batteries at the specified point on the ship board.
-     * Notifies the controller about the use of a battery component.
      *
      * @param shipBoard the ship board where the battery is used
-     * @param point the point on the ship board where the battery is located
+     * @param point     the point on the ship board where the battery is located
      */
     public void spendBatteries(ShipBoard shipBoard, Point point) {
         throw new IllegalStateException("This action is unsupported in this state");
@@ -56,7 +66,6 @@ public abstract non-sealed class GameState implements GameStateInterface {
 
     /**
      * Grants a reward to the specified ship board.
-     * Notifies the controller about the acquisition of credits or other rewards.
      *
      * @param shipBoard the ship board acquiring the reward
      */
@@ -66,7 +75,8 @@ public abstract non-sealed class GameState implements GameStateInterface {
 
     /**
      * Lets the player choose a ship piece to remove by its index.
-     * @param shipBoard the ship board of the player
+     *
+     * @param shipBoard  the ship board of the player
      * @param pieceIndex the index of the ship piece to remove
      */
     public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
@@ -75,6 +85,7 @@ public abstract non-sealed class GameState implements GameStateInterface {
 
     /**
      * Draws a new adventure card for the specified ship board.
+     *
      * @param shipBoard the ship board drawing the card
      */
     public void drawCard(ShipBoard shipBoard) {
@@ -83,44 +94,51 @@ public abstract non-sealed class GameState implements GameStateInterface {
 
     /**
      * Removes a crew member from the specified position on the ship board.
+     *
      * @param shipBoard the ship board losing the crew
-     * @param position the position of the crew to remove
+     * @param position  the position of the crew to remove
      */
-    public void loseCrew(ShipBoard shipBoard, Point position)  {
+    public void loseCrew(ShipBoard shipBoard, Point position) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
-     * Removes a good from the specified position on the ship board.
+     * Removes the most valuable good from the specified position
+     * on the ship board. If no goods are present, a battery is lost instead.
+     *
      * @param shipBoard the ship board losing the good
-     * @param position the position of the good to remove
+     * @param position  the position of the good to remove
      */
-    public void loseGood(ShipBoard shipBoard, Point position)  {
+    public void loseGood(ShipBoard shipBoard, Point position) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
      * Adds a good to the specified position on the ship board.
+     *
      * @param shipBoard the ship board gaining the good
-     * @param position the position to add the good
-     * @param good the type of good to add
+     * @param position  the position to add the good
+     * @param good      the type of good to add
      */
-    public void addGood(ShipBoard shipBoard, Point position, GoodsType good)  {
+    public void addGood(ShipBoard shipBoard, Point position, GoodsType good) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
      * Removes a good of the specified type from the given position on the ship board.
+     *
      * @param shipBoard the ship board losing the good
-     * @param position the position of the good to remove
-     * @param good the type of good to remove
+     * @param position  the position of the good to remove
+     * @param good      the type of good to remove
      */
-    public void removeGood(ShipBoard shipBoard, Point position, GoodsType good)  {
+    public void removeGood(ShipBoard shipBoard, Point position, GoodsType good) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
-     * Moves to the next state of the game.
+     * Used to advance to the next state of the game when the player
+     * is ready to proceed.
+     *
      * @param shipBoard the ship board of the player that requested the action
      */
     public void goNext(ShipBoard shipBoard) {
@@ -129,8 +147,9 @@ public abstract non-sealed class GameState implements GameStateInterface {
 
     /**
      * Lets the player choose a planet.
+     *
      * @param shipBoard the ship board of the player
-     * @param option the option representing the chosen planet
+     * @param option    the option representing the chosen planet
      */
     public void choosePlanet(ShipBoard shipBoard, int option) {
         throw new IllegalStateException("This action is unsupported in this state");
@@ -138,39 +157,44 @@ public abstract non-sealed class GameState implements GameStateInterface {
 
     /**
      * Requests a random component for the specified ship board.
+     *
      * @param shipBoard the ship board requesting the component
      */
-    public void requestRandComponent(ShipBoard shipBoard){
+    public void requestRandComponent(ShipBoard shipBoard) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
      * Requests a specific component by ID for the specified ship board.
-     * @param shipBoard the ship board requesting the component
+     *
+     * @param shipBoard   the ship board requesting the component
      * @param componentId the ID of the component to request
      */
-    public void requestComponent(ShipBoard shipBoard, int componentId){
+    public void requestComponent(ShipBoard shipBoard, int componentId) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
-     * Rejects the current component for the specified ship board.
+     * Rejects the component in hand for the specified ship board.
+     *
      * @param shipBoard the ship board rejecting the component
      */
-    public void rejectComponent(ShipBoard shipBoard){
+    public void rejectComponent(ShipBoard shipBoard) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
-     * Stashes the current component for the specified ship board.
+     * Stashes the component in hand for the specified ship board.
+     *
      * @param shipBoard the ship board stashing the component
      */
-    public void stashComponent(ShipBoard shipBoard){
+    public void stashComponent(ShipBoard shipBoard) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
-     * Grabs the placed component for the specified ship board.
+     * Returns a placed component to the hand for the specified ship board.
+     *
      * @param shipBoard the ship board grabbing the placed component
      */
     public void grabPlacedComponent(ShipBoard shipBoard) {
@@ -179,42 +203,47 @@ public abstract non-sealed class GameState implements GameStateInterface {
 
     /**
      * Grabs a stashed component by index for the specified ship board.
+     *
      * @param shipBoard the ship board grabbing the stashed component
-     * @param index the index of the stashed component
+     * @param index     the index of the stashed component
      */
-    public void grabStashedComponent(ShipBoard shipBoard, int index){
+    public void grabStashedComponent(ShipBoard shipBoard, int index) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
      * Places a component at the specified point and orientation on the ship board.
-     * @param shipBoard the ship board placing the component
-     * @param point the point where the component is placed
+     *
+     * @param shipBoard   the ship board placing the component
+     * @param point       the point where the component is placed
      * @param orientation the orientation of the component
      */
-    public void placeComponent(ShipBoard shipBoard, Point point, Direction orientation){
+    public void placeComponent(ShipBoard shipBoard, Point point, Direction orientation) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
      * Lets the player with the specified ship board flip the hourglass.
+     *
      * @param shipBoard the ship board flipping the hourglass
      */
-    public void flipHourglass(ShipBoard shipBoard){
+    public void flipHourglass(ShipBoard shipBoard) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
      * Places the ship on the flight board at the specified starting position.
-     * @param shipBoard the ship board placing the ship
+     *
+     * @param shipBoard        the ship board placing the ship
      * @param startingPosition the starting position on the flight board
      */
-    public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition){
+    public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
-     * Places the ship on the flight board.
+     * Places the ship on the flight board at the first available position.
+     *
      * @param shipBoard the ship board placing the ship
      */
     public void placeShipOnFlightBoard(ShipBoard shipBoard) {
@@ -223,25 +252,28 @@ public abstract non-sealed class GameState implements GameStateInterface {
 
     /**
      * Acquires a forecast card from the specified deck for the ship board.
+     *
      * @param shipBoard the ship board acquiring the forecast
      * @param deckIndex the index of the deck to acquire the forecast from
      */
-    public void acquireForecast(ShipBoard shipBoard, int deckIndex){
+    public void acquireForecast(ShipBoard shipBoard, int deckIndex) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
      * Releases the current forecast for the specified ship board.
+     *
      * @param shipBoard the ship board releasing the forecast
      */
-    public void releaseForecast(ShipBoard shipBoard){
+    public void releaseForecast(ShipBoard shipBoard) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
      * Removes a component from the specified position on the ship board.
+     *
      * @param shipBoard the ship board removing the component
-     * @param point the position of the component to remove
+     * @param point     the position of the component to remove
      */
     public void removeComponent(ShipBoard shipBoard, Point point) {
         throw new IllegalStateException("This action is unsupported in this state");
@@ -249,19 +281,21 @@ public abstract non-sealed class GameState implements GameStateInterface {
 
     /**
      * Initializes the cabin at the specified position on the ship board with the given crew type.
+     *
      * @param shipBoard the ship board initializing the cabin
-     * @param point the position of the cabin
-     * @param crewType the type of crew to assign to the cabin
+     * @param point     the position of the cabin
+     * @param crewType  the type of crew to assign to the cabin
      */
     public void initializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 
     /**
-     * Lets the player give up.
+     * Lets the player with the given shipboard give up.
+     *
      * @param shipBoard the ship board of the player giving up
      */
-    public void giveUp(ShipBoard shipBoard){
+    public void giveUp(ShipBoard shipBoard) {
         throw new IllegalStateException("This action is unsupported in this state");
     }
 }

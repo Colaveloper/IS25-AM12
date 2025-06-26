@@ -5,6 +5,11 @@ public final class TestShipBuildingState extends ShipBuildingState implements Ga
         super();
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>Ends the ship building phase by finalizing all ship boards and
+     * placing them on the flight board. </p>
+     */
     @Override
     protected void endBuilding() {
         synchronized (endLock) {

@@ -29,7 +29,7 @@ public abstract class Projectile {
      * (used for testing purposes)
      *
      * @param dice the dice roll that determines the projectile's origin
-     * @param direction the direction in which the projectile is fired
+     * @param direction the direction from which the projectile is fired
      */
     public Projectile(IntSupplier dice, Direction direction) {
         this.direction = direction;
@@ -39,7 +39,7 @@ public abstract class Projectile {
     /**
      * Constructs a Projectile with a specified direction and a random dice roll.
      *
-     * @param direction the direction in which the projectile is fired
+     * @param direction the direction from which the projectile is fired
      */
     public Projectile(Direction direction) {
         this(dice, direction);

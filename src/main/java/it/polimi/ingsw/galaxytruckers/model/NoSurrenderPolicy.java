@@ -5,6 +5,12 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 
 import java.util.Set;
 
+/**
+ * A surrender policy that disables surrender functionality.
+ * This class implements the SurrenderPolicy interface and provides
+ * methods that always return false or empty sets, indicating that
+ * surrender is not allowed in the game.
+ */
 public class NoSurrenderPolicy implements SurrenderPolicy {
 
     @Override

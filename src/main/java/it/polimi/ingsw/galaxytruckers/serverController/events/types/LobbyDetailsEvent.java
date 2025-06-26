@@ -15,10 +15,6 @@ public record LobbyDetailsEvent(
         String playerName,
         LobbyDetailsDTO details
 ) implements LobbyEvent {
-    @Override
-    public boolean shouldResume() {
-        return true;
-    }
 
     @Override
     public Optional<String> getReceiverName() {

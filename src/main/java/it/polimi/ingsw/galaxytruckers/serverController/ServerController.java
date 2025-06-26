@@ -45,6 +45,14 @@ public class ServerController implements ServerControllerInterface {
         this(model, false, false);
     }
 
+    /**
+     * Creates a new server controller with the specified game model, and with
+     * the given flags
+     *
+     * @param model        the game model interface to be used by this controller
+     * @param demoMode     boolean indicating if the server is in demo mode
+     * @param editScenario boolean indicating if the server is in edit scenario mode
+     */
     public ServerController(GameModelInterface model, boolean demoMode, boolean editScenario) {
         this.model = model;
         this.demoMode = demoMode;
@@ -54,6 +62,12 @@ public class ServerController implements ServerControllerInterface {
         evenQueueHandler.start();
     }
 
+    /**
+     * Constructor for testing purposes only.
+     *
+     * @param model      the game model interface to be used by this controller
+     * @param eventQueue the event queue to be used by this controller
+     */
     @VisibleForTesting
     public ServerController(GameModelInterface model, EventQueue<ControllerEvent> eventQueue) {
         this.model = model;
@@ -62,6 +76,10 @@ public class ServerController implements ServerControllerInterface {
         this.editScenario = false;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>Calls {@link Player#addPlayer(String)} to add a new player</p>
+     */
     @Override
     public void registerNickname(String nickname, ClientHandler clientHandler) {
         Player player;
@@ -84,13 +102,6 @@ public class ServerController implements ServerControllerInterface {
         }
     }
 
-    /**
-     * Sends a list of active lobbies to the specified player.
-     * Used when a player first connects or reconnects to the server.
-     *
-     * @param player The player to send the active lobbies list to
-     * @param reconnect Flag indicating if this is a reconnection attempt
-     */
     private void requestActiveLobbies(Player player, boolean reconnect) {
         synchronized (idToLobby) {
             List<ActiveLobbyDTO> activeLobbyDTOS = idToLobby.values().stream()
@@ -100,6 +111,14 @@ public class ServerController implements ServerControllerInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The lobby is created with the ServerController demoMode and
+     * editScenario parameters
+     * </p>
+     * @throws IllegalStateException if the player is already in a lobby
+     */
     @Override
     public LobbyInterface newGame(Player creator, Level level, int numPlayers) {
         Lobby newLobby;
@@ -116,6 +135,13 @@ public class ServerController implements ServerControllerInterface {
         return newLobby;
     }
 
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalStateException if the player is already in a lobby
+     * @throws IllegalArgumentException if the lobby with the given ID does not exist
+     */
     @Override
     public LobbyInterface joinLobby(Player player, UUID lobbyID) {
         Lobby lobby;
@@ -156,23 +182,15 @@ public class ServerController implements ServerControllerInterface {
 
     @Override
     public void leaveLobby(Player player) {
-        synchronized (lock){
+        synchronized (lock) {
             player.getLobby().ifPresent(lobby -> {
-                System.out.println("Player " + player.getNickname() + " has left the lobby");
+                System.out.println("Player " + player.getNickname() + " has left the lobby " + lobby.getId());
                 lobby.notifyPlayerExit(player);
                 removeLobby(lobby);
             });
         }
     }
 
-    /**
-     * Removes a lobby from the server controller.
-     * Cleans up by removing the lobby from all collections and notifies
-     * all related players that they are no longer in the lobby.
-     * Triggers a RemoveActiveLobbyEvent to update connected clients.
-     *
-     * @param lobby The lobby to be removed
-     */
     private void removeLobby(Lobby lobby) {
         synchronized (lock) {
             if (idToLobby.remove(lobby.getId()) != null) {
@@ -184,6 +202,7 @@ public class ServerController implements ServerControllerInterface {
                         System.out.println("The player " + p.getNickname() + " has been removed");
                     }
                 });
+                System.out.println("Lobby " + lobby.getId() + " has been removed");
             }
             if (activeLobbies.remove(lobby)) {
                 eventQueue.notifyEvent(new RemoveActiveLobbyEvent(lobby.getId()));

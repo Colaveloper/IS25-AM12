@@ -14,6 +14,17 @@ public class SlaversCard extends AdventureCard {
     private final int crewLoss;
     private boolean defeated;
 
+    /**
+     * Constructs a SlaversCard.
+     *
+     * @param game the game instance
+     * @param level the adventure card level
+     * @param crewLoss the number of crew lost if defeated
+     * @param firePowerThreshold the firepower required to defeat the slavers
+     * @param creditPrize the credits awarded for defeating the slavers
+     * @param flightDaysLoss the number of flight days lost when claiming the prize
+     * @param id the unique card identifier
+     */
     public SlaversCard(Game game, Level level, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss, int id) {
         super(game, level, id);
         this.firePowerThreshold = firePowerThreshold;

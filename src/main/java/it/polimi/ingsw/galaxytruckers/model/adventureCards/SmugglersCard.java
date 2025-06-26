@@ -17,9 +17,20 @@ public class SmugglersCard extends AdventureCard {
     private boolean defeated;
     private boolean acquired;
 
+    /**
+     * Constructs a SmugglersCard.
+     *
+     * @param game the game instance
+     * @param level the adventure card level
+     * @param goodsLoss the number of goods lost if defeated
+     * @param firePowerThreshold the firepower required to defeat the smugglers
+     * @param goodsPrize the goods awarded for defeating the smugglers
+     * @param flightDaysLoss the number of flight days lost when claiming the prize
+     * @param id the unique card identifier
+     */
     public SmugglersCard (Game game, Level level, int goodsLoss, int firePowerThreshold, Map<GoodsType, Integer> goodsPrize, int flightDaysLoss, int id) {
         super(game, level, id);
-        this.firePowerThreshold = firePowerThreshold;
+        this.firePowerThreshold = firePowerThreshold*2; // Firepower is doubled to account for half firepower from the ships
         this.goodsPrize = goodsPrize;
         this.flightDaysLoss = flightDaysLoss;
         this.goodsLoss = goodsLoss;
@@ -67,6 +78,5 @@ public class SmugglersCard extends AdventureCard {
 
     public void getReward() {
         flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
-        //currentShipBoard = null;//todo l'ho tolto, spero non fosse importante
     }
 }

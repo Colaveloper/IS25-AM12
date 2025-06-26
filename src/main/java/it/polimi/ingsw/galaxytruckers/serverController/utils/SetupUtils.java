@@ -10,7 +10,17 @@ import java.awt.*;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Utility class for setting up components and ship boards from DTOs in order
+ * to load specific scenarios
+ */
 public class SetupUtils {
+    /**
+     * Creates a {@link Component} from a {@link ComponentDTO}.
+     *
+     * @param componentDTO the DTO containing the component's data
+     * @return the created {@link Component}
+     */
     public static Component setupComponent(ComponentDTO componentDTO) {
         ComponentRegistry componentRegistry = ComponentRegistry.getInstance();
         Component component = componentRegistry.getComponentById(componentDTO.id());
@@ -26,15 +36,27 @@ public class SetupUtils {
             case CargoHold cargoHold -> {
                 cargoHold.setGoods(componentDTO.payload().goods());
             }
-            case Engine _ -> {}
-            case LifeSupport _ -> {}
-            case Activatable _ -> {}
-            case Cannon _ -> {}
-            case Component _ -> {}
+            case Activatable activatable -> {
+                if (componentDTO.payload().active()) activatable.activate();
+            }
+            case Engine _ -> {
+            }
+            case LifeSupport _ -> {
+            }
+            case Cannon _ -> {
+            }
+            case Component _ -> {
+            }
         }
         return component;
     }
 
+    /**
+     * Sets up a {@link ShipBoard} using the data from a {@link ShipBoardDTO}.
+     *
+     * @param shipBoard    the ship board to set up
+     * @param shipBoardDTO the DTO containing the ship board's data
+     */
     public static void setupShipBoard(ShipBoard shipBoard, ShipBoardDTO shipBoardDTO) {
         Map<Point, Component> componentMap = shipBoardDTO.componentMap().entrySet().stream()
                 .collect(Collectors.toMap(

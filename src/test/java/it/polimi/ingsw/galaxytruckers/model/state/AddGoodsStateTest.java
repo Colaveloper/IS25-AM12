@@ -8,7 +8,6 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.awt.*;
 import java.io.IOException;
@@ -36,7 +35,7 @@ class AddGoodsStateTest {
                 // mock
             }
             @Override
-            public void removeGoods(Point pos, GoodsType goods, int num){
+            public void removeGoods(Point pos, GoodsType goods){
                 // mock
             }
         };

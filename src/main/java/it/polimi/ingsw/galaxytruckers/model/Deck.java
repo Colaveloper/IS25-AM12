@@ -45,15 +45,19 @@ public abstract class Deck {
     }
 
     /**
-     * @param id the id of the forecast deck
+     * Returns the forecast deck for the given index or an empty
+     * list if forecast decks are not used.
+     *
+     * @param index the index of the forecast deck
      * @return the requested forecast deck
      */
-    public List<AdventureCard> getForecastDeck(int id) {
+    public List<AdventureCard> getForecastDeck(int index) {
         return List.of();
     }
 
     /**
-     * Mixes the forecast and hidden decks  into the master deck
+     * Mixes the forecast and hidden decks  into the master deck, if
+     * there are any forecast decks.
      */
     public void initMasterDeck() {}
 
@@ -183,12 +187,7 @@ public abstract class Deck {
         return cards;
     }
 
-    /**
-     * Loads projectile information from a JSON file into a list.
-     * @param projectilesNode the JsonNode from which to load the list of projectiles
-     * @return a {@link List} of the loaded projectiles
-     * */
-    public static List<Projectile> parseProjectiles(JsonNode projectilesNode) {
+    private static List<Projectile> parseProjectiles(JsonNode projectilesNode) {
         List<Projectile> projectiles = new ArrayList<>();
         for (JsonNode node : projectilesNode) {
             Direction direction = Direction.valueOf(node.get(1).asText().toUpperCase());
@@ -215,7 +214,7 @@ public abstract class Deck {
      * @param planetsNode the JsonNode from which to load the list of planets
      * @return a {@link List} of the loaded planets
      * */
-    public static  List<Map<GoodsType, Integer>> parsePlanets(JsonNode planetsNode) {
+    private static  List<Map<GoodsType, Integer>> parsePlanets(JsonNode planetsNode) {
         List<Map<GoodsType, Integer>> planets = new ArrayList<>();
         int direction = planetsNode.get(1).asInt();
         for (JsonNode node : planetsNode) {
@@ -230,7 +229,7 @@ public abstract class Deck {
      * @param goodsNode the JsonNode from which to load the map of goods
      * @return a {@link Map} of the loaded goods
      * */
-    public static Map<GoodsType, Integer> parseGoods(JsonNode goodsNode) {
+    private static Map<GoodsType, Integer> parseGoods(JsonNode goodsNode) {
         Map<GoodsType, Integer> goods = new HashMap<>();
         for (GoodsType type : GoodsType.values()) {
             goods.put(type, goodsNode.get(type.name().toLowerCase()).asInt());

@@ -76,6 +76,13 @@ public class ComponentRegistry {
         }
     }
 
+    /**
+     * Returns a component by its unique identifier.
+     *
+     * @param id the unique identifier of the component
+     * @return the component associated with the given id
+     * @throws IllegalArgumentException if no component is found with the given id
+     */
     public Component getComponentById(int id) {
         if (idToComponent.containsKey(id)) {
             try {
@@ -109,7 +116,7 @@ public class ComponentRegistry {
         }
     }
 
-    protected Component parseComponent(JsonNode node) throws IOException {
+    private Component parseComponent(JsonNode node) throws IOException {
         //iterating through nodes and adding each as a component to list
         String type = node.get("type").asText();
         Component component;
@@ -132,7 +139,7 @@ public class ComponentRegistry {
                 component = new Engine(connectors, id);
             case "cargo_hold" -> {
                 int size = node.get("size").asInt();
-                Boolean isSpecial = node.get("special").asBoolean();
+                boolean isSpecial = node.get("special").asBoolean();
                 component = new CargoHold(connectors, id, isSpecial, size);
             }
             case "structural" ->

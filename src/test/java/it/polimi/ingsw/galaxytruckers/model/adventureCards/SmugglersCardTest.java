@@ -60,7 +60,7 @@ class SmugglersCardTest {
         ship2 = new SecondShipBoardForTesting(GameColor.RED) {
             @Override
             public int getFirePower() {
-                return 2;
+                return 4;
             }
 
         };
@@ -68,7 +68,7 @@ class SmugglersCardTest {
         ship3 = new SecondShipBoardForTesting(GameColor.RED) {
             @Override
             public int getFirePower() {
-                return 1;
+                return 2;
             }
 
         };

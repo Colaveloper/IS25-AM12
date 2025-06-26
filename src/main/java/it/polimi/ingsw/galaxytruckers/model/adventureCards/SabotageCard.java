@@ -14,6 +14,13 @@ public class SabotageCard extends AdventureCard {
 
     private static final Dice dice = new Dice() {};
 
+    /**
+     * Constructs a SabotageCard.
+     *
+     * @param game the game instance
+     * @param level the adventure card level
+     * @param id the unique card identifier
+     */
     protected SabotageCard(Game game, Level level, int id) {
         super(game, level, id);
     }

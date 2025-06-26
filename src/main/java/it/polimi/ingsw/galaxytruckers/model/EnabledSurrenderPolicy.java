@@ -7,17 +7,24 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Surrender policy implementation that allows surrendering ships.
+ */
 public class EnabledSurrenderPolicy implements SurrenderPolicy {
     private final Set<ShipBoard> requests = new HashSet<>();
     private final Set<ShipBoard> surrenderedShips = new HashSet<>();
     private final GameEventListener listener;
 
+    /**
+     * Constructor for EnabledSurrenderPolicy.
+     * @param listener the GameEventListener to notify about surrender events
+     */
     public EnabledSurrenderPolicy(GameEventListener listener) {
         this.listener = listener;
     }
 
-    /** {@inheritDoc}
-     * Returns true to indicate that surrender is enabled.
+    /**
+     * {@inheritDoc}
      * @return true
      */
     @Override
@@ -25,12 +32,6 @@ public class EnabledSurrenderPolicy implements SurrenderPolicy {
         return true;
     }
 
-    /** {@inheritDoc}
-     * Requests surrender for the given ship board.
-     * @param shipBoard the ship board requesting surrender
-     * @param cause the cause of the surrender
-     * @return
-     */
     @Override
     public synchronized boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause) {
         if (surrenderedShips.contains(shipBoard)) return false;
@@ -39,11 +40,6 @@ public class EnabledSurrenderPolicy implements SurrenderPolicy {
         return res;
     }
 
-    /** {@inheritDoc}
-     * Confirms the surrender on the given flight board.
-     * @param flightBoard the flight board on which surrender is confirmed
-     * @return a set of newly surrendered ships
-     */
     @Override
     public synchronized Set<ShipBoard> confirmSurrender(FlightBoard flightBoard) {
 

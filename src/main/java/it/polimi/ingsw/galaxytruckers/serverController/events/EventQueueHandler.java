@@ -51,6 +51,7 @@ public abstract class EventQueueHandler<T extends Event> implements EventHandler
      */
     public void stop() {
         this.isRunning = false;
+        this.thread.interrupt();
     }
 
     /**

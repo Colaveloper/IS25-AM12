@@ -9,6 +9,10 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the state of the game where players can correct their ship boards
+ * by removing components or choosing ship pieces.
+ */
 public non-sealed class ShipCorrectionState extends GameState implements GameStateInterface {
     private final Set<ShipBoard> validShipBoards;
     private final Map<ShipBoard, List<Set<Point>>> shipPiecesMap;
@@ -16,6 +20,12 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
     private final Set<ShipBoard> pendingShipBoards = new HashSet<>();
     private final Object lock = new Object();
 
+    /**
+     * Signals that the player is inactive and a state transition
+     * should occur if all other players are done correcting their ships.
+     *
+     * @param shipBoard the ship board of the player who wants to skip
+     */
     @Override
     public void skip(ShipBoard shipBoard) {
         synchronized (lock) {
@@ -31,6 +41,13 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
         }
     }
 
+    /**
+     * Constructor for ShipCorrectionState.
+     *
+     * @param shouldDiscard if true, removing components calls
+     *                      {@link ShipBoard#discardComponent(Point)} instead of
+     *                      {@link ShipBoard#removeComponent(Point)}
+     */
     public ShipCorrectionState(boolean shouldDiscard) {
         this.shouldDiscard = shouldDiscard;
         this.validShipBoards = new HashSet<>();
@@ -42,6 +59,14 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
         else shipBoard.removeComponent(point);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>Shipboards are also examined to compute their validity and to
+     * check if they are connected. Moves on to {@link ShipInitializationState}
+     * if all ships are correct</p>
+     *
+     * @param game the game to associate with this state
+     */
     @Override
     public void setGame(Game game) {
         super.setGame(game);
@@ -56,10 +81,7 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
     private void tryStateTransition() {
         synchronized (lock) {
             if (!expired) {
-                Set<ShipBoard> remainingShipBoards = game.getShipBoards().stream()
-                        .filter(s -> !getValidShipBoards().contains(s) || getShipPieces(s) != null)
-                        .filter(s -> !pendingShipBoards.contains(s))
-                        .collect(Collectors.toSet());
+                Set<ShipBoard> remainingShipBoards = game.getShipBoards().stream().filter(s -> !getValidShipBoards().contains(s) || getShipPieces(s) != null).filter(s -> !pendingShipBoards.contains(s)).collect(Collectors.toSet());
                 if (remainingShipBoards.isEmpty()) {
                     expired = true;
                     pendingShipBoards.forEach(this::defaultAction);
@@ -74,7 +96,7 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
             if (!validShipBoards.contains(shipBoard)) {
                 shipBoard.removeAll(shouldDiscard);
             } else if (getShipPieces(shipBoard) != null) {
-                shipBoard.keepShipPiece(getShipPieces(shipBoard),0,shouldDiscard);
+                shipBoard.keepShipPiece(getShipPieces(shipBoard), 0, shouldDiscard);
             }
         }
     }
@@ -98,6 +120,13 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>Checks the correctness of the ship after removal and moves on
+     * to {@link ShipInitializationState} if all ships are correct</p>
+     *
+     * @throws IllegalStateException if the ship board is already valid
+     */
     @Override
     public void removeComponent(ShipBoard shipBoard, Point point) {
         synchronized (lock) {
@@ -118,6 +147,10 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>If all ships are valid, moves on to {@link ShipInitializationState}</p>
+     */
     @Override
     public void chooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
         List<Set<Point>> shipPieces = getShipPieces(shipBoard);
@@ -134,6 +167,11 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
         }
     }
 
+    /**
+     * Returns the set of valid ship boards.
+     *
+     * @return a set of valid ship boards
+     */
     public Set<ShipBoard> getValidShipBoards() {
         Set<ShipBoard> res;
         synchronized (lock) {
@@ -142,6 +180,11 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
         return res;
     }
 
+    /**
+     * Returns a map of ship boards to their pieces.
+     *
+     * @return a map where keys are ship boards and values are lists of sets of points representing the pieces
+     */
     public Map<ShipBoard, List<Set<Point>>> getShipPiecesMap() {
         Map<ShipBoard, List<Set<Point>>> mapCopy = new HashMap<>();
         synchronized (lock) {
@@ -152,6 +195,13 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
         return mapCopy;
     }
 
+    /**
+     * Returns the ship pieces for a given ship board. It returns the
+     * live list and not a shallow copy.
+     *
+     * @param shipBoard the ship board for which to get the pieces
+     * @return a list of sets of points representing the ship pieces
+     */
     public List<Set<Point>> getShipPieces(ShipBoard shipBoard) {
         List<Set<Point>> res;
         synchronized (lock) {
@@ -160,10 +210,18 @@ public non-sealed class ShipCorrectionState extends GameState implements GameSta
         return res;
     }
 
+    /**
+     * @return true if components should be discarded when removed,
+     * false if they should be removed normally
+     */
     public boolean getShouldDiscard() {
         return shouldDiscard;
     }
 
+    /**
+     * Should be used for testing purposes only.
+     * @return a set of ship boards that have skipped
+     */
     @VisibleForTesting
     public Set<ShipBoard> getPendingShipBoards() {
         Set<ShipBoard> res;

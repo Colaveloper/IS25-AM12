@@ -29,9 +29,10 @@ public interface SurrenderPolicy {
     boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause);
 
     /**
-     * Confirms the surrender for a given flight board.
+     * Confirms the received surrender requests by removing the surrendered ships
+     * from the flight board.
      *
-     * @param flightBoard the flight board for which surrender is confirmed
+     * @param flightBoard the flight board from which to remove surrendered ships
      * @return a set of ship boards that have surrendered
      */
     Set<ShipBoard> confirmSurrender(FlightBoard flightBoard);

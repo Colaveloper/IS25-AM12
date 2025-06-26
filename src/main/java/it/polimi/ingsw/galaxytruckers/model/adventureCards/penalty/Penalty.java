@@ -19,7 +19,8 @@ public interface Penalty {
      *
      * @param shipBoard the ShipBoard of the player being penalized
      * @param flightBoard the FlightBoard containing all players' ship boards
-     * @return an Optional containing the AdventureState if a penalty is inflicted, or empty if not
+     * @return an Optional containing the AdventureState the player must be brought to after the
+     * penalty, or empty if not applicable
      */
     Optional<AdventureState> inflictPenalty(ShipBoard shipBoard, FlightBoard flightBoard);
 }

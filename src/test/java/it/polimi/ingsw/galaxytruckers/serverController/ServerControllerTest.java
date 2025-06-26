@@ -43,6 +43,9 @@ class ServerControllerTest {
 
     @AfterEach
     void cleanup(){
+        for (UUID id : controller.getIdToLobby().keySet()) {
+            controller.getIdToLobby().get(id).remove();
+        }
         controller.getIdToLobby().clear();
         Player.clear();
     }

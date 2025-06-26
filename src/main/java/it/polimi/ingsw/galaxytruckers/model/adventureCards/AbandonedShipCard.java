@@ -12,6 +12,16 @@ public class AbandonedShipCard extends AdventureCard {
     private boolean accepted;
     private boolean acquired;
 
+    /**
+     * Constructs an AbandonedShipCard.
+     *
+     * @param game the game instance
+     * @param level the adventure card level
+     * @param creditPrize the credits awarded for claiming the ship
+     * @param requiredCrew the number of crew required to claim the ship
+     * @param flightDaysLoss the number of flight days lost when claiming the ship
+     * @param id the unique card identifier
+     */
     public AbandonedShipCard (Game game, Level level, int creditPrize, int requiredCrew, int flightDaysLoss, int id) {
         super(game, level, id);
         this.flightDaysLoss = flightDaysLoss;

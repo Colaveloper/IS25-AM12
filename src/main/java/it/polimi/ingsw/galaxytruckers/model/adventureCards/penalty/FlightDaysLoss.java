@@ -18,6 +18,14 @@ public class FlightDaysLoss implements Penalty {
         this.flightDaysToLose = flightDaysToLose;
     }
 
+    /**
+     * Inflicts a penalty by moving the player's ship backward by the specified number of flight days.
+     * No additional AdventureState is required after this penalty.
+     *
+     * @param shipBoard the ShipBoard of the player being penalized
+     * @param flightBoard the FlightBoard containing all players' ship boards
+     * @return an empty Optional, as no further state is needed
+     */
     @Override
     public Optional<AdventureState> inflictPenalty(ShipBoard shipBoard, FlightBoard flightBoard) {
         flightBoard.displaceShip(shipBoard, -flightDaysToLose);

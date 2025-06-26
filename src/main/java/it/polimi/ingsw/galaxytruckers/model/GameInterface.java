@@ -11,9 +11,8 @@ import java.awt.*;
 public interface GameInterface {
 
     /**
-     * Requests a snapshot of the current game state for the specified ship board.
-     * Generates a {@link it.polimi.ingsw.galaxytruckers.serverController.events.types.GameSnapshotEvent}
-     * in order to retrive game information (e.g., after a disconnection).
+     * Requests a snapshot of the game state for the given ship board. The
+     * snapshot will be notified to the event listener.
      *
      * @param shipBoard the ship board for which to request the snapshot
      */
@@ -27,6 +26,11 @@ public interface GameInterface {
      */
     ShipBoard addShipBoard(GameColor color);
 
+    /**
+     * Sets the callback to be executed when the adventure starts.
+     *
+     * @param startAdventureCallback the callback to be executed when the adventure starts
+     */
     void setStartAdventureCallback(Runnable startAdventureCallback);
 
     /**
@@ -34,6 +38,10 @@ public interface GameInterface {
      */
     void start();
 
+    /**
+     * Starts a game directly in the adventure phase, skipping the ship building phase.
+     * Initializes the deck and the flight board and sets the current state to DrawCardState.
+     */
     void skipBuilding();
 
     /**

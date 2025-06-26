@@ -54,6 +54,11 @@ public abstract class AdventureCard {
      */
     public abstract AdventureState getNextState();
 
+    /**
+     * Returns the unique identifier of this adventure card.
+     *
+     * @return the card's unique ID
+     */
     public int getId() {
         return id;
     }

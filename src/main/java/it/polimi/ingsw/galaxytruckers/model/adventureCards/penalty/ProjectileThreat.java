@@ -22,6 +22,14 @@ public class ProjectileThreat implements Penalty {
         this.projectiles = projectiles.reversed();
     }
 
+    /**
+     * Inflicts a penalty by handling the next projectile threat for the player's ship.
+     * If there are no projectiles left, no penalty is applied.
+     *
+     * @param shipBoard the ShipBoard of the player being penalized
+     * @param flightBoard the FlightBoard containing all players' ship boards
+     * @return an Optional containing a HandleProjectileState if a projectile is to be handled, or empty if not
+     */
     @Override
     public Optional<AdventureState> inflictPenalty(ShipBoard shipBoard, FlightBoard flightBoard) {
         if (projectiles.isEmpty()) {

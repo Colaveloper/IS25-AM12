@@ -5,6 +5,9 @@ import com.google.common.annotations.VisibleForTesting;
 import java.util.*;
 import java.util.List;
 
+/**
+ * TestFlightBoard is a subclass of FlightBoard used for games of level TEST.
+ */
 public class TestFlightBoard extends FlightBoard {
     @VisibleForTesting
     protected static int loopLength;

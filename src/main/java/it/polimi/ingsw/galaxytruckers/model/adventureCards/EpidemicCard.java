@@ -20,6 +20,13 @@ import static java.lang.Math.abs;
 public class EpidemicCard extends AdventureCard {
 
 
+    /**
+     * Constructs an EpidemicCard.
+     *
+     * @param game the game instance
+     * @param level the adventure card level
+     * @param id the unique card identifier
+     */
     public EpidemicCard(Game game, Level level, int id) {
         super(game, level, id);
     }

@@ -229,7 +229,7 @@ class RemoveGoodsStateTest {
             }
 
             @Override
-            public void removeGoods(Point pos, GoodsType good, int num){
+            public void removeGoods(Point pos, GoodsType good){
                 // mock
             }
         };
@@ -250,7 +250,7 @@ class RemoveGoodsStateTest {
                 return testGoods;
             }
             @Override
-            public void removeGoods(Point pos, GoodsType good, int num){
+            public void removeGoods(Point pos, GoodsType good){
                 // mock
             }
             @Override

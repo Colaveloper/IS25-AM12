@@ -10,25 +10,21 @@ import java.awt.*;
 
 /**
  * Interface for lobbies in the Galaxy Truckers game.
- * Provides methods for interacting with the game model during different phases of gameplay,
- * including ship building, ship validity checking, ship initialization, and adventure phases.
- * Each method delegates to corresponding methods in the underlying game model.
+ * Each method delegates to a corresponding method in {@link it.polimi.ingsw.galaxytruckers.model.GameInterface}.
  */
 public interface LobbyInterface {
 
     //region Shipbuilding
 
     /**
-     * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#requestRandComponent(ShipBoard)}
-     * on the lobby game and the player's shipBoard
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#requestRandComponent(ShipBoard)}.
      *
      * @param player the player wishing to perform the action
      */
     void requestRandComponent(Player player);
 
     /**
-     * Calls {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#requestComponent(ShipBoard, int)}
-     * on the lobby game, the player's shipboard and the given id
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#requestComponent(ShipBoard, int)}.
      *
      * @param player      the nickname of the player wishing to perform the action
      * @param componentID the id of the component the player wishes to take
@@ -36,28 +32,28 @@ public interface LobbyInterface {
     void requestComponent(Player player, int componentID);
 
     /**
-     * Rejects the currently selected component, returning it to the available components pool.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#rejectComponent(ShipBoard)}.
      *
      * @param player the player wishing to reject the component
      */
     void rejectComponent(Player player);
 
     /**
-     * Stashes the currently selected component into the player's temporary storage.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#stashComponent(ShipBoard)}.
      *
      * @param player the player wishing to stash the component
      */
     void stashComponent(Player player);
 
     /**
-     * Grabs a component that was previously placed on the player's ship.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#grabPlacedComponent(ShipBoard)}.
      *
      * @param player the player wishing to grab a placed component
      */
     void grabPlacedComponent(Player player);
 
     /**
-     * Retrieves a component from the player's stash.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#grabStashedComponent(ShipBoard, int)}.
      *
      * @param player the player wishing to grab a stashed component
      * @param index the index of the component in the player's stash
@@ -65,7 +61,7 @@ public interface LobbyInterface {
     void grabStashedComponent(Player player, int index);
 
     /**
-     * Places the currently selected component on the player's ship.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#placeComponent(ShipBoard, Point, Direction)}.
      *
      * @param player the player wishing to place the component
      * @param point the coordinates where the component should be placed
@@ -74,14 +70,14 @@ public interface LobbyInterface {
     void placeComponent(Player player, Point point, Direction orientation);
 
     /**
-     * Signals that the player wants to flip the hourglass during the ship building phase.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#flipHourglass(ShipBoard)}.
      *
      * @param player the player flipping the hourglass
      */
     void flipHourglass(Player player);
 
     /**
-     * Places the player's ship on the flight board at a specific starting position.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#placeShipOnFlightBoard(ShipBoard, int)}.
      *
      * @param player the player placing their ship
      * @param startingPosition the position on the flight board where the ship should be placed
@@ -89,14 +85,14 @@ public interface LobbyInterface {
     void placeShipOnFlightBoard(Player player, int startingPosition);
 
     /**
-     * Places the player's ship on the flight board at the default starting position.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#placeShipOnFlightBoard(ShipBoard)}.
      *
      * @param player the player placing their ship
      */
     void placeShipOnFlightBoard(Player player);
 
     /**
-     * Allows a player to view a forecast card from the specified deck.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#acquireForecast(ShipBoard, int)}.
      *
      * @param player the player acquiring the forecast
      * @param deckIndex the index of the deck to view the forecast from
@@ -104,7 +100,7 @@ public interface LobbyInterface {
     void acquireForecast(Player player, int deckIndex);
 
     /**
-     * Releases a previously acquired forecast card.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#releaseForecast(ShipBoard)}.
      *
      * @param player the player releasing the forecast
      */
@@ -115,7 +111,7 @@ public interface LobbyInterface {
     //region Ship validity check
 
     /**
-     * Removes a component from the player's ship at the specified coordinates.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#removeComponent(ShipBoard, Point)}.
      *
      * @param player the player removing the component
      * @param point the coordinates of the component to remove
@@ -123,7 +119,7 @@ public interface LobbyInterface {
     void removeComponent(Player player, Point point);
 
     /**
-     * Selects a specific ship piece during the ship building phase.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#chooseShipPiece(ShipBoard, int)}.
      *
      * @param player the player choosing the ship piece
      * @param pieceIndex the index of the piece to choose
@@ -134,7 +130,7 @@ public interface LobbyInterface {
     //region Ship init
 
     /**
-     * Initializes a cabin on the player's ship with the specified crew type.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#initializeCabin(ShipBoard, Point, CrewType)}.
      *
      * @param player the player initializing the cabin
      * @param point the coordinates where the cabin should be placed
@@ -146,14 +142,14 @@ public interface LobbyInterface {
     //region Adventure
 
     /**
-     * Draws a card during the adventure phase.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#drawCard(ShipBoard)}.
      *
      * @param player the player drawing the card
      */
     void drawCard(Player player);
 
     /**
-     * Activates a component on the player's ship at the specified coordinates.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#activateComponent(ShipBoard, Point)}.
      *
      * @param player the player activating the component
      * @param point the coordinates of the component to activate
@@ -161,7 +157,7 @@ public interface LobbyInterface {
     void activateComponent(Player player, Point point);
 
     /**
-     * Signals that a crew member is lost at the specified location.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#loseCrew(ShipBoard, Point)}.
      *
      * @param player the player losing the crew
      * @param point the coordinates where the crew is lost
@@ -169,14 +165,14 @@ public interface LobbyInterface {
     void loseCrew(Player player, Point point);
 
     /**
-     * Collects a reward during the adventure phase.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#grabReward(ShipBoard)}.
      *
      * @param player the player grabbing the reward
      */
     void grabReward(Player player);
 
     /**
-     * Places goods of a specific type at the specified location on the player's ship.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#placeGoods(ShipBoard, Point, GoodsType)}.
      *
      * @param player the player placing the goods
      * @param point the coordinates where the goods should be placed
@@ -185,7 +181,7 @@ public interface LobbyInterface {
     void placeGoods(Player player, Point point, GoodsType goodsType);
 
     /**
-     * Removes goods of a specific type from the specified location on the player's ship.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#removeGoods(ShipBoard, Point, GoodsType)}.
      *
      * @param player the player removing the goods
      * @param point the coordinates from which to remove the goods
@@ -194,7 +190,7 @@ public interface LobbyInterface {
     void removeGoods(Player player, Point point, GoodsType goodsType);
 
     /**
-     * Signals that goods are lost at the specified location.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#loseGood(ShipBoard, Point)}.
      *
      * @param player the player losing the goods
      * @param point the coordinates where the goods are lost
@@ -202,7 +198,7 @@ public interface LobbyInterface {
     void loseGoods(Player player, Point point);
 
     /**
-     * Uses a battery component at the specified location.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#useBattery(ShipBoard, Point)}.
      *
      * @param player the player using the battery
      * @param point the coordinates of the battery to use
@@ -210,7 +206,7 @@ public interface LobbyInterface {
     void useBattery(Player player, Point point);
 
     /**
-     * Selects a planet during the adventure phase.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#choosePlanet(ShipBoard, int)}.
      *
      * @param player the player choosing the planet
      * @param choice the index of the chosen planet
@@ -218,14 +214,14 @@ public interface LobbyInterface {
     void choosePlanet(Player player, int choice);
 
     /**
-     * Signals that the player is ready to proceed to the next screen/state.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#goNext(ShipBoard)}.
      *
      * @param player the player who is ready to proceed
      */
     void goNext(Player player);
 
     /**
-     * Signals that the player wants to abandon the current flight.
+     * Delegates to {@link it.polimi.ingsw.galaxytruckers.model.GameInterface#giveUp(ShipBoard)}.
      *
      * @param player the player giving up
      */

@@ -8,12 +8,20 @@ import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
 import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StarDustCard extends AdventureCard {
 
-    List<ShipBoard> invertedShips;
+    private final List<ShipBoard> invertedShips = new ArrayList<>();
 
+    /**
+     * Constructs a StarDustCard.
+     *
+     * @param game the game instance
+     * @param level the adventure card level
+     * @param id the unique card identifier
+     */
     public StarDustCard(Game game, Level level, int id) {
         super(game, level, id);
     }
@@ -21,7 +29,8 @@ public class StarDustCard extends AdventureCard {
     @Override
     public void initialize() {
         super.initialize();
-        this.invertedShips = flightBoard.getOrderedShips().reversed();
+        this.invertedShips.clear();
+        this.invertedShips.addAll(flightBoard.getOrderedShips().reversed());
     }
 
     public AdventureState getNextState() {

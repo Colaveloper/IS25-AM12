@@ -8,14 +8,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Represents a shield component in the ship, which can be activated to defend against attacks.
+ */
 public non-sealed class Shield extends Component implements Activatable{
     private boolean active;
 
+    /**
+     * Constructs a Shield with the specified connectors and id.
+     *
+     * @param connectors the connectors for this component
+     * @param id the unique identifier for this component
+     */
     public Shield(Map<Direction, Connector> connectors, int id) {
         super(connectors, id);
         this.active = false;
     }
 
+    /**
+     * Constructs a Shield with the specified connectors.
+     * Used for testing purposes.
+     *
+     * @param connectors the connectors for this component
+     */
     @VisibleForTesting
     public Shield(Map<Direction, Connector> connectors) {
         super(connectors);

@@ -6,6 +6,11 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * SecondFlightBoard class represents the second flight board in the Galaxy Truckers game.
+ * It extends the FlightBoard class and provides specific functionality for the second flight board,
+ * including choosing the starting position on placement and removing ships.
+ */
 public class SecondFlightBoard extends FlightBoard{
     @VisibleForTesting
     protected static int loopLength;
@@ -20,6 +25,13 @@ public class SecondFlightBoard extends FlightBoard{
         this.startingPositionsLeft.addAll(startingPositions);
     }
 
+    /**
+     * Places a ship on the flight board at the specified starting position.
+     *
+     * @param shipBoard the ship board to place on the flight board
+     * @param startingPosition the starting position on the flight board
+     * @throws IllegalArgumentException if the starting position is not available
+     */
     @Override
     public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
         synchronized (startingPositionsLeft) {
