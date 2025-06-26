@@ -294,6 +294,13 @@ public abstract class Screen {
     public void notifyRemoveLobby(UUID LobbyId){}
 
     /**
+     * Notifies the screen that a player has joined the game.
+     *
+     * @param player the player who joined
+     */
+    public void notifyPlayerJoin(Player player){}
+
+    /**
      * Notifies the screen that a component has changed.
      *
      * @param shipBoard The ship board where the component changed

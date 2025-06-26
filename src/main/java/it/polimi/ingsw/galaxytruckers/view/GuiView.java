@@ -105,6 +105,11 @@ public class GuiView extends View<GuiScreen> {
     }
 
     @Override
+    public void notifyPlayerJoin(Player player) {
+        currentScreen.notifyPlayerJoin(player);
+    }
+
+    @Override
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
         currentScreen.notifyRequestRandComponent(shipBoard, component);
     }

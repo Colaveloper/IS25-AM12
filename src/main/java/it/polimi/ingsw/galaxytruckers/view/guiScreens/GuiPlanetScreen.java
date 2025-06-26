@@ -154,6 +154,7 @@ public class GuiPlanetScreen extends GuiAdventureScreen {
         Platform.runLater(() -> {
             planetToShip.set(choice, shipBoard);
             currentShipBoard.set(nextShipBoard);
+            guiLog.log("It's " + model.getPlayerByShip(state.getShipBoard()).getNickname() + "'s turn now.");
         });
     }
 
@@ -168,6 +169,7 @@ public class GuiPlanetScreen extends GuiAdventureScreen {
     public void notifyCurrentPlayerUpdate(ShipBoard shipBoard) {
         Platform.runLater(() -> {
             currentShipBoard.set(shipBoard);
+            guiLog.log("It's " + model.getPlayerByShip(state.getShipBoard()).getNickname() + "'s turn now.");
         });
     }
 }

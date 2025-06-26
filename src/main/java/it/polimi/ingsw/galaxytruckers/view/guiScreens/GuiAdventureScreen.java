@@ -41,9 +41,9 @@ public abstract class GuiAdventureScreen extends GuiGameScreen {
         giveUpButton.setOnAction(e -> {
             controller.giveUp();
             guiLog.log("You've given up, but you must continue playing this card. Giving up will take effect at the end of the card.");
-            guiLog.log("It's " + model.getPlayerByShip(state.getShipBoard()).getNickname() + "'s turn now.");
         });
         guiButtonBox.getChildren().add(giveUpButton);
+        guiLog.log("It's " + model.getPlayerByShip(state.getShipBoard()).getNickname() + "'s turn now.");
     }
 
     /**
