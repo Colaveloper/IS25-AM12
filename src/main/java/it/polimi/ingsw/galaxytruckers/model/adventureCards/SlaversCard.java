@@ -27,7 +27,7 @@ public class SlaversCard extends AdventureCard {
      */
     public SlaversCard(Game game, Level level, int crewLoss, int firePowerThreshold, int creditPrize, int flightDaysLoss, int id) {
         super(game, level, id);
-        this.firePowerThreshold = firePowerThreshold;
+        this.firePowerThreshold = firePowerThreshold*2; // Firepower is doubled to account for half firepower from the ships
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;
         this.crewLoss = crewLoss;
