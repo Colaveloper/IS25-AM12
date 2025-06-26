@@ -19,6 +19,14 @@ public class GoodsLoss implements Penalty {
         this.goodsToLose = goodsToLose;
     }
 
+    /**
+     * Inflicts a penalty by requiring the player to remove a specified number of goods from their ship.
+     * If goodsToLose is zero, no penalty is applied.
+     *
+     * @param shipBoard the ShipBoard of the player being penalized
+     * @param flightBoard the FlightBoard containing all players' ship boards
+     * @return an Optional containing a RemoveGoodsState if goods are to be removed, or empty if not
+     */
     @Override
     public Optional<AdventureState> inflictPenalty(ShipBoard shipBoard, FlightBoard flightBoard) {
         if (goodsToLose != 0) {

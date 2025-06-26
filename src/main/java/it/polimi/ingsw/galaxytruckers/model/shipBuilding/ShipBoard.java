@@ -197,14 +197,14 @@ public abstract class ShipBoard {
     }
 
     /**
-     * Stashes the last placed component, making it available for later retrieval.
-     * This method is a placeholder and is implemented only by subclasses that support stashing.
+     * Stashes the last placed component, making it available for later retrieval, if
+     * the specific ship board supports stashing.
      */
     public void stashComponent() {}
 
     /**
-     * Grabs a stashed component by its index, making it available for placement.
-     * This method is a placeholder and is implemented only by subclasses that support stashing.
+     * Grabs a stashed component by its index, making it available for placement, if
+     * the specific ship board supports stashing.
      *
      * @param index The index of the stashed component to grab.
      */
@@ -304,36 +304,68 @@ public abstract class ShipBoard {
 
     //region ship stats observers
 
+    /**
+     * @return the firepower of the ship board, to be intepreted as
+     *      2 * the nominal firepower of the ship.
+     */
     public int getFirePower() {
         return firePower;
     }
 
+    /**
+     * @return the engine power of the ship board
+     */
     public int getEnginePower() {
         return enginePower;
     }
 
+    /**
+     * @return the number of batteries available on the ship board
+     */
     public int getNumBatteries() {
         return numBatteries;
     }
 
+    /**
+     * @return the crew size of the ship board, representing the number of crew members
+     */
     public int getCrewSize() {
         return crewSize;
     }
 
+    /**
+     * @return the number of credits gained by the ship board
+     */
     public int getCredits() { return credits; }
 
+    /**
+     * @return the number of losses incurred by the ship board
+     */
     public int getLosses() { return losses; }
 
+    /**
+     * @return the goods stored in the ship board's cargo holds.
+     */
     public Map<GoodsType, Integer> getGoods() {
         return new HashMap<>(goods);
     }
 
+    /**
+     * Calculates the total value of goods stored in the ship board's cargo holds.
+     *
+     * @return the total value of goods, calculated as the sum of each good's value multiplied by its quantity.
+     */
     public int getGoodsValue() {
         return goods.keySet().stream()
                 .mapToInt(g -> g.getValue()*goods.get(g))
                 .sum();
     }
 
+    /**
+     * Calculates the number of exposed connectors on the ship board.
+     *
+     * @return the number of exposed connectors, which are connectors that are not connected to any other component.
+     */
     public int getExposedConnectorsNumber() {
         int exposedConnectorsNumber = 0;
         for (Point point : componentMap.keySet()) {
@@ -348,6 +380,10 @@ public abstract class ShipBoard {
         return exposedConnectorsNumber;
     }
 
+    /**
+     * @return the set of directions where the ship board has shields.
+     * This set is used to determine which directions are defensible against attacks.
+     */
     public Set<Direction> getShieldDirections() {
         return new HashSet<>(shieldDirections);
     }
@@ -356,54 +392,96 @@ public abstract class ShipBoard {
 
     //region components observers
 
+    /**
+     * @return the center point of the ship board, which is a fixed point at (7, 7).
+     */
     public Point getCenter() {
         return new Point(center);
     }
 
+    /**
+     * @return a map of all components on the ship board, where the key is the position and the value is the component.
+     */
     public Map<Point, Component> getComponentMap() {
         return new HashMap<>(componentMap);
     }
 
+    /**
+     * @return a map of cannons on the ship board, where the key is the position and the value is the cannon.
+     */
     public Map<Point, Cannon> getCannons() {
         return new HashMap<>(cannons);
     }
 
+    /**
+     * @return a map of engines on the ship board, where the key is the position and the value is the engine.
+     */
     public Map<Point, Engine> getEngines() {
         return new HashMap<>(engines);
     }
 
+    /**
+     * @return a map of batteries on the ship board, where the key is the position and the value is the battery.
+     */
     public Map<Point, Battery> getBatteries() {
         return new HashMap<>(batteries);
     }
 
+    /**
+     * @return a map of shields on the ship board, where the key is the position and the value is the shield.
+     */
     public Map<Point, Shield> getShields() {
         return new HashMap<>(shields);
     }
 
+    /**
+     * @return a map of cabins on the ship board, where the key is the position and the value is the cabin.
+     */
     public Map<Point, Cabin> getCabins() {
         return new HashMap<>(cabins);
     }
 
+    /**
+     * @return a map of cargo holds on the ship board, where the key is the position and the value is the cargo hold.
+     */
     public Map<Point, CargoHold> getCargoHolds() {
         return new HashMap<>(cargoHolds);
     }
 
+    /**
+     * @return a map of life supports on the ship board, where the key is the position and the value is the life support.
+     * Returns an empty map if the ship board does not support life supports.
+     */
     public Map<Point, LifeSupport> getLifeSupports() {
         return new HashMap<>();
     }
 
+    /**
+     * @return a map of activatable components on the ship board, where the key is the position and the value is the activatable component.
+     * This includes components like DoubleCannon, DoubleEngine, and Shield.
+     */
     public Map<Point, Activatable> getActivatables() {
         return new HashMap<>(activatables);
     }
 
+    /**
+     * @return the component in hand for this ship board, if any.
+     */
     public Optional<Component> getLastComponent() {
         return Optional.ofNullable(lastComponent);
     }
 
+    /**
+     * @return the position of the component in hand, if any.
+     */
     public Optional<Point> getLastPosition() {
         return Optional.ofNullable(lastPosition);
     }
 
+    /**
+     * @return a list of stashed components.
+     * Returns an empty list if the ship board does not support stashing components.
+     */
     public List<Component> getStashedComponents() {
         return List.of();
     }
@@ -431,15 +509,14 @@ public abstract class ShipBoard {
      * Removes goods of a specific type and amount from the cargo hold at a given position.
      *
      * @param position The position of the cargo hold.
-     * @param goods The type of goods to remove.
-     * @param amount The amount of goods to remove.
+     * @param goods    The type of goods to remove.
      */
-    public void removeGoods(Point position, GoodsType goods, int amount) {
+    public void removeGoods(Point position, GoodsType goods) {
         if (!cargoHolds.containsKey(position)) {
             throw new IllegalStateException("There is no cargo hold for this position");
         }
-        cargoHolds.get(position).removeGoods(goods, amount);
-        this.goods.put(goods, this.goods.get(goods) - amount);
+        cargoHolds.get(position).removeGoods(goods, 1);
+        this.goods.put(goods, this.goods.get(goods) - 1);
         eventListener.notifyGoodsUpdateEvent(this,position,goods,false);
     }
     // endregion
@@ -464,8 +541,6 @@ public abstract class ShipBoard {
     //region cabin and life support methods
     /**
      * Returns the set of crew type options available for a cabin at a specific position.
-     * Generally, only the HUMAN crew-type is supported, but subclasses can override
-     * this method to provide additional crew types.
      *
      * @param position The position of the cabin.
      * @return A set containing the available crew types.
@@ -482,6 +557,7 @@ public abstract class ShipBoard {
      *
      * @param position The position of the cabin to initialize.
      * @param crewType The crew type to assign to the cabin.
+     * @throws IllegalStateException if there is no cabin at the specified position.
      */
     public void initializeCabin(Point position, CrewType crewType) {
         if (!cabins.containsKey(position)) {
@@ -496,6 +572,7 @@ public abstract class ShipBoard {
     /**
      * Loses crew from a cabin at a specific position.
      * @param position The position of the cabin from which to lose crew.
+     * @throws IllegalStateException if there is no cabin at the specified position.
      */
     public void loseCrew(Point position) {
         if (!cabins.containsKey(position)) {
@@ -515,6 +592,7 @@ public abstract class ShipBoard {
      *
      * @param position The position of the component to activate.
      * @return true if the component was successfully activated, false if it was already active.
+     * @throws IllegalStateException if there is no activatable for the specified position.
      */
     public boolean activateComponent(Point position) {
         if (!activatables.containsKey(position)) {
@@ -539,6 +617,7 @@ public abstract class ShipBoard {
      * This method checks if the activatable exists and deactivates it, notifying the event listener.
      *
      * @param position The position of the component to deactivate.
+     * @throws IllegalStateException if there is no activatable for the specified position,
      */
     public void deactivateComponent(Point position) {
         if (!activatables.containsKey(position)) {

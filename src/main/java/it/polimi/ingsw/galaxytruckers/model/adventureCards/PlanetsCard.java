@@ -17,6 +17,15 @@ public class PlanetsCard extends AdventureCard {
     private Map<ShipBoard, Integer> planetChoices;
     private List<ShipBoard> landedShips;
 
+    /**
+     * Constructs a PlanetsCard.
+     *
+     * @param game the game instance
+     * @param level the adventure card level
+     * @param planets the list of planets and their goods
+     * @param flightDaysLoss the number of flight days lost when landing
+     * @param id the unique card identifier
+     */
     public PlanetsCard(Game game, Level level, List<Map<GoodsType, Integer>> planets, int flightDaysLoss, int id) {
         super(game, level, id);
         this.planets = planets;

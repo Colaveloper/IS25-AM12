@@ -11,6 +11,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Represents the ship building state for games of level SECOND, where players
+ * can build their ships and manage forecasts.
+ */
 public non-sealed class SecondShipBuildingState extends ShipBuildingState implements GameStateInterface {
     private final Hourglass hourglass;
     private final Map<ShipBoard, Integer> shipToForecasts = new HashMap<>();
@@ -23,12 +27,27 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
         this.hourglass = new Hourglass(3);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>In this state, the hourglass is started and the game is set.
+     * </p>
+     */
     @Override
     public void setGame(Game game) {
         super.setGame(game);
         hourglass.flip(this::notifyHourglassEnd);
     }
 
+    /**
+     * {@inheritDoc}.
+     * <p>
+     * The action is implemented in this state and calls
+     * {@link Hourglass#flip(Runnable)} to flip the hourglass.
+     * </p>
+     *
+     * @throws IllegalStateException if it's the last flip and the
+     *                               ship board is not completed.
+     */
     @Override
     public void flipHourglass(ShipBoard shipBoard) {
         synchronized (this.hourglass) {
@@ -48,6 +67,12 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
         }
     }
 
+    /**
+     * {@inheritDoc}.
+     * <p>The action is implemented for this state</p>
+     *
+     * @throws IllegalStateException if the ship board is already completed.
+     */
     @Override
     public void stashComponent(ShipBoard shipBoard) {
         if (getCompletedShipBoards().contains(shipBoard)) {
@@ -56,6 +81,12 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
         shipBoard.stashComponent();
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>The action is implemented for this state</p>
+     *
+     * @throws IllegalStateException if the ship board is already completed.
+     */
     @Override
     public void grabStashedComponent(ShipBoard shipBoard, int index) {
         if (getCompletedShipBoards().contains(shipBoard)) {
@@ -64,6 +95,12 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
         shipBoard.grabStashedComponent(index);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>The action is implemented for this state</p>
+     *
+     * @throws IllegalStateException if the ship board is already completed.
+     */
     @Override
     public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
         if (getCompletedShipBoards().contains(shipBoard)) {
@@ -74,6 +111,13 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
         completeShipBoard(shipBoard);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>The action is implemented for this state</p>
+     *
+     * @throws IllegalStateException    if the ship board is already completed
+     * @throws IllegalArgumentException if the forecast is blocked by another player
+     */
     @Override
     public void acquireForecast(ShipBoard shipBoard, int deckIndex) {
         if (getCompletedShipBoards().contains(shipBoard)) {
@@ -90,6 +134,10 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>The action is implemented for this state</p>
+     */
     @Override
     public void releaseForecast(ShipBoard shipBoard) {
         synchronized (forecastLock) {
@@ -101,6 +149,11 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>In this state, the hourglass is stopped, forecasts are released and
+     * ships are placed on the flight board</p>
+     */
     @Override
     protected void endBuilding() {
         synchronized (endLock) {
@@ -121,21 +174,35 @@ public non-sealed class SecondShipBuildingState extends ShipBuildingState implem
         }
     }
 
+    /**
+     * Notifies the end of the hourglass event to the event listener.
+     */
     protected void notifyHourglassEnd() {
-        System.out.println("Hourglass has finished");
         game.getEventListener().notifyHourglassEndEvent();
     }
 
+    /**
+     * Returns the hourglass used in this state.
+     *
+     * @return the hourglass
+     */
     @VisibleForTesting
     public Hourglass getHourglass() {
         return hourglass;
     }
 
+    /**
+     * @return a map where keys are ship boards and values are forecast indices
+     * they have acquired.
+     */
     @VisibleForTesting
     public Map<ShipBoard, Integer> getShipToForecasts() {
         return shipToForecasts;
     }
 
+    /**
+     * @return a set of blocked forecast indices
+     */
     @VisibleForTesting
     public Set<Integer> getBlockedForecasts() {
         return blockedForecasts;

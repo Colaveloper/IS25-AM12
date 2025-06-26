@@ -23,9 +23,20 @@ public class PiratesCard extends AdventureCard {
     private Projectile currentProjectile;
     private ShipBoard winnerShipBoard;
 
+    /**
+     * Constructs a PiratesCard.
+     *
+     * @param game the game instance
+     * @param level the adventure card level
+     * @param firePowerThreshold the firepower required to defeat the pirates
+     * @param creditPrize the credits awarded for defeating the pirates
+     * @param flightDaysLoss the number of flight days lost when claiming the prize
+     * @param projectiles the list of projectiles to be handled by defeated players
+     * @param id the unique card identifier
+     */
     public PiratesCard(Game game, Level level, int firePowerThreshold, int creditPrize, int flightDaysLoss, List<Projectile> projectiles, int id) {
         super(game, level, id);
-        this.firePowerThreshold = firePowerThreshold;
+        this.firePowerThreshold = firePowerThreshold*2; // Firepower threshold is doubled to account for half firepower from the ships
         this.creditPrize = creditPrize;
         this.flightDaysLoss = flightDaysLoss;
         this.projectiles = projectiles.reversed();  // list is inverted to be treated as a stack

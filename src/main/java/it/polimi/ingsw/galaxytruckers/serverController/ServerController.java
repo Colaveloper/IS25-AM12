@@ -158,7 +158,7 @@ public class ServerController implements ServerControllerInterface {
     public void leaveLobby(Player player) {
         synchronized (lock){
             player.getLobby().ifPresent(lobby -> {
-                System.out.println("Player " + player.getNickname() + " has left the lobby");
+                System.out.println("Player " + player.getNickname() + " has left the lobby " + lobby.getId());
                 lobby.notifyPlayerExit(player);
                 removeLobby(lobby);
             });
@@ -184,6 +184,7 @@ public class ServerController implements ServerControllerInterface {
                         System.out.println("The player " + p.getNickname() + " has been removed");
                     }
                 });
+                System.out.println("Lobby " + lobby.getId() + " has been removed");
             }
             if (activeLobbies.remove(lobby)) {
                 eventQueue.notifyEvent(new RemoveActiveLobbyEvent(lobby.getId()));

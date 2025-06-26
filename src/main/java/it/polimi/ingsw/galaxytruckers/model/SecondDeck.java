@@ -7,6 +7,12 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.IntStream;
 
+/**
+ * The SecondDeck class represents the adventure cards deck for games of level SECOND in
+ * the Galaxy-Trucker game.
+ * It extends the Deck class and initializes the deck with adventure cards of levels TEST, FIRST, and SECOND.
+ * The deck is divided into three forecast decks and a hidden deck.
+ */
 public class SecondDeck extends Deck{
     private final List<List<AdventureCard>> forecastDecks;
     private final List<AdventureCard> hiddenDeck;
@@ -42,10 +48,16 @@ public class SecondDeck extends Deck{
         hiddenDeck.addAll(hardCards.subList(6, 8));
     }
 
+    /**
+     * {@inheritDoc}
+     * @param index the index of the forecast deck
+     * @return the list of adventure cards in the specified forecast deck
+     * @throws IllegalArgumentException if the index is out of bounds
+     */
     @Override
-    public List<AdventureCard> getForecastDeck(int deckIndex) {
+    public List<AdventureCard> getForecastDeck(int index) {
         try {
-            return forecastDecks.get(deckIndex);
+            return forecastDecks.get(index);
         } catch (IndexOutOfBoundsException e) {
             throw new IllegalArgumentException("No forecast deck with such index");
         }

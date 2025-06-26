@@ -10,6 +10,13 @@ import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 
 public class OpenSpaceCard extends AdventureCard {
 
+    /**
+     * Constructs an OpenSpaceCard.
+     *
+     * @param game the game instance
+     * @param level the adventure card level
+     * @param id the unique card identifier
+     */
     public OpenSpaceCard (Game game, Level level, int id) {
         super(game, level, id);
     }

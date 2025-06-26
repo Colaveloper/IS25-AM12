@@ -91,6 +91,7 @@ class ShipCorrectionStateTest {
             ));
             shipBoards.get(2).placeComponent(new Point(9, 7), Direction.UP);
             shipBoards.get(2).weldLastComponent();
+            shipBoards.forEach(s -> game.getFlightBoard().placeShipOnFlightBoard(s));
             game.setCurrentState(shipCorrectionState);
         }
 

@@ -38,13 +38,9 @@ class JsonUtilsTest {
 
     @Test
     void serializeShipBoardDTO() {
-        JsonNode jsonNode;
         assertDoesNotThrow(() -> {
             JsonUtils.serializeShipBoardDTO(shipBoardDTO);
         });
-        jsonNode = JsonUtils.serializeShipBoardDTO(shipBoardDTO);
-        System.out.println(jsonNode.toString());
-        System.out.println(shipBoardDTO.toString());
     }
 
     @Test

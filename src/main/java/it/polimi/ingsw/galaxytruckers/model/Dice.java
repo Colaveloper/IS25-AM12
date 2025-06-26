@@ -7,12 +7,12 @@ import java.util.function.IntSupplier;
  * Represents two dice that can be rolled to get a random number between 2 and 12.
  * The number is the sum of two random integers, each ranging from 1 to 6.
  */
-public interface Dice extends IntSupplier {
+public class Dice implements IntSupplier {
     // shared instance of Random
-    Random RANDOM = new Random();
+    private static final Random RANDOM = new Random();
 
     @Override
-    default int getAsInt() {
+    public int getAsInt() {
         return RANDOM.nextInt(6) + RANDOM.nextInt(6) + 2;
     }
 }

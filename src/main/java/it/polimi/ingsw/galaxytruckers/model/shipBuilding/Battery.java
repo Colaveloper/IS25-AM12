@@ -2,19 +2,34 @@ package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
-import org.checkerframework.common.returnsreceiver.qual.This;
 
-import java.awt.*;
 import java.util.Map;
 
+/**
+ * Represents a battery component in the ship, used to store and provide energy.
+ */
 public non-sealed class Battery extends Component implements ComponentInterface{
     int numBatteries;
 
+    /**
+     * Constructs a Battery with the specified connectors, id, and number of batteries.
+     *
+     * @param connectors the connectors for this component
+     * @param id the unique identifier for this component
+     * @param numBatteries the number of batteries in this component
+     */
     public Battery(Map<Direction, Connector> connectors, int id, int numBatteries) {
         super(connectors,id);
         this.numBatteries = numBatteries;
     }
 
+    /**
+     * Constructs a Battery with the specified connectors and number of batteries.
+     * Used for testing purposes.
+     *
+     * @param connectors the connectors for this component
+     * @param numBatteries the number of batteries in this component
+     */
     @VisibleForTesting
     public Battery(Map<Direction, Connector> connectors, int numBatteries) {
         super(connectors);
@@ -24,16 +39,29 @@ public non-sealed class Battery extends Component implements ComponentInterface{
         this.numBatteries = numBatteries;
     }
 
+    /**
+     * Constructs a Battery with the specified number of batteries.
+     * Used for testing purposes.
+     *
+     * @param numBatteries the number of batteries in this component
+     */
     @VisibleForTesting
     public Battery(int numBatteries) {
         super();
         this.numBatteries = numBatteries;
     }
 
+    /**
+     * @return the number of batteries on this component.
+     */
     public int getNumBatteries() {
         return numBatteries;
     }
 
+    /**
+     * Sets the number of batteries on this component.
+     * @param numBatteries the new number of batteries
+     */
     public void setNumBatteries(int numBatteries) {
         this.numBatteries = numBatteries;
     }

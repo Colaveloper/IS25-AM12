@@ -6,8 +6,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Hourglass {
     private final static int DURATION = 60000; // 60 seconds in milliseconds
@@ -24,11 +22,19 @@ public class Hourglass {
         this.flipsLeft = rounds;
     }
 
+    /**
+     * Sets the duration of the hourglass for testing purposes.
+     *
+     * @param duration the duration in milliseconds
+     */
     @VisibleForTesting
     public synchronized void setDuration(int duration) {
         this.duration = duration;
     }
 
+    /**
+     * Stops the hourglass if it is running, resets the missing time to 0
+     */
     public synchronized void stop() {
         if (scheduledFuture != null) {
             scheduledFuture.cancel(true);
@@ -48,8 +54,10 @@ public class Hourglass {
     /**
      * Flips the hourglass, if not already running, decrements the number of remaining flips
      * and executes the given task once it has finished
+     *
      * @param endTask the task to be executed when the hourglass runs out
-     * @throws IllegalStateException if the hourglass is already running
+     * @throws IllegalStateException if the hourglass is already running or if
+     *                               there are no flips left
      */
     public synchronized void flip(Runnable endTask) {
         if (!isRunning) {
@@ -61,7 +69,7 @@ public class Hourglass {
             scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
                 boolean end = false;
                 synchronized (this) {
-                    missingTime-= period; // Decrement by 100 milliseconds
+                    missingTime -= period; // Decrement by 100 milliseconds
                     if (missingTime <= 0) {
                         end = true;
                         isRunning = false;
@@ -78,15 +86,24 @@ public class Hourglass {
         flipsLeft--;
     }
 
+    /**
+     * @return the number of flips left in the hourglass
+     */
     public synchronized int getFlipsLeft() {
         return flipsLeft;
     }
 
+    /**
+     * @return {@code true} if the hourglass is currently running, {@code false} otherwise
+     */
     public synchronized boolean getIsRunning() {
         return isRunning;
     }
 
+    /**
+     * @return the remaining time in seconds until the hourglass runs out
+     */
     public synchronized int getMissingTime() {
-        return missingTime;
+        return missingTime / 1000; // Convert milliseconds to seconds
     }
 }

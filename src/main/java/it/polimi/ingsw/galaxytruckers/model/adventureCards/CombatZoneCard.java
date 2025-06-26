@@ -17,6 +17,15 @@ public class CombatZoneCard extends AdventureCard {
     private int checkIndex;
     ShipBoard penalizedShipBoard;
 
+    /**
+     * Constructs a CombatZoneCard.
+     *
+     * @param game the game instance
+     * @param level the adventure card level
+     * @param checks the list of combat zone checks to perform
+     * @param penalties the list of penalties to inflict
+     * @param id the unique card identifier
+     */
     public CombatZoneCard(Game game, Level level, List<CombatZoneCheck> checks, List<Penalty> penalties, int id) {
         super(game, level, id);
         this.checks = checks;

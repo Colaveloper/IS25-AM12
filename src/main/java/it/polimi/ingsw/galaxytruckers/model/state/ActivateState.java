@@ -6,12 +6,22 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Abstract class representing a state in which the player can activate components
+ * and spend batteries on their ship board.
+ */
 public abstract class ActivateState extends AdventureState {
     protected final Set<Point> availablePositions;
     protected final ShipBoard shipBoard;
     protected int batteriesToSpend;
     protected int activatedComponents;
 
+    /**
+     * Constructor for ActivateState.
+     *
+     * @param shipBoard          the ship board of the player who is activating components
+     * @param availablePositions the positions on the ship board where components can be activated
+     */
     protected ActivateState(ShipBoard shipBoard, Set<Point> availablePositions) {
         this.shipBoard = shipBoard;
         this.batteriesToSpend = 0;
@@ -19,6 +29,16 @@ public abstract class ActivateState extends AdventureState {
         this.availablePositions = availablePositions;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Skips this state if it's the given ship board's turn.
+     * If the player has batteries to spend or components to activate
+     * they will be used/activated.
+     * </p>
+     *
+     * @param shipBoard the ship board of the player who should skip
+     */
     @Override
     public synchronized void skip(ShipBoard shipBoard) {
         if (!expired && this.shipBoard.equals(shipBoard)) {
@@ -46,6 +66,14 @@ public abstract class ActivateState extends AdventureState {
         }
     }
 
+    /**
+     * Activates a component on the ship board at the specified position.
+     *
+     * @param shipBoard the ship board on which the component is located
+     * @param position  the position of the component to activate
+     * @throws IllegalStateException if it's not the player's turn, or if
+     *                               the player has not enough batteries to activate the component.
+     */
     @Override
     public synchronized void activateComponent(ShipBoard shipBoard, Point position) {
         if (!this.shipBoard.equals(shipBoard)) {
@@ -63,6 +91,14 @@ public abstract class ActivateState extends AdventureState {
         }
     }
 
+    /**
+     * Spends a battery on the ship board at the specified point.
+     *
+     * @param shipBoard the ship board where the battery is used
+     * @param point     the point on the ship board where the battery is located
+     * @throws IllegalStateException if it's not the player's turn, or if
+     *                               the player has not enough activatable components to spend the battery on.
+     */
     @Override
     public synchronized void spendBatteries(ShipBoard shipBoard, Point point) {
         if (!this.shipBoard.equals(shipBoard)) {
@@ -76,6 +112,13 @@ public abstract class ActivateState extends AdventureState {
         batteriesToSpend--;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param shipBoard the ship board of the player that requested the action
+     * @throws IllegalStateException if it's not the player's turn, or if the player
+     *                               has batteries to spend or components to activate.
+     */
     @Override
     public synchronized void goNext(ShipBoard shipBoard) {
         if (!this.shipBoard.equals(shipBoard)) {
@@ -90,14 +133,24 @@ public abstract class ActivateState extends AdventureState {
         endStateAction();
     }
 
+    /**
+     * Ends the state action by transitioning to the next state.
+     */
     protected void endStateAction() {
         getNextState();
     }
 
+    /**
+     * @return a set containing the positions on the ship board of
+     * components that can be activated.
+     */
     public synchronized Set<Point> getAvailablePositions() {
         return availablePositions;
     }
 
+    /**
+     * @return the ship board of the player who is activating components.
+     */
     public synchronized ShipBoard getShipBoard() {
         return shipBoard;
     }

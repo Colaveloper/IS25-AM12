@@ -24,6 +24,11 @@ public class FirePowerCheck implements CombatZoneCheck {
         return instance;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This implementation determines the weakest player based on fire-power.
+     */
     @Override
     public ShipBoard getWeakestPlayer(FlightBoard flightBoard) {
         return flightBoard.getShipToPlace().keySet().stream()
@@ -33,6 +38,11 @@ public class FirePowerCheck implements CombatZoneCheck {
                 .orElseThrow(IllegalStateException::new);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This implementation returns an AdventureState for declaring fire-power.
+     */
     @Override
     public Optional<AdventureState> getAvailableAction(ShipBoard shipBoard) {
         return Optional.of(new DeclareFirePowerState(shipBoard));

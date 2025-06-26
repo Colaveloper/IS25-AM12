@@ -42,8 +42,6 @@ public class SecondShipBoard extends ShipBoard {
     private boolean isStashed = false;
 
     private final Set<CrewType> aliens;
-    // We might need this attribute to handle meteors and cannon hits better
-    // private List<Map<Integer, Integer>> cannonDirections;
 
     private final Map<Point, LifeSupport> lifeSupports;
 
@@ -59,6 +57,10 @@ public class SecondShipBoard extends ShipBoard {
         return shipArea.contains(point);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws IllegalStateException if the component was stashed and can't be rejected
+     */
     @Override
     public Component rejectComponent() {
         if (isStashed) {
@@ -75,6 +77,11 @@ public class SecondShipBoard extends ShipBoard {
 
     //Stashing methods
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalStateException if there is no component to stash or if there are already 2 stashed components
+     */
     public void stashComponent() {
         if (lastComponent == null) {
             throw new IllegalStateException("There is no component to stash");
@@ -88,6 +95,10 @@ public class SecondShipBoard extends ShipBoard {
         if (eventListener != null) eventListener.notifyStashComponentEvent(this);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws IllegalArgumentException if the index is out of bounds
+     */
     public void grabStashedComponent(int index) {
         weldLastComponent();
         try {
@@ -166,6 +177,12 @@ public class SecondShipBoard extends ShipBoard {
         }
     }
 
+    @Override
+    public void loseCrew(Point position) {
+        super.loseCrew(position);
+        aliens.remove(cabins.get(position).getCrewType());
+    }
+
     //Visitor pattern methods
 
     @Override
@@ -184,8 +201,7 @@ public class SecondShipBoard extends ShipBoard {
 
         for (Point point : adjacentCabins) {
             if (!getCrewTypeOptions(point).contains(cabins.get(point).getCrewType())) {
-                this.crewSize--;
-                this.aliens.remove(cabins.get(point).getCrewType());
+                loseCrew(point);
             }
         }
     }

@@ -372,7 +372,7 @@ class LobbyTest {
         }
 
         @Test
-        void loadScenario() throws IOException {
+        void loadScenario() {
             lobby = new Lobby(true, false, new ModelStub(), p1, Level.SECOND, 2, removeLobby) {
                 @Override
                 protected String getScenarioPath() {

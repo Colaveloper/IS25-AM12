@@ -18,11 +18,8 @@ public class BigFire extends Projectile{
         super(direction);
     }
 
-    /** * {@inheritDoc}
-     * Returns an empty set, as you cannot defend from a big fire.
-     *
-     * @param shipBoard the ship board to check for activatable points
-     * @return an empty set of points
+    /** {@inheritDoc}
+     * <p>Returns an empty set, as you cannot defend from a big fire.</p>
      */
     @Override
     public Set<Point> getActivatablePoints(ShipBoard shipBoard) {

@@ -7,13 +7,24 @@ import it.polimi.ingsw.galaxytruckers.view.Direction;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents a cargo hold component in the ship, used to store goods of various types.
+ */
 public non-sealed class CargoHold extends Component implements ComponentInterface{
     private final int size;
     private int numGoods;
     private final Map<GoodsType, Integer> goods;
-    private final Boolean isSpecial;
+    private final boolean isSpecial;
 
-    public CargoHold(Map<Direction, Connector> connectors, int id, Boolean isSpecial, int size) {
+    /**
+     * Constructs a CargoHold with the specified connectors, id, special status, and size.
+     *
+     * @param connectors the connectors for this component
+     * @param id the unique identifier for this component
+     * @param isSpecial whether this cargo hold can store special goods
+     * @param size the capacity of the cargo hold
+     */
+    public CargoHold(Map<Direction, Connector> connectors, int id, boolean isSpecial, int size) {
         super(connectors, id);
         this.isSpecial = isSpecial;
         this.size = size;
@@ -21,8 +32,16 @@ public non-sealed class CargoHold extends Component implements ComponentInterfac
         this.numGoods = 0;
     }
 
+    /**
+     * Constructs a CargoHold with the specified connectors, size, and special status.
+     * Used for testing purposes.
+     *
+     * @param connectors the connectors for this component
+     * @param size the capacity of the cargo hold
+     * @param isSpecial whether this cargo hold can store special goods
+     */
     @VisibleForTesting
-    public CargoHold(Map<Direction, Connector> connectors, int size, Boolean isSpecial) {
+    public CargoHold(Map<Direction, Connector> connectors, int size, boolean isSpecial) {
         super(connectors);
         this.size = size;
         this.numGoods = 0;
@@ -30,6 +49,12 @@ public non-sealed class CargoHold extends Component implements ComponentInterfac
         this.isSpecial = isSpecial;
     }
 
+    /**
+     * Constructs a CargoHold with the specified size.
+     * Used for testing purposes.
+     *
+     * @param size the capacity of the cargo hold
+     */
     @VisibleForTesting
     public CargoHold(int size) {
         super();
@@ -39,12 +64,23 @@ public non-sealed class CargoHold extends Component implements ComponentInterfac
         this.isSpecial = false;
     }
 
-    public Boolean getIsSpecial() { return isSpecial; }
+    /**
+     * @return true if this cargo hold can store special goods, false otherwise.
+     */
+    public boolean getIsSpecial() { return isSpecial; }
 
+    /**
+     * @return the goods stored in this cargo hold.
+     */
     public Map<GoodsType, Integer> getGoods() {
         return new HashMap<>(goods);
     }
 
+    /**
+     * Sets the goods in the cargo hold.
+     *
+     * @param goods a map of goods types and their quantities
+     */
     public void setGoods(Map<GoodsType, Integer> goods) {
         this.goods.clear();
         this.goods.putAll(goods);
@@ -55,9 +91,9 @@ public non-sealed class CargoHold extends Component implements ComponentInterfac
      * Adds goods to the cargo hold.
      * @param goodsType the type of goods to add
      * @param amount the number of goods to add
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if goods cannot be added to the cargo hold
      */
-    public void addGoods(GoodsType goodsType, int amount) throws IllegalArgumentException {
+    public void addGoods(GoodsType goodsType, int amount) {
         if (goodsType == GoodsType.RED && !isSpecial) {
             throw new IllegalArgumentException("Cannot add special goods in non-special CargoHold");
         }

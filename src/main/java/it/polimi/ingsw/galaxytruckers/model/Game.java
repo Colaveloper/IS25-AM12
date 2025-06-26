@@ -42,8 +42,16 @@ public class Game implements GameInterface {
     private final ExecutorService transitionExecutor = Executors.newSingleThreadExecutor();
 
     @VisibleForTesting
-    private Runnable afterEach = () -> {};
+    private Runnable afterEach = () -> {
+    };
 
+    /**
+     * Creates a new game with the specified level, number of ships, and event listener.
+     *
+     * @param level         the level of the game
+     * @param shipsN        the number of ships in the game
+     * @param eventListener the event listener to notify about game events
+     */
     public Game(Level level, int shipsN, GameEventListener eventListener) {
         this.eventListener = eventListener;
         this.level = level;
@@ -69,12 +77,6 @@ public class Game implements GameInterface {
     }
 
     //region Setup methods
-    /**
-     * Adds shipboard of the given color to the game
-     *
-     * @param color the color of the added shipboard
-     * @return the added shipboard
-     */
     @Override
     public ShipBoard addShipBoard(GameColor color) {
         ShipBoard shipBoard;
@@ -85,13 +87,11 @@ public class Game implements GameInterface {
         return shipBoard;
     }
 
-    /**
-     * Starts the game by setting the current state to ShipBuilding
-     */
     @Override
     public void start() {
         setCurrentState(gameFactory.createShipBuildingState());
     }
+
 
     @Override
     public void skipBuilding() {
@@ -115,6 +115,13 @@ public class Game implements GameInterface {
 
     //region State methods
 
+    /**
+     * Submits a state transition to the game. The transition will
+     * be executed asynchronously. It is guaranteed that no action can be performed
+     * while the transition is being executed.
+     *
+     * @param runnable the {@code Runnable} to be executed in the state transition
+     */
     public void submitStateTransition(Runnable runnable) {
         transitionExecutor.submit(() -> {
             try {
@@ -125,6 +132,7 @@ public class Game implements GameInterface {
             }
         });
     }
+
     /**
      * Sets the game's current state to the given state
      *
@@ -141,6 +149,7 @@ public class Game implements GameInterface {
     //endregion
 
     //region Getters
+
     /**
      * @return the game's factory
      */
@@ -187,14 +196,23 @@ public class Game implements GameInterface {
         return level;
     }
 
+    /**
+     * @return the game's surrender policy
+     */
     public SurrenderPolicy getSurrenderPolicy() {
         return surrenderPolicy;
     }
 
+    /**
+     * @return true if the game is over, false otherwise
+     */
     public boolean isGameOver() {
         return withStateReadLock(() -> gameOver);
     }
 
+    /**
+     * @return the game's event listener
+     */
     public GameEventListener getEventListener() {
         return eventListener;
     }
@@ -202,10 +220,6 @@ public class Game implements GameInterface {
     //endregion
 
     //region GameEnd methods
-    /**
-     * Assigns ship rewards to be used in the final score and
-     * changes game state to the end game state
-     */
     private void endGame() {
         gameOver = true;
         assignShipRewards();
@@ -215,6 +229,7 @@ public class Game implements GameInterface {
     /**
      * Ends the game and computes the final scores if either the deck is empty or
      * all ships have surrendered
+     *
      * @return {@code true} if the game was ended, {@code false} otherwise
      */
     public boolean tryEndGame() {
@@ -264,7 +279,6 @@ public class Game implements GameInterface {
     //endregion
 
     //region Player requests
-
 
     @Override
     public void skip(ShipBoard shipBoard) {

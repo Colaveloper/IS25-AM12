@@ -24,6 +24,11 @@ public class CrewSizeCheck implements CombatZoneCheck {
         return instance;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This implementation determines the weakest player based on crew size.
+     */
     @Override
     public ShipBoard getWeakestPlayer(FlightBoard flightBoard) {
         return flightBoard.getShipToPlace().keySet().stream()
@@ -33,6 +38,11 @@ public class CrewSizeCheck implements CombatZoneCheck {
                 .orElseThrow(IllegalStateException::new);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This implementation returns an empty Optional, as no specific state is required.
+     */
     @Override
     public Optional<AdventureState> getAvailableAction(ShipBoard shipBoard) {
         return Optional.empty();

@@ -984,7 +984,7 @@ class ShipBoardTest {
                 addComponent(new Point(7,7));
                 assertTrue(restIsUnchanged());
                 shipBoard.placeGoods(new Point(7,7), GoodsType.GREEN, 3);
-                shipBoard.removeGoods(new Point(7,7),GoodsType.GREEN,1);
+                shipBoard.removeGoods(new Point(7,7),GoodsType.GREEN);
                 assertEquals(4, shipBoard.getGoodsValue());
             }
 
@@ -993,14 +993,14 @@ class ShipBoardTest {
                 addComponent(new Point(7,7));
                 shipBoard.placeGoods(new Point(7,7), GoodsType.GREEN,3);
                 clearInvocations(shipBoard.getEventListener());
-                shipBoard.removeGoods(new Point(7,7),GoodsType.GREEN,1);
+                shipBoard.removeGoods(new Point(7,7),GoodsType.GREEN);
                 verify(shipBoard.getEventListener(), times(1))
                         .notifyGoodsUpdateEvent(shipBoard, new Point(7,7), GoodsType.GREEN, false);
             }
 
             @Test
             void removeGoodsThrowsException(){
-                assertThrows(IllegalStateException.class, () -> shipBoard.removeGoods(new Point(7,7), GoodsType.GREEN, 2));
+                assertThrows(IllegalStateException.class, () -> shipBoard.removeGoods(new Point(7,7), GoodsType.GREEN));
                 assertTrue(restIsUnchanged());
             }
 
