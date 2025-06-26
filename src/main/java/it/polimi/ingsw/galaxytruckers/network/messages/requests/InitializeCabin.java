@@ -6,10 +6,19 @@ import it.polimi.ingsw.galaxytruckers.network.messages.RegisteredRequest;
 
 import java.awt.*;
 
+/**
+ * Request class for {@link VirtualServer#initializeCabin(Point, CrewType)}
+ */
 public class InitializeCabin extends RegisteredRequest {
     private final Point point;
     private final CrewType crewType;
 
+    /**
+     * Constructor for InitializeCabin request.
+     *
+     * @param point    the point where the cabin is to be initialized
+     * @param crewType the type of crew to be initialized in the cabin
+     */
     public InitializeCabin(Point point, CrewType crewType) {
         this.point = point;
         this.crewType = crewType;

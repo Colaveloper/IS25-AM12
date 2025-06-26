@@ -3,6 +3,9 @@ package it.polimi.ingsw.galaxytruckers.network.messages.requests;
 import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.messages.RegisteredRequest;
 
+/**
+ * Request class for {@link VirtualServer#goNext()}
+ */
 public class GoNext extends RegisteredRequest {
 
     @Override
