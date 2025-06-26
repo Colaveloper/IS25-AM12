@@ -44,4 +44,23 @@ class PlayerRegistryTest {
 
         assertNull(player);
     }
+
+    @Test
+    void shouldRemovePlayer() {
+        Player player = registry.addPlayer("testPlayer");
+        registry.removePlayer(player);
+
+        Player retrievedPlayer = registry.getByNickname("testPlayer");
+        assertNull(retrievedPlayer);
+    }
+
+    @Test
+    void shouldClearAllPlayers() {
+        registry.addPlayer("player1");
+        registry.addPlayer("player2");
+        registry.clear();
+
+        assertNull(registry.getByNickname("player1"));
+        assertNull(registry.getByNickname("player2"));
+    }
 }

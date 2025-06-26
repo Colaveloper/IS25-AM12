@@ -22,9 +22,11 @@ public class PlayerRegistry {
      * @return the Player object, or null if not found
      */
     public Player getByNickname(String nickname) {
+        Player player;
         synchronized (players) {
-            return players.get(nickname);
+            player = players.get(nickname);
         }
+        return player;
     }
 
     /**
@@ -34,14 +36,16 @@ public class PlayerRegistry {
      * @return the existing or newly created Player object
      */
     public Player addPlayer(String nickname) {
+        Player player;
         synchronized (players) {
             if (players.containsKey(nickname)) {
-                return players.get(nickname);
+                player = players.get(nickname);
+            } else {
+                player = new Player(nickname);
+                players.put(nickname, player);
             }
-            Player player = new Player(nickname);
-            players.put(nickname, player);
-            return player;
         }
+        return player;
     }
 
     /**
@@ -63,5 +67,4 @@ public class PlayerRegistry {
             players.clear();
         }
     }
-
 }

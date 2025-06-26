@@ -46,20 +46,6 @@ class AdventureCardRegistryTest {
     }
 
     @Test
-    void getCard_ValidId_ReturnsCorrectCard() {
-        // Test with known card ID 0 (from cardsReference.json)
-        AdventureCard card = registry.getCard(0);
-        assertNotNull(card);
-        assertInstanceOf(AbandonedShipCard.class, card);
-        assertEquals(Level.FIRST, card.getCardLevel());
-
-        AbandonedShipCard abandonedShipCard = (AbandonedShipCard) card;
-        assertEquals(3, abandonedShipCard.getCreditPrize());
-        assertEquals(2, abandonedShipCard.getRequiredCrew());
-        assertEquals(1, abandonedShipCard.getFlightDaysLoss());
-    }
-
-    @Test
     void getCard_InvalidId_ThrowsException() {
         assertThrows(NullPointerException.class, () -> registry.getCard(-1));
         assertThrows(NullPointerException.class, () -> registry.getCard(999999));

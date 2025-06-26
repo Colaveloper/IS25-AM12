@@ -44,7 +44,7 @@ public class ComponentRegistry {
         return instance;
     }
 
-    private ComponentRegistry() {
+    protected ComponentRegistry() {
         this.components = new HashMap<>();
         this.startingCabins = new HashMap<>();
         try {
@@ -108,7 +108,7 @@ public class ComponentRegistry {
         return components.size();
     }
 
-    private void loadComponents() throws IOException {
+    protected void loadComponents() throws IOException {
         //reading from the JSON file and returning the list of components
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(componentJson);

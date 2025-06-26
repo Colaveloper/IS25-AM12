@@ -39,7 +39,7 @@ public class ConversionUtils {
      * @param <T> the type of the values
      * @return a map with Player keys
      */
-    public <T> Map<Player,T> convertPlayerMap(Map<String,T> map) {
+    protected <T> Map<Player,T> convertPlayerMap(Map<String,T> map) {
         Map<Player, T> convertedMap = new HashMap<>();
         for (String name : map.keySet()) {
             convertedMap.put(playerRegistry.getByNickname(name), map.get(name));
@@ -54,7 +54,7 @@ public class ConversionUtils {
      * @param <T> the type of the values
      * @return a map with ShipBoard keys
      */
-    public <T> Map<ShipBoard, T> convertMap(Map<String, T> map) {
+    protected <T> Map<ShipBoard, T> convertMap(Map<String, T> map) {
         Map<ShipBoard, T> convertedMap = new HashMap<>();
         for (String name : map.keySet()) {
             convertedMap.put(playerRegistry.getByNickname(name).getShipBoard(), map.get(name));
@@ -71,7 +71,7 @@ public class ConversionUtils {
      * @param <R> the type of the output collection
      * @return a collection of ShipBoard objects
      */
-    public <T extends Collection<String>, R extends Collection<ShipBoard>> R convertCollection(T nicknames, Supplier<R> supplier) {
+    protected <T extends Collection<String>, R extends Collection<ShipBoard>> R convertCollection(T nicknames, Supplier<R> supplier) {
         return nicknames.stream()
                 .map(x -> playerRegistry.getByNickname(x).getShipBoard())
                 .collect(supplier,R::add,R::addAll);
@@ -83,7 +83,7 @@ public class ConversionUtils {
      * @param nickname the player's nickname
      * @return the corresponding ShipBoard
      */
-    public ShipBoard convertName(String nickname) {
+    protected ShipBoard convertName(String nickname) {
         return playerRegistry.getByNickname(nickname).getShipBoard();
     }
 
@@ -93,7 +93,7 @@ public class ConversionUtils {
      * @param nicknames the array of player nicknames
      * @return an array of ShipBoard objects
      */
-    public ShipBoard[] convertArray(String[] nicknames) {
+    protected ShipBoard[] convertArray(String[] nicknames) {
         return Arrays.stream(nicknames).map(this::convertName).toArray(ShipBoard[]::new);
     }
 
