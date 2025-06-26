@@ -318,7 +318,7 @@ class CliViewTest {
         Point p = new Point(1, 2);
         cliView.currentScreen = screen;
         cliView.notifyUseBattery(sb, p);
-        verify(screen).notifyComponentChange(sb, p);
+        verify(screen).notifyUseBattery(sb, p);
         verify(screen).render();
     }
 

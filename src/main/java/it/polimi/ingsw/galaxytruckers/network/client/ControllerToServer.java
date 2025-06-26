@@ -14,6 +14,8 @@ import java.util.UUID;
  */
 public interface ControllerToServer {
 
+    void clearModel();
+
     /**
      * Calls the corresponding method on {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer}.
      */

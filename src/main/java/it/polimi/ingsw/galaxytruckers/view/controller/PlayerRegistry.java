@@ -21,7 +21,7 @@ public class PlayerRegistry {
      * @param nickname the nickname of the player
      * @return the Player object, or null if not found
      */
-    public Player getByNickname(String nickname) {
+    public synchronized Player getByNickname(String nickname) {
         Player player;
         synchronized (players) {
             player = players.get(nickname);
@@ -35,7 +35,7 @@ public class PlayerRegistry {
      * @param nickname the nickname of the player
      * @return the existing or newly created Player object
      */
-    public Player addPlayer(String nickname) {
+    public synchronized Player addPlayer(String nickname) {
         Player player;
         synchronized (players) {
             if (players.containsKey(nickname)) {
@@ -53,7 +53,7 @@ public class PlayerRegistry {
      *
      * @param player the Player to remove
      */
-    public void removePlayer(Player player) {
+    public synchronized void removePlayer(Player player) {
         synchronized (players) {
             players.remove(player.getNickname());
         }
@@ -62,7 +62,7 @@ public class PlayerRegistry {
     /**
      * Clears all players from the registry.
      */
-    public void clear() {
+    public synchronized void clear() {
         synchronized (players) {
             players.clear();
         }

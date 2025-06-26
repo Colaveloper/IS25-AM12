@@ -40,7 +40,7 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
     /**
      * Creates a new SocketClientHandler that handles communication with a client
      *
-     * @param socket the socket through which the client communicates
+     * @param socket     the socket through which the client communicates
      * @param controller the controller that manages server operations
      */
     public SocketClientHandler(SafeSocket socket, ServerControllerInterface controller) {
@@ -107,8 +107,8 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
     }
 
     private void requestTask() {
-        while (isRunning.get()) {
-            try {
+        try {
+            while (isRunning.get()) {
                 Message message = socket.read();
                 synchronized (requestLock) {
                     switch (message) {
@@ -132,15 +132,16 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
                                 socket.write(new Response(ping.id()));
                             }
                         }
-                        case EventMessage _, Response _ -> System.err.println("The SocketHandler received invalid request " + message.getClass());
+                        case EventMessage _, Response _ ->
+                                System.err.println("The SocketHandler received invalid request " + message.getClass());
                     }
                 }
-            } catch (IOException e) {
-                handleIOException(e);
-            } catch (ClassNotFoundException e) {
-                System.err.println("Class not found, check that the socket classes are configured correctly");
-                stop();
             }
+        } catch (IOException e) {
+            handleIOException(e);
+        } catch (ClassNotFoundException e) {
+            System.err.println("Class not found, check that the socket classes are configured correctly");
+            stop();
         }
     }
 
@@ -175,7 +176,7 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     @Override
     public void requestNewGame(Level level, int playerN) {
-        controller.newGame(player,level,playerN);
+        controller.newGame(player, level, playerN);
     }
 
     @Override
@@ -185,7 +186,7 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     @Override
     public void joinLobby(UUID lobbyID) {
-        controller.joinLobby(player,lobbyID);
+        controller.joinLobby(player, lobbyID);
     }
 
     @Override
@@ -200,7 +201,7 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     @Override
     public void requestComponent(int componentID) {
-        getLobby().requestComponent(player,componentID);
+        getLobby().requestComponent(player, componentID);
     }
 
     @Override
@@ -220,7 +221,7 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     @Override
     public void grabStashedComponent(int index) {
-        getLobby().grabStashedComponent(player,index);
+        getLobby().grabStashedComponent(player, index);
     }
 
     @Override
@@ -235,7 +236,7 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     @Override
     public void placeShipOnFlightBoard(int startingPosition) {
-        getLobby().placeShipOnFlightBoard(player,startingPosition);
+        getLobby().placeShipOnFlightBoard(player, startingPosition);
     }
 
     @Override
@@ -245,7 +246,7 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     @Override
     public void acquireForecast(int deckIndex) {
-        getLobby().acquireForecast(player,deckIndex);
+        getLobby().acquireForecast(player, deckIndex);
     }
 
     @Override
@@ -255,27 +256,27 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     @Override
     public void removeComponent(Point point) {
-        getLobby().removeComponent(player,point);
+        getLobby().removeComponent(player, point);
     }
 
     @Override
     public void chooseShipPiece(int pieceIndex) {
-        getLobby().chooseShipPiece(player,pieceIndex);
+        getLobby().chooseShipPiece(player, pieceIndex);
     }
 
     @Override
     public void initializeCabin(Point point, CrewType crewType) {
-        getLobby().initializeCabin(player,point,crewType);
+        getLobby().initializeCabin(player, point, crewType);
     }
 
     @Override
     public void activateComponent(Point point) {
-        getLobby().activateComponent(player,point);
+        getLobby().activateComponent(player, point);
     }
 
     @Override
     public void loseCrew(Point point) {
-        getLobby().loseCrew(player,point);
+        getLobby().loseCrew(player, point);
     }
 
     @Override
@@ -285,27 +286,27 @@ class SocketClientHandler implements VirtualServer, ClientHandler {
 
     @Override
     public void placeGoods(Point point, GoodsType goodsType) {
-        getLobby().placeGoods(player,point,goodsType);
+        getLobby().placeGoods(player, point, goodsType);
     }
 
     @Override
     public void removeGoods(Point point, GoodsType goodsType) {
-        getLobby().removeGoods(player,point,goodsType);
+        getLobby().removeGoods(player, point, goodsType);
     }
 
     @Override
     public void loseGoods(Point point) {
-        getLobby().loseGoods(player,point);
+        getLobby().loseGoods(player, point);
     }
 
     @Override
     public void useBattery(Point point) {
-        getLobby().useBattery(player,point);
+        getLobby().useBattery(player, point);
     }
 
     @Override
     public void choosePlanet(int choice) {
-        getLobby().choosePlanet(player,choice);
+        getLobby().choosePlanet(player, choice);
     }
 
     @Override

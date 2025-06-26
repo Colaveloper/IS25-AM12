@@ -102,6 +102,14 @@ public class ClientController implements ClientControllerInterface, ControllerTo
         model.setPlayer(null);
     }
 
+    @Override
+    public void clearModel() {
+        model.getPlayers().stream()
+                .filter(p -> !p.equals(model.getClientPlayer()))
+                .forEach(playerRegistry::removePlayer);
+        model.clearGame();
+    }
+
     /**
      * Simulates a disconnection from the server.
      */
