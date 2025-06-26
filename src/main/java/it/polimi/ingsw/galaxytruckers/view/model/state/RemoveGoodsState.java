@@ -13,7 +13,7 @@ import java.util.List;
  * such as smugglers demanding cargo. The player must choose which
  * goods to remove from their ship until the required amount is met.
  */
-public final class RemoveGoodsState extends AdventureState {
+public final class RemoveGoodsState extends AdventureState implements GameStateInterface, AdventureStateInterface {
     /** The number of goods that still need to be removed from the ship */
     private int goodsToLose;
 

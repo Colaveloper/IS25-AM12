@@ -12,7 +12,7 @@ import java.util.Set;
  * in the Galaxy Truckers game. This occurs when a ship is damaged and broken into
  * multiple disconnected pieces, requiring the player to choose one piece to continue with.
  */
-public final class ChooseShipPieceState extends AdventureState {
+public final class ChooseShipPieceState extends AdventureState implements GameStateInterface, AdventureStateInterface {
 
     /** List of disconnected ship pieces, each represented as a set of points */
     private final List<Set<Point>> shipPieces;

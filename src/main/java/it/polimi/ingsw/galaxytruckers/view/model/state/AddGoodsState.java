@@ -14,7 +14,7 @@ import java.util.Set;
  * This state allows players to place goods from a buffer onto their ship or remove goods
  * previously placed. Players can only interact with the goods during their turn.
  */
-public final class AddGoodsState extends AdventureState {
+public final class AddGoodsState extends AdventureState implements GameStateInterface, AdventureStateInterface {
     /** Buffer containing available goods that can be placed on the ship */
     private final GoodsBuffer goodsBuffer;
 

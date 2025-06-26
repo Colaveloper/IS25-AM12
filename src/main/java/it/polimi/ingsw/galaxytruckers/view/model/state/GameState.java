@@ -24,12 +24,7 @@ import java.util.Set;
  * AdventureState, ShipBuildingState, ShipCorrectionState, and ShipInitializationState.
  * </p>
  */
-public abstract sealed class GameState permits
-        AdventureState,
-        ShipBuildingState,
-        ShipCorrectionState,
-        ShipInitializationState
-{
+public abstract non-sealed class GameState implements GameStateInterface {
     /** The game instance associated with this state */
     protected Game game;
 

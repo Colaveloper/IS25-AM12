@@ -12,7 +12,7 @@ import java.util.Set;
  * activate shields or handle the resulting damage. Only specific components can be activated
  * to defend against projectiles.
  */
-public final class HandleProjectileState extends ActivateState {
+public final class HandleProjectileState extends ActivateState implements GameStateInterface {
     /** The projectile that the player's ship is currently handling */
     private final Projectile projectile;
 

@@ -13,7 +13,7 @@ import java.util.Set;
  * This state allows players to select which planets to land on to receive goods
  * at the cost of losing flight days.
  */
-public final class ChoosePlanetState extends AdventureState {
+public final class ChoosePlanetState extends AdventureState implements GameStateInterface, AdventureStateInterface {
     /** Array of planet options represented as ship boards */
     private final ShipBoard[] options;
 

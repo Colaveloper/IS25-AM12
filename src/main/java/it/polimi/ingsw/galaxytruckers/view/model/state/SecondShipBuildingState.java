@@ -17,7 +17,7 @@ import java.util.List;
  * including specialized mechanics like forecast peeking and time constraints.
  * Players have a limited time governed by the hourglass to complete their ships.
  */
-public final class SecondShipBuildingState extends ShipBuildingState {
+public final class SecondShipBuildingState extends ShipBuildingState implements GameStateInterface {
 
     /** Array tracking which ship boards have acquired which forecast positions (null if position is available) */
     private final ShipBoard[] blockedForecasts = new ShipBoard[]{null,null,null};

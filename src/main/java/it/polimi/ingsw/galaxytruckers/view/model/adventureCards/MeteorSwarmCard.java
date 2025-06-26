@@ -5,7 +5,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class MeteorSwarmCard extends AdventureCard {
+public final class MeteorSwarmCard extends AdventureCard implements AdventureCardInterface {
     //attributes
     private final List<Projectile> projectiles;
 

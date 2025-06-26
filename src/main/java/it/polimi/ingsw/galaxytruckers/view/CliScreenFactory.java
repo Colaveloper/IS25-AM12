@@ -43,7 +43,9 @@ public class CliScreenFactory implements ScreenFactory<CliScreen> {
                 case GrabRewardState grabRewardState -> new CliRewardScreen(model, controller, grabRewardState);
                 case RemoveCrewState removeCrewState -> new CliRemoveCrewScreen(model, controller, removeCrewState);
                 case RemoveGoodsState removeGoodsState -> new CliLoseGoodsScreen(model, controller, removeGoodsState);
+                default -> throw new IllegalStateException("Unexpected AdventureState: " + s);
             };
+            default -> throw new IllegalStateException("Unexpected GameState: " + gameState);
         };
     }
 }

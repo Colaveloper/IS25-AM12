@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 
-public final class SlaversCard extends AdventureCard {
+public final class SlaversCard extends AdventureCard implements AdventureCardInterface {
 
     private final int firePowerThreshold;
     private final int creditPrize;

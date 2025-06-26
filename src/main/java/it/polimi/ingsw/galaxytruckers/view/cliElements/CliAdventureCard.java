@@ -96,6 +96,7 @@ public class CliAdventureCard extends CliElement{
                 description.add("[STAR DUST]");
                 description.add("Hope you have those connectors sealed!");
             }
+            default -> throw new IllegalStateException("Unexpected AdventureCard: " + card);
         }
         return description;
     }

@@ -4,7 +4,7 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 
 import java.util.List;
 
-public final class PiratesCard extends AdventureCard {
+public final class PiratesCard extends AdventureCard implements AdventureCardInterface {
     // Card Parameters
     private final int firePowerThreshold;
     private final List<Projectile> projectiles;

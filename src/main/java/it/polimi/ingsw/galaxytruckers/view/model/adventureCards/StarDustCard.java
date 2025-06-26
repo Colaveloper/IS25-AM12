@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 
-public final class StarDustCard extends AdventureCard {
+public final class StarDustCard extends AdventureCard implements AdventureCardInterface {
     public StarDustCard(Level level, int id) {
         super(level, id);
     }

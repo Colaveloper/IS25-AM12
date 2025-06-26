@@ -2,7 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.model.adventureCards;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 
-public final class AbandonedShipCard extends AdventureCard {
+public final class AbandonedShipCard extends AdventureCard implements AdventureCardInterface {
     private final int flightDaysLoss;
     private final int creditPrize;
     private final int requiredCrew;

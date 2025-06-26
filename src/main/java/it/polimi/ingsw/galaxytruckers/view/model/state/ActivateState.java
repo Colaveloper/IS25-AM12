@@ -15,7 +15,7 @@ import java.util.List;
  * The class is sealed to restrict subclassing to specific activation states.
  * </p>
  */
-public sealed abstract class ActivateState extends AdventureState permits
+public sealed abstract class ActivateState extends AdventureState implements AdventureStateInterface permits
         DeclareFirePowerState,
         DeclareEnginePowerState,
         HandleProjectileState

@@ -12,7 +12,7 @@ import java.util.Set;
  * This state is triggered when a ship encounters a situation that requires crew sacrifice,
  * such as the slavers card. The player must choose which crew members to remove from their ship.
  */
-public final class RemoveCrewState extends AdventureState {
+public final class RemoveCrewState extends AdventureState implements GameStateInterface, AdventureStateInterface {
     /** The number of crew members that must be sacrificed in this state */
     int crewSacrifice;
 

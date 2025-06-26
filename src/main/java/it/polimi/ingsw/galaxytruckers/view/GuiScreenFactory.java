@@ -42,7 +42,9 @@ public class GuiScreenFactory implements ScreenFactory<GuiScreen> {
                 case GrabRewardState grabRewardState -> new GuiRewardScreen(model, controller, grabRewardState);
                 case RemoveCrewState removeCrewState -> new GuiRemoveCrewScreen(model, controller, removeCrewState);
                 case RemoveGoodsState removeGoodsState -> new GuiLoseGoodsScreen(model, controller, removeGoodsState);
+                default -> throw new IllegalStateException("Unexpected AdventureState: " + s);
             };
+            default -> throw new IllegalStateException("Unexpected GameState: " + gameState);
         };
     }
 }

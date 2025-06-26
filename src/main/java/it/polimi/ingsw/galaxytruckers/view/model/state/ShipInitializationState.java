@@ -14,7 +14,7 @@ import java.util.Set;
  * crew members to cabins based on crew type requirements. Different types of crew members
  * can only be assigned to specific cabin positions on the ship.
  */
-public final class ShipInitializationState extends GameState {
+public final class ShipInitializationState extends GameState implements GameStateInterface {
     /** Mapping of ship boards to their available crew types and valid cabin positions */
     private final Map<ShipBoard, Map<CrewType,Set<Point>>> crewtypeToPoints;
 

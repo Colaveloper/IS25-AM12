@@ -10,7 +10,7 @@ import java.util.List;
  * This state allows the current player to choose whether to take a reward (credits)
  * or skip it. Players can only interact with rewards during their turn.
  */
-public final class GrabRewardState extends AdventureState {
+public final class GrabRewardState extends AdventureState implements GameStateInterface, AdventureStateInterface {
 
     /**
      * Creates a new GrabRewardState with the specified parameters.
