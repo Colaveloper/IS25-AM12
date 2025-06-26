@@ -3,9 +3,10 @@ package it.polimi.ingsw.galaxytruckers.network.client;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.utils.Logger;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
-import it.polimi.ingsw.galaxytruckers.view.*;
+import it.polimi.ingsw.galaxytruckers.utils.Logger;
+import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.view.ErrorReporter;
 import it.polimi.ingsw.galaxytruckers.view.controller.ClientEventHandler;
 import it.polimi.ingsw.galaxytruckers.view.controller.PlayerRegistry;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
@@ -13,13 +14,17 @@ import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 
 import java.awt.*;
-import java.io.IOException;
-import java.util.*;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * ClientController is responsible for handling client-side interactions with the server,
+ * managing the client components, and processing events received from the server.
+ * It implements the ClientControllerInterface and ControllerToServer interfaces.
+ */
 public class ClientController implements ClientControllerInterface, ControllerToServer {
     private ClientModel model;
     private ServerHandler server;
@@ -33,49 +38,87 @@ public class ClientController implements ClientControllerInterface, ControllerTo
 
     private ClientEventHandler eventHandler;
 
+    /**
+     * Sets the model for the client controller.
+     *
+     * @param model the ClientModel instance to be used by the controller
+     */
     public void setModel(ClientModel model) {
         this.model = model;
     }
 
+    /**
+     * Sets the server handler for the client controller.
+     *
+     * @param server the ServerHandler instance to be used by the controller
+     */
     public void setServer(ServerHandler server) {
         this.server = server;
     }
 
+    /**
+     * Sets the view for the client controller.
+     *
+     * @param view the view object to be used by the controller
+     */
     public void setView(ErrorReporter view) {
         this.view = view;
     }
 
+    /**
+     * Initializes the event handler for processing events received from the server.
+     */
     public void initEventHandler() {
         this.eventHandler = new ClientEventHandler(model, playerRegistry);
     }
 
     //---------------------------------------INTERNAL CALLS------------------------------------------
 
+    /**
+     * Sets the client model's meta state to CREATION, allowing the user to create
+     * a new game
+     */
     public void showGameCreation() {
         model.setMetaState(MetaState.CREATION);
     }
 
+    /**
+     * Create a new player for the given nickname and sets it
+     * as the client player in the model.
+     *
+     * @param nickname the nickname of the player to be created
+     */
     public void setMyNickname(String nickname) {
         Player player = playerRegistry.addPlayer(nickname);
         model.setPlayer(player);
     }
 
+    /**
+     * Removes the client player from the registry and from the client model.
+     */
     public void clearNickname() {
         Player player = model.getClientPlayer();
         playerRegistry.removePlayer(player);
         model.setPlayer(null);
     }
 
+    /**
+     * Simulates a disconnection from the server.
+     */
     public void dropConnection() {
         server.dropConnection();
     }
 
+    /**
+     * Signals to the client that it has been disconnected from the server.
+     * Afterwards, the client will attempt to reconnect at regular intervals.
+     */
     public void signalDisconnection() {
         synchronized (connectionLock) {
             if (connected) {
                 view.reportError("You have been disconnected, trying to reconnect...");
                 connected = false;
-                connectionFuture = scheduler.scheduleAtFixedRate(this::reconnect,3,3, TimeUnit.SECONDS);
+                connectionFuture = scheduler.scheduleAtFixedRate(this::reconnect, 3, 3, TimeUnit.SECONDS);
             }
         }
     }
@@ -365,17 +408,5 @@ public class ClientController implements ClientControllerInterface, ControllerTo
             view.reportError(e.getMessage());
         }
     }
-
-    private void runAndInterceptIOE(RunnableWithIOE action) {
-        try {
-            action.run();
-        } catch (IOException e) {
-            view.reportError("IO Exception: " + e.getMessage());
-        }
-    }
 }
 
-@FunctionalInterface
-interface RunnableWithIOE {
-    void run() throws IOException;
-}
