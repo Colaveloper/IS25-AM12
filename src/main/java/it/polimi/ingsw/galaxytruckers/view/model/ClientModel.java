@@ -139,6 +139,7 @@ public class ClientModel {
                     if (getClientPlayer().equals(player)) {
                         game.setMyShip(player.getShipBoard());
                     }
+                    observers.forEach(observer -> observer.notifyPlayerJoin(player));
                 }
             }
         }

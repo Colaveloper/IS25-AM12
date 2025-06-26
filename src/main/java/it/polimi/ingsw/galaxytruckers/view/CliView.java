@@ -66,6 +66,11 @@ public class CliView extends View<CliScreen> {
     }
 
     @Override
+    public void notifyPlayerJoin(Player player) {
+        currentScreen.render();
+    }
+
+    @Override
     public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
         currentScreen.notifyRequestRandComponent(shipBoard, component);
         currentScreen.render();

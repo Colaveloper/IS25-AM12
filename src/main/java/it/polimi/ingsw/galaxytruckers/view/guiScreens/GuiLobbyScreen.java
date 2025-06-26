@@ -3,6 +3,7 @@ package it.polimi.ingsw.galaxytruckers.view.guiScreens;
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
@@ -18,6 +19,7 @@ import javafx.scene.shape.Rectangle;
  * their nickname.
  */
 public class GuiLobbyScreen extends GuiScreen {
+    private FlowPane lobbyPane;
 
     /**
      * Constructs a new lobby screen.
@@ -38,7 +40,7 @@ public class GuiLobbyScreen extends GuiScreen {
      */
     @Override
     public Pane getNode() {
-        FlowPane lobbyPane = new FlowPane();
+        lobbyPane = new FlowPane();
         lobbyPane.setAlignment(Pos.CENTER);
         lobbyPane.setHgap(20);
         lobbyPane.setVgap(20);
@@ -50,6 +52,14 @@ public class GuiLobbyScreen extends GuiScreen {
         }
 
         return lobbyPane;
+    }
+
+    @Override
+    public void notifyPlayerJoin(Player player) {
+        Platform.runLater(() -> {
+            StackPane playerBox = createPlayerBox(player.getNickname());
+            lobbyPane.getChildren().add(playerBox);
+        });
     }
 
     /**

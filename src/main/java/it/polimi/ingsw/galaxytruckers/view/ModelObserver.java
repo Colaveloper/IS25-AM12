@@ -24,6 +24,14 @@ import java.util.UUID;
  */
 public interface ModelObserver {
     //region Event update methods
+
+    /**
+     * Notifies the observer that a player has joined the game
+     *
+     * @param player the player who joined
+     */
+    void notifyPlayerJoin(Player player);
+
     /**
      * Notifies the observer of a change in the meta state of the game.
      *
