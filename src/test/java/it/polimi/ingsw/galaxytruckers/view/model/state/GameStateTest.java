@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers.view.model.state;
 
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GameColor;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
+import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.ModelObserver;
@@ -25,7 +26,12 @@ class GameStateTest {
 
     @BeforeEach
     void setUp() {
-        state = mock(GameState.class);
+        state = new GameState() {
+            @Override
+            public List<StateActions> getAvailableActions() {
+                return List.of();
+            }
+        };
     }
 
     @Test

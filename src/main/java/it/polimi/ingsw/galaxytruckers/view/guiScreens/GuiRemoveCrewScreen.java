@@ -27,7 +27,6 @@ import java.util.Set;
  * It allows the player to select a cabin and remove crew, updating the UI accordingly.
  * </p>
  *
- * @author (your name or team)
  */
 public class GuiRemoveCrewScreen extends GuiAdventureScreen {
     private final ObjectProperty<Point> selectedPoint;
