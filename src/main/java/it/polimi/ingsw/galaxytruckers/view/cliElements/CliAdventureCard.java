@@ -64,7 +64,7 @@ public class CliAdventureCard extends CliElement{
             }
             case MeteorSwarmCard meteorSwarmCard -> {
                 description.add("[METEOR SWARM]");
-                description.add(describeProjectiles(meteorSwarmCard.getProjectiles()));
+                description.addAll(describeProjectiles(meteorSwarmCard.getProjectiles()));
             }
             case OpenSpaceCard openSpaceCard -> {
                 description.add("[OPEN SPACE]");
@@ -72,7 +72,7 @@ public class CliAdventureCard extends CliElement{
             }
             case PiratesCard piratesCard -> {
                 description.add("[PIRATES]");
-                description.add(describeProjectiles(piratesCard.getProjectiles()));
+                description.addAll(describeProjectiles(piratesCard.getProjectiles()));
                 description.add("Needed firepower to defeat pirates: " + piratesCard.getFirePowerThreshold());
                 description.add("Credits reward for defeating: " + piratesCard.getCreditPrize());
                 description.add("Flight days lost: " + piratesCard.getFlightDaysLoss());
@@ -153,15 +153,19 @@ public class CliAdventureCard extends CliElement{
                 .collect(Collectors.toList());
     }
 
-    private static String describeProjectiles(List<Projectile> projectiles) {
-        if(projectiles.isEmpty()) return "No projectiles.";
+    private static List<String> describeProjectiles(List<Projectile> projectiles) {
+        if(projectiles.isEmpty()) return List.of("No projectiles.");
+        List<String> description = new ArrayList<>();
 
-        StringBuilder result = new StringBuilder();
+        StringBuilder result;
         for(Projectile projectile : projectiles) {
+            result = new StringBuilder();
             result.append(projectile.type())
                     .append(" coming from ")
                     .append(projectile.direction());
+            description.add(result.toString());
         }
-        return result.toString();
+
+        return description;
     }
 }

@@ -77,7 +77,7 @@ public class CliShipPieceChoiceScreen extends CliAdventureScreen {
         if (shipBroken) {
             System.out.println("your ship is broken, choose a piece of ship to keep");
             for(int i = 1; i <= numPieces; i++) {
-                System.out.println(colors.get(i).getHighlight() + i + "\t" + colors.get(i) + CliHighlights.RESET.getHighlight() + "\n");
+                System.out.println(colors.get(i).getHighlight() + (i-1) + "\t" + colors.get(i) + CliHighlights.RESET.getHighlight() + "\n");
             }
         }
         else{
