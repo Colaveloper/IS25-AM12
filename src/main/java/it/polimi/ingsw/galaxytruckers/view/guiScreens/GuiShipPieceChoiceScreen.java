@@ -53,10 +53,12 @@ public class GuiShipPieceChoiceScreen extends GuiAdventureScreen {
     }
 
     private void highlightShipPieces() {
-        List<Color> colors = List.of(Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.PURPLE, Color.BROWN, Color.PINK, Color.YELLOW);
-        for (int i = 0; i < shipPieces.size(); i++) {
-            Color color = colors.get(i % colors.size());
-            guiShipBoards.get(myShipBoard).highlightPoints(shipPieces.get(i), color);
+        if(isMyTurn()) {
+            List<Color> colors = List.of(Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.PURPLE, Color.BROWN, Color.PINK, Color.YELLOW);
+            for (int i = 0; i < shipPieces.size(); i++) {
+                Color color = colors.get(i % colors.size());
+                guiShipBoards.get(myShipBoard).highlightPoints(shipPieces.get(i), color);
+            }
         }
     }
 
