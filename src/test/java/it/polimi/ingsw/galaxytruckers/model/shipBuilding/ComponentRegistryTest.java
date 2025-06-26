@@ -74,4 +74,9 @@ class ComponentRegistryTest {
             assertDoesNotThrow(() -> componentRegistry.getStartingCabin(color));
         }
     }
+
+    @Test
+    void getComponentById() {
+        assertThrows(IllegalArgumentException.class, () -> componentRegistry.getComponentById(-1));
+    }
 }

@@ -9,6 +9,7 @@ import it.polimi.ingsw.galaxytruckers.model.factory.TestFactory;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CargoHold;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.model.state.ShipBuildingState;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
@@ -78,6 +79,18 @@ class GameTest {
         assertInstanceOf(ShipBuildingState.class,  game.getCurrentState());
         assertNotNull(game.getFlightBoard());
         assertNotNull(game.getDeck());
+    }
+
+    @Test
+    void skipBuildingSetsUpTheGameCorrectly() {
+        game.skipBuilding();
+        for (ShipBoard s : game.getShipBoards()) {
+            verify(game.getEventListener()).requestSnapshot(game,s);
+        }
+        assertTrue(game.getFlightBoard().getShipToPlace().keySet().containsAll(shipBoards));
+        assertEquals(2, game.getFlightBoard().getShipToPlace().size());
+        assertInstanceOf(DrawCardState.class, game.getCurrentState());
+
     }
 
     @Test

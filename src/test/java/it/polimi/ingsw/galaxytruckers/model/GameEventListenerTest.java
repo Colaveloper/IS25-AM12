@@ -33,6 +33,7 @@ import java.util.function.Supplier;
 import static org.mockito.Mockito.*;
 
 class GameEventListenerTest {
+
     interface ControllerEventListener extends EventListener<LobbyEvent> {
     }
 
@@ -108,6 +109,14 @@ class GameEventListenerTest {
                         game.getDeck().getCurrentCard().getId()
                 )
         ));
+    }
+
+    @Test
+    void notifyStartAdventure() {
+        Runnable mockRunnable = mock(Runnable.class);
+        listener.setStartAdventureCallback(mockRunnable);
+        listener.notifyStartAdventure();
+        verify(mockRunnable).run();
     }
 
     @Test
