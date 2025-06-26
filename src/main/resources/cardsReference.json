@@ -1,587 +1,564 @@
 [
   {
-    "type": "smugglers",
-    "level": "TEST",
+    "type": "abandonedShip",
+    "level": "FIRST",
+    "credits": 3,
     "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "people": 2,
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_0117.jpg",
     "id": 0
   },
   {
-    "type": "smugglers",
+    "type": "abandonedShip",
     "level": "TEST",
+    "credits": 4,
     "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "people": 3,
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_0118.jpg",
     "id": 1
   },
   {
-    "type": "smugglers",
-    "level": "TEST",
+    "type": "abandonedShip",
+    "level": "SECOND",
+    "credits": 6,
     "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "people": 4,
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0117.jpg",
     "id": 2
   },
   {
-    "type": "smugglers",
-    "level": "TEST",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "type": "abandonedShip",
+    "level": "SECOND",
+    "credits": 8,
+    "flight day loss": 2,
+    "people": 5,
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg",
     "id": 3
   },
   {
-    "type": "smugglers",
+    "type": "abandonedStation",
     "level": "TEST",
-    "flight day loss": 1,
-    "storage": {
+    "storage":
+    {
       "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
+      "green": 1,
+      "yellow": 1,
+      "red": 0
     },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "flight day loss": 1,
+    "people": 5,
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_0119.jpg",
     "id": 4
   },
   {
-    "type": "smugglers",
-    "level": "TEST",
-    "flight day loss": 1,
-    "storage": {
+    "type": "abandonedStation",
+    "level": "FIRST",
+    "storage":
+    {
       "blue": 0,
       "green": 0,
-      "yellow": 2,
-      "red": 1
+      "yellow": 0,
+      "red": 2
     },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "flight day loss": 1,
+    "people": 6,
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg",
     "id": 5
   },
   {
-    "type": "smugglers",
-    "level": "TEST",
-    "flight day loss": 1,
-    "storage": {
+    "type": "abandonedStation",
+    "level": "SECOND",
+    "storage":
+    {
       "blue": 0,
       "green": 0,
-      "yellow": 2,
+      "yellow": 1,
       "red": 1
     },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "flight day loss": 1,
+    "people": 7,
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg",
     "id": 6
   },
   {
-    "type": "smugglers",
-    "level": "TEST",
-    "flight day loss": 1,
-    "storage": {
+    "type": "abandonedStation",
+    "level": "SECOND",
+    "storage":
+    {
       "blue": 0,
-      "green": 0,
+      "green": 1,
       "yellow": 2,
-      "red": 1
+      "red": 0
     },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "flight day loss": 2,
+    "people": 8,
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0118.jpg",
     "id": 7
   },
   {
-    "type": "smugglers",
-    "level": "FIRST",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "type": "meteors",
+    "level": "TEST",
+    "meteors": [
+      ["big meteor", "up"],
+      ["small meteor", "right"],
+      ["small meteor","left"]
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_019.jpg",
     "id": 8
   },
   {
-    "type": "smugglers",
+    "type": "meteors",
     "level": "FIRST",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "meteors": [
+      ["small meteor","up"],
+      ["small meteor","up"],
+      ["small meteor","right"],
+      ["small meteor","left"],
+      ["small meteor","down"]
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_0110.jpg",
     "id": 9
   },
   {
-    "type": "smugglers",
+    "type": "meteors",
     "level": "FIRST",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "meteors": [
+      ["big meteor","up"],
+      ["small meteor","up"],
+      ["big meteor","up"]
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_0111.jpg",
     "id": 10
   },
   {
-    "type": "smugglers",
-    "level": "FIRST",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "type": "meteors",
+    "level": "SECOND",
+    "meteors": [
+      ["small meteor","up"],
+      ["small meteor","up"],
+      ["big meteor","right"],
+      ["small meteor","right"],
+      ["small meteor","right"]
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_019.jpg",
     "id": 11
   },
   {
-    "type": "smugglers",
-    "level": "FIRST",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "type": "meteors",
+    "level": "SECOND",
+    "meteors": [
+      ["small meteor","up"],
+      ["small meteor","up"],
+      ["small meteor","left"],
+      ["small meteor","right"],
+      ["small meteor","down"]
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0110.jpg",
     "id": 12
   },
   {
-    "type": "smugglers",
-    "level": "FIRST",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "type": "meteors",
+    "level": "SECOND",
+    "meteors": [
+      ["small meteor","up"],
+      ["small meteor", "up"],
+      ["big meteor","left"],
+      ["small meteor","left"],
+      ["small meteor","left"]
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0111.jpg",
     "id": 13
   },
   {
-    "type": "smugglers",
+    "type": "pirates",
     "level": "FIRST",
+    "firePowerThreshold": 5,
+    "shoots": [
+      ["small fire", "up"],
+      ["big fire", "up"],
+      ["small fire", "up"]
+    ],
     "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "credits": 4,
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_013.jpg",
     "id": 14
   },
   {
-    "type": "smugglers",
-    "level": "FIRST",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "type": "pirates",
+    "level": "SECOND",
+    "firePowerThreshold": 6,
+    "shoots": [
+      ["big fire", "up"],
+      ["small fire", "up"],
+      ["big fire", "up"]
+    ],
+    "flight day loss": 2,
+    "credits": 7,
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_013.jpg",
     "id": 15
   },
   {
-    "type": "smugglers",
+    "type": "planets",
     "level": "FIRST",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "flight day loss": 3,
+    "planets": [
+      {
+        "blue": 3,
+        "green": 1,
+        "yellow": 0,
+        "red": 1
+      },
+      {
+        "blue": 1,
+        "green": 0,
+        "yellow": 1,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 1,
+        "yellow": 0,
+        "red": 1
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_0112.jpg",
     "id": 16
   },
   {
-    "type": "smugglers",
-    "level": "FIRST",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "type": "planets",
+    "level": "TEST",
+    "flight day loss": 2,
+    "planets": [
+      {
+        "blue": 2,
+        "green": 0,
+        "yellow": 0,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 0,
+        "red": 2
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_0113.jpg",
     "id": 17
   },
   {
-    "type": "smugglers",
+    "type": "planets",
     "level": "FIRST",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "flight day loss": 3,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 2,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 1,
+        "yellow": 1,
+        "red": 1
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_0114.jpg",
     "id": 18
   },
   {
-    "type": "smugglers",
-    "level": "SECOND",
+    "type": "planets",
+    "level": "FIRST",
     "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "planets": [
+      {
+        "blue": 3,
+        "green": 0,
+        "yellow": 0,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 2,
+        "yellow": 0,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_0115.jpg",
     "id": 19
   },
   {
-    "type": "smugglers",
+    "type": "planets",
     "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "flight day loss": 4,
+    "planets": [
+      {
+        "blue": 4,
+        "green": 0,
+        "yellow": 0,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 2,
+        "yellow": 0,
+        "red": 2
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 3
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_0115.jpg",
     "id": 20
   },
   {
-    "type": "smugglers",
+    "type": "planets",
     "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "flight day loss": 4,
+    "planets": [
+      {
+        "blue": 4,
+        "green": 0,
+        "yellow": 0,
+        "red": 1
+      },
+      {
+        "blue": 0,
+        "green": 2,
+        "yellow": 0,
+        "red": 2
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 1,
+        "red": 3
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0112.jpg",
     "id": 21
   },
   {
-    "type": "smugglers",
+    "type": "planets",
     "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "flight day loss": 3,
+    "planets": [
+      {
+        "blue": 0,
+        "green": 4,
+        "yellow": 0,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 0,
+        "red": 2
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0113.jpg",
     "id": 22
   },
   {
-    "type": "smugglers",
+    "type": "planets",
     "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "flight day loss": 2,
+    "planets": [
+      {"blue": 0, "green": 0, "yellow": 1, "red": 1},
+      {"blue": 1, "green": 1, "yellow": 1, "red": 0},
+      {"blue": 0, "green": 0, "yellow": 1, "red": 1},
+      {"blue": 0, "green": 0, "yellow": 1, "red": 0}
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
     "id": 23
   },
   {
-    "type": "smugglers",
+    "type": "planets",
     "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "flight day loss": 3,
+    "planets": [
+      {
+        "blue": 4,
+        "green": 0,
+        "yellow": 0,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 4,
+        "yellow": 0,
+        "red": 0
+      },
+      {
+        "blue": 0,
+        "green": 0,
+        "yellow": 2,
+        "red": 0
+      }
+    ],
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0115.jpg",
     "id": 24
   },
   {
-    "type": "smugglers",
-    "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "type": "open space",
+    "level": "TEST",
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
     "id": 25
   },
   {
-    "type": "smugglers",
-    "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "type": "open space",
+    "level": "FIRST",
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
     "id": 26
   },
   {
-    "type": "smugglers",
-    "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "type": "open space",
+    "level": "FIRST",
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
     "id": 27
   },
   {
-    "type": "smugglers",
+    "type": "open space",
     "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
     "id": 28
   },
   {
-    "type": "smugglers",
+    "type": "open space",
     "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
     "id": 29
   },
   {
-    "type": "smugglers",
+    "type": "open space",
     "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
     "id": 30
   },
   {
-    "type": "smugglers",
+    "type": "epidemic",
     "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_015.jpg",
     "id": 31
   },
   {
     "type": "smugglers",
-    "level": "SECOND",
+    "level": "TEST",
     "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
+    "storage":
+    {
+      "blue": 1,
+      "green": 1,
+      "yellow": 1,
+      "red": 0
     },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "cannons": 4,
+    "penalty": 2,
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_012.jpg",
     "id": 32
   },
   {
     "type": "smugglers",
     "level": "SECOND",
     "flight day loss": 1,
-    "storage": {
+    "storage":
+    {
       "blue": 0,
       "green": 0,
       "yellow": 2,
       "red": 1
     },
-    "cannons": 1,
+    "cannons": 8,
     "penalty": 3,
     "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
     "id": 33
   },
   {
-    "type": "smugglers",
-    "level": "SECOND",
+    "type": "slavers",
+    "level": "FIRST",
     "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
+    "cannons": 6,
     "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "credits": 5,
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_01.jpg",
     "id": 34
   },
   {
-    "type": "smugglers",
+    "type": "slavers",
     "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "flight day loss": 2,
+    "cannons": 7,
+    "penalty": 4,
+    "credits": 8,
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_01.jpg",
     "id": 35
   },
   {
-    "type": "smugglers",
-    "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "type": "stardust",
+    "level": "TEST",
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_014.jpg",
     "id": 36
   },
   {
-    "type": "smugglers",
-    "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "type": "warzone",
+    "checks": [
+      "min crew",
+      "min engine",
+      "min cannons"
+    ],
+    "penalties": [
+      "loses flight days",
+      "loses crew",
+      "gets shot"
+    ],
+    "shoots": [
+      ["small fire", "down"],
+      ["big fire", "down"]
+    ],
+    "crew loss": 2,
+    "flight day loss": 3,
+    "level": "TEST",
+    "path": "src/main/resources/textures/cards/GT-cards_I_IT_0116.jpg",
     "id": 37
   },
   {
-    "type": "smugglers",
+    "type": "warzone",
+    "checks": [
+      "min cannons",
+      "min engine",
+      "min crew"
+    ],
+    "penalties": [
+      "loses flight days",
+      "loses goods",
+      "gets shot"
+    ],
+    "storage": 3,
+    "flight day loss": 4,
+    "shoots": [
+      ["small fire", "up"],
+      ["small fire", "right"],
+      ["small fire", "left"],
+      ["big fire", "down"]
+    ],
     "level": "SECOND",
-    "flight day loss": 1,
-    "storage": {
-      "blue": 0,
-      "green": 0,
-      "yellow": 2,
-      "red": 1
-    },
-    "cannons": 1,
-    "penalty": 3,
-    "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
+    "path": "src/main/resources/textures/cards/GT-cards_II_IT_0116.jpg",
     "id": 38
   }
+
 ]

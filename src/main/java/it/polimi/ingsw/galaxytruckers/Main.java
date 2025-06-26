@@ -11,7 +11,7 @@ public class Main {
     private final static String SERVER_ADDRESS = "localhost"; // Default server address
     private final static String SERVER_NAME = "Galaxy-Truckers-Server"; // Default server name
 
-    public static void main() {
+    public static void main(String[] args) {
         // This is the entry point of the Galaxy Truckers game application.
         // You can initialize your game logic here, set up the server, or start the client interface.
         System.out.println("Welcome to Galaxy Truckers!");
