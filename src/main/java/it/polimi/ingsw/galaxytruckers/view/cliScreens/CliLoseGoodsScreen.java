@@ -29,8 +29,7 @@ public class CliLoseGoodsScreen extends CliAdventureScreen {
         }
         if (isMyTurn) {
             if(myShipBoard.getCargoOnShip() == 0) System.out.println("Your turn to lose batteries");
-            else System.out.println("Your turn to lose goods");
-            System.out.println("Select cargo holds to discard goods from");
+            else System.out.println("Your turn to lose goods Select cargo holds to discard goods from");
         } else {
             System.out.println("Waiting for " + currentShip.getColor() + " ship to lose goods");
         }
