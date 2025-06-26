@@ -134,7 +134,7 @@ public abstract class CliScreen extends Screen {
         description.addAll(cliComponentLegend.getDescription());
 
         description.add(
-                "firepower: "     + myShipBoard.getFirePower()/2 +
+                "firepower: "     + String.format("%.1f", myShipBoard.getFirePower() / 2.0) +
                 "\tengine power: "+ myShipBoard.getEnginePower() +
                 "\tbatteries: "   + myShipBoard.getNumBatteries() +
                 "\tcrewsize: "    + myShipBoard.getCrewSize() +

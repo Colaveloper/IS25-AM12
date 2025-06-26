@@ -83,9 +83,9 @@ public class GuiStatBox extends PurpleVBox {
         }
 
         // stat values row
-        int fire = shipBoard.getFirePower() / 2;
+        //int fire = shipBoard.getFirePower() / 2;
         String lossVal = shipBoard.getLosses() != 0 ? String.valueOf(shipBoard.getLosses()) : "-";
-        String[] values = {String.valueOf(fire),
+        String[] values = {String.format("%.1f", shipBoard.getFirePower() / 2.0),
                 String.valueOf(shipBoard.getEnginePower()),
                 String.valueOf(shipBoard.getNumBatteries()),
                 String.valueOf(shipBoard.getCrewSize()),
