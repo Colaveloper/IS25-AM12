@@ -45,7 +45,11 @@ When launching the server, the host is first asked whether to start a **demo** s
 
 > Tip: For the best experience in TUI mode, disable soft-wrap in the terminal. The terminal must support UTF-8 character display.
 
-Ensure that **Java 24** is installed.
+Ensure that **Java 24** is installed and is set correctly in the environment variables. For example on Linux, run:
+```bash
+export JAVA_HOME=/usr/lib/jvm/java-24-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
+```
 
 ## Documentation
 
