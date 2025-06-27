@@ -1,11 +1,12 @@
+![logo.webp](logo.webp)
 ## About the Project
 
 This project is a digital implementation of the board game **Galaxy Trucker**, developed as part of the Final Software Engineering Project for the academic year 2024/2025 at Politecnico di Milano by:
 
-* Tommaso Capone
-* Francesco Cola
-* Lorenzo Carafa
-* Francesco Canossi
+* [Tommaso Capone](https://github.com/capbros)
+* [Francesco Cola](https://github.com/Colaveloper)
+* [Lorenzo Carafa](https://github.com/LorenzoCarafa)
+* [Francesco Canossi](https://github.com/froopy090)
 
 The implementation supports the **complete rule set** of the game, including both the **Second Flight** and the optional **Test Flight** mode.
 
