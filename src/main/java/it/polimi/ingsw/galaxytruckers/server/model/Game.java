@@ -38,7 +38,18 @@ public class Game implements GameInterface {
 
     private final GameEventListener eventListener;
 
-    private final ExecutorService transitionExecutor = Executors.newSingleThreadExecutor();
+    private final ExecutorService transitionExecutor = Executors.newSingleThreadExecutor(r -> {
+        Thread t = new Thread(r, "Game State Transition Executor");
+        t.setDaemon(true);
+        return t;
+    });
+
+    /**
+     * Shuts down the game state transition executor.
+     */
+    public void shutdown() {
+        this.transitionExecutor.shutdown();
+    }
 
     @VisibleForTesting
     private Runnable afterEach = () -> {

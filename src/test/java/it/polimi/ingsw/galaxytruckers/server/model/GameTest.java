@@ -11,6 +11,7 @@ import it.polimi.ingsw.galaxytruckers.server.model.state.DrawCardState;
 import it.polimi.ingsw.galaxytruckers.server.model.state.GameState;
 import it.polimi.ingsw.galaxytruckers.server.model.state.ShipBuildingState;
 import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,11 @@ class GameTest {
         game.setCurrentState(gameState);
         clearInvocations(gameState);
         gameEventListener = game.getEventListener();
+    }
+
+    @AfterEach
+    void  tearDown() {
+        game.shutdown();
     }
 
     @Test
