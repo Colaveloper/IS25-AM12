@@ -4,11 +4,14 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.Player;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -51,7 +54,16 @@ public class GuiLobbyScreen extends GuiScreen {
             lobbyPane.getChildren().add(playerBox);
         }
 
-        return lobbyPane;
+        Button leaveGameButton = new Button("Leave Game");
+        leaveGameButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+        leaveGameButton.setOnAction(e -> {
+            controller.quit();
+        });
+
+        VBox root = new VBox(20, lobbyPane, leaveGameButton);
+        root.setAlignment(Pos.CENTER);
+        root.setPadding(new Insets(20));
+        return root;
     }
 
     @Override

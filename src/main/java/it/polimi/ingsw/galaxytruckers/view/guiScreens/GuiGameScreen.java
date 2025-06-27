@@ -8,6 +8,7 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GameState;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 
@@ -60,6 +61,12 @@ public abstract class GuiGameScreen extends GuiScreen {
         guiFlightBoard = new GuiFlightBoard(model.getGame().getFlightBoard(), getGuiController());
         guiLog = new GuiLog();
         guiButtonBox = new PurpleHBox(10);
+        Button leaveGameButton = new Button("Leave Game");
+        leaveGameButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+        leaveGameButton.setOnAction(e -> {
+            controller.quit();
+        });
+        guiButtonBox.getChildren().add(leaveGameButton);
         guiStatBox = new GuiStatBox(myShipBoard);
     }
 
