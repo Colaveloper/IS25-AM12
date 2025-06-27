@@ -11,7 +11,7 @@ The implementation supports the **complete rule set** of the game, including bot
 
 Each player can independently choose their preferred combination of interface (GUI or TUI) and communication protocol (Socket or RMI) and still take part in the same game.
 
-The GUI is implemented in **JavaFX**, with responsive layouts for different screen sizes. The TUI supports **UTF-8 encoding** and, where possible, clears the console for a better experience.
+The GUI is implemented in **JavaFX**, with responsive layouts for different screen sizes. The TUI supports **UTF-8 encoding**.
 
 The server supports **multiple games simultaneously** and handles players using different technologies in the same match. If a player disconnects, the server continues by taking default actions. Players can reconnect using the same nickname and resume the game. If only one player remains, default actions are applied until the game ends.
 
@@ -24,7 +24,6 @@ The server supports **multiple games simultaneously** and handles players using 
 | TUI              | ✔️          | Multiple games           | ✔️          |
 | GUI              | ✔️          | Disconnection resilience | ✔️          |
 | Test Flight mode | ✔️          | Persistence              | ❌           |
-| Chat             | ❌           |                          |             |
 
 ## Running the Application
 
@@ -33,7 +32,7 @@ The project is distributed as a single precompiled executable JAR file.
 To run it:
 
 ```bash
-java -jar GalaxyTruckers-1.0.jar   // Replace with the actual JAR file name
+java -jar GalaxyTruckers-1.0.jar
 ```
 
 When launching the server, the host is first asked whether to start a **demo** session. If so, they can either:
