@@ -54,10 +54,9 @@ Ensure that **Java 24** is installed.
 
 *Work in progress.*
 
-## Screenshots
-
-![img.png](img.png)
-![img_1.png](img_1.png)
+## Gameplay Screenshots
+![cli_screenshot.png](cli_screenshot.png) 
+![gui_screenshot.png](gui_screenshot.png)
 
 ## Tools and Libraries
 
