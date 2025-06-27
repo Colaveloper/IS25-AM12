@@ -18,17 +18,20 @@ The server supports **multiple games simultaneously** and handles players using 
 
 ## Features
 
-| Feature          | Implemented | Feature                  | Implemented |
-| ---------------- | ----------- | ------------------------ | ----------- |
-| Simplified rules | ✔️          | Socket                   | ✔️          |
-| Complete rules   | ✔️          | RMI                      | ✔️          |
-| TUI              | ✔️          | Multiple games           | ✔️          |
-| GUI              | ✔️          | Disconnection resilience | ✔️          |
-| Test Flight mode | ✔️          | Persistence              | ❌           |
+| Feature          | Implemented | Feature                         | Implemented |
+| ---------------- | ----------- |---------------------------------| ----------- |
+| Simplified rules | ✔️          | Socket                          | ✔️          |
+| Complete rules   | ✔️          | RMI                             | ✔️          |
+| TUI              | ✔️          | Multiple games                  | ✔️          |
+| GUI              | ✔️          | Client disconnection resilience | ✔️          |
+| Test Flight mode | ✔️          | Server state persistence        | ❌           |
 
 ## Running the Application
 
 The project is distributed as a single precompiled executable JAR file.
+
+NOTE: resources files are accessed via filepath, therefore the 
+JAR file must be run from the root directory of the project.
 
 To run it:
 
@@ -70,4 +73,4 @@ Libraries:
 
 Build:
 
-* **Maven** with Shade and Compiler plugins (Java 24 target, Java 21+ runtime)
+* **Maven** with Shade and Compiler plugins (Java 24 target, Java 24 runtime)
