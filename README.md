@@ -9,7 +9,7 @@ This project is a digital implementation of the board game **Galaxy Trucker**, d
 
 The implementation supports the **complete rule set** of the game, including both the **Second Flight** and the optional **Test Flight** mode.
 
-Each player can independently choose their preferred combination of interface (GUI or TUI) and communication protocol (Socket or RMI), and still take part in the same game.
+Each player can independently choose their preferred combination of interface (GUI or TUI) and communication protocol (Socket or RMI) and still take part in the same game.
 
 The GUI is implemented in **JavaFX**, with responsive layouts for different screen sizes. The TUI supports **UTF-8 encoding** and, where possible, clears the console for a better experience.
 
@@ -33,13 +33,12 @@ The project is distributed as a single precompiled executable JAR file.
 To run it:
 
 ```bash
-java -jar GalaxyTruckers-1.0.jar
+java -jar GalaxyTruckers-1.0.jar   // Replace with the actual JAR file name
 ```
 
-You can also start the server in special modes:
-
-* `edit` → saves the ship layout as a JSON after ship construction
-* `demo` → loads a ship layout from a JSON file and skips ship construction
+When launching the server, the host is first asked whether to start a **demo** session. If so, they can either:
+- Use prefabricated ships to skip the building phase, or
+- **Edit** them by playing the building phase. The resulting ships will be saved and used in future demo sessions.
 
 > Tip: For the best experience in TUI mode, disable soft-wrap in the terminal.
 
@@ -57,7 +56,8 @@ Ensure that **Java 21 or higher** is installed.
 
 ## Screenshots
 
-*Work in progress.*
+![img.png](img.png)
+![img_1.png](img_1.png)
 
 ## Tools and Libraries
 
