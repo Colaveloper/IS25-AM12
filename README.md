@@ -36,7 +36,7 @@ JAR file must be run from the root directory of the project.
 To run it:
 
 ```bash
-java -jar GalaxyTruckers-1.0-SNAPSHOT-shaded.jar
+java -jar GalaxyTruckers-1.0-SNAPSHOT.jar
 ```
 
 When launching the server, the host is first asked whether to start a **demo** session. If so, they can either:
@@ -45,7 +45,11 @@ When launching the server, the host is first asked whether to start a **demo** s
 
 > Tip: For the best experience in TUI mode, disable soft-wrap in the terminal. The terminal must support UTF-8 character display.
 
-Ensure that **Java 24** is installed.
+Ensure that **Java 24** is installed and is set correctly in the environment variables. For example on Linux, run:
+```bash
+export JAVA_HOME=/usr/lib/jvm/java-24-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
+```
 
 ## Documentation
 
@@ -54,8 +58,8 @@ Ensure that **Java 24** is installed.
 * The communication protocol between client and server is documented with [**sequence diagrams**](deliveries/SEQUENCE-DIAGRAM.drawio.pdf).
 
 ## Testing and Coverage
-
-*Work in progress.*
+The server was tested with full coverage by unit and systems tests
+![coverage.png](../IS25-AM12/deliveries/coverage.png)
 
 ## Gameplay Screenshots
 ![cli_screenshot.png](src/main/resources/textures/other/cli_screenshot.png)
