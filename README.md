@@ -12,7 +12,7 @@ The implementation supports the [**complete rule set**](https://www.czechgames.c
 
 Each player can independently choose their preferred combination of interface (GUI or TUI) and communication protocol (Socket or RMI) and still take part in the same game.
 
-The GUI is implemented in **JavaFX**, with responsive layouts for different screen sizes. The TUI supports **UTF-8 encoding**.
+The GUI is implemented in **JavaFX**, with responsive layouts for different screen sizes.
 
 The server supports **multiple games simultaneously** and handles players using different technologies in the same match. If a player disconnects, the server continues by taking default actions. Players can reconnect using the same nickname and resume the game. If only one player remains, default actions are applied until the game ends.
 
@@ -40,7 +40,7 @@ When launching the server, the host is first asked whether to start a **demo** s
 - Use prefabricated ships to skip the building phase, or
 - **Edit** them by playing the building phase. The resulting ships will be saved and used in future demo sessions.
 
-> Tip: For the best experience in TUI mode, disable soft-wrap in the terminal.
+> Tip: For the best experience in TUI mode, disable soft-wrap in the terminal. The terminal must support UTF-8 character display.
 
 Ensure that **Java 24** is installed.
 
