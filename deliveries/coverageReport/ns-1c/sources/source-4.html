@@ -1,0 +1,377 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DtoConverter</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.controller.dto</a>
+</div>
+
+<h1>Coverage Summary for Class: DtoConverter (it.polimi.ingsw.galaxytruckers.server.controller.dto)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DtoConverter</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.2%
+  </span>
+  <span class="absValue">
+    (20/21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96%
+  </span>
+  <span class="absValue">
+    (48/50)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98.9%
+  </span>
+  <span class="absValue">
+    (87/88)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.controller.dto;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.FlightBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.Hourglass;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.components.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.states.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.lobby.Lobby;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.lobby.Player;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.utils.ConversionUtils;
+&nbsp;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;/**
+&nbsp; * Utility class for converting game states and other objects into their corresponding DTOs.
+&nbsp; */
+<b class="nc">&nbsp;public class DtoConverter {</b>
+&nbsp;    /**
+&nbsp;     * Converts a GameStateInterface to a StateDTO.
+&nbsp;     *
+&nbsp;     * @param gameState the game state to convert
+&nbsp;     * @return the corresponding StateDTO
+&nbsp;     */
+&nbsp;    public static StateDTO getState(GameStateInterface gameState) {
+<b class="pc">&nbsp;        switch (gameState) {</b>
+<b class="fc">&nbsp;            case AddGoodsState addGoodsState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(addGoodsState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ChoosePlanetState choosePlanetState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(choosePlanetState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ChooseShipPieceState chooseShipPieceState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(chooseShipPieceState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case DeclareEnginePowerState declareEnginePowerState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(declareEnginePowerState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case DeclareFirePowerState declareFirePowerState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(declareFirePowerState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case DrawCardState drawCardState -&gt; {</b>
+<b class="fc">&nbsp;                return new SimpleStateDTO(Player.getPlayer(drawCardState.getShipBoard()).getNickname(), StateDTOType.DRAW_CARD);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case GrabRewardState grabRewardState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(grabRewardState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case HandleProjectileState handleProjectileState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(handleProjectileState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case RemoveCrewState removeCrewState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(removeCrewState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case RemoveGoodsState removeGoodsState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(removeGoodsState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ShipCorrectionState shipCorrectionState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(shipCorrectionState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ShipInitializationState shipInitializationState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(shipInitializationState);</b>
+&nbsp;            }
+<b class="pc">&nbsp;            case SecondShipBuildingState _, TestShipBuildingState _ -&gt; {</b>
+<b class="fc">&nbsp;                return new ShipBuildingDTO();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case GameState _ -&gt; throw new RuntimeException(&quot;Invalid state&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a GameStateInterface to a ComplexStateDTO.
+&nbsp;     *
+&nbsp;     * @param gameState the game state to convert
+&nbsp;     * @return the corresponding ComplexStateDTO
+&nbsp;     */
+&nbsp;    public static ComplexStateDTO getComplexState(GameStateInterface gameState) {
+<b class="pc">&nbsp;        switch (gameState) {</b>
+<b class="fc">&nbsp;            case AddGoodsState addGoodsState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(addGoodsState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ChoosePlanetState choosePlanetState -&gt; {</b>
+<b class="fc">&nbsp;                return new ComplexChoosePlanetDTO(stateDtoOf(choosePlanetState), ConversionUtils.convertArray(choosePlanetState.getChosenPlanets()));</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ChooseShipPieceState chooseShipPieceState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(chooseShipPieceState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case DeclareEnginePowerState declareEnginePowerState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(declareEnginePowerState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case DeclareFirePowerState declareFirePowerState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(declareFirePowerState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case DrawCardState drawCardState -&gt; {</b>
+<b class="fc">&nbsp;                return new ComplexDrawCardDTO(ConversionUtils.convert(drawCardState.getShipBoard()), drawCardState.hasDrawn());</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case GrabRewardState grabRewardState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(grabRewardState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case HandleProjectileState handleProjectileState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(handleProjectileState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case RemoveCrewState removeCrewState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(removeCrewState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case RemoveGoodsState removeGoodsState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(removeGoodsState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case SecondShipBuildingState secondShipBuildingState -&gt; {</b>
+<b class="fc">&nbsp;                return new SecondShipBuildingDTO(getBuildingData(secondShipBuildingState), getHourglass(secondShipBuildingState.getHourglass()), ConversionUtils.convertMap(secondShipBuildingState.getShipToForecasts()));</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ShipCorrectionState shipCorrectionState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(shipCorrectionState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ShipInitializationState shipInitializationState -&gt; {</b>
+<b class="fc">&nbsp;                return stateDtoOf(shipInitializationState);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case TestShipBuildingState testShipBuildingState -&gt; {</b>
+<b class="fc">&nbsp;                return new TestShipBuildingDTO(getBuildingData(testShipBuildingState));</b>
+&nbsp;            }
+&nbsp;            case GameState _ -&gt; {
+<b class="fc">&nbsp;                throw new RuntimeException(&quot;Invalid state&quot;);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a Lobby object to an ActiveLobbyDTO.
+&nbsp;     *
+&nbsp;     * @param lobby the lobby to convert
+&nbsp;     * @return the corresponding ActiveLobbyDTO
+&nbsp;     */
+&nbsp;    public static ActiveLobbyDTO getActiveLobby(Lobby lobby) {
+<b class="fc">&nbsp;        return new ActiveLobbyDTO(lobby.getId(), lobby.getLevel(), lobby.getNumPlayers(), lobby.getPlayers().stream().map(Player::getNickname).toList(), lobby.getHost().getNickname());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a Lobby object to a LobbyDetailsDTO.
+&nbsp;     *
+&nbsp;     * @param lobby the lobby to convert
+&nbsp;     * @return the corresponding LobbyDetailsDTO
+&nbsp;     */
+&nbsp;    public static LobbyDetailsDTO getLobbyDetails(Lobby lobby) {
+<b class="fc">&nbsp;        return new LobbyDetailsDTO(lobby.getId(), lobby.getPlayerColors().entrySet().stream().collect(Collectors.toMap(e -&gt; e.getKey().getNickname(), Map.Entry::getValue)), lobby.getLevel(), lobby.getNumPlayers());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a ShipBuildingState to a BuildingDataDTO.
+&nbsp;     *
+&nbsp;     * @param shipBuildingState the ship building state to convert
+&nbsp;     * @return the corresponding BuildingDataDTO
+&nbsp;     */
+&nbsp;    public static BuildingDataDTO getBuildingData(ShipBuildingState shipBuildingState) {
+<b class="fc">&nbsp;        return new BuildingDataDTO(shipBuildingState.getComponentBank().getNumCovered(), shipBuildingState.getComponentBank().getUncoveredIds(), ConversionUtils.convertCollection(shipBuildingState.getCompletedShipBoards(), HashSet::new));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a FlightBoard object to a FlightBoardDTO.
+&nbsp;     *
+&nbsp;     * @param flightBoard the flight board to convert
+&nbsp;     * @return the corresponding FlightBoardDTO
+&nbsp;     */
+&nbsp;    public static FlightBoardDTO getFlightBoard(FlightBoard flightBoard) {
+<b class="fc">&nbsp;        return new FlightBoardDTO(ConversionUtils.convertMap(flightBoard.getShipToPlace()));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a ShipBoard object to a ShipBoardDTO.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board to convert
+&nbsp;     * @return the corresponding ShipBoardDTO
+&nbsp;     */
+&nbsp;    public static ShipBoardDTO getShipBoard(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        return new ShipBoardDTO(shipBoard.getComponentMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -&gt; getComponent(entry.getValue()))), shipBoard.getLastComponent().map(Component::getId).orElse(-1), shipBoard.getLastPosition().orElse(null), shipBoard.getStashedComponents().stream().map(Component::getId).toList(), shipBoard.getCredits(), shipBoard.getLosses());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts an Hourglass object to an HourglassDTO.
+&nbsp;     *
+&nbsp;     * @param hourglass the hourglass to convert
+&nbsp;     * @return the corresponding HourglassDTO
+&nbsp;     */
+&nbsp;    public static HourglassDTO getHourglass(Hourglass hourglass) {
+<b class="fc">&nbsp;        return new HourglassDTO(hourglass.getMissingTime(), hourglass.getFlipsLeft(), hourglass.getIsRunning());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a ComponentInterface to a ComponentDTO.
+&nbsp;     *
+&nbsp;     * @param component the component to convert
+&nbsp;     * @return the corresponding ComponentDTO
+&nbsp;     */
+&nbsp;    public static ComponentDTO getComponent(ComponentInterface component) {
+<b class="fc">&nbsp;        ComponentPayload payload = null;</b>
+<b class="pc">&nbsp;        switch (component) {</b>
+<b class="fc">&nbsp;            case Activatable activatable -&gt; {</b>
+<b class="fc">&nbsp;                payload = new ActivatablePayload(activatable.isActive());</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case Battery battery -&gt; {</b>
+<b class="fc">&nbsp;                payload = new BatteryPayload(battery.getNumBatteries());</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case Cabin cabin -&gt; {</b>
+<b class="fc">&nbsp;                payload = new CabinPayload(cabin.getCrewType(), cabin.getNumResidents());</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case CargoHold cargoHold -&gt; {</b>
+<b class="fc">&nbsp;                payload = new CargoPayload(cargoHold.getGoods());</b>
+&nbsp;            }
+<b class="pc">&nbsp;            case Cannon _, Engine _, LifeSupport _, Component _ -&gt; {</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        return new ComponentDTO(component.getId(), component.getOrientation(), payload);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //region Specific state conversion methods
+&nbsp;    private static ShipCorrectionDTO stateDtoOf(ShipCorrectionState shipCorrectionState) {
+<b class="fc">&nbsp;        return new ShipCorrectionDTO(ConversionUtils.convertCollection(shipCorrectionState.getValidShipBoards(), HashSet::new), ConversionUtils.convertMap(shipCorrectionState.getShipPiecesMap()), shipCorrectionState.getShouldDiscard());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static ShipInitializationDTO stateDtoOf(ShipInitializationState shipInitializationState) {
+<b class="fc">&nbsp;        return new ShipInitializationDTO(ConversionUtils.convertMap(shipInitializationState.getShipRelevantCabins()));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static SimpleStateDTO stateDtoOf(DeclareFirePowerState declareFirePowerState) {
+<b class="fc">&nbsp;        return new SimpleStateDTO(ConversionUtils.convert(declareFirePowerState.getShipBoard()), StateDTOType.DECLARE_FIRE_POWER);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static SimpleStateDTO stateDtoOf(DeclareEnginePowerState declareEnginePowerState) {
+<b class="fc">&nbsp;        return new SimpleStateDTO(ConversionUtils.convert(declareEnginePowerState.getShipBoard()), StateDTOType.DECLARE_ENGINE_POWER);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static SimpleStateDTO stateDtoOf(GrabRewardState grabRewardState) {
+<b class="fc">&nbsp;        return new SimpleStateDTO(ConversionUtils.convert(grabRewardState.getShipBoard()), StateDTOType.GRAB_REWARD);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static AddGoodsDTO stateDtoOf(AddGoodsState addGoodsState) {
+<b class="fc">&nbsp;        return new AddGoodsDTO(ConversionUtils.convert(addGoodsState.getShipBoard()), addGoodsState.getGoodsBuffer());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static ChooseShipPieceDTO stateDtoOf(ChooseShipPieceState chooseShipPieceState) {
+<b class="fc">&nbsp;        return new ChooseShipPieceDTO(Player.getPlayer(chooseShipPieceState.getShipBoard()).getNickname(), chooseShipPieceState.getShipPieces());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static HandleProjectileDTO stateDtoOf(HandleProjectileState handleProjectileState) {
+<b class="fc">&nbsp;        return new HandleProjectileDTO(Player.getPlayer(handleProjectileState.getShipBoard()).getNickname(), handleProjectileState.getProjectile().getProjectileType(), handleProjectileState.getProjectile().getDiceRoll(), handleProjectileState.getProjectile().getDirection(), handleProjectileState.getAvailablePositions());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static RemoveCrewDTO stateDtoOf(RemoveCrewState removeCrewState) {
+<b class="fc">&nbsp;        return new RemoveCrewDTO(Player.getPlayer(removeCrewState.getShipBoard()).getNickname(), removeCrewState.getCrewSacrifice());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static RemoveGoodsDTO stateDtoOf(RemoveGoodsState removeGoodsState) {
+<b class="fc">&nbsp;        return new RemoveGoodsDTO(Player.getPlayer(removeGoodsState.getShipBoard()).getNickname(), removeGoodsState.getGoodsToLose());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static ChoosePlanetDTO stateDtoOf(ChoosePlanetState choosePlanetState) {
+<b class="fc">&nbsp;        return new ChoosePlanetDTO(ConversionUtils.convert(choosePlanetState.getCurrentShip()), choosePlanetState.getNumPlanets());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //endregion
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,241 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Direction</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.shared.enums</a>
+</div>
+
+<h1>Coverage Summary for Class: Direction (it.polimi.ingsw.galaxytruckers.shared.enums)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Direction</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (8/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    64.3%
+  </span>
+  <span class="absValue">
+    (9/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (25/30)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.shared.enums;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.EnumMap;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents the four cardinal directions in the Galaxy Truckers game.
+&nbsp; * This enum provides utility methods for direction manipulation, rotation,
+&nbsp; * and calculating neighboring positions on a grid.
+&nbsp; */
+<b class="fc">&nbsp;public enum Direction {</b>
+&nbsp;    /** Represents upward direction (north) */
+<b class="fc">&nbsp;    UP,</b>
+&nbsp;    /** Represents rightward direction (east) */
+<b class="fc">&nbsp;    RIGHT,</b>
+&nbsp;    /** Represents downward direction (south) */
+<b class="fc">&nbsp;    DOWN,</b>
+&nbsp;    /** Represents leftward direction (west) */
+<b class="fc">&nbsp;    LEFT;</b>
+&nbsp;
+&nbsp;    /** Cached array of all direction values for efficient access */
+<b class="fc">&nbsp;    private static final Direction[] VALUES = values();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the direction that is 90 degrees clockwise from this direction.
+&nbsp;     *
+&nbsp;     * @return The direction to the right of this direction
+&nbsp;     */
+&nbsp;    public Direction getRight() {
+<b class="fc">&nbsp;        return VALUES[(this.ordinal() + 1) % Direction.values().length];</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the direction that is 90 degrees counterclockwise from this direction.
+&nbsp;     *
+&nbsp;     * @return The direction to the left of this direction
+&nbsp;     */
+&nbsp;    public Direction getLeft() {
+<b class="fc">&nbsp;        return VALUES[(this.ordinal() + (values().length - 1)) % Direction.values().length];</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the direction that is 180 degrees from this direction (opposite).
+&nbsp;     *
+&nbsp;     * @return The opposite direction
+&nbsp;     */
+&nbsp;    public Direction getOpposite() {
+<b class="fc">&nbsp;        return VALUES[(this.ordinal() + 2) % Direction.values().length];</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts this direction to an angle in degrees.
+&nbsp;     * UP = 0°, RIGHT = 90°, DOWN = 180°, LEFT = 270°
+&nbsp;     *
+&nbsp;     * @return The angle in degrees corresponding to this direction
+&nbsp;     */
+&nbsp;    public int getAngle() {
+<b class="nc">&nbsp;        return switch (this) {</b>
+<b class="nc">&nbsp;            case UP -&gt; 0;</b>
+<b class="nc">&nbsp;            case RIGHT -&gt; 90;</b>
+<b class="nc">&nbsp;            case DOWN -&gt; 180;</b>
+<b class="nc">&nbsp;            case LEFT -&gt; 270;</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Rotates a map of direction-to-value pairs from one direction to another.
+&nbsp;     * This is useful for rotating component orientations in the game.
+&nbsp;     *
+&nbsp;     * @param &lt;V&gt;      The type of values in the map
+&nbsp;     * @param original The original direction-to-value map
+&nbsp;     * @param from     The source direction
+&nbsp;     * @param to       The target direction
+&nbsp;     * @return A new map with rotated direction keys
+&nbsp;     */
+&nbsp;    public static &lt;V&gt; Map&lt;Direction, V&gt; rotateDirectionMap(
+&nbsp;            Map&lt;Direction, V&gt; original,
+&nbsp;            Direction from,
+&nbsp;            Direction to
+&nbsp;    ) {
+<b class="fc">&nbsp;        int steps = computeSteps(from, to);</b>
+<b class="fc">&nbsp;        Map&lt;Direction, V&gt; rotated = new EnumMap&lt;&gt;(Direction.class);</b>
+&nbsp;
+<b class="fc">&nbsp;        for (Direction key : Direction.values()) {</b>
+<b class="fc">&nbsp;            Direction newKey = key;</b>
+<b class="fc">&nbsp;            for (int i = 0; i &lt; steps; i++) {</b>
+<b class="fc">&nbsp;                newKey = newKey.getRight();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            rotated.put(newKey, original.get(key));</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return rotated;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Computes the number of 90-degree clockwise rotations needed to go from one direction to another.
+&nbsp;     *
+&nbsp;     * @param from The starting direction
+&nbsp;     * @param to   The target direction
+&nbsp;     * @return The number of clockwise steps needed
+&nbsp;     */
+&nbsp;    private static int computeSteps(Direction from, Direction to) {
+<b class="fc">&nbsp;        int dist = to.ordinal() - from.ordinal();</b>
+<b class="pc">&nbsp;        if (dist &lt; 0) dist += Direction.values().length;</b>
+<b class="fc">&nbsp;        return dist;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the neighboring point in a specified direction from a given point.
+&nbsp;     * This is useful for grid-based navigation in the game.
+&nbsp;     *
+&nbsp;     * @param p         The starting point
+&nbsp;     * @param direction The direction to move
+&nbsp;     * @return A new point that is one unit away in the specified direction
+&nbsp;     */
+&nbsp;    public static Point getNeighbour(Point p, Direction direction) {
+<b class="pc">&nbsp;        return switch (direction) {</b>
+<b class="fc">&nbsp;            case UP -&gt; new Point(p.x, p.y - 1);</b>
+<b class="fc">&nbsp;            case DOWN -&gt; new Point(p.x, p.y + 1);</b>
+<b class="fc">&nbsp;            case LEFT -&gt; new Point(p.x - 1, p.y);</b>
+<b class="fc">&nbsp;            case RIGHT -&gt; new Point(p.x + 1, p.y);</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

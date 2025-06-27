@@ -1,0 +1,470 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: CliScreen (it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (2/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    2.4%
+  </span>
+  <span class="absValue">
+    (4/164)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.5%
+  </span>
+  <span class="absValue">
+    (19/115)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CliScreen$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">CliScreen$MockitoMock$hMc7Z2YJ</td>
+  </tr>
+  <tr>
+    <td class="name">CliScreen$MockitoMock$hMc7Z2YJ$auxiliary$0plwYaKe</td>
+  </tr>
+  <tr>
+    <td class="name">CliScreen$MockitoMock$hMc7Z2YJ$auxiliary$nkbt5U7U</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    18.2%
+  </span>
+  <span class="absValue">
+    (2/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    2.4%
+  </span>
+  <span class="absValue">
+    (4/164)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.4%
+  </span>
+  <span class="absValue">
+    (19/116)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.Screen;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Player;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliAllShips;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponentLegend;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliFlightBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliShipBoard;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.*;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Base class for all command-line interface screens in the game.
+&nbsp; * Provides common functionality for managing game state, player ships,
+&nbsp; * and user interface elements across different game phases.
+&nbsp; * Each game screen extends this class to implement its unique behavior.
+&nbsp; */
+&nbsp;public abstract class CliScreen extends Screen {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The client model containing the current game state and player information.
+&nbsp;     */
+&nbsp;    protected final ClientModel model;
+&nbsp;    /**
+&nbsp;     * The controller used to send commands to the server.
+&nbsp;     */
+&nbsp;    protected final ClientControllerInterface controller;
+&nbsp;    /**
+&nbsp;     * The current game state containing available actions and state information.
+&nbsp;     */
+&nbsp;    protected final GameState state;
+&nbsp;    /**
+&nbsp;     * List of available actions that can be performed in the current game state.
+&nbsp;     */
+&nbsp;    protected final List&lt;StateActions&gt; availableActions;
+&nbsp;    /**
+&nbsp;     * The CLI flight board displaying the current state of the flight board.
+&nbsp;     */
+&nbsp;    protected CliFlightBoard cliFlightBoard;
+&nbsp;    /**
+&nbsp;     * The ship board of the client player,
+&nbsp;     */
+&nbsp;    protected ShipBoard myShipBoard;
+&nbsp;    /**
+&nbsp;     * The CLI representation of all ships in the game, including the client&#39;s ship.
+&nbsp;     */
+&nbsp;    protected CliAllShips cliAllShips;
+&nbsp;    /**
+&nbsp;     * Map linking each ship board to its corresponding CLI representation.
+&nbsp;     */
+&nbsp;    protected Map&lt;ShipBoard, CliShipBoard&gt; shipToCliShip;
+&nbsp;    /**
+&nbsp;     * The CLI component legend that provides information about ship components and their representations.
+&nbsp;     */
+&nbsp;    protected CliComponentLegend cliComponentLegend;
+&nbsp;    private String surrenderMessage;
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new CLI screen with the given game state and controller.
+&nbsp;     * Initializes the screen&#39;s UI elements, player ships, and available actions.
+&nbsp;     *
+&nbsp;     * @param model The client model containing the current game state
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     * @param gameState The current game state containing available actions and player information
+&nbsp;     */
+<b class="fc">&nbsp;    public CliScreen(ClientModel model, ClientControllerInterface controller, GameState gameState) {</b>
+<b class="fc">&nbsp;        this.model = model;</b>
+<b class="fc">&nbsp;        this.controller = controller;</b>
+<b class="fc">&nbsp;        this.state = gameState;</b>
+<b class="fc">&nbsp;        this.availableActions = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.cliComponentLegend = new CliComponentLegend();</b>
+<b class="fc">&nbsp;        if (gameState != null) {</b>
+<b class="fc">&nbsp;            this.availableActions.addAll(gameState.getAvailableActions());</b>
+<b class="fc">&nbsp;            this.myShipBoard = model.getMyShip();</b>
+<b class="fc">&nbsp;            this.shipToCliShip = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;            for (Player player : model.getPlayers()) {</b>
+<b class="fc">&nbsp;                shipToCliShip.put(player.getShipBoard(), new CliShipBoard(player.getShipBoard(), player.getNickname()));</b>
+&nbsp;            }
+<b class="fc">&nbsp;            List&lt;CliShipBoard&gt; list = new ArrayList&lt;&gt;(shipToCliShip.values().stream().toList());</b>
+<b class="fc">&nbsp;            list.sort(Comparator.comparing(CliShipBoard::getNickname));</b>
+<b class="fc">&nbsp;            list.remove(shipToCliShip.get(myShipBoard));</b>
+<b class="fc">&nbsp;            list.addFirst(shipToCliShip.get(myShipBoard));</b>
+<b class="fc">&nbsp;            this.cliAllShips = new CliAllShips(list);</b>
+<b class="fc">&nbsp;            this.cliFlightBoard = new CliFlightBoard(model.getGame().getFlightBoard());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Alternative constructor for screens that don&#39;t require a game state.
+&nbsp;     *
+&nbsp;     * @param model The client model containing the current game state
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     */
+&nbsp;    public CliScreen(ClientModel model, ClientControllerInterface controller) {
+<b class="fc">&nbsp;        this(model, controller, null);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the current game state associated with this screen.
+&nbsp;     *
+&nbsp;     * @return The current GameState object
+&nbsp;     */
+&nbsp;    public GameState getState() {
+<b class="nc">&nbsp;        return state;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Renders the current screen content to the command line interface.
+&nbsp;     * Each screen implementation provides its specific rendering logic.
+&nbsp;     */
+&nbsp;    public abstract void render();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handles notification when a player gives up the game.
+&nbsp;     * Updates the screen with a surrender message.
+&nbsp;     *
+&nbsp;     * @param player The player who has given up
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void notifyGiveUp(Player player) {
+<b class="nc">&nbsp;        surrenderMessage = player.getNickname() + &quot; has surrendered!&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Processes and executes user input commands.
+&nbsp;     * Each screen implementation handles its specific command set.
+&nbsp;     *
+&nbsp;     * @param input The command string entered by the user
+&nbsp;     */
+&nbsp;    public abstract void parseAndInvoke(String input);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the screen when a ship component changes.
+&nbsp;     * Marks affected UI elements as needing to be redrawn.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board containing the changed component
+&nbsp;     * @param point The position of the changed component
+&nbsp;     */
+&nbsp;    public void notifyComponentChange(ShipBoard shipBoard, Point point) {
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+<b class="nc">&nbsp;        shipToCliShip.get(shipBoard).setDirty();</b>
+<b class="nc">&nbsp;        shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Generates a formatted display of the current ship&#39;s statistics and flight board.
+&nbsp;     * Includes information about firepower, engine power, batteries, crew size,
+&nbsp;     * credits, and any losses. Also shows the flight board and component legend.
+&nbsp;     *
+&nbsp;     * @return A list of strings containing the formatted ship and flight statistics
+&nbsp;     */
+&nbsp;    protected List&lt;String&gt; printShipFlightStats() {
+<b class="nc">&nbsp;        List&lt;String&gt; description = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        description.addAll(cliFlightBoard.getDescription());</b>
+&nbsp;
+<b class="nc">&nbsp;        description.addAll(cliComponentLegend.getDescription());</b>
+&nbsp;
+<b class="nc">&nbsp;        description.add(</b>
+<b class="nc">&nbsp;                &quot;firepower: &quot;     + String.format(&quot;%.1f&quot;, myShipBoard.getFirePower() / 2.0) +</b>
+<b class="nc">&nbsp;                &quot;\tengine power: &quot;+ myShipBoard.getEnginePower() +</b>
+<b class="nc">&nbsp;                &quot;\tbatteries: &quot;   + myShipBoard.getNumBatteries() +</b>
+<b class="nc">&nbsp;                &quot;\tcrewsize: &quot;    + myShipBoard.getCrewSize() +</b>
+<b class="nc">&nbsp;                &quot;\tcredits: &quot;     + myShipBoard.getCredits()</b>
+&nbsp;        );
+<b class="nc">&nbsp;        if(myShipBoard.getLosses()!=0) description.add(&quot;losses: &quot; + myShipBoard.getLosses());</b>
+&nbsp;
+<b class="nc">&nbsp;        description.addAll(cliAllShips.getDescription());</b>
+<b class="nc">&nbsp;        return description;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Displays all currently available actions to the player based on the game state.
+&nbsp;     * Shows different command options depending on the current phase and available actions.
+&nbsp;     * Includes surrender messages and handles players who have given up.
+&nbsp;     */
+&nbsp;    protected void printActions() {
+<b class="nc">&nbsp;        if(!model.getGame().getGivenUpShips().contains(model.getClientPlayer().getShipBoard())) {</b>
+<b class="nc">&nbsp;            List&lt;String&gt; actions = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;            availableActions.clear(); // refreshing available actions</b>
+<b class="nc">&nbsp;            availableActions.addAll(state.getAvailableActions());</b>
+<b class="nc">&nbsp;            for (StateActions action : availableActions) {</b>
+<b class="nc">&nbsp;                switch (action) {</b>
+<b class="nc">&nbsp;                    case GRAB_PLACED_COMPONENT -&gt;   actions.add(&quot;G Grab last placed Component&quot;);</b>
+<b class="nc">&nbsp;                    case ACTIVATE_COMPONENT -&gt;      actions.add(&quot;A[x][y] Activate component        &quot;);</b>
+<b class="nc">&nbsp;                    case SPEND_BATTERIES -&gt;         actions.add(&quot;B[x][y] Spend battery on component&quot;);</b>
+<b class="nc">&nbsp;                    case GRAB_REWARD -&gt;             actions.add(&quot;P       To pick reward            &quot;);</b>
+<b class="nc">&nbsp;                    case CHOOSE_SHIP_PIECE -&gt;       actions.add(&quot;K [i] Choose piece of ship to keep&quot;);</b>
+<b class="nc">&nbsp;                    case GO_NEXT, RELEASE_FORECAST-&gt;actions.add(&quot;press ENTER key to continue       &quot;);</b>
+<b class="nc">&nbsp;                    case LOSE_CREW -&gt;               actions.add(&quot;L[x][y] Remove crew from component&quot;);</b>
+<b class="nc">&nbsp;                    case LOSE_GOOD -&gt;               actions.add(&quot;L[x][y] Remove good from cargo hold&quot;);</b>
+<b class="nc">&nbsp;                    case REMOVE_GOOD -&gt;             actions.add(&quot;R[x][y][color] Pick goods from cargo hold&quot;);</b>
+<b class="nc">&nbsp;                    case ADD_GOOD -&gt;                actions.add(&quot;P[x][y][color] Place goods on cargo hold&quot;);</b>
+<b class="nc">&nbsp;                    case CHOOSE_PLANET -&gt;           actions.add(&quot;L[i]  Land on i-th planet         &quot;);</b>
+<b class="nc">&nbsp;                    case REQUEST_RAND_COMPONENT -&gt;  actions.add(&quot;C  Get New covered component      &quot;);</b>
+<b class="nc">&nbsp;                    case REQUEST_COMPONENT -&gt;       actions.add(&quot;U[i] Pick i-th uncovered component&quot;);</b>
+<b class="nc">&nbsp;                    case REJECT_COMPONENT -&gt;        actions.add(&quot;R  Rejected component             &quot;);</b>
+<b class="nc">&nbsp;                    case STASH_COMPONENT -&gt;         actions.add(&quot;S  To stash current component     &quot;);</b>
+<b class="nc">&nbsp;                    case GRAB_STASHED_COMPONENT -&gt;  actions.add(&quot;S [i]  To grab i-th stashed       &quot;);</b>
+<b class="nc">&nbsp;                    case PLACE_COMPONENT -&gt;         actions.add(&quot;P[x][y]  Place component in [x][y]&quot;);</b>
+<b class="nc">&nbsp;                    case ROTATE_COMPONENT -&gt;        actions.add(&quot;R [LEFT|RIGHT] Rotate component   &quot;);</b>
+<b class="nc">&nbsp;                    case FLIP_HOURGLASS -&gt;          actions.add(&quot;H  To Flip hourglass              &quot;);</b>
+<b class="nc">&nbsp;                    case PLACE_SHIP_ON_FLIGHTBOARD-&gt;actions.add(&quot;E [i] End and place on flightboard&quot;);</b>
+<b class="nc">&nbsp;                    case PLACE_SHIP_FOR_TEST -&gt;     actions.add(&quot;E to place ship on first available space&quot;);</b>
+<b class="nc">&nbsp;                    case FINISH_BUILDING -&gt;         actions.add(&quot;X  To finish building             &quot;);</b>
+<b class="nc">&nbsp;                    case ACQUIRE_FORECAST -&gt;        actions.add(&quot;F [i]  Pick i-th forecast deck    &quot;);</b>
+<b class="nc">&nbsp;                    case DRAW_CARD -&gt;               actions.add(&quot;  Press ENTER to draw a card      &quot;);</b>
+<b class="nc">&nbsp;                    case REMOVE_COMPONENT -&gt;        actions.add(&quot;R[x][y]  Remove component in x, y &quot;);</b>
+<b class="nc">&nbsp;                    case INITIALIZE_CABIN -&gt;        actions.add(&quot;P[x][y]  Initialize cabin in x, y &quot;);</b>
+<b class="nc">&nbsp;                    case GIVE_UP -&gt;                 actions.add(&quot;Y  To give up and stop playing    &quot;);</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            for (int i = 0; i &lt; availableActions.size(); i++) {</b>
+<b class="nc">&nbsp;                System.out.print(actions.get(i) + &quot;\t\t&quot;);</b>
+<b class="nc">&nbsp;                if ((i + 1) % 4 == 0) {</b>
+<b class="nc">&nbsp;                    System.out.println();</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            System.out.println();</b>
+&nbsp;        }
+&nbsp;        else{
+<b class="nc">&nbsp;            System.out.println(&quot;You&#39;re out of the flight! - watch other players compete.&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if(surrenderMessage!=null) {</b>
+<b class="nc">&nbsp;            System.out.println(surrenderMessage);</b>
+<b class="nc">&nbsp;            surrenderMessage = null;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Extracts x,y coordinates from an input command string.
+&nbsp;     * Parses space-separated input where the second and third tokens are coordinates.
+&nbsp;     *
+&nbsp;     * @param input The command string containing coordinates (format: &quot;command x y&quot;)
+&nbsp;     * @return A Point object containing the parsed x,y coordinates
+&nbsp;     * @throws NumberFormatException if the coordinates are not valid integers
+&nbsp;     * @throws ArrayIndexOutOfBoundsException if the input doesn&#39;t contain enough parts
+&nbsp;     */
+&nbsp;    protected Point getPoint(String input) {
+<b class="nc">&nbsp;        String[] parts = input.split(&quot; &quot;);</b>
+<b class="nc">&nbsp;        int x = Integer.parseInt(parts[1]);</b>
+<b class="nc">&nbsp;        int y = Integer.parseInt(parts[2]);</b>
+<b class="nc">&nbsp;        return new Point(x, y);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if the user input command is legal based on the return value of {@link #isFormatLegal(String)},
+&nbsp;     * as well as the screen&#39;s own information (in @Override methods).
+&nbsp;     *
+&nbsp;     * @param input The command string entered by the user
+&nbsp;     * @return true if the input is legal, false otherwise
+&nbsp;     */
+&nbsp;    public boolean isInputLegal(String input) {
+<b class="nc">&nbsp;        return isFormatLegal(input);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Validates the format of a user input command based on the available actions.
+&nbsp;     * Checks if the input matches the expected patterns for each action type.
+&nbsp;     *
+&nbsp;     * @param input The command string entered by the user
+&nbsp;     * @return true if the input format is legal for the current game state, false otherwise
+&nbsp;     */
+&nbsp;    protected final boolean isFormatLegal(String input) {
+<b class="nc">&nbsp;        input = input.toUpperCase().trim();</b>
+<b class="nc">&nbsp;        if(input.isEmpty()) input = &quot; &quot;; //to check last case of empty input</b>
+&nbsp;        //String[] parts = input.split(&quot; &quot;);
+<b class="nc">&nbsp;        return switch (input.substring(0, 1)) {</b>
+<b class="nc">&nbsp;            case &quot;P&quot; -&gt;(availableActions.contains(StateActions.PLACE_COMPONENT) ||</b>
+<b class="nc">&nbsp;                        availableActions.contains(StateActions.INITIALIZE_CABIN))&amp;&amp; input.matches(&quot;P\\s\\d+\\s\\d+&quot;) ||</b>
+<b class="nc">&nbsp;                        availableActions.contains(StateActions.GRAB_REWARD)     &amp;&amp; input.matches(&quot;P&quot;) ||</b>
+<b class="nc">&nbsp;                        availableActions.contains(StateActions.ADD_GOOD)        &amp;&amp; input.matches(&quot;P\\s\\d+\\s\\d+\\s[A-Z]+&quot;);</b>
+<b class="nc">&nbsp;            case &quot;H&quot; -&gt; availableActions.contains(StateActions.FLIP_HOURGLASS)  &amp;&amp; input.matches(&quot;H&quot;);</b>
+<b class="nc">&nbsp;            case &quot;S&quot; -&gt; availableActions.contains(StateActions.STASH_COMPONENT) &amp;&amp; input.matches(&quot;S&quot;) ||</b>
+<b class="nc">&nbsp;                        availableActions.contains(StateActions.GRAB_STASHED_COMPONENT) &amp;&amp; input.matches(&quot;S\\s\\d+&quot;);</b>
+<b class="nc">&nbsp;            case &quot;R&quot; -&gt; availableActions.contains(StateActions.REJECT_COMPONENT)&amp;&amp; input.matches(&quot;R&quot;) ||</b>
+<b class="nc">&nbsp;                        availableActions.contains(StateActions.REMOVE_GOOD)     &amp;&amp; input.matches(&quot;R\\s\\d+\\s\\d+\\s[A-Z]+&quot;) ||</b>
+<b class="nc">&nbsp;                        availableActions.contains(StateActions.REMOVE_COMPONENT)&amp;&amp; input.matches(&quot;R\\s\\d+\\s\\d+&quot;) ||</b>
+<b class="nc">&nbsp;                        availableActions.contains(StateActions.ROTATE_COMPONENT)&amp;&amp; input.matches(&quot;R\\s(LEFT|RIGHT)&quot;);</b>
+<b class="nc">&nbsp;            case &quot;C&quot; -&gt; availableActions.contains(StateActions.REQUEST_RAND_COMPONENT) &amp;&amp; input.matches(&quot;C&quot;);</b>
+<b class="nc">&nbsp;            case &quot;U&quot; -&gt; availableActions.contains(StateActions.REQUEST_COMPONENT)&amp;&amp; input.matches(&quot;U\\s\\d+&quot;);</b>
+<b class="nc">&nbsp;            case &quot;F&quot; -&gt; availableActions.contains(StateActions.ACQUIRE_FORECAST)&amp;&amp; input.matches(&quot;F\\s\\d+&quot;);</b>
+<b class="nc">&nbsp;            case &quot;X&quot; -&gt; availableActions.contains(StateActions.FINISH_BUILDING) &amp;&amp; input.matches(&quot;X&quot;);</b>
+<b class="nc">&nbsp;            case &quot;L&quot; -&gt;(availableActions.contains(StateActions.LOSE_CREW)   ||</b>
+<b class="nc">&nbsp;                        availableActions.contains(StateActions.LOSE_GOOD))      &amp;&amp; input.matches(&quot;L\\s\\d+\\s\\d+&quot;) ||</b>
+<b class="nc">&nbsp;                        availableActions.contains(StateActions.CHOOSE_PLANET)   &amp;&amp; input.matches(&quot;L\\s\\d+&quot;);</b>
+<b class="nc">&nbsp;            case &quot;K&quot; -&gt; availableActions.contains(StateActions.CHOOSE_SHIP_PIECE)&amp;&amp; input.matches(&quot;K\\s\\d+&quot;);</b>
+<b class="nc">&nbsp;            case &quot;Y&quot; -&gt; availableActions.contains(StateActions.GIVE_UP)         &amp;&amp; input.matches(&quot;Y&quot;);</b>
+<b class="nc">&nbsp;            case &quot;B&quot; -&gt; availableActions.contains(StateActions.SPEND_BATTERIES) &amp;&amp; input.matches(&quot;B\\s\\d+\\s\\d+&quot;);</b>
+<b class="nc">&nbsp;            case &quot;A&quot; -&gt; availableActions.contains(StateActions.ACTIVATE_COMPONENT)&amp;&amp; input.matches(&quot;A\\s\\d+\\s\\d+&quot;);</b>
+<b class="nc">&nbsp;            case &quot;E&quot; -&gt; availableActions.contains(StateActions.PLACE_SHIP_ON_FLIGHTBOARD) &amp;&amp; input.matches(&quot;E\\s\\d+&quot;) ||</b>
+<b class="nc">&nbsp;                        availableActions.contains(StateActions.PLACE_SHIP_FOR_TEST) &amp;&amp; input.matches(&quot;E&quot;);</b>
+<b class="nc">&nbsp;            case &quot;G&quot; -&gt; availableActions.contains(StateActions.GRAB_PLACED_COMPONENT) &amp;&amp; input.matches(&quot;G&quot;);</b>
+<b class="nc">&nbsp;            case &quot; &quot; -&gt;(availableActions.contains(StateActions.GO_NEXT)    ||</b>
+<b class="nc">&nbsp;                        availableActions.contains(StateActions.DRAW_CARD)  ||</b>
+<b class="nc">&nbsp;                        availableActions.contains(StateActions.RELEASE_FORECAST));</b>
+&nbsp;            default -&gt; {
+&nbsp;                //System.out.println(&quot;invalid input&quot;);
+<b class="nc">&nbsp;                yield false;</b>
+&nbsp;            }
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

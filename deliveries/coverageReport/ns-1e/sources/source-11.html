@@ -1,0 +1,82 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > StateDTO</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.controller.dto.states</a>
+</div>
+
+<h1>Coverage Summary for Class: StateDTO (it.polimi.ingsw.galaxytruckers.server.controller.dto.states)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">StateDTO</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.controller.dto.states;
+&nbsp;
+&nbsp;import java.io.Serializable;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents the state of the game in a DTO format.
+&nbsp; * This interface is used to define various states that can be sent to clients.
+&nbsp; * It is sealed to restrict its implementations to specific classes.
+&nbsp; */
+&nbsp;public sealed interface StateDTO extends Serializable permits AddGoodsDTO, ChoosePlanetDTO, ChooseShipPieceDTO,
+&nbsp;                                                              HandleProjectileDTO, RemoveCrewDTO, RemoveGoodsDTO,
+&nbsp;                                                              ShipBuildingDTO, ShipCorrectionDTO, ShipInitializationDTO,
+&nbsp;                                                              SimpleStateDTO {
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

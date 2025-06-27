@@ -1,0 +1,105 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ScreenFactory</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view</a>
+</div>
+
+<h1>Coverage Summary for Class: ScreenFactory (it.polimi.ingsw.galaxytruckers.client.view)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ScreenFactory</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;//import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiSecondShipBuildingScreen;
+&nbsp;//import it.polimi.ingsw.galaxytruckers.view.guiScreens.GuiSecondShipBuildingScreen;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.MetaState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * Factory interface for creating Screen instances based on different game states.
+&nbsp; * Implements the Factory Method design pattern to create appropriate screen objects
+&nbsp; * for either CLI or GUI implementations depending on the concrete factory used.
+&nbsp; *
+&nbsp; * @param &lt;S&gt; The type of Screen to be created, must extend the Screen class
+&nbsp; */
+&nbsp;public interface ScreenFactory&lt;S extends Screen&gt; {
+&nbsp;    /**
+&nbsp;     * Creates a screen based on a meta state (non-gameplay state like login or lobby).
+&nbsp;     *
+&nbsp;     * @param metaState   The current meta state of the client
+&nbsp;     * @param model       The client model containing game data
+&nbsp;     * @param controller  The controller for communicating with the server
+&nbsp;     * @return            A screen instance appropriate for the given meta state
+&nbsp;     */
+&nbsp;    S createScreen(MetaState metaState, ClientModel model, ClientControllerInterface controller);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a screen based on a game state (active gameplay state).
+&nbsp;     *
+&nbsp;     * @param gameState   The current game state of the client
+&nbsp;     * @param model       The client model containing game data
+&nbsp;     * @param controller  The controller for communicating with the server
+&nbsp;     * @return            A screen instance appropriate for the given game state
+&nbsp;     */
+&nbsp;    S createScreen(GameState gameState, ClientModel model, ClientControllerInterface controller);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,114 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SurrenderPolicy</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model</a>
+</div>
+
+<h1>Coverage Summary for Class: SurrenderPolicy (it.polimi.ingsw.galaxytruckers.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">SurrenderPolicy</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.SurrenderCause;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * Interface representing the surrender policy in the game.
+&nbsp; * It defines methods to check if surrender is enabled, request surrender,
+&nbsp; * confirm surrender, and retrieve surrendered ships.
+&nbsp; */
+&nbsp;public interface SurrenderPolicy {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if surrender is enabled in the game.
+&nbsp;     *
+&nbsp;     * @return true if surrender is enabled, false otherwise
+&nbsp;     */
+&nbsp;    boolean isSurrenderEnabled();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests surrender for a given ship board with a specified cause.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board requesting surrender
+&nbsp;     * @param cause the cause of the surrender
+&nbsp;     * @return true if the surrender request is successful, false otherwise
+&nbsp;     */
+&nbsp;    boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Confirms the received surrender requests by removing the surrendered ships
+&nbsp;     * from the flight board.
+&nbsp;     *
+&nbsp;     * @param flightBoard the flight board from which to remove surrendered ships
+&nbsp;     * @return a set of ship boards that have surrendered
+&nbsp;     */
+&nbsp;    Set&lt;ShipBoard&gt; confirmSurrender(FlightBoard flightBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves the set of ship boards that have surrendered.
+&nbsp;     *
+&nbsp;     * @return a set of surrendered ship boards
+&nbsp;     */
+&nbsp;    Set&lt;ShipBoard&gt; getSurrenderedShips();
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

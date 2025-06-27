@@ -1,0 +1,299 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ShipInitializationState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.state</a>
+</div>
+
+<h1>Coverage Summary for Class: ShipInitializationState (it.polimi.ingsw.galaxytruckers.server.model.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ShipInitializationState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (30/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (64/64)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.state;
+&nbsp;
+&nbsp;import com.google.common.annotations.VisibleForTesting;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.Game;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.Cabin;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents the state of the game where players initialize their ship cabins.
+&nbsp; */
+<b class="fc">&nbsp;public non-sealed class ShipInitializationState extends GameState implements GameStateInterface {</b>
+<b class="fc">&nbsp;    private final Map&lt;ShipBoard, Map&lt;CrewType, Set&lt;Point&gt;&gt;&gt; shipRelevantCabins = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;    private final Set&lt;ShipBoard&gt; pendingShipBoards = new HashSet&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;    private final Object lock = new Object();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Signals that the player associated with the ship board is inactive
+&nbsp;     * and that a state transition should occur if all other players
+&nbsp;     * have finished initializing their ships.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board of the player who wants to skip
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void skip(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        synchronized (lock) {</b>
+<b class="fc">&nbsp;            pendingShipBoards.add(shipBoard);</b>
+<b class="fc">&nbsp;            tryStateTransition();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void cancelSkip(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        synchronized (lock) {</b>
+<b class="fc">&nbsp;            pendingShipBoards.remove(shipBoard);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * &lt;p&gt;Changes state to {@link DrawCardState} if no ship has
+&nbsp;     * options to choose from when initializing their cabins&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param game the game to associate with this state
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void setGame(Game game) {
+<b class="fc">&nbsp;        super.setGame(game);</b>
+<b class="fc">&nbsp;        for (ShipBoard shipBoard : game.getShipBoards()) {</b>
+<b class="fc">&nbsp;            shipRelevantCabins.put(shipBoard, new HashMap&lt;&gt;());</b>
+<b class="fc">&nbsp;            Map&lt;CrewType, Set&lt;Point&gt;&gt; crewTypeCabin = shipRelevantCabins.get(shipBoard);</b>
+<b class="fc">&nbsp;            for (Point p : shipBoard.getCabins().keySet()) {</b>
+<b class="fc">&nbsp;                Set&lt;CrewType&gt; availableCrewTypes = shipBoard.getCrewTypeOptions(p);</b>
+<b class="fc">&nbsp;                for (CrewType crewType : availableCrewTypes) {</b>
+<b class="fc">&nbsp;                    if (crewType != CrewType.HUMAN) {</b>
+<b class="fc">&nbsp;                        if (!crewTypeCabin.containsKey(crewType)) {</b>
+<b class="fc">&nbsp;                            crewTypeCabin.put(crewType, new HashSet&lt;&gt;());</b>
+&nbsp;                        }
+<b class="fc">&nbsp;                        crewTypeCabin.get(crewType).add(p);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            if (crewTypeCabin.isEmpty()) {</b>
+<b class="fc">&nbsp;                initHumans(shipBoard, false);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        tryStateTransition();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes a cabin on the ship board with the specified crew type.
+&nbsp;     * Calls {@link ShipBoard#initializeCabin(Point, CrewType)}. Changes state
+&nbsp;     * to {@link DrawCardState} if all ship boards have no more cabins
+&nbsp;     * to initialize
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board initializing the cabin
+&nbsp;     * @param point     the position of the cabin
+&nbsp;     * @param crewType  the type of crew to assign to the cabin
+&nbsp;     * @throws IllegalArgumentException if the specified cabin does not need to be initialized
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void initializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
+<b class="fc">&nbsp;        Map&lt;CrewType, Set&lt;Point&gt;&gt; crewTypeMap = getCrewTypeMap(shipBoard);</b>
+<b class="fc">&nbsp;        if (crewTypeMap != null &amp;&amp; crewTypeMap.containsKey(crewType) &amp;&amp; crewTypeMap.get(crewType).contains(point)) {</b>
+<b class="fc">&nbsp;            shipBoard.initializeCabin(point, crewType);</b>
+<b class="fc">&nbsp;            crewTypeMap.remove(crewType);</b>
+<b class="fc">&nbsp;            if (crewTypeMap.isEmpty()) {</b>
+<b class="fc">&nbsp;                initHumans(shipBoard, true);</b>
+&nbsp;            }
+&nbsp;        } else {
+<b class="fc">&nbsp;            throw new IllegalArgumentException(&quot;The specified cabin does not need to be initialized&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes all empty cabins on the ship board with humans.
+&nbsp;     * Calls {@link ShipBoard#initializeCabin(Point, CrewType)}. Changes state
+&nbsp;     * to {@link DrawCardState} if all ship boards have no more cabins
+&nbsp;     * to initialize
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board of the player that requested the action
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void goNext(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        initHumans(shipBoard, true);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void initHumans(ShipBoard shipBoard, boolean stateTransition) {
+<b class="fc">&nbsp;        Map&lt;Point, Cabin&gt; cabins = shipBoard.getCabins();</b>
+<b class="fc">&nbsp;        cabins.keySet().stream()</b>
+<b class="fc">&nbsp;                .filter(p -&gt; cabins.get(p).getNumResidents() == 0)</b>
+<b class="fc">&nbsp;                .forEach(p -&gt; {</b>
+<b class="fc">&nbsp;                    shipBoard.initializeCabin(p, CrewType.HUMAN);</b>
+&nbsp;                });
+<b class="fc">&nbsp;        synchronized (lock) {</b>
+<b class="fc">&nbsp;            shipRelevantCabins.remove(shipBoard);</b>
+<b class="fc">&nbsp;            if (stateTransition) tryStateTransition();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void tryStateTransition() {
+<b class="fc">&nbsp;        synchronized (lock) {</b>
+<b class="fc">&nbsp;            if (!expired &amp;&amp; (shipRelevantCabins.isEmpty() || pendingShipBoards.containsAll(shipRelevantCabins.keySet()))) {</b>
+<b class="fc">&nbsp;                expired = true;</b>
+<b class="fc">&nbsp;                game.submitStateTransition(() -&gt; {</b>
+<b class="fc">&nbsp;                    pendingShipBoards.forEach(s -&gt; initHumans(s, false));</b>
+<b class="fc">&nbsp;                    game.getEventListener().notifyStartAdventure();</b>
+<b class="fc">&nbsp;                    game.setCurrentState(new DrawCardState());</b>
+&nbsp;                });
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns a copy of the map containing all ship boards and the available
+&nbsp;     * cabin positions for each crew type.
+&nbsp;     *
+&nbsp;     * @return a map where the keys are ship boards and the values are maps
+&nbsp;     * containing crew types and their corresponding cabin positions.
+&nbsp;     */
+&nbsp;    public Map&lt;ShipBoard, Map&lt;CrewType, Set&lt;Point&gt;&gt;&gt; getShipRelevantCabins() {
+<b class="fc">&nbsp;        Map&lt;ShipBoard, Map&lt;CrewType, Set&lt;Point&gt;&gt;&gt; mapCopy = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        synchronized (lock) {</b>
+<b class="fc">&nbsp;            for (ShipBoard ship : shipRelevantCabins.keySet()) {</b>
+<b class="fc">&nbsp;                mapCopy.put(ship, new HashMap&lt;&gt;(shipRelevantCabins.get(ship)));</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return mapCopy;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns a map of crew types and their corresponding cabin positions.
+&nbsp;     * It returns a live reference rather that a copy
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board for which to get the crew type map
+&nbsp;     * @return a map where the keys are crew types and the values are sets of points
+&nbsp;     * representing the cabin positions for that crew type.
+&nbsp;     */
+&nbsp;    public Map&lt;CrewType, Set&lt;Point&gt;&gt; getCrewTypeMap(ShipBoard shipBoard) {
+&nbsp;        Map&lt;CrewType, Set&lt;Point&gt;&gt; res;
+<b class="fc">&nbsp;        synchronized (lock) {</b>
+<b class="fc">&nbsp;            res = shipRelevantCabins.get(shipBoard);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return res;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Should be used for testing purposes only.
+&nbsp;     * @return a set of ship boards that have skipped
+&nbsp;     */
+&nbsp;    @VisibleForTesting
+&nbsp;    public Set&lt;ShipBoard&gt; getPendingShipBoards() {
+&nbsp;        Set&lt;ShipBoard&gt; res;
+<b class="fc">&nbsp;        synchronized (lock) {</b>
+<b class="fc">&nbsp;            res = new HashSet&lt;&gt;(pendingShipBoards);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return res;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,511 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GameEventListener</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model</a>
+</div>
+
+<h1>Coverage Summary for Class: GameEventListener (it.polimi.ingsw.galaxytruckers.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameEventListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (35/35)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (74/74)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.adventureCards.AdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.types.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.SurrenderCause;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.GameState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.DtoConverter;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.GameSnapshot;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.LobbyDetailsDTO;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.ShipBoardDTO;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.EventListener;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.utils.ConversionUtils;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.*;
+&nbsp;import java.util.List;
+&nbsp;import java.util.function.Supplier;
+&nbsp;
+&nbsp;/**
+&nbsp; * This class is responsible for handling game events and notifying the controller.
+&nbsp; * It provides methods to request snapshots, notify various game events, and manage game state updates.
+&nbsp; */
+&nbsp;public class GameEventListener {
+&nbsp;    private final EventListener&lt;LobbyEvent&gt; controllerListener;
+&nbsp;    private final Supplier&lt;LobbyDetailsDTO&gt; lobbyDetailsSupplier;
+<b class="fc">&nbsp;    private Runnable startAdventureCallback = () -&gt; {};</b>
+&nbsp;
+<b class="fc">&nbsp;    public GameEventListener(EventListener&lt;LobbyEvent&gt; controllerListener, Supplier&lt;LobbyDetailsDTO&gt; lobbyDetailsSupplier) {</b>
+<b class="fc">&nbsp;        this.controllerListener = controllerListener;</b>
+<b class="fc">&nbsp;        this.lobbyDetailsSupplier = lobbyDetailsSupplier;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setStartAdventureCallback(Runnable startAdventureCallback) {
+<b class="fc">&nbsp;        this.startAdventureCallback = startAdventureCallback;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests a snapshot of the current game state for the specified ship board.
+&nbsp;     * Generates a {@link GameSnapshotEvent} to retrieve game information (e.g., after a disconnection).
+&nbsp;     *
+&nbsp;     * @param game      the game for which to request the snapshot
+&nbsp;     * @param shipBoard the ship board for which to request the snapshot
+&nbsp;     */
+&nbsp;    public void requestSnapshot(Game game, ShipBoard shipBoard) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new GameSnapshotEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+<b class="fc">&nbsp;                lobbyDetailsSupplier.get(),</b>
+<b class="fc">&nbsp;                getGameSnapshot(game)</b>
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    private GameSnapshot getGameSnapshot(Game game) {
+<b class="fc">&nbsp;        Map&lt;String, ShipBoardDTO&gt; ships = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (ShipBoard s : game.getShipBoards()) {</b>
+<b class="fc">&nbsp;            ships.put(ConversionUtils.convert(s),DtoConverter.getShipBoard(s));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return new GameSnapshot(</b>
+<b class="fc">&nbsp;                DtoConverter.getFlightBoard(game.getFlightBoard()),</b>
+<b class="fc">&nbsp;                DtoConverter.getComplexState(game.getCurrentState()),</b>
+&nbsp;                ships,
+<b class="fc">&nbsp;                (game.getDeck().getCurrentCard() != null)</b>
+<b class="fc">&nbsp;                        ? game.getDeck().getCurrentCard().getId()</b>
+<b class="fc">&nbsp;                        : -1</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    public void notifyStartAdventure() {
+<b class="fc">&nbsp;        startAdventureCallback.run();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a component activation event.
+&nbsp;     * @param shipBoard the ship board where the component is located
+&nbsp;     * @param point the point on the ship board where the component is located
+&nbsp;     * @param active true if the component is activated, false otherwise
+&nbsp;     */
+&nbsp;    public void notifyActivateComponentEvent(ShipBoard shipBoard, Point point, boolean active) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new ActivateComponentEvent(ConversionUtils.convert(shipBoard), point, active));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about an update to the flight board.
+&nbsp;     * @param shipBoard the ship board that has been moved
+&nbsp;     * @param position the position on the flight board where the ship is now located
+&nbsp;     */
+&nbsp;    public void notifyFlightBoardUpdateEvent(ShipBoard shipBoard, int position) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new FlightBoardUpdateEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+&nbsp;                position
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about the flipping of the hourglass.
+&nbsp;     * @param shipBoard the ship board responsible for the hourglass flipping
+&nbsp;     */
+&nbsp;    public void notifyFlipHourglassEvent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new FlipHourglassEvent(ConversionUtils.convert(shipBoard)));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a forecast details request event.
+&nbsp;     * @param shipBoard the ship board that is requesting the forecast details
+&nbsp;     * @param adventureCards the list of adventure cards associated with the forecast
+&nbsp;     */
+&nbsp;    public void notifyForecastDetailsEvent(ShipBoard shipBoard, List&lt;AdventureCard&gt; adventureCards) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new ForecastDetailsEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+<b class="fc">&nbsp;                adventureCards.stream().map(AdventureCard::getId).toList()));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a game end event with final scores.
+&nbsp;     * @param finalScores a map containing the final scores of each ship board
+&nbsp;     */
+&nbsp;    public void notifyGameEndEvent(Map&lt;ShipBoard, Integer&gt; finalScores) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new GameEndEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convertMap(finalScores)</b>
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a game state update event.
+&nbsp;     * @param gameState the current game state
+&nbsp;     */
+&nbsp;    public void notifyGameStateUpdateEvent(GameState gameState) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new GameStateUpdateEvent(</b>
+<b class="fc">&nbsp;                DtoConverter.getState(gameState)</b>
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about the update of a ship board cargo hold.
+&nbsp;     * @param shipBoard the ship board whose cargo hold has been updated
+&nbsp;     * @param point the point on the ship board where the cargo hold is located
+&nbsp;     * @param goodsType the type of goods that have been added or removed
+&nbsp;     * @param add true if goods have been added, false if they have been removed
+&nbsp;     */
+&nbsp;    public void notifyGoodsUpdateEvent(ShipBoard shipBoard, Point point, GoodsType goodsType, boolean add) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new GoodsUpdateEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+&nbsp;                point,
+&nbsp;                goodsType,
+&nbsp;                add
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about that a placed component has been grabbed in the hand.
+&nbsp;     * @param shipBoard the ship board where the component has been placed
+&nbsp;     */
+&nbsp;    public void notifyGrabPlacedComponentEvent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new GrabPlacedComponentEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard)</b>
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about that a stashed component has been grabbed in the hand.
+&nbsp;     * @param shipBoard the ship board where the component has been stashed
+&nbsp;     * @param index the index of the stashed component
+&nbsp;     */
+&nbsp;    public void notifyGrabStashedComponentEvent(ShipBoard shipBoard, int index) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new GrabStashedComponentEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+&nbsp;                index
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about the hourglass ending.
+&nbsp;     */
+&nbsp;    public void notifyHourglassEndEvent() {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new HourglassEndEvent());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a cabin being initialized with a specific crew type.
+&nbsp;     * @param shipBoard the ship board where the cabin is located
+&nbsp;     * @param point the point on the ship board where the cabin is located
+&nbsp;     * @param crewType the type of crew that will occupy the cabin
+&nbsp;     */
+&nbsp;    public void notifyCabinInitializationEvent(ShipBoard shipBoard, Point point, CrewType crewType) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new InitializeCabinEvent(ConversionUtils.convert(shipBoard), point, crewType));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a crew member being lost from a ship board.
+&nbsp;     * @param shipBoard the ship board from which the crew member is lost
+&nbsp;     * @param point the point on the ship board where the crew member was located
+&nbsp;     */
+&nbsp;    public void notifyLoseCrewEvent(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new LoseCrewEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+&nbsp;                point
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a new card being drawn.
+&nbsp;     * @param adventureCard the adventure card that has been drawn
+&nbsp;     */
+&nbsp;    public void notifyNewCardEvent(AdventureCard adventureCard) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new NewCardEvent(</b>
+<b class="fc">&nbsp;                adventureCard.getId()</b>
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about the peeking of a forecast by a player with a specific ship board.
+&nbsp;     * @param shipBoard the ship board of the player who peeked the forecast
+&nbsp;     * @param deckIndex the index of the deck that was peeked
+&nbsp;     */
+&nbsp;    public void notifyPeekForecastEvent(ShipBoard shipBoard, int deckIndex) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new PeekForecastEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+&nbsp;                deckIndex));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about the placement of a component on a ship board.
+&nbsp;     * @param shipBoard the ship board where the component is placed
+&nbsp;     *                  @param orientation the orientation of the component
+&nbsp;     *                                     @param position the position on the ship board where the component is placed
+&nbsp;     */
+&nbsp;    public void notifyPlaceComponentEvent(ShipBoard shipBoard, Direction orientation, Point position) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new PlaceComponentEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+&nbsp;                position,
+&nbsp;                orientation
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a planet being chosen by a player with a specific ship board.
+&nbsp;     * @param shipBoard the ship board of the player who chose the planet
+&nbsp;     *                  @param planetId the ID of the chosen planet
+&nbsp;     *                                  @param nextShipBoard the ship board that will be asked next
+&nbsp;     */
+&nbsp;    public void notifyPlanetChoiceEvent(ShipBoard shipBoard, int planetId, ShipBoard nextShipBoard) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new PlanetChoiceEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+&nbsp;                planetId,
+<b class="fc">&nbsp;                ConversionUtils.convert(nextShipBoard)</b>
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a component being rejected from a ship board.
+&nbsp;     * @param shipBoard the ship board from which the component is rejected
+&nbsp;     */
+&nbsp;    public void notifyRejectComponentEvent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new RejectComponentEvent(ConversionUtils.convert(shipBoard)));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a request to acquire a forecast for a ship board.
+&nbsp;     * @param shipBoard the ship board requesting the forecast
+&nbsp;     * @param deckIndex the index of the deck from which to acquire the forecast
+&nbsp;     */
+&nbsp;    public void notifyReleaseForecastEvent(ShipBoard shipBoard, int deckIndex) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new ReleaseForecastEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard), deckIndex));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a request to remove a component from a ship board at a specific point.
+&nbsp;     * @param shipBoard the ship board from which the component is removed
+&nbsp;     * @param point the point on the ship board where the component is located
+&nbsp;     */
+&nbsp;    public void notifyRemoveComponentEvent(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new RemoveComponentEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+&nbsp;                point
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about the acquisition of a covered component by a player with a specific ship board.
+&nbsp;     * @param shipBoard the ship board of the player acquiring the component
+&nbsp;     * @param component the component being acquired
+&nbsp;     */
+&nbsp;    public void notifyRequestFaceDownComponentEvent(ShipBoard shipBoard, Component component) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new RequestFaceDownComponentEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+<b class="fc">&nbsp;                component.getId()</b>
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about the acquisition of a face-up component by a player with a specific ship board.
+&nbsp;     * @param shipBoard the ship board of the player acquiring the component
+&nbsp;     * @param component the component being acquired
+&nbsp;     */
+&nbsp;    public void notifyRequestFaceUpComponentEvent(ShipBoard shipBoard, Component component) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new RequestFaceUpComponentEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+<b class="fc">&nbsp;                component.getId()</b>
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a ship being broken into sets of connected pieces.
+&nbsp;     * @param shipBoard the ship board that has been broken
+&nbsp;     * @param shipPieces a list of point sets representing the connected pieces of the ship
+&nbsp;     */
+&nbsp;    public void notifyShipNotConnectedEvent(ShipBoard shipBoard, List&lt;Set&lt;Point&gt;&gt; shipPieces) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new ShipNotConnectedEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+&nbsp;                shipPieces
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a ship piece being removed from a ship board.
+&nbsp;     * @param shipBoard the ship board from which the piece is removed
+&nbsp;     * @param pieceIndex the index of the piece being removed
+&nbsp;     */
+&nbsp;    public void notifyShipPieceRemovalEvent(ShipBoard shipBoard, int pieceIndex) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new ShipPieceRemoveEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+&nbsp;                pieceIndex
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a ship acquiring credits
+&nbsp;     * @param shipBoard the ship board acquiring the credits
+&nbsp;     * @param value the number of credits acquired
+&nbsp;     */
+&nbsp;    public void notifyGrabCreditsEvent(ShipBoard shipBoard, int value) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new GrabCreditsEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard),</b>
+&nbsp;                value
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about the stashing of the current component by a player with a specific ship board.
+&nbsp;     * @param shipBoard the ship board of the player stashing the component
+&nbsp;     */
+&nbsp;    public void notifyStashComponentEvent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new StashComponentEvent(ConversionUtils.convert(shipBoard)));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about the surrender of some players with specific ship boards.
+&nbsp;     * @param ships the list of ship boards that have surrendered
+&nbsp;     */
+&nbsp;    public void notifySurrenderEvent(List&lt;ShipBoard&gt; ships) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new SurrenderEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convertCollection(ships, ArrayList::new)</b>
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a surrender request event for a specific ship board.
+&nbsp;     * @param shipBoard the ship board requesting surrender
+&nbsp;     * @param cause the cause of the surrender
+&nbsp;     */
+&nbsp;    public void notifySurrenderRequestEvent(ShipBoard shipBoard, SurrenderCause cause) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new SurrenderRequestEvent(ConversionUtils.convert(shipBoard), cause));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a ship board update event.
+&nbsp;     * @param shipBoard the ship board that has been updated
+&nbsp;     */
+&nbsp;    public void notifyUseBatteryEvent(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new UseBatteryEvent(ConversionUtils.convert(shipBoard), point));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about a ship board validation event.
+&nbsp;     * @param shipBoard the ship board that is being validated
+&nbsp;     */
+&nbsp;    public void notifyValidateShipEvent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new ValidateShipEvent(</b>
+<b class="fc">&nbsp;                ConversionUtils.convert(shipBoard)</b>
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the controller about the update of the current player.
+&nbsp;     * @param shipBoard the ship board of the current player
+&nbsp;     */
+&nbsp;    public void notifyCurrentPlayerUpdateEvent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        controllerListener.notifyEvent(new CurrentPlayerUpdateEvent(ConversionUtils.convert(shipBoard)));</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

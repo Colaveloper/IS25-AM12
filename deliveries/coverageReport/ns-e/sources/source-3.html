@@ -1,0 +1,181 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliAdventureScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: CliAdventureScreen (it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliAdventureScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.DescriptionUtils;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliAdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.AdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.AdventureState;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract base class for all CLI screens in the adventure phase of the game.
+&nbsp; * Provides common functionality for adventure-related screens including turn management,
+&nbsp; * ship board tracking, and adventure card display.
+&nbsp; */
+&nbsp;public abstract class CliAdventureScreen extends CliScreen{
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Flag indicating whether it is the current player&#39;s turn.
+&nbsp;     */
+&nbsp;    protected final boolean isMyTurn;
+&nbsp;    /**
+&nbsp;     * Flag indicating whether the player has surrendered and is out of the game.
+&nbsp;     */
+&nbsp;    protected final boolean imOut;
+&nbsp;    /**
+&nbsp;     * The ship board of the current player.
+&nbsp;     */
+&nbsp;    protected final ShipBoard currentShip;
+&nbsp;    /**
+&nbsp;     * The current adventure card being played.
+&nbsp;     */
+&nbsp;    protected final CliAdventureCard currentAdventureCard;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new adventure screen with the given game state.
+&nbsp;     * Initializes the screen with the current player&#39;s ship status,
+&nbsp;     * turn information, and active adventure card.
+&nbsp;     *
+&nbsp;     * @param model The client model containing the current game state
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     * @param gameState The current adventure phase state
+&nbsp;     */
+&nbsp;    public CliAdventureScreen(ClientModel model, ClientControllerInterface controller, AdventureState gameState) {
+<b class="fc">&nbsp;        super(model, controller, gameState);</b>
+<b class="fc">&nbsp;        imOut = gameState.getImOut();   //if player surrendered</b>
+<b class="fc">&nbsp;        currentShip = gameState.getShipBoard(); // ship of the current player playing</b>
+<b class="pc">&nbsp;        isMyTurn = currentShip == myShipBoard;</b>
+<b class="fc">&nbsp;        AdventureCard adventureCard = model.getGame().getCurrentCard();</b>
+<b class="pc">&nbsp;        if(adventureCard != null) this.currentAdventureCard = new CliAdventureCard(adventureCard);</b>
+<b class="fc">&nbsp;        else this.currentAdventureCard = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Generates a formatted description of the current adventure card.
+&nbsp;     * Creates a bordered display with the card&#39;s description and title.
+&nbsp;     *
+&nbsp;     * @return A list of strings containing the formatted card description
+&nbsp;     */
+&nbsp;    protected List&lt;String&gt; printCurrentCard() {
+<b class="nc">&nbsp;        return DescriptionUtils.borderAndTitle(currentAdventureCard.getDescription(), &quot;Current card&quot;);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

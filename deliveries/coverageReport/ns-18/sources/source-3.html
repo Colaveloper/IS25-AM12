@@ -1,0 +1,327 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RemoteController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.network.server.rmi</a>
+</div>
+
+<h1>Coverage Summary for Class: RemoteController (it.polimi.ingsw.galaxytruckers.network.server.rmi)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">RemoteController</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.network.server.rmi;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.VirtualServer;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.rmi.Remote;
+&nbsp;import java.rmi.RemoteException;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;/**
+&nbsp; * Remote interface for the controller, allowing remote method invocation (RMI).
+&nbsp; * This interface defines methods that can be called by clients to interact with the game.
+&nbsp; */
+&nbsp;public interface RemoteController extends Remote {
+&nbsp;    /**
+&nbsp;     * Pings the server to check if it is reachable.
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void ping() throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#requestNewGame(Level, int)}.
+&nbsp;     *
+&nbsp;     * @param level the game level
+&nbsp;     * @param numPlayers the number of players
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void newGame(Level level, int numPlayers) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#joinLobby(UUID)}.
+&nbsp;     *
+&nbsp;     * @param lobbyID the UUID of the lobby to join
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void joinLobby(UUID lobbyID) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#leaveLobby()}.
+&nbsp;     *
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void leaveLobby() throws RemoteException;
+&nbsp;
+&nbsp;    // void chooseColor(GameColor color) throws RemoteException;
+&nbsp;
+&nbsp;    // Ship building
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#requestRandComponent()}.
+&nbsp;     *
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void requestRandComponent() throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#requestComponent(int)}.
+&nbsp;     *
+&nbsp;     * @param componentID the id of the component to request
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void requestComponent(int componentID) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#rejectComponent()}.
+&nbsp;     *
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void rejectComponent() throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#stashComponent()}.
+&nbsp;     *
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void stashComponent() throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#grabPlacedComponent()}.
+&nbsp;     *
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void grabPlacedComponent() throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#grabStashedComponent(int)}.
+&nbsp;     *
+&nbsp;     * @param index the index of the stashed component to grab
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void grabStashedComponent(int index) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#placeComponent(Point, Direction)}.
+&nbsp;     *
+&nbsp;     * @param point the coordinates where the component should be placed
+&nbsp;     * @param orientation the direction the component should face
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void placeComponent(Point point, Direction orientation) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#flipHourglass()}.
+&nbsp;     *
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void flipHourglass() throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#placeShipOnFlightBoard(int)}.
+&nbsp;     *
+&nbsp;     * @param startingPosition the position on the flight board where the ship should be placed
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void placeShipOnFlightBoard(int startingPosition) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#placeShipOnFlightBoard()}.
+&nbsp;     *
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void placeShipOnFlightBoard() throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#acquireForecast(int)}.
+&nbsp;     *
+&nbsp;     * @param deckIndex the index of the deck to view the forecast from
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void acquireForecast(int deckIndex) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#releaseForecast()}.
+&nbsp;     *
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void releaseForecast() throws RemoteException;
+&nbsp;
+&nbsp;    // Ship validity check
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#removeComponent(Point)}.
+&nbsp;     *
+&nbsp;     * @param point the coordinates of the component to remove
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void removeComponent(Point point) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#chooseShipPiece(int)}.
+&nbsp;     *
+&nbsp;     * @param pieceIndex the index of the piece to choose
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void chooseShipPiece(int pieceIndex) throws RemoteException;
+&nbsp;
+&nbsp;    // Ship init
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#initializeCabin(Point, CrewType)}.
+&nbsp;     *
+&nbsp;     * @param point the coordinates where the cabin should be placed
+&nbsp;     * @param crewType the type of crew to place in the cabin
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void initializeCabin(Point point, CrewType crewType) throws RemoteException;
+&nbsp;
+&nbsp;    // Adventure
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#drawCard()}.
+&nbsp;     *
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void drawCard() throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#activateComponent(Point)}.
+&nbsp;     *
+&nbsp;     * @param point the coordinates of the component to activate
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void activateComponent(Point point) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#loseCrew(Point)}.
+&nbsp;     *
+&nbsp;     * @param point the coordinates where the crew is lost
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void loseCrew(Point point) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#grabReward()}.
+&nbsp;     *
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void grabReward() throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#placeGoods(Point, GoodsType)}.
+&nbsp;     *
+&nbsp;     * @param point the coordinates where the goods should be placed
+&nbsp;     * @param goodsType the type of goods to place
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void placeGoods(Point point, GoodsType goodsType) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#removeGoods(Point, GoodsType)}.
+&nbsp;     *
+&nbsp;     * @param point the coordinates from which to remove the goods
+&nbsp;     * @param goodsType the type of goods to remove
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void removeGoods(Point point, GoodsType goodsType) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#loseGoods(Point)}.
+&nbsp;     *
+&nbsp;     * @param point the coordinates where the goods are lost
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void loseGoods(Point point) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#useBattery(Point)}.
+&nbsp;     *
+&nbsp;     * @param point the coordinates of the battery to use
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void useBattery(Point point) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#choosePlanet(int)}.
+&nbsp;     *
+&nbsp;     * @param choice the index of the chosen planet
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void choosePlanet(int choice) throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#goNext()}.
+&nbsp;     *
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void goNext() throws RemoteException;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#giveUp()}.
+&nbsp;     *
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    void giveUp() throws RemoteException;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

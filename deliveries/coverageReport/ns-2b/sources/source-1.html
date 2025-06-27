@@ -1,0 +1,188 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > JsonUtils</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.shared.utils</a>
+</div>
+
+<h1>Coverage Summary for Class: JsonUtils (it.polimi.ingsw.galaxytruckers.shared.utils)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">JsonUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (6/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.2%
+  </span>
+  <span class="absValue">
+    (20/21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.shared.utils;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.databind.JsonNode;
+&nbsp;import com.fasterxml.jackson.databind.ObjectMapper;
+&nbsp;import com.fasterxml.jackson.databind.module.SimpleModule;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.Connector;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.ShipBoardDTO;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.utils.json.PointKeyDeserializer;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.utils.json.PointSerializer;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;/**
+&nbsp; * Utility class for JSON-related operations in the Galaxy Truckers project.
+&nbsp; * Provides helper methods to convert JSON nodes to model objects.
+&nbsp; */
+<b class="nc">&nbsp;public class JsonUtils {</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a JSON array node representing connectors into a map of directions to connectors.
+&nbsp;     * The order of connectors in the array is assumed to be [UP, LEFT, DOWN, RIGHT].
+&nbsp;     *
+&nbsp;     * @param connectorNode the JSON node containing connector information as an array
+&nbsp;     * @return a map associating each direction with its corresponding connector
+&nbsp;     */
+&nbsp;    public static Map&lt;Direction, Connector&gt; nodeToConnector(JsonNode connectorNode) {
+<b class="fc">&nbsp;        Direction[] directions = {Direction.UP, Direction.LEFT, Direction.DOWN, Direction.RIGHT};</b>
+<b class="fc">&nbsp;        Map&lt;Direction, Connector&gt; connectors = new HashMap&lt;&gt;();</b>
+<b class="pc">&nbsp;        if(connectorNode != null &amp;&amp; connectorNode.isArray()) {</b>
+<b class="pc">&nbsp;            for (int i = 0; i &lt; directions.length &amp;&amp; i &lt; connectorNode.size(); i++) {</b>
+<b class="fc">&nbsp;                connectors.put(</b>
+&nbsp;                        directions[i],
+<b class="fc">&nbsp;                        Connector.valueOf(</b>
+<b class="fc">&nbsp;                                connectorNode.get(i).asText().toUpperCase()</b>
+&nbsp;                        )
+&nbsp;                );
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        return connectors;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // old implementation
+&nbsp;
+&nbsp;//    List&lt;Connector&gt; connectors = new ArrayList&lt;&gt;();
+&nbsp;//        if(connectorNode != null &amp;&amp; connectorNode.isArray()){
+&nbsp;//        for (JsonNode conn : connectorNode){
+&nbsp;//            connectors.add(Connector.valueOf(conn.asText().toUpperCase())); //convert string to enum
+&nbsp;//        }
+&nbsp;//    }
+&nbsp;//        return connectors;
+&nbsp;
+&nbsp;    public static JsonNode serializeShipBoardDTO(ShipBoardDTO shipBoardDTO) {
+<b class="fc">&nbsp;        ObjectMapper mapper = new ObjectMapper();</b>
+<b class="fc">&nbsp;        SimpleModule module = new SimpleModule();</b>
+<b class="fc">&nbsp;        module.addKeySerializer(Point.class, new PointSerializer());</b>
+<b class="fc">&nbsp;        module.addKeyDeserializer(Point.class, new PointKeyDeserializer());</b>
+<b class="fc">&nbsp;        mapper.registerModule(module);</b>
+<b class="fc">&nbsp;        return mapper.valueToTree(shipBoardDTO);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static ShipBoardDTO deserializeShipBoardDTO(JsonNode shipBoardDTO) {
+<b class="fc">&nbsp;        ObjectMapper mapper = new ObjectMapper();</b>
+<b class="fc">&nbsp;        SimpleModule module = new SimpleModule();</b>
+<b class="fc">&nbsp;        module.addKeySerializer(Point.class, new PointSerializer());</b>
+<b class="fc">&nbsp;        module.addKeyDeserializer(Point.class, new PointKeyDeserializer());</b>
+<b class="fc">&nbsp;        mapper.registerModule(module);</b>
+<b class="fc">&nbsp;        return mapper.convertValue(shipBoardDTO, ShipBoardDTO.class);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

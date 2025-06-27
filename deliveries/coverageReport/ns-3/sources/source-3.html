@@ -1,0 +1,407 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ClientEventHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: ClientEventHandler (it.polimi.ingsw.galaxytruckers.client.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClientEventHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (3/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65.1%
+  </span>
+  <span class="absValue">
+    (41/63)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    68.1%
+  </span>
+  <span class="absValue">
+    (111/163)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.controller;
+&nbsp;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.states.ComplexStateDTO;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.states.StateDTO;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.types.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.types.Event;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.EventHandler;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.AdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.*;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.*;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Handles events received from the server and updates the client model accordingly.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class implements the {@link EventHandler} interface for {@link Event} types. It processes various
+&nbsp; * game events, converting data as needed and notifying the {@link ClientModel} and related classes to update
+&nbsp; * the client-side state. The handler uses a {@link PlayerRegistry} and {@link ConversionUtils} to map player
+&nbsp; * names and data between server and client representations.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public class ClientEventHandler implements EventHandler&lt;Event&gt; {
+&nbsp;    private final ClientController controller;
+&nbsp;    private final ClientModel clientModel;
+&nbsp;    private final PlayerRegistry playerRegistry;
+&nbsp;    private final ConversionUtils conversionUtils;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a ClientEventHandler with the given client model and player registry.
+&nbsp;     *
+&nbsp;     * @param clientController the controller for client-side operations
+&nbsp;     * @param clientModel      the client-side model to update
+&nbsp;     * @param playerRegistry   the registry for player information
+&nbsp;     */
+<b class="fc">&nbsp;    public ClientEventHandler(ClientController clientController, ClientModel clientModel, PlayerRegistry playerRegistry) {</b>
+<b class="fc">&nbsp;        this.controller = clientController;</b>
+<b class="fc">&nbsp;        this.clientModel = clientModel;</b>
+<b class="fc">&nbsp;        this.playerRegistry = playerRegistry;</b>
+<b class="fc">&nbsp;        this.conversionUtils = new ConversionUtils(playerRegistry);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handles the {@code ModelEvent} passed as the argument, updating all
+&nbsp;     * affected classes.
+&nbsp;     *
+&nbsp;     * @param event the event to be handled
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void handleEvent(Event event) {
+<b class="pc">&nbsp;        switch (event) {</b>
+<b class="fc">&nbsp;            case ActivateComponentEvent activateComponentEvent -&gt; clientModel.notifyActivateComponent(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(activateComponentEvent.playerName()),</b>
+<b class="fc">&nbsp;                    activateComponentEvent.point()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case FlightBoardUpdateEvent flightBoardUpdateEvent -&gt; clientModel.notifyFlightBoardPosition(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(flightBoardUpdateEvent.playerName()),</b>
+<b class="fc">&nbsp;                    flightBoardUpdateEvent.position()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case FlipHourglassEvent flipHourglassEvent -&gt; clientModel.notifyFlipHourglass(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(flipHourglassEvent.playerName())</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case ForecastDetailsEvent forecastDetailsEvent -&gt; clientModel.setForecastDeck(</b>
+<b class="fc">&nbsp;                    forecastDetailsEvent.forecastDeckIds().stream()</b>
+<b class="fc">&nbsp;                            .map(id -&gt; AdventureCardRegistry.getInstance().getCard(id))</b>
+<b class="fc">&nbsp;                            .toList()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case GameEndEvent gameEndEvent -&gt; {</b>
+<b class="fc">&nbsp;                clientModel.setFinalScores(</b>
+<b class="fc">&nbsp;                        conversionUtils.convertPlayerMap(gameEndEvent.playerToScore())</b>
+&nbsp;                );
+<b class="fc">&nbsp;                clientModel.setMetaState(MetaState.ENDGAME);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case GoodsUpdateEvent goodsUpdateEvent -&gt; {</b>
+<b class="fc">&nbsp;                if (goodsUpdateEvent.add()) {</b>
+<b class="fc">&nbsp;                    clientModel.notifyPlaceGoods(</b>
+<b class="fc">&nbsp;                            conversionUtils.convertName(goodsUpdateEvent.playerName()),</b>
+<b class="fc">&nbsp;                            goodsUpdateEvent.point(),</b>
+<b class="fc">&nbsp;                            goodsUpdateEvent.goodsType()</b>
+&nbsp;                    );
+&nbsp;                } else {
+<b class="fc">&nbsp;                    clientModel.notifyRemoveGoods(</b>
+<b class="fc">&nbsp;                            conversionUtils.convertName(goodsUpdateEvent.playerName()),</b>
+<b class="fc">&nbsp;                            goodsUpdateEvent.point(),</b>
+<b class="fc">&nbsp;                            goodsUpdateEvent.goodsType()</b>
+&nbsp;                    );
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            case GrabStashedComponentEvent grabStashedComponentEvent -&gt; clientModel.notifyGrabStashedComponent(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(grabStashedComponentEvent.playerName()),</b>
+<b class="fc">&nbsp;                    grabStashedComponentEvent.index()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case HourglassEndEvent _ -&gt; clientModel.notifyHourglassEnd();</b>
+<b class="fc">&nbsp;            case InitializeCabinEvent initializeCabinEvent -&gt; clientModel.notifyInitializeCabin(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(initializeCabinEvent.playerName()),</b>
+<b class="fc">&nbsp;                    initializeCabinEvent.point(),</b>
+<b class="fc">&nbsp;                    initializeCabinEvent.crewType()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case JoinLobbyEvent joinLobbyEvent -&gt; clientModel.addPlayer(</b>
+<b class="fc">&nbsp;                    playerRegistry.addPlayer(joinLobbyEvent.playerName()),</b>
+<b class="fc">&nbsp;                    joinLobbyEvent.color()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case LobbyDetailsEvent lobbyDetailsEvent -&gt; {</b>
+<b class="fc">&nbsp;                LobbyDetailsDTO details = lobbyDetailsEvent.details();</b>
+<b class="fc">&nbsp;                setupLobby(details,true);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case NewCardEvent newCardEvent -&gt; clientModel.notifyDrawCard(</b>
+<b class="fc">&nbsp;                    AdventureCardRegistry.getInstance().getCard(newCardEvent.cardId())</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case PeekForecastEvent peekForecastEvent -&gt; clientModel.notifyPeekForecast(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(peekForecastEvent.playerName()),</b>
+<b class="fc">&nbsp;                    peekForecastEvent.forecastIndex()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case PlaceComponentEvent placeComponentEvent -&gt; clientModel.notifyPlaceComponent(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(placeComponentEvent.playerName()),</b>
+<b class="fc">&nbsp;                    placeComponentEvent.position(),</b>
+<b class="fc">&nbsp;                    placeComponentEvent.rotation()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case PlanetChoiceEvent planetChoiceEvent -&gt; clientModel.notifyChoosePlanet(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(planetChoiceEvent.playerName()),</b>
+<b class="fc">&nbsp;                    planetChoiceEvent.planetIndex(),</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(planetChoiceEvent.nextPlayerName())</b>
+&nbsp;            );
+<b class="nc">&nbsp;            case PlayerDisconnectionEvent playerDisconnectionEvent -&gt; {</b>
+<b class="nc">&nbsp;                    controller.reportError(&quot;Player &quot; + playerDisconnectionEvent.playerName() + &quot; has disconnected.&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case PlayerExitEvent playerExitEvent -&gt; {</b>
+<b class="nc">&nbsp;                    controller.reportError(&quot;Player &quot; + playerExitEvent.playerName() + &quot; has left the game.&quot;);</b>
+<b class="nc">&nbsp;                    controller.clearModel();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case RejectComponentEvent rejectComponentEvent -&gt; clientModel.notifyRejectComponent(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(rejectComponentEvent.playerName())</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case ReleaseForecastEvent releaseForecastEvent -&gt; clientModel.notifyReleaseForecast(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(releaseForecastEvent.playerName())</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case RemoveComponentEvent removeComponentEvent -&gt; clientModel.notifyRemoveComponent(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(removeComponentEvent.playerName()),</b>
+<b class="fc">&nbsp;                    removeComponentEvent.point()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case RequestFaceDownComponentEvent requestFaceDownComponentEvent -&gt; clientModel.notifyRequestRandComponent(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(requestFaceDownComponentEvent.playerName()),</b>
+<b class="fc">&nbsp;                    ComponentRegistry.getInstance().getComponent(requestFaceDownComponentEvent.componentId())</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case RequestFaceUpComponentEvent requestFaceUpComponentEvent -&gt; clientModel.notifyRequestComponent(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(requestFaceUpComponentEvent.playerName()),</b>
+<b class="fc">&nbsp;                    ComponentRegistry.getInstance().getComponent(requestFaceUpComponentEvent.componentId())</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case ShipNotConnectedEvent shipNotConnectedEvent -&gt; clientModel.notifyShipNotConnected(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(shipNotConnectedEvent.playerName()),</b>
+<b class="fc">&nbsp;                    shipNotConnectedEvent.shipPieces()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case ShipPieceRemoveEvent shipPieceRemoveEvent -&gt; clientModel.notifyChooseShipPiece(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(shipPieceRemoveEvent.playerName()),</b>
+<b class="fc">&nbsp;                    shipPieceRemoveEvent.index()</b>
+&nbsp;            );
+<b class="nc">&nbsp;            case GrabCreditsEvent grabCreditsEvent -&gt; clientModel.notifyGrabCredits(</b>
+<b class="nc">&nbsp;                    conversionUtils.convertName(grabCreditsEvent.playerName()),</b>
+<b class="nc">&nbsp;                    grabCreditsEvent.value()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case StashComponentEvent stashComponentEvent -&gt; clientModel.notifyStashComponent(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(stashComponentEvent.playerName())</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case SurrenderEvent surrenderEvent -&gt;</b>
+<b class="fc">&nbsp;                    clientModel.notifySurrenderShip(</b>
+<b class="fc">&nbsp;                            conversionUtils.convertCollection(surrenderEvent.playerNames(), HashSet::new)</b>
+&nbsp;                    );
+<b class="fc">&nbsp;            case UseBatteryEvent useBatteryEvent -&gt; clientModel.notifyUseBattery(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(useBatteryEvent.playerName()),</b>
+<b class="fc">&nbsp;                    useBatteryEvent.point()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case ValidateShipEvent validateShipEvent -&gt; clientModel.notifyShipValidated(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(validateShipEvent.playerName())</b>
+&nbsp;            );
+<b class="nc">&nbsp;            case GameStateUpdateEvent gameStateUpdateEvent -&gt; updateGameState(gameStateUpdateEvent.stateDTO());</b>
+<b class="fc">&nbsp;            case LoseCrewEvent loseCrewEvent -&gt; clientModel.notifyLoseCrew(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(loseCrewEvent.playerName()),</b>
+<b class="fc">&nbsp;                    loseCrewEvent.point()</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case AddActiveLobbyEvent addActiveLobbyEvent -&gt; {</b>
+<b class="fc">&nbsp;                ActiveLobbyDTO lobby = addActiveLobbyEvent.newLobby();</b>
+<b class="fc">&nbsp;                clientModel.notifyNewLobby(new Lobby(lobby.id(), lobby.numPlayers(), lobby.level(), lobby.host()));</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case RemoveActiveLobbyEvent removeActiveLobbyEvent -&gt; clientModel.notifyRemoveLobby(removeActiveLobbyEvent.lobbyId());</b>
+<b class="fc">&nbsp;            case SetActiveLobbiesEvent setActiveLobbyEvent -&gt; {</b>
+<b class="fc">&nbsp;                clientModel.setPlayer(playerRegistry.addPlayer(setActiveLobbyEvent.playerName()));</b>
+<b class="fc">&nbsp;                for(ActiveLobbyDTO lobby : setActiveLobbyEvent.activeLobbies()) {</b>
+<b class="fc">&nbsp;                    clientModel.notifyNewLobby(new Lobby(lobby.id(), lobby.numPlayers(), lobby.level(), lobby.host()));</b>
+&nbsp;                }
+<b class="pc">&nbsp;                if (!setActiveLobbyEvent.reconnect()) clientModel.setMetaState(MetaState.JOINORCREATE);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case CurrentPlayerUpdateEvent currentPlayerUpdateEvent -&gt; clientModel.notifyCurrentPlayerUpdate(</b>
+<b class="fc">&nbsp;                    conversionUtils.convertName(currentPlayerUpdateEvent.playerName())</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case SurrenderRequestEvent surrenderRequestEvent -&gt; clientModel.notifySurrenderRequest(</b>
+<b class="fc">&nbsp;                    playerRegistry.getByNickname(surrenderRequestEvent.playerName())</b>
+&nbsp;            );
+<b class="fc">&nbsp;            case GrabPlacedComponentEvent grabPlacedComponentEvent -&gt; {</b>
+<b class="fc">&nbsp;                clientModel.notifyGrabPlacedComponent(</b>
+<b class="fc">&nbsp;                        conversionUtils.convertName(grabPlacedComponentEvent.playerName())</b>
+&nbsp;                );
+&nbsp;            }
+<b class="nc">&nbsp;            case GameSnapshotEvent gameSnapshotEvent -&gt; {</b>
+<b class="nc">&nbsp;                LobbyDetailsDTO details = gameSnapshotEvent.lobbyDetails();</b>
+<b class="nc">&nbsp;                GameSnapshot gameSnapshot = gameSnapshotEvent.gameSnapshot();</b>
+<b class="nc">&nbsp;                if (gameSnapshot != null) {</b>
+&nbsp;                    //Set lobby details
+<b class="nc">&nbsp;                    setupLobby(details,false);</b>
+&nbsp;
+<b class="nc">&nbsp;                    Game game = clientModel.getGame();</b>
+&nbsp;                    //Set FlightBoard
+<b class="nc">&nbsp;                    Map&lt;String,Integer&gt; playerToPlace = gameSnapshot.flightBoardDTO().playerToPlace();</b>
+<b class="nc">&nbsp;                    game.getFlightBoard().setShipToPlace(conversionUtils.convertMap(playerToPlace));</b>
+&nbsp;
+&nbsp;                    //Set Ships
+<b class="nc">&nbsp;                    Map&lt;String, ShipBoardDTO&gt; ships = gameSnapshot.ships();</b>
+<b class="nc">&nbsp;                    for (String nickname : ships.keySet()) {</b>
+<b class="nc">&nbsp;                        ShipBoardDTO ship = ships.get(nickname);</b>
+<b class="nc">&nbsp;                        ShipBoard shipBoard = conversionUtils.convertName(nickname);</b>
+&nbsp;                        //Set ComponentMap
+<b class="nc">&nbsp;                        Map&lt;Point, Component&gt; componentMap = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;                        Map&lt;Point, ComponentDTO&gt; componentDTOMap = ship.componentMap();</b>
+<b class="nc">&nbsp;                        for (Point point : componentDTOMap.keySet()) {</b>
+<b class="nc">&nbsp;                            componentMap.put(point,conversionUtils.convertComponent(componentDTOMap.get(point)));</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                        shipBoard.setComponentMap(componentMap);</b>
+&nbsp;                        //Set hand
+<b class="nc">&nbsp;                        Component lastComponent = (ship.lastComponent() != -1)</b>
+<b class="nc">&nbsp;                                ? ComponentRegistry.getInstance().getComponent(ship.lastComponent())</b>
+<b class="nc">&nbsp;                                : null;</b>
+<b class="nc">&nbsp;                        Point lastPosition = ship.lastPosition();</b>
+<b class="nc">&nbsp;                        shipBoard.setHand(lastComponent,lastPosition);</b>
+&nbsp;                        //Set stash
+<b class="nc">&nbsp;                        List&lt;Component&gt; stashedComponents = ship.stashedComponents().stream()</b>
+<b class="nc">&nbsp;                                .map(id -&gt; ComponentRegistry.getInstance().getComponent(id))</b>
+<b class="nc">&nbsp;                                .toList();</b>
+<b class="nc">&nbsp;                        shipBoard.setStashedComponents(stashedComponents);</b>
+&nbsp;                        //Set Stats
+<b class="nc">&nbsp;                        shipBoard.setCredits(ship.credits());</b>
+<b class="nc">&nbsp;                        shipBoard.setLosses(ship.losses());</b>
+&nbsp;                    }
+&nbsp;
+&nbsp;                    //Set current card
+<b class="nc">&nbsp;                    AdventureCard adventureCard = (gameSnapshot.currentCardId() != -1)</b>
+<b class="nc">&nbsp;                            ? AdventureCardRegistry.getInstance().getCard(gameSnapshot.currentCardId())</b>
+<b class="nc">&nbsp;                            : null;</b>
+<b class="nc">&nbsp;                    clientModel.getGame().setCurrentCard(adventureCard);</b>
+&nbsp;
+&nbsp;                    //Set Game State
+<b class="nc">&nbsp;                    updateGameState(gameSnapshot.state());</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    setupLobby(details,true);</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            case EndByDisconnectionEvent endByDisconnectionEvent -&gt; {</b>
+<b class="nc">&nbsp;                controller.reportError(&quot;The game has ended because all other players disconnected.&quot;);</b>
+<b class="nc">&nbsp;                clientModel.clearGame();</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void setupLobby(LobbyDetailsDTO details, boolean setMetaState) {
+<b class="fc">&nbsp;        clientModel.createGame(details.level());</b>
+<b class="fc">&nbsp;        for (String name : details.playerColors().keySet()) {</b>
+<b class="fc">&nbsp;            clientModel.addPlayer(playerRegistry.addPlayer(name), details.playerColors().get(name));</b>
+&nbsp;        }
+<b class="pc">&nbsp;        if (setMetaState) clientModel.setMetaState(MetaState.INLOBBY);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void updateGameState(StateDTO stateDTO) {
+<b class="nc">&nbsp;        GameState gameState = conversionUtils.getGameState(stateDTO,clientModel);</b>
+<b class="nc">&nbsp;        if (gameState == null) System.err.println(&quot;GameState is null&quot;);</b>
+&nbsp;        else {
+<b class="nc">&nbsp;            clientModel.notifyCurrentState(gameState);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void updateGameState(ComplexStateDTO complexStateDTO) {
+<b class="nc">&nbsp;        GameState state = conversionUtils.getGameState(complexStateDTO,clientModel);</b>
+<b class="nc">&nbsp;        if (state == null) System.err.println(&quot;GameState is null&quot;);</b>
+&nbsp;        else {
+<b class="nc">&nbsp;            clientModel.notifyCurrentState(state);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

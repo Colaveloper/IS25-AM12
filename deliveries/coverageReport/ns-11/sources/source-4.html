@@ -1,0 +1,401 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiCorrectionScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiCorrectionScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiCorrectionScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/40)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/85)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GuiCorrectionScreen$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/17)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/48)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/102)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements.GuiHighlights;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.ShipCorrectionState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.StateActions;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.geometry.Pos;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.layout.VBox;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.stream.IntStream;
+&nbsp;
+&nbsp;/**
+&nbsp; * Screen for the ship correction phase of the game.
+&nbsp; * This screen is displayed when players need to fix issues with their ship construction,
+&nbsp; * either due to invalid component placement or disconnected ship pieces.
+&nbsp; * Players can select which ship piece to keep or which components to remove to fix their ship.
+&nbsp; */
+&nbsp;public class GuiCorrectionScreen extends GuiGameScreen {
+&nbsp;    private final List&lt;Set&lt;Point&gt;&gt; shipPieces;
+&nbsp;    private boolean shipValid;
+&nbsp;    private boolean shipBroken;
+&nbsp;    private Point selectedPoint;
+&nbsp;    private Integer selectedPieceIndex;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a GuiCorrectionScreen with the specified model, controller, and correction state.
+&nbsp;     * Initializes the screen based on the current state of the player&#39;s ship,
+&nbsp;     * displaying appropriate messages and controls based on whether the ship is valid,
+&nbsp;     * broken (disconnected), or has invalid component placement.
+&nbsp;     *
+&nbsp;     * @param model The client model containing all game data
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     * @param state The current ship correction state
+&nbsp;     */
+&nbsp;    public GuiCorrectionScreen(ClientModel model, ClientControllerInterface controller, ShipCorrectionState state) {
+<b class="nc">&nbsp;        super(model, controller, state);</b>
+<b class="nc">&nbsp;        this.shipPieces = new ArrayList&lt;&gt;(state.getShipPieces().getOrDefault(model.getMyShip(), Collections.emptyList()));</b>
+<b class="nc">&nbsp;        this.shipValid = state.getValidShipBoards().contains(model.getMyShip());</b>
+<b class="nc">&nbsp;        this.shipBroken = false;</b>
+<b class="nc">&nbsp;        this.selectedPoint = null;</b>
+<b class="nc">&nbsp;        this.selectedPieceIndex = null;</b>
+&nbsp;
+<b class="nc">&nbsp;        if (shipValid) {</b>
+<b class="nc">&nbsp;            shipBroken = state.getShipPieces().containsKey(model.getMyShip());</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        for (ShipBoard ship : state.getShipPieces().keySet()) {</b>
+<b class="nc">&nbsp;            shipNotConnected(ship, state.getShipPieces().get(ship));</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        String message;
+<b class="nc">&nbsp;        if (shipBroken) {</b>
+<b class="nc">&nbsp;            message = &quot;Your ship is broken. Choose a piece to keep by clicking on any component in that piece.&quot;;</b>
+<b class="nc">&nbsp;        } else if (!shipValid) {</b>
+<b class="nc">&nbsp;            message = &quot;Your ship has invalid component positioning. Click on a component to remove it.&quot;;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            message = &quot;Your ship is valid. Wait for other players to correct their ships.&quot;;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        guiLog.log(message);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Displays a confirmation button with the specified message.
+&nbsp;     * This method is called when the player needs to confirm a selection
+&nbsp;     * or action during the ship correction process.
+&nbsp;     *
+&nbsp;     * @param message The message to display with the confirmation button
+&nbsp;     */
+&nbsp;    private void showConfirmationButton(String message) {
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc">&nbsp;            guiLog.getChildren().clear();</b>
+&nbsp;
+<b class="nc">&nbsp;            VBox content = new VBox(10);</b>
+<b class="nc">&nbsp;            Label label = new Label(message);</b>
+<b class="nc">&nbsp;            label.setStyle(&quot;-fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;            Button confirmButton = new Button(&quot;Confirm&quot;);</b>
+<b class="nc">&nbsp;            confirmButton.setOnAction(e -&gt; confirmSelection());</b>
+&nbsp;
+<b class="nc">&nbsp;            content.getChildren().addAll(label, confirmButton);</b>
+<b class="nc">&nbsp;            content.setAlignment(Pos.CENTER);</b>
+&nbsp;
+<b class="nc">&nbsp;            guiLog.getChildren().add(content);</b>
+<b class="nc">&nbsp;            guiLog.setAlignment(Pos.CENTER);</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    private void confirmSelection() {
+<b class="nc">&nbsp;        if (!shipValid &amp;&amp; selectedPoint != null) {</b>
+<b class="nc">&nbsp;            controller.removeComponent(selectedPoint);</b>
+<b class="nc">&nbsp;            clearSelection();</b>
+<b class="nc">&nbsp;        } else if (shipBroken &amp;&amp; selectedPieceIndex != null) {</b>
+<b class="nc">&nbsp;            controller.chooseShipPiece(selectedPieceIndex);</b>
+<b class="nc">&nbsp;            clearSelection();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void clearSelection() {
+<b class="nc">&nbsp;        if (selectedPoint != null || selectedPieceIndex != null) {</b>
+<b class="nc">&nbsp;            guiShipBoards.get(model.getMyShip()).clearHighlights();</b>
+&nbsp;
+<b class="nc">&nbsp;            if (shipBroken) {</b>
+<b class="nc">&nbsp;                for (int i = 0; i &lt; shipPieces.size(); i++) {</b>
+<b class="nc">&nbsp;                    List&lt;GuiHighlights&gt; highlights = GuiHighlights.getSomeColors(shipPieces.size());</b>
+<b class="nc">&nbsp;                    guiShipBoards.get(model.getMyShip()).highlightPoints(shipPieces.get(i), highlights.get(i + 1).getColor());</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            selectedPoint = null;</b>
+<b class="nc">&nbsp;            selectedPieceIndex = null;</b>
+&nbsp;
+<b class="nc">&nbsp;            String message = &quot;&quot;;</b>
+<b class="nc">&nbsp;            if (shipBroken) {</b>
+<b class="nc">&nbsp;                message = &quot;Your ship is broken. Choose a piece to keep by clicking on any component in that piece.&quot;;</b>
+<b class="nc">&nbsp;            } else if (!shipValid) {</b>
+<b class="nc">&nbsp;                message = &quot;Your ship has invalid component positioning. Click on a component to remove it.&quot;;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                message = &quot;Your ship is valid. Wait for other players to correct their ships.&quot;;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            guiLog.log(message);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void shipNotConnected(ShipBoard shipBoard, List&lt;Set&lt;Point&gt;&gt; pieces) {
+<b class="nc">&nbsp;        int numPieces = pieces.size();</b>
+<b class="nc">&nbsp;        List&lt;GuiHighlights&gt; highlights = GuiHighlights.getSomeColors(numPieces);</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; numPieces; i++) {</b>
+<b class="nc">&nbsp;            guiShipBoards.get(shipBoard).highlightPoints(pieces.get(i), highlights.get(i + 1).getColor());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List&lt;Point&gt; removed) {
+<b class="nc">&nbsp;        for (Point piece : removed) {</b>
+<b class="nc">&nbsp;            guiShipBoards.get(shipBoard).notifyRemoveComponent(piece);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (model.getMyShip().equals(shipBoard)) {</b>
+<b class="nc">&nbsp;            shipBroken = false;</b>
+<b class="nc">&nbsp;            shipValid = true;</b>
+<b class="nc">&nbsp;            String message = &quot;Your ship is valid. Wait for other players to correct their ships.&quot;;</b>
+<b class="nc">&nbsp;            guiLog.log(message);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        guiStatBox.notifyChange();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyShipNotConnected(ShipBoard shipBoard, List&lt;Set&lt;Point&gt;&gt; pieces) {
+<b class="nc">&nbsp;        if (model.getMyShip().equals(shipBoard)) {</b>
+<b class="nc">&nbsp;            this.shipPieces.clear();</b>
+<b class="nc">&nbsp;            this.shipPieces.addAll(pieces);</b>
+<b class="nc">&nbsp;            shipBroken = true;</b>
+<b class="nc">&nbsp;            shipValid = true;</b>
+<b class="nc">&nbsp;            String message = &quot;Your ship is broken. Choose a piece to keep by clicking on any component in that piece.&quot;;</b>
+<b class="nc">&nbsp;            guiLog.log(message);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        shipNotConnected(shipBoard, pieces);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyShipValidated(ShipBoard shipBoard) {
+<b class="nc">&nbsp;        if (model.getMyShip().equals(shipBoard)) {</b>
+<b class="nc">&nbsp;            shipBroken = false;</b>
+<b class="nc">&nbsp;            shipValid = true;</b>
+<b class="nc">&nbsp;            String message = &quot;Your ship is valid. Wait for other players to correct their ships.&quot;;</b>
+<b class="nc">&nbsp;            guiLog.log(message);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        guiShipBoards.get(shipBoard).clearHighlights();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRemoveComponent(ShipBoard shipBoard, Point removedPoint) {
+<b class="nc">&nbsp;        guiShipBoards.get(shipBoard).notifyRemoveComponent(removedPoint);</b>
+<b class="nc">&nbsp;        if (model.getMyShip().equals(shipBoard)) {</b>
+<b class="nc">&nbsp;            selectedPoint = null;</b>
+<b class="nc">&nbsp;            selectedPieceIndex = null;</b>
+<b class="nc">&nbsp;            clearSelection();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected VBox getFreeUseVBox() {
+<b class="nc">&nbsp;        return new VBox();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected VBox getShipBoardVBox(ShipBoard shipBoard) {
+<b class="nc">&nbsp;        VBox getShipBoardVBox = new VBox(5);</b>
+<b class="nc">&nbsp;        getShipBoardVBox.setAlignment(Pos.CENTER);</b>
+<b class="nc">&nbsp;        getShipBoardVBox.getChildren().addAll(guiShipBoards.get(shipBoard));</b>
+<b class="nc">&nbsp;        return getShipBoardVBox;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Provides a custom GuiController implementation for the ship correction phase.
+&nbsp;     * This controller handles:
+&nbsp;     * 1. Component removal selection when the ship has invalid component placement
+&nbsp;     * 2. Ship piece selection when the ship has disconnected pieces
+&nbsp;     *
+&nbsp;     * When a point is clicked, the controller highlights the selection and displays
+&nbsp;     * a confirmation button to confirm the action.
+&nbsp;     *
+&nbsp;     * @return A GuiController implementation for handling correction phase interactions
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    protected GuiController getGuiController() {
+<b class="nc">&nbsp;        return new GuiController() {</b>
+&nbsp;            @Override
+&nbsp;            public void handlePointPress(Point point) {
+<b class="nc">&nbsp;                if (state.getAvailableActions().contains(StateActions.REMOVE_COMPONENT) &amp;&amp; !shipValid) {</b>
+<b class="nc">&nbsp;                    guiShipBoards.get(model.getMyShip()).clearHighlights();</b>
+<b class="nc">&nbsp;                    selectedPoint = point;</b>
+<b class="nc">&nbsp;                    guiShipBoards.get(model.getMyShip()).highlightPoints(</b>
+<b class="nc">&nbsp;                            Collections.singleton(point), javafx.scene.paint.Color.YELLOW);</b>
+<b class="nc">&nbsp;                    showConfirmationButton(&quot;Remove this component?&quot;);</b>
+<b class="nc">&nbsp;                } else if (state.getAvailableActions().contains(StateActions.CHOOSE_SHIP_PIECE) &amp;&amp; shipBroken) {</b>
+<b class="nc">&nbsp;                    IntStream.range(0, shipPieces.size())</b>
+<b class="nc">&nbsp;                            .filter(i -&gt; shipPieces.get(i).contains(point))</b>
+<b class="nc">&nbsp;                            .findFirst()</b>
+<b class="nc">&nbsp;                            .ifPresent(i -&gt; {</b>
+<b class="nc">&nbsp;                                selectedPieceIndex = i;</b>
+<b class="nc">&nbsp;                                guiShipBoards.get(model.getMyShip()).clearHighlights();</b>
+<b class="nc">&nbsp;                                guiShipBoards.get(model.getMyShip()).highlightPoints(</b>
+<b class="nc">&nbsp;                                        shipPieces.get(i), Color.YELLOW);</b>
+<b class="nc">&nbsp;                                showConfirmationButton(&quot;Keep this piece?&quot;);</b>
+&nbsp;                            });
+&nbsp;                }
+&nbsp;            }
+&nbsp;        };
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

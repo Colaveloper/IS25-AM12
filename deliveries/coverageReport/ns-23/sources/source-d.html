@@ -1,0 +1,194 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SecondDeck</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model</a>
+</div>
+
+<h1>Coverage Summary for Class: SecondDeck (it.polimi.ingsw.galaxytruckers.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SecondDeck</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (27/27)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.adventureCards.AdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.*;
+&nbsp;import java.util.stream.IntStream;
+&nbsp;
+&nbsp;/**
+&nbsp; * The SecondDeck class represents the adventure cards deck for games of level SECOND in
+&nbsp; * the Galaxy-Trucker game.
+&nbsp; * It extends the Deck class and initializes the deck with adventure cards of levels TEST, FIRST, and SECOND.
+&nbsp; * The deck is divided into three forecast decks and a hidden deck.
+&nbsp; */
+&nbsp;public class SecondDeck extends Deck{
+&nbsp;    private final List&lt;List&lt;AdventureCard&gt;&gt; forecastDecks;
+&nbsp;    private final List&lt;AdventureCard&gt; hiddenDeck;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for the SecondDeck class.
+&nbsp;     * It initializes the deck with adventure cards of levels TEST, FIRST, and SECOND.
+&nbsp;     * The deck is divided into three forecast decks and a hidden deck.
+&nbsp;     *
+&nbsp;     * @param game the game instance to which this deck belongs
+&nbsp;     * @throws IOException if there is an error reading the adventure cards
+&nbsp;     */
+&nbsp;    public SecondDeck(Game game) throws IOException {
+<b class="fc">&nbsp;        super(game);</b>
+<b class="fc">&nbsp;        List&lt;AdventureCard&gt; easyCards = relevantCards.stream()</b>
+<b class="fc">&nbsp;                .filter(c -&gt; c.getCardLevel() == Level.TEST || c.getCardLevel() == Level.FIRST)</b>
+<b class="fc">&nbsp;                .limit(4)</b>
+<b class="fc">&nbsp;                .toList();</b>
+<b class="fc">&nbsp;        List&lt;AdventureCard&gt; hardCards = relevantCards.stream()</b>
+<b class="fc">&nbsp;                .filter(c -&gt; c.getCardLevel() == Level.SECOND)</b>
+<b class="fc">&nbsp;                .limit(8)</b>
+<b class="fc">&nbsp;                .toList();</b>
+<b class="fc">&nbsp;        forecastDecks = IntStream.range(0, 3)</b>
+<b class="fc">&nbsp;                .mapToObj(i -&gt; {</b>
+<b class="fc">&nbsp;                    List&lt;AdventureCard&gt; forecastDeck = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;                    forecastDeck.addAll(easyCards.subList(i, i+1));</b>
+<b class="fc">&nbsp;                    forecastDeck.addAll(hardCards.subList(i*2, i*2+2));</b>
+<b class="fc">&nbsp;                    return forecastDeck;</b>
+&nbsp;                })
+<b class="fc">&nbsp;                .toList();</b>
+<b class="fc">&nbsp;        hiddenDeck = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        hiddenDeck.addAll(easyCards.subList(3, 4));</b>
+<b class="fc">&nbsp;        hiddenDeck.addAll(hardCards.subList(6, 8));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * @param index the index of the forecast deck
+&nbsp;     * @return the list of adventure cards in the specified forecast deck
+&nbsp;     * @throws IllegalArgumentException if the index is out of bounds
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public List&lt;AdventureCard&gt; getForecastDeck(int index) {
+&nbsp;        try {
+<b class="fc">&nbsp;            return forecastDecks.get(index);</b>
+&nbsp;        } catch (IndexOutOfBoundsException e) {
+<b class="fc">&nbsp;            throw new IllegalArgumentException(&quot;No forecast deck with such index&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void initMasterDeck() {
+<b class="fc">&nbsp;        forecastDecks.stream()</b>
+<b class="fc">&nbsp;                .flatMap(Collection::stream)</b>
+<b class="fc">&nbsp;                .forEach(card -&gt; masterDeck.add(card));</b>
+<b class="fc">&nbsp;        masterDeck.addAll(hiddenDeck);</b>
+&nbsp;        do {
+<b class="fc">&nbsp;            Collections.shuffle(masterDeck);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        while (masterDeck.getLast().getCardLevel() != Level.SECOND);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

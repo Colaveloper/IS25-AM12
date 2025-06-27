@@ -1,0 +1,275 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiActivationScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiActivationScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiActivationScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GuiActivationScreen$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/38)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.AdventureState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.StateActions;
+&nbsp;import javafx.beans.binding.Bindings;
+&nbsp;import javafx.beans.property.IntegerProperty;
+&nbsp;import javafx.beans.property.SimpleIntegerProperty;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * Screen for the component activation phase of the game.
+&nbsp; * This screen allows players to activate components on their ship by spending batteries.
+&nbsp; * Players can click on components to activate them or on batteries to spend them.
+&nbsp; * The screen provides visual feedback about the activation state and controls to complete the activation phase.
+&nbsp; */
+&nbsp;public abstract class GuiActivationScreen extends GuiAdventureScreen {
+&nbsp;    private final IntegerProperty batteriesToSpend;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a GuiActivationScreen with the specified model, controller, and game state.
+&nbsp;     * Initializes the battery counter and sets up the UI elements for the activation phase.
+&nbsp;     * If it&#39;s the player&#39;s turn, a &quot;FINISH ACTIVATION&quot; button is displayed, which is enabled
+&nbsp;     * only when all required batteries have been spent.
+&nbsp;     *
+&nbsp;     * @param model The client model containing all game data
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     * @param gameState The current adventure state
+&nbsp;     */
+&nbsp;    public GuiActivationScreen(ClientModel model, ClientControllerInterface controller, AdventureState gameState) {
+<b class="nc">&nbsp;        super(model, controller, gameState);</b>
+<b class="nc">&nbsp;        batteriesToSpend = new SimpleIntegerProperty(0);</b>
+<b class="nc">&nbsp;        if (isMyTurn()) {</b>
+<b class="nc">&nbsp;            Button goNextButton = new Button(&quot;FINISH ACTIVATION&quot;);</b>
+<b class="nc">&nbsp;            goNextButton.setOnAction(_ -&gt; getGuiController().goNext());</b>
+<b class="nc">&nbsp;            goNextButton.disableProperty().bind(</b>
+<b class="nc">&nbsp;                    Bindings.createBooleanBinding(() -&gt; (batteriesToSpend.get() != 0), batteriesToSpend)</b>
+&nbsp;            );
+<b class="nc">&nbsp;            goNextButton.setVisible(true);</b>
+<b class="nc">&nbsp;            guiButtonBox.getChildren().add(goNextButton);</b>
+<b class="nc">&nbsp;            guiLog.log(&quot;Spend the batteries you want to activate components, then press OK&quot;);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            guiLog.log(&quot;Wait for your turn&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Provides a custom GuiController implementation for the activation phase.
+&nbsp;     * This controller handles clicks on components and batteries, allowing players to
+&nbsp;     * activate components or spend batteries based on the current game state.
+&nbsp;     *
+&nbsp;     * @return A GuiController implementation for handling activation phase interactions
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    protected GuiController getGuiController() {
+<b class="nc">&nbsp;        return new GuiController() {</b>
+&nbsp;            @Override
+&nbsp;            public void handlePointPress(Point point) {
+<b class="nc">&nbsp;                if (isMyTurn()) {</b>
+<b class="nc">&nbsp;                    if (model.getMyShip().getActivatables().containsKey(point)) {</b>
+<b class="nc">&nbsp;                        if (!model.getMyShip().getActivatables().get(point).isActive()) {</b>
+<b class="nc">&nbsp;                            if (state.getAvailableActions().contains(StateActions.ACTIVATE_COMPONENT)) {</b>
+<b class="nc">&nbsp;                                controller.activateComponent(point);</b>
+&nbsp;                            }
+&nbsp;                        } else {
+<b class="nc">&nbsp;                            guiLog.log(&quot;This component is already active&quot;);</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                    } else if (model.getMyShip().getBatteries().containsKey(point)) {</b>
+<b class="nc">&nbsp;                        if (model.getMyShip().getBatteries().get(point).getNumBatteries() &gt; 0) {</b>
+<b class="nc">&nbsp;                            if (state.getAvailableActions().contains(StateActions.SPEND_BATTERIES)) {</b>
+<b class="nc">&nbsp;                                controller.useBattery(point);</b>
+&nbsp;                            }
+&nbsp;                        } else {
+<b class="nc">&nbsp;                            guiLog.log(&quot;Out of batteries at this position&quot;);</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            @Override
+&nbsp;            public void goNext() {
+<b class="nc">&nbsp;                if (isMyTurn()) {</b>
+<b class="nc">&nbsp;                    if(batteriesToSpend.get() &gt; 0) {</b>
+<b class="nc">&nbsp;                        guiLog.log(&quot;You need to use &quot; + batteriesToSpend.get() + &quot; batteries&quot;);</b>
+<b class="nc">&nbsp;                    } else if(batteriesToSpend.get() &lt; 0) {</b>
+<b class="nc">&nbsp;                        guiLog.log(&quot;You need to activate &quot; + (batteriesToSpend.get() * (-1)) + &quot; components&quot;);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        if (state.getAvailableActions().contains(StateActions.GO_NEXT)) {</b>
+<b class="nc">&nbsp;                            controller.goNext();</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
+<b class="nc">&nbsp;        batteriesToSpend.add(-1);</b>
+<b class="nc">&nbsp;        guiShipBoards.get(shipBoard).highlightPoints(Set.of(point), Color.BLUE);</b>
+<b class="nc">&nbsp;        guiStatBox.notifyChange();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyUseBattery(ShipBoard shipBoard, Point point) {
+<b class="nc">&nbsp;        batteriesToSpend.add(1);</b>
+<b class="nc">&nbsp;        guiShipBoards.get(shipBoard).notifyComponentChange(point);</b>
+<b class="nc">&nbsp;        guiShipBoards.get(shipBoard).highlightPoints(Set.of(point), Color.GREEN);</b>
+<b class="nc">&nbsp;        guiStatBox.notifyChange();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

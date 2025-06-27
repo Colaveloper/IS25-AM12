@@ -1,0 +1,282 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Projectile</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.adventureCards.projectiles</a>
+</div>
+
+<h1>Coverage Summary for Class: Projectile (it.polimi.ingsw.galaxytruckers.server.model.adventureCards.projectiles)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Projectile</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (20/20)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Projectile$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Projectile$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (22/22)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.adventureCards.projectiles;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.Dice;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.ProjectileType;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.Comparator;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.function.IntSupplier;
+&nbsp;import java.util.stream.Stream;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a projectile that can be fired at a ship.
+&nbsp; * It has a direction and a dice roll that determine its origin.
+&nbsp; */
+&nbsp;public abstract class Projectile {
+&nbsp;
+&nbsp;    protected final Direction direction;
+&nbsp;    protected int diceRoll;
+<b class="fc">&nbsp;    private static final Dice dice = new Dice() {};</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a Projectile with a specified dice roll and direction.
+&nbsp;     * (used for testing purposes)
+&nbsp;     *
+&nbsp;     * @param dice the dice roll that determines the projectile&#39;s origin
+&nbsp;     * @param direction the direction from which the projectile is fired
+&nbsp;     */
+<b class="fc">&nbsp;    public Projectile(IntSupplier dice, Direction direction) {</b>
+<b class="fc">&nbsp;        this.direction = direction;</b>
+<b class="fc">&nbsp;        this.diceRoll = dice.getAsInt();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a Projectile with a specified direction and a random dice roll.
+&nbsp;     *
+&nbsp;     * @param direction the direction from which the projectile is fired
+&nbsp;     */
+&nbsp;    public Projectile(Direction direction) {
+<b class="fc">&nbsp;        this(dice, direction);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * After any activation took place, this method is called to remove
+&nbsp;     * the component at {@code getComponentPositionToRemove}, if any.
+&nbsp;     * The return value indicates whether a component was actually removed.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship that is threatened by the projectile
+&nbsp;     * @return true if a component is removed (in that case a check on the connectivity should take place), false otherwise
+&nbsp;     */
+&nbsp;    public boolean fireAt(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        Optional&lt;Point&gt; removalPosition = getComponentPositionToRemove(shipBoard);</b>
+<b class="fc">&nbsp;        removalPosition.ifPresent(shipBoard::discardComponent);</b>
+<b class="fc">&nbsp;        return removalPosition.isPresent();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the set of locations of the activatable components to protect from a specific projectile.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship that is threatened by the projectile
+&nbsp;     * @return the set of locations of the activatable components of the right type to protect from a projectile
+&nbsp;     */
+&nbsp;    public abstract Set&lt;Point&gt; getActivatablePoints(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the first found component position, if any,that the projectile hits.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship that is threatened by the projectile
+&nbsp;     * @return an optional with the component position found, if any
+&nbsp;     */
+&nbsp;    protected Optional&lt;Point&gt; getFirstFoundComponentPosition(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        Stream&lt;Map.Entry&lt;Point, Component&gt;&gt; line = shipBoard.getComponentMap().entrySet().stream()</b>
+<b class="fc">&nbsp;                .filter(e -&gt; (</b>
+<b class="fc">&nbsp;                        (direction==Direction.UP || direction==Direction.DOWN)</b>
+<b class="fc">&nbsp;                                ? e.getKey().x</b>
+<b class="fc">&nbsp;                                : e.getKey().y) == diceRoll);</b>
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="pc">&nbsp;        return switch (direction) {</b>
+<b class="fc">&nbsp;            case UP    -&gt; line.min(Comparator.comparingInt(e -&gt; e.getKey().y)).map(Map.Entry::getKey); // Min y</b>
+<b class="fc">&nbsp;            case RIGHT -&gt; line.max(Comparator.comparingInt(e -&gt; e.getKey().x)).map(Map.Entry::getKey); // Max x</b>
+<b class="fc">&nbsp;            case DOWN  -&gt; line.max(Comparator.comparingInt(e -&gt; e.getKey().y)).map(Map.Entry::getKey); // Max y</b>
+<b class="fc">&nbsp;            case LEFT  -&gt; line.min(Comparator.comparingInt(e -&gt; e.getKey().x)).map(Map.Entry::getKey); // Min x</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the position of the component to remove, if any, based on {@code getFirstFoundComponentPosition}.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship that is threatened by the projectile
+&nbsp;     * @return an optional with the position of the component to remove, if any
+&nbsp;     */
+&nbsp;    protected abstract Optional&lt;Point&gt; getComponentPositionToRemove(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return the type of the projectile
+&nbsp;     */
+&nbsp;    public abstract ProjectileType getProjectileType();
+&nbsp;
+&nbsp;    public int getDiceRoll() {
+<b class="fc">&nbsp;        return diceRoll;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Direction getDirection() {
+<b class="fc">&nbsp;        return direction;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

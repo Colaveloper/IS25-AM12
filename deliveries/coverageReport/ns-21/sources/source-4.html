@@ -1,0 +1,298 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > LobbyInterface</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.controller.lobby</a>
+</div>
+
+<h1>Coverage Summary for Class: LobbyInterface (it.polimi.ingsw.galaxytruckers.server.controller.lobby)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">LobbyInterface</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.controller.lobby;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.GameInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * Interface for lobbies in the Galaxy Truckers game.
+&nbsp; * Each method delegates to a corresponding method in {@link GameInterface}.
+&nbsp; */
+&nbsp;public interface LobbyInterface {
+&nbsp;
+&nbsp;    //region Shipbuilding
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#requestRandComponent(ShipBoard)}.
+&nbsp;     *
+&nbsp;     * @param player the player wishing to perform the action
+&nbsp;     */
+&nbsp;    void requestRandComponent(Player player);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#requestComponent(ShipBoard, int)}.
+&nbsp;     *
+&nbsp;     * @param player      the nickname of the player wishing to perform the action
+&nbsp;     * @param componentID the id of the component the player wishes to take
+&nbsp;     */
+&nbsp;    void requestComponent(Player player, int componentID);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#rejectComponent(ShipBoard)}.
+&nbsp;     *
+&nbsp;     * @param player the player wishing to reject the component
+&nbsp;     */
+&nbsp;    void rejectComponent(Player player);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#stashComponent(ShipBoard)}.
+&nbsp;     *
+&nbsp;     * @param player the player wishing to stash the component
+&nbsp;     */
+&nbsp;    void stashComponent(Player player);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#grabPlacedComponent(ShipBoard)}.
+&nbsp;     *
+&nbsp;     * @param player the player wishing to grab a placed component
+&nbsp;     */
+&nbsp;    void grabPlacedComponent(Player player);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#grabStashedComponent(ShipBoard, int)}.
+&nbsp;     *
+&nbsp;     * @param player the player wishing to grab a stashed component
+&nbsp;     * @param index the index of the component in the player&#39;s stash
+&nbsp;     */
+&nbsp;    void grabStashedComponent(Player player, int index);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#placeComponent(ShipBoard, Point, Direction)}.
+&nbsp;     *
+&nbsp;     * @param player the player wishing to place the component
+&nbsp;     * @param point the coordinates where the component should be placed
+&nbsp;     * @param orientation the direction the component should face
+&nbsp;     */
+&nbsp;    void placeComponent(Player player, Point point, Direction orientation);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#flipHourglass(ShipBoard)}.
+&nbsp;     *
+&nbsp;     * @param player the player flipping the hourglass
+&nbsp;     */
+&nbsp;    void flipHourglass(Player player);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#placeShipOnFlightBoard(ShipBoard, int)}.
+&nbsp;     *
+&nbsp;     * @param player the player placing their ship
+&nbsp;     * @param startingPosition the position on the flight board where the ship should be placed
+&nbsp;     */
+&nbsp;    void placeShipOnFlightBoard(Player player, int startingPosition);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#placeShipOnFlightBoard(ShipBoard)}.
+&nbsp;     *
+&nbsp;     * @param player the player placing their ship
+&nbsp;     */
+&nbsp;    void placeShipOnFlightBoard(Player player);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#acquireForecast(ShipBoard, int)}.
+&nbsp;     *
+&nbsp;     * @param player the player acquiring the forecast
+&nbsp;     * @param deckIndex the index of the deck to view the forecast from
+&nbsp;     */
+&nbsp;    void acquireForecast(Player player, int deckIndex);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#releaseForecast(ShipBoard)}.
+&nbsp;     *
+&nbsp;     * @param player the player releasing the forecast
+&nbsp;     */
+&nbsp;    void releaseForecast(Player player);
+&nbsp;
+&nbsp;    //endregion
+&nbsp;
+&nbsp;    //region Ship validity check
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#removeComponent(ShipBoard, Point)}.
+&nbsp;     *
+&nbsp;     * @param player the player removing the component
+&nbsp;     * @param point the coordinates of the component to remove
+&nbsp;     */
+&nbsp;    void removeComponent(Player player, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#chooseShipPiece(ShipBoard, int)}.
+&nbsp;     *
+&nbsp;     * @param player the player choosing the ship piece
+&nbsp;     * @param pieceIndex the index of the piece to choose
+&nbsp;     */
+&nbsp;    void chooseShipPiece(Player player, int pieceIndex);
+&nbsp;    //endregion
+&nbsp;
+&nbsp;    //region Ship init
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#initializeCabin(ShipBoard, Point, CrewType)}.
+&nbsp;     *
+&nbsp;     * @param player the player initializing the cabin
+&nbsp;     * @param point the coordinates where the cabin should be placed
+&nbsp;     * @param crewType the type of crew to place in the cabin
+&nbsp;     */
+&nbsp;    void initializeCabin(Player player, Point point, CrewType crewType);
+&nbsp;    //endregion
+&nbsp;
+&nbsp;    //region Adventure
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#drawCard(ShipBoard)}.
+&nbsp;     *
+&nbsp;     * @param player the player drawing the card
+&nbsp;     */
+&nbsp;    void drawCard(Player player);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#activateComponent(ShipBoard, Point)}.
+&nbsp;     *
+&nbsp;     * @param player the player activating the component
+&nbsp;     * @param point the coordinates of the component to activate
+&nbsp;     */
+&nbsp;    void activateComponent(Player player, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#loseCrew(ShipBoard, Point)}.
+&nbsp;     *
+&nbsp;     * @param player the player losing the crew
+&nbsp;     * @param point the coordinates where the crew is lost
+&nbsp;     */
+&nbsp;    void loseCrew(Player player, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#grabReward(ShipBoard)}.
+&nbsp;     *
+&nbsp;     * @param player the player grabbing the reward
+&nbsp;     */
+&nbsp;    void grabReward(Player player);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#placeGoods(ShipBoard, Point, GoodsType)}.
+&nbsp;     *
+&nbsp;     * @param player the player placing the goods
+&nbsp;     * @param point the coordinates where the goods should be placed
+&nbsp;     * @param goodsType the type of goods to place
+&nbsp;     */
+&nbsp;    void placeGoods(Player player, Point point, GoodsType goodsType);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#removeGoods(ShipBoard, Point, GoodsType)}.
+&nbsp;     *
+&nbsp;     * @param player the player removing the goods
+&nbsp;     * @param point the coordinates from which to remove the goods
+&nbsp;     * @param goodsType the type of goods to remove
+&nbsp;     */
+&nbsp;    void removeGoods(Player player, Point point, GoodsType goodsType);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#loseGood(ShipBoard, Point)}.
+&nbsp;     *
+&nbsp;     * @param player the player losing the goods
+&nbsp;     * @param point the coordinates where the goods are lost
+&nbsp;     */
+&nbsp;    void loseGoods(Player player, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#useBattery(ShipBoard, Point)}.
+&nbsp;     *
+&nbsp;     * @param player the player using the battery
+&nbsp;     * @param point the coordinates of the battery to use
+&nbsp;     */
+&nbsp;    void useBattery(Player player, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#choosePlanet(ShipBoard, int)}.
+&nbsp;     *
+&nbsp;     * @param player the player choosing the planet
+&nbsp;     * @param choice the index of the chosen planet
+&nbsp;     */
+&nbsp;    void choosePlanet(Player player, int choice);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#goNext(ShipBoard)}.
+&nbsp;     *
+&nbsp;     * @param player the player who is ready to proceed
+&nbsp;     */
+&nbsp;    void goNext(Player player);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delegates to {@link GameInterface#giveUp(ShipBoard)}.
+&nbsp;     *
+&nbsp;     * @param player the player giving up
+&nbsp;     */
+&nbsp;    void giveUp(Player player);
+&nbsp;    //endregion
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

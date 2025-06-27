@@ -1,0 +1,183 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AdventureCard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.adventureCards</a>
+</div>
+
+<h1>Coverage Summary for Class: AdventureCard (it.polimi.ingsw.galaxytruckers.server.model.adventureCards)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AdventureCard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.adventureCards;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.FlightBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.Game;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.AdventureState;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract class representing an adventure card in the game.
+&nbsp; * It provides methods to initialize the card and retrieve its level and ID.
+&nbsp; */
+&nbsp;public abstract class AdventureCard {
+&nbsp;    /**
+&nbsp;     * The index of the player currently being evaluated for the adventure card.
+&nbsp;     */
+&nbsp;    protected int currentPlayerIndex;
+&nbsp;    /**
+&nbsp;     * The ship board of the player currently being evaluated.
+&nbsp;     */
+&nbsp;    protected ShipBoard currentShipBoard;
+&nbsp;    /**
+&nbsp;     * The flight board where the adventure takes place.
+&nbsp;     */
+&nbsp;    protected FlightBoard flightBoard;
+&nbsp;    private final Level cardLevel;
+&nbsp;    /**
+&nbsp;     * The game instance this card belongs to.
+&nbsp;     */
+&nbsp;    protected final Game game;
+&nbsp;    private final int id;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for the AdventureCard class.
+&nbsp;     *
+&nbsp;     * @param game      The game instance this card belongs to.
+&nbsp;     * @param cardLevel The level of the card.
+&nbsp;     * @param id        The unique identifier for the card.
+&nbsp;     */
+<b class="fc">&nbsp;    protected AdventureCard(Game game, Level cardLevel, int id) {</b>
+<b class="fc">&nbsp;        this.game = game;</b>
+<b class="fc">&nbsp;        this.cardLevel = cardLevel;</b>
+<b class="fc">&nbsp;        this.id = id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes the adventure card by setting the flight board and resetting the current ship board and player index.
+&nbsp;     */
+&nbsp;    public void initialize() {
+<b class="fc">&nbsp;        this.flightBoard = game.getFlightBoard();</b>
+<b class="fc">&nbsp;        this.currentShipBoard = null;</b>
+<b class="fc">&nbsp;        this.currentPlayerIndex = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return the level of the adventure card.
+&nbsp;     */
+&nbsp;    public Level getCardLevel() {
+<b class="fc">&nbsp;        return cardLevel;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Abstract method to get the next state of the adventure card, based on the rules of the card,
+&nbsp;     * and the state of the ships.
+&nbsp;     * This method can call recursively and make use of local subclasses variables.
+&nbsp;     *
+&nbsp;     * @return The next AdventureState that the game should transition to.
+&nbsp;     */
+&nbsp;    public abstract AdventureState getNextState();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the unique identifier of this adventure card.
+&nbsp;     *
+&nbsp;     * @return the card&#39;s unique ID
+&nbsp;     */
+&nbsp;    public int getId() {
+<b class="fc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Activatable</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.shipBuilding</a>
+</div>
+
+<h1>Coverage Summary for Class: Activatable (it.polimi.ingsw.galaxytruckers.server.model.shipBuilding)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">Activatable</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.shipBuilding;
+&nbsp;
+&nbsp;/**
+&nbsp; * Interface representing components that can be activated or deactivated in the ship building phase.
+&nbsp; * This interface is implemented by components such as DoubleCannon, DoubleEngine, and Shield.
+&nbsp; */
+&nbsp;public sealed interface Activatable extends ComponentInterface permits DoubleCannon, DoubleEngine, Shield {
+&nbsp;    /**
+&nbsp;     * Activates the component.
+&nbsp;     */
+&nbsp;    void activate();
+&nbsp;    /**
+&nbsp;     * Deactivates the component.
+&nbsp;     */
+&nbsp;    void deactivate();
+&nbsp;    /**
+&nbsp;     * Checks if the component is currently active.
+&nbsp;     *
+&nbsp;     * @return true if the component is active, false otherwise.
+&nbsp;     */
+&nbsp;    boolean isActive();
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

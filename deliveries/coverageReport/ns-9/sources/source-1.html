@@ -1,0 +1,225 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ActivateState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.model.state</a>
+</div>
+
+<h1>Coverage Summary for Class: ActivateState (it.polimi.ingsw.galaxytruckers.client.model.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ActivateState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (1/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (8/24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.model.state;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract base class for states that handle component activation in the Galaxy Truckers game.
+&nbsp; * This class represents the phase where players can activate their ship components and
+&nbsp; * use batteries. It manages the balance between activated components and batteries used.
+&nbsp; * &lt;p&gt;
+&nbsp; * The class is sealed to restrict subclassing to specific activation states.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public sealed abstract class ActivateState extends AdventureState implements AdventureStateInterface permits
+&nbsp;        DeclareFirePowerState,
+&nbsp;        DeclareEnginePowerState,
+&nbsp;        HandleProjectileState
+&nbsp;{
+&nbsp;    /** Set of positions where components can be activated */
+&nbsp;    protected final Set&lt;Point&gt; availablePositions;
+&nbsp;
+&nbsp;    /** Flag indicating whether it&#39;s the current player&#39;s turn */
+&nbsp;    protected final boolean isMyTurn;
+&nbsp;
+&nbsp;    /** Maximum number of components that can be activated (limited by batteries or available positions) */
+&nbsp;    private final int maxActivate;
+&nbsp;
+&nbsp;    /** Counter for the number of batteries that have been activated */
+&nbsp;    private int batteriesActivated;
+&nbsp;
+&nbsp;    /** Counter for the number of components that have been activated */
+&nbsp;    private int componentActivated;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new ActivateState with the specified parameters.
+&nbsp;     * Initializes the state with the player&#39;s ship, the currently active ship,
+&nbsp;     * and the positions where components can be activated.
+&nbsp;     *
+&nbsp;     * @param myShip The ship board of the local player
+&nbsp;     * @param currentShip The ship board that is currently active
+&nbsp;     * @param availablePositions Set of positions where components can be activated
+&nbsp;     */
+<b class="fc">&nbsp;    ActivateState(ShipBoard myShip, ShipBoard currentShip, Set&lt;Point&gt; availablePositions) {</b>
+<b class="fc">&nbsp;        this.myShip = myShip;</b>
+<b class="fc">&nbsp;        this.isMyTurn = currentShip.equals(myShip);</b>
+<b class="fc">&nbsp;        this.currentShip = currentShip;</b>
+<b class="fc">&nbsp;        this.availablePositions = availablePositions;</b>
+<b class="fc">&nbsp;        this.maxActivate = Math.min(currentShip.getNumBatteries(), availablePositions.size());</b>
+<b class="fc">&nbsp;        batteriesActivated = 0;</b>
+<b class="fc">&nbsp;        componentActivated = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the list of actions available in the current activation state.
+&nbsp;     * The available actions depend on:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;Whether the player is out of the game&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Whether it&#39;s the player&#39;s turn&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;The number of batteries and components that have been activated&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Whether the maximum number of activations has been reached&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     * Possible actions include spending batteries, activating components,
+&nbsp;     * and proceeding to the next step when batteries and components are balanced.
+&nbsp;     *
+&nbsp;     * @return A list of available actions in this state
+&nbsp;     */
+&nbsp;    public List&lt;StateActions&gt; getAvailableActions() {
+<b class="nc">&nbsp;        List&lt;StateActions&gt; actions = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        if(imOut) return actions;</b>
+<b class="nc">&nbsp;        if (isMyTurn) {</b>
+<b class="nc">&nbsp;            if (!currentShip.getBatteries().isEmpty() &amp;&amp; !currentShip.getActivatables().isEmpty()) {</b>
+<b class="nc">&nbsp;                if(batteriesActivated &lt; maxActivate) actions.add(StateActions.SPEND_BATTERIES);</b>
+<b class="nc">&nbsp;                if(componentActivated &lt; maxActivate) actions.add(StateActions.ACTIVATE_COMPONENT);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            if(componentActivated == batteriesActivated) actions.add(StateActions.GO_NEXT);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        actions.addAll(super.getAvailableActions());</b>
+<b class="nc">&nbsp;        return actions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
+<b class="nc">&nbsp;        shipBoard.activateComponent(point);</b>
+<b class="nc">&nbsp;        componentActivated++;</b>
+<b class="nc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyActivateComponent(shipBoard, point));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyUseBattery(ShipBoard shipBoard, Point point) {
+<b class="nc">&nbsp;        shipBoard.useBattery(point);</b>
+<b class="nc">&nbsp;        batteriesActivated++;</b>
+<b class="nc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyUseBattery(shipBoard, point));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the set of positions where components can be activated.
+&nbsp;     * These positions represent valid locations for component activation
+&nbsp;     * during this state.
+&nbsp;     *
+&nbsp;     * @return Set of points where components can be activated
+&nbsp;     */
+&nbsp;    public Set&lt;Point&gt; getAvailablePositions() {
+<b class="nc">&nbsp;        return availablePositions;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

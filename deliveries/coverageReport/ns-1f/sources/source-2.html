@@ -1,0 +1,153 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > EventQueue</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.controller.events</a>
+</div>
+
+<h1>Coverage Summary for Class: EventQueue (it.polimi.ingsw.galaxytruckers.server.controller.events)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EventQueue</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.controller.events;
+&nbsp;
+&nbsp;import com.google.common.annotations.VisibleForTesting;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.types.Event;
+&nbsp;
+&nbsp;import java.util.concurrent.BlockingQueue;
+&nbsp;import java.util.concurrent.LinkedBlockingQueue;
+&nbsp;
+&nbsp;/**
+&nbsp; * A threadsafe queue for handling game events in the Galaxy Truckers game.
+&nbsp; * Implements the EventListener interface to receive events and provides methods
+&nbsp; * for retrieving events for processing. Uses a blocking queue to safely handle
+&nbsp; * events across multiple threads.
+&nbsp; *
+&nbsp; * @param &lt;T&gt; the type of Event that this queue will store and manage
+&nbsp; */
+<b class="fc">&nbsp;public class EventQueue&lt;T extends Event&gt; implements EventListener&lt;T&gt; {</b>
+<b class="fc">&nbsp;    private final BlockingQueue&lt;T&gt; queue = new LinkedBlockingQueue&lt;&gt;();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds an event to the queue when notified.
+&nbsp;     * Implementation of the EventListener interface method.
+&nbsp;     *
+&nbsp;     * @param event the event to add to the queue
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void notifyEvent(T event) {
+<b class="fc">&nbsp;        queue.add(event);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves and removes the head of the queue, waiting if necessary
+&nbsp;     * until an element becomes available.
+&nbsp;     *
+&nbsp;     * @return the head of the queue
+&nbsp;     * @throws InterruptedException if interrupted while waiting
+&nbsp;     */
+&nbsp;    public T poll() throws InterruptedException {
+<b class="fc">&nbsp;        return queue.take();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Clears all events from the queue.
+&nbsp;     */
+&nbsp;    @VisibleForTesting
+&nbsp;    public void clear() {
+<b class="fc">&nbsp;        this.queue.clear();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

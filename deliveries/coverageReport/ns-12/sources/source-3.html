@@ -1,0 +1,304 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > VirtualServer</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.network</a>
+</div>
+
+<h1>Coverage Summary for Class: VirtualServer (it.polimi.ingsw.galaxytruckers.network)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">VirtualServer</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.network;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;/**
+&nbsp; * Interface for client-side requests to the virtual server in the Galaxy Truckers game.
+&nbsp; * &lt;p&gt;
+&nbsp; * Methods in this interface allow the client to interact with the game server for lobby management,
+&nbsp; * ship building, adventure actions, and other gameplay operations.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public interface VirtualServer {
+&nbsp;
+&nbsp;    //region App methods
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Registers the client&#39;s nickname with the server.
+&nbsp;     *
+&nbsp;     * @param myNickname the nickname to register
+&nbsp;     */
+&nbsp;    void registerNickname(String myNickname);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests to create a new game lobby.
+&nbsp;     *
+&nbsp;     * @param level the game level
+&nbsp;     * @param playerN the number of players
+&nbsp;     */
+&nbsp;    void requestNewGame(Level level, int playerN);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests to join an existing lobby.
+&nbsp;     *
+&nbsp;     * @param lobbyID the UUID of the lobby to join
+&nbsp;     */
+&nbsp;    void joinLobby(UUID lobbyID);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests to leave the current lobby.
+&nbsp;     */
+&nbsp;    void leaveLobby();
+&nbsp;
+&nbsp;    //endregion
+&nbsp;
+&nbsp;    //region Game methods
+&nbsp;
+&nbsp;    //region Ship building
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests a random component for ship building.
+&nbsp;     */
+&nbsp;    void requestRandComponent();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests a specific component for ship building.
+&nbsp;     *
+&nbsp;     * @param componentID the id of the component to request
+&nbsp;     */
+&nbsp;    void requestComponent(int componentID);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Rejects the currently offered component.
+&nbsp;     */
+&nbsp;    void rejectComponent();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Stashes the currently offered component.
+&nbsp;     */
+&nbsp;    void stashComponent();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests to grab a placed component from the ship.
+&nbsp;     */
+&nbsp;    void grabPlacedComponent();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests to grab a stashed component.
+&nbsp;     *
+&nbsp;     * @param index the index of the stashed component to grab
+&nbsp;     */
+&nbsp;    void grabStashedComponent(int index);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places a component on the ship at the specified location and orientation.
+&nbsp;     *
+&nbsp;     * @param point the coordinates where the component should be placed
+&nbsp;     * @param orientation the direction the component should face
+&nbsp;     */
+&nbsp;    void placeComponent(Point point, Direction orientation);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Flips the hourglass
+&nbsp;     */
+&nbsp;    void flipHourglass();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places the ship on the flight board at the specified starting position.
+&nbsp;     *
+&nbsp;     * @param startingPosition the position on the flight board
+&nbsp;     */
+&nbsp;    void placeShipOnFlightBoard(int startingPosition);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places the ship on the flight board.
+&nbsp;     */
+&nbsp;    void placeShipOnFlightBoard();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Acquires a forecast from the specified deck.
+&nbsp;     *
+&nbsp;     * @param deckIndex the index of the deck to view the forecast from
+&nbsp;     */
+&nbsp;    void acquireForecast(int deckIndex);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Releases the acquired forecast.
+&nbsp;     */
+&nbsp;    void releaseForecast();
+&nbsp;
+&nbsp;    //endregion
+&nbsp;
+&nbsp;    //region Ship validity check
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes a component from the ship at the specified location.
+&nbsp;     *
+&nbsp;     * @param point the coordinates of the component to remove
+&nbsp;     */
+&nbsp;    void removeComponent(Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Chooses a ship piece during ship validity check.
+&nbsp;     *
+&nbsp;     * @param pieceIndex the index of the piece to choose
+&nbsp;     */
+&nbsp;    void chooseShipPiece(int pieceIndex);
+&nbsp;
+&nbsp;    //endregion
+&nbsp;
+&nbsp;    //region Ship init
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes a cabin at the specified location with the given crew type.
+&nbsp;     *
+&nbsp;     * @param point the coordinates where the cabin should be placed
+&nbsp;     * @param crewType the type of crew to place in the cabin
+&nbsp;     */
+&nbsp;    void initializeCabin(Point point, CrewType crewType);
+&nbsp;
+&nbsp;    //endregion
+&nbsp;
+&nbsp;    //region Adventure
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Draws an adventure card.
+&nbsp;     */
+&nbsp;    void drawCard();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Activates a component at the specified location.
+&nbsp;     *
+&nbsp;     * @param point the coordinates of the component to activate
+&nbsp;     */
+&nbsp;    void activateComponent(Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes a crew member from the specified location.
+&nbsp;     *
+&nbsp;     * @param point the coordinates where the crew is lost
+&nbsp;     */
+&nbsp;    void loseCrew(Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Grabs a reward.
+&nbsp;     */
+&nbsp;    void grabReward();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places goods at the specified location.
+&nbsp;     *
+&nbsp;     * @param point the coordinates where the goods should be placed
+&nbsp;     * @param goodsType the type of goods to place
+&nbsp;     */
+&nbsp;    void placeGoods(Point point, GoodsType goodsType);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes goods from the specified location.
+&nbsp;     *
+&nbsp;     * @param point the coordinates from which to remove the goods
+&nbsp;     * @param goodsType the type of goods to remove
+&nbsp;     */
+&nbsp;    void removeGoods(Point point, GoodsType goodsType);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Loses goods at the specified location or loses batteries if no
+&nbsp;     * goods are present on the ship
+&nbsp;     *
+&nbsp;     * @param point the coordinates where the goods are lost
+&nbsp;     */
+&nbsp;    void loseGoods(Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Uses a battery at the specified location.
+&nbsp;     *
+&nbsp;     * @param point the coordinates of the battery to use
+&nbsp;     */
+&nbsp;    void useBattery(Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Chooses a planet during an adventure.
+&nbsp;     *
+&nbsp;     * @param choice the index of the chosen planet
+&nbsp;     */
+&nbsp;    void choosePlanet(int choice);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Signals readiness to proceed to the next phase.
+&nbsp;     */
+&nbsp;    void goNext();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gives up the current game.
+&nbsp;     */
+&nbsp;    void giveUp();
+&nbsp;
+&nbsp;    //endregion
+&nbsp;
+&nbsp;    //endregion
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

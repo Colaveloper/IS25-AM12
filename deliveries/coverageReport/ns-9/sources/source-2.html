@@ -1,0 +1,193 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AddGoodsState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.model.state</a>
+</div>
+
+<h1>Coverage Summary for Class: AddGoodsState (it.polimi.ingsw.galaxytruckers.client.model.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AddGoodsState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (21/21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.model.state;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents the state where players can add goods to their ship in the Galaxy Truckers game.
+&nbsp; * This state allows players to place goods from a buffer onto their ship or remove goods
+&nbsp; * previously placed. Players can only interact with the goods during their turn.
+&nbsp; */
+&nbsp;public final class AddGoodsState extends AdventureState implements GameStateInterface, AdventureStateInterface {
+&nbsp;    /** Buffer containing available goods that can be placed on the ship */
+&nbsp;    private final GoodsBuffer goodsBuffer;
+&nbsp;
+&nbsp;    /** Flag indicating whether it&#39;s the current player&#39;s turn */
+&nbsp;    private final boolean isMyTurn;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new AddGoodsState with the specified parameters.
+&nbsp;     * Initializes the state with the player&#39;s ship, a buffer of goods to place,
+&nbsp;     * and the currently active ship.
+&nbsp;     *
+&nbsp;     * @param myShip The ship board of the local player
+&nbsp;     * @param goodsBuffer Map of goods types to their quantities available for placement
+&nbsp;     * @param currentShip The ship board that is currently active
+&nbsp;     */
+<b class="fc">&nbsp;    public AddGoodsState(ShipBoard myShip, Map&lt;GoodsType, Integer&gt; goodsBuffer, ShipBoard currentShip) {</b>
+<b class="fc">&nbsp;        this.myShip = myShip;</b>
+<b class="fc">&nbsp;        this.isMyTurn = currentShip.equals(myShip);</b>
+<b class="fc">&nbsp;        this.goodsBuffer = new GoodsBuffer(goodsBuffer);</b>
+<b class="fc">&nbsp;        this.currentShip = currentShip;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;StateActions&gt; getAvailableActions() {
+<b class="fc">&nbsp;        List&lt;StateActions&gt; actions = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        if(!isMyTurn) {</b>
+<b class="fc">&nbsp;            return super.getAvailableActions();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (!goodsBuffer.isEmpty()) {</b>
+<b class="fc">&nbsp;            actions.add(StateActions.ADD_GOOD);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        actions.add(StateActions.REMOVE_GOOD);</b>
+<b class="fc">&nbsp;        actions.add(StateActions.GO_NEXT);</b>
+<b class="fc">&nbsp;        actions.addAll(super.getAvailableActions());</b>
+<b class="fc">&nbsp;        return actions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+<b class="fc">&nbsp;        goodsBuffer.removeFromBuffer(goodsType);</b>
+<b class="fc">&nbsp;        shipBoard.placeGoods(point,goodsType);</b>
+<b class="fc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyPlaceGoods(shipBoard, point, goodsType));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+<b class="fc">&nbsp;        goodsBuffer.addToBuffer(goodsType);</b>
+<b class="fc">&nbsp;        shipBoard.removeGoods(point,goodsType);</b>
+<b class="fc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyRemoveGoods(shipBoard, point, goodsType));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the buffer of goods available for placement on the ship.
+&nbsp;     * The goods buffer maintains the count of each type of good that can be placed.
+&nbsp;     *
+&nbsp;     * @return The goods buffer containing available goods
+&nbsp;     */
+&nbsp;    public GoodsBuffer getGoodsBuffer() {
+<b class="fc">&nbsp;        return goodsBuffer;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

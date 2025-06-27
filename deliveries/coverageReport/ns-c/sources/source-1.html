@@ -1,0 +1,290 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliAdventureCard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements</a>
+</div>
+
+<h1>Coverage Summary for Class: CliAdventureCard (it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliAdventureCard</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/96)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements;
+&nbsp;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import java.util.*;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.penalty.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents an adventure card in the CLI.
+&nbsp; * It provides a detailed description of the card&#39;s effects and requirements.
+&nbsp; */
+&nbsp;public class CliAdventureCard extends CliElement{
+&nbsp;    AdventureCard card;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a CLI representation of an adventure card.
+&nbsp;     *
+&nbsp;     * @param card The adventure card to be represented
+&nbsp;     */
+<b class="nc">&nbsp;    public CliAdventureCard(AdventureCard card) {</b>
+<b class="nc">&nbsp;        this.card = card;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected List&lt;String&gt; getNewDescription(){
+<b class="nc">&nbsp;        List&lt;String&gt; description = new ArrayList&lt;&gt;();</b>
+&nbsp;//        description.add(&quot;[NO CARD]&quot;); // default value
+<b class="nc">&nbsp;        switch(card){</b>
+<b class="nc">&nbsp;            case AbandonedShipCard abandonedShipCard -&gt; {</b>
+<b class="nc">&nbsp;                description.add(&quot;[ABANDONED SHIP]&quot;);</b>
+<b class="nc">&nbsp;                description.add(&quot;Flight days lost: &quot; + abandonedShipCard.getFlightDaysLoss());</b>
+<b class="nc">&nbsp;                description.add(&quot;Credits prize: &quot; + abandonedShipCard.getCreditPrize());</b>
+<b class="nc">&nbsp;                description.add(&quot;Required crew sacrifice: &quot; + abandonedShipCard.getRequiredCrew());</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case AbandonedStationCard abandonedStationCard -&gt; {</b>
+<b class="nc">&nbsp;                description.add(&quot;[ABANDONED STATION]&quot;);</b>
+<b class="nc">&nbsp;                description.addAll(describeGoods(abandonedStationCard.getGoodsPrize()));</b>
+<b class="nc">&nbsp;                description.add(&quot;Flight days lost: &quot; + abandonedStationCard.getFlightDaysLoss());</b>
+<b class="nc">&nbsp;                description.add(&quot;Required crew sacrifice: &quot; + abandonedStationCard.getRequiredCrew());</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case CombatZoneCard combatZoneCard -&gt; {</b>
+<b class="nc">&nbsp;                description.add(&quot;[COMBAT ZONE]&quot;);</b>
+<b class="nc">&nbsp;                List&lt;CombatZoneCheck&gt; checks = combatZoneCard.getChecks();</b>
+<b class="nc">&nbsp;                List&lt;Penalty&gt; penalties = combatZoneCard.getPenalties();</b>
+<b class="nc">&nbsp;                List&lt;String&gt; penaltyStrings = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;                for(Penalty penalty : penalties){</b>
+<b class="nc">&nbsp;                    switch (penalty) {</b>
+<b class="nc">&nbsp;                        case ProjectileThreat projectileThreat -&gt; penaltyStrings.add(&quot; penalty: projectile threat&quot;);</b>
+<b class="nc">&nbsp;                        case CrewLoss crewLoss -&gt; penaltyStrings.add(&quot; penalty: crew loss&quot;);</b>
+<b class="nc">&nbsp;                        case FlightDaysLoss flightDaysLoss -&gt; penaltyStrings.add(&quot; penalty: flight days loss&quot;);</b>
+<b class="nc">&nbsp;                        case GoodsLoss goodsLoss -&gt; penaltyStrings.add(&quot; penalty: goods loss&quot;);</b>
+<b class="nc">&nbsp;                        default -&gt; throw new IllegalStateException(&quot;Unexpected value: &quot; + penalty);</b>
+&nbsp;                    }
+&nbsp;                }
+<b class="nc">&nbsp;                for (int i = 0; i &lt; checks.size(); i++) {</b>
+<b class="nc">&nbsp;                    description.add(&quot;Check the &quot; + checks.get(i) + penaltyStrings.get(i));</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            case EpidemicCard epidemicCard -&gt; {</b>
+<b class="nc">&nbsp;                description.add(&quot;[EPIDEMIC]&quot;);</b>
+<b class="nc">&nbsp;                description.add(&quot;An epidemic strikes!&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case MeteorSwarmCard meteorSwarmCard -&gt; {</b>
+<b class="nc">&nbsp;                description.add(&quot;[METEOR SWARM]&quot;);</b>
+<b class="nc">&nbsp;                description.addAll(describeProjectiles(meteorSwarmCard.getProjectiles()));</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case OpenSpaceCard openSpaceCard -&gt; {</b>
+<b class="nc">&nbsp;                description.add(&quot;[OPEN SPACE]&quot;);</b>
+<b class="nc">&nbsp;                description.add(&quot;Warm up those engines!&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case PiratesCard piratesCard -&gt; {</b>
+<b class="nc">&nbsp;                description.add(&quot;[PIRATES]&quot;);</b>
+<b class="nc">&nbsp;                description.addAll(describeProjectiles(piratesCard.getProjectiles()));</b>
+<b class="nc">&nbsp;                description.add(&quot;Needed firepower to defeat pirates: &quot; + piratesCard.getFirePowerThreshold());</b>
+<b class="nc">&nbsp;                description.add(&quot;Credits reward for defeating: &quot; + piratesCard.getCreditPrize());</b>
+<b class="nc">&nbsp;                description.add(&quot;Flight days lost: &quot; + piratesCard.getFlightDaysLoss());</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case PlanetsCard planetsCard -&gt; {</b>
+<b class="nc">&nbsp;                description.add(&quot;[PLANETS]&quot;);</b>
+<b class="nc">&nbsp;                description.add(&quot;Flight days lost for landing: &quot; + planetsCard.getFlightDaysLoss());</b>
+<b class="nc">&nbsp;                description.addAll(describePlanets(planetsCard.getPlanets()));</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case SabotageCard sabotageCard -&gt; {</b>
+<b class="nc">&nbsp;                description.add(&quot;[SABOTAGE]&quot;);</b>
+<b class="nc">&nbsp;                description.add(&quot;Sabotage! Tough luck to whoever has the least crew.&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case SlaversCard slaversCard -&gt; {</b>
+<b class="nc">&nbsp;                description.add(&quot;[SLAVERS]&quot;);</b>
+<b class="nc">&nbsp;                description.add(&quot;Firepower needed to defeat slavers: &quot; + slaversCard.getFirePowerThreshold());</b>
+<b class="nc">&nbsp;                description.add(&quot;Crew lost if not defeated: &quot; + slaversCard.getCrewLoss());</b>
+<b class="nc">&nbsp;                description.add(&quot;Credits reward for defeating: &quot; + slaversCard.getCreditPrize());</b>
+<b class="nc">&nbsp;                description.add(&quot;Flight days lost for defeating: &quot; + slaversCard.getFlightDaysLoss())</b>
+&nbsp;                        ;
+&nbsp;            }
+<b class="nc">&nbsp;            case SmugglersCard smugglersCard -&gt; {</b>
+<b class="nc">&nbsp;                description.add(&quot;[SMUGGLERS]&quot;);</b>
+<b class="nc">&nbsp;                description.add(&quot;Firepower needed to defeat smugglers: &quot; + smugglersCard.getFirePowerThreshold());</b>
+<b class="nc">&nbsp;                description.add(&quot;Goods received for defeating smugglers:&quot; + describeGoods(smugglersCard.getGoodsPrize()));</b>
+<b class="nc">&nbsp;                description.add(&quot;Flight days lost for defeating smugglers: &quot; + smugglersCard.getFlightDaysLoss());</b>
+<b class="nc">&nbsp;                description.add(&quot;Goods lost if not defeated: &quot; + smugglersCard.getGoodsLoss())</b>
+&nbsp;                        ;
+&nbsp;            }
+<b class="nc">&nbsp;            case StarDustCard starDustCard -&gt; {</b>
+<b class="nc">&nbsp;                description.add(&quot;[STAR DUST]&quot;);</b>
+<b class="nc">&nbsp;                description.add(&quot;Hope you have those connectors sealed!&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            default -&gt; throw new IllegalStateException(&quot;Unexpected AdventureCard: &quot; + card);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return description;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static List&lt;String&gt; describePlanets(List&lt;Map&lt;GoodsType, Integer&gt;&gt; planets) {
+&nbsp;        /*
+&nbsp;        * entrySet().stream() — loop over all good types per planet
+&nbsp;        * Collections.nCopies() — repeat goods names based on count
+&nbsp;        * flatMap() — flatten the repeated names into one stream
+&nbsp;        * joining(&quot;, &quot;) — turn them into the nice comma-separated string
+&nbsp;        * */
+<b class="nc">&nbsp;        List&lt;String&gt; description = new ArrayList&lt;&gt;();</b>
+&nbsp;        StringBuilder row;
+<b class="nc">&nbsp;        if (planets.isEmpty()) return List.of(&quot;No planets.&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        List&lt;GoodsType&gt; orderedGoods = List.of(GoodsType.BLUE, GoodsType.GREEN, GoodsType.YELLOW, GoodsType.RED);</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; planets.size(); i++) {</b>
+<b class="nc">&nbsp;            row = new StringBuilder();</b>
+<b class="nc">&nbsp;            row.append(&quot;planet &quot;).append(i).append(&quot;: &quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;            int finalI = i;</b>
+<b class="nc">&nbsp;            String goods = orderedGoods.stream()</b>
+<b class="nc">&nbsp;                    .flatMap(type -&gt; {</b>
+<b class="nc">&nbsp;                        int count = planets.get(finalI).getOrDefault(type, 0);</b>
+<b class="nc">&nbsp;                        return Collections.nCopies(count, type.name().toLowerCase()).stream();</b>
+&nbsp;                    })
+<b class="nc">&nbsp;                    .collect(Collectors.joining(&quot;, &quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;            row.append(goods);</b>
+<b class="nc">&nbsp;            description.add(row.toString());</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return description;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static List&lt;String&gt; describeGoods(Map&lt;GoodsType, Integer&gt; goods) {
+<b class="nc">&nbsp;        if (goods.isEmpty()) return List.of(&quot;No goods.&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        List&lt;GoodsType&gt; orderedGoods = List.of(GoodsType.BLUE, GoodsType.GREEN, GoodsType.YELLOW, GoodsType.RED);</b>
+&nbsp;
+<b class="nc">&nbsp;        return orderedGoods.stream()</b>
+<b class="nc">&nbsp;                .flatMap(type -&gt; Collections.nCopies(goods.getOrDefault(type, 0), type.name().toLowerCase()).stream())</b>
+<b class="nc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static List&lt;String&gt; describeProjectiles(List&lt;Projectile&gt; projectiles) {
+<b class="nc">&nbsp;        if(projectiles.isEmpty()) return List.of(&quot;No projectiles.&quot;);</b>
+<b class="nc">&nbsp;        List&lt;String&gt; description = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;        StringBuilder result;
+<b class="nc">&nbsp;        for(Projectile projectile : projectiles) {</b>
+<b class="nc">&nbsp;            result = new StringBuilder();</b>
+<b class="nc">&nbsp;            result.append(projectile.type())</b>
+<b class="nc">&nbsp;                    .append(&quot; coming from &quot;)</b>
+<b class="nc">&nbsp;                    .append(projectile.direction());</b>
+<b class="nc">&nbsp;            description.add(result.toString());</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return description;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

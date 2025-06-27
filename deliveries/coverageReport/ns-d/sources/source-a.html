@@ -1,0 +1,187 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliLifeSupport</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents</a>
+</div>
+
+<h1>Coverage Summary for Class: CliLifeSupport (it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliLifeSupport</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CliLifeSupport$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.CliHighlights;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.LifeSupport;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a CLI component for displaying the Life Support system in the Galaxy Truckers game.
+&nbsp; */
+&nbsp;public class CliLifeSupport extends CliComponent {
+&nbsp;
+&nbsp;    private final LifeSupport lifeSupport;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new CLI representation of a Life Support component.
+&nbsp;     *
+&nbsp;     * @param component the LifeSupport component to be represented
+&nbsp;     */
+&nbsp;    public CliLifeSupport(LifeSupport component) {
+<b class="nc">&nbsp;        super(component);</b>
+<b class="nc">&nbsp;        this.lifeSupport = component;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected List&lt;String&gt; getNewDescription() {
+&nbsp;        String open;
+<b class="nc">&nbsp;        switch (lifeSupport.getAlienType()){</b>
+<b class="nc">&nbsp;            case CrewType.PURPLE -&gt; open = CliHighlights.MAGENTA.getHighlight();</b>
+<b class="nc">&nbsp;            case CrewType.BROWN -&gt; open = CliHighlights.YELLOW.getHighlight();</b>
+<b class="nc">&nbsp;            case CrewType.HUMAN -&gt; open = CliHighlights.WHITE.getHighlight();</b>
+<b class="nc">&nbsp;            default -&gt; open = CliHighlights.RESET.getHighlight();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return addBorders(open + &quot; Ѫ &quot; + CliHighlights.RESET.getHighlight());</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,266 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliValidationScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: CliValidationScreen (it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliValidationScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    12.5%
+  </span>
+  <span class="absValue">
+    (1/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    6.5%
+  </span>
+  <span class="absValue">
+    (3/46)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    9.8%
+  </span>
+  <span class="absValue">
+    (6/61)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.CliHighlights;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.ShipCorrectionState;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * CLI screen for validating and correcting ship configurations in the game.
+&nbsp; */
+&nbsp;public class CliValidationScreen extends CliScreen {
+&nbsp;
+&nbsp;    private boolean shipValid;
+&nbsp;    private boolean shipBroken;
+&nbsp;    private int myShipPieces;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new validation screen with the given game state.
+&nbsp;     *
+&nbsp;     * @param model      The client model containing the current game state
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     * @param gameState  The current ship correction state
+&nbsp;     */
+&nbsp;    public CliValidationScreen(ClientModel model, ClientControllerInterface controller, ShipCorrectionState gameState) {
+<b class="fc">&nbsp;        super(model, controller, gameState);</b>
+<b class="fc">&nbsp;        shipValid = gameState.getValidShipBoards().contains(myShipBoard);</b>
+<b class="fc">&nbsp;        shipBroken = false;</b>
+<b class="pc">&nbsp;        if (shipValid) shipBroken = gameState.getShipPieces().containsKey(myShipBoard);</b>
+<b class="pc">&nbsp;        if (shipBroken) myShipPieces = gameState.getShipPieces().get(myShipBoard).size();</b>
+<b class="pc">&nbsp;        for(ShipBoard ship : gameState.getShipPieces().keySet()) {</b>
+<b class="nc">&nbsp;            shipNotConnected(ship, gameState.getShipPieces().get(ship));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void render() {
+<b class="nc">&nbsp;        printShipFlightStats().forEach(System.out::println);</b>
+&nbsp;
+<b class="nc">&nbsp;        if(shipBroken) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;your ship is broken, choose a piece to keep from these&quot;);</b>
+<b class="nc">&nbsp;            List&lt;CliHighlights&gt; highlights = CliHighlights.getSomeColors(myShipPieces);</b>
+<b class="nc">&nbsp;            for(int i = 1; i &lt;= myShipPieces; i++) {</b>
+<b class="nc">&nbsp;                String colorChoice = highlights.get(i) == CliHighlights.RESET ? &quot;WHITE&quot; : highlights.get(i).toString();</b>
+<b class="nc">&nbsp;                System.out.println(highlights.get(i).getHighlight() + i + &quot; &quot; + colorChoice + CliHighlights.RESET.getHighlight() + &quot;\t&quot;);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        if (!shipValid) {//add else if to separate validation and ship piece choice</b>
+<b class="nc">&nbsp;            System.out.println(&quot;\nyour ship has invalid component positioning, choose a component to remove&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if(!shipBroken &amp;&amp; shipValid) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;someone else has an invalid ship, wait while they correct them&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        printActions();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void parseAndInvoke(String input)  {
+<b class="nc">&nbsp;        if (shipValid &amp;&amp; !shipBroken) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;your ship is valid, wait for other players&quot;);</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;        String[] parts = input.split(&quot;\\s+&quot;);</b>
+<b class="nc">&nbsp;        switch (parts[0].toUpperCase()){</b>
+&nbsp;            case &quot;R&quot; -&gt; {
+<b class="nc">&nbsp;                if(shipValid) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;ship is valid, wait for other players, unreachable&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                Point point = getPoint(input);</b>
+<b class="nc">&nbsp;                if (!myShipBoard.getShipArea().contains(point)) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;Cannot place component outside of the ship&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                if (!myShipBoard.getComponentMap().containsKey(point)) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;There&#39;s no component in that point&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                controller.removeComponent(point);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            case &quot;K&quot; -&gt; {
+<b class="nc">&nbsp;                if(!shipBroken) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;unreachable statement&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                int pos = Integer.parseInt(parts[1]);</b>
+<b class="nc">&nbsp;                if(pos &gt;= myShipPieces || pos &lt; 0){</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;invalid ship piece choice&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                controller.chooseShipPiece(Integer.parseInt(parts[1]));</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
+<b class="nc">&nbsp;        CliShipBoard ship = shipToCliShip.get(shipBoard);</b>
+<b class="nc">&nbsp;        ship.onRemoveComponent(point);</b>
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List&lt;Point&gt; removed){
+<b class="nc">&nbsp;        CliShipBoard ship = shipToCliShip.get(shipBoard);</b>
+<b class="nc">&nbsp;        for(Point point : removed){</b>
+<b class="nc">&nbsp;            ship.onRemoveComponent(point);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if(myShipBoard == shipBoard) {</b>
+<b class="nc">&nbsp;            shipBroken = false;</b>
+<b class="nc">&nbsp;            shipValid = true;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyShipNotConnected(ShipBoard shipBoard, List&lt;Set&lt;Point&gt;&gt; shipPieces){
+<b class="nc">&nbsp;        if(myShipBoard == shipBoard) {</b>
+<b class="nc">&nbsp;            myShipPieces = shipPieces.size();</b>
+<b class="nc">&nbsp;            shipBroken = true;</b>
+<b class="nc">&nbsp;            shipValid = true;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        shipNotConnected(shipBoard, shipPieces);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void shipNotConnected(ShipBoard shipBoard, List&lt;Set&lt;Point&gt;&gt; shipPieces) {
+<b class="nc">&nbsp;        int numPieces = shipPieces.size();</b>
+<b class="nc">&nbsp;        List&lt;CliHighlights&gt; highlights = CliHighlights.getSomeColors(numPieces);</b>
+<b class="nc">&nbsp;        for(int i = 0; i &lt; numPieces; i++){</b>
+<b class="nc">&nbsp;            shipToCliShip.get(shipBoard).highlightPoints(shipPieces.get(i), highlights.get(i + 1));</b>
+&nbsp;        }
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyShipValidated(ShipBoard shipBoard){
+<b class="nc">&nbsp;        if(myShipBoard == shipBoard) {</b>
+<b class="nc">&nbsp;            shipBroken = false;</b>
+<b class="nc">&nbsp;            shipValid = true;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

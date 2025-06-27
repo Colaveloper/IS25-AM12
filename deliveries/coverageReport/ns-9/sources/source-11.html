@@ -1,0 +1,238 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ShipCorrectionState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.model.state</a>
+</div>
+
+<h1>Coverage Summary for Class: ShipCorrectionState (it.polimi.ingsw.galaxytruckers.client.model.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ShipCorrectionState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    22.2%
+  </span>
+  <span class="absValue">
+    (2/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (8/32)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.model.state;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.List;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents the state where players correct issues with their ships in the Galaxy Truckers game.
+&nbsp; * This state is triggered when a ship has validation issues, such as disconnected components
+&nbsp; * or rule violations. Players must fix these issues by either removing problematic components
+&nbsp; * or choosing which ship piece to keep when disconnected.
+&nbsp; */
+&nbsp;public final class ShipCorrectionState extends GameState implements GameStateInterface {
+&nbsp;    /** Set of ship boards that have passed validation */
+&nbsp;    private final Set&lt;ShipBoard&gt; validShipBoards;
+&nbsp;
+&nbsp;    /** Map of ship boards to their disconnected pieces (for ships that are not connected) */
+&nbsp;    private final Map&lt;ShipBoard, List&lt;Set&lt;Point&gt;&gt;&gt; shipPieces;
+&nbsp;
+&nbsp;    /** Flag indicating whether removed components should be counted as losses */
+&nbsp;    private final boolean shouldDiscard;
+&nbsp;
+&nbsp;    /** Flag indicating whether the local player&#39;s ship is connected */
+&nbsp;    private boolean isConnected;
+&nbsp;
+&nbsp;    /** Flag indicating whether the local player&#39;s ship is valid */
+&nbsp;    private boolean isValid;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new ShipCorrectionState with the specified parameters.
+&nbsp;     * Initializes the state with the player&#39;s ship, valid ship boards, disconnected ship pieces,
+&nbsp;     * and discard flag. Determines the initial validity and connectivity status of the player&#39;s ship.
+&nbsp;     *
+&nbsp;     * @param myShip The ship board of the local player
+&nbsp;     * @param validShipBoards Set of ship boards that have passed validation
+&nbsp;     * @param shipPieces Map of ship boards to their disconnected pieces
+&nbsp;     * @param shouldDiscard Flag indicating whether removed components should be counted as losses
+&nbsp;     */
+<b class="fc">&nbsp;    public ShipCorrectionState(ShipBoard myShip, Set&lt;ShipBoard&gt; validShipBoards, Map&lt;ShipBoard, List&lt;Set&lt;Point&gt;&gt;&gt; shipPieces, boolean shouldDiscard) {</b>
+<b class="fc">&nbsp;        this.myShip = myShip;</b>
+<b class="fc">&nbsp;        isValid = validShipBoards.contains(myShip);</b>
+<b class="fc">&nbsp;        isConnected = !shipPieces.containsKey(myShip);</b>
+<b class="fc">&nbsp;        this.validShipBoards = validShipBoards;</b>
+<b class="fc">&nbsp;        this.shipPieces = shipPieces;</b>
+<b class="fc">&nbsp;        this.shouldDiscard = shouldDiscard;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;StateActions&gt; getAvailableActions() {
+<b class="nc">&nbsp;        if(!isValid) return List.of(StateActions.REMOVE_COMPONENT);</b>
+<b class="nc">&nbsp;        if(!isConnected) return List.of(StateActions.CHOOSE_SHIP_PIECE);</b>
+<b class="nc">&nbsp;        return List.of();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
+<b class="nc">&nbsp;        shipBoard.removeComponent(point);</b>
+<b class="nc">&nbsp;        if (shouldDiscard) shipBoard.incrementLosses(1);</b>
+<b class="nc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyRemoveComponent(shipBoard, point));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
+<b class="nc">&nbsp;        if(myShip == shipBoard) isConnected = true;</b>
+<b class="nc">&nbsp;        List&lt;Point&gt; removedPoints = shipBoard.removeShipPiece(shipPieces.get(shipBoard), pieceIndex);</b>
+<b class="nc">&nbsp;        if (shouldDiscard) shipBoard.incrementLosses(removedPoints.size());</b>
+<b class="nc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyChooseShipPiece(shipBoard, pieceIndex, removedPoints));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyShipNotConnected(ShipBoard shipBoard, List&lt;Set&lt;Point&gt;&gt; shipPieces) {
+<b class="nc">&nbsp;        if(myShip == shipBoard) {</b>
+<b class="nc">&nbsp;            isConnected = false;</b>
+<b class="nc">&nbsp;            isValid = true;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        validShipBoards.add(shipBoard);</b>
+<b class="nc">&nbsp;        this.shipPieces.put(shipBoard, shipPieces);</b>
+<b class="nc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyShipNotConnected(shipBoard, shipPieces));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyShipValidated(ShipBoard shipBoard) {
+<b class="nc">&nbsp;        if(myShip == shipBoard) {</b>
+<b class="nc">&nbsp;            isConnected = true;</b>
+<b class="nc">&nbsp;            isValid = true;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        shipPieces.remove(shipBoard);</b>
+<b class="nc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyShipValidated(shipBoard));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the set of ship boards that have passed validation.
+&nbsp;     * This represents ships that meet the basic validation requirements,
+&nbsp;     * though they may still have connectivity issues.
+&nbsp;     *
+&nbsp;     * @return Set of ship boards that have passed validation
+&nbsp;     */
+&nbsp;    public Set&lt;ShipBoard&gt; getValidShipBoards() {
+<b class="nc">&nbsp;        return validShipBoards;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the mapping of ship boards to their disconnected pieces.
+&nbsp;     * For each ship board with connectivity issues, this returns a list of sets of points,
+&nbsp;     * where each set represents a disconnected piece of the ship.
+&nbsp;     *
+&nbsp;     * @return Map of ship boards to their disconnected pieces
+&nbsp;     */
+&nbsp;    public Map&lt;ShipBoard, List&lt;Set&lt;Point&gt;&gt;&gt; getShipPieces() {
+<b class="fc">&nbsp;        return shipPieces;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
+<b class="nc">&nbsp;        int numResidents = shipBoard.initializeCabin(point, crewType);</b>
+<b class="nc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyInitializeCabin(shipBoard, point, crewType, numResidents));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

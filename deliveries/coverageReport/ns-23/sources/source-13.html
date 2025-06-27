@@ -1,0 +1,319 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GameInterface</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model</a>
+</div>
+
+<h1>Coverage Summary for Class: GameInterface (it.polimi.ingsw.galaxytruckers.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">GameInterface</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GameColor;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;
+&nbsp;public interface GameInterface {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests a snapshot of the game state for the given ship board. The
+&nbsp;     * snapshot will be notified to the event listener.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board for which to request the snapshot
+&nbsp;     */
+&nbsp;    void requestSnapshot(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds a ship board to the game with the specified color.
+&nbsp;     *
+&nbsp;     * @param color the color of the ship board to add
+&nbsp;     * @return the newly added ship board
+&nbsp;     */
+&nbsp;    ShipBoard addShipBoard(GameColor color);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the callback to be executed when the adventure starts.
+&nbsp;     *
+&nbsp;     * @param startAdventureCallback the callback to be executed when the adventure starts
+&nbsp;     */
+&nbsp;    void setStartAdventureCallback(Runnable startAdventureCallback);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Starts the game, setting the game state to the initial state.
+&nbsp;     */
+&nbsp;    void start();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Starts a game directly in the adventure phase, skipping the ship building phase.
+&nbsp;     * Initializes the deck and the flight board and sets the current state to DrawCardState.
+&nbsp;     */
+&nbsp;    void skipBuilding();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Skips the available actions for the given ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board for which to skip actions
+&nbsp;     */
+&nbsp;    void skip(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests a random component for the specified ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board to request the component for
+&nbsp;     */
+&nbsp;    void requestRandComponent(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests a specific component by its ID for the specified ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board to request the component for
+&nbsp;     * @param componentID the ID of the component to request
+&nbsp;     */
+&nbsp;    void requestComponent(ShipBoard shipBoard, int componentID);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Rejects the current component of the specified ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board from which to reject the component
+&nbsp;     */
+&nbsp;    void rejectComponent(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Stashes the current component of the specified ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board from which to stash the component
+&nbsp;     */
+&nbsp;    void stashComponent(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Grabs the placed component from the specified ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board from which to grab the placed component
+&nbsp;     */
+&nbsp;    void grabPlacedComponent(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Grabs a stashed component from the specified ship board at the given index.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board from which to grab the stashed component
+&nbsp;     * @param index the index of the stashed component to grab
+&nbsp;     */
+&nbsp;    void grabStashedComponent(ShipBoard shipBoard, int index);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places a component on the specified ship board at the given point and orientation.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board on which to place the component
+&nbsp;     * @param point the point where the component should be placed
+&nbsp;     * @param orientation the orientation of the component
+&nbsp;     */
+&nbsp;    void placeComponent(ShipBoard shipBoard, Point point, Direction orientation);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Let the specified ship board flip the hourglass
+&nbsp;     * @param shipBoard the ship board that flips the hourglass
+&nbsp;     */
+&nbsp;    void flipHourglass(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places a ship on the flight board at the specified starting position.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board to place
+&nbsp;     * @param startingPosition the starting position on the flight board
+&nbsp;     */
+&nbsp;    void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places a ship on the flight board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board to place
+&nbsp;     */
+&nbsp;    void placeShipOnFlightBoard(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Acquires a forecast for the specified ship board at the given deck index.
+&nbsp;     * @param shipBoard the ship board for which to acquire the forecast
+&nbsp;     * @param deckIndex the index of the deck from which to acquire the forecast
+&nbsp;     */
+&nbsp;    void acquireForecast(ShipBoard shipBoard, int deckIndex);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Releases the forecast from the specified ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board for which to release the forecast
+&nbsp;     */
+&nbsp;    void releaseForecast(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes a component from the specified ship board at the given point.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board from which to remove the component
+&nbsp;     * @param point the point where the component is located
+&nbsp;     */
+&nbsp;    void removeComponent(ShipBoard shipBoard, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Chooses a ship piece from the specified ship board at the given index.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board from which to choose the piece
+&nbsp;     * @param pieceIndex the index of the piece to choose
+&nbsp;     */
+&nbsp;    void chooseShipPiece(ShipBoard shipBoard, int pieceIndex);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes a cabin on the specified ship board at the given point with the specified crew type.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board on which to initialize the cabin
+&nbsp;     * @param point the point where the cabin should be initialized
+&nbsp;     * @param crewType the type of crew that will occupy the cabin
+&nbsp;     */
+&nbsp;    void initializeCabin(ShipBoard shipBoard, Point point, CrewType crewType);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Activates a component on the specified ship board at the given point.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board on which to activate the component
+&nbsp;     * @param point the point where the component is located
+&nbsp;     */
+&nbsp;    void activateComponent(ShipBoard shipBoard, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Loses a crew member from the specified ship board at the given point.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board from which to lose the crew member
+&nbsp;     * @param point the point where the crew member is located
+&nbsp;     */
+&nbsp;    void loseCrew(ShipBoard shipBoard, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Grabs a reward from the specified ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board from which to grab the reward
+&nbsp;     */
+&nbsp;    void grabReward(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places goods of a specific type on the specified ship board at the given point.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board on which to place the goods
+&nbsp;     * @param point the point where the goods should be placed
+&nbsp;     * @param goodsType the type of goods to place
+&nbsp;     */
+&nbsp;    void placeGoods(ShipBoard shipBoard, Point point, GoodsType goodsType);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes goods of a specific type from the specified ship board at the given point.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board from which to remove the goods
+&nbsp;     * @param point the point where the goods are located
+&nbsp;     * @param goodsType the type of goods to remove
+&nbsp;     */
+&nbsp;    void removeGoods(ShipBoard shipBoard, Point point, GoodsType goodsType);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Uses a battery on the specified ship board at the given point.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board on which to use the battery
+&nbsp;     * @param point the point where the battery is located
+&nbsp;     */
+&nbsp;    void useBattery(ShipBoard shipBoard, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Chooses a planet from the specified ship board based on the given choice.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board from which to choose the planet
+&nbsp;     * @param choice the index of the planet to choose
+&nbsp;     */
+&nbsp;    void choosePlanet(ShipBoard shipBoard, int choice);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Let the specified ship board give up on the current game.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board that gives up
+&nbsp;     */
+&nbsp;    void giveUp(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Let the specified ship board draw a card from the deck.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board that draws a card
+&nbsp;     */
+&nbsp;    void drawCard(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes the most valuable good from the specified ship board at the given point.
+&nbsp;     * @param shipBoard the ship board from which to remove the good
+&nbsp;     * @param point the point where the good is located
+&nbsp;     */
+&nbsp;    void loseGood(ShipBoard shipBoard, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Moves to the next state of the game for the specified ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board that asks to go to the next state
+&nbsp;     */
+&nbsp;    void goNext(ShipBoard shipBoard);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

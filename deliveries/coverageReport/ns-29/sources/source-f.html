@@ -1,0 +1,437 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ShipBuildingState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.state</a>
+</div>
+
+<h1>Coverage Summary for Class: ShipBuildingState (it.polimi.ingsw.galaxytruckers.server.model.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ShipBuildingState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (22/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (78/78)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.state;
+&nbsp;
+&nbsp;import com.google.common.annotations.VisibleForTesting;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.FlightBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ComponentBank;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;public abstract class ShipBuildingState extends GameState {
+&nbsp;    private final ComponentBank componentBank;
+<b class="fc">&nbsp;    protected final Set&lt;ShipBoard&gt; completedShipBoards = new HashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;    protected final Set&lt;ShipBoard&gt; pendingShipBoards = new HashSet&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;    private final Object coveredLock = new Object();</b>
+<b class="fc">&nbsp;    private final Object uncoveredLock = new Object();</b>
+&nbsp;
+<b class="fc">&nbsp;    protected final Object endLock = new Object();</b>
+&nbsp;
+<b class="fc">&nbsp;    public ShipBuildingState() {</b>
+<b class="fc">&nbsp;        this.componentBank = new ComponentBank();</b>
+<b class="fc">&nbsp;        this.componentBank.initialize();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Signals to the state that the player is inactive, so that the building
+&nbsp;     * phase ends if all other ships are completed.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board of the player who wants to skip
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void skip(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        synchronized (endLock) {</b>
+<b class="fc">&nbsp;            pendingShipBoards.add(shipBoard);</b>
+<b class="fc">&nbsp;            tryToEnd();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void cancelSkip(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        removePending(shipBoard);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests a face down component from the component bank and
+&nbsp;     * offers it to the specified ship board (by calling {@link ShipBoard#offerComponent(Component)}).
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board requesting the component
+&nbsp;     * @throws IllegalStateException if the ship board is already completed
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void requestRandComponent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        if (getCompletedShipBoards().contains(shipBoard)) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;Ship Board already completed&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        synchronized (coveredLock) {</b>
+<b class="fc">&nbsp;            Component component = componentBank.drawRandComponent();</b>
+&nbsp;            try {
+<b class="fc">&nbsp;                shipBoard.offerComponent(component);</b>
+<b class="fc">&nbsp;                game.getEventListener().notifyRequestFaceDownComponentEvent(shipBoard, component);</b>
+&nbsp;            } catch (IllegalStateException e) {
+<b class="fc">&nbsp;                componentBank.returnCoveredComponent(component);</b>
+&nbsp;                throw e;
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Requests a face up component from the component bank and offers
+&nbsp;     * it to the ship board (by calling {@link ShipBoard#offerComponent(Component)}).
+&nbsp;     *
+&nbsp;     * @param shipBoard   the ship board requesting the component
+&nbsp;     * @param componentId the ID of the component to request
+&nbsp;     * @throws IllegalStateException if the ship board is already completed
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void requestComponent(ShipBoard shipBoard, int componentId) {
+<b class="fc">&nbsp;        if (getCompletedShipBoards().contains(shipBoard)) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;Ship Board already completed&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        synchronized (uncoveredLock) {</b>
+<b class="fc">&nbsp;            Component component = componentBank.removeUncoveredComponent(componentId);</b>
+&nbsp;            try {
+<b class="fc">&nbsp;                shipBoard.offerComponent(component);</b>
+<b class="fc">&nbsp;                game.getEventListener().notifyRequestFaceUpComponentEvent(shipBoard, component);</b>
+&nbsp;            } catch (IllegalStateException e) {
+<b class="fc">&nbsp;                componentBank.addToUncoveredComponents(component);</b>
+&nbsp;                throw e;
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the in hand component of the specified ship board to
+&nbsp;     * the component bank as an uncovered component (by calling {@link ShipBoard#rejectComponent()} and
+&nbsp;     * {@link ComponentBank#addToUncoveredComponents(Component)}).
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board rejecting the component
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void rejectComponent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        if (getCompletedShipBoards().contains(shipBoard)) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;Ship Board already completed&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        synchronized (uncoveredLock) {</b>
+<b class="fc">&nbsp;            Component component = shipBoard.rejectComponent();</b>
+<b class="fc">&nbsp;            if (component == null) {</b>
+<b class="fc">&nbsp;                throw new IllegalStateException(&quot;You don&#39;t have any component to reject&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            componentBank.addToUncoveredComponents(component);</b>
+<b class="fc">&nbsp;            game.getEventListener().notifyRejectComponentEvent(shipBoard);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Stashes the in hand component of the specified ship board by calling
+&nbsp;     * {@link ShipBoard#stashComponent()}, if the actions is implemented in the
+&nbsp;     * specific state class.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board stashing the component
+&nbsp;     * @throws UnsupportedOperationException if the action is not available in this state
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void stashComponent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        throw new UnsupportedOperationException(&quot;This action is not available.&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Grabs the placed component of the specified ship board by calling
+&nbsp;     * {@link ShipBoard#grabPlacedComponent()}.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board grabbing the placed component
+&nbsp;     * @throws IllegalStateException if the ship board is already completed
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void grabPlacedComponent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        if (getCompletedShipBoards().contains(shipBoard)) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;Ship Board already completed&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        shipBoard.grabPlacedComponent();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Grabs a stashed component from the specified ship board by calling
+&nbsp;     * {@link ShipBoard#grabStashedComponent(int)}, if the actions is implemented in the
+&nbsp;     * specific state class.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board grabbing the stashed component
+&nbsp;     * @param index     the index of the stashed component
+&nbsp;     * @throws UnsupportedOperationException if the action is not available in this state
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void grabStashedComponent(ShipBoard shipBoard, int index) {
+<b class="fc">&nbsp;        throw new UnsupportedOperationException(&quot;This action is not available.&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places a component on the specified ship board at the given point and orientation
+&nbsp;     * by calling {@link ShipBoard#placeComponent(Point, Direction)}.
+&nbsp;     *
+&nbsp;     * @param shipBoard   the ship board where the component is placed
+&nbsp;     * @param point       the point where the component is placed
+&nbsp;     * @param orientation the orientation of the component
+&nbsp;     * @throws IllegalStateException if the ship board is already completed
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void placeComponent(ShipBoard shipBoard, Point point, Direction orientation) {
+<b class="fc">&nbsp;        if (getCompletedShipBoards().contains(shipBoard)) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;Ship Board already completed&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        shipBoard.placeComponent(point, orientation);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Flips the hourglass if the action is implemented in the specific state class.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board flipping the hourglass
+&nbsp;     * @throws UnsupportedOperationException if the action is not available in this state
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void flipHourglass(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        throw new UnsupportedOperationException(&quot;This action is not available at level &quot; + game.getLevel());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places a ship board on the flight board at the specified starting position
+&nbsp;     * by calling {@link FlightBoard#placeShipOnFlightBoard(ShipBoard, int)}.
+&nbsp;     * If the ship board is already completed, it throws an IllegalStateException.
+&nbsp;     *
+&nbsp;     * @param shipBoard        the ship board to place
+&nbsp;     * @param startingPosition the starting position on the flight board
+&nbsp;     * @throws UnsupportedOperationException if the action is not available in this state
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
+<b class="fc">&nbsp;        throw new UnsupportedOperationException(&quot;This action is not available at level &quot; + game.getLevel());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places a ship board on the flight board in the first available position by
+&nbsp;     * calling {@link FlightBoard#placeShipOnFlightBoard(ShipBoard)}.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board placing the ship
+&nbsp;     * @throws IllegalStateException if the ship board is already completed
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void placeShipOnFlightBoard(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        if (getCompletedShipBoards().contains(shipBoard)) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;Ship Board already completed&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        game.getFlightBoard().placeShipOnFlightBoard(shipBoard);</b>
+<b class="fc">&nbsp;        completeShipBoard(shipBoard);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Acquires a forecast for the specified ship board at the given deck index.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board acquiring the forecast
+&nbsp;     * @param deckIndex the index of the deck to acquire the forecast from
+&nbsp;     * @throws UnsupportedOperationException if the action is not available in this state
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void acquireForecast(ShipBoard shipBoard, int deckIndex) {
+<b class="fc">&nbsp;        throw new UnsupportedOperationException(&quot;This action is not available at level &quot; + game.getLevel());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Releases the forecast for the specified ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board releasing the forecast
+&nbsp;     * @throws UnsupportedOperationException if the action is not available in this state
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void releaseForecast(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        throw new UnsupportedOperationException(&quot;This action is not available at level &quot; + game.getLevel());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Ends the ship building phase by calling the abstract method.
+&nbsp;     * Moves on to {@link ShipCorrectionState}
+&nbsp;     */
+&nbsp;    protected abstract void endBuilding();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Flags the ship board as completed and tries to end the game
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board that has been completed
+&nbsp;     */
+&nbsp;    protected void completeShipBoard(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        synchronized (endLock) {</b>
+<b class="fc">&nbsp;            completedShipBoards.add(shipBoard);</b>
+<b class="fc">&nbsp;            tryToEnd();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if all ship boards are completed or have skipped and if so,
+&nbsp;     * ends the game by calling {@link #endBuilding()}.
+&nbsp;     */
+&nbsp;    private void tryToEnd() {
+<b class="fc">&nbsp;        Set&lt;ShipBoard&gt; missingShips = new HashSet&lt;&gt;(game.getShipBoards());</b>
+<b class="fc">&nbsp;        missingShips.removeAll(completedShipBoards);</b>
+<b class="fc">&nbsp;        missingShips.removeAll(pendingShipBoards);</b>
+<b class="fc">&nbsp;        if (missingShips.isEmpty()) {</b>
+<b class="fc">&nbsp;            endBuilding();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void removePending(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        synchronized (endLock) {</b>
+<b class="fc">&nbsp;            pendingShipBoards.remove(shipBoard);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return the component bank used in the ship building phase
+&nbsp;     */
+&nbsp;    public ComponentBank getComponentBank() {
+<b class="fc">&nbsp;        return componentBank;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return a set of completed ship boards
+&nbsp;     */
+&nbsp;    public Set&lt;ShipBoard&gt; getCompletedShipBoards() {
+&nbsp;        Set&lt;ShipBoard&gt; res;
+<b class="fc">&nbsp;        synchronized (endLock) {</b>
+<b class="fc">&nbsp;            res = new HashSet&lt;&gt;(completedShipBoards);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return res;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Custom constructor for testing purposes.
+&nbsp;     *
+&nbsp;     * @param testBank the component bank to use in the test
+&nbsp;     */
+&nbsp;    @VisibleForTesting
+<b class="fc">&nbsp;    protected ShipBuildingState(ComponentBank testBank) {</b>
+<b class="fc">&nbsp;        this.componentBank = testBank;</b>
+<b class="fc">&nbsp;        this.componentBank.initialize();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * To be used for testing purposes.
+&nbsp;     *
+&nbsp;     * @return set of pending ship boards
+&nbsp;     */
+&nbsp;    @VisibleForTesting
+&nbsp;    public Set&lt;ShipBoard&gt; getPendingShipBoards() {
+&nbsp;        Set&lt;ShipBoard&gt; res;
+<b class="fc">&nbsp;        synchronized (endLock) {</b>
+<b class="fc">&nbsp;            res = new HashSet&lt;&gt;(pendingShipBoards);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return res;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

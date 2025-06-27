@@ -1,0 +1,217 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Component</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.model.shipBuilding</a>
+</div>
+
+<h1>Coverage Summary for Class: Component (it.polimi.ingsw.galaxytruckers.client.model.shipBuilding)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Component</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.model.shipBuilding;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.Connector;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;/**
+&nbsp; * Base class for all client ship components.
+&nbsp; * This sealed class defines the common properties and behaviors shared by all ship components,
+&nbsp; * restricting its implementation to specific component types: Battery, Cabin, Cannon,
+&nbsp; * CargoHold, Engine, LifeSupport, and Shield.
+&nbsp; */
+&nbsp;public sealed class Component permits
+&nbsp;        Battery,
+&nbsp;        Cabin,
+&nbsp;        Cannon,
+&nbsp;        CargoHold,
+&nbsp;        Engine,
+&nbsp;        LifeSupport,
+&nbsp;        Shield {
+&nbsp;
+&nbsp;    /** Map of connectors that define how this component connects to adjacent components in each direction */
+&nbsp;    private final Map&lt;Direction, Connector&gt; connectors;
+&nbsp;    /** Current orientation of the component on the ship */
+&nbsp;    private Direction orientation;
+&nbsp;    /** Unique identifier for this component instance */
+&nbsp;    private final int id;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new component with specified connectors and ID.
+&nbsp;     * The component is initialized with an upward orientation.
+&nbsp;     *
+&nbsp;     * @param connectors Map defining connection points for each direction
+&nbsp;     * @param id Unique identifier for this component
+&nbsp;     */
+<b class="fc">&nbsp;    public Component(Map&lt;Direction, Connector&gt; connectors, int id) {</b>
+<b class="fc">&nbsp;        this.connectors = connectors;</b>
+<b class="fc">&nbsp;        this.orientation = Direction.UP;</b>
+<b class="fc">&nbsp;        this.id = id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the connector configuration for this component.
+&nbsp;     *
+&nbsp;     * @return Map of directional connectors
+&nbsp;     */
+&nbsp;    public Map&lt;Direction, Connector&gt; getConnectors() {
+<b class="fc">&nbsp;        return connectors;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the unique identifier of this component.
+&nbsp;     *
+&nbsp;     * @return The component&#39;s unique ID
+&nbsp;     */
+&nbsp;    public int getId() {
+<b class="fc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the current orientation of this component.
+&nbsp;     *
+&nbsp;     * @return The direction this component is facing
+&nbsp;     */
+&nbsp;    public Direction getOrientation() {
+<b class="fc">&nbsp;        return orientation;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the orientation of this component.
+&nbsp;     *
+&nbsp;     * @param orientation The new direction for this component to face
+&nbsp;     */
+&nbsp;    public void setOrientation(Direction orientation) {
+<b class="fc">&nbsp;        this.orientation = orientation;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Get the actual connector for a given orientation, accounting for the component&#39;s rotation.
+&nbsp;     *
+&nbsp;     * @param direction The requested orientation
+&nbsp;     * @return The connector in that orientation after rotation
+&nbsp;     */
+&nbsp;    public Connector getRotatedConnector(Direction direction) {
+<b class="fc">&nbsp;        int steps = 0;</b>
+<b class="fc">&nbsp;        Direction currentDir = Direction.UP;</b>
+&nbsp;
+<b class="fc">&nbsp;        while (currentDir != orientation) {</b>
+<b class="fc">&nbsp;            currentDir = currentDir.getRight();</b>
+<b class="fc">&nbsp;            steps++;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Direction rotatedDirection = direction;</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; steps; i++) {</b>
+<b class="fc">&nbsp;            rotatedDirection = rotatedDirection.getLeft();</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return connectors.get(rotatedDirection);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,253 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ClientControllerInterface</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: ClientControllerInterface (it.polimi.ingsw.galaxytruckers.client.controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">ClientControllerInterface$MockitoMock$km3nuYjz</td>
+  </tr>
+  <tr>
+    <td class="name">ClientControllerInterface$MockitoMock$km3nuYjz$auxiliary$01Klm5UW</td>
+  </tr>
+  <tr>
+    <td class="name">ClientControllerInterface$MockitoMock$km3nuYjz$auxiliary$QIjpg1fO</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.controller;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.VirtualServer;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;/**
+&nbsp; * Interface for client-to-server controller actions and client-side model updates.
+&nbsp; */
+&nbsp;public interface ClientControllerInterface {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Clears the model, deleting game data and resetting the state to JOIN_OR_CREATE
+&nbsp;     */
+&nbsp;    void clearModel();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void registerNickname(String input);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void flipHourglass();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void releaseForecast();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void requestNewGame(Level level, int playersN);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void showGameCreation();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void joinLobby(UUID lobbyID);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void requestRandComponent();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void requestComponent(int componentId);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void stashComponent();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void grabPlacedComponent();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void grabStashedComponent(int index);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void acquireForecast(int index);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void rejectComponent();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void placeComponent(Point point, Direction orientation);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void goNext();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void chooseShipPiece(int choice);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void activateComponent(Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void removeComponent(Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void useBattery(Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void initializeCabin(Point point, CrewType crewType);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void placeShipOnFlightboard(int startingPosition);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void placeShipOnFlightBoard();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void drawCard();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void placeGoods(Point point, GoodsType good);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void removeGoods(Point point, GoodsType good);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void loseGoods(Point p);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void choosePlanet(int choice);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void loseCrew(Point p);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void grabReward();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void giveUp();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calls the corresponding method on {@link VirtualServer}.
+&nbsp;     */
+&nbsp;    void quit();
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,182 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SafeSocket</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.network</a>
+</div>
+
+<h1>Coverage Summary for Class: SafeSocket (it.polimi.ingsw.galaxytruckers.network)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SafeSocket</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.network;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.messages.Message;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.ObjectInputStream;
+&nbsp;import java.io.ObjectOutputStream;
+&nbsp;import java.net.Socket;
+&nbsp;
+&nbsp;/**
+&nbsp; * A thread-safe wrapper around a Socket that provides methods to read and write messages.
+&nbsp; */
+&nbsp;public class SafeSocket {
+&nbsp;
+&nbsp;    private final Socket socket;
+&nbsp;    private final ObjectOutputStream out;
+&nbsp;    private final ObjectInputStream in;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a SafeSocket instance with the given Socket.
+&nbsp;     *
+&nbsp;     * @param socket the Socket to wrap
+&nbsp;     * @throws IOException if an I/O error occurs when creating the input or output streams
+&nbsp;     */
+<b class="nc">&nbsp;    public SafeSocket(Socket socket) throws IOException {</b>
+<b class="nc">&nbsp;        this.socket = socket;</b>
+<b class="nc">&nbsp;        this.out = new ObjectOutputStream(socket.getOutputStream());</b>
+<b class="nc">&nbsp;        out.flush();</b>
+<b class="nc">&nbsp;        this.in = new ObjectInputStream(socket.getInputStream());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Writes a Message to the socket&#39;s output stream.
+&nbsp;     *
+&nbsp;     * @param message the message to write
+&nbsp;     * @throws IOException if an I/O error occurs while writing the message
+&nbsp;     */
+&nbsp;    public synchronized void write (Message message) throws IOException {
+<b class="nc">&nbsp;        out.writeObject(message);</b>
+<b class="nc">&nbsp;        out.flush();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Reads a Message from the socket&#39;s input stream.
+&nbsp;     *
+&nbsp;     * @return the read Message
+&nbsp;     * @throws IOException if an I/O error occurs while reading the message
+&nbsp;     * @throws ClassNotFoundException if the class of the serialized object cannot be found
+&nbsp;     */
+&nbsp;    public Message read() throws IOException, ClassNotFoundException {
+<b class="nc">&nbsp;        return (Message) in.readObject();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Closes the socket and its associated streams.
+&nbsp;     *
+&nbsp;     * @throws IOException if an I/O error occurs while closing the streams or socket
+&nbsp;     */
+&nbsp;    public synchronized void close() throws IOException {
+<b class="nc">&nbsp;        if (!socket.isClosed()) {</b>
+<b class="nc">&nbsp;            out.close();</b>
+<b class="nc">&nbsp;            in.close();</b>
+<b class="nc">&nbsp;            socket.close();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,246 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliGoodsScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: CliGoodsScreen (it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliGoodsScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/35)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4.1%
+  </span>
+  <span class="absValue">
+    (2/49)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.CargoHold;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.AddGoodsState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.GoodsBuffer;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * CLI screen for the add goods phase in the Galaxy Truckers game.
+&nbsp; */
+&nbsp;public class CliGoodsScreen extends CliAdventureScreen {
+&nbsp;
+&nbsp;    private final GoodsBuffer goodsBuffer;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new goods management screen with the given game state.
+&nbsp;     *
+&nbsp;     * @param model      The client model containing the current game state
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     * @param gameState  The current add-goods state
+&nbsp;     */
+&nbsp;    public CliGoodsScreen(ClientModel model, ClientControllerInterface controller, AddGoodsState gameState) {
+<b class="fc">&nbsp;        super(model, controller, gameState);</b>
+<b class="fc">&nbsp;        this.goodsBuffer = gameState.getGoodsBuffer();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void render() {
+<b class="nc">&nbsp;        printShipFlightStats().forEach(System.out::println);</b>
+<b class="nc">&nbsp;        if(imOut) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;you surrendered&quot;);</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;        if (isMyTurn) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Your turn to manage goods&quot;);</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Goods in buffer:&quot;);</b>
+<b class="nc">&nbsp;            for (GoodsType type : GoodsType.values()) {</b>
+<b class="nc">&nbsp;                int amount = goodsBuffer.getGoodsBuffer().getOrDefault(type, 0);</b>
+<b class="nc">&nbsp;                if (amount &gt; 0) {</b>
+<b class="nc">&nbsp;                    System.out.println(type + &quot;: &quot; + amount);</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            System.out.println(&quot;Cargo holds with goods: &quot; + countCargoHoldsWithGoods());</b>
+&nbsp;//            System.out.println(&quot;Use P x y TYPE to place goods or R x y TYPE to remove goods&quot;);
+&nbsp;//            System.out.println(&quot;Goods types: RED, GREEN, BLUE, YELLOW&quot;);
+&nbsp;        } else {
+<b class="nc">&nbsp;            System.out.println(&quot;Waiting for &quot; + currentShip.getColor() + &quot; ship to manage goods&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        printActions();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private int countCargoHoldsWithGoods() {
+<b class="nc">&nbsp;        int count = 0;</b>
+<b class="nc">&nbsp;        for (CargoHold cargoHold : currentShip.getCargoHolds().values()) {</b>
+<b class="nc">&nbsp;            if (!cargoHold.getGoods().isEmpty()) {</b>
+<b class="nc">&nbsp;                count++;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return count;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void parseAndInvoke(String input) {
+<b class="nc">&nbsp;        if(input.trim().equalsIgnoreCase(&quot;Y&quot;)) {</b>
+<b class="nc">&nbsp;            controller.giveUp();</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;        String[] parts = input.split(&quot;\\s+&quot;);</b>
+<b class="nc">&nbsp;        if (!isMyTurn) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;It&#39;s not your turn, unreachable statement&quot;);</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;        switch (parts[0].toUpperCase()) {</b>
+&nbsp;            case &quot;P&quot; -&gt; {
+<b class="nc">&nbsp;                GoodsType goodsType = GoodsType.valueOf(parts[3].trim().toUpperCase());</b>
+<b class="nc">&nbsp;                Point p = getPoint(input);</b>
+&nbsp;
+<b class="nc">&nbsp;                if(!(goodsBuffer.getGoodsBuffer().getOrDefault(goodsType, 0) &gt; 0)) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;no goods of that type&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                if(!currentShip.getCargoHolds().containsKey(p)){</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;no cargo holds in that position&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                if (goodsBuffer.getGoodsBuffer().getOrDefault(goodsType, 0) &lt;= 0) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;No &quot; + goodsType + &quot; goods available in buffer&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                if (!currentShip.getCargoHolds().containsKey(p)) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;No cargo hold at this position&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+&nbsp;
+&nbsp;                // Check if trying to add special cargo to regular cargo hold
+<b class="nc">&nbsp;                CargoHold cargoHold = currentShip.getCargoHolds().get(p);</b>
+<b class="nc">&nbsp;                if (goodsType == GoodsType.RED &amp;&amp; !cargoHold.isSpecial()) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;Cannot add special cargo to a regular cargo hold. Use a special cargo hold (○) instead.&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                controller.placeGoods(p, goodsType);</b>
+&nbsp;            }
+&nbsp;            case &quot;R&quot; -&gt; {
+<b class="nc">&nbsp;                GoodsType goodsType = GoodsType.valueOf(parts[3].toUpperCase());</b>
+<b class="nc">&nbsp;                Point p = getPoint(input);</b>
+&nbsp;
+<b class="nc">&nbsp;                if(!currentShip.getCargoHolds().containsKey(p)){</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;no cargo holds in that position&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                CargoHold cargoHold = currentShip.getCargoHolds().get(p);</b>
+<b class="nc">&nbsp;                if (!cargoHold.getGoods().containsKey(goodsType)) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;No &quot; + goodsType + &quot; goods at this position&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                controller.removeGoods(p, goodsType);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case &quot;&quot; -&gt; controller.goNext();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // place/remove goods are done in state, cli is updated in cliScreen
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

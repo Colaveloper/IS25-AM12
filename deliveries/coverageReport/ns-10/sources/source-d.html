@@ -1,0 +1,200 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiHand</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiHand (it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiHand</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens.GuiController;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.scene.layout.HBox;
+&nbsp;import javafx.scene.layout.Region;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI component representing the player&#39;s hand in the game.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class displays the component currently held in the player&#39;s hand, allowing for rotation and clearing.
+&nbsp; * It interacts with the {@link GuiController} to handle user actions and updates the display accordingly.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public class GuiHand extends HBox {
+&nbsp;
+&nbsp;    private GuiComponent guiHandComponent;
+&nbsp;    private final GuiController controller;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a GuiHand for the given component and controller.
+&nbsp;     *
+&nbsp;     * @param component the component to display in the hand (can be null for placeholder)
+&nbsp;     * @param controller the GUI controller handling actions
+&nbsp;     */
+<b class="nc">&nbsp;    public GuiHand(Component component, GuiController controller) {</b>
+<b class="nc">&nbsp;        this.controller = controller;</b>
+<b class="nc">&nbsp;        if (component == null) {</b>
+<b class="nc">&nbsp;            getChildren().add(createPlaceholder());</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            guiHandComponent = new GuiComponent(component);</b>
+<b class="nc">&nbsp;            guiHandComponent.setOnMouseClicked(_ -&gt; controller.rotateHandComponent());</b>
+<b class="nc">&nbsp;            getChildren().add(guiHandComponent);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the hand to display the given component.
+&nbsp;     *
+&nbsp;     * @param component the new component to display in the hand
+&nbsp;     */
+&nbsp;    public void notifySetHand(Component component) {
+<b class="nc">&nbsp;        Platform.runLater(()-&gt;{</b>
+<b class="nc">&nbsp;            getChildren().clear();</b>
+<b class="nc">&nbsp;            guiHandComponent = new GuiComponent(component);</b>
+<b class="nc">&nbsp;            guiHandComponent.setOnMouseClicked(_ -&gt; controller.rotateHandComponent());</b>
+<b class="nc">&nbsp;            getChildren().add(guiHandComponent);</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Clears the hand and displays a placeholder.
+&nbsp;     */
+&nbsp;    public void notifyClearHand() {
+<b class="nc">&nbsp;        Platform.runLater(()-&gt;{</b>
+<b class="nc">&nbsp;            getChildren().clear();</b>
+<b class="nc">&nbsp;            guiHandComponent = null;</b>
+<b class="nc">&nbsp;            getChildren().add(createPlaceholder());</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the visual direction of the component in the hand.
+&nbsp;     *
+&nbsp;     * @param direction the direction to set
+&nbsp;     */
+&nbsp;    public void setComponentDirection(Direction direction) {
+<b class="nc">&nbsp;        guiHandComponent.setDirection(direction);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a placeholder region to display when the hand is empty.
+&nbsp;     *
+&nbsp;     * @return a styled placeholder region
+&nbsp;     */
+&nbsp;    private Region createPlaceholder() {
+<b class="nc">&nbsp;        Region region = new Region();</b>
+<b class="nc">&nbsp;        region.setPrefSize(50, 50);</b>
+<b class="nc">&nbsp;        region.setStyle(&quot;-fx-border-color: gray; -fx-border-width: 2;&quot;);</b>
+<b class="nc">&nbsp;        return region;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

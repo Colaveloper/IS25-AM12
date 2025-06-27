@@ -1,0 +1,178 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliHand</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements</a>
+</div>
+
+<h1>Coverage Summary for Class: CliHand (it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliHand</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (1/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (2/12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.DescriptionUtils;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents.CliComponent;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a CLI hand element that displays a component in the player&#39;s hand.
+&nbsp; */
+&nbsp;public class CliHand extends CliElement {
+&nbsp;
+&nbsp;    private CliComponent cliComponent;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new CLI hand element with the given component.
+&nbsp;     * If the component is null, it will represent an empty hand.
+&nbsp;     *
+&nbsp;     * @param component The component to be displayed in the hand, or null for an empty hand
+&nbsp;     */
+<b class="nc">&nbsp;    public CliHand(Component component) {</b>
+<b class="nc">&nbsp;        this.cliComponent = CliComponent.of(component);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Default constructor for an empty CLI hand.
+&nbsp;     * Initializes the hand without any component.
+&nbsp;     */
+<b class="fc">&nbsp;    public CliHand() {</b>
+<b class="fc">&nbsp;        this.cliComponent = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the hand to display the given component.
+&nbsp;     * If the component is null, it clears the hand.
+&nbsp;     *
+&nbsp;     * @param lastComponent The component to be displayed in the hand, or null to clear the hand
+&nbsp;     */
+&nbsp;    public void setHand(Component lastComponent) {
+<b class="nc">&nbsp;        cliComponent = CliComponent.of(lastComponent);</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Clears the hand by setting the component to null.
+&nbsp;     */
+&nbsp;    public void clearHand() {
+<b class="nc">&nbsp;        cliComponent = null;</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected List&lt;String&gt; getNewDescription() {
+<b class="nc">&nbsp;        return DescriptionUtils.borderAndTitle(</b>
+<b class="nc">&nbsp;                cliComponent == null</b>
+<b class="nc">&nbsp;                        ? List.of(&quot;    &quot;, &quot;     &quot;, &quot;   &quot;)</b>
+<b class="nc">&nbsp;                        : cliComponent.getDescription(),</b>
+&nbsp;                &quot;hand&quot;
+&nbsp;        );
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

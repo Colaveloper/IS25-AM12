@@ -1,0 +1,238 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiFlightBoard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiFlightBoard (it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiFlightBoard</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/39)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens.GuiController;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.FlightBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.geometry.Pos;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.layout.HBox;
+&nbsp;import javafx.scene.layout.StackPane;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;import javafx.scene.shape.Circle;
+&nbsp;import javafx.scene.shape.Polygon;
+&nbsp;import javafx.scene.text.Font;
+&nbsp;import javafx.scene.text.FontWeight;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI component representing the flight board in the game.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class visually displays the flight board, including ship positions and the flight loop.
+&nbsp; * It uses a horizontal box to represent the board and updates the display based on the current state of the {@link FlightBoard} model.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public class GuiFlightBoard extends PurpleVBox {
+&nbsp;    private final GuiController controller;
+&nbsp;    private final List&lt;Integer&gt; startingPositions;
+&nbsp;    private final int loopLength;
+&nbsp;    private final Map&lt;ShipBoard, Integer&gt; shipToPlace; // doesn&#39;t use modulus
+&nbsp;
+&nbsp;    private static final int SLOT_SIZE = 30;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The horizontal box containing the visual slots of the flight board.
+&nbsp;     */
+&nbsp;    private final HBox flightBoardHBox;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a GuiFlightBoard for the given flight board model and controller.
+&nbsp;     *
+&nbsp;     * @param flightBoard the flight board model to represent
+&nbsp;     * @param controller the GUI controller handling actions
+&nbsp;     */
+<b class="nc">&nbsp;    public GuiFlightBoard(FlightBoard flightBoard, GuiController controller) {</b>
+<b class="nc">&nbsp;        this.controller = controller;</b>
+<b class="nc">&nbsp;        this.loopLength = flightBoard.getLoopLength();</b>
+<b class="nc">&nbsp;        this.startingPositions = flightBoard.getStartingPositions();</b>
+<b class="nc">&nbsp;        this.shipToPlace = flightBoard.getShipToPlace();</b>
+&nbsp;
+<b class="nc">&nbsp;        Label flightBoardLabel = new Label(&quot;FlightBoard&quot;);</b>
+<b class="nc">&nbsp;        flightBoardLabel.setFont(Font.font(&quot;System&quot;, FontWeight.BOLD, 16));</b>
+<b class="nc">&nbsp;        flightBoardLabel.setTextFill(Color.WHITE);</b>
+&nbsp;
+<b class="nc">&nbsp;        flightBoardHBox = new HBox();</b>
+<b class="nc">&nbsp;        flightBoardHBox.setMaxWidth(Double.MAX_VALUE);</b>
+<b class="nc">&nbsp;        flightBoardHBox.setMaxHeight(30);</b>
+<b class="nc">&nbsp;        flightBoardHBox.setSpacing(5);</b>
+<b class="nc">&nbsp;        flightBoardHBox.setAlignment(Pos.CENTER);</b>
+<b class="nc">&nbsp;        updateFlightBoardHBox();</b>
+&nbsp;
+<b class="nc">&nbsp;        getChildren().addAll(flightBoardLabel, flightBoardHBox);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the visual representation of the flight board slots and ship positions.
+&nbsp;     */
+&nbsp;    private void updateFlightBoardHBox() {
+<b class="nc">&nbsp;        flightBoardHBox.getChildren().clear();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; loopLength; i++) {</b>
+<b class="nc">&nbsp;            StackPane slot = new StackPane();</b>
+<b class="nc">&nbsp;            slot.setPrefSize(SLOT_SIZE, SLOT_SIZE);</b>
+<b class="nc">&nbsp;            flightBoardHBox.getChildren().add(slot);</b>
+&nbsp;
+<b class="nc">&nbsp;            int position = i;</b>
+&nbsp;
+<b class="nc">&nbsp;            shipToPlace.entrySet().stream()</b>
+<b class="nc">&nbsp;                    .filter(e -&gt; Math.floorMod(e.getValue(), loopLength) == position)</b>
+<b class="nc">&nbsp;                    .map(Map.Entry::getKey)</b>
+<b class="nc">&nbsp;                    .findFirst()</b>
+<b class="nc">&nbsp;                    .ifPresentOrElse(</b>
+&nbsp;                            (s)-&gt; {
+<b class="nc">&nbsp;                                Circle circle = new Circle(SLOT_SIZE / 2.0);</b>
+<b class="nc">&nbsp;                                circle.setFill(GameColorGuiMapper.toJfxColor(s.getColor()));</b>
+<b class="nc">&nbsp;                                slot.getChildren().add(circle);</b>
+&nbsp;                            },
+&nbsp;                            () -&gt; {
+<b class="nc">&nbsp;                                Polygon triangle = new Polygon(</b>
+&nbsp;                                        0.0, 0.0,
+&nbsp;                                        0.0, SLOT_SIZE,
+&nbsp;                                        SLOT_SIZE, SLOT_SIZE / 2.0
+&nbsp;                                );
+<b class="nc">&nbsp;                                if (startingPositions.contains(position)) {</b>
+<b class="nc">&nbsp;                                    triangle.setFill(Color.WHITE);</b>
+<b class="nc">&nbsp;                                    triangle.setStroke(null);</b>
+<b class="nc">&nbsp;                                    triangle.onMouseClickedProperty().set(_ -&gt; {</b>
+<b class="nc">&nbsp;                                        controller.placeShipOnFlightBoard(position);</b>
+&nbsp;                                    });
+&nbsp;                                } else {
+<b class="nc">&nbsp;                                    triangle.setFill(Color.TRANSPARENT);</b>
+<b class="nc">&nbsp;                                    triangle.setStroke(Color.WHITE);</b>
+&nbsp;                                }
+<b class="nc">&nbsp;                                slot.getChildren().add(triangle);</b>
+&nbsp;                            });
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the GUI to update the flight board display when a ship&#39;s position changes.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method is typically called when a ship moves to a new position on the flight board.
+&nbsp;     * It schedules a UI update on the JavaFX application thread.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship whose position has changed
+&nbsp;     * @param position the new position of the ship on the flight board
+&nbsp;     */
+&nbsp;    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+<b class="nc">&nbsp;        Platform.runLater(this::updateFlightBoardHBox);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

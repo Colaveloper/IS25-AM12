@@ -1,0 +1,261 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DescriptionUtils</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli</a>
+</div>
+
+<h1>Coverage Summary for Class: DescriptionUtils (it.polimi.ingsw.galaxytruckers.client.view.cli)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DescriptionUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/52)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli;
+&nbsp;
+&nbsp;import org.checkerframework.dataflow.qual.Pure;
+&nbsp;
+&nbsp;import javax.annotation.CheckReturnValue;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.regex.Pattern;
+&nbsp;
+&nbsp;/**
+&nbsp; * Utility class for text formatting and manipulation.
+&nbsp; * This class provides methods for formatting text displays, such as placing text
+&nbsp; * side by side and adding borders with titles around text blocks.
+&nbsp; * It properly handles ANSI escape sequences when calculating text widths.
+&nbsp; */
+<b class="nc">&nbsp;public class DescriptionUtils {</b>
+&nbsp;    /** Pattern to match ANSI escape sequences in strings. */
+<b class="nc">&nbsp;    private static final Pattern ANSI_ESCAPE = Pattern.compile(&quot;\u001B\\[[;\\d]*m&quot;);</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places two lists of strings side by side with default spacing of 1.
+&nbsp;     *
+&nbsp;     * @param a The first list of strings (left side)
+&nbsp;     * @param b The second list of strings (right side)
+&nbsp;     * @return A new list of strings with content from both lists placed side by side
+&nbsp;     */
+&nbsp;    @Pure
+&nbsp;    @CheckReturnValue
+&nbsp;    public static List&lt;String&gt; sideBySide(List&lt;String&gt; a, List&lt;String&gt; b) {
+<b class="nc">&nbsp;        return sideBySide(a, b, 1); // default spacing = 1</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places two lists of strings side by side with specified spacing between them.
+&nbsp;     * If one list is longer than the other, empty strings are used to pad the shorter list.
+&nbsp;     * ANSI escape sequences are handled correctly when calculating widths.
+&nbsp;     *
+&nbsp;     * @param a       The first list of strings (left side)
+&nbsp;     * @param b       The second list of strings (right side)
+&nbsp;     * @param spacing The number of space characters to insert between the two sides
+&nbsp;     * @return A new list of strings with content from both lists placed side by side
+&nbsp;     */
+&nbsp;    @Pure
+&nbsp;    @CheckReturnValue
+&nbsp;    public static List&lt;String&gt; sideBySide(List&lt;String&gt; a, List&lt;String&gt; b, int spacing) {
+<b class="nc">&nbsp;        if (a.isEmpty()) return new ArrayList&lt;&gt;(b);</b>
+<b class="nc">&nbsp;        if (b.isEmpty()) return new ArrayList&lt;&gt;(a);</b>
+&nbsp;
+<b class="nc">&nbsp;        List&lt;String&gt; c = new ArrayList&lt;&gt;(a);</b>
+<b class="nc">&nbsp;        int leftWidth = 1;</b>
+&nbsp;
+<b class="nc">&nbsp;        for (String s : a) {</b>
+<b class="nc">&nbsp;            leftWidth = Math.max(leftWidth, getRealWidth(s));</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        int maxSize = Math.max(a.size(), b.size());</b>
+<b class="nc">&nbsp;        while (c.size() &lt; maxSize) c.add(&quot;&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        String space = &quot; &quot;.repeat(Math.max(0, spacing));</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; maxSize; i++) {</b>
+<b class="nc">&nbsp;            String left = c.get(i);</b>
+<b class="nc">&nbsp;            String right = (i &lt; b.size()) ? b.get(i) : &quot;&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;            StringBuilder line = new StringBuilder(left);</b>
+<b class="nc">&nbsp;            int padding = leftWidth - getRealWidth(left);</b>
+<b class="nc">&nbsp;            line.append(&quot; &quot;.repeat(Math.max(0, padding))).append(space).append(right);</b>
+<b class="nc">&nbsp;            c.set(i, line.toString());</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return c;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds a decorative border around a list of strings with a title at the top.
+&nbsp;     * The content is centered within the border, and the title is centered in the top border.
+&nbsp;     * ANSI escape sequences are handled correctly when calculating widths.
+&nbsp;     *
+&nbsp;     * @param original The list of strings to be bordered
+&nbsp;     * @param title    The title to display in the top border
+&nbsp;     * @return A new list of strings with the original content surrounded by a border and title
+&nbsp;     */
+&nbsp;    @Pure
+&nbsp;    @CheckReturnValue
+&nbsp;    public static List&lt;String&gt; borderAndTitle(List&lt;String&gt; original, String title) {
+<b class="nc">&nbsp;        int contentWidth = 0;</b>
+<b class="nc">&nbsp;        for (String line : original) {</b>
+<b class="nc">&nbsp;            contentWidth = Math.max(contentWidth, getRealWidth(line));</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        String titleWithSpace = &quot; &quot; + title + &quot; &quot;;</b>
+<b class="nc">&nbsp;        int titleDisplayWidth = getRealWidth(titleWithSpace);</b>
+&nbsp;
+&nbsp;        // Ensure contentWidth is at least as wide as the title
+<b class="nc">&nbsp;        contentWidth = Math.max(contentWidth, titleDisplayWidth);</b>
+&nbsp;
+<b class="nc">&nbsp;        int totalWidth = contentWidth + 4; // 2 padding + 2 border</b>
+&nbsp;
+&nbsp;        // Calculate connect position to center the title
+<b class="nc">&nbsp;        int titleStart = Math.max(0, (totalWidth - 2 - titleDisplayWidth) / 2);</b>
+&nbsp;
+<b class="nc">&nbsp;        StringBuilder topBorder = new StringBuilder(&quot;╭&quot;);</b>
+<b class="nc">&nbsp;        int i = 0;</b>
+<b class="nc">&nbsp;        while (i &lt; titleStart) {</b>
+<b class="nc">&nbsp;            topBorder.append(&#39;─&#39;);</b>
+<b class="nc">&nbsp;            i++;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        topBorder.append(titleWithSpace);</b>
+<b class="nc">&nbsp;        while (i &lt; totalWidth - 2 - titleDisplayWidth) {</b>
+<b class="nc">&nbsp;            topBorder.append(&#39;─&#39;);</b>
+<b class="nc">&nbsp;            i++;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        topBorder.append(&#39;╮&#39;);</b>
+&nbsp;
+<b class="nc">&nbsp;        String bottomBorder = &quot;╰&quot; + &quot;─&quot;.repeat(totalWidth - 2) + &#39;╯&#39;;</b>
+&nbsp;
+<b class="nc">&nbsp;        List&lt;String&gt; bordered = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        bordered.add(topBorder.toString());</b>
+&nbsp;
+<b class="nc">&nbsp;        for (String line : original) {</b>
+<b class="nc">&nbsp;            int realLineWidth = getRealWidth(line);</b>
+<b class="nc">&nbsp;            int totalPadding = contentWidth - realLineWidth;</b>
+<b class="nc">&nbsp;            int leftPadding = totalPadding / 2;</b>
+<b class="nc">&nbsp;            int rightPadding = totalPadding - leftPadding;</b>
+&nbsp;
+<b class="nc">&nbsp;            String borderedLine =</b>
+<b class="nc">&nbsp;                    &quot;│ &quot; + &quot; &quot;.repeat(leftPadding) + line + &quot; &quot;.repeat(rightPadding) + &quot; │&quot;;</b>
+<b class="nc">&nbsp;            bordered.add(borderedLine);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        bordered.add(bottomBorder);</b>
+<b class="nc">&nbsp;        return bordered;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calculates the actual display width of a string by removing ANSI escape sequences.
+&nbsp;     * This is necessary because ANSI escape sequences don&#39;t occupy display space but are part of the string length.
+&nbsp;     *
+&nbsp;     * @param line The string to calculate the real width for
+&nbsp;     * @return The display width of the string (excluding ANSI escape sequences)
+&nbsp;     */
+&nbsp;    private static int getRealWidth(String line) {
+<b class="nc">&nbsp;        return ANSI_ESCAPE.matcher(line).replaceAll(&quot;&quot;).length();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

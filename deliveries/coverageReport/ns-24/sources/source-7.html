@@ -1,0 +1,163 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > OpenSpaceCard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.adventureCards</a>
+</div>
+
+<h1>Coverage Summary for Class: OpenSpaceCard (it.polimi.ingsw.galaxytruckers.server.model.adventureCards)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">OpenSpaceCard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.adventureCards;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.Game;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.SurrenderPolicy;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.SurrenderCause;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.AdventureState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.DeclareEnginePowerState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.DrawCardState;
+&nbsp;
+&nbsp;public class OpenSpaceCard extends AdventureCard {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs an OpenSpaceCard.
+&nbsp;     *
+&nbsp;     * @param game the game instance
+&nbsp;     * @param level the adventure card level
+&nbsp;     * @param id the unique card identifier
+&nbsp;     */
+&nbsp;    public OpenSpaceCard (Game game, Level level, int id) {
+<b class="fc">&nbsp;        super(game, level, id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public AdventureState getNextState() {
+<b class="fc">&nbsp;        if (currentShipBoard != null) {</b>
+<b class="fc">&nbsp;            if(currentShipBoard.getEnginePower() == 0) {</b>
+<b class="fc">&nbsp;                SurrenderPolicy surrenderPolicy = game.getSurrenderPolicy();</b>
+<b class="pc">&nbsp;                if (surrenderPolicy.isSurrenderEnabled()) {</b>
+<b class="fc">&nbsp;                    surrenderPolicy.requestSurrender(currentShipBoard, SurrenderCause.NOENGINES);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;            else{
+<b class="fc">&nbsp;                game.getFlightBoard().displaceShip(currentShipBoard, currentShipBoard.getEnginePower());</b>
+<b class="fc">&nbsp;                currentShipBoard.deactivateAll();</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        if (currentPlayerIndex &lt; game.getFlightBoard().getShipToPlace().size()) {  // There are other players to evaluate</b>
+<b class="fc">&nbsp;            currentShipBoard = game.getFlightBoard().getOrderedShips().get(currentPlayerIndex);</b>
+<b class="fc">&nbsp;            currentPlayerIndex++;</b>
+<b class="fc">&nbsp;            return new DeclareEnginePowerState(currentShipBoard);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="fc">&nbsp;            return new DrawCardState();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

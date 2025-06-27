@@ -1,0 +1,215 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiShipBuildingScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiShipBuildingScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiShipBuildingScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements.GuiComponentBank;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements.GuiHand;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.ShipBuildingState;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract GUI screen for the ship building phase of the game.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class manages the UI and logic for building ships, including handling the component bank,
+&nbsp; * player hands, and interactions with the ship board. It provides methods for updating the UI
+&nbsp; * in response to game events such as requesting components, placing components, and updating the
+&nbsp; * player&#39;s hand. Subclasses should implement specific behaviors for different ship building phases.
+&nbsp; * &lt;/p&gt;
+&nbsp; *
+&nbsp; * @author (your name or team)
+&nbsp; */
+&nbsp;public abstract class GuiShipBuildingScreen extends GuiGameScreen {
+&nbsp;
+&nbsp;    protected final GuiComponentBank guiComponentBank;
+&nbsp;    protected final Map&lt;ShipBoard, GuiHand&gt; guiHands;
+&nbsp;    protected final ShipBuildingState state;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new GuiShipBuildingScreen.
+&nbsp;     *
+&nbsp;     * @param model the client model
+&nbsp;     * @param controller the controller to communicate with the server
+&nbsp;     * @param state the current ship building state
+&nbsp;     */
+&nbsp;    public GuiShipBuildingScreen(ClientModel model, ClientControllerInterface controller, ShipBuildingState state) {
+<b class="nc">&nbsp;        super(model, controller, state);</b>
+<b class="nc">&nbsp;        this.state = state;</b>
+<b class="nc">&nbsp;        guiComponentBank = new GuiComponentBank(state.getComponentBank(), getGuiController());</b>
+<b class="nc">&nbsp;        guiHands = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (ShipBoard shipBoard : model.getGame().getShipBoards()) {</b>
+<b class="nc">&nbsp;            guiHands.put(shipBoard, new GuiHand(</b>
+<b class="nc">&nbsp;                    shipBoard.getLastPosition()==null ? shipBoard.getLastComponent() : null,</b>
+<b class="nc">&nbsp;                    getGuiController()</b>
+&nbsp;            ));
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
+<b class="nc">&nbsp;        guiComponentBank.notifyRequestRandComponent();</b>
+<b class="nc">&nbsp;        guiHands.get(shipBoard).notifySetHand(component);</b>
+<b class="nc">&nbsp;        guiStatBox.notifyChange();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
+<b class="nc">&nbsp;        guiComponentBank.notifyRequestComponent(component);</b>
+<b class="nc">&nbsp;        guiHands.get(shipBoard).notifySetHand(component);</b>
+<b class="nc">&nbsp;        guiStatBox.notifyChange();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRejectComponent(ShipBoard shipBoard, Component component) {
+<b class="nc">&nbsp;        guiComponentBank.notifyRejectComponent(component);</b>
+<b class="nc">&nbsp;        guiHands.get(shipBoard).notifyClearHand();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
+<b class="nc">&nbsp;        guiComponentBank.notifyRejectComponent(component);</b>
+<b class="nc">&nbsp;        guiShipBoards.get(shipBoard).notifyRemoveComponent(oldPosition);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
+<b class="nc">&nbsp;        Component component = shipBoard.getComponentMap().get(point);</b>
+<b class="nc">&nbsp;        guiShipBoards.get(shipBoard).notifyPlaceComponent(component, point, orientation);</b>
+<b class="nc">&nbsp;        guiHands.get(shipBoard).notifyClearHand();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation, Point oldPosition) {
+<b class="nc">&nbsp;        Component component = shipBoard.getComponentMap().get(point);</b>
+<b class="nc">&nbsp;        guiShipBoards.get(shipBoard).notifyPlaceComponent(component, point, orientation);</b>
+<b class="nc">&nbsp;        guiShipBoards.get(shipBoard).notifyRemoveComponent(oldPosition);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+<b class="nc">&nbsp;        guiFlightBoard.notifyFlightBoardPosition(shipBoard, position);</b>
+<b class="nc">&nbsp;        guiStatBox.notifyChange();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

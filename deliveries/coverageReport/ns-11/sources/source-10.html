@@ -1,0 +1,214 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiNicknameChoiceScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiNicknameChoiceScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiNicknameChoiceScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/30)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.geometry.Insets;
+&nbsp;import javafx.geometry.Pos;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.control.TextField;
+&nbsp;import javafx.scene.effect.DropShadow;
+&nbsp;import javafx.scene.layout.Pane;
+&nbsp;import javafx.scene.layout.Region;
+&nbsp;import javafx.scene.layout.VBox;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;import javafx.scene.text.Font;
+&nbsp;import javafx.scene.text.TextAlignment;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI screen for nickname selection.
+&nbsp; * This screen allows players to enter and submit a unique nickname
+&nbsp; * before joining a game. It represents the first interactive screen
+&nbsp; * that players encounter when starting the game.
+&nbsp; */
+&nbsp;public class GuiNicknameChoiceScreen extends GuiScreen {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new nickname choice screen.
+&nbsp;     *
+&nbsp;     * @param model      The client model containing game state
+&nbsp;     * @param controller The controller for communicating with the server
+&nbsp;     */
+&nbsp;    public GuiNicknameChoiceScreen(ClientModel model, ClientControllerInterface controller) {
+<b class="nc">&nbsp;        super(model, controller);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Submits the entered nickname to the server if it&#39;s not empty.
+&nbsp;     * Trims whitespace from the nickname before submission.
+&nbsp;     *
+&nbsp;     * @param field The text field containing the nickname to submit
+&nbsp;     */
+&nbsp;    private void submitNickname(TextField field) {
+<b class="nc">&nbsp;        String nickname = field.getText().trim();</b>
+<b class="nc">&nbsp;        if (!nickname.isEmpty()) {</b>
+<b class="nc">&nbsp;            controller.registerNickname(nickname);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * Creates and returns the nickname selection interface with a prompt,
+&nbsp;     * text field for input, and a submit button.
+&nbsp;     *
+&nbsp;     * @return A styled Pane containing the nickname selection user interface
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public Pane getNode() {
+<b class="nc">&nbsp;        VBox layout = new VBox(20);</b>
+<b class="nc">&nbsp;        layout.setMinHeight(Region.USE_PREF_SIZE);</b>
+<b class="nc">&nbsp;        layout.setMaxHeight(Region.USE_PREF_SIZE);</b>
+<b class="nc">&nbsp;        layout.setAlignment(Pos.CENTER);</b>
+<b class="nc">&nbsp;        layout.setPadding(new Insets(40));</b>
+<b class="nc">&nbsp;        layout.setMaxWidth(400);</b>
+<b class="nc">&nbsp;        layout.setStyle(</b>
+&nbsp;                &quot;-fx-background-color: rgba(0, 0, 50, 0.4); -fx-background-radius: 20;&quot;
+&nbsp;        );
+&nbsp;
+<b class="nc">&nbsp;        Label prompt = new Label(&quot;Please choose a unique nickname to proceed:&quot;);</b>
+<b class="nc">&nbsp;        prompt.setFont(new Font(&quot;Arial&quot;, 20));</b>
+<b class="nc">&nbsp;        prompt.setTextFill(Color.LIGHTSKYBLUE);</b>
+<b class="nc">&nbsp;        prompt.setWrapText(true);</b>
+<b class="nc">&nbsp;        prompt.setTextAlignment(TextAlignment.CENTER);</b>
+<b class="nc">&nbsp;        prompt.setEffect(new DropShadow(8, Color.DARKSLATEBLUE));</b>
+<b class="nc">&nbsp;        prompt.setMaxWidth(350);</b>
+&nbsp;
+<b class="nc">&nbsp;        TextField nicknameField = new TextField();</b>
+<b class="nc">&nbsp;        nicknameField.setMaxWidth(Double.MAX_VALUE);</b>
+<b class="nc">&nbsp;        nicknameField.setStyle(</b>
+&nbsp;                &quot;-fx-background-color: rgba(255, 255, 255, 0.1); -fx-text-fill: white; -fx-prompt-text-fill: #aaaaaa; -fx-alignment: center;&quot;
+&nbsp;        );
+&nbsp;
+<b class="nc">&nbsp;        Button submitButton = new Button(&quot;Submit&quot;);</b>
+<b class="nc">&nbsp;        submitButton.setFont(new Font(18));</b>
+<b class="nc">&nbsp;        submitButton.setMaxWidth(Double.MAX_VALUE);</b>
+<b class="nc">&nbsp;        submitButton.setStyle(</b>
+&nbsp;                &quot;-fx-background-color: rgba(0, 150, 255, 0.6); -fx-text-fill: white; -fx-background-radius: 8;&quot;
+&nbsp;        );
+&nbsp;
+<b class="nc">&nbsp;        nicknameField.setOnAction(e -&gt; submitNickname(nicknameField));</b>
+<b class="nc">&nbsp;        submitButton.setOnAction(e -&gt; submitNickname(nicknameField));</b>
+&nbsp;
+<b class="nc">&nbsp;        layout.getChildren().addAll(prompt, nicknameField, submitButton);</b>
+&nbsp;
+<b class="nc">&nbsp;        Platform.runLater(nicknameField::requestFocus);</b>
+<b class="nc">&nbsp;        return layout;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

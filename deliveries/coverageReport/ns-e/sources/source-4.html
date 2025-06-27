@@ -1,0 +1,206 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliCrewInitializationScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: CliCrewInitializationScreen (it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliCrewInitializationScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10.3%
+  </span>
+  <span class="absValue">
+    (3/29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.ShipInitializationState;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * CLI screen for crew initialization in the Galaxy Truckers game.
+&nbsp; */
+&nbsp;public class CliCrewInitializationScreen extends CliScreen {
+&nbsp;
+&nbsp;    private final boolean shipNotValid;
+&nbsp;    private CrewType currentCrewType;
+&nbsp;    private final Map&lt;CrewType, Set&lt;Point&gt;&gt; crewTypeToPoints;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new crew initialization screen with the given game state.
+&nbsp;     * @param model The client model containing the current game state
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     * @param gameState The current ship initialization state
+&nbsp;     */
+&nbsp;    public CliCrewInitializationScreen(ClientModel model, ClientControllerInterface controller, ShipInitializationState gameState) {
+<b class="fc">&nbsp;        super(model, controller, gameState);</b>
+<b class="fc">&nbsp;        shipNotValid = gameState.getCrewtypeToPoints().containsKey(model.getMyShip());</b>
+<b class="fc">&nbsp;        this.crewTypeToPoints = gameState.getCrewtypeToPoints().getOrDefault(myShipBoard, null);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void render() {
+&nbsp;
+<b class="nc">&nbsp;        printShipFlightStats().forEach(System.out::println);</b>
+&nbsp;
+<b class="nc">&nbsp;        if(shipNotValid) {</b>
+<b class="nc">&nbsp;            if(crewTypeToPoints.containsKey(CrewType.PURPLE)) {</b>
+<b class="nc">&nbsp;                System.out.println(&quot;choose position for purple alien in one of the highlighted cabins&quot;);</b>
+<b class="nc">&nbsp;                currentCrewType = CrewType.PURPLE;</b>
+<b class="nc">&nbsp;            } else if (crewTypeToPoints.containsKey(CrewType.BROWN)) {</b>
+<b class="nc">&nbsp;                System.out.println(&quot;choose position for brown alien in one of the highlighted cabins&quot;);</b>
+<b class="nc">&nbsp;                currentCrewType = CrewType.BROWN;</b>
+&nbsp;            }
+&nbsp;            else{
+<b class="nc">&nbsp;                System.out.println(&quot;all aliens places, other cabins will be filled with humans, &quot;);</b>
+<b class="nc">&nbsp;                currentCrewType = CrewType.HUMAN;</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            //model.setSelectablePoints(model.getMyNickname(), model.getUnplacedCrew().get(currentCrewType));
+<b class="nc">&nbsp;            printActions();</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            System.out.println(&quot;empty cabins will be filled with humans, waiting for other players to finish&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void parseAndInvoke(String input) {
+<b class="nc">&nbsp;        if(!shipNotValid) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;your ship is valid, wait for other players to finish&quot;);</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;        String[] parts = input.split(&quot;\\s+&quot;);</b>
+<b class="nc">&nbsp;        switch (parts[0].toUpperCase()) {</b>
+&nbsp;            case &quot;P&quot;-&gt; {
+<b class="nc">&nbsp;                Point point = getPoint(input);</b>
+<b class="nc">&nbsp;                if (!myShipBoard.getShipArea().contains(point)) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;Cannot place alien outside of the ship&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                if (!crewTypeToPoints.get(currentCrewType).contains(point)) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;cabin is not valid for &quot; + currentCrewType + &quot; alien&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                controller.initializeCabin(getPoint(input), currentCrewType);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case &quot;&quot;-&gt; controller.goNext();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+<b class="nc">&nbsp;        shipToCliShip.get(shipBoard).setDirty();</b>
+<b class="nc">&nbsp;        shipToCliShip.get(shipBoard).getCliComponent(point).setDirty();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

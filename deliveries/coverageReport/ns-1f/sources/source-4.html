@@ -1,0 +1,207 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > LobbyEventHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.controller.events</a>
+</div>
+
+<h1>Coverage Summary for Class: LobbyEventHandler (it.polimi.ingsw.galaxytruckers.server.controller.events)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LobbyEventHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.controller.events;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.types.LobbyEvent;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.lobby.Lobby;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.lobby.Player;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Event handler for lobby-related events in the Galaxy Truckers game.
+&nbsp; * Manages distribution of events to players within a specific lobby and
+&nbsp; * executes lobby actions associated with events. Extends the EventQueueHandler
+&nbsp; * to process events of type LobbyEvent.
+&nbsp; */
+&nbsp;public class LobbyEventHandler extends EventQueueHandler&lt;LobbyEvent&gt; {
+&nbsp;    private final Lobby lobby;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new LobbyEventHandler with the specified event queue and lobby.
+&nbsp;     *
+&nbsp;     * @param eventQueue the event queue containing lobby events to be handled
+&nbsp;     * @param lobby the lobby instance associated with this handler
+&nbsp;     */
+&nbsp;    public LobbyEventHandler(EventQueue&lt;LobbyEvent&gt; eventQueue, Lobby lobby) {
+<b class="fc">&nbsp;        super(eventQueue);</b>
+<b class="fc">&nbsp;        this.lobby = lobby;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handles lobby events by sending them to the appropriate players and executing
+&nbsp;     * any associated lobby actions. If the event has a specific receiver, it&#39;s sent
+&nbsp;     * only to that player; otherwise, it&#39;s broadcast to all players in the lobby.
+&nbsp;     *
+&nbsp;     * @param event the lobby event to be handled
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void handleEvent(LobbyEvent event) {
+<b class="fc">&nbsp;        event.getReceiverName().ifPresentOrElse(</b>
+<b class="fc">&nbsp;                (playerName) -&gt; sendEvent(playerName,event),</b>
+<b class="fc">&nbsp;                () -&gt; broadcastEvent(event)</b>
+&nbsp;        );
+<b class="fc">&nbsp;        event.runLobbyAction(lobby);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the list of players currently in the lobby.
+&nbsp;     *
+&nbsp;     * @return a list of players in the lobby
+&nbsp;     */
+&nbsp;    private List&lt;Player&gt; getPlayers() {
+<b class="fc">&nbsp;        return lobby.getPlayers();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Broadcasts an event to all players in the lobby.
+&nbsp;     * If a player doesn&#39;t have an associated client handler (likely disconnected),
+&nbsp;     * the player&#39;s turn is skipped.
+&nbsp;     *
+&nbsp;     * @param event the event to broadcast to all players
+&nbsp;     */
+&nbsp;    private void broadcastEvent(LobbyEvent event) {
+<b class="fc">&nbsp;        for (Player player : getPlayers()) {</b>
+<b class="fc">&nbsp;            ClientHandler clientHandler = SessionManager.getInstance().getClient(player);</b>
+<b class="fc">&nbsp;            if (clientHandler != null) {</b>
+<b class="fc">&nbsp;                clientHandler.notifyEvent(event);</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                lobby.skip(player);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sends an event to a specific player identified by their name.
+&nbsp;     * If the player doesn&#39;t have an associated client handler (likely disconnected),
+&nbsp;     * the player&#39;s turn is skipped.
+&nbsp;     *
+&nbsp;     * @param playerName the name of the player to receive the event
+&nbsp;     * @param event the event to send to the player
+&nbsp;     */
+&nbsp;    private void sendEvent(String playerName, LobbyEvent event) {
+<b class="fc">&nbsp;        Player player = Player.getPlayer(playerName);</b>
+<b class="fc">&nbsp;        ClientHandler clientHandler = SessionManager.getInstance().getClient(player);</b>
+<b class="fc">&nbsp;        if (clientHandler != null) {</b>
+<b class="fc">&nbsp;            clientHandler.notifyEvent(event);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            lobby.skip(player);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RmiServer</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.network.server.rmi</a>
+</div>
+
+<h1>Coverage Summary for Class: RmiServer (it.polimi.ingsw.galaxytruckers.network.server.rmi)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RmiServer</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.network.server.rmi;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.ServerControllerInterface;
+&nbsp;
+&nbsp;import java.rmi.NotBoundException;
+&nbsp;import java.rmi.RemoteException;
+&nbsp;import java.rmi.registry.LocateRegistry;
+&nbsp;import java.rmi.registry.Registry;
+&nbsp;import java.rmi.server.UnicastRemoteObject;
+&nbsp;
+&nbsp;/**
+&nbsp; * RMI server implementation that allows clients to register with a nickname.
+&nbsp; * It binds the server to a specific port and provides methods for client registration.
+&nbsp; */
+&nbsp;public class RmiServer extends UnicastRemoteObject implements RemoteServer {
+&nbsp;    private final ServerControllerInterface controller;
+&nbsp;    private Registry registry;
+&nbsp;    private String name;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs an RmiServer with the specified controller.
+&nbsp;     *
+&nbsp;     * @param controller the server controller that manages game logic and client interactions
+&nbsp;     * @throws RemoteException if there is an error during remote object creation
+&nbsp;     */
+&nbsp;    public RmiServer(ServerControllerInterface controller) throws RemoteException {
+<b class="nc">&nbsp;        super();</b>
+<b class="nc">&nbsp;        this.controller = controller;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Starts the RMI server, binding it to the specified name and port.
+&nbsp;     *
+&nbsp;     * @param name the name to bind the RMI server to
+&nbsp;     * @param port the port on which the RMI server will listen for incoming connections
+&nbsp;     * @throws RemoteException if there is an error during remote object creation or binding
+&nbsp;     */
+&nbsp;    public void start(String name, int port) throws RemoteException {
+<b class="nc">&nbsp;        RemoteServer boundInterface = this;</b>
+&nbsp;
+<b class="nc">&nbsp;        registry = LocateRegistry.createRegistry(port);</b>
+<b class="nc">&nbsp;        registry.rebind(name, boundInterface);</b>
+&nbsp;
+<b class="nc">&nbsp;        this.name = name;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public RemoteController registerNickname(RemoteClient client, String nickname) throws RemoteException {
+<b class="nc">&nbsp;        RmiClientHandler handler = new RmiClientHandler(client, controller);</b>
+<b class="nc">&nbsp;        controller.registerNickname(nickname, handler);</b>
+<b class="nc">&nbsp;        handler.start();</b>
+<b class="nc">&nbsp;        return handler;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Stops the RMI server, unbinding it from the registry and unexporting the remote object.
+&nbsp;     * @throws RemoteException if there is an error during unbinding or unexporting
+&nbsp;     */
+&nbsp;    public void stop() throws RemoteException {
+&nbsp;        try {
+<b class="nc">&nbsp;            registry.unbind(name);</b>
+<b class="nc">&nbsp;            UnicastRemoteObject.unexportObject(registry, true);</b>
+&nbsp;        } catch (NotBoundException e) {
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

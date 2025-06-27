@@ -1,0 +1,616 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ShipBoard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.model.shipBuilding</a>
+</div>
+
+<h1>Coverage Summary for Class: ShipBoard (it.polimi.ingsw.galaxytruckers.client.model.shipBuilding)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ShipBoard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (49/49)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.2%
+  </span>
+  <span class="absValue">
+    (50/58)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (173/173)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ShipBoard$MockitoMock$Ha25luKH</td>
+  </tr>
+  <tr>
+    <td class="name">ShipBoard$MockitoMock$Ha25luKH$auxiliary$AirjRtUN</td>
+  </tr>
+  <tr>
+    <td class="name">ShipBoard$MockitoMock$Ha25luKH$auxiliary$guz1tTaE</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (49/49)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.2%
+  </span>
+  <span class="absValue">
+    (50/58)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (173/173)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.model.shipBuilding;
+&nbsp;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ComponentRegistry;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GameColor;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.List;
+&nbsp;import java.util.*;
+&nbsp;import java.util.stream.IntStream;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract base class representing a player&#39;s ship board.
+&nbsp; */
+&nbsp;public abstract class ShipBoard {
+&nbsp;
+&nbsp;    protected final Map&lt;Point, Component&gt; componentMap;
+&nbsp;    protected Component lastComponent;  // can be null
+&nbsp;    protected Point lastPosition;  // can be null
+&nbsp;    protected final GameColor color;
+&nbsp;
+&nbsp;    protected int firePower;
+&nbsp;    protected int enginePower;
+&nbsp;    protected int numBatteries;
+&nbsp;    protected int crewSize;
+&nbsp;    protected int credits;
+&nbsp;    protected int losses;
+&nbsp;    protected int cargoOnShip;
+&nbsp;
+&nbsp;    protected final Map&lt;Point, Cannon&gt; cannons;
+&nbsp;    protected final Map&lt;Point, Engine&gt; engines;
+&nbsp;    protected final Map&lt;Point, Battery&gt; batteries;
+&nbsp;    protected final Map&lt;Point, Shield&gt; shields;
+&nbsp;    protected final Map&lt;Point, CargoHold&gt;  cargoHolds;
+&nbsp;    protected final Map&lt;Point, Cabin&gt; cabins;
+&nbsp;    protected final Map&lt;Point, Activatable&gt; activatables;
+&nbsp;
+<b class="fc">&nbsp;    public ShipBoard(GameColor color) { // (, Color color)</b>
+<b class="fc">&nbsp;        this.color = color;</b>
+&nbsp;
+<b class="fc">&nbsp;        this.lastComponent = null;</b>
+<b class="fc">&nbsp;        this.lastPosition = null;</b>
+&nbsp;
+<b class="fc">&nbsp;        this.firePower = 0;</b>
+<b class="fc">&nbsp;        this.enginePower = 0;</b>
+<b class="fc">&nbsp;        this.numBatteries = 0;</b>
+<b class="fc">&nbsp;        this.crewSize = 0;</b>
+<b class="fc">&nbsp;        this.credits = 0;</b>
+<b class="fc">&nbsp;        this.losses = 0;</b>
+&nbsp;
+<b class="fc">&nbsp;        this.componentMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.cannons = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.engines = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.batteries = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.shields = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.cargoHolds = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.cabins = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.activatables = new HashMap&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        offerComponent(ComponentRegistry.getInstance().getStartingCabin(color));</b>
+<b class="fc">&nbsp;        placeComponent(new Point(7,7),Direction.UP);</b>
+<b class="fc">&nbsp;        weldLastComponent();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the valid placement area for components on this ship board.
+&nbsp;     * Each ship type defines its own specific valid area for component placement.
+&nbsp;     *
+&nbsp;     * @return Set of Points representing valid component placement locations
+&nbsp;     */
+&nbsp;    public abstract Set&lt;Point&gt; getShipArea();
+&nbsp;
+&nbsp;    //region Setup methods
+&nbsp;    public void setComponentMap(Map&lt;Point, Component&gt; componentMap) {
+<b class="fc">&nbsp;        this.componentMap.clear();</b>
+<b class="fc">&nbsp;        for (Point point : componentMap.keySet()) {</b>
+<b class="fc">&nbsp;            Component component = componentMap.get(point);</b>
+<b class="fc">&nbsp;            this.componentMap.put(point, component);</b>
+<b class="fc">&nbsp;            updateStats(point, component);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setHand(Component lastComponent, Point lastPosition) {
+<b class="fc">&nbsp;        this.lastComponent = lastComponent;</b>
+<b class="fc">&nbsp;        this.lastPosition = lastPosition;</b>
+<b class="fc">&nbsp;        if (lastComponent != null &amp;&amp; lastPosition != null) {</b>
+<b class="fc">&nbsp;            componentMap.put(lastPosition, lastComponent);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setStashedComponents(List&lt;Component&gt; stashedComponents) {
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void setLosses(int losses) {
+<b class="fc">&nbsp;        this.losses = losses;</b>
+&nbsp;    }
+&nbsp;    //endregion
+&nbsp;
+&nbsp;    //CliComponentBank interaction methods
+&nbsp;
+&nbsp;    protected void resetLastComponent() {
+<b class="fc">&nbsp;        if(lastPosition != null &amp;&amp; lastComponent != null) {</b>
+<b class="fc">&nbsp;            componentMap.remove(lastPosition);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        this.lastComponent = null;</b>
+<b class="fc">&nbsp;        this.lastPosition = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //Ship building methods
+&nbsp;
+&nbsp;    //CliComponentBank interaction methods
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handles a new component being offered for placement.
+&nbsp;     * Finalizes any previous component placement and prepares for placing
+&nbsp;     * the new component.
+&nbsp;     *
+&nbsp;     * @param component The component being offered for placement
+&nbsp;     */
+&nbsp;    public void offerComponent(Component component) {
+<b class="fc">&nbsp;        weldLastComponent();</b>
+<b class="fc">&nbsp;        lastComponent = component;</b>
+<b class="fc">&nbsp;        if (component == null) System.out.println(&quot;Offering null component&quot;);</b>
+<b class="fc">&nbsp;        lastPosition = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes the current component from its placed position,
+&nbsp;     * making it available for repositioning.
+&nbsp;     */
+&nbsp;    public void grabPlacedComponent() {
+<b class="fc">&nbsp;        componentMap.remove(lastPosition);</b>
+<b class="fc">&nbsp;        lastPosition = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Rejects and returns the currently held component.
+&nbsp;     * Removes it from any current position and clears component trackers.
+&nbsp;     *
+&nbsp;     * @return The rejected component
+&nbsp;     */
+&nbsp;    public Component rejectComponent() {
+<b class="fc">&nbsp;        if (lastPosition != null) {</b>
+<b class="fc">&nbsp;            componentMap.remove(lastPosition);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        Component rejectedComponent = lastComponent;</b>
+<b class="fc">&nbsp;        lastComponent = null;</b>
+<b class="fc">&nbsp;        lastPosition = null;</b>
+<b class="fc">&nbsp;        return rejectedComponent;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //Ship building methods
+&nbsp;
+&nbsp;    public void placeComponent(Point newPosition, Direction orientation) {
+<b class="fc">&nbsp;        if (lastPosition != null) {</b>
+<b class="fc">&nbsp;            componentMap.remove(lastPosition);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        lastPosition = newPosition;</b>
+<b class="fc">&nbsp;        lastComponent.setOrientation(orientation);</b>
+<b class="fc">&nbsp;        componentMap.put(newPosition, lastComponent);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public void stashComponent() {}</b>
+&nbsp;
+<b class="fc">&nbsp;    public void grabStashedComponent(int index) {}</b>
+&nbsp;
+&nbsp;    public void weldLastComponent() {
+<b class="fc">&nbsp;        if (lastComponent != null) {</b>
+<b class="fc">&nbsp;            updateStats(lastPosition, lastComponent);</b>
+<b class="fc">&nbsp;            lastComponent = null;</b>
+<b class="fc">&nbsp;            lastPosition = null;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void updateStats(Point position, Component component) {
+<b class="fc">&nbsp;        switch (component) {</b>
+<b class="fc">&nbsp;            case Battery c -&gt; {</b>
+<b class="fc">&nbsp;                batteries.put(position, c);</b>
+<b class="fc">&nbsp;                numBatteries += c.getNumBatteries();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case Cabin c -&gt; {</b>
+<b class="fc">&nbsp;                add(position,c);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case DoubleCannon c -&gt; {</b>
+<b class="fc">&nbsp;                cannons.put(position,c);</b>
+<b class="fc">&nbsp;                activatables.put(position,c);</b>
+<b class="fc">&nbsp;                firePower += c.getFirePower();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case Cannon c -&gt; {</b>
+<b class="fc">&nbsp;                cannons.put(position, c);</b>
+<b class="fc">&nbsp;                firePower += c.getFirePower();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case DoubleEngine c -&gt; {</b>
+<b class="fc">&nbsp;                engines.put(position,c);</b>
+<b class="fc">&nbsp;                activatables.put(position,c);</b>
+<b class="fc">&nbsp;                enginePower += c.getEnginePower();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case Engine c -&gt; {</b>
+<b class="fc">&nbsp;                engines.put(position,c);</b>
+<b class="fc">&nbsp;                enginePower += c.getEnginePower();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case CargoHold c -&gt; {</b>
+<b class="fc">&nbsp;                cargoHolds.put(position,c);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case Shield c -&gt; {</b>
+<b class="fc">&nbsp;                shields.put(position,c);</b>
+<b class="fc">&nbsp;                activatables.put(position,c);</b>
+&nbsp;            }
+<b class="pc">&nbsp;            case LifeSupport _, Component _ -&gt; {}</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void finishBuilding() {
+<b class="pc">&nbsp;        if (lastComponent != null &amp;&amp; lastPosition != null) {</b>
+<b class="fc">&nbsp;            weldLastComponent();</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            lastComponent = null;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes a component at the specified position.
+&nbsp;     * Updates all relevant ship statistics and specialized collections
+&nbsp;     * to reflect the component&#39;s removal.
+&nbsp;     *
+&nbsp;     * @param position The position of the component to remove
+&nbsp;     */
+&nbsp;    public void removeComponent(Point position) {
+<b class="fc">&nbsp;        Component removedComponent = componentMap.remove(position);</b>
+<b class="fc">&nbsp;        switch (removedComponent) {</b>
+<b class="fc">&nbsp;            case Battery battery -&gt; {</b>
+<b class="fc">&nbsp;                batteries.remove(position);</b>
+<b class="fc">&nbsp;                numBatteries -= battery.numBatteries;</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case Cabin cabin -&gt; {</b>
+<b class="fc">&nbsp;                remove(position,cabin);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case DoubleCannon doubleCannon -&gt; {</b>
+<b class="fc">&nbsp;                cannons.remove(position);</b>
+<b class="fc">&nbsp;                activatables.remove(position);</b>
+<b class="fc">&nbsp;                firePower -= doubleCannon.getFirePower();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case Cannon cannon -&gt; {</b>
+<b class="fc">&nbsp;                cannons.remove(position);</b>
+<b class="fc">&nbsp;                firePower -= cannon.getFirePower();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case DoubleEngine doubleEngine -&gt; {</b>
+<b class="fc">&nbsp;                engines.remove(position);</b>
+<b class="fc">&nbsp;                activatables.remove(position);</b>
+<b class="fc">&nbsp;                enginePower -= doubleEngine.getEnginePower();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case Engine engine -&gt; {</b>
+<b class="fc">&nbsp;                engines.remove(position);</b>
+<b class="fc">&nbsp;                enginePower -= engine.getEnginePower();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case CargoHold cargoHold -&gt; {</b>
+<b class="fc">&nbsp;                cargoHolds.remove(position);</b>
+<b class="fc">&nbsp;                cargoOnShip -= cargoHold.getGoods().values().stream()</b>
+<b class="fc">&nbsp;                        .mapToInt(Integer::intValue)</b>
+<b class="fc">&nbsp;                        .sum();</b>
+&nbsp;            }
+&nbsp;            case Shield _ -&gt; {
+<b class="fc">&nbsp;                shields.remove(position);</b>
+<b class="fc">&nbsp;                activatables.remove(position);</b>
+&nbsp;            }
+<b class="pc">&nbsp;            case LifeSupport _, Component _ -&gt; {}</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes sections of the ship while keeping a specified piece.
+&nbsp;     * Used during damage resolution when the ship becomes disconnected
+&nbsp;     * and a piece must be chosen to keep.
+&nbsp;     *
+&nbsp;     * @param shipPieces List of connected component groups
+&nbsp;     * @param pieceIndex Index of the piece to keep
+&nbsp;     * @return List of points where components were removed
+&nbsp;     */
+&nbsp;    public List&lt;Point&gt; removeShipPiece(List&lt;Set&lt;Point&gt;&gt; shipPieces, int pieceIndex) {
+<b class="fc">&nbsp;        List&lt;Point&gt; pointsToRemove = IntStream.range(0, shipPieces.size())</b>
+<b class="fc">&nbsp;                .filter(i -&gt; i != pieceIndex)</b>
+<b class="fc">&nbsp;                .boxed()</b>
+<b class="fc">&nbsp;                .flatMap(i -&gt; shipPieces.get(i).stream())</b>
+<b class="fc">&nbsp;                .toList();</b>
+<b class="fc">&nbsp;        pointsToRemove.forEach(this::removeComponent);</b>
+<b class="fc">&nbsp;        return pointsToRemove;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places goods in a cargo hold at the specified position.
+&nbsp;     *
+&nbsp;     * @param position Location of the cargo hold
+&nbsp;     * @param goods Type of goods to add
+&nbsp;     */
+&nbsp;    public void placeGoods(Point position, GoodsType goods) {
+<b class="fc">&nbsp;        cargoHolds.get(position).addGoods(goods);</b>
+<b class="fc">&nbsp;        cargoOnShip += 1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes goods from a cargo hold at the specified position.
+&nbsp;     *
+&nbsp;     * @param position Location of the cargo hold
+&nbsp;     * @param goods Type of goods to remove
+&nbsp;     */
+&nbsp;    public void removeGoods(Point position, GoodsType goods) {
+<b class="fc">&nbsp;        cargoHolds.get(position).removeGoods(goods);</b>
+<b class="fc">&nbsp;        cargoOnShip -= 1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //Batteries methods
+&nbsp;
+&nbsp;    public void useBattery(Point position) {
+<b class="fc">&nbsp;        batteries.get(position).removeBattery();</b>
+<b class="fc">&nbsp;        numBatteries--;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //Cabin (and LifeSupport) methods
+&nbsp;
+&nbsp;    public int initializeCabin(Point position, CrewType crewType) {
+<b class="fc">&nbsp;        Cabin cabin = cabins.get(position);</b>
+<b class="fc">&nbsp;        cabin.initialize(crewType);</b>
+<b class="fc">&nbsp;        crewSize += cabin.getNumResidents();</b>
+<b class="fc">&nbsp;        return cabin.getNumResidents();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void loseCrew(Point position) {
+<b class="fc">&nbsp;        cabins.get(position).loseCrew();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Activatables methods
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Activates a component at the specified position.
+&nbsp;     * Updates ship statistics based on the activated component&#39;s effects.
+&nbsp;     * Only applies to components that implement the Activatable interface.
+&nbsp;     *
+&nbsp;     * @param position Location of the component to activate
+&nbsp;     */
+&nbsp;    public void activateComponent(Point position) {
+<b class="fc">&nbsp;        Activatable component = activatables.get(position);</b>
+<b class="fc">&nbsp;        component.setActive(true);</b>
+<b class="pc">&nbsp;        switch (component) {</b>
+<b class="fc">&nbsp;            case DoubleCannon doubleCannon -&gt; firePower += doubleCannon.getFirePower();</b>
+<b class="fc">&nbsp;            case DoubleEngine doubleEngine -&gt; enginePower += doubleEngine.getEnginePower();</b>
+&nbsp;            case Shield _ -&gt; {}
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Deactivates a component at the specified position.
+&nbsp;     * Reverts any statistical changes applied when the
+&nbsp;     * component was activated.
+&nbsp;     *
+&nbsp;     * @param position Location of the component to deactivate
+&nbsp;     */
+&nbsp;    public void deactivateComponent(Point position) {
+<b class="fc">&nbsp;        Activatable component = activatables.get(position);</b>
+<b class="pc">&nbsp;        switch (component) {</b>
+<b class="fc">&nbsp;            case DoubleCannon doubleCannon -&gt; firePower -= doubleCannon.getFirePower();</b>
+<b class="fc">&nbsp;            case DoubleEngine doubleEngine -&gt; enginePower -= doubleEngine.getEnginePower();</b>
+&nbsp;            case Shield _ -&gt; {}
+&nbsp;        }
+<b class="fc">&nbsp;        component.setActive(false);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Deactivates all activatable components on the ship.
+&nbsp;     * Updates all relevant ship statistics to reflect the deactivation.
+&nbsp;     */
+&nbsp;    public void deactivateAll() {
+<b class="fc">&nbsp;        for (Point p : activatables.keySet()) {</b>
+<b class="fc">&nbsp;            if (activatables.get(p).isActive()) deactivateComponent(p);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setCredits(int credits) {
+<b class="fc">&nbsp;        this.credits = credits;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void incrementLosses(int amount) {
+<b class="fc">&nbsp;        this.losses += amount;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getFirePower() {
+<b class="fc">&nbsp;        return firePower;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getEnginePower() {
+<b class="fc">&nbsp;        return enginePower;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getNumBatteries() {
+<b class="fc">&nbsp;        return numBatteries;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCrewSize() {
+<b class="fc">&nbsp;        return crewSize;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public int getCredits() { return credits; }</b>
+&nbsp;
+<b class="fc">&nbsp;    public int getLosses() { return losses; }</b>
+&nbsp;
+&nbsp;    // Components Observers
+&nbsp;
+&nbsp;    public Map&lt;Point, Component&gt; getComponentMap() {
+<b class="fc">&nbsp;        return componentMap;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;Point, Cannon&gt; getCannons() {
+<b class="fc">&nbsp;        return cannons;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;Point, Engine&gt; getEngines() {
+<b class="fc">&nbsp;        return engines;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;Point, Battery&gt; getBatteries() {
+<b class="fc">&nbsp;        return batteries;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCargoOnShip() {
+<b class="fc">&nbsp;        return cargoOnShip;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;Point, Shield&gt; getShields() {
+<b class="fc">&nbsp;        return shields;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;Point, Cabin&gt; getCabins() {
+<b class="fc">&nbsp;        return cabins;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;Point, CargoHold&gt; getCargoHolds() {
+<b class="fc">&nbsp;        return cargoHolds;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;Point, LifeSupport&gt; getLifeSupports() {
+<b class="fc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;Point, Activatable&gt; getActivatables() {
+<b class="fc">&nbsp;        return activatables;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Component getLastComponent() {
+<b class="fc">&nbsp;        return this.lastComponent;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Component&gt; getStashedComponents() {
+<b class="fc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Point getLastPosition() {
+<b class="fc">&nbsp;        return lastPosition;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public GameColor getColor() {
+<b class="fc">&nbsp;        return color;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //Stat update methods
+&nbsp;    protected void add(Point point, Cabin cabin) {
+<b class="fc">&nbsp;        cabins.put(point, cabin);</b>
+<b class="fc">&nbsp;        crewSize += cabin.getNumResidents();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected void remove(Point point, Cabin cabin) {
+<b class="fc">&nbsp;        cabins.remove(point);</b>
+<b class="fc">&nbsp;        crewSize -= cabin.getNumResidents();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

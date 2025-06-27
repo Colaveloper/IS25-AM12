@@ -1,0 +1,153 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SecondFactory</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model</a>
+</div>
+
+<h1>Coverage Summary for Class: SecondFactory (it.polimi.ingsw.galaxytruckers.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SecondFactory</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GameColor;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.SecondShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.SecondShipBuildingState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.ShipBuildingState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.ShipCorrectionState;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;
+<b class="fc">&nbsp;public class SecondFactory implements GameFactory{</b>
+&nbsp;    @Override
+&nbsp;    public Deck createDeck(Game game) throws IOException {
+<b class="fc">&nbsp;        SecondDeck deck = new SecondDeck(game);</b>
+<b class="fc">&nbsp;        deck.initMasterDeck();</b>
+<b class="fc">&nbsp;        return deck;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public FlightBoard createFlightBoard(int shipsN, GameEventListener gameEventListener) {
+<b class="fc">&nbsp;        return new SecondFlightBoard(shipsN, gameEventListener);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ShipBoard createShipBoard(GameColor color, GameEventListener eventListener) {
+<b class="fc">&nbsp;         return new SecondShipBoard(color,eventListener);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ShipBuildingState createShipBuildingState() {
+<b class="fc">&nbsp;        return new SecondShipBuildingState();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ShipCorrectionState createShipCorrectionState() {
+<b class="fc">&nbsp;        return new ShipCorrectionState(true);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public SurrenderPolicy createSurrenderPolicy(GameEventListener gameEventListener) {
+<b class="fc">&nbsp;        return new EnabledSurrenderPolicy(gameEventListener);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ScoresRegistry createScoresRegistry() {
+<b class="fc">&nbsp;        return new ScoresRegistry(new int[]{8,6,4,2},4);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

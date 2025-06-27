@@ -1,0 +1,198 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CheatCodes</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: CheatCodes (it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CheatCodes</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+  <span class="absValue">
+    (5/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.4%
+  </span>
+  <span class="absValue">
+    (14/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.utils.Logger;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Utility class that manages cheat codes for testing and debugging purposes.
+&nbsp; * Provides predefined sequences of inputs that can simulate player actions
+&nbsp; * for automated testing and development scenarios.
+&nbsp; */
+<b class="nc">&nbsp;public class CheatCodes {</b>
+<b class="fc">&nbsp;    private static final List&lt;String&gt; startToBuild = new ArrayList&lt;&gt;(List.of(&quot;0&quot;, &quot;&quot;, &quot;player1&quot;, &quot;C&quot;, &quot;SECOND 2&quot;));</b>
+<b class="fc">&nbsp;    private static final List&lt;String&gt; secondToBuild =new ArrayList&lt;&gt;(List.of(&quot;0&quot;, &quot;&quot;, &quot;player2&quot;, &quot;0&quot;));</b>
+&nbsp;    private static List&lt;String&gt; cheatString;
+&nbsp;    private static boolean isCheatOn;
+&nbsp;
+&nbsp;    static {
+<b class="fc">&nbsp;        for(int i = 0; i &lt; 20; i++){</b>
+<b class="fc">&nbsp;            secondToBuild.add(&quot;C&quot;);</b>
+<b class="fc">&nbsp;            secondToBuild.add(&quot;R&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        secondToBuild.add(&quot;e 3&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Activates a specific cheat sequence based on the provided input.
+&nbsp;     *
+&nbsp;     * @param input The cheat code identifier:
+&nbsp;     *              2 - activates the startToBuild sequence
+&nbsp;     *              3 - activates the secondToBuild sequence
+&nbsp;     */
+&nbsp;    public static void activateCheats(int input) {
+<b class="fc">&nbsp;        isCheatOn = true;</b>
+<b class="pc">&nbsp;        switch (input) {</b>
+<b class="fc">&nbsp;            case 2 -&gt; cheatString = startToBuild;</b>
+<b class="nc">&nbsp;            case 3 -&gt; cheatString = secondToBuild;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if all cheat inputs in the current sequence have been consumed.
+&nbsp;     *
+&nbsp;     * @return true if there are no more cheat inputs remaining in the sequence,
+&nbsp;     *         false if there are still inputs available
+&nbsp;     */
+&nbsp;    public static boolean cheatEmpty() {
+<b class="fc">&nbsp;        return cheatString.isEmpty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves and removes the next cheat input from the current sequence.
+&nbsp;     * Includes a small delay between inputs to simulate real user interaction.
+&nbsp;     *
+&nbsp;     * @return The next cheat input string from the sequence
+&nbsp;     * @throws InterruptedException if the thread sleep is interrupted
+&nbsp;     */
+&nbsp;    public static String cheat() throws InterruptedException {
+<b class="fc">&nbsp;        Thread.sleep(200);</b>
+<b class="fc">&nbsp;        Logger.println(4, cheatString.getFirst());</b>
+<b class="fc">&nbsp;        return cheatString.removeFirst();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Enables or disables the cheat functionality globally.
+&nbsp;     *
+&nbsp;     * @param cheat true to enable cheats, false to disable them
+&nbsp;     */
+&nbsp;    public static void setCheats(boolean cheat) {
+<b class="nc">&nbsp;        isCheatOn = cheat;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if cheat mode is currently active.
+&nbsp;     *
+&nbsp;     * @return true if cheats are enabled, false otherwise
+&nbsp;     */
+&nbsp;    public static boolean isCheatOn() {
+<b class="fc">&nbsp;        return isCheatOn;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

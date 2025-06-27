@@ -1,0 +1,195 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Component</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.shipBuilding</a>
+</div>
+
+<h1>Coverage Summary for Class: Component (it.polimi.ingsw.galaxytruckers.server.model.shipBuilding)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Component</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (19/19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.shipBuilding;
+&nbsp;
+&nbsp;import com.google.common.annotations.VisibleForTesting;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.util.EnumMap;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;/**
+&nbsp; * Base class for all ship components, providing connector and orientation management.
+&nbsp; */
+&nbsp;public non-sealed class Component implements ComponentInterface {
+&nbsp;    private final Map&lt;Direction, Connector&gt; connectors;
+&nbsp;    private Direction orientation;
+&nbsp;    private final int id;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a Component with the specified connectors and id.
+&nbsp;     *
+&nbsp;     * @param connectors the connectors for this component
+&nbsp;     * @param id         the unique identifier for this component
+&nbsp;     */
+<b class="fc">&nbsp;    public Component(Map&lt;Direction, Connector&gt; connectors, int id) {</b>
+<b class="fc">&nbsp;        this.connectors = new EnumMap&lt;&gt;(connectors);</b>
+<b class="fc">&nbsp;        this.orientation = Direction.UP;</b>
+<b class="fc">&nbsp;        this.id = id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a Component with the specified connectors.
+&nbsp;     * Used for testing purposes.
+&nbsp;     *
+&nbsp;     * @param connectors the connectors for this component
+&nbsp;     */
+&nbsp;    @VisibleForTesting
+<b class="fc">&nbsp;    public Component(Map&lt;Direction, Connector&gt; connectors) {</b>
+<b class="fc">&nbsp;        this.connectors = new EnumMap&lt;&gt;(connectors);</b>
+<b class="fc">&nbsp;        this.orientation = Direction.UP;</b>
+<b class="fc">&nbsp;        this.id = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a Component with default universal connectors.
+&nbsp;     * Used for testing purposes.
+&nbsp;     */
+&nbsp;    @VisibleForTesting
+<b class="fc">&nbsp;    public Component() {</b>
+<b class="fc">&nbsp;        this.connectors = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.connectors.putAll(Map.of(</b>
+&nbsp;                Direction.UP, Connector.UNIVERSAL,
+&nbsp;                Direction.RIGHT, Connector.UNIVERSAL,
+&nbsp;                Direction.DOWN, Connector.UNIVERSAL,
+&nbsp;                Direction.LEFT, Connector.UNIVERSAL
+&nbsp;        ));
+<b class="fc">&nbsp;        this.orientation = Direction.UP;</b>
+<b class="fc">&nbsp;        this.id = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return a map of connectors for this component, keyed by direction.
+&nbsp;     */
+&nbsp;    public Map&lt;Direction, Connector&gt; getConnectors() {
+<b class="fc">&nbsp;        return connectors;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return the unique identifier of the component
+&nbsp;     */
+&nbsp;    public int getId() {
+<b class="fc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return the current orientation of the component
+&nbsp;     */
+&nbsp;    public Direction getOrientation() {
+<b class="fc">&nbsp;        return orientation;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the orientation of the component.
+&nbsp;     *
+&nbsp;     * @param orientation the new orientation to set
+&nbsp;     */
+&nbsp;    public void setOrientation(Direction orientation) {
+<b class="fc">&nbsp;        Map&lt;Direction, Connector&gt; rotatedConnectors = Direction.rotateDirectionMap(connectors, this.orientation, orientation);</b>
+<b class="fc">&nbsp;        this.orientation = orientation;</b>
+<b class="fc">&nbsp;        this.connectors.putAll(rotatedConnectors);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

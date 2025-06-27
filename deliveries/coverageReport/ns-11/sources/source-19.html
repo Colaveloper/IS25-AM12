@@ -1,0 +1,275 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiTestShipBuildingScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiTestShipBuildingScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiTestShipBuildingScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GuiTestShipBuildingScreen$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/38)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements.PurpleVBox;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.StateActions;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.TestShipBuildingState;
+&nbsp;import javafx.geometry.Pos;
+&nbsp;import javafx.scene.layout.VBox;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI screen for the test ship building phase of the game.
+&nbsp; * &lt;p&gt;
+&nbsp; * This screen manages the UI and logic for ship building in the test flight, allowing players to
+&nbsp; * interact with their ship board and hand. It extends GuiShipBuildingScreen and customizes the
+&nbsp; * layout for the test phase, providing a simplified interface for testing ship construction.
+&nbsp; * &lt;/p&gt;
+&nbsp; *
+&nbsp; * @author (your name or team)
+&nbsp; */
+&nbsp;public class GuiTestShipBuildingScreen extends GuiShipBuildingScreen {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new GuiTestShipBuildingScreen.
+&nbsp;     *
+&nbsp;     * @param model the client model
+&nbsp;     * @param controller the controller to communicate with the server
+&nbsp;     * @param state the test ship building state
+&nbsp;     */
+&nbsp;    public GuiTestShipBuildingScreen(ClientModel model, ClientControllerInterface controller, TestShipBuildingState state) {
+<b class="nc">&nbsp;        super(model, controller, state);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected VBox getShipBoardVBox(ShipBoard shipBoard) {
+<b class="nc">&nbsp;        VBox getShipBoardVBox = new VBox(5);</b>
+<b class="nc">&nbsp;        getShipBoardVBox.setAlignment(Pos.CENTER);</b>
+&nbsp;
+<b class="nc">&nbsp;        PurpleVBox shipBoardVBox = guiShipBoards.get(shipBoard);</b>
+&nbsp;
+<b class="nc">&nbsp;        getShipBoardVBox.getChildren().addAll(shipBoardVBox, guiHands.get(shipBoard));</b>
+&nbsp;
+<b class="nc">&nbsp;        return getShipBoardVBox;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected VBox getFreeUseVBox() {
+<b class="nc">&nbsp;        VBox freeUseVBox = new VBox(5);</b>
+<b class="nc">&nbsp;        freeUseVBox.getChildren().add(guiComponentBank);</b>
+<b class="nc">&nbsp;        return freeUseVBox;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected GuiController getGuiController() {
+<b class="nc">&nbsp;        return new GuiController() {</b>
+&nbsp;            @Override
+&nbsp;            public void placeShipOnFlightBoard(int position) {
+<b class="nc">&nbsp;                if (state.getAvailableActions().contains(StateActions.PLACE_SHIP_FOR_TEST)) {</b>
+<b class="nc">&nbsp;                    controller.placeShipOnFlightBoard();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            @Override
+&nbsp;            public void requestRandComponent() {
+<b class="nc">&nbsp;                if (state.getAvailableActions().contains(StateActions.REQUEST_RAND_COMPONENT)) {</b>
+<b class="nc">&nbsp;                    controller.requestRandComponent();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            @Override
+&nbsp;            public void rejectComponent() {
+<b class="nc">&nbsp;                if (state.getAvailableActions().contains(StateActions.REJECT_COMPONENT)) {</b>
+<b class="nc">&nbsp;                    controller.rejectComponent();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            @Override
+&nbsp;            public void requestComponent(int id) {
+<b class="nc">&nbsp;                if (state.getAvailableActions().contains(StateActions.REQUEST_COMPONENT)) {</b>
+<b class="nc">&nbsp;                    controller.requestComponent(id);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            @Override
+&nbsp;            public void rotateHandComponent() {
+<b class="nc">&nbsp;                if (myShipBoard.getLastComponent() != null) {</b>
+<b class="nc">&nbsp;                    Direction currentDirection = myShipBoard.getLastComponent().getOrientation();</b>
+<b class="nc">&nbsp;                    Direction newDirection = currentDirection.getLeft();</b>
+<b class="nc">&nbsp;                    myShipBoard.getLastComponent().setOrientation(newDirection);</b>
+<b class="nc">&nbsp;                    guiHands.get(myShipBoard).setComponentDirection(newDirection);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            @Override
+&nbsp;            public void handlePointPress(Point point) {
+&nbsp;                // clicking on a component that has been placed on the ship
+<b class="nc">&nbsp;                if (myShipBoard.getComponentMap().containsKey(point)) {</b>
+&nbsp;                    // we grab the component only if it hasn&#39;t been welded
+<b class="nc">&nbsp;                    if (myShipBoard.getLastPosition() != null &amp;&amp;</b>
+<b class="nc">&nbsp;                            myShipBoard.getLastPosition().equals(point) &amp;&amp;</b>
+<b class="nc">&nbsp;                            state.getAvailableActions().contains(StateActions.GRAB_PLACED_COMPONENT)) {</b>
+<b class="nc">&nbsp;                        Component component = myShipBoard.getComponentMap().get(point);</b>
+<b class="nc">&nbsp;                        controller.grabPlacedComponent();</b>
+<b class="nc">&nbsp;                        guiShipBoards.get(myShipBoard).notifyRemoveComponent(point);</b>
+<b class="nc">&nbsp;                        guiHands.get(myShipBoard).notifySetHand(component);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;                // place the component on an empty space on the ship
+<b class="nc">&nbsp;                else if (myShipBoard.getShipArea().contains(point) &amp;&amp;</b>
+<b class="nc">&nbsp;                        !myShipBoard.getComponentMap().containsKey(point) &amp;&amp;</b>
+<b class="nc">&nbsp;                        myShipBoard.getLastComponent() != null &amp;&amp;</b>
+<b class="nc">&nbsp;                        myShipBoard.getLastPosition() == null) {</b>
+<b class="nc">&nbsp;                    if (state.getAvailableActions().contains(StateActions.PLACE_COMPONENT)) {</b>
+<b class="nc">&nbsp;                        controller.placeComponent(point, myShipBoard.getLastComponent().getOrientation());</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;        };
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

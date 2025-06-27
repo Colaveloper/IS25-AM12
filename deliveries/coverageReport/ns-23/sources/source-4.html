@@ -1,0 +1,190 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > EnabledSurrenderPolicy</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model</a>
+</div>
+
+<h1>Coverage Summary for Class: EnabledSurrenderPolicy (it.polimi.ingsw.galaxytruckers.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EnabledSurrenderPolicy</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (23/23)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model;
+&nbsp;
+&nbsp;import com.google.common.annotations.VisibleForTesting;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.SurrenderCause;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * Surrender policy implementation that allows surrendering ships.
+&nbsp; */
+&nbsp;public class EnabledSurrenderPolicy implements SurrenderPolicy {
+<b class="fc">&nbsp;    private final Set&lt;ShipBoard&gt; requests = new HashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;    private final Set&lt;ShipBoard&gt; surrenderedShips = new HashSet&lt;&gt;();</b>
+&nbsp;    private final GameEventListener listener;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for EnabledSurrenderPolicy.
+&nbsp;     * @param listener the GameEventListener to notify about surrender events
+&nbsp;     */
+<b class="fc">&nbsp;    public EnabledSurrenderPolicy(GameEventListener listener) {</b>
+<b class="fc">&nbsp;        this.listener = listener;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * @return true
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public boolean isSurrenderEnabled() {
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public synchronized boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause) {
+<b class="fc">&nbsp;        if (surrenderedShips.contains(shipBoard)) return false;</b>
+<b class="fc">&nbsp;        boolean res = requests.add(shipBoard);</b>
+<b class="fc">&nbsp;        if (res) listener.notifySurrenderRequestEvent(shipBoard, cause);</b>
+<b class="fc">&nbsp;        return res;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public synchronized Set&lt;ShipBoard&gt; confirmSurrender(FlightBoard flightBoard) {
+&nbsp;
+<b class="fc">&nbsp;        Set&lt;ShipBoard&gt; allShips = flightBoard.getShipToPlace().keySet();</b>
+<b class="fc">&nbsp;        allShips.stream()</b>
+<b class="fc">&nbsp;                .filter(s -&gt; s.getCrewSize() == 0)</b>
+<b class="fc">&nbsp;                .forEach(s -&gt; requestSurrender(s, SurrenderCause.NOCREW));</b>
+<b class="fc">&nbsp;        flightBoard.getLappedShips().forEach(s -&gt; requestSurrender(s,SurrenderCause.LAPPED));</b>
+&nbsp;
+<b class="fc">&nbsp;        this.surrenderedShips.addAll(requests);</b>
+<b class="fc">&nbsp;        Set&lt;ShipBoard&gt; newSurrenderedShips = new HashSet&lt;&gt;(this.requests);</b>
+<b class="fc">&nbsp;        this.requests.clear();</b>
+<b class="fc">&nbsp;        flightBoard.removeShips(newSurrenderedShips);</b>
+<b class="fc">&nbsp;        if (!newSurrenderedShips.isEmpty()) listener.notifySurrenderEvent(newSurrenderedShips.stream().toList());</b>
+<b class="fc">&nbsp;        return newSurrenderedShips;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public synchronized Set&lt;ShipBoard&gt; getSurrenderedShips() {
+<b class="fc">&nbsp;        return new HashSet&lt;&gt;(surrenderedShips);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @VisibleForTesting
+&nbsp;    public synchronized Set&lt;ShipBoard&gt; getRequests() {
+<b class="fc">&nbsp;        return new HashSet&lt;&gt;(requests);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @VisibleForTesting
+&nbsp;    protected synchronized GameEventListener getListener() {
+<b class="fc">&nbsp;        return listener;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

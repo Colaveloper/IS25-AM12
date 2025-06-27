@@ -1,0 +1,414 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RmiClient</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.network.client.rmi</a>
+</div>
+
+<h1>Coverage Summary for Class: RmiClient (it.polimi.ingsw.galaxytruckers.network.client.rmi)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RmiClient</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/41)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/69)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.network.client.rmi;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ServerToClientInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.client.ServerHandler;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteServer;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteController;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.types.Event;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.rmi.NotBoundException;
+&nbsp;import java.rmi.RemoteException;
+&nbsp;import java.rmi.registry.LocateRegistry;
+&nbsp;import java.rmi.registry.Registry;
+&nbsp;import java.rmi.server.UnicastRemoteObject;
+&nbsp;import java.util.UUID;
+&nbsp;import java.util.concurrent.Executors;
+&nbsp;import java.util.concurrent.ScheduledExecutorService;
+&nbsp;import java.util.concurrent.ScheduledFuture;
+&nbsp;import java.util.concurrent.TimeUnit;
+&nbsp;
+&nbsp;/**
+&nbsp; * RMIClient is the client-side implementation of the RMI protocol for Galaxy Truckers.
+&nbsp; * It allows the client to connect to a remote server and interact with it through remote method calls.
+&nbsp; */
+&nbsp;public class RmiClient extends UnicastRemoteObject implements RemoteClient, ServerHandler {
+&nbsp;    private RemoteServer server;
+&nbsp;    private RemoteController remoteController;
+&nbsp;    private ServerToClientInterface clientController;
+<b class="nc">&nbsp;    private final ScheduledExecutorService pingScheduler = Executors.newScheduledThreadPool(1);</b>
+&nbsp;    private ScheduledFuture&lt;?&gt; pingTask;
+&nbsp;
+&nbsp;    private String serverName;
+&nbsp;    private String serverAddress;
+&nbsp;    private int serverPort;
+&nbsp;
+<b class="nc">&nbsp;    boolean connected = false;</b>
+<b class="nc">&nbsp;    private final Object connectionLock = new Object();</b>
+&nbsp;
+&nbsp;    public RmiClient() throws RemoteException {
+<b class="nc">&nbsp;        super();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Starts the RMI client by connecting to the specified server.
+&nbsp;     *
+&nbsp;     * @param serverName    the name of the RMI server
+&nbsp;     * @param serverAddress the address of the RMI server
+&nbsp;     * @param serverPort    the port of the RMI server
+&nbsp;     */
+&nbsp;    public void start(String serverName, String serverAddress, int serverPort) {
+&nbsp;        try {
+<b class="nc">&nbsp;            this.serverName = serverName;</b>
+<b class="nc">&nbsp;            this.serverAddress = serverAddress;</b>
+<b class="nc">&nbsp;            this.serverPort = serverPort;</b>
+<b class="nc">&nbsp;            connect();</b>
+&nbsp;        } catch (RemoteException e) {
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;Failed to locate RMI server&quot;, e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean reconnect() {
+<b class="nc">&nbsp;        synchronized (connectionLock) {</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                connect();</b>
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            } catch (RemoteException e) {
+<b class="nc">&nbsp;                System.out.println(&quot;Failed to reconnect: &quot; + e.getMessage());</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return false;</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void dropConnection() {
+<b class="nc">&nbsp;        handleNetworkError(new RemoteException(&quot;Simulated Network Exception&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void connect() throws RemoteException {
+&nbsp;        try {
+<b class="nc">&nbsp;            Registry registry = LocateRegistry.getRegistry(serverAddress, serverPort);</b>
+<b class="nc">&nbsp;            this.server = (RemoteServer) registry.lookup(serverName);</b>
+<b class="nc">&nbsp;            connected = true;</b>
+&nbsp;        } catch (NotBoundException e) {
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;Server not bound, config error&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the client controller for handling client-side events.
+&nbsp;     *
+&nbsp;     * @param clientController the client controller interface to set
+&nbsp;     */
+&nbsp;    public void setClientController(ServerToClientInterface clientController) {
+<b class="nc">&nbsp;        this.clientController = clientController;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void handleNetworkError(RemoteException e) {
+<b class="nc">&nbsp;        synchronized (connectionLock) {</b>
+<b class="nc">&nbsp;            System.err.println(&quot;RemoteException: &quot; + e.getMessage());</b>
+<b class="nc">&nbsp;            if (connected) {</b>
+<b class="nc">&nbsp;                connected = false;</b>
+<b class="nc">&nbsp;                pingTask.cancel(true);</b>
+<b class="nc">&nbsp;                clientController.signalDisconnection();</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void ping() {
+<b class="nc">&nbsp;        synchronized (connectionLock) {</b>
+<b class="nc">&nbsp;            runRemoteMethod(() -&gt; remoteController.ping());</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // VirtualServer
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void registerNickname(String myNickname) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; {</b>
+<b class="nc">&nbsp;            this.remoteController = server.registerNickname(this, myNickname);</b>
+<b class="nc">&nbsp;            this.pingTask = this.pingScheduler.scheduleAtFixedRate(this::ping, 5, 5, TimeUnit.SECONDS);</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void requestNewGame(Level level, int playerN) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.newGame(level, playerN));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void drawCard() {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.drawCard());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void joinLobby(UUID lobbyID) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.joinLobby(lobbyID));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void leaveLobby() {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.leaveLobby());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void requestRandComponent() {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.requestRandComponent());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void requestComponent(int componentID) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.requestComponent(componentID));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void rejectComponent() {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.rejectComponent());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void stashComponent() {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.stashComponent());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void grabPlacedComponent() {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.grabPlacedComponent());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void grabStashedComponent(int index) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.grabStashedComponent(index));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void placeComponent(Point point, Direction orientation) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.placeComponent(point, orientation));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void flipHourglass() {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.flipHourglass());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void placeShipOnFlightBoard(int startingPosition) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.placeShipOnFlightBoard(startingPosition));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void placeShipOnFlightBoard() {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.placeShipOnFlightBoard());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void acquireForecast(int deckIndex) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.acquireForecast(deckIndex));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void releaseForecast() {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.releaseForecast());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void removeComponent(Point point) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.removeComponent(point));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void chooseShipPiece(int pieceIndex) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.chooseShipPiece(pieceIndex));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void initializeCabin(Point point, CrewType crewType) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.initializeCabin(point, crewType));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void activateComponent(Point point) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.activateComponent(point));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void loseCrew(Point point) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.loseCrew(point));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void grabReward() {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.grabReward());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void placeGoods(Point point, GoodsType goodsType) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.placeGoods(point, goodsType));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void removeGoods(Point point, GoodsType goodsType) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.removeGoods(point, goodsType));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void loseGoods(Point point) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.loseGoods(point));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void useBattery(Point point) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.useBattery(point));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void choosePlanet(int choice) {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.choosePlanet(choice));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void goNext() {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.goNext());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void giveUp() {
+<b class="nc">&nbsp;        runRemoteMethod(() -&gt; remoteController.giveUp());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void runRemoteMethod(RemoteRunnable remoteRunnable) {
+&nbsp;        try {
+<b class="nc">&nbsp;            synchronized (connectionLock) {</b>
+<b class="nc">&nbsp;                if (!connected) return;</b>
+<b class="nc">&nbsp;                remoteRunnable.run();</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        } catch (RemoteException e) {
+<b class="nc">&nbsp;            handleNetworkError(e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- RemoteClient ---
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyEvent(Event event) throws RemoteException {
+<b class="nc">&nbsp;        clientController.notifyEvent(event);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;@FunctionalInterface
+&nbsp;interface RemoteRunnable {
+&nbsp;    void run() throws RemoteException;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

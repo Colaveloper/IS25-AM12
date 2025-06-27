@@ -1,0 +1,201 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiScreenFactory</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiScreenFactory (it.polimi.ingsw.galaxytruckers.client.view.gui)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiScreenFactory</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GuiScreenFactory$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/29)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.MetaState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.ScreenFactory;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens.*;
+&nbsp;
+<b class="nc">&nbsp;public class GuiScreenFactory implements ScreenFactory&lt;GuiScreen&gt; {</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public GuiScreen createScreen(MetaState metaState, ClientModel model, ClientControllerInterface controller) {
+<b class="nc">&nbsp;        return switch (metaState) {</b>
+<b class="nc">&nbsp;            case REGISTER -&gt; new GuiNicknameChoiceScreen(model, controller);</b>
+<b class="nc">&nbsp;            case JOINORCREATE -&gt; new GuiJoinOrCreateScreen(model, model.getActiveLobbies().keySet(), controller);</b>
+<b class="nc">&nbsp;            case CREATION -&gt; new GuiGameCreationScreen(model, controller);</b>
+<b class="nc">&nbsp;            case INLOBBY -&gt; new GuiLobbyScreen(model, controller);</b>
+<b class="nc">&nbsp;            case INGAME -&gt; createScreen(model.getGame().getCurrentState(), model, controller);</b>
+<b class="nc">&nbsp;            case ENDGAME -&gt; new GuiEndGameScreen(model, controller);</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public GuiScreen createScreen(GameState gameState, ClientModel model, ClientControllerInterface controller) {
+<b class="nc">&nbsp;        return switch (gameState) {</b>
+<b class="nc">&nbsp;            case ShipBuildingState shipBuildingState -&gt; switch (shipBuildingState) {</b>
+<b class="nc">&nbsp;                case SecondShipBuildingState secondShipBuildingState -&gt; new GuiSecondShipBuildingScreen(model, controller, secondShipBuildingState);</b>
+<b class="nc">&nbsp;                case TestShipBuildingState testShipBuildingState -&gt; new GuiTestShipBuildingScreen(model, controller, testShipBuildingState);</b>
+&nbsp;            };
+<b class="nc">&nbsp;            case ShipCorrectionState shipCorrectionState -&gt; new GuiCorrectionScreen(model, controller, shipCorrectionState);</b>
+<b class="nc">&nbsp;            case ShipInitializationState shipInitializationState -&gt; new GuiCrewInitializationScreen(model, controller, shipInitializationState);</b>
+<b class="nc">&nbsp;            case AdventureState s -&gt; switch (s) {</b>
+<b class="nc">&nbsp;                case ActivateState activateState -&gt; switch (activateState) {</b>
+<b class="nc">&nbsp;                    case DeclareEnginePowerState declareEnginePowerState -&gt; new GuiDeclareEnginePowerScreen(model, controller, declareEnginePowerState);</b>
+<b class="nc">&nbsp;                    case DeclareFirePowerState declareFirePowerState -&gt; new GuiDeclareFirePowerScreen(model, controller, declareFirePowerState);</b>
+<b class="nc">&nbsp;                    case HandleProjectileState handleProjectileState -&gt; new GuiProjectilesScreen(model, controller, handleProjectileState);</b>
+&nbsp;                };
+<b class="nc">&nbsp;                case AddGoodsState addGoodsState -&gt; new GuiGoodsScreen(model, controller, addGoodsState);</b>
+<b class="nc">&nbsp;                case ChoosePlanetState choosePlanetState -&gt; new GuiPlanetScreen(model, controller, choosePlanetState);</b>
+<b class="nc">&nbsp;                case ChooseShipPieceState chooseShipPieceState -&gt; new GuiShipPieceChoiceScreen(model, controller, chooseShipPieceState);</b>
+<b class="nc">&nbsp;                case DrawCardState drawCardState -&gt; new GuiNewCardScreen(model, controller, drawCardState);</b>
+<b class="nc">&nbsp;                case GrabRewardState grabRewardState -&gt; new GuiRewardScreen(model, controller, grabRewardState);</b>
+<b class="nc">&nbsp;                case RemoveCrewState removeCrewState -&gt; new GuiRemoveCrewScreen(model, controller, removeCrewState);</b>
+<b class="nc">&nbsp;                case RemoveGoodsState removeGoodsState -&gt; new GuiLoseGoodsScreen(model, controller, removeGoodsState);</b>
+<b class="nc">&nbsp;                default -&gt; throw new IllegalStateException(&quot;Unexpected AdventureState: &quot; + s);</b>
+&nbsp;            };
+<b class="nc">&nbsp;            default -&gt; throw new IllegalStateException(&quot;Unexpected GameState: &quot; + gameState);</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

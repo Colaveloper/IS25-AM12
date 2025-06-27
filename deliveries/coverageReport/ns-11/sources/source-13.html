@@ -1,0 +1,348 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiRemoveCrewScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiRemoveCrewScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiRemoveCrewScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/55)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GuiRemoveCrewScreen$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/26)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/65)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.RemoveCrewState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.StateActions;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.beans.binding.Bindings;
+&nbsp;import javafx.beans.property.ObjectProperty;
+&nbsp;import javafx.beans.property.SimpleObjectProperty;
+&nbsp;import javafx.geometry.Insets;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.layout.VBox;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI screen for handling the removal of crew members from the ship.
+&nbsp; * &lt;p&gt;
+&nbsp; * This screen is displayed when a player must remove crew members from their ship.
+&nbsp; * It allows the player to select a cabin and remove crew, updating the UI accordingly.
+&nbsp; * &lt;/p&gt;
+&nbsp; *
+&nbsp; */
+&nbsp;public class GuiRemoveCrewScreen extends GuiAdventureScreen {
+&nbsp;    private final ObjectProperty&lt;Point&gt; selectedPoint;
+&nbsp;    private final VBox cabinInfoBox;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new GuiRemoveCrewScreen.
+&nbsp;     *
+&nbsp;     * @param model the client model
+&nbsp;     * @param controller the controller to communicate with the server
+&nbsp;     * @param removeCrewState the state containing information about crew removal
+&nbsp;     */
+&nbsp;    public GuiRemoveCrewScreen(ClientModel model, ClientControllerInterface controller, RemoveCrewState removeCrewState) {
+<b class="nc">&nbsp;        super(model, controller, removeCrewState);</b>
+<b class="nc">&nbsp;        this.selectedPoint = new SimpleObjectProperty&lt;&gt;();</b>
+<b class="nc">&nbsp;        this.cabinInfoBox = new VBox(2);</b>
+<b class="nc">&nbsp;        updateCabinInfoBox();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (isMyTurn()) {</b>
+<b class="nc">&nbsp;            guiLog.log(&quot;Your turn to remove crew members&quot;);</b>
+<b class="nc">&nbsp;            guiLog.log(&quot;Select a cabin to remove crew from&quot;);</b>
+<b class="nc">&nbsp;            guiLog.log(&quot;Then select remove action&quot;);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            guiLog.log(&quot;Wait for others to remove crew members&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (isMyTurn()) {</b>
+<b class="nc">&nbsp;            setupButtonBox();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets up the action buttons for removing crew and finishing the action.
+&nbsp;     * Adds the buttons to the GUI button box and binds their actions.
+&nbsp;     */
+&nbsp;    private void setupButtonBox() {
+<b class="nc">&nbsp;        guiButtonBox.getChildren().clear();</b>
+&nbsp;
+<b class="nc">&nbsp;        VBox actionButtons = new VBox(5);</b>
+<b class="nc">&nbsp;        actionButtons.setPadding(new Insets(5));</b>
+&nbsp;
+<b class="nc">&nbsp;        Button removeButton = new Button(&quot;Remove Crew&quot;);</b>
+<b class="nc">&nbsp;        removeButton.disableProperty().bind(</b>
+<b class="nc">&nbsp;                Bindings.createBooleanBinding(</b>
+<b class="nc">&nbsp;                        () -&gt; (</b>
+<b class="nc">&nbsp;                                selectedPoint.get() == null ||</b>
+<b class="nc">&nbsp;                                !myShipBoard.getCabins().containsKey(selectedPoint.get()) ||</b>
+<b class="nc">&nbsp;                                myShipBoard.getCabins().get(selectedPoint.get()).getNumResidents() &lt;= 0</b>
+&nbsp;                        ), selectedPoint
+&nbsp;                )
+&nbsp;        );
+&nbsp;
+<b class="nc">&nbsp;        removeButton.setOnAction(_ -&gt; {</b>
+<b class="nc">&nbsp;            controller.loseCrew(selectedPoint.get());</b>
+<b class="nc">&nbsp;            selectedPoint.set(null);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        Button nextButton = new Button(&quot;Done&quot;);</b>
+<b class="nc">&nbsp;        nextButton.setOnAction(_ -&gt; getGuiController().goNext());</b>
+&nbsp;
+<b class="nc">&nbsp;        actionButtons.getChildren().addAll(removeButton, nextButton);</b>
+<b class="nc">&nbsp;        guiButtonBox.getChildren().add(actionButtons);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns a custom GuiController for handling point presses and advancing the state.
+&nbsp;     *
+&nbsp;     * @return a GuiController instance for this screen
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    protected GuiController getGuiController() {
+<b class="nc">&nbsp;        return new GuiController() {</b>
+&nbsp;            @Override
+&nbsp;            public void handlePointPress(Point point) {
+<b class="nc">&nbsp;                if (state.getAvailableActions().contains(StateActions.LOSE_CREW)) {</b>
+<b class="nc">&nbsp;                    if (myShipBoard.getCabins().containsKey(point)) {</b>
+<b class="nc">&nbsp;                        selectedPoint.set(point);</b>
+<b class="nc">&nbsp;                        updateCabinInfoBox();</b>
+<b class="nc">&nbsp;                        guiLog.log(&quot;Action to be performed at &quot;+ point.x + &quot;,&quot; + point.y);</b>
+<b class="nc">&nbsp;                        guiShipBoards.get(myShipBoard).highlightPoints(Set.of(point), Color.YELLOW);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        guiLog.log(&quot;No cabin at &quot; + point.x + &quot;,&quot; + point.y);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            @Override
+&nbsp;            public void goNext() {
+<b class="nc">&nbsp;                if (state.getAvailableActions().contains(StateActions.GO_NEXT)) {</b>
+<b class="nc">&nbsp;                    controller.goNext();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the cabinInfoBox with information about the selected cabin and crew count.
+&nbsp;     */
+&nbsp;    private void updateCabinInfoBox() {
+<b class="nc">&nbsp;        Platform.runLater(()-&gt;{</b>
+<b class="nc">&nbsp;            cabinInfoBox.getChildren().clear();</b>
+<b class="nc">&nbsp;            Label cabinsWithCrewLabel = new Label(&quot;Cabins with crew: &quot; + countCabinsWithCrew());</b>
+<b class="nc">&nbsp;            cabinsWithCrewLabel.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;            cabinInfoBox.getChildren().add(cabinsWithCrewLabel);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (selectedPoint.get() != null &amp;&amp; myShipBoard.getCabins().containsKey(selectedPoint.get())) {</b>
+<b class="nc">&nbsp;                Label positionLabel = new Label(&quot;Selected position: (&quot; + selectedPoint.get().x + &quot;,&quot; + selectedPoint.get().y + &quot;)&quot;);</b>
+<b class="nc">&nbsp;                positionLabel.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;                cabinInfoBox.getChildren().add(positionLabel);</b>
+&nbsp;
+<b class="nc">&nbsp;                int crewCount = myShipBoard.getCabins().get(selectedPoint.get()).getNumResidents();</b>
+<b class="nc">&nbsp;                Label crewLabel = new Label(&quot;Crew members: &quot; + crewCount);</b>
+<b class="nc">&nbsp;                crewLabel.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;                cabinInfoBox.getChildren().add(crewLabel);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns a VBox containing UI elements for free use actions and cabin info.
+&nbsp;     *
+&nbsp;     * @return VBox with UI elements
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    protected VBox getFreeUseVBox() {
+<b class="nc">&nbsp;        VBox freeUseVBox = super.getFreeUseVBox();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (isMyTurn()) {</b>
+<b class="nc">&nbsp;            freeUseVBox.getChildren().add(cabinInfoBox);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return freeUseVBox;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Counts the number of cabins on the ship that have at least one crew member.
+&nbsp;     *
+&nbsp;     * @return the number of cabins with crew
+&nbsp;     */
+&nbsp;    private int countCabinsWithCrew() {
+<b class="nc">&nbsp;        ShipBoard currentShip = state.getShipBoard();</b>
+<b class="nc">&nbsp;        int count = 0;</b>
+<b class="nc">&nbsp;        for (var cabin : currentShip.getCabins().values()) {</b>
+<b class="nc">&nbsp;            if (cabin.getNumResidents() &gt; 0) {</b>
+<b class="nc">&nbsp;                count++;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return count;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen of a component change, clears highlights, and updates the cabin info box.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board that changed
+&nbsp;     * @param point the point (cabin) that changed
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void notifyComponentChange(ShipBoard shipBoard, Point point) {
+<b class="nc">&nbsp;        super.notifyComponentChange(shipBoard, point);</b>
+<b class="nc">&nbsp;        guiShipBoards.get(myShipBoard).clearHighlights();</b>
+<b class="nc">&nbsp;        updateCabinInfoBox();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

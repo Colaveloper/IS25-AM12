@@ -1,0 +1,243 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Client</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client</a>
+</div>
+
+<h1>Coverage Summary for Class: Client (it.polimi.ingsw.galaxytruckers.client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Client</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/48)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.View;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.CliView;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.GuiView;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.JFXApp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.client.ServerHandler;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.client.rmi.RmiClient;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.client.socket.SocketClient;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens.CheatCodes;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientController;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import javafx.application.Application;
+&nbsp;
+&nbsp;import java.rmi.RemoteException;
+&nbsp;import java.util.Scanner;
+&nbsp;
+&nbsp;/**
+&nbsp; * Client class that initializes the connection to the server and launches the user interface.
+&nbsp; * It allows the user to choose between RMI or Socket communication methods and provides and to
+&nbsp; * select the preferred user interface (CLI or GUI).
+&nbsp; */
+<b class="nc">&nbsp;public class Client {</b>
+<b class="nc">&nbsp;    private final ClientController controller = new ClientController();</b>
+<b class="nc">&nbsp;    private final ClientModel model = new ClientModel();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Main method to start the client application.
+&nbsp;     * It expects four command line arguments: server name, server address, RMI port, and socket port.
+&nbsp;     *
+&nbsp;     * @param args command line arguments for server connection: serverName, serverAddress,
+&nbsp;     *             rmiPort, socketPort
+&nbsp;     */
+&nbsp;    public static void main(String[] args) {
+<b class="nc">&nbsp;        Client client = new Client();</b>
+<b class="nc">&nbsp;        if (args.length != 4) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Please enter the address of the server&quot;);</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;        client.connect(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));</b>
+<b class="nc">&nbsp;        client.launchUI();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Connects to the server using either RMI or Socket communication.
+&nbsp;     *
+&nbsp;     * @param serverName    the name of the server exported to the RMI registry
+&nbsp;     * @param serverAddress the address of the server to connect to
+&nbsp;     * @param rmiPort       the port number for RMI communication
+&nbsp;     * @param socketPort    the port number for Socket communication
+&nbsp;     */
+&nbsp;    public void connect(String serverName, String serverAddress, int rmiPort, int socketPort) {
+<b class="nc">&nbsp;        Scanner scanner = new Scanner(System.in);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Do you wish to use RMI (0) or Socket (1) for communication with the server?&quot;);</b>
+&nbsp;        //System.out.println(&quot;create and skip to building (2) or join and skip to building (3)&quot;);
+<b class="nc">&nbsp;        boolean chosen = false;</b>
+<b class="nc">&nbsp;        controller.setModel(model);</b>
+<b class="nc">&nbsp;        controller.initEventHandler();</b>
+&nbsp;        do {
+&nbsp;            try {
+<b class="nc">&nbsp;                int choice = Integer.parseInt(scanner.nextLine());</b>
+&nbsp;//                if (choice &gt; 1 &amp;&amp; choice &lt;= 3) {
+&nbsp;//                    model.activateCheats(choice);
+&nbsp;//                    choice = Integer.parseInt(CheatCodes.cheat());
+&nbsp;//                }
+&nbsp;                ServerHandler server;
+<b class="nc">&nbsp;                if (choice == 0) {</b>
+<b class="nc">&nbsp;                    chosen = true;</b>
+<b class="nc">&nbsp;                    RmiClient rmiClient = new RmiClient();</b>
+<b class="nc">&nbsp;                    server = rmiClient;</b>
+<b class="nc">&nbsp;                    controller.setServer(server);</b>
+<b class="nc">&nbsp;                    rmiClient.setClientController(controller);</b>
+<b class="nc">&nbsp;                    rmiClient.start(serverName, serverAddress, rmiPort);</b>
+<b class="nc">&nbsp;                } else if (choice == 1) {</b>
+<b class="nc">&nbsp;                    chosen = true;</b>
+<b class="nc">&nbsp;                    SocketClient socketClient = new SocketClient();</b>
+<b class="nc">&nbsp;                    server = socketClient;</b>
+<b class="nc">&nbsp;                    controller.setServer(server);</b>
+<b class="nc">&nbsp;                    socketClient.setController(controller);</b>
+<b class="nc">&nbsp;                    socketClient.start(serverAddress, socketPort);</b>
+&nbsp;                    return;
+&nbsp;                } else {
+<b class="nc">&nbsp;                    System.out.println(&quot;Invalid choice!&quot;);</b>
+&nbsp;                }
+&nbsp;            } catch (NumberFormatException e) {
+<b class="nc">&nbsp;                System.out.println(&quot;The choice is badly formatted!&quot;);</b>
+&nbsp;            } catch (RemoteException e) {
+<b class="nc">&nbsp;                throw new RuntimeException(e);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } while (!chosen);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Successfully connected to the server&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Launches the user interface for the client.
+&nbsp;     * This method allows the user to choose between a graphical interface (GUI) or a command-line interface (CLI).
+&nbsp;     */
+&nbsp;    public void launchUI() {
+<b class="nc">&nbsp;        System.out.println(&quot;Enter \&quot;G\&quot; to switch to the Graphical Interface, or press any other key to continue here&quot;);</b>
+&nbsp;
+&nbsp;        String command;
+<b class="nc">&nbsp;        if (CheatCodes.isCheatOn()) {</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                command = CheatCodes.cheat();</b>
+&nbsp;            } catch (InterruptedException e) {
+<b class="nc">&nbsp;                System.out.println(e.getMessage());</b>
+<b class="nc">&nbsp;                command = &quot; &quot;;</b>
+&nbsp;            }
+&nbsp;        } else {
+<b class="nc">&nbsp;            Scanner scanner = new Scanner(System.in);</b>
+<b class="nc">&nbsp;            command = scanner.nextLine();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        View&lt;?&gt; view;
+<b class="nc">&nbsp;        if (command.trim().equalsIgnoreCase(&quot;G&quot;)) {</b>
+<b class="nc">&nbsp;            GuiView guiView = new GuiView(controller, model);</b>
+<b class="nc">&nbsp;            view = guiView;</b>
+<b class="nc">&nbsp;            JFXApp.setGuiView(guiView);</b>
+<b class="nc">&nbsp;            controller.setView(view);</b>
+<b class="nc">&nbsp;            Application.launch(JFXApp.class);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            view = new CliView(controller, model);</b>
+<b class="nc">&nbsp;            controller.setView(view);</b>
+&nbsp;        }
+&nbsp;        // views start rendering autonomously at creation
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

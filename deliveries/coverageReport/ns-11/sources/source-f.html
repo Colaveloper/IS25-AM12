@@ -1,0 +1,248 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiNewCardScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiNewCardScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiNewCardScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GuiNewCardScreen$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/21)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.AdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.DrawCardState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.StateActions;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI screen for drawing new adventure cards.
+&nbsp; * This screen allows the leader player to draw a new adventure card
+&nbsp; * and then start the adventure, while other players wait for the leader&#39;s action.
+&nbsp; */
+&nbsp;public class GuiNewCardScreen extends GuiAdventureScreen {
+<b class="nc">&nbsp;    Button actionButton = new Button(&quot;Draw Card&quot;);</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new card drawing screen.
+&nbsp;     *
+&nbsp;     * @param model         The client model containing game state
+&nbsp;     * @param controller    The controller for communicating with the server
+&nbsp;     * @param drawCardState The state containing valid actions for this phase
+&nbsp;     */
+&nbsp;    public GuiNewCardScreen(ClientModel model, ClientControllerInterface controller, DrawCardState drawCardState) {
+<b class="nc">&nbsp;        super(model, controller, drawCardState);</b>
+&nbsp;
+<b class="nc">&nbsp;        if(isMyTurn()) {</b>
+<b class="nc">&nbsp;            actionButton.setOnAction(e -&gt; getGuiController().drawCard());</b>
+<b class="nc">&nbsp;            guiButtonBox.getChildren().clear();</b>
+<b class="nc">&nbsp;            guiButtonBox.getChildren().add(actionButton);</b>
+<b class="nc">&nbsp;            guiLog.log(&quot;Draw and start a new adventure!&quot;);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            guiLog.log(&quot;Wait for the leader to draw and start the next adventure&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * Creates and returns a GUI controller that handles drawing cards
+&nbsp;     * and navigation to the next screen.
+&nbsp;     *
+&nbsp;     * @return A GUI controller for this screen
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    protected GuiController getGuiController() {
+<b class="nc">&nbsp;        return new GuiController() {</b>
+&nbsp;            /**
+&nbsp;             * Handles navigation to the next screen if allowed by the current state.
+&nbsp;             */
+&nbsp;            @Override
+&nbsp;            public void goNext() {
+<b class="nc">&nbsp;                if(state.getAvailableActions().contains(StateActions.GO_NEXT)) {</b>
+<b class="nc">&nbsp;                    controller.goNext();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            /**
+&nbsp;             * Handles drawing a card if allowed by the current state.
+&nbsp;             */
+&nbsp;            @Override
+&nbsp;            public void drawCard() {
+<b class="nc">&nbsp;                if(state.getAvailableActions().contains(StateActions.DRAW_CARD)) {</b>
+<b class="nc">&nbsp;                    controller.drawCard();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * Updates the GUI when a card is drawn, displaying the card and
+&nbsp;     * changing the action button to allow starting the adventure.
+&nbsp;     *
+&nbsp;     * @param adventureCard The adventure card that was drawn
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void notifyDrawCard(AdventureCard adventureCard) {
+<b class="nc">&nbsp;        Platform.runLater(()-&gt;{</b>
+<b class="nc">&nbsp;            guiAdventureCard().ifPresent((guiAdventureCard)-&gt; {</b>
+<b class="nc">&nbsp;                guiAdventureCard.setFitHeight(400);</b>
+<b class="nc">&nbsp;                cardBox.getChildren().clear();</b>
+<b class="nc">&nbsp;                cardBox.getChildren().add(guiAdventureCard);</b>
+&nbsp;            });
+<b class="nc">&nbsp;            actionButton.setText(&quot;Start Adventure&quot;);</b>
+<b class="nc">&nbsp;            actionButton.setOnAction(e -&gt; getGuiController().goNext());</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

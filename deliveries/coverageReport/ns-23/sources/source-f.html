@@ -1,0 +1,182 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SecondFlightBoard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model</a>
+</div>
+
+<h1>Coverage Summary for Class: SecondFlightBoard (it.polimi.ingsw.galaxytruckers.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SecondFlightBoard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (20/20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model;
+&nbsp;
+&nbsp;import com.google.common.annotations.VisibleForTesting;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;/**
+&nbsp; * SecondFlightBoard class represents the second flight board in the Galaxy Truckers game.
+&nbsp; * It extends the FlightBoard class and provides specific functionality for the second flight board,
+&nbsp; * including choosing the starting position on placement and removing ships.
+&nbsp; */
+&nbsp;public class SecondFlightBoard extends FlightBoard{
+&nbsp;    @VisibleForTesting
+&nbsp;    protected static int loopLength;
+&nbsp;    @VisibleForTesting
+&nbsp;    protected static List&lt;Integer&gt; startingPositions;
+&nbsp;
+&nbsp;    public SecondFlightBoard(int shipsN, GameEventListener gameEventListener) {
+<b class="fc">&nbsp;        super(gameEventListener);</b>
+<b class="fc">&nbsp;        loopLength = 24;</b>
+<b class="fc">&nbsp;        startingPositions = Arrays.asList(6, 3, 1, 0).subList(0, shipsN);</b>
+<b class="fc">&nbsp;        this.startingPositionsLeft.clear();</b>
+<b class="fc">&nbsp;        this.startingPositionsLeft.addAll(startingPositions);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Places a ship on the flight board at the specified starting position.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board to place on the flight board
+&nbsp;     * @param startingPosition the starting position on the flight board
+&nbsp;     * @throws IllegalArgumentException if the starting position is not available
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
+<b class="fc">&nbsp;        synchronized (startingPositionsLeft) {</b>
+<b class="fc">&nbsp;            if (!startingPositionsLeft.contains(startingPosition)) {</b>
+<b class="fc">&nbsp;                throw new IllegalArgumentException(&quot;Position not available for positioning&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            startingPositionsLeft.remove((Integer) startingPosition);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        synchronized (shipToPlace) {</b>
+<b class="fc">&nbsp;            shipToPlace.put(shipBoard, startingPosition);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        gameEventListener.notifyFlightBoardUpdateEvent(shipBoard, startingPosition);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void removeShips (Set&lt;ShipBoard&gt; shipsToRemove) {
+<b class="fc">&nbsp;        shipToPlace.entrySet().removeIf(entry -&gt; shipsToRemove.contains(entry.getKey()));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Set&lt;ShipBoard&gt; getLappedShips() {
+<b class="fc">&nbsp;        return shipToPlace.entrySet().stream()</b>
+<b class="fc">&nbsp;                .filter(entry -&gt; shipToPlace.get(getOrderedShips().getFirst()) - entry.getValue() &gt; loopLength)</b>
+<b class="fc">&nbsp;                .map(Map.Entry::getKey)</b>
+<b class="fc">&nbsp;                .collect(Collectors.toSet());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected int getLoopLength() {
+<b class="fc">&nbsp;        return loopLength;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

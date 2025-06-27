@@ -1,0 +1,211 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiLobbyScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiLobbyScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiLobbyScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Player;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.geometry.Insets;
+&nbsp;import javafx.geometry.Pos;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.layout.FlowPane;
+&nbsp;import javafx.scene.layout.Pane;
+&nbsp;import javafx.scene.layout.StackPane;
+&nbsp;import javafx.scene.layout.VBox;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;import javafx.scene.shape.Rectangle;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI screen for displaying the game lobby.
+&nbsp; * This screen shows all players who have joined the game and are waiting
+&nbsp; * for the game to start. Each player is represented by a visual box containing
+&nbsp; * their nickname.
+&nbsp; */
+&nbsp;public class GuiLobbyScreen extends GuiScreen {
+&nbsp;    private FlowPane lobbyPane;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new lobby screen.
+&nbsp;     *
+&nbsp;     * @param model      The client model containing game state and player information
+&nbsp;     * @param controller The controller for communicating with the server
+&nbsp;     */
+&nbsp;    public GuiLobbyScreen(ClientModel model, ClientControllerInterface controller) {
+<b class="nc">&nbsp;        super(model, controller);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * Creates and returns the lobby interface displaying all players in the lobby.
+&nbsp;     * Players are shown in a grid layout with their nicknames.
+&nbsp;     *
+&nbsp;     * @return A Pane containing the lobby user interface with player boxes
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public Pane getNode() {
+<b class="nc">&nbsp;        lobbyPane = new FlowPane();</b>
+<b class="nc">&nbsp;        lobbyPane.setAlignment(Pos.CENTER);</b>
+<b class="nc">&nbsp;        lobbyPane.setHgap(20);</b>
+<b class="nc">&nbsp;        lobbyPane.setVgap(20);</b>
+<b class="nc">&nbsp;        lobbyPane.setPrefWrapLength(600);</b>
+&nbsp;
+<b class="nc">&nbsp;        for (Player player : model.getPlayers()) {</b>
+<b class="nc">&nbsp;            StackPane playerBox = createPlayerBox(player.getNickname());</b>
+<b class="nc">&nbsp;            lobbyPane.getChildren().add(playerBox);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Button leaveGameButton = new Button(&quot;Leave Game&quot;);</b>
+<b class="nc">&nbsp;        leaveGameButton.setStyle(&quot;-fx-background-color: red; -fx-text-fill: white;&quot;);</b>
+<b class="nc">&nbsp;        leaveGameButton.setOnAction(e -&gt; {</b>
+<b class="nc">&nbsp;            controller.quit();</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        VBox root = new VBox(20, lobbyPane, leaveGameButton);</b>
+<b class="nc">&nbsp;        root.setAlignment(Pos.CENTER);</b>
+<b class="nc">&nbsp;        root.setPadding(new Insets(20));</b>
+<b class="nc">&nbsp;        return root;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPlayerJoin(Player player) {
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc">&nbsp;            StackPane playerBox = createPlayerBox(player.getNickname());</b>
+<b class="nc">&nbsp;            lobbyPane.getChildren().add(playerBox);</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a styled box representing a player in the lobby.
+&nbsp;     *
+&nbsp;     * @param nickname The nickname of the player to display
+&nbsp;     * @return A StackPane containing the player&#39;s information with appropriate styling
+&nbsp;     */
+&nbsp;    private StackPane createPlayerBox(String nickname) {
+<b class="nc">&nbsp;        Rectangle background = new Rectangle(150, 100);</b>
+<b class="nc">&nbsp;        background.setArcWidth(20);</b>
+<b class="nc">&nbsp;        background.setArcHeight(20);</b>
+<b class="nc">&nbsp;        background.setFill(Color.LIGHTGRAY);</b>
+&nbsp;
+<b class="nc">&nbsp;        Label nameLabel = new Label(nickname);</b>
+&nbsp;
+<b class="nc">&nbsp;        StackPane box = new StackPane(background, nameLabel);</b>
+<b class="nc">&nbsp;        box.setAlignment(Pos.CENTER);</b>
+<b class="nc">&nbsp;        return box;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

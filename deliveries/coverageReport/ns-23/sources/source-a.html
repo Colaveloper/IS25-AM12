@@ -1,0 +1,225 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Hourglass</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model</a>
+</div>
+
+<h1>Coverage Summary for Class: Hourglass (it.polimi.ingsw.galaxytruckers.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Hourglass</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (11/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (33/33)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model;
+&nbsp;
+&nbsp;import com.google.common.annotations.VisibleForTesting;
+&nbsp;
+&nbsp;import java.util.concurrent.Executors;
+&nbsp;import java.util.concurrent.ScheduledExecutorService;
+&nbsp;import java.util.concurrent.ScheduledFuture;
+&nbsp;import java.util.concurrent.TimeUnit;
+&nbsp;
+&nbsp;public class Hourglass {
+&nbsp;    private final static int DURATION = 60000; // 60 seconds in milliseconds
+&nbsp;    private final static int period = 100; // 100 milliseconds
+&nbsp;
+&nbsp;    private int flipsLeft;
+<b class="fc">&nbsp;    private boolean isRunning = false;</b>
+<b class="fc">&nbsp;    private int missingTime = 0;</b>
+<b class="fc">&nbsp;    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);</b>
+&nbsp;    private ScheduledFuture&lt;?&gt; scheduledFuture;
+<b class="fc">&nbsp;    private int duration = DURATION;</b>
+&nbsp;
+<b class="fc">&nbsp;    public Hourglass(int rounds) {</b>
+<b class="fc">&nbsp;        this.flipsLeft = rounds;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the duration of the hourglass for testing purposes.
+&nbsp;     *
+&nbsp;     * @param duration the duration in milliseconds
+&nbsp;     */
+&nbsp;    @VisibleForTesting
+&nbsp;    public synchronized void setDuration(int duration) {
+<b class="fc">&nbsp;        this.duration = duration;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Stops the hourglass if it is running, resets the missing time to 0
+&nbsp;     */
+&nbsp;    public synchronized void stop() {
+<b class="pc">&nbsp;        if (scheduledFuture != null) {</b>
+<b class="fc">&nbsp;            scheduledFuture.cancel(true);</b>
+<b class="fc">&nbsp;            missingTime = 0;</b>
+<b class="fc">&nbsp;            isRunning = false;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return {@code true} if the next hourglass flip is the last one,
+&nbsp;     * {@code false} otherwise
+&nbsp;     */
+&nbsp;    public synchronized boolean isLastFlip() {
+<b class="fc">&nbsp;        return this.flipsLeft == 1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Flips the hourglass, if not already running, decrements the number of remaining flips
+&nbsp;     * and executes the given task once it has finished
+&nbsp;     *
+&nbsp;     * @param endTask the task to be executed when the hourglass runs out
+&nbsp;     * @throws IllegalStateException if the hourglass is already running or if
+&nbsp;     *                               there are no flips left
+&nbsp;     */
+&nbsp;    public synchronized void flip(Runnable endTask) {
+<b class="fc">&nbsp;        if (!isRunning) {</b>
+<b class="fc">&nbsp;            if (flipsLeft &lt;= 0) {</b>
+<b class="fc">&nbsp;                throw new IllegalStateException(&quot;The hourglass is already on the last spot&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            isRunning = true;</b>
+<b class="fc">&nbsp;            missingTime = duration;</b>
+<b class="fc">&nbsp;            scheduledFuture = scheduler.scheduleAtFixedRate(() -&gt; {</b>
+<b class="fc">&nbsp;                boolean end = false;</b>
+<b class="fc">&nbsp;                synchronized (this) {</b>
+<b class="fc">&nbsp;                    missingTime -= period; // Decrement by 100 milliseconds</b>
+<b class="fc">&nbsp;                    if (missingTime &lt;= 0) {</b>
+<b class="fc">&nbsp;                        end = true;</b>
+<b class="fc">&nbsp;                        isRunning = false;</b>
+&nbsp;                    }
+<b class="fc">&nbsp;                }</b>
+<b class="fc">&nbsp;                if (end) {</b>
+<b class="fc">&nbsp;                    endTask.run();</b>
+<b class="fc">&nbsp;                    stop();</b>
+&nbsp;                }
+&nbsp;            }, 0, period, TimeUnit.MILLISECONDS);
+&nbsp;        } else {
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;The hourglass is not yet finished&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        flipsLeft--;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return the number of flips left in the hourglass
+&nbsp;     */
+&nbsp;    public synchronized int getFlipsLeft() {
+<b class="fc">&nbsp;        return flipsLeft;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return {@code true} if the hourglass is currently running, {@code false} otherwise
+&nbsp;     */
+&nbsp;    public synchronized boolean getIsRunning() {
+<b class="fc">&nbsp;        return isRunning;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return the remaining time in seconds until the hourglass runs out
+&nbsp;     */
+&nbsp;    public synchronized int getMissingTime() {
+<b class="fc">&nbsp;        return missingTime / 1000; // Convert milliseconds to seconds</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

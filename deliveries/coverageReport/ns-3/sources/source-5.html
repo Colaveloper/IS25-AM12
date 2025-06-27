@@ -1,0 +1,479 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ConversionUtils</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: ConversionUtils (it.polimi.ingsw.galaxytruckers.client.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ConversionUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (20/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66%
+  </span>
+  <span class="absValue">
+    (31/47)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84.8%
+  </span>
+  <span class="absValue">
+    (117/138)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.controller;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.ComponentDTO;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.HourglassDTO;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.states.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Player;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.Projectile;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.dto.BuildingDataDTO;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;import java.util.function.Supplier;
+&nbsp;
+&nbsp;/**
+&nbsp; * Utility class for converting between server and client representations of game data.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class provides methods to convert player names, collections, and maps between server-side (String-based)
+&nbsp; * and client-side (Player, ShipBoard, etc.) representations. It also assists in converting DTOs to client model objects.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public class ConversionUtils {
+&nbsp;    private final PlayerRegistry playerRegistry;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a ConversionUtils with the given player registry.
+&nbsp;     *
+&nbsp;     * @param playerRegistry the registry for player information
+&nbsp;     */
+<b class="fc">&nbsp;    public ConversionUtils(PlayerRegistry playerRegistry) {</b>
+<b class="fc">&nbsp;        this.playerRegistry = playerRegistry;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a map from player nicknames to values into a map from Player objects to values.
+&nbsp;     *
+&nbsp;     * @param map the map with String keys (nicknames)
+&nbsp;     * @param &lt;T&gt; the type of the values
+&nbsp;     * @return a map with Player keys
+&nbsp;     */
+&nbsp;    protected &lt;T&gt; Map&lt;Player,T&gt; convertPlayerMap(Map&lt;String,T&gt; map) {
+<b class="fc">&nbsp;        Map&lt;Player, T&gt; convertedMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (String name : map.keySet()) {</b>
+<b class="fc">&nbsp;            convertedMap.put(playerRegistry.getByNickname(name), map.get(name));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return convertedMap;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a map from player nicknames to values into a map from ShipBoard objects to values.
+&nbsp;     *
+&nbsp;     * @param map the map with String keys (nicknames)
+&nbsp;     * @param &lt;T&gt; the type of the values
+&nbsp;     * @return a map with ShipBoard keys
+&nbsp;     */
+&nbsp;    protected &lt;T&gt; Map&lt;ShipBoard, T&gt; convertMap(Map&lt;String, T&gt; map) {
+<b class="fc">&nbsp;        Map&lt;ShipBoard, T&gt; convertedMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (String name : map.keySet()) {</b>
+<b class="fc">&nbsp;            convertedMap.put(playerRegistry.getByNickname(name).getShipBoard(), map.get(name));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return convertedMap;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a collection of player nicknames to a collection of ShipBoard objects.
+&nbsp;     *
+&nbsp;     * @param nicknames the collection of player nicknames
+&nbsp;     * @param supplier a supplier for the resulting collection type
+&nbsp;     * @param &lt;T&gt; the type of the input collection
+&nbsp;     * @param &lt;R&gt; the type of the output collection
+&nbsp;     * @return a collection of ShipBoard objects
+&nbsp;     */
+&nbsp;    protected &lt;T extends Collection&lt;String&gt;, R extends Collection&lt;ShipBoard&gt;&gt; R convertCollection(T nicknames, Supplier&lt;R&gt; supplier) {
+<b class="fc">&nbsp;        return nicknames.stream()</b>
+<b class="fc">&nbsp;                .map(x -&gt; playerRegistry.getByNickname(x).getShipBoard())</b>
+<b class="fc">&nbsp;                .collect(supplier,R::add,R::addAll);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a player nickname to a ShipBoard object.
+&nbsp;     *
+&nbsp;     * @param nickname the player&#39;s nickname
+&nbsp;     * @return the corresponding ShipBoard
+&nbsp;     */
+&nbsp;    protected ShipBoard convertName(String nickname) {
+<b class="fc">&nbsp;        return playerRegistry.getByNickname(nickname).getShipBoard();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts an array of player nicknames to an array of ShipBoard objects.
+&nbsp;     *
+&nbsp;     * @param nicknames the array of player nicknames
+&nbsp;     * @return an array of ShipBoard objects
+&nbsp;     */
+&nbsp;    protected ShipBoard[] convertArray(String[] nicknames) {
+<b class="fc">&nbsp;        return Arrays.stream(nicknames).map(this::convertName).toArray(ShipBoard[]::new);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts building data from a DTO to the client model&#39;s ShipBuildingState.
+&nbsp;     *
+&nbsp;     * @param shipBuildingState the client model&#39;s ship building state
+&nbsp;     * @param data the DTO containing building data
+&nbsp;     */
+&nbsp;    public void convertBuildingData(ShipBuildingState shipBuildingState, BuildingDataDTO data) {
+&nbsp;        //Set completed shipboards
+<b class="fc">&nbsp;        shipBuildingState.setCompletedShipBoards(convertCollection(data.completedNames(), HashSet::new));</b>
+&nbsp;
+&nbsp;        //Set ComponentBank
+<b class="fc">&nbsp;        ComponentBank componentBank = shipBuildingState.getComponentBank();</b>
+<b class="fc">&nbsp;        componentBank.setCoveredComponentsN(data.numCovered());</b>
+<b class="fc">&nbsp;        componentBank.setUncoveredComponents(data.uncoveredIds().stream()</b>
+<b class="fc">&nbsp;                .map(id -&gt; ComponentRegistry.getInstance().getComponent(id))</b>
+<b class="fc">&nbsp;                .toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a ComponentDTO to a Component, updating its properties as needed.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method retrieves the component by ID from the registry, sets its orientation, and updates
+&nbsp;     * any additional properties (such as batteries, crew, goods, or activation state) based on the payload.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     * @param componentDTO the DTO containing component data
+&nbsp;     * @return the updated Component instance
+&nbsp;     */
+&nbsp;    public Component convertComponent(ComponentDTO componentDTO) {
+<b class="fc">&nbsp;        Component component = ComponentRegistry.getInstance().getComponent(componentDTO.id());</b>
+<b class="fc">&nbsp;        component.setOrientation(componentDTO.orientation());</b>
+<b class="fc">&nbsp;        switch (component) {</b>
+<b class="fc">&nbsp;            case Battery battery -&gt; {</b>
+<b class="fc">&nbsp;                battery.setNumBatteries(componentDTO.payload().numBatteries());</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case Cabin cabin -&gt; {</b>
+<b class="fc">&nbsp;                cabin.setCrewType(componentDTO.payload().crewType());</b>
+<b class="fc">&nbsp;                cabin.setNumResidents(componentDTO.payload().numResidents());</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case CargoHold cargoHold -&gt; {</b>
+<b class="fc">&nbsp;                cargoHold.setGoods(componentDTO.payload().goods());</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case Activatable activatable -&gt; {</b>
+<b class="fc">&nbsp;                activatable.setActive(componentDTO.payload().active());</b>
+&nbsp;            }
+<b class="pc">&nbsp;            case Cannon _, Engine _, LifeSupport _, Component _ -&gt; {}</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return component;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a StateDTO to a GameState for the client model.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method dispatches to the appropriate state conversion method based on the type of StateDTO.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     * @param stateDTO the state DTO to convert
+&nbsp;     * @param clientModel the client model instance
+&nbsp;     * @return the corresponding GameState
+&nbsp;     */
+&nbsp;    public GameState getGameState(StateDTO stateDTO, ClientModel clientModel) {
+<b class="fc">&nbsp;        ShipBoard myShip = clientModel.getMyShip();</b>
+<b class="pc">&nbsp;        switch (stateDTO) {</b>
+<b class="nc">&nbsp;            case AddGoodsDTO addGoodsDTO -&gt; {</b>
+<b class="nc">&nbsp;                return getAddGoodsState(addGoodsDTO, myShip);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case ChoosePlanetDTO choosePlanetDTO -&gt; {</b>
+<b class="nc">&nbsp;                return getChoosePlanetState(choosePlanetDTO, myShip);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case ChooseShipPieceDTO chooseShipPieceDTO -&gt; {</b>
+<b class="nc">&nbsp;                return getChooseShipPieceState(chooseShipPieceDTO, myShip);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case HandleProjectileDTO handleProjectileDTO -&gt; {</b>
+<b class="nc">&nbsp;                return getHandleProjectileState(handleProjectileDTO, myShip);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case RemoveCrewDTO removeCrewDTO -&gt; {</b>
+<b class="nc">&nbsp;                return getRemoveCrewState(removeCrewDTO, myShip);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case RemoveGoodsDTO removeGoodsDTO -&gt; {</b>
+<b class="nc">&nbsp;                return getRemoveGoodsState(removeGoodsDTO, myShip);</b>
+&nbsp;            }
+&nbsp;            case ShipBuildingDTO _ -&gt; {
+<b class="fc">&nbsp;                return getShipBuildingState(clientModel);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case ShipCorrectionDTO shipCorrectionDTO -&gt; {</b>
+<b class="nc">&nbsp;                return getShipCorrectionState(shipCorrectionDTO, myShip);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case ShipInitializationDTO shipInitializationDTO -&gt; {</b>
+<b class="nc">&nbsp;                return getShipInitializationState(shipInitializationDTO, myShip);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case SimpleStateDTO simpleStateDTO -&gt; {</b>
+<b class="fc">&nbsp;                return getSimpleState(simpleStateDTO, myShip);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a ComplexStateDTO to a GameState for the client model.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method dispatches to the appropriate state conversion method based on the type of ComplexStateDTO.
+&nbsp;     * It handles additional complex state types such as planet choices and draw card states.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     * @param stateDTO the complex state DTO to convert
+&nbsp;     * @param clientModel the client model instance
+&nbsp;     * @return the corresponding GameState
+&nbsp;     */
+&nbsp;    public GameState getGameState(ComplexStateDTO stateDTO, ClientModel clientModel) {
+<b class="fc">&nbsp;        ShipBoard myShip = clientModel.getMyShip();</b>
+<b class="pc">&nbsp;        switch (stateDTO) {</b>
+<b class="fc">&nbsp;            case AddGoodsDTO addGoodsDTO -&gt; {</b>
+<b class="fc">&nbsp;                return getAddGoodsState(addGoodsDTO, myShip);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ChooseShipPieceDTO chooseShipPieceDTO -&gt; {</b>
+<b class="fc">&nbsp;                return getChooseShipPieceState(chooseShipPieceDTO, myShip);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case HandleProjectileDTO handleProjectileDTO -&gt; {</b>
+<b class="fc">&nbsp;                return getHandleProjectileState(handleProjectileDTO, myShip);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case RemoveCrewDTO removeCrewDTO -&gt; {</b>
+<b class="fc">&nbsp;                return getRemoveCrewState(removeCrewDTO, myShip);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case RemoveGoodsDTO removeGoodsDTO -&gt; {</b>
+<b class="fc">&nbsp;                return getRemoveGoodsState(removeGoodsDTO, myShip);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ShipCorrectionDTO shipCorrectionDTO -&gt; {</b>
+<b class="fc">&nbsp;                return getShipCorrectionState(shipCorrectionDTO, myShip);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ShipInitializationDTO shipInitializationDTO -&gt; {</b>
+<b class="fc">&nbsp;                return getShipInitializationState(shipInitializationDTO, myShip);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case SimpleStateDTO simpleStateDTO -&gt; {</b>
+<b class="nc">&nbsp;                if (simpleStateDTO.type().isComplex())</b>
+<b class="nc">&nbsp;                    return getSimpleState(simpleStateDTO, myShip);</b>
+<b class="nc">&nbsp;                else return null;</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ComplexChoosePlanetDTO complexChoosePlanetDTO -&gt; {</b>
+<b class="fc">&nbsp;                ChoosePlanetState choosePlanetState = getChoosePlanetState(</b>
+<b class="fc">&nbsp;                        complexChoosePlanetDTO.baseData(),</b>
+<b class="fc">&nbsp;                        clientModel.getMyShip()</b>
+&nbsp;                );
+<b class="fc">&nbsp;                choosePlanetState.setOptions(convertArray(complexChoosePlanetDTO.choices()));</b>
+<b class="fc">&nbsp;                return choosePlanetState;</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case ComplexDrawCardDTO complexDrawCardDTO -&gt; {</b>
+<b class="fc">&nbsp;                DrawCardState state = new DrawCardState(</b>
+<b class="fc">&nbsp;                        clientModel.getMyShip(),</b>
+<b class="fc">&nbsp;                        convertName(complexDrawCardDTO.playerName())</b>
+&nbsp;                );
+<b class="fc">&nbsp;                state.setHasDrawn(complexDrawCardDTO.hasDrawn());</b>
+<b class="fc">&nbsp;                return state;</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case SecondShipBuildingDTO secondShipBuildingDTO -&gt; {</b>
+<b class="fc">&nbsp;                SecondShipBuildingState state = new SecondShipBuildingState();</b>
+<b class="fc">&nbsp;                convertBuildingData(state,secondShipBuildingDTO.baseData());</b>
+<b class="fc">&nbsp;                state.setMyShip(clientModel.getMyShip());</b>
+&nbsp;                //Set blocked forecasts
+<b class="fc">&nbsp;                Map&lt;ShipBoard, Integer&gt; blockedForecasts = convertMap(secondShipBuildingDTO.blockedForecasts());</b>
+<b class="fc">&nbsp;                for (ShipBoard shipBoard : blockedForecasts.keySet()) {</b>
+<b class="fc">&nbsp;                    state.getBlockedForecasts()[blockedForecasts.get(shipBoard)] = shipBoard;</b>
+&nbsp;                }
+&nbsp;                //Set hourglass
+<b class="fc">&nbsp;                HourglassDTO hourglassDTO = secondShipBuildingDTO.hourglass();</b>
+<b class="fc">&nbsp;                state.getHourglass().setup(hourglassDTO.flipsLeft(), hourglassDTO.timeLeft(), hourglassDTO.isRunning());</b>
+<b class="fc">&nbsp;                return state;</b>
+&nbsp;            }
+<b class="fc">&nbsp;            case TestShipBuildingDTO testShipBuildingDTO -&gt; {</b>
+<b class="fc">&nbsp;                TestShipBuildingState state = new TestShipBuildingState();</b>
+<b class="fc">&nbsp;                convertBuildingData(state,testShipBuildingDTO.data());</b>
+<b class="fc">&nbsp;                state.setMyShip(clientModel.getMyShip());</b>
+<b class="fc">&nbsp;                return state;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private AdventureState getSimpleState(SimpleStateDTO simpleStateDTO, ShipBoard myShip) {
+<b class="fc">&nbsp;        ShipBoard shipBoard = convertName(simpleStateDTO.playerName());</b>
+<b class="pc">&nbsp;        switch (simpleStateDTO.type()) {</b>
+&nbsp;            case DECLARE_ENGINE_POWER -&gt; {
+<b class="fc">&nbsp;                return new DeclareEnginePowerState(myShip, shipBoard);</b>
+&nbsp;            }
+&nbsp;            case DECLARE_FIRE_POWER -&gt; {
+<b class="fc">&nbsp;                return new DeclareFirePowerState(myShip, shipBoard);</b>
+&nbsp;            }
+&nbsp;            case DRAW_CARD -&gt; {
+<b class="fc">&nbsp;                return new DrawCardState(myShip, shipBoard);</b>
+&nbsp;            }
+&nbsp;            case GRAB_REWARD -&gt; {
+<b class="fc">&nbsp;                return new GrabRewardState(myShip, shipBoard);</b>
+&nbsp;            }
+&nbsp;            case null -&gt; {
+<b class="nc">&nbsp;                return null;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private ShipInitializationState getShipInitializationState(ShipInitializationDTO shipInitializationDTO, ShipBoard myShip) {
+<b class="fc">&nbsp;        return new ShipInitializationState(</b>
+&nbsp;                myShip,
+<b class="fc">&nbsp;                convertMap(shipInitializationDTO.crewTypeToCabins())</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    private ShipCorrectionState getShipCorrectionState(ShipCorrectionDTO shipCorrectionDTO, ShipBoard myShip) {
+<b class="fc">&nbsp;        return new ShipCorrectionState(</b>
+&nbsp;                myShip,
+<b class="fc">&nbsp;                convertCollection(shipCorrectionDTO.validShips(),HashSet::new),</b>
+<b class="fc">&nbsp;                convertMap(shipCorrectionDTO.shipPieces()),</b>
+<b class="fc">&nbsp;                shipCorrectionDTO.shouldDiscard());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private ShipBuildingState getShipBuildingState(ClientModel clientModel) {
+&nbsp;        ShipBuildingState gameState;
+<b class="fc">&nbsp;        gameState = clientModel.getGame().getGameFactory().createShipBuildingState();</b>
+<b class="fc">&nbsp;        gameState.setMyShip(clientModel.getMyShip());</b>
+<b class="fc">&nbsp;        return gameState;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private RemoveGoodsState getRemoveGoodsState(RemoveGoodsDTO removeGoodsDTO, ShipBoard myShip) {
+<b class="fc">&nbsp;        return new RemoveGoodsState(</b>
+&nbsp;                myShip,
+<b class="fc">&nbsp;                removeGoodsDTO.goodsLoss(),</b>
+<b class="fc">&nbsp;                convertName(removeGoodsDTO.playerName())</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    private RemoveCrewState getRemoveCrewState(RemoveCrewDTO removeCrewDTO, ShipBoard myShip) {
+<b class="fc">&nbsp;        return new RemoveCrewState(</b>
+&nbsp;                myShip,
+<b class="fc">&nbsp;                removeCrewDTO.crewLoss(),</b>
+<b class="fc">&nbsp;                convertName(removeCrewDTO.playerName())</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    private HandleProjectileState getHandleProjectileState(HandleProjectileDTO handleProjectileDTO, ShipBoard myShip) {
+<b class="fc">&nbsp;        return new HandleProjectileState(</b>
+&nbsp;                myShip,
+<b class="fc">&nbsp;                convertName(handleProjectileDTO.playerName()),</b>
+<b class="fc">&nbsp;                new Projectile(handleProjectileDTO.diceRoll(), handleProjectileDTO.direction(), handleProjectileDTO.projectileType()),</b>
+<b class="fc">&nbsp;                handleProjectileDTO.availablePoints()</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    private ChooseShipPieceState getChooseShipPieceState(ChooseShipPieceDTO chooseShipPieceDTO, ShipBoard myShip) {
+<b class="fc">&nbsp;        return new ChooseShipPieceState(</b>
+&nbsp;                myShip,
+<b class="fc">&nbsp;                chooseShipPieceDTO.shipPieces(),</b>
+<b class="fc">&nbsp;                convertName(chooseShipPieceDTO.playerName())</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    private ChoosePlanetState getChoosePlanetState(ChoosePlanetDTO choosePlanetDTO, ShipBoard myShip) {
+<b class="fc">&nbsp;        return new ChoosePlanetState(</b>
+&nbsp;                myShip,
+<b class="fc">&nbsp;                convertName(choosePlanetDTO.playerName()),</b>
+<b class="fc">&nbsp;                choosePlanetDTO.numPlanets()</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    private AddGoodsState getAddGoodsState(AddGoodsDTO addGoodsDTO, ShipBoard myShip) {
+<b class="fc">&nbsp;        return new AddGoodsState(</b>
+&nbsp;                myShip,
+<b class="fc">&nbsp;                addGoodsDTO.goodsBuffer(),</b>
+<b class="fc">&nbsp;                convertName(addGoodsDTO.playerName())</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,134 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > LobbyEvent</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.controller.events.types</a>
+</div>
+
+<h1>Coverage Summary for Class: LobbyEvent (it.polimi.ingsw.galaxytruckers.server.controller.events.types)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LobbyEvent</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.controller.events.types;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.lobby.Lobby;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents an event that occurs within a game lobby.
+&nbsp; * Implementations of this interface signal changes or actions specific to a lobby.
+&nbsp; */
+&nbsp;public sealed interface LobbyEvent extends Event permits ActivateComponentEvent, CurrentPlayerUpdateEvent,
+&nbsp;                                                         EndByDisconnectionEvent, FlightBoardUpdateEvent,
+&nbsp;                                                         FlipHourglassEvent, ForecastDetailsEvent, GameEndEvent,
+&nbsp;                                                         GameSnapshotEvent, GameStateUpdateEvent, GoodsUpdateEvent,
+&nbsp;                                                         GrabCreditsEvent, GrabPlacedComponentEvent,
+&nbsp;                                                         GrabStashedComponentEvent, HourglassEndEvent,
+&nbsp;                                                         InitializeCabinEvent, JoinLobbyEvent, LobbyDetailsEvent,
+&nbsp;                                                         LoseCrewEvent, NewCardEvent, PeekForecastEvent,
+&nbsp;                                                         PlaceComponentEvent, PlanetChoiceEvent,
+&nbsp;                                                         PlayerDisconnectionEvent, PlayerExitEvent,
+&nbsp;                                                         RejectComponentEvent, ReleaseForecastEvent,
+&nbsp;                                                         RemoveComponentEvent, RequestFaceDownComponentEvent,
+&nbsp;                                                         RequestFaceUpComponentEvent, ShipNotConnectedEvent,
+&nbsp;                                                         ShipPieceRemoveEvent, StashComponentEvent, SurrenderEvent,
+&nbsp;                                                         SurrenderRequestEvent, UseBatteryEvent, ValidateShipEvent {
+&nbsp;    /**
+&nbsp;     * Executes an action on the given lobby when this event is processed.
+&nbsp;     *
+&nbsp;     * @param lobby the lobby on which to perform the action
+&nbsp;     */
+<b class="fc">&nbsp;    default void runLobbyAction(Lobby lobby) {}</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

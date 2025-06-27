@@ -1,0 +1,89 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RemoteServer</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.network.server.rmi</a>
+</div>
+
+<h1>Coverage Summary for Class: RemoteServer (it.polimi.ingsw.galaxytruckers.network.server.rmi)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">RemoteServer</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.network.server.rmi;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.VirtualServer;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
+&nbsp;
+&nbsp;import java.rmi.Remote;
+&nbsp;import java.rmi.RemoteException;
+&nbsp;
+&nbsp;/**
+&nbsp; * Remote interface for the server, allowing clients to register their nicknames.
+&nbsp; */
+&nbsp;public interface RemoteServer extends Remote {
+&nbsp;    /**
+&nbsp;     * Remote version of {@link VirtualServer#registerNickname(String)}
+&nbsp;     * @param client the remote client that is registering the nickname
+&nbsp;     * @param nickname the nickname to register
+&nbsp;     * @return a RemoteController that allows the client to interact with the server
+&nbsp;     * @throws RemoteException if there is an error during the remote method call
+&nbsp;     */
+&nbsp;    RemoteController registerNickname(RemoteClient client, String nickname) throws RemoteException;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

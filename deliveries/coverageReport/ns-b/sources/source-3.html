@@ -1,0 +1,427 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliView</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli</a>
+</div>
+
+<h1>Coverage Summary for Class: CliView (it.polimi.ingsw.galaxytruckers.client.view.cli)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliView</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.6%
+  </span>
+  <span class="absValue">
+    (40/41)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (5/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.6%
+  </span>
+  <span class="absValue">
+    (86/90)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.View;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens.CheatCodes;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens.CliScreen;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientController;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.MetaState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Player;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.AdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.GameState;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.*;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Command-line interface implementation of the View.
+&nbsp; * This class provides the command-line user interface for the Galaxy Truckers game,
+&nbsp; * handling rendering of game state and user input processing.
+&nbsp; */
+&nbsp;public class CliView extends View&lt;CliScreen&gt; {
+&nbsp;    CliScreen currentScreen;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new command-line interface view.
+&nbsp;     * Initializes the view with the given controller and model,
+&nbsp;     * starts the input processing loop, and sets the initial state to REGISTER.
+&nbsp;     *
+&nbsp;     * @param controller The client controller for handling user commands
+&nbsp;     * @param model The client model containing game data
+&nbsp;     */
+&nbsp;    public CliView(ClientController controller, ClientModel model) {
+<b class="fc">&nbsp;        super(model, controller, new CliScreenFactory());</b>
+<b class="fc">&nbsp;        startInputLoop();</b>
+<b class="fc">&nbsp;        notifyMetaState(MetaState.REGISTER);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //region event-notify methods
+&nbsp;    @Override
+&nbsp;    public void notifyMetaState(MetaState metaState) {
+<b class="fc">&nbsp;        currentScreen = screenFactory.createScreen(metaState, model, controller);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyCurrentState(GameState gameState) {
+<b class="fc">&nbsp;        currentScreen = screenFactory.createScreen(gameState, model, controller);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyNewLobby(Lobby lobby) {
+<b class="fc">&nbsp;        currentScreen.notifyNewLobby(lobby);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRemoveLobby(UUID uuid) {
+<b class="fc">&nbsp;        currentScreen.notifyRemoveLobby(uuid);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPlayerJoin(Player player) {
+<b class="nc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
+<b class="fc">&nbsp;        currentScreen.notifyRequestRandComponent(shipBoard, component);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
+<b class="fc">&nbsp;        currentScreen.notifyRequestComponent(shipBoard, component);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRejectComponent(ShipBoard shipBoard, Component component) {
+<b class="fc">&nbsp;        currentScreen.notifyRejectComponent(shipBoard, component);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyStashComponent(ShipBoard shipBoard, Component component) {
+<b class="fc">&nbsp;        currentScreen.notifyStashComponent(shipBoard, component);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
+<b class="fc">&nbsp;        currentScreen.notifyGrabStashedComponent(shipBoard, index, component);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyGrabPlacedComponent(ShipBoard shipBoard, Point prevPosition) {
+<b class="fc">&nbsp;        currentScreen.notifyGrabPlacedComponent(shipBoard, prevPosition);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
+<b class="fc">&nbsp;        currentScreen.notifyPlaceComponent(shipBoard, point, orientation);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyFlipHourglass(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        currentScreen.notifyFlipHourglass(shipBoard);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyHourglassEnd() {
+<b class="fc">&nbsp;        currentScreen.notifyHourglassEnd();</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+<b class="fc">&nbsp;        currentScreen.notifyFlightBoardPosition(shipBoard, position);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
+<b class="fc">&nbsp;        currentScreen.notifyPeekForecast(shipBoard, deckIndex);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void setForecastDeck(List&lt;AdventureCard&gt; adventureCards) {
+<b class="fc">&nbsp;        currentScreen.setForecastDeck(adventureCards);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
+<b class="fc">&nbsp;        currentScreen.notifyReleaseForecast(shipBoard, index);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        currentScreen.notifyRemoveComponent(shipBoard, point);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List&lt;Point&gt; removed) {
+<b class="fc">&nbsp;        currentScreen.notifyChooseShipPiece(shipBoard, pieceIndex, removed);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyShipNotConnected(ShipBoard shipBoard, List&lt;Set&lt;Point&gt;&gt; shipPieces) {
+<b class="fc">&nbsp;        currentScreen.notifyShipNotConnected(shipBoard, shipPieces);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyShipValidated(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        currentScreen.notifyShipValidated(shipBoard);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents) {
+<b class="fc">&nbsp;        currentScreen.notifyComponentChange(shipBoard, point);</b>
+&nbsp;        //currentScreen.notifyInitializeCabin(shipBoard, point, crewType, numResidents);
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyDrawCard(AdventureCard adventureCard) {
+<b class="fc">&nbsp;        currentScreen.notifyDrawCard(adventureCard);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        currentScreen.notifyActivateComponent(shipBoard, point);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        currentScreen.notifyComponentChange(shipBoard, point);</b>
+&nbsp;//        currentScreen.notifyLoseCrew(shipBoard, point);
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed) {
+<b class="fc">&nbsp;        currentScreen.notifyGrabReward(shipBoard, rewardGrabbed);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+<b class="fc">&nbsp;        currentScreen.notifyComponentChange(shipBoard, point);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+<b class="fc">&nbsp;        currentScreen.notifyComponentChange(shipBoard, point);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyUseBattery(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        currentScreen.notifyUseBattery(shipBoard, point);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipboard) {
+<b class="fc">&nbsp;        currentScreen.notifyChoosePlanet(shipBoard, choice, nextShipboard);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyCurrentPlayerUpdate(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        currentScreen.notifyCurrentPlayerUpdate(shipBoard);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyGiveUp(Player player) {
+<b class="fc">&nbsp;        currentScreen.notifyGiveUp(player);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void setFinalScores(Map&lt;Player, Integer&gt; finalScores) {
+<b class="fc">&nbsp;        currentScreen.setFinalScores(finalScores);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
+<b class="fc">&nbsp;        currentScreen.notifyRejectComponent(shipBoard, component, oldPosition);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
+<b class="fc">&nbsp;        currentScreen.notifyStashComponent(shipBoard, component, oldPosition);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {
+<b class="fc">&nbsp;        currentScreen.notifyPlaceComponent(shipBoard, newPoint, orientation, oldPosition);</b>
+<b class="fc">&nbsp;        currentScreen.render();</b>
+&nbsp;    }
+&nbsp;    //endregion
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Starts a background thread to continuously process user input.
+&nbsp;     * The thread reads input from the console, validates it against the current screen&#39;s
+&nbsp;     * requirements, and then invokes the appropriate action. If cheat codes are enabled,
+&nbsp;     * input may be provided by the cheat system instead of user input.
+&nbsp;     */
+&nbsp;    private void startInputLoop() {
+<b class="fc">&nbsp;        new Thread(() -&gt; {</b>
+<b class="fc">&nbsp;            Scanner scanner = new Scanner(System.in);</b>
+&nbsp;            String input;
+&nbsp;            while (true) {
+<b class="pc">&nbsp;                if(CheatCodes.isCheatOn() &amp;&amp; !CheatCodes.cheatEmpty()){</b>
+&nbsp;                    try {
+<b class="fc">&nbsp;                        input = CheatCodes.cheat();</b>
+&nbsp;                    } catch (InterruptedException e) {
+<b class="nc">&nbsp;                        throw new RuntimeException(e);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;                else {
+<b class="nc">&nbsp;                    input = scanner.nextLine();</b>
+&nbsp;                }
+&nbsp;
+&nbsp;                // letting the user correct format errors
+<b class="pc">&nbsp;                while (!currentScreen.isInputLegal(input)) {</b>
+<b class="pc">&nbsp;                    if (input.equals(&quot;drop_connection&quot;)) controller.dropConnection();</b>
+<b class="pc">&nbsp;                    if (input.equals(&quot;exit&quot;)) controller.quit();</b>
+&nbsp;                    else {
+<b class="fc">&nbsp;                        System.out.println(&quot;Invalid format, please check your input&quot;);</b>
+&nbsp;                    }
+<b class="fc">&nbsp;                    input = scanner.nextLine();</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                currentScreen.parseAndInvoke(input);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }).start();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void reportError(String message) {
+<b class="fc">&nbsp;        System.out.println(&quot;\u001B[31mError: &quot; + message + &quot;\u001B[0m&quot;);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

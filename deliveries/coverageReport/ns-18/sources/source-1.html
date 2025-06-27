@@ -1,0 +1,470 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RmiClientHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.network.server.rmi</a>
+</div>
+
+<h1>Coverage Summary for Class: RmiClientHandler (it.polimi.ingsw.galaxytruckers.network.server.rmi)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RmiClientHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/42)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/133)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.network.server.rmi;
+&nbsp;
+&nbsp;import com.google.common.annotations.VisibleForTesting;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.server.ClientEventQueue;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.ServerControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.types.Event;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.lobby.LobbyInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.lobby.Player;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.rmi.NoSuchObjectException;
+&nbsp;import java.rmi.RemoteException;
+&nbsp;import java.rmi.server.UnicastRemoteObject;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;/**
+&nbsp; * Handles communication with a client over RMI.
+&nbsp; * It processes requests from the client and sends events back to the client.
+&nbsp; */
+&nbsp;public class RmiClientHandler extends UnicastRemoteObject implements RemoteController, ClientHandler {
+&nbsp;    private final RemoteClient remoteClient;
+&nbsp;    private final ServerControllerInterface controller;
+<b class="nc">&nbsp;    private Runnable afterEach = () -&gt; {</b>
+<b class="nc">&nbsp;    };</b>
+&nbsp;
+&nbsp;    private final Thread updateThread;
+<b class="nc">&nbsp;    private boolean running = false;</b>
+<b class="nc">&nbsp;    private final ClientEventQueue eventQueue = new ClientEventQueue();</b>
+&nbsp;
+&nbsp;    private Player player;
+&nbsp;
+<b class="nc">&nbsp;    private final Object requestLock = new Object();</b>
+<b class="nc">&nbsp;    private final Object eventLock = new Object();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new RmiClientHandler that handles communication with a client.
+&nbsp;     *
+&nbsp;     * @param remoteClient the remote client interface for sending events
+&nbsp;     * @param controller   the controller that manages server operations
+&nbsp;     * @throws RemoteException if there is an error during RMI export
+&nbsp;     */
+&nbsp;    public RmiClientHandler(RemoteClient remoteClient, ServerControllerInterface controller) throws RemoteException {
+<b class="nc">&nbsp;        super();</b>
+<b class="nc">&nbsp;        this.remoteClient = remoteClient;</b>
+<b class="nc">&nbsp;        this.controller = controller;</b>
+<b class="nc">&nbsp;        this.updateThread = new Thread(this::runUpdateThread, &quot;UpdateThread&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Starts the update thread to send events to the client.
+&nbsp;     * This method should be called after setting the player.
+&nbsp;     */
+&nbsp;    public void start() {
+<b class="nc">&nbsp;        synchronized (eventLock) {</b>
+<b class="nc">&nbsp;            if (!running) {</b>
+<b class="nc">&nbsp;                running = true;</b>
+<b class="nc">&nbsp;                updateThread.start();</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void setPlayer(Player player) {
+<b class="nc">&nbsp;        this.player = player;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void pauseEvents() {
+<b class="nc">&nbsp;        eventQueue.pause();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void stop() {
+&nbsp;        try {
+<b class="nc">&nbsp;            System.out.println(&quot;Stopping RmiClientHandler&quot;);</b>
+<b class="nc">&nbsp;            synchronized (requestLock) {</b>
+<b class="nc">&nbsp;                UnicastRemoteObject.unexportObject(this, false);</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            running = false;</b>
+<b class="nc">&nbsp;            synchronized (eventLock) {</b>
+<b class="nc">&nbsp;                updateThread.interrupt();</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        } catch (NoSuchObjectException e) {
+<b class="nc">&nbsp;            System.out.println(&quot;The RMI client is not currently exported&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void handleNetworkError(RemoteException e) {
+<b class="nc">&nbsp;        System.out.println(&quot;WARNING: Failed to contact player &quot; + player.getNickname() + &quot;\n&quot; +</b>
+<b class="nc">&nbsp;                &quot;A remote exception was thrown: &quot; + e.getMessage());</b>
+<b class="nc">&nbsp;        controller.handlePlayerDisconnection(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void runUpdateThread() {
+<b class="nc">&nbsp;        while (running) {</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                Event event = eventQueue.poll();</b>
+<b class="nc">&nbsp;                synchronized (eventLock) {</b>
+<b class="nc">&nbsp;                    remoteClient.notifyEvent(event);</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            } catch (InterruptedException e) {
+<b class="nc">&nbsp;                Thread.currentThread().interrupt();</b>
+&nbsp;            } catch (RemoteException e) {
+<b class="nc">&nbsp;                handleNetworkError(e);</b>
+&nbsp;            } catch (RuntimeException e) {
+<b class="nc">&nbsp;                System.out.println(&quot;An error occurred on the client of &quot; + player.getNickname());</b>
+<b class="nc">&nbsp;                e.printStackTrace(System.err);</b>
+&nbsp;            } finally {
+<b class="nc">&nbsp;                afterEach.run();</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void ping() throws RemoteException {
+<b class="nc">&nbsp;        SessionManager.getInstance().ping(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // VirtualClient
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyEvent(Event event) {
+<b class="nc">&nbsp;        eventQueue.notifyEvent(event);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // RemoteController
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void newGame(Level level, int numPlayers) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            controller.newGame(player, level, numPlayers);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void joinLobby(UUID lobbyID) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            controller.joinLobby(player, lobbyID);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void leaveLobby() throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            if (player.getLobby().isPresent()) controller.leaveLobby(player);</b>
+<b class="nc">&nbsp;            else throw new IllegalStateException(&quot;You are not in a lobby yet&quot;);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void requestRandComponent() throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().requestRandComponent(player);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void requestComponent(int componentID) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().requestComponent(player, componentID);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void rejectComponent() throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().rejectComponent(player);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void stashComponent() throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().stashComponent(player);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void grabPlacedComponent() throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().grabPlacedComponent(player);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void grabStashedComponent(int index) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().grabStashedComponent(player, index);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void placeComponent(Point point, Direction orientation) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().placeComponent(player, point, orientation);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void flipHourglass() throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().flipHourglass(player);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void placeShipOnFlightBoard(int startingPosition) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().placeShipOnFlightBoard(player, startingPosition);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void placeShipOnFlightBoard() throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().placeShipOnFlightBoard(player);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void acquireForecast(int deckIndex) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().acquireForecast(player, deckIndex);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void releaseForecast() throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().releaseForecast(player);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void removeComponent(Point point) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().removeComponent(player, point);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void chooseShipPiece(int pieceIndex) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().chooseShipPiece(player, pieceIndex);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void initializeCabin(Point point, CrewType crewType) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().initializeCabin(player, point, crewType);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void drawCard() throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().drawCard(player);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void activateComponent(Point point) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().activateComponent(player, point);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void loseCrew(Point point) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().loseCrew(player, point);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void grabReward() throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().grabReward(player);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void placeGoods(Point point, GoodsType goodsType) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().placeGoods(player, point, goodsType);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void removeGoods(Point point, GoodsType goodsType) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().removeGoods(player, point, goodsType);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void loseGoods(Point point) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().loseGoods(player, point);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void useBattery(Point point) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().useBattery(player, point);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void choosePlanet(int choice) throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().choosePlanet(player, choice);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void goNext() throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().goNext(player);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void giveUp() throws RemoteException {
+<b class="nc">&nbsp;        synchronized (requestLock) {</b>
+<b class="nc">&nbsp;            getLobby().giveUp(player);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private LobbyInterface getLobby() {
+<b class="nc">&nbsp;        return player.getLobby().orElseThrow(() -&gt; new IllegalStateException(&quot;You are not in a lobby&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @VisibleForTesting
+&nbsp;    protected boolean isRunning() {
+<b class="nc">&nbsp;        return running;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @VisibleForTesting
+&nbsp;    protected void setAfterEach(Runnable afterEach) {
+<b class="nc">&nbsp;        this.afterEach = afterEach;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

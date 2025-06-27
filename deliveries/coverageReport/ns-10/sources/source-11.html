@@ -1,0 +1,384 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiShipBoard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiShipBoard (it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiShipBoard</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/44)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/110)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens.GuiController;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.geometry.Pos;
+&nbsp;import javafx.scene.Node;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.image.Image;
+&nbsp;import javafx.scene.image.ImageView;
+&nbsp;import javafx.scene.layout.GridPane;
+&nbsp;import javafx.scene.layout.StackPane;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;import javafx.scene.text.Font;
+&nbsp;import javafx.scene.text.FontWeight;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStream;
+&nbsp;import java.nio.file.Files;
+&nbsp;import java.nio.file.Path;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI element representing a ship board in the game.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class displays the ship&#39;s grid, including its components and empty areas, and allows for interaction with the ship&#39;s layout.
+&nbsp; * It is used to visually represent a player&#39;s ship and its current state in the GUI.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public class GuiShipBoard extends PurpleVBox {
+&nbsp;    private int minX;
+&nbsp;    private int minY;
+&nbsp;    private final GuiController controller;
+&nbsp;    private final GridPane shipGrid;
+&nbsp;
+<b class="nc">&nbsp;    Image emptyAreaImage = null;</b>
+&nbsp;    /**
+&nbsp;     * The path to the image used for empty areas of the ship.
+&nbsp;     */
+<b class="nc">&nbsp;    public final static Path emptyAreaImagePath = Path.of(&quot;src/main/resources/textures/tiles/empty_area.png&quot;);</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a GuiShipBoard for the given ship name, ship board model, and controller.
+&nbsp;     *
+&nbsp;     * @param name the name of the ship/player
+&nbsp;     * @param shipBoard the ship board model to represent
+&nbsp;     * @param controller the GUI controller handling actions
+&nbsp;     */
+&nbsp;    public GuiShipBoard(String name, ShipBoard shipBoard, GuiController controller) {
+<b class="nc">&nbsp;        super(5);</b>
+&nbsp;
+<b class="nc">&nbsp;        this.controller = controller;</b>
+&nbsp;
+<b class="nc">&nbsp;        setAlignment(Pos.CENTER);</b>
+&nbsp;
+<b class="nc">&nbsp;        shipGrid = new GridPane();</b>
+<b class="nc">&nbsp;        setShipGrid(shipBoard);</b>
+&nbsp;
+<b class="nc">&nbsp;        Label nameLabel = new Label(name);</b>
+<b class="nc">&nbsp;        nameLabel.setFont(Font.font(&quot;System&quot;, FontWeight.BOLD, 16));</b>
+<b class="nc">&nbsp;        nameLabel.setTextFill(Color.WHITE);</b>
+&nbsp;
+<b class="nc">&nbsp;        this.getChildren().addAll(nameLabel, shipGrid);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets up the ship grid based on the current ship board state.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board model to use for layout
+&nbsp;     */
+&nbsp;    private void setShipGrid(ShipBoard shipBoard) {
+<b class="nc">&nbsp;        Set&lt;Point&gt; shipArea = shipBoard.getShipArea();</b>
+<b class="nc">&nbsp;        Map&lt;Point, Component&gt; componentMap = shipBoard.getComponentMap();</b>
+&nbsp;
+<b class="nc">&nbsp;        minX = shipArea.stream().mapToInt(p -&gt; p.x).min().orElse(0);</b>
+<b class="nc">&nbsp;        minY = shipArea.stream().mapToInt(p -&gt; p.y).min().orElse(0);</b>
+<b class="nc">&nbsp;        int maxX = shipArea.stream().mapToInt(p -&gt; p.x).max().orElse(0);</b>
+<b class="nc">&nbsp;        int maxY = shipArea.stream().mapToInt(p -&gt; p.y).max().orElse(0);</b>
+&nbsp;
+<b class="nc">&nbsp;        int rows = maxY - minY + 1;</b>
+<b class="nc">&nbsp;        int cols = maxX - minX + 1;</b>
+&nbsp;
+<b class="nc">&nbsp;        shipGrid.setHgap(0);</b>
+<b class="nc">&nbsp;        shipGrid.setVgap(0);</b>
+&nbsp;
+<b class="nc">&nbsp;        try (InputStream is = Files.newInputStream(emptyAreaImagePath)) {</b>
+<b class="nc">&nbsp;            emptyAreaImage = new Image(is);</b>
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            System.err.println(&quot;Path not found: &quot; + emptyAreaImagePath);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        for (int x = 0; x &lt; cols; x++) {</b>
+<b class="nc">&nbsp;            javafx.scene.control.Label colLabel = new javafx.scene.control.Label(String.valueOf(minX + x));</b>
+<b class="nc">&nbsp;            shipGrid.add(colLabel, x + 1, 0);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        for (int y = 0; y &lt; rows; y++) {</b>
+<b class="nc">&nbsp;            javafx.scene.control.Label rowLabel = new Label(String.valueOf(minY + y));</b>
+<b class="nc">&nbsp;            shipGrid.add(rowLabel, 0, y + 1);</b>
+&nbsp;
+<b class="nc">&nbsp;            for (int x = 0; x &lt; cols; x++) {</b>
+<b class="nc">&nbsp;                Point currentPoint = new Point(minX + x, minY + y);</b>
+<b class="nc">&nbsp;                if (shipArea.contains(currentPoint)) {</b>
+&nbsp;                    StackPane areaPane;
+<b class="nc">&nbsp;                    if (componentMap.containsKey(currentPoint)) {</b>
+<b class="nc">&nbsp;                        areaPane = GuiComponent.of(componentMap.get(currentPoint));</b>
+<b class="nc">&nbsp;                        areaPane.setMaxSize(60, 60);</b>
+<b class="nc">&nbsp;                        areaPane.setOnMouseClicked(_-&gt;controller.handlePointPress(currentPoint));</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        areaPane = getEmptyAreaPane(currentPoint);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    shipGrid.add(areaPane, x + 1, y + 1);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the GUI to place a component at the specified point with the given orientation.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method updates the ship grid to visually add the component at the given position.
+&nbsp;     * It schedules the update on the JavaFX application thread.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param component the component to place
+&nbsp;     * @param point the position on the ship grid
+&nbsp;     * @param orientation the orientation of the component
+&nbsp;     */
+&nbsp;    public void notifyPlaceComponent(Component component, Point point, Direction orientation) {
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc">&nbsp;            Optional&lt;Node&gt; toReplace = shipGrid.getChildren().stream()</b>
+<b class="nc">&nbsp;                    .filter(node -&gt; {</b>
+<b class="nc">&nbsp;                        Integer col = GridPane.getColumnIndex(node);</b>
+<b class="nc">&nbsp;                        Integer row = GridPane.getRowIndex(node);</b>
+<b class="nc">&nbsp;                        if (col == null || row == null) return false;</b>
+<b class="nc">&nbsp;                        col -= 1;</b>
+<b class="nc">&nbsp;                        row -= 1;</b>
+<b class="nc">&nbsp;                        return col + minX == point.x &amp;&amp; row + minY == point.y;</b>
+&nbsp;                    })
+<b class="nc">&nbsp;                    .findFirst();</b>
+&nbsp;
+<b class="nc">&nbsp;            toReplace.ifPresent(node -&gt; {</b>
+<b class="nc">&nbsp;                shipGrid.getChildren().remove(node);</b>
+<b class="nc">&nbsp;                GuiComponent guiComponent = new GuiComponent(component);</b>
+<b class="nc">&nbsp;                guiComponent.setMaxSize(60, 60);</b>
+<b class="nc">&nbsp;                guiComponent.setOnMouseClicked(_ -&gt; controller.handlePointPress(point));</b>
+<b class="nc">&nbsp;                shipGrid.add(guiComponent, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));</b>
+&nbsp;            });
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the GUI to remove a component from the specified position.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method updates the ship grid to visually remove the component at the given position and replace it with an empty area.
+&nbsp;     * It schedules the update on the JavaFX application thread.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param oldPosition the position from which to remove the component
+&nbsp;     */
+&nbsp;    public void notifyRemoveComponent(Point oldPosition) {
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc">&nbsp;            Optional&lt;Node&gt; toReplace = shipGrid.getChildren().stream()</b>
+<b class="nc">&nbsp;                    .filter(node -&gt; {</b>
+<b class="nc">&nbsp;                        Integer col = GridPane.getColumnIndex(node);</b>
+<b class="nc">&nbsp;                        Integer row = GridPane.getRowIndex(node);</b>
+<b class="nc">&nbsp;                        if (col == null || row == null) return false;</b>
+<b class="nc">&nbsp;                        col -= 1;</b>
+<b class="nc">&nbsp;                        row -= 1;</b>
+<b class="nc">&nbsp;                        return col + minX == oldPosition.x &amp;&amp; row + minY == oldPosition.y;</b>
+&nbsp;                    })
+<b class="nc">&nbsp;                    .findFirst();</b>
+&nbsp;
+<b class="nc">&nbsp;            toReplace.ifPresent(node -&gt; {</b>
+<b class="nc">&nbsp;                shipGrid.getChildren().remove(node);</b>
+<b class="nc">&nbsp;                StackPane areaView = getEmptyAreaPane(oldPosition);</b>
+<b class="nc">&nbsp;                shipGrid.add(areaView, GridPane.getColumnIndex(node), GridPane.getRowIndex(node));</b>
+&nbsp;            });
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    private StackPane getEmptyAreaPane(Point position) {
+<b class="nc">&nbsp;        StackPane areaPane = new StackPane();</b>
+&nbsp;
+<b class="nc">&nbsp;        ImageView freeAreaView = new ImageView(emptyAreaImage);</b>
+<b class="nc">&nbsp;        freeAreaView.setFitWidth(60);</b>
+<b class="nc">&nbsp;        freeAreaView.setFitHeight(60);</b>
+&nbsp;
+<b class="nc">&nbsp;        areaPane.getChildren().add(freeAreaView);</b>
+<b class="nc">&nbsp;        areaPane.setMaxSize(60, 60);</b>
+<b class="nc">&nbsp;        areaPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);</b>
+<b class="nc">&nbsp;        areaPane.setOnMouseClicked(_-&gt; controller.handlePointPress(position));</b>
+<b class="nc">&nbsp;        return areaPane;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the GUI that a component&#39;s content has changed at the specified point.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method finds the GuiComponent at the given point and calls its notifyContentChange method.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     * @param point the position of the component whose content has changed
+&nbsp;     */
+&nbsp;    public void notifyComponentChange(Point point) {
+<b class="nc">&nbsp;        Platform.runLater(()-&gt;{</b>
+<b class="nc">&nbsp;            shipGrid.getChildren().stream()</b>
+<b class="nc">&nbsp;                    .filter(node -&gt; node instanceof GuiComponent)</b>
+<b class="nc">&nbsp;                    .map(node -&gt; (GuiComponent) node)</b>
+<b class="nc">&nbsp;                    .filter(component -&gt; {</b>
+<b class="nc">&nbsp;                        Integer col = GridPane.getColumnIndex(component);</b>
+<b class="nc">&nbsp;                        Integer row = GridPane.getRowIndex(component);</b>
+<b class="nc">&nbsp;                        if (col == null || row == null) return false;</b>
+<b class="nc">&nbsp;                        col -= 1;</b>
+<b class="nc">&nbsp;                        row -= 1;</b>
+<b class="nc">&nbsp;                        return col + minX == point.x &amp;&amp; row + minY == point.y;</b>
+&nbsp;                    })
+<b class="nc">&nbsp;                    .findFirst()</b>
+<b class="nc">&nbsp;                    .ifPresent(GuiComponent::notifyContentChange);</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Highlights the specified points on the ship grid with the given color.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method visually highlights the GuiComponents at the given points using the provided color.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     * @param points the set of points to highlight
+&nbsp;     * @param color the color to use for highlighting
+&nbsp;     */
+&nbsp;    public void highlightPoints(Set&lt;Point&gt; points, Color color) {
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc">&nbsp;            for (Point point : points) {</b>
+<b class="nc">&nbsp;                shipGrid.getChildren().stream()</b>
+<b class="nc">&nbsp;                        .filter(node -&gt; node instanceof GuiComponent)</b>
+<b class="nc">&nbsp;                        .map(node -&gt; (GuiComponent) node)</b>
+<b class="nc">&nbsp;                        .filter(node -&gt; {</b>
+<b class="nc">&nbsp;                            Integer col = GridPane.getColumnIndex(node);</b>
+<b class="nc">&nbsp;                            Integer row = GridPane.getRowIndex(node);</b>
+<b class="nc">&nbsp;                            if (col == null || row == null) return false;</b>
+<b class="nc">&nbsp;                            col -= 1;</b>
+<b class="nc">&nbsp;                            row -= 1;</b>
+<b class="nc">&nbsp;                            return col + minX == point.x &amp;&amp; row + minY == point.y;</b>
+&nbsp;                        })
+<b class="nc">&nbsp;                        .findFirst()</b>
+<b class="nc">&nbsp;                        .ifPresent(component -&gt; component.setHighlight(color));</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Clears all highlights from the ship grid.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method removes any visual highlights from all GuiComponents on the ship grid.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     */
+&nbsp;    public void clearHighlights() {
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc">&nbsp;            shipGrid.getChildren().stream()</b>
+<b class="nc">&nbsp;                    .filter(node -&gt; node instanceof GuiComponent)</b>
+<b class="nc">&nbsp;                    .map(node -&gt; (GuiComponent) node)</b>
+<b class="nc">&nbsp;                    .forEach(GuiComponent::clearHighlight);</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

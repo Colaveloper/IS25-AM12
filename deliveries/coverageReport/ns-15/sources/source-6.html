@@ -1,0 +1,171 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Response</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.network.messages</a>
+</div>
+
+<h1>Coverage Summary for Class: Response (it.polimi.ingsw.galaxytruckers.network.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Response</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.network.messages;
+&nbsp;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a response message to a {@link Request}. It&#39;s used to
+&nbsp; * give feedback to the client about the success or failure of a request.
+&nbsp; */
+&nbsp;public final class Response implements Message{
+&nbsp;    private final UUID uuid;
+&nbsp;    private final RuntimeException error;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a Response with a given id and an exception.
+&nbsp;     * @param uuid the unique identifier of the request this response is for
+&nbsp;     * @param error the exception that occurred while processing the request
+&nbsp;     */
+<b class="nc">&nbsp;    public Response(UUID uuid, RuntimeException error) {</b>
+<b class="nc">&nbsp;        this.uuid = uuid;</b>
+<b class="nc">&nbsp;        this.error = error;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a Response with a given id and no error, signaling a successful request.
+&nbsp;     * @param uuid the unique identifier of the request this response is for
+&nbsp;     */
+<b class="nc">&nbsp;    public Response(UUID uuid) {</b>
+<b class="nc">&nbsp;        this.uuid = uuid;</b>
+<b class="nc">&nbsp;        this.error = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the unique identifier of the request this response is for.
+&nbsp;     * @return the UUID of the request
+&nbsp;     */
+&nbsp;    public UUID getUuid() {
+<b class="nc">&nbsp;        return uuid;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if the response indicates an error.
+&nbsp;     * @return true if there is an error, false otherwise
+&nbsp;     */
+&nbsp;    public boolean isError() {
+<b class="nc">&nbsp;        return error != null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the error associated with this response, if any.
+&nbsp;     * @return the RuntimeException representing the error, or null if there is no error
+&nbsp;     */
+&nbsp;    public RuntimeException getError() {
+<b class="nc">&nbsp;        return error;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

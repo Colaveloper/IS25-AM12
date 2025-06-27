@@ -1,0 +1,393 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiLoseGoodsScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiLoseGoodsScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiLoseGoodsScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/74)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GuiLoseGoodsScreen$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/85)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.CargoHold;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.RemoveGoodsState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.StateActions;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.beans.binding.Bindings;
+&nbsp;import javafx.beans.property.ObjectProperty;
+&nbsp;import javafx.beans.property.SimpleObjectProperty;
+&nbsp;import javafx.geometry.Insets;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.layout.*;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI screen for handling the loss of goods during adverse game events.
+&nbsp; * This screen allows players to select cargo holds and choose which goods
+&nbsp; * to discard. Players potentially lose batteries if they have no goods to lose.
+&nbsp; */
+&nbsp;public class GuiLoseGoodsScreen extends GuiAdventureScreen {
+&nbsp;    private final ObjectProperty&lt;Point&gt; selectedPoint;
+<b class="nc">&nbsp;    private VBox cargoInfoBox = new VBox(2);</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new lose goods screen.
+&nbsp;     *
+&nbsp;     * @param model            The client model containing game state
+&nbsp;     * @param controller       The controller for communicating with the server
+&nbsp;     * @param removeGoodsState The state containing valid actions for this phase
+&nbsp;     */
+&nbsp;    public GuiLoseGoodsScreen(ClientModel model, ClientControllerInterface controller, RemoveGoodsState removeGoodsState) {
+<b class="nc">&nbsp;        super(model, controller, removeGoodsState);</b>
+<b class="nc">&nbsp;        this.selectedPoint = new SimpleObjectProperty&lt;&gt;();</b>
+<b class="nc">&nbsp;        ObjectProperty&lt;GoodsType&gt; selectedGoodsType = new SimpleObjectProperty&lt;&gt;();</b>
+<b class="nc">&nbsp;        updateCargoInfoBox();</b>
+<b class="nc">&nbsp;        if (isMyTurn()) {</b>
+<b class="nc">&nbsp;            guiLog.log(&quot;Your turn to lose goods&quot;);</b>
+<b class="nc">&nbsp;            guiLog.log(&quot;Select a cargo hold to remove goods from&quot;);</b>
+<b class="nc">&nbsp;            guiLog.log(&quot;Select batteries to use if you have no goods to lose&quot;);</b>
+<b class="nc">&nbsp;            setupButtonBox();</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            guiLog.log(&quot;Wait for others to lose goods&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets up the button box with goods type selection and action buttons.
+&nbsp;     * This is only done when it&#39;s the current player&#39;s turn.
+&nbsp;     */
+&nbsp;    private void setupButtonBox() {
+<b class="nc">&nbsp;        guiButtonBox.getChildren().clear();</b>
+&nbsp;
+<b class="nc">&nbsp;        VBox actionButtons = new VBox(5);</b>
+<b class="nc">&nbsp;        actionButtons.setPadding(new Insets(5));</b>
+&nbsp;
+<b class="nc">&nbsp;        Button loseGoodOrBatteryButton = new Button(&quot;Lose Good/Battery&quot;);</b>
+&nbsp;        // disable the button if there are no goods or batteries to lose
+<b class="nc">&nbsp;        loseGoodOrBatteryButton.disableProperty().bind(</b>
+<b class="nc">&nbsp;                Bindings.createBooleanBinding(</b>
+<b class="nc">&nbsp;                        () -&gt; (selectedPoint.get() == null ||</b>
+<b class="nc">&nbsp;                                (!myShipBoard.getCargoHolds().containsKey(selectedPoint.get()) ||</b>
+<b class="nc">&nbsp;                                        myShipBoard.getCargoHolds().get(selectedPoint.get()).getGoods().isEmpty()) &amp;&amp;</b>
+<b class="nc">&nbsp;                                myShipBoard.getNumBatteries() &lt;= 0),</b>
+&nbsp;                        selectedPoint
+&nbsp;                )
+&nbsp;        );
+&nbsp;
+<b class="nc">&nbsp;        loseGoodOrBatteryButton.setOnAction(_ -&gt;{</b>
+<b class="nc">&nbsp;            guiShipBoards.get(myShipBoard).clearHighlights();</b>
+<b class="nc">&nbsp;            controller.loseGoods(selectedPoint.get());</b>
+<b class="nc">&nbsp;            selectedPoint.set(null);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        Button nextButton = new Button(&quot;Done&quot;);</b>
+<b class="nc">&nbsp;        nextButton.setOnAction(_ -&gt; getGuiController().goNext());</b>
+&nbsp;
+<b class="nc">&nbsp;        actionButtons.getChildren().addAll(loseGoodOrBatteryButton, nextButton);</b>
+<b class="nc">&nbsp;        guiButtonBox.getChildren().add(actionButtons);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * Creates and returns a GUI controller that handles point clicks for selecting
+&nbsp;     * cargo holds and navigation to the next screen.
+&nbsp;     *
+&nbsp;     * @return A GUI controller for this screen
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    protected GuiController getGuiController() {
+<b class="nc">&nbsp;        return new GuiController() {</b>
+&nbsp;            @Override
+&nbsp;            public void handlePointPress(Point point) {
+<b class="nc">&nbsp;                if (state.getAvailableActions().contains(StateActions.LOSE_GOOD)) {</b>
+<b class="nc">&nbsp;                    if (myShipBoard.getCargoHolds().containsKey(point) || myShipBoard.getBatteries().containsKey(point)) {</b>
+<b class="nc">&nbsp;                        guiShipBoards.get(myShipBoard).clearHighlights();</b>
+<b class="nc">&nbsp;                        selectedPoint.set(point);</b>
+<b class="nc">&nbsp;                        updateCargoInfoBox();</b>
+<b class="nc">&nbsp;                        guiLog.log(&quot;Action to be performed at &quot;+ point.x + &quot;,&quot; + point.y);</b>
+<b class="nc">&nbsp;                        guiShipBoards.get(myShipBoard).highlightPoints(Set.of(point), Color.YELLOW);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        guiLog.log(&quot;No cargo hold or battery at &quot; + point.x + &quot;,&quot; + point.y);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            @Override
+&nbsp;            public void goNext() {
+<b class="nc">&nbsp;                if (state.getAvailableActions().contains(StateActions.GO_NEXT)) {</b>
+<b class="nc">&nbsp;                    controller.goNext();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the cargo information box with details about the selected cargo hold.
+&nbsp;     * Shows the position and contents of the selected cargo hold.
+&nbsp;     */
+&nbsp;    private void updateCargoInfoBox() {
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc">&nbsp;            cargoInfoBox.getChildren().clear();</b>
+<b class="nc">&nbsp;            Label cargoHoldsLabel = new Label(&quot;Cargo holds with goods: &quot; + countCargoHoldsWithGoods());</b>
+<b class="nc">&nbsp;            cargoHoldsLabel.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;            Label batteriesLabel = new Label(&quot;Batteries available: &quot; + countBatteries());</b>
+<b class="nc">&nbsp;            batteriesLabel.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;            cargoInfoBox.getChildren().add(cargoHoldsLabel);</b>
+<b class="nc">&nbsp;            cargoInfoBox.getChildren().add(batteriesLabel);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (selectedPoint.get() != null &amp;&amp; myShipBoard.getCargoHolds().containsKey(selectedPoint.get())) {</b>
+<b class="nc">&nbsp;                CargoHold cargoHold = myShipBoard.getCargoHolds().get(selectedPoint.get());</b>
+<b class="nc">&nbsp;                Label positionLabel = new Label(&quot;Cargo hold at: (&quot; + selectedPoint.get().x + &quot;,&quot; + selectedPoint.get().y + &quot;)&quot;);</b>
+<b class="nc">&nbsp;                positionLabel.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;                cargoInfoBox.getChildren().add(positionLabel);</b>
+&nbsp;
+<b class="nc">&nbsp;                for (GoodsType type : cargoHold.getGoods().keySet()) {</b>
+<b class="nc">&nbsp;                    int amount = cargoHold.getGoods().getOrDefault(type, 0);</b>
+<b class="nc">&nbsp;                    if (amount &gt; 0) {</b>
+<b class="nc">&nbsp;                        Label goodsLabel = new Label(type + &quot;: &quot; + amount);</b>
+<b class="nc">&nbsp;                        goodsLabel.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;                        cargoInfoBox.getChildren().add(goodsLabel);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            if (selectedPoint.get() != null &amp;&amp; myShipBoard.getBatteries().containsKey(selectedPoint.get())) {</b>
+<b class="nc">&nbsp;                Label batteryLabel = new Label(&quot;Battery at: (&quot; + selectedPoint.get().x + &quot;,&quot; + selectedPoint.get().y + &quot;)&quot;);</b>
+<b class="nc">&nbsp;                batteryLabel.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;                cargoInfoBox.getChildren().add(batteryLabel);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * Creates and returns a VBox containing the cargo information display
+&nbsp;     * along with the standard free-use area.
+&nbsp;     *
+&nbsp;     * @return A VBox containing the free-use area with cargo information
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    protected VBox getFreeUseVBox() {
+<b class="nc">&nbsp;        VBox freeUseVBox = super.getFreeUseVBox();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (isMyTurn()) {</b>
+<b class="nc">&nbsp;            freeUseVBox.getChildren().add(cargoInfoBox);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return freeUseVBox;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Counts the total number of batteries available on the player&#39;s ship.
+&nbsp;     *
+&nbsp;     * @return The total number of batteries available
+&nbsp;     */
+&nbsp;    private int countBatteries() {
+<b class="nc">&nbsp;        int totalBatteries = 0;</b>
+<b class="nc">&nbsp;        for (Point point : myShipBoard.getBatteries().keySet()) {</b>
+<b class="nc">&nbsp;            totalBatteries += myShipBoard.getBatteries().get(point).getNumBatteries();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return totalBatteries;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Counts the number of cargo holds that contain goods on the current ship.
+&nbsp;     *
+&nbsp;     * @return The number of cargo holds containing goods
+&nbsp;     */
+&nbsp;    private int countCargoHoldsWithGoods() {
+<b class="nc">&nbsp;        ShipBoard currentShip = state.getShipBoard();</b>
+<b class="nc">&nbsp;        int count = 0;</b>
+<b class="nc">&nbsp;        for (CargoHold cargoHold : currentShip.getCargoHolds().values()) {</b>
+<b class="nc">&nbsp;            if (!cargoHold.getGoods().isEmpty()) {</b>
+<b class="nc">&nbsp;                count++;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return count;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * Updates the GUI when a component changes on the ship board,
+&nbsp;     * specifically refreshing the cargo information display.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board containing the changed component
+&nbsp;     * @param point The position of the changed component
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void notifyComponentChange(ShipBoard shipBoard, Point point) {
+<b class="nc">&nbsp;        super.notifyComponentChange(shipBoard, point);</b>
+<b class="nc">&nbsp;        guiShipBoards.get(myShipBoard).clearHighlights();</b>
+<b class="nc">&nbsp;        updateCargoInfoBox();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board containing the changed component
+&nbsp;     * @param point The position of the changed component
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void notifyUseBattery(ShipBoard shipBoard, Point point) {
+<b class="nc">&nbsp;        super.notifyUseBattery(shipBoard, point);</b>
+<b class="nc">&nbsp;        notifyComponentChange(shipBoard, point);</b>
+<b class="nc">&nbsp;        guiShipBoards.get(myShipBoard).clearHighlights();</b>
+<b class="nc">&nbsp;        updateCargoInfoBox();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

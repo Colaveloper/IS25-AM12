@@ -1,0 +1,415 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Screen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view</a>
+</div>
+
+<h1>Coverage Summary for Class: Screen (it.polimi.ingsw.galaxytruckers.client.view)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Screen</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    2.7%
+  </span>
+  <span class="absValue">
+    (1/37)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    2.7%
+  </span>
+  <span class="absValue">
+    (1/37)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Lobby;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Player;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.AdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract class representing a view screen in the Galaxy Truckers game.
+&nbsp; * This class defines methods for various game notifications and updates
+&nbsp; * that can be rendered on the screen. Concrete implementations should
+&nbsp; * provide specific rendering logic for both GUI and TUI.
+&nbsp; */
+<b class="fc">&nbsp;public abstract class Screen {</b>
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a random component has been requested.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component is requested
+&nbsp;     * @param component The randomly selected component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a specific component has been requested.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component is requested
+&nbsp;     * @param component The requested component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyRequestComponent(ShipBoard shipBoard, Component component){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a component has been rejected.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was rejected
+&nbsp;     * @param component The rejected component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyRejectComponent(ShipBoard shipBoard, Component component){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a component has been stashed.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was stashed
+&nbsp;     * @param component The stashed component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyStashComponent(ShipBoard shipBoard, Component component){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a stashed component has been grabbed.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was grabbed from
+&nbsp;     * @param index     The index of the stashed component
+&nbsp;     * @param component The grabbed component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a placed component has been grabbed.
+&nbsp;     *
+&nbsp;     * @param shipBoard    The ship board where the component was grabbed from
+&nbsp;     * @param prevPosition The previous position of the grabbed component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyGrabPlacedComponent(ShipBoard shipBoard, Point prevPosition) {}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a component has been placed on the board.
+&nbsp;     *
+&nbsp;     * @param shipBoard   The ship board where the component was placed
+&nbsp;     * @param point       The position where the component was placed
+&nbsp;     * @param orientation The orientation of the placed component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that the hourglass has been flipped.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board associated with the hourglass
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyFlipHourglass(ShipBoard shipBoard){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that the hourglass timer has ended.
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyHourglassEnd(){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen of a ship&#39;s position update on the flight board.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board being updated
+&nbsp;     * @param position  The new position on the flight board
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a forecast card has been peeked at.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board associated with the forecast
+&nbsp;     * @param deckIndex The index of the deck being peeked at
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the forecast deck of adventure cards.
+&nbsp;     *
+&nbsp;     * @param adventureCards The list of adventure cards for the forecast deck
+&nbsp;     */
+<b class="nc">&nbsp;    public void setForecastDeck(List&lt;AdventureCard&gt; adventureCards){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a forecast has been released.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board associated with the forecast
+&nbsp;     * @param index     The index of the released forecast
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyReleaseForecast(ShipBoard shipBoard, int index){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a component has been removed from the board.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was removed
+&nbsp;     * @param point     The position of the removed component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyRemoveComponent(ShipBoard shipBoard, Point point){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a ship piece has been chosen.
+&nbsp;     *
+&nbsp;     * @param shipBoard   The ship board where the piece was chosen
+&nbsp;     * @param pieceIndex  The index of the chosen piece
+&nbsp;     * @param removed     List of points where components were removed
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List&lt;Point&gt; removed){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that the ship is not properly connected.
+&nbsp;     *
+&nbsp;     * @param shipBoard  The ship board that is not connected
+&nbsp;     * @param shipPieces Sets of points representing disconnected ship pieces
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyShipNotConnected(ShipBoard shipBoard, List&lt;Set&lt;Point&gt;&gt; shipPieces){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that the ship has been validated.
+&nbsp;     *
+&nbsp;     * @param shipBoard The validated ship board
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyShipValidated(ShipBoard shipBoard){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a cabin has been initialized.
+&nbsp;     *
+&nbsp;     * @param shipBoard    The ship board where the cabin was initialized
+&nbsp;     * @param point        The position of the cabin
+&nbsp;     * @param crewType     The type of crew assigned to the cabin
+&nbsp;     * @param numResidents The number of residents in the cabin
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that an adventure card has been drawn.
+&nbsp;     *
+&nbsp;     * @param adventureCard The drawn adventure card
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyDrawCard(AdventureCard adventureCard){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a component has been activated.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was activated
+&nbsp;     * @param point     The position of the activated component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyActivateComponent(ShipBoard shipBoard, Point point){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a crew member has been lost.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the crew was lost
+&nbsp;     * @param point     The position where the crew was lost
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyLoseCrew(ShipBoard shipBoard, Point point){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a reward has been grabbed or not.
+&nbsp;     *
+&nbsp;     * @param shipBoard      The ship board associated with the reward
+&nbsp;     * @param rewardGrabbed  Whether the reward was grabbed (true) or not (false)
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that goods have been placed on the ship.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where goods were placed
+&nbsp;     * @param point     The position where goods were placed
+&nbsp;     * @param goodsType The type of goods placed
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that goods have been removed from the ship.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where goods were removed
+&nbsp;     * @param point     The position where goods were removed
+&nbsp;     * @param goodsType The type of goods removed
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a battery has been used.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the battery was used
+&nbsp;     * @param point     The position of the used battery
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyUseBattery(ShipBoard shipBoard, Point point){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a planet has been chosen.
+&nbsp;     *
+&nbsp;     * @param shipBoard      The current ship board
+&nbsp;     * @param choice         The index of the chosen planet
+&nbsp;     * @param nextShipBoard  The next ship board after the choice
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen of the current player update.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board of the current player
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyCurrentPlayerUpdate(ShipBoard shipBoard){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a player has given up.
+&nbsp;     *
+&nbsp;     * @param player The player who gave up
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyGiveUp(Player player){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the final scores for all players.
+&nbsp;     *
+&nbsp;     * @param finalScores A map of players to their final scores
+&nbsp;     */
+<b class="nc">&nbsp;    public void setFinalScores(Map&lt;Player, Integer&gt; finalScores){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a component has been rejected with its old position.
+&nbsp;     *
+&nbsp;     * @param shipBoard    The ship board where the component was rejected
+&nbsp;     * @param component    The rejected component
+&nbsp;     * @param oldPosition  The previous position of the component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a component has been stashed with its old position.
+&nbsp;     *
+&nbsp;     * @param shipBoard    The ship board where the component was stashed
+&nbsp;     * @param component    The stashed component
+&nbsp;     * @param oldPosition  The previous position of the component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a component has been placed with its old position.
+&nbsp;     *
+&nbsp;     * @param shipBoard    The ship board where the component was placed
+&nbsp;     * @param newPoint     The new position of the component
+&nbsp;     * @param orientation  The orientation of the component
+&nbsp;     * @param oldPosition  The previous position of the component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a new lobby has been created.
+&nbsp;     *
+&nbsp;     * @param lobby The newly created lobby
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyNewLobby(Lobby lobby){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a lobby has been removed.
+&nbsp;     *
+&nbsp;     * @param LobbyId The UUID of the removed lobby
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyRemoveLobby(UUID LobbyId){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a player has joined the game.
+&nbsp;     *
+&nbsp;     * @param player the player who joined
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyPlayerJoin(Player player){}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the screen that a component has changed.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component changed
+&nbsp;     * @param point     The position of the changed component
+&nbsp;     */
+<b class="nc">&nbsp;    public void notifyComponentChange(ShipBoard shipBoard, Point point) {}</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

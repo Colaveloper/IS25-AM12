@@ -1,0 +1,128 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ServerControllerInterface</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: ServerControllerInterface (it.polimi.ingsw.galaxytruckers.server.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ServerControllerInterface</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.controller;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.lobby.LobbyInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.lobby.Player;
+&nbsp;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;public interface ServerControllerInterface {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Registers a player with the given nickname and associates it with the provided client handler.
+&nbsp;     * Sends the player information about the active lobbies he can join.
+&nbsp;     * If the player is already registered but not active, it reconnects the player and
+&nbsp;     * generates a snapshot of the game they are in.
+&nbsp;     *
+&nbsp;     * @param nickname the nickname of the player to register
+&nbsp;     * @param handler  the client handler associated with the player
+&nbsp;     */
+&nbsp;    void registerNickname(String nickname, ClientHandler handler);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new lobby for a game of the chosen level and with
+&nbsp;     * the specified number of players, adding the creator to it
+&nbsp;     *
+&nbsp;     * @param creator    nickname of the lobby creator
+&nbsp;     * @param level      level of the game
+&nbsp;     * @param numPlayers number of players in the game
+&nbsp;     * @return the {@link LobbyInterface} of the created lobby
+&nbsp;     */
+&nbsp;    LobbyInterface newGame(Player creator, Level level, int numPlayers);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds the player with the specified nickname to the lobby
+&nbsp;     * with the given lobby ID
+&nbsp;     *
+&nbsp;     * @param player  the nickname of the player joining a lobby
+&nbsp;     * @param lobbyID the ID of the lobby the player wants to join
+&nbsp;     * @return the {@link LobbyInterface} of the lobby the player has just entered
+&nbsp;     */
+&nbsp;    LobbyInterface joinLobby(Player player, UUID lobbyID);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes the given player from the active players in the server and, if
+&nbsp;     * the player was in a lobby, notifies other players in the lobby of the
+&nbsp;     * disconnection, otherwise it removes the player from the registered players.
+&nbsp;     *
+&nbsp;     * @param player the player who has disconnected
+&nbsp;     */
+&nbsp;    void handlePlayerDisconnection(Player player);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies other players in the lobby of the player&#39;s exit and interrupts
+&nbsp;     * the game
+&nbsp;     *
+&nbsp;     * @param player the player who left
+&nbsp;     */
+&nbsp;    void leaveLobby(Player player);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

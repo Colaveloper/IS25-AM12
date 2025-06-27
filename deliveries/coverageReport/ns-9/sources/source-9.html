@@ -1,0 +1,544 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GameState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.model.state</a>
+</div>
+
+<h1>Coverage Summary for Class: GameState (it.polimi.ingsw.galaxytruckers.client.model.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (35/35)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (35/35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.model.state;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Player;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.AdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Game;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract base class for all game states in the Galaxy Truckers game.
+&nbsp; * This class implements the State pattern to model different phases of gameplay.
+&nbsp; * Each concrete state provides specific behavior for the actions that are valid
+&nbsp; * during that phase of the game, while default implementations produce error messages.
+&nbsp; * &lt;p&gt;
+&nbsp; * The class is sealed to restrict subclassing to the predefined set of game states:
+&nbsp; * AdventureState, ShipBuildingState, ShipCorrectionState, and ShipInitializationState.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+<b class="fc">&nbsp;public abstract non-sealed class GameState implements GameStateInterface {</b>
+&nbsp;    /** The game instance associated with this state */
+&nbsp;    protected Game game;
+&nbsp;
+&nbsp;    /** The client model that this state can modify */
+&nbsp;    protected ClientModel clientModel;
+&nbsp;
+&nbsp;    /** The ship board associated with the local player */
+&nbsp;    protected ShipBoard myShip;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the game instance associated with this state.
+&nbsp;     *
+&nbsp;     * @return The game instance
+&nbsp;     */
+&nbsp;    public Game getGame() {
+<b class="fc">&nbsp;        return game;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the ship board for the local player.
+&nbsp;     *
+&nbsp;     * @param shipBoard The local player&#39;s ship board
+&nbsp;     */
+&nbsp;    public void setMyShip(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        this.myShip = shipBoard;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the game instance for this state.
+&nbsp;     * This method is called when transitioning to this state.
+&nbsp;     *
+&nbsp;     * @param game The game instance to associate with this state
+&nbsp;     */
+&nbsp;    public void setGame(Game game) {
+<b class="fc">&nbsp;        this.game = game;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the list of available actions in the current state.
+&nbsp;     * Concrete states must implement this to define which actions are allowed.
+&nbsp;     *
+&nbsp;     * @return A list of available actions in this state
+&nbsp;     */
+&nbsp;    public abstract List&lt;StateActions&gt; getAvailableActions();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Performs cleanup when leaving this state.
+&nbsp;     * By default, deactivates all components on all ship boards.
+&nbsp;     */
+&nbsp;    public void leave() {
+<b class="fc">&nbsp;        game.getShipBoards().forEach(ShipBoard::deactivateAll);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a random component has been requested.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board requesting the component
+&nbsp;     * @param component The randomly selected component
+&nbsp;     */
+&nbsp;    public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
+<b class="fc">&nbsp;        System.err.println(&quot;1This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a specific component has been requested.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board requesting the component
+&nbsp;     * @param componentId The requested component
+&nbsp;     */
+&nbsp;    public void notifyRequestComponent(ShipBoard shipBoard, Component componentId) {
+<b class="fc">&nbsp;        System.err.println(&quot;2This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a component has been rejected.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was rejected
+&nbsp;     */
+&nbsp;    public void notifyRejectComponent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        System.err.println(&quot;3This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a component has been stashed.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was stashed
+&nbsp;     */
+&nbsp;    public void notifyStashComponent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        System.err.println(&quot;4This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a placed component has been grabbed.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was grabbed
+&nbsp;     */
+&nbsp;    public void notifyGrabPlacedComponent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        System.err.println(&quot;3.5This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a stashed component has been grabbed.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was grabbed
+&nbsp;     * @param index The index of the stashed component
+&nbsp;     */
+&nbsp;    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index) {
+<b class="fc">&nbsp;        System.err.println(&quot;5This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a component has been placed on the ship.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was placed
+&nbsp;     * @param point The coordinates where the component was placed
+&nbsp;     * @param orientation The orientation of the placed component
+&nbsp;     */
+&nbsp;    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
+<b class="fc">&nbsp;        System.err.println(&quot;6This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that the hourglass has been flipped.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the hourglass was flipped
+&nbsp;     */
+&nbsp;    public void notifyFlipHourglass(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        System.err.println(&quot;7This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that the hourglass timer has ended.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     */
+&nbsp;    public void notifyHourglassEnd() {
+<b class="fc">&nbsp;        System.err.println(&quot;8This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that ships have surrendered and should be removed from the flight board.
+&nbsp;     * This method is properly implemented in the base class to work in all states.
+&nbsp;     *
+&nbsp;     * @param shipBoards The set of ship boards that have surrendered
+&nbsp;     */
+&nbsp;    public void notifySurrenderShip(Set&lt;ShipBoard&gt; shipBoards) {
+<b class="fc">&nbsp;        for (ShipBoard shipBoard : shipBoards) game.getFlightBoard().removeShip(shipBoard);</b>
+&nbsp;        //doesn&#39;t notify observers so it doesnt print anything, but there&#39;s an event for that
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a player has requested to surrender.
+&nbsp;     * This method is properly implemented in the base class to work in all states.
+&nbsp;     *
+&nbsp;     * @param player The player who requested to surrender
+&nbsp;     */
+&nbsp;    public void notifySurrenderRequest(Player player) {
+<b class="fc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyGiveUp(player));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates a ship&#39;s position on the flight board.
+&nbsp;     * This method is properly implemented in the base class to work in all states.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board to update
+&nbsp;     * @param position The new position on the flight board
+&nbsp;     * @param isMyShip Whether this is the local player&#39;s ship
+&nbsp;     */
+&nbsp;    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position, boolean isMyShip) {
+<b class="fc">&nbsp;        game.getFlightBoard().setShipPosition(shipBoard, position);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a forecast card has been peeked at.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the forecast was peeked
+&nbsp;     * @param deckIndex The index of the deck being peeked at
+&nbsp;     */
+&nbsp;    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
+<b class="fc">&nbsp;        System.err.println(&quot;9This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the forecast deck with adventure cards.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param adventureCards The list of adventure cards for the forecast deck
+&nbsp;     */
+&nbsp;    public void setForecastDeck(List&lt;AdventureCard&gt; adventureCards) {
+<b class="fc">&nbsp;        System.err.println(&quot;10This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a forecast has been released.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the forecast was released
+&nbsp;     * @param isMyShip Whether this is the local player&#39;s ship
+&nbsp;     */
+&nbsp;    public void notifyReleaseForecast(ShipBoard shipBoard, boolean isMyShip) {
+<b class="fc">&nbsp;        System.err.println(&quot;11This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a component has been removed from the ship.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was removed
+&nbsp;     * @param point The coordinates of the removed component
+&nbsp;     */
+&nbsp;    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        System.err.println(&quot;12This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a ship piece has been chosen.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the piece was chosen
+&nbsp;     * @param pieceIndex The index of the chosen piece
+&nbsp;     */
+&nbsp;    public void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex) {
+<b class="fc">&nbsp;        System.err.println(&quot;13This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a ship is not connected.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board that is not connected
+&nbsp;     * @param shipPieces The disconnected ship pieces
+&nbsp;     */
+&nbsp;    public void notifyShipNotConnected(ShipBoard shipBoard, List&lt;Set&lt;Point&gt;&gt; shipPieces) {
+<b class="fc">&nbsp;        System.err.println(&quot;14This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a ship has been validated.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board that was validated
+&nbsp;     */
+&nbsp;    public void notifyShipValidated(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        System.err.println(&quot;15This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a cabin has been initialized with crew.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the cabin was initialized
+&nbsp;     * @param point The coordinates of the initialized cabin
+&nbsp;     * @param crewType The type of crew assigned to the cabin
+&nbsp;     */
+&nbsp;    public void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType) {
+<b class="fc">&nbsp;        System.err.println(&quot;16This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that an adventure card has been drawn.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param adventureCard The drawn adventure card
+&nbsp;     */
+&nbsp;    public void notifyDrawCard(AdventureCard adventureCard) {
+<b class="fc">&nbsp;        System.err.println(&quot;17This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a component has been activated.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was activated
+&nbsp;     * @param point The coordinates of the activated component
+&nbsp;     */
+&nbsp;    public void notifyActivateComponent(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        System.err.println(&quot;18This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that crew has been lost from a cabin.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the crew was lost
+&nbsp;     * @param point The coordinates of the cabin where crew was lost
+&nbsp;     */
+&nbsp;    public void notifyLoseCrew(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        System.err.println(&quot;19This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a reward has been grabbed.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board that grabbed the reward
+&nbsp;     * @param credits The amount of credits grabbed
+&nbsp;     */
+&nbsp;    public void notifyGrabReward(ShipBoard shipBoard, int credits) {
+<b class="fc">&nbsp;        System.err.println(&quot;20This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that goods have been placed on the ship.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where goods were placed
+&nbsp;     * @param point The coordinates where goods were placed
+&nbsp;     * @param goodsType The type of goods placed
+&nbsp;     */
+&nbsp;    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+<b class="fc">&nbsp;        System.err.println(&quot;21This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that goods have been removed from the ship.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where goods were removed
+&nbsp;     * @param point The coordinates where goods were removed
+&nbsp;     * @param goodsType The type of goods removed
+&nbsp;     */
+&nbsp;    public void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+<b class="fc">&nbsp;        System.err.println(&quot;22This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a battery has been used.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the battery was used
+&nbsp;     * @param point The coordinates of the used battery
+&nbsp;     */
+&nbsp;    public void notifyUseBattery(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        System.err.println(&quot;23This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a planet has been chosen.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board choosing the planet
+&nbsp;     * @param choice The index of the chosen planet
+&nbsp;     * @param nextShipboard The ship board after the choice
+&nbsp;     */
+&nbsp;    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipboard) {
+<b class="fc">&nbsp;        System.err.println(&quot;24This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that the current player has been updated.
+&nbsp;     * Default implementation signals this action is not permitted in this state.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board of the current player
+&nbsp;     */
+&nbsp;    public void notifyCurrentPlayerUpdate(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        System.err.println(&quot;25This action is not permitted in this state, \n&quot; +</b>
+&nbsp;                &quot;it seems the client and the server are out of sync&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies that a ship has given up.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board that has given up
+&nbsp;     */
+&nbsp;    public void notifyGiveUp(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        System.err.println(shipBoard.getColor() + &quot; is giving up&quot;);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

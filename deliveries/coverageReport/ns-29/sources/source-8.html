@@ -1,0 +1,222 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DrawCardState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.state</a>
+</div>
+
+<h1>Coverage Summary for Class: DrawCardState (it.polimi.ingsw.galaxytruckers.server.model.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DrawCardState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (33/33)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.state;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.Game;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.SurrenderPolicy;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents the state of the game where a player can draw a card from the deck.
+&nbsp; */
+<b class="fc">&nbsp;public final class DrawCardState extends AdventureState implements GameStateInterface {</b>
+&nbsp;    private ShipBoard shipBoard;
+<b class="fc">&nbsp;    private boolean hasDrawn = false;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * If it&#39;s the player&#39;s turn it skips the turn, drawing a card if it hasn&#39;t been drawn yet.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board of the player who wants to skip
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public synchronized void skip(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        if (!expired &amp;&amp; this.shipBoard.equals(shipBoard)) {</b>
+<b class="fc">&nbsp;            if (hasDrawn) {</b>
+<b class="fc">&nbsp;                getNextState();</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                game.getDeck().drawCard();</b>
+<b class="fc">&nbsp;                game.getDeck().getCurrentCard().initialize();</b>
+<b class="fc">&nbsp;                game.getEventListener().notifyNewCardEvent(game.getDeck().getCurrentCard());</b>
+<b class="fc">&nbsp;                getNextState();</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes the state so that it&#39;s the turn of the first ship on the flight board.
+&nbsp;     * If there are no cards left or all players have surrendered, the game ends.
+&nbsp;     *
+&nbsp;     * @param game the game to associate with this state
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void setGame(Game game) {
+<b class="fc">&nbsp;        super.setGame(game);</b>
+<b class="fc">&nbsp;        SurrenderPolicy surrenderPolicy = game.getSurrenderPolicy();</b>
+<b class="fc">&nbsp;        if (surrenderPolicy.isSurrenderEnabled()) {</b>
+<b class="fc">&nbsp;            surrenderPolicy.confirmSurrender(game.getFlightBoard());</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (game.tryEndGame()) {</b>
+<b class="fc">&nbsp;            expired = true;</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="fc">&nbsp;        shipBoard = game.getFlightBoard().getOrderedShips().getFirst();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Draws a card from the deck for the current ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board drawing the card
+&nbsp;     * @throws IllegalStateException if it&#39;s not the player&#39;s turn or
+&nbsp;     *                               if they have already drawn a card
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public synchronized void drawCard(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        checkIfExpired();</b>
+<b class="fc">&nbsp;        if (!this.shipBoard.equals(shipBoard)) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;It&#39;s not your turn&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (hasDrawn) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;It&#39;s already drawn&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        hasDrawn = true;</b>
+<b class="fc">&nbsp;        game.getDeck().drawCard();</b>
+<b class="fc">&nbsp;        game.getDeck().getCurrentCard().initialize();</b>
+<b class="fc">&nbsp;        game.getEventListener().notifyNewCardEvent(game.getDeck().getCurrentCard());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Moves to the next state of the game after the player has drawn a card.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board of the player that requested the action
+&nbsp;     * @throws IllegalStateException if it&#39;s not the player&#39;s turn or if they haven&#39;t drawn a card yet
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public synchronized void goNext(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        if (!this.shipBoard.equals(shipBoard)) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;It&#39;s not your turn&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        checkIfExpired();</b>
+<b class="fc">&nbsp;        if (!hasDrawn) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;You need to draw first&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        getNextState();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return the ship board of the player who is currently drawing a card.@
+&nbsp;     */
+&nbsp;    public synchronized ShipBoard getShipBoard() {
+<b class="fc">&nbsp;        return shipBoard;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return true if the player has drawn a card, false otherwise.
+&nbsp;     */
+&nbsp;    public synchronized boolean hasDrawn() {
+<b class="fc">&nbsp;        return hasDrawn;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

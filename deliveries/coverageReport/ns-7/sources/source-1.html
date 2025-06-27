@@ -1,0 +1,213 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GameFactory</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.model.factory</a>
+</div>
+
+<h1>Coverage Summary for Class: GameFactory (it.polimi.ingsw.galaxytruckers.client.model.factory)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameFactory</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameFactory$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GameFactory$MockitoMock$rn1RN5xt</td>
+  </tr>
+  <tr>
+    <td class="name">GameFactory$MockitoMock$rn1RN5xt$auxiliary$4kN7wvwI</td>
+  </tr>
+  <tr>
+    <td class="name">GameFactory$MockitoMock$rn1RN5xt$auxiliary$Eyi9Rv9q</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.model.factory;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GameColor;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.FlightBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.ShipBuildingState;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract factory for creating game components based on game level.
+&nbsp; */
+<b class="fc">&nbsp;public abstract class GameFactory {</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a flight board appropriate for the game level.
+&nbsp;     *
+&nbsp;     * @return A FlightBoard configured for the specific game level
+&nbsp;     */
+&nbsp;    public abstract FlightBoard createFlightBoard();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a ship board appropriate for the game level.
+&nbsp;     *
+&nbsp;     * @param color The color identifier for the ship board
+&nbsp;     * @return A ShipBoard configured for the specific game level
+&nbsp;     */
+&nbsp;    public abstract ShipBoard createShipBoard(GameColor color);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a ship building state appropriate for the game level.
+&nbsp;     *
+&nbsp;     * @return A ShipBuildingState configured for the specific game level
+&nbsp;     */
+&nbsp;    public abstract ShipBuildingState createShipBuildingState();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Factory method to get the appropriate game factory based on difficulty level.
+&nbsp;     * - TEST: Returns TestFactory for tutorial gameplay
+&nbsp;     * - SECOND: Returns SecondFactory for advanced gameplay
+&nbsp;     *
+&nbsp;     * @param level The desired game difficulty level
+&nbsp;     * @return A GameFactory instance appropriate for the specified level
+&nbsp;     * @throws IllegalArgumentException if an unsupported level is provided
+&nbsp;     */
+&nbsp;    public static GameFactory getFactory(Level level) {
+<b class="fc">&nbsp;        GameFactory gameFactory = null;</b>
+<b class="fc">&nbsp;        switch (level) {</b>
+<b class="fc">&nbsp;            case TEST -&gt; gameFactory = new TestFactory();</b>
+<b class="fc">&nbsp;            case SECOND -&gt; gameFactory = new SecondFactory();</b>
+<b class="fc">&nbsp;            default -&gt; throw new IllegalArgumentException(&quot;Unexpected level: &quot; + level);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return gameFactory;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

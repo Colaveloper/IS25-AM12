@@ -1,0 +1,288 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliComponent</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents</a>
+</div>
+
+<h1>Coverage Summary for Class: CliComponent (it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliComponent</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/29)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/49)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CliComponent$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/29)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/51)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.Connector;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliElement;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.CliHighlights;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.*;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a component on the ship board in the CLI.
+&nbsp; */
+&nbsp;public class CliComponent extends CliElement {
+&nbsp;
+&nbsp;    private final Component component;
+&nbsp;    private final Map&lt;Direction, Connector&gt; connectors;
+&nbsp;    private String open;
+&nbsp;    private String close;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for CliComponent. Used by subclasses when constructed in {@link CliComponent#of(Component)}.
+&nbsp;     *
+&nbsp;     * @param component The component to be represented in the CLI
+&nbsp;     */
+<b class="nc">&nbsp;    protected CliComponent(Component component) {</b>
+<b class="nc">&nbsp;        this.component = component;</b>
+<b class="nc">&nbsp;        this.connectors = component.getConnectors();</b>
+<b class="nc">&nbsp;        open = CliHighlights.RESET.getHighlight();</b>
+<b class="nc">&nbsp;        close = CliHighlights.RESET.getHighlight();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Factory method to create a CliComponent based on the type of Component.
+&nbsp;     * The switch is based on the sealed class Component.
+&nbsp;     *
+&nbsp;     * @param component The component to be represented in the CLI
+&nbsp;     * @return A CliComponent or its subclass based on the type of the component
+&nbsp;     */
+&nbsp;    public static CliComponent of(Component component) {
+<b class="nc">&nbsp;        return switch (component) {</b>
+<b class="nc">&nbsp;            case DoubleCannon doubleCannon-&gt; new CliDoubleCannon(doubleCannon);</b>
+<b class="nc">&nbsp;            case DoubleEngine doubleEngine -&gt; new CliDoubleEngine(doubleEngine);</b>
+<b class="nc">&nbsp;            case Battery battery -&gt; new CliBattery(battery);</b>
+<b class="nc">&nbsp;            case Cabin cabin -&gt; new CliCabin(cabin);</b>
+<b class="nc">&nbsp;            case Cannon cannon -&gt; new CliCannon(cannon);</b>
+<b class="nc">&nbsp;            case CargoHold cargoHold -&gt; new CliCargoHold(cargoHold);</b>
+<b class="nc">&nbsp;            case Engine engine -&gt; new CliEngine(engine);</b>
+<b class="nc">&nbsp;            case LifeSupport lifeSupport -&gt; new CliLifeSupport(lifeSupport);</b>
+<b class="nc">&nbsp;            case Shield shield -&gt; new CliShield(shield);</b>
+<b class="nc">&nbsp;            case Component comp -&gt; new CliComponent(comp);</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the connector character for the specified direction.
+&nbsp;     * The character is determined based on the component&#39;s rotated connector in that direction.
+&nbsp;     *
+&nbsp;     * @param direction The direction for which to get the connector character
+&nbsp;     * @return A string representing the connector character for the specified direction
+&nbsp;     */
+&nbsp;    public String getConnector(Direction direction) {
+<b class="nc">&nbsp;        Connector connector = component.getRotatedConnector(direction);</b>
+<b class="nc">&nbsp;        return switch (direction) {</b>
+<b class="nc">&nbsp;            case UP -&gt; switch (connector) {</b>
+<b class="nc">&nbsp;                case NONE -&gt; &quot;─&quot;;</b>
+<b class="nc">&nbsp;                case SINGLE -&gt; &quot;┴&quot;;</b>
+<b class="nc">&nbsp;                case DOUBLE -&gt; &quot;╨&quot;;</b>
+<b class="nc">&nbsp;                case UNIVERSAL -&gt; &quot;╩&quot;;</b>
+&nbsp;            };
+<b class="nc">&nbsp;            case LEFT -&gt; switch (connector) {</b>
+<b class="nc">&nbsp;                case NONE -&gt; &quot;│&quot;;</b>
+<b class="nc">&nbsp;                case SINGLE -&gt; &quot;┤&quot;;</b>
+<b class="nc">&nbsp;                case DOUBLE -&gt; &quot;╡&quot;;</b>
+<b class="nc">&nbsp;                case UNIVERSAL -&gt; &quot;╣&quot;;</b>
+&nbsp;            };
+<b class="nc">&nbsp;            case DOWN -&gt; switch (connector) {</b>
+<b class="nc">&nbsp;                case NONE -&gt; &quot;─&quot;;</b>
+<b class="nc">&nbsp;                case SINGLE -&gt; &quot;┬&quot;;</b>
+<b class="nc">&nbsp;                case DOUBLE -&gt; &quot;╥&quot;;</b>
+<b class="nc">&nbsp;                case UNIVERSAL -&gt; &quot;╦&quot;;</b>
+&nbsp;            };
+<b class="nc">&nbsp;            case RIGHT -&gt; switch (connector) {</b>
+<b class="nc">&nbsp;                case NONE -&gt; &quot;│&quot;;</b>
+<b class="nc">&nbsp;                case SINGLE -&gt; &quot;├&quot;;</b>
+<b class="nc">&nbsp;                case DOUBLE -&gt; &quot;╞&quot;;</b>
+<b class="nc">&nbsp;                case UNIVERSAL -&gt; &quot;╠&quot;;</b>
+&nbsp;            };
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the ID of the component.
+&nbsp;     * This ID is used to identify the component in the game state.
+&nbsp;     *
+&nbsp;     * @return The unique identifier of the component
+&nbsp;     */
+&nbsp;    public int getId() {
+<b class="nc">&nbsp;        return component.getId();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Highlights the component with the specified color.
+&nbsp;     * This method sets the open and close strings to the highlight color.
+&nbsp;     *
+&nbsp;     * @param color The color to use for highlighting
+&nbsp;     */
+&nbsp;    public void highlight(CliHighlights color) {
+<b class="nc">&nbsp;        open = color.getHighlight();</b>
+<b class="nc">&nbsp;        close = CliHighlights.RESET.getHighlight();</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected List&lt;String&gt; getNewDescription() {
+<b class="nc">&nbsp;        return addBorders(&quot;   &quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds borders to the middle string and returns a list of strings representing the component.
+&nbsp;     * The borders are added based on the connectors in the specified directions.
+&nbsp;     *
+&nbsp;     * @param middle The string to be placed in the middle of the component representation
+&nbsp;     * @return A list of strings representing the component with borders
+&nbsp;     */
+&nbsp;    protected List&lt;String&gt; addBorders(String middle) {
+&nbsp;        //open = CliHighlights.RESET.getHighlight();
+<b class="nc">&nbsp;        close = CliHighlights.RESET.getHighlight();</b>
+&nbsp;
+<b class="nc">&nbsp;        List&lt;String&gt; lines = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;            lines.add(0, open+&quot;╭─&quot; + getConnector(Direction.UP) + &quot;─╮&quot;+close);</b>
+<b class="nc">&nbsp;            lines.add(1, open+ getConnector(Direction.LEFT) + close + middle + open + getConnector(Direction.RIGHT)+close);</b>
+<b class="nc">&nbsp;            lines.add(2, open+&quot;╰─&quot; + getConnector(Direction.DOWN) + &quot;─╯&quot;+close);</b>
+<b class="nc">&nbsp;        return lines;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,238 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliComponentBank</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents</a>
+</div>
+
+<h1>Coverage Summary for Class: CliComponentBank (it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliComponentBank</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10%
+  </span>
+  <span class="absValue">
+    (1/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.2%
+  </span>
+  <span class="absValue">
+    (6/37)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.DescriptionUtils;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliElement;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ComponentBank;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents the component bank in the CLI.
+&nbsp; */
+&nbsp;public class CliComponentBank extends CliElement {
+&nbsp;
+&nbsp;    private int coveredComponentsN;
+&nbsp;    private final Map&lt;Integer, CliComponent&gt; cliComponentMap;
+&nbsp;    private final List&lt;CliComponent&gt; uncoveredComponents;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new CliComponentBank from the given ComponentBank.
+&nbsp;     * It initializes the covered components count and maps the uncovered components to their IDs.
+&nbsp;     *
+&nbsp;     * @param componentBank The ComponentBank to convert into a CLI representation
+&nbsp;     */
+<b class="fc">&nbsp;    public CliComponentBank(ComponentBank componentBank) {</b>
+<b class="fc">&nbsp;        this.cliComponentMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.coveredComponentsN = componentBank.getCoveredComponentsN();</b>
+<b class="fc">&nbsp;        List&lt;Component&gt; modelUncovered =  componentBank.getUncoveredComponents();</b>
+<b class="fc">&nbsp;        this.uncoveredComponents = new ArrayList&lt;&gt;();</b>
+<b class="pc">&nbsp;        for (Component component : modelUncovered) {</b>
+<b class="nc">&nbsp;            CliComponent cliComponent = new CliComponent(component);</b>
+<b class="nc">&nbsp;            this.uncoveredComponents.add(cliComponent);</b>
+<b class="nc">&nbsp;            this.cliComponentMap.put(component.getId(),cliComponent);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new empty CliComponentBank.
+&nbsp;     * Initializes the covered components count to 0 and prepares an empty list for uncovered components.
+&nbsp;     */
+&nbsp;    public void removeCovered() {
+<b class="nc">&nbsp;        coveredComponentsN--;</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds a new uncovered component to the bank.
+&nbsp;     * Increments the covered components count and adds the component to the list.
+&nbsp;     *
+&nbsp;     * @param component The component to add
+&nbsp;     */
+&nbsp;    public void addUncovered(Component component) {
+<b class="nc">&nbsp;        uncoveredComponents.add(CliComponent.of(component));</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes an uncovered component from the bank.
+&nbsp;     * If the component is found in the map, it is removed and the covered components count is decremented.
+&nbsp;     * If not found, it searches through the list of uncovered components for equality.
+&nbsp;     *
+&nbsp;     * @param component The component to remove
+&nbsp;     */
+&nbsp;    public void removeUncovered(Component component) {
+<b class="nc">&nbsp;        CliComponent cliComponent = cliComponentMap.get(component.getId());</b>
+<b class="nc">&nbsp;        if (cliComponent != null) {</b>
+<b class="nc">&nbsp;            cliComponentMap.remove(component.getId());</b>
+<b class="nc">&nbsp;            uncoveredComponents.remove(cliComponent);</b>
+<b class="nc">&nbsp;            setDirty();</b>
+&nbsp;        } else {
+&nbsp;            // try to find it by checking equality instead
+<b class="nc">&nbsp;            for (CliComponent comp : new ArrayList&lt;&gt;(uncoveredComponents)) {</b>
+<b class="nc">&nbsp;                if (comp.getId() == component.getId()) {</b>
+<b class="nc">&nbsp;                    uncoveredComponents.remove(comp);</b>
+<b class="nc">&nbsp;                    cliComponentMap.remove(component.getId());</b>
+<b class="nc">&nbsp;                    setDirty();</b>
+&nbsp;                    break;
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the number of covered components in the bank.
+&nbsp;     *
+&nbsp;     * @return The number of covered components
+&nbsp;     */
+&nbsp;    public int getCoveredComponentsN() {
+<b class="nc">&nbsp;        return coveredComponentsN;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the list of uncovered components in the bank.
+&nbsp;     *
+&nbsp;     * @return List of CliComponent representing uncovered components
+&nbsp;     */
+&nbsp;    public List&lt;CliComponent&gt; getUncoveredComponents() {
+<b class="nc">&nbsp;        return uncoveredComponents;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected List&lt;String&gt; getNewDescription() {
+<b class="nc">&nbsp;        List&lt;String&gt; coveredDescription = new ArrayList&lt;&gt;(DescriptionUtils.borderAndTitle(List.of(&quot;&quot;, String.valueOf(coveredComponentsN), &quot;&quot;), &quot;down&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        List&lt;String&gt; revealedDescription = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        List&lt;String&gt; revealedDescriptionUnit = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        int i = 0;</b>
+<b class="nc">&nbsp;        for (CliComponent cliComponent : uncoveredComponents) {</b>
+<b class="nc">&nbsp;            revealedDescriptionUnit.addAll(cliComponent.getNewDescription());</b>
+<b class="nc">&nbsp;            revealedDescriptionUnit.add(&quot;  &quot;+i+&quot;  &quot;);</b>
+<b class="nc">&nbsp;            revealedDescription = DescriptionUtils.sideBySide(revealedDescription, revealedDescriptionUnit);</b>
+<b class="nc">&nbsp;            revealedDescriptionUnit.clear();</b>
+<b class="nc">&nbsp;            i++;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        revealedDescription = DescriptionUtils.borderAndTitle(revealedDescription, &quot;up&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        return DescriptionUtils.sideBySide(coveredDescription, revealedDescription);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

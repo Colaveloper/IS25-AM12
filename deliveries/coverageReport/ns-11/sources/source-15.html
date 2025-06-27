@@ -1,0 +1,174 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.Screen;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.GameState;
+&nbsp;import javafx.scene.layout.Pane;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract base class for all GUI screens in the Galaxy Truckers game.
+&nbsp; * This class extends the generic Screen class and provides common functionality
+&nbsp; * and data that all GUI-based screens need to operate.
+&nbsp; *
+&nbsp; * Each concrete implementation of GuiScreen represents a different screen or view
+&nbsp; * in the game&#39;s graphical user interface, such as menus, game boards, or dialogs.
+&nbsp; */
+&nbsp;public abstract class GuiScreen extends Screen {
+&nbsp;    protected final ClientModel model;
+&nbsp;    protected final ClientControllerInterface controller;
+&nbsp;    protected final GameState state;
+&nbsp;    protected ShipBoard myShipBoard;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a GuiScreen with the specified model, controller, and game state.
+&nbsp;     *
+&nbsp;     * @param model The client model containing all game data
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     * @param state The current game state, can be null for screens not associated with a game state
+&nbsp;     */
+<b class="nc">&nbsp;    public GuiScreen(ClientModel model, ClientControllerInterface controller, GameState state) {</b>
+<b class="nc">&nbsp;        this.model = model;</b>
+<b class="nc">&nbsp;        this.controller = controller;</b>
+<b class="nc">&nbsp;        this.state = state;</b>
+<b class="nc">&nbsp;        if (state != null) this.myShipBoard = model.getMyShip();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a GuiScreen with the specified model and controller, but no game state.
+&nbsp;     * This constructor is typically used for screens that don&#39;t require a specific game state,
+&nbsp;     * such as the main menu or connection screens.
+&nbsp;     *
+&nbsp;     * @param model The client model containing all game data
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     */
+&nbsp;    public GuiScreen(ClientModel model, ClientControllerInterface controller) {
+<b class="nc">&nbsp;        this(model, controller, null);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the JavaFX Pane that represents this screen&#39;s visual elements.
+&nbsp;     * Each concrete implementation must provide the specific Pane that contains
+&nbsp;     * all the visual components for that screen.
+&nbsp;     *
+&nbsp;     * @return A JavaFX Pane containing this screen&#39;s UI elements
+&nbsp;     */
+&nbsp;    public abstract Pane getNode();
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliElement</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements</a>
+</div>
+
+<h1>Coverage Summary for Class: CliElement (it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliElement</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    44.4%
+  </span>
+  <span class="absValue">
+    (4/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a generic CLI element that can be described.
+&nbsp; * It caches the description to avoid recomputing it unnecessarily.
+&nbsp; */
+<b class="fc">&nbsp;public abstract class CliElement {</b>
+&nbsp;
+<b class="fc">&nbsp;    private boolean dirty = true;</b>
+&nbsp;    /**
+&nbsp;     * Cache for the textual description of this element.
+&nbsp;     */
+<b class="fc">&nbsp;    protected final List&lt;String&gt; descriptionCache = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Marks this element as dirty, indicating that its description needs to be recomputed.
+&nbsp;     */
+&nbsp;    public void setDirty() {
+<b class="fc">&nbsp;        this.dirty = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the cached description of this element.
+&nbsp;     * If the description is dirty, it recomputes it and updates the cache,
+&nbsp;     * calling {@link #getNewDescription()} to get the new description.
+&nbsp;     *
+&nbsp;     * @return A list of strings representing the description of this element
+&nbsp;     */
+&nbsp;    public final List&lt;String&gt; getDescription() {
+<b class="nc">&nbsp;        if (dirty) {</b>
+&nbsp;            //System.out.println(&quot;REDESCRIBE &quot;+toString());
+<b class="nc">&nbsp;            descriptionCache.clear();</b>
+<b class="nc">&nbsp;            descriptionCache.addAll(getNewDescription());</b>
+<b class="nc">&nbsp;            dirty = false;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return descriptionCache;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Abstract method to be implemented by subclasses to provide the new description.
+&nbsp;     * This method is called when the description is dirty and needs to be recomputed.
+&nbsp;     *
+&nbsp;     * @return A list of strings representing the new description of this element
+&nbsp;     */
+&nbsp;    protected abstract List&lt;String&gt; getNewDescription();
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

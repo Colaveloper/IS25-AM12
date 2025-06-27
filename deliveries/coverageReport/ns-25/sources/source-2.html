@@ -1,0 +1,166 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > EnginePowerCheck</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.adventureCards.check</a>
+</div>
+
+<h1>Coverage Summary for Class: EnginePowerCheck (it.polimi.ingsw.galaxytruckers.server.model.adventureCards.check)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EnginePowerCheck</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.adventureCards.check;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.FlightBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.AdventureState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.DeclareEnginePowerState;
+&nbsp;
+&nbsp;import java.util.Comparator;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;/**
+&nbsp; * Singleton class that implements the CombatZoneCheck interface to determine the weakest player based on engine power.
+&nbsp; * It provides a method to get the weakest player&#39;s ShipBoard and an AdventureState for declaring engine power.
+&nbsp; */
+&nbsp;public class EnginePowerCheck implements CombatZoneCheck {
+&nbsp;    private static EnginePowerCheck instance;
+&nbsp;
+<b class="fc">&nbsp;    private EnginePowerCheck() {}</b>
+&nbsp;
+&nbsp;    public static EnginePowerCheck getInstance() {
+<b class="fc">&nbsp;        if (instance == null) {</b>
+<b class="fc">&nbsp;            instance = new EnginePowerCheck();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return instance;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This implementation determines the weakest player based on engine power.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public ShipBoard getWeakestPlayer(FlightBoard flightBoard) {
+<b class="fc">&nbsp;        return flightBoard.getShipToPlace().keySet().stream()</b>
+<b class="fc">&nbsp;                .min(Comparator</b>
+<b class="fc">&nbsp;                        .comparingInt(ShipBoard::getEnginePower)</b>
+<b class="fc">&nbsp;                        .thenComparing(flightBoard.getShipToPlace()::get, Comparator.reverseOrder()))</b>
+<b class="fc">&nbsp;                .orElseThrow(IllegalStateException::new);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This implementation returns an AdventureState for declaring engine power.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public Optional&lt;AdventureState&gt; getAvailableAction(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        return Optional.of(new DeclareEnginePowerState(shipBoard));</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

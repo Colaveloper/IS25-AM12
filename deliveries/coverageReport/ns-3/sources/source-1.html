@@ -1,0 +1,457 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AdventureCardRegistry</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: AdventureCardRegistry (it.polimi.ingsw.galaxytruckers.client.controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AdventureCardRegistry</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (36/36)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (94/94)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AdventureCardRegistry$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AdventureCardRegistry$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (36/36)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (96/96)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.controller;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.core.type.TypeReference;
+&nbsp;import com.fasterxml.jackson.databind.JsonNode;
+&nbsp;import com.fasterxml.jackson.databind.ObjectMapper;
+&nbsp;import com.google.common.annotations.VisibleForTesting;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.ProjectileType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.penalty.*;
+&nbsp;
+&nbsp;import java.io.File;
+&nbsp;import java.io.IOException;
+&nbsp;import java.nio.file.Path;
+&nbsp;import java.util.*;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;/**
+&nbsp; * Singleton registry for adventure cards in the game.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class loads adventure card data from a JSON file and provides access to card metadata and image paths.
+&nbsp; * It supports retrieving the mapping from card IDs to image paths and the total number of cards.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public class AdventureCardRegistry {
+&nbsp;    private static AdventureCardRegistry instance;
+&nbsp;    private static final String jsonPath = &quot;src/main/resources/cardsReference.json&quot;;
+&nbsp;
+<b class="fc">&nbsp;    private final Map&lt;Integer, JsonNode&gt; adventureCards = new HashMap&lt;&gt;();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the singleton instance of the registry, creating it if necessary.
+&nbsp;     *
+&nbsp;     * @return the singleton instance
+&nbsp;     */
+&nbsp;    public static AdventureCardRegistry getInstance() {
+<b class="fc">&nbsp;        if (instance == null) {</b>
+<b class="fc">&nbsp;            instance = new AdventureCardRegistry();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return instance;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs the registry and loads adventure card data from the JSON file.
+&nbsp;     */
+&nbsp;    @VisibleForTesting
+<b class="fc">&nbsp;    protected AdventureCardRegistry() {</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            loadRelevantCards();</b>
+&nbsp;        } catch (IOException e) {
+<b class="fc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Loads adventure card metadata from the JSON file into the registry.
+&nbsp;     *
+&nbsp;     * @throws IOException if the file cannot be read
+&nbsp;     */
+&nbsp;    protected void loadRelevantCards() throws IOException {
+<b class="fc">&nbsp;        File jsonFile = new File(jsonPath);</b>
+<b class="fc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
+<b class="fc">&nbsp;        JsonNode rootNode = objectMapper.readTree(jsonFile);</b>
+&nbsp;
+<b class="fc">&nbsp;        for(JsonNode node : rootNode) {</b>
+<b class="fc">&nbsp;            adventureCards.put(node.get(&quot;id&quot;).asInt(), node);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns a mapping from card IDs to their image file paths.
+&nbsp;     *
+&nbsp;     * @return a map from card ID to image path
+&nbsp;     */
+&nbsp;    public Map&lt;Integer, Path&gt; getIdToImagePath() {
+<b class="fc">&nbsp;        return adventureCards.entrySet().stream()</b>
+<b class="fc">&nbsp;                .collect(Collectors.toMap(</b>
+&nbsp;                        Map.Entry::getKey,
+<b class="fc">&nbsp;                        e -&gt; Path.of(e.getValue().get(&quot;path&quot;).asText())</b>
+&nbsp;                ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the number of adventure cards in the registry.
+&nbsp;     *
+&nbsp;     * @return the number of cards
+&nbsp;     */
+&nbsp;    public int getSize() {
+<b class="fc">&nbsp;        return adventureCards.size();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves an adventure card by its ID.
+&nbsp;     *
+&nbsp;     * @param id the ID of the card
+&nbsp;     * @return the {@link AdventureCard} corresponding to the ID
+&nbsp;     */
+&nbsp;    public AdventureCard getCard(int id) {
+<b class="fc">&nbsp;        return parseAdventureCard(adventureCards.get(id));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Loads projectile information from a JSON file into a list.
+&nbsp;     * @param projectilesNode the JsonNode from which to load the list of projectiles
+&nbsp;     * @return a {@link List} of the loaded projectiles
+&nbsp;     * */
+&nbsp;    @VisibleForTesting
+&nbsp;    protected List&lt;Projectile&gt; parseProjectiles(JsonNode projectilesNode) {
+<b class="fc">&nbsp;        List&lt;Projectile&gt; projectiles = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (JsonNode node : projectilesNode) {</b>
+<b class="fc">&nbsp;            Direction direction = Direction.valueOf(node.get(1).asText().toUpperCase());</b>
+<b class="fc">&nbsp;            switch (node.get(0).asText()) {</b>
+&nbsp;                case &quot;small fire&quot;:
+<b class="fc">&nbsp;                    projectiles.add(new Projectile(0, direction, ProjectileType.SMALLFIRE));</b>
+&nbsp;                    break;
+&nbsp;                case &quot;big fire&quot;:
+<b class="fc">&nbsp;                    projectiles.add(new Projectile(0, direction, ProjectileType.BIGFIRE));</b>
+&nbsp;                    break;
+&nbsp;                case  &quot;big meteor&quot;:
+<b class="fc">&nbsp;                    projectiles.add(new Projectile(0, direction, ProjectileType.BIGMETEOR));</b>
+&nbsp;                    break;
+&nbsp;                case &quot;small meteor&quot;:
+<b class="fc">&nbsp;                    projectiles.add(new Projectile(0, direction, ProjectileType.SMALLMETEOR));</b>
+&nbsp;                    break;
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        return projectiles;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Parses a JSON node representing an adventure card into an {@link AdventureCard} object.
+&nbsp;     * Visible for testing purposes.
+&nbsp;     * @param cardNode the JsonNode representing the card
+&nbsp;     * @return the parsed {@link AdventureCard}
+&nbsp;     */
+&nbsp;    @VisibleForTesting
+&nbsp;    protected AdventureCard parseAdventureCard(JsonNode cardNode) {
+<b class="fc">&nbsp;        String type = cardNode.get(&quot;type&quot;).asText();</b>
+<b class="fc">&nbsp;        Level level = Level.valueOf(cardNode.get(&quot;level&quot;).asText().toUpperCase());</b>
+<b class="fc">&nbsp;        int id = cardNode.get(&quot;id&quot;).asInt();</b>
+&nbsp;        AdventureCard card;
+&nbsp;
+<b class="fc">&nbsp;        card = switch (type) {</b>
+<b class="fc">&nbsp;            case &quot;planets&quot; -&gt; new PlanetsCard(</b>
+&nbsp;                    level,
+<b class="fc">&nbsp;                    parsePlanets(cardNode.get(&quot;planets&quot;)),</b>
+<b class="fc">&nbsp;                    cardNode.get(&quot;flight day loss&quot;).asInt(),</b>
+&nbsp;                    id
+&nbsp;            );
+<b class="fc">&nbsp;            case &quot;pirates&quot; -&gt; new PiratesCard(</b>
+&nbsp;                    level,
+<b class="fc">&nbsp;                    cardNode.get(&quot;firePowerThreshold&quot;).asInt(),</b>
+<b class="fc">&nbsp;                    cardNode.get(&quot;credits&quot;).asInt(),</b>
+<b class="fc">&nbsp;                    cardNode.get(&quot;flight day loss&quot;).asInt(),</b>
+<b class="fc">&nbsp;                    parseProjectiles(cardNode.get(&quot;shoots&quot;)),</b>
+&nbsp;                    id
+&nbsp;            );
+<b class="fc">&nbsp;            case &quot;smugglers&quot; -&gt; new SmugglersCard(</b>
+&nbsp;                    level,
+<b class="fc">&nbsp;                    cardNode.get(&quot;penalty&quot;).asInt(),</b>
+<b class="fc">&nbsp;                    cardNode.get(&quot;cannons&quot;).asInt(),</b>
+<b class="fc">&nbsp;                    parseGoods(cardNode.get(&quot;storage&quot;)),</b>
+<b class="fc">&nbsp;                    cardNode.get(&quot;flight day loss&quot;).asInt(),</b>
+&nbsp;                    id
+&nbsp;            );
+<b class="fc">&nbsp;            case &quot;slavers&quot; -&gt; new SlaversCard(</b>
+&nbsp;                    level,
+<b class="fc">&nbsp;                    cardNode.get(&quot;penalty&quot;).asInt(),</b>
+<b class="fc">&nbsp;                    cardNode.get(&quot;cannons&quot;).asInt(),</b>
+<b class="fc">&nbsp;                    cardNode.get(&quot;credits&quot;).asInt(),</b>
+<b class="fc">&nbsp;                    cardNode.get(&quot;flight day loss&quot;).asInt(),</b>
+&nbsp;                    id
+&nbsp;            );
+<b class="fc">&nbsp;            case &quot;meteors&quot; -&gt; new MeteorSwarmCard(</b>
+&nbsp;                    level,
+<b class="fc">&nbsp;                    parseProjectiles(cardNode.get(&quot;meteors&quot;)),</b>
+&nbsp;                    id
+&nbsp;            );
+<b class="fc">&nbsp;            case &quot;epidemic&quot; -&gt; new EpidemicCard(</b>
+&nbsp;                    level,
+&nbsp;                    id
+&nbsp;            );
+<b class="fc">&nbsp;            case &quot;stardust&quot; -&gt; new StarDustCard(</b>
+&nbsp;                    level,
+&nbsp;                    id
+&nbsp;            );
+<b class="fc">&nbsp;            case &quot;abandonedShip&quot; -&gt; new AbandonedShipCard(</b>
+&nbsp;                    level,
+<b class="fc">&nbsp;                    cardNode.get(&quot;credits&quot;).asInt(),</b>
+<b class="fc">&nbsp;                    cardNode.get(&quot;people&quot;).asInt(),</b>
+<b class="fc">&nbsp;                    cardNode.get(&quot;flight day loss&quot;).asInt(),</b>
+&nbsp;                    id
+&nbsp;            );
+<b class="fc">&nbsp;            case &quot;abandonedStation&quot; -&gt; new AbandonedStationCard(</b>
+&nbsp;                    level,
+<b class="fc">&nbsp;                    parseGoods(cardNode.get(&quot;storage&quot;)),</b>
+<b class="fc">&nbsp;                    cardNode.get(&quot;people&quot;).asInt(),</b>
+<b class="fc">&nbsp;                    cardNode.get(&quot;flight day loss&quot;).asInt(),</b>
+&nbsp;                    id
+&nbsp;            );
+<b class="fc">&nbsp;            case &quot;warzone&quot; -&gt; new CombatZoneCard(</b>
+&nbsp;                    level,
+<b class="fc">&nbsp;                    parseChecks(cardNode.path(&quot;checks&quot;)),</b>
+<b class="fc">&nbsp;                    parsePenalties(cardNode.path(&quot;penalties&quot;), cardNode),</b>
+&nbsp;                    id
+&nbsp;            );
+<b class="fc">&nbsp;            case &quot;open space&quot; -&gt; new OpenSpaceCard(</b>
+&nbsp;                    level,
+&nbsp;                    id
+&nbsp;            );
+<b class="fc">&nbsp;            default -&gt; throw new IllegalArgumentException(&quot;Unknown card type: &quot; + type);</b>
+&nbsp;        };
+<b class="fc">&nbsp;        return card;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Loads planet information from a JSON file into a list.
+&nbsp;     * @param planetsNode the JsonNode from which to load the list of planets
+&nbsp;     * @return a {@link List} of the loaded planets
+&nbsp;     * */
+&nbsp;    @VisibleForTesting
+&nbsp;    protected List&lt;Map&lt;GoodsType, Integer&gt;&gt; parsePlanets(JsonNode planetsNode) {
+<b class="fc">&nbsp;        List&lt;Map&lt;GoodsType, Integer&gt;&gt; planets = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (JsonNode node : planetsNode) {</b>
+<b class="fc">&nbsp;            Map&lt;GoodsType, Integer&gt; map = parseGoods(node);</b>
+<b class="fc">&nbsp;            planets.add(map);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return planets;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Loads projectile information from a JSON file into a map.
+&nbsp;     * @param goodsNode the JsonNode from which to load the map of goods
+&nbsp;     * @return a {@link Map} of the loaded goods
+&nbsp;     * */
+&nbsp;    @VisibleForTesting
+&nbsp;    protected Map&lt;GoodsType, Integer&gt; parseGoods(JsonNode goodsNode) {
+<b class="fc">&nbsp;        Map&lt;GoodsType, Integer&gt; goods = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (GoodsType type : GoodsType.values()) {</b>
+<b class="fc">&nbsp;            goods.put(type, goodsNode.get(type.name().toLowerCase()).asInt());</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return goods;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Parses a JSON node representing checks for a combat zone card into a list of {@link CombatZoneCheck}.
+&nbsp;     * @param checkNode the JsonNode representing the checks
+&nbsp;     * @return a list of {@link CombatZoneCheck} objects
+&nbsp;     */
+&nbsp;    @VisibleForTesting
+&nbsp;    protected List&lt;CombatZoneCheck&gt; parseChecks(JsonNode checkNode) {
+<b class="fc">&nbsp;        List&lt;String&gt; checkNames = new ObjectMapper().convertValue(checkNode, new TypeReference&lt;&gt;(){});</b>
+<b class="fc">&nbsp;        List&lt;CombatZoneCheck&gt; checks = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (String name : checkNames) {</b>
+<b class="fc">&nbsp;            checks.add(switch (name) {</b>
+<b class="fc">&nbsp;                case &quot;min cannons&quot; -&gt; CombatZoneCheck.FIREPOWER;</b>
+<b class="fc">&nbsp;                case &quot;min engine&quot; -&gt; CombatZoneCheck.ENGINEPOWER;</b>
+<b class="fc">&nbsp;                case &quot;min crew&quot; -&gt; CombatZoneCheck.CREWSIZE;</b>
+<b class="fc">&nbsp;                default -&gt; throw new IllegalArgumentException(&quot;Unknown check name: &quot; + name);</b>
+&nbsp;            });
+&nbsp;        }
+<b class="fc">&nbsp;        return checks;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Parses a JSON node representing penalties for a combat zone card into a list of {@link Penalty} objects.
+&nbsp;     * @param penaltiesNode the JsonNode representing the penalties
+&nbsp;     * @param cardNode the JsonNode representing the card, used to retrieve specific penalty values
+&nbsp;     * @return a list of {@link Penalty} objects
+&nbsp;     */
+&nbsp;    @VisibleForTesting
+&nbsp;    protected List&lt;Penalty&gt; parsePenalties(JsonNode penaltiesNode, JsonNode cardNode) {
+<b class="fc">&nbsp;        List&lt;Penalty&gt; penalties = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        List&lt;String&gt; penaltiesNames = new ObjectMapper().convertValue(penaltiesNode, new TypeReference&lt;&gt;(){});</b>
+<b class="fc">&nbsp;        for (String name : penaltiesNames) {</b>
+<b class="fc">&nbsp;            penalties.add(switch (name) {</b>
+<b class="fc">&nbsp;                case &quot;loses flight days&quot; -&gt; new FlightDaysLoss(cardNode.path(&quot;flight day loss&quot;).asInt());</b>
+<b class="fc">&nbsp;                case &quot;loses goods&quot; -&gt; new GoodsLoss(cardNode.path(&quot;storage&quot;).asInt());</b>
+<b class="fc">&nbsp;                case &quot;gets shot&quot; -&gt; new ProjectileThreat(parseProjectiles(cardNode.path(&quot;shoots&quot;)));</b>
+<b class="fc">&nbsp;                case &quot;loses crew&quot; -&gt; new CrewLoss(cardNode.path(&quot;crew loss&quot;).asInt());</b>
+<b class="fc">&nbsp;                default -&gt; throw new IllegalArgumentException(&quot;Unknown penalty name: &quot; + name);</b>
+&nbsp;            });
+&nbsp;        }
+<b class="fc">&nbsp;        return penalties;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

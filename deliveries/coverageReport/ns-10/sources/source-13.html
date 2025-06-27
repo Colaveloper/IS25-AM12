@@ -1,0 +1,232 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiStatBox</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiStatBox (it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiStatBox</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/43)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.geometry.Insets;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.layout.Background;
+&nbsp;import javafx.scene.layout.BackgroundFill;
+&nbsp;import javafx.scene.layout.ColumnConstraints;
+&nbsp;import javafx.scene.layout.CornerRadii;
+&nbsp;import javafx.scene.layout.GridPane;
+&nbsp;import javafx.scene.layout.Priority;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;import javafx.scene.text.Font;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI component for displaying ship statistics in a styled box.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class displays various statistics of a {@link ShipBoard} in a grid layout, such as crew, cargo, and other ship attributes.
+&nbsp; * The box is styled with a background and padding, and updates its display based on the current state of the ship board.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public class GuiStatBox extends PurpleVBox {
+&nbsp;
+&nbsp;    private final ShipBoard shipBoard;
+&nbsp;    private final GridPane grid;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a GuiStatBox for the given ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board whose statistics are to be displayed
+&nbsp;     */
+<b class="nc">&nbsp;    public GuiStatBox(ShipBoard shipBoard) {</b>
+<b class="nc">&nbsp;        this.shipBoard = shipBoard;</b>
+<b class="nc">&nbsp;        this.grid = new GridPane();</b>
+<b class="nc">&nbsp;        setupContainer();</b>
+<b class="nc">&nbsp;        buildGrid();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets up the container&#39;s layout, background, and padding.
+&nbsp;     */
+&nbsp;    private void setupContainer() {
+<b class="nc">&nbsp;        this.setSpacing(0);</b>
+<b class="nc">&nbsp;        this.setPadding(new Insets(10));</b>
+<b class="nc">&nbsp;        this.setBackground(new Background(new BackgroundFill(</b>
+<b class="nc">&nbsp;                Color.rgb(10, 20, 50, 0.7),</b>
+&nbsp;                new CornerRadii(8),
+&nbsp;                Insets.EMPTY
+&nbsp;        )));
+&nbsp;        // allow grid to fill horizontally
+<b class="nc">&nbsp;        this.setFillWidth(true);</b>
+<b class="nc">&nbsp;        grid.setMaxWidth(Double.MAX_VALUE);</b>
+<b class="nc">&nbsp;        this.getChildren().add(grid);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Builds and populates the statistics grid with the current ship board data.
+&nbsp;     */
+&nbsp;    private void buildGrid() {
+&nbsp;        // clear old content and constraints
+<b class="nc">&nbsp;        grid.getChildren().clear();</b>
+<b class="nc">&nbsp;        grid.getColumnConstraints().clear();</b>
+&nbsp;
+<b class="nc">&nbsp;        grid.setHgap(15);</b>
+<b class="nc">&nbsp;        grid.setVgap(8);</b>
+<b class="nc">&nbsp;        grid.setPadding(new Insets(10, 15, 10, 20));</b>
+&nbsp;
+&nbsp;        // define six equal-width columns
+<b class="nc">&nbsp;        for (int i = 0; i &lt; 6; i++) {</b>
+<b class="nc">&nbsp;            ColumnConstraints cc = new ColumnConstraints();</b>
+<b class="nc">&nbsp;            cc.setHgrow(Priority.ALWAYS);</b>
+<b class="nc">&nbsp;            cc.setPercentWidth(100.0 / 6);</b>
+<b class="nc">&nbsp;            grid.getColumnConstraints().add(cc);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // header row labels
+<b class="nc">&nbsp;        String[] headers = {&quot;Cannons&quot;, &quot;Engines&quot;, &quot;Batteries&quot;, &quot;Crew&quot;, &quot;Credits&quot;, &quot;Losses&quot;};</b>
+<b class="nc">&nbsp;        for (int col = 0; col &lt; headers.length; col++) {</b>
+<b class="nc">&nbsp;            Label lbl = createLabel(headers[col], 12);</b>
+<b class="nc">&nbsp;            grid.add(lbl, col, 0);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // stat values row
+&nbsp;        //int fire = shipBoard.getFirePower() / 2;
+<b class="nc">&nbsp;        String lossVal = shipBoard.getLosses() != 0 ? String.valueOf(shipBoard.getLosses()) : &quot;-&quot;;</b>
+<b class="nc">&nbsp;        String[] values = {String.format(&quot;%.1f&quot;, shipBoard.getFirePower() / 2.0),</b>
+<b class="nc">&nbsp;                String.valueOf(shipBoard.getEnginePower()),</b>
+<b class="nc">&nbsp;                String.valueOf(shipBoard.getNumBatteries()),</b>
+<b class="nc">&nbsp;                String.valueOf(shipBoard.getCrewSize()),</b>
+<b class="nc">&nbsp;                String.valueOf(shipBoard.getCredits()),</b>
+&nbsp;                lossVal};
+<b class="nc">&nbsp;        for (int col = 0; col &lt; values.length; col++) {</b>
+<b class="nc">&nbsp;            Label valLbl = createLabel(values[col], 11);</b>
+<b class="nc">&nbsp;            grid.add(valLbl, col, 1);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private Label createLabel(String text, double fontSize) {
+<b class="nc">&nbsp;        Label lbl = new Label(text);</b>
+<b class="nc">&nbsp;        lbl.setFont(new Font(&quot;Arial&quot;, fontSize));</b>
+<b class="nc">&nbsp;        lbl.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;        GridPane.setHgrow(lbl, Priority.ALWAYS);</b>
+<b class="nc">&nbsp;        lbl.setMaxWidth(Double.MAX_VALUE);</b>
+<b class="nc">&nbsp;        lbl.setAlignment(javafx.geometry.Pos.CENTER);</b>
+<b class="nc">&nbsp;        return lbl;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Refreshes the stat grid when underlying ShipBoard changes.
+&nbsp;     */
+&nbsp;    public void notifyChange() {
+<b class="nc">&nbsp;        Platform.runLater(this::buildGrid);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

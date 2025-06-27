@@ -1,0 +1,278 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiForecast</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiForecast (it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiForecast</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/47)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens.GuiController;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.AdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.scene.image.ImageView;
+&nbsp;import javafx.scene.layout.StackPane;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;import javafx.scene.shape.Rectangle;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI component representing the forecast area in the game.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class displays the forecast slots, showing which forecasts are blocked by ships and which are free.
+&nbsp; * Users can interact with the slots to acquire forecasts. The display updates automatically based on the
+&nbsp; * current state of the blocked forecasts.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public class GuiForecast extends PurpleHBox {
+&nbsp;    private final GuiController controller;
+&nbsp;    private final List&lt;StackPane&gt; slots;
+&nbsp;    private final ShipBoard[] blockedForecasts;
+&nbsp;    private boolean meWatching;
+&nbsp;
+&nbsp;    private static final int SLOT_SIZE = 30;
+<b class="nc">&nbsp;    double cardWidth = 60;</b>
+<b class="nc">&nbsp;    double cardHeight = 90;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a GuiForecast for the given blocked forecasts and controller.
+&nbsp;     *
+&nbsp;     * @param blockedForecasts array of ships blocking each forecast slot (null if free)
+&nbsp;     * @param controller the GUI controller handling actions
+&nbsp;     */
+&nbsp;    public GuiForecast(ShipBoard[] blockedForecasts, GuiController controller) {
+<b class="nc">&nbsp;        super(10);</b>
+<b class="nc">&nbsp;        this.controller = controller;</b>
+<b class="nc">&nbsp;        this.slots = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        this.blockedForecasts = blockedForecasts;</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; blockedForecasts.length; i++) {</b>
+<b class="nc">&nbsp;            StackPane slot = new StackPane();</b>
+<b class="nc">&nbsp;            slot.setPrefSize(SLOT_SIZE, SLOT_SIZE);</b>
+<b class="nc">&nbsp;            slots.add(slot);</b>
+<b class="nc">&nbsp;            getChildren().add(slot);</b>
+&nbsp;
+&nbsp;        }
+<b class="nc">&nbsp;        updateCoveredDecks();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the display of the forecast slots based on the current blocked forecasts.
+&nbsp;     */
+&nbsp;    private void updateCoveredDecks() {
+<b class="nc">&nbsp;        for (int i = 0; i &lt; blockedForecasts.length; i++) {</b>
+<b class="nc">&nbsp;            slots.get(i).getChildren().clear();</b>
+&nbsp;
+<b class="nc">&nbsp;            ShipBoard shipBoard = blockedForecasts[i];</b>
+<b class="nc">&nbsp;            if (shipBoard == null) {</b>
+<b class="nc">&nbsp;                slots.get(i).getChildren().add(createFreeForecast());</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                slots.get(i).getChildren().add(createTakenForecast(shipBoard));</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            int finalI = i;</b>
+<b class="nc">&nbsp;            slots.get(i).setOnMouseClicked(_ -&gt; controller.acquireForecast(finalI));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private Rectangle createFreeForecast() {
+<b class="nc">&nbsp;        return createCardBase(Color.LIGHTGRAY);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Rectangle createTakenForecast(ShipBoard shipBoard) {
+<b class="nc">&nbsp;        Rectangle card = createCardBase(GameColorGuiMapper.toJfxColor(shipBoard.getColor()));</b>
+<b class="nc">&nbsp;        card.setOnMouseClicked(_-&gt;controller.releaseForecast());</b>
+<b class="nc">&nbsp;        return card;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Rectangle createCardBase(Color fillColor) {
+<b class="nc">&nbsp;        double arc = 12;</b>
+&nbsp;
+<b class="nc">&nbsp;        Rectangle card = new Rectangle(cardWidth, cardHeight);</b>
+<b class="nc">&nbsp;        card.setArcWidth(arc);</b>
+<b class="nc">&nbsp;        card.setArcHeight(arc);</b>
+<b class="nc">&nbsp;        card.setFill(fillColor);</b>
+<b class="nc">&nbsp;        return card;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the GUI that another player is peeking at a forecast slot.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * If the current user is not watching, this method updates the forecast display.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     * @param shipBoard the ship peeking at the forecast
+&nbsp;     * @param deckIndex the index of the forecast deck being peeked at
+&nbsp;     */
+&nbsp;    public void notifyOtherPeekForecast(ShipBoard shipBoard, int deckIndex) {
+<b class="nc">&nbsp;        Platform.runLater(()-&gt; {</b>
+<b class="nc">&nbsp;            if (meWatching) return;</b>
+<b class="nc">&nbsp;            updateCoveredDecks();</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the GUI that another player has released a forecast slot.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * If the current user is not watching, this method updates the forecast display.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     * @param shipBoard the ship releasing the forecast
+&nbsp;     * @param deckIndex the index of the forecast deck being released
+&nbsp;     */
+&nbsp;    public void notifyOtherReleaseForecast(ShipBoard shipBoard, int deckIndex) {
+<b class="nc">&nbsp;        Platform.runLater(()-&gt; {</b>
+<b class="nc">&nbsp;            if (meWatching) return;</b>
+<b class="nc">&nbsp;            updateCoveredDecks();</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the GUI that the current user is peeking at the forecast area.
+&nbsp;     * Sets the internal flag to indicate the user is watching.
+&nbsp;     */
+&nbsp;    public void notifyMePeekForecast() {
+<b class="nc">&nbsp;        meWatching = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the forecast deck to display the given adventure cards.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method updates the forecast slots to show the specified adventure cards.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     * @param adventureCards the list of adventure cards to display
+&nbsp;     */
+&nbsp;    public void setForecastDeck(List&lt;AdventureCard&gt; adventureCards) {
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc">&nbsp;            for (int i = 0; i &lt; slots.size(); i++) {</b>
+<b class="nc">&nbsp;                AdventureCard adventureCard = adventureCards.get(i);</b>
+<b class="nc">&nbsp;                ImageView adventureCardView = new GuiAdventureCard(adventureCard.getId());</b>
+<b class="nc">&nbsp;                adventureCardView.setFitWidth(cardWidth);</b>
+<b class="nc">&nbsp;                adventureCardView.setFitHeight(cardHeight);</b>
+<b class="nc">&nbsp;                slots.get(i).getChildren().setAll(adventureCardView);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the GUI that the current user has released the forecast area.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method resets the internal watching flag and updates the forecast display.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     */
+&nbsp;    public void notifyMeReleaseForecast() {
+<b class="nc">&nbsp;        Platform.runLater(()-&gt; {</b>
+<b class="nc">&nbsp;            meWatching = false;</b>
+<b class="nc">&nbsp;            updateCoveredDecks();</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

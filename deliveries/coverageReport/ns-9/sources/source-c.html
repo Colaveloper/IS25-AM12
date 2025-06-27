@@ -1,0 +1,154 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > HandleProjectileState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.model.state</a>
+</div>
+
+<h1>Coverage Summary for Class: HandleProjectileState (it.polimi.ingsw.galaxytruckers.client.model.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HandleProjectileState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.model.state;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.Projectile;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents the state where players handle incoming projectiles in the Galaxy Truckers game.
+&nbsp; * This state is triggered when a ship encounters a projectile during flight and needs to
+&nbsp; * activate shields or handle the resulting damage. Only specific components can be activated
+&nbsp; * to defend against projectiles.
+&nbsp; */
+&nbsp;public final class HandleProjectileState extends ActivateState implements GameStateInterface {
+&nbsp;    /** The projectile that the player&#39;s ship is currently handling */
+&nbsp;    private final Projectile projectile;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new HandleProjectileState with the specified parameters.
+&nbsp;     * Initializes the state with the player&#39;s ship, the currently active ship,
+&nbsp;     * the incoming projectile, and the available positions for shield activation.
+&nbsp;     *
+&nbsp;     * @param myShip The ship board of the local player
+&nbsp;     * @param shipBoard The ship board that is currently active
+&nbsp;     * @param projectile The incoming projectile that needs to be handled
+&nbsp;     * @param availablePositions Set of positions where shield components can be activated
+&nbsp;     */
+&nbsp;    public HandleProjectileState(ShipBoard myShip, ShipBoard shipBoard, Projectile projectile, Set&lt;Point&gt; availablePositions) {
+<b class="fc">&nbsp;        super(myShip, shipBoard, availablePositions);</b>
+<b class="fc">&nbsp;        this.projectile = projectile;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRemoveComponent(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        shipBoard.removeComponent(point);</b>
+<b class="fc">&nbsp;        shipBoard.incrementLosses(1);</b>
+<b class="fc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyRemoveComponent(shipBoard, point));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the projectile that the ship is currently handling.
+&nbsp;     * This projectile represents the incoming threat that the player must defend against.
+&nbsp;     *
+&nbsp;     * @return The projectile being handled in this state
+&nbsp;     */
+&nbsp;    public Projectile getProjectile() {
+<b class="fc">&nbsp;        return projectile;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,224 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiAdventureScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiAdventureScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiAdventureScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/25)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements.GuiAdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.AdventureState;
+&nbsp;import javafx.geometry.Pos;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.layout.VBox;
+&nbsp;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract base class for all adventure phase screens in Galaxy Truckers.
+&nbsp; * This screen is displayed during the adventure phase of the game when players
+&nbsp; * are encountering adventure cards such as pirates, planets, or other space events.
+&nbsp; * It extends the GuiGameScreen to provide adventure-specific UI elements and functionality.
+&nbsp; */
+&nbsp;public abstract class GuiAdventureScreen extends GuiGameScreen {
+&nbsp;
+&nbsp;    protected final AdventureState state;
+&nbsp;
+&nbsp;    /** Container for displaying the current adventure card */
+&nbsp;    protected VBox cardBox;
+&nbsp;    
+&nbsp;    /**
+&nbsp;     * Constructs a GuiAdventureScreen with the specified model, controller, and adventure state.
+&nbsp;     * Initializes the adventure-specific UI elements including a &quot;Give Up&quot; button that allows
+&nbsp;     * players to surrender from the current game.
+&nbsp;     *
+&nbsp;     * @param model The client model containing all game data
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     * @param gameState The current adventure state
+&nbsp;     */
+&nbsp;    public GuiAdventureScreen(ClientModel model, ClientControllerInterface controller, AdventureState gameState) {
+<b class="nc">&nbsp;        super(model, controller, gameState);</b>
+<b class="nc">&nbsp;        this.state = gameState;</b>
+<b class="nc">&nbsp;        Button giveUpButton = new Button(&quot;Give Up&quot;);</b>
+<b class="nc">&nbsp;        giveUpButton.setOnAction(e -&gt; {</b>
+<b class="nc">&nbsp;            controller.giveUp();</b>
+<b class="nc">&nbsp;            guiLog.log(&quot;You&#39;ve given up, but you must continue playing this card. Giving up will take effect at the end of the card.&quot;);</b>
+&nbsp;        });
+<b class="nc">&nbsp;        guiButtonBox.getChildren().add(giveUpButton);</b>
+<b class="nc">&nbsp;        guiLog.log(&quot;It&#39;s &quot; + model.getPlayerByShip(state.getShipBoard()).getNickname() + &quot;&#39;s turn now.&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Determines whether it&#39;s the current player&#39;s turn in the adventure phase.
+&nbsp;     * This is used to enable or disable UI controls based on turn status.
+&nbsp;     *
+&nbsp;     * @return true if it&#39;s the current player&#39;s turn, false otherwise
+&nbsp;     */
+&nbsp;    protected boolean isMyTurn() {
+<b class="nc">&nbsp;        return state.getShipBoard() == myShipBoard;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates the flexible use vertical box containing the adventure card display.
+&nbsp;     * If the player has surrendered, it displays a message instead of the card.
+&nbsp;     * This area shows the current adventure card that players are dealing with.
+&nbsp;     *
+&nbsp;     * @return A VBox containing either the current adventure card or a surrender message
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    protected VBox getFreeUseVBox() {
+<b class="nc">&nbsp;        cardBox = new VBox(5);</b>
+<b class="nc">&nbsp;        if (state.getGame().getGivenUpShips().contains(myShipBoard)) {</b>
+<b class="nc">&nbsp;            Label surrenderLabel = new Label(&quot;You&#39;ve surrendered, watch other players compete.&quot;);</b>
+<b class="nc">&nbsp;            surrenderLabel.setStyle(&quot;-fx-text-fill: white;&quot;);</b>
+<b class="nc">&nbsp;            cardBox.getChildren().add(surrenderLabel);</b>
+<b class="nc">&nbsp;            return cardBox;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        cardBox.setAlignment(Pos.CENTER);</b>
+<b class="nc">&nbsp;        guiAdventureCard().ifPresent((guiAdventureCard)-&gt; {</b>
+<b class="nc">&nbsp;            guiAdventureCard.setFitHeight(200);</b>
+<b class="nc">&nbsp;            cardBox.getChildren().add(guiAdventureCard);</b>
+&nbsp;        });
+<b class="nc">&nbsp;        return cardBox;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a vertical box containing the specified ship board.
+&nbsp;     * This method provides a simple implementation that just displays the ship board
+&nbsp;     * without additional UI elements that might be present in other game phases.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board to be displayed
+&nbsp;     * @return A VBox containing the ship board
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    protected VBox getShipBoardVBox(ShipBoard shipBoard) {
+<b class="nc">&nbsp;        VBox getShipBoardVBox = new VBox(5);</b>
+<b class="nc">&nbsp;        getShipBoardVBox.setAlignment(Pos.CENTER);</b>
+<b class="nc">&nbsp;        getShipBoardVBox.getChildren().addAll(guiShipBoards.get(shipBoard));</b>
+<b class="nc">&nbsp;        return getShipBoardVBox;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a GUI representation of the current adventure card if one exists.
+&nbsp;     * This method encapsulates the logic for retrieving and displaying the current card.
+&nbsp;     *
+&nbsp;     * @return An Optional containing the GUI adventure card, or empty if no card is present
+&nbsp;     */
+&nbsp;    protected Optional&lt;GuiAdventureCard&gt; guiAdventureCard() {
+<b class="nc">&nbsp;        return state.getCurrentCard() == null ? Optional.empty() : Optional.of(new GuiAdventureCard(state.getCurrentCard().getId()));</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

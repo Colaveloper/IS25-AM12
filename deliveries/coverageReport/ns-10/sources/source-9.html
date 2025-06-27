@@ -1,0 +1,256 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiComponentBank</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiComponentBank (it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiComponentBank</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/53)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiElements;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens.GuiController;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ComponentBank;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.geometry.Insets;
+&nbsp;import javafx.geometry.Pos;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.Control;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.layout.*;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;import javafx.scene.text.Font;
+&nbsp;import javafx.scene.text.FontWeight;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI component representing the player&#39;s component bank in the game.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class displays the covered and rejected components, and provides controls for drawing and rejecting components.
+&nbsp; * It interacts with the {@link GuiController} to handle user actions and updates the display accordingly.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public class GuiComponentBank extends HBox {
+&nbsp;
+&nbsp;    private final GuiController controller;
+&nbsp;    private final Label coveredNLabel;
+&nbsp;    private final FlowPane rejectedContainer; // Changed to FlowPane
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a GuiComponentBank for the given component bank and controller.
+&nbsp;     *
+&nbsp;     * @param componentBank the component bank model to represent
+&nbsp;     * @param controller the GUI controller handling actions
+&nbsp;     */
+<b class="nc">&nbsp;    public GuiComponentBank(ComponentBank componentBank, GuiController controller) {</b>
+<b class="nc">&nbsp;        this.controller = controller;</b>
+&nbsp;
+<b class="nc">&nbsp;        setMaxWidth(Double.MAX_VALUE);</b>
+<b class="nc">&nbsp;        setSpacing(5);</b>
+<b class="nc">&nbsp;        setPadding(new Insets(5));</b>
+<b class="nc">&nbsp;        setAlignment(Pos.TOP_LEFT);</b>
+<b class="nc">&nbsp;        HBox.setHgrow(this, Priority.ALWAYS);</b>
+&nbsp;
+&nbsp;        // === Left container ===
+<b class="nc">&nbsp;        VBox coveredBox = new VBox(5);</b>
+&nbsp;
+<b class="nc">&nbsp;        Button plusButton = new Button(&quot;+&quot;);</b>
+<b class="nc">&nbsp;        plusButton.setFont(Font.font(&quot;Arial&quot;, FontWeight.BOLD, 24));</b>
+<b class="nc">&nbsp;        plusButton.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;        plusButton.setStyle(&quot;-fx-background-color: #2196F3;&quot;);</b>
+<b class="nc">&nbsp;        plusButton.setPrefSize(50, 50);</b>
+<b class="nc">&nbsp;        plusButton.setOnMouseClicked(_ -&gt; controller.requestRandComponent());</b>
+&nbsp;
+<b class="nc">&nbsp;        coveredNLabel = new Label(Integer.toString(componentBank.getCoveredComponentsN()));</b>
+<b class="nc">&nbsp;        coveredNLabel.setFont(Font.font(14));</b>
+<b class="nc">&nbsp;        coveredNLabel.setTextFill(Color.GRAY);</b>
+&nbsp;
+<b class="nc">&nbsp;        coveredBox.getChildren().addAll(plusButton, coveredNLabel);</b>
+&nbsp;
+<b class="nc">&nbsp;        HBox uncoveredBox = new HBox(10);</b>
+&nbsp;
+<b class="nc">&nbsp;        Button minusButton = new Button(&quot;-&quot;);</b>
+<b class="nc">&nbsp;        minusButton.setFont(Font.font(&quot;Arial&quot;, FontWeight.BOLD, 24));</b>
+<b class="nc">&nbsp;        minusButton.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;        minusButton.setStyle(&quot;-fx-background-color: #2196F3;&quot;);</b>
+<b class="nc">&nbsp;        minusButton.setPrefSize(50, 50);</b>
+<b class="nc">&nbsp;        minusButton.setOnMouseClicked(_ -&gt; controller.rejectComponent());</b>
+&nbsp;
+&nbsp;        // flowpane for rejected components
+<b class="nc">&nbsp;        rejectedContainer = new FlowPane();</b>
+<b class="nc">&nbsp;        rejectedContainer.setHgap(0);</b>
+<b class="nc">&nbsp;        rejectedContainer.setVgap(0);</b>
+<b class="nc">&nbsp;        rejectedContainer.setPrefWidth(Control.USE_COMPUTED_SIZE);</b>
+<b class="nc">&nbsp;        rejectedContainer.setMaxWidth(Double.MAX_VALUE);</b>
+<b class="nc">&nbsp;        HBox.setHgrow(rejectedContainer, Priority.ALWAYS);</b>
+&nbsp;
+<b class="nc">&nbsp;        rejectedContainer.setStyle(</b>
+&nbsp;            &quot;-fx-background-color: rgba(20, 20, 40, 0.7);&quot; +
+&nbsp;            &quot;-fx-border-color: rgba(100, 100, 200, 0.8);&quot; +
+&nbsp;            &quot;-fx-border-width: 1px;&quot; +
+&nbsp;            &quot;-fx-border-radius: 5px;&quot; +
+&nbsp;            &quot;-fx-background-radius: 5px;&quot; +
+&nbsp;            &quot;-fx-padding: 10px;&quot;
+&nbsp;        );
+&nbsp;
+<b class="nc">&nbsp;        VBox.setVgrow(rejectedContainer, Priority.ALWAYS);</b>
+<b class="nc">&nbsp;        rejectedContainer.setPrefWrapLength(1500);</b>
+&nbsp;
+<b class="nc">&nbsp;        componentBank.getUncoveredComponents().forEach(component -&gt; {</b>
+<b class="nc">&nbsp;            GuiComponent newComponent = new GuiComponent(component);</b>
+<b class="nc">&nbsp;            rejectedContainer.getChildren().add(newComponent);</b>
+<b class="nc">&nbsp;            newComponent.setOnMouseClicked(_ -&gt;</b>
+<b class="nc">&nbsp;                    controller.requestComponent(component.getId())</b>
+&nbsp;            );
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        uncoveredBox.getChildren().addAll(minusButton, rejectedContainer);</b>
+&nbsp;
+<b class="nc">&nbsp;        getChildren().addAll(coveredBox, uncoveredBox);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the label to reflect one less covered component after a random draw.
+&nbsp;     */
+&nbsp;    public void notifyRequestRandComponent() {
+<b class="nc">&nbsp;        Platform.runLater(()-&gt; coveredNLabel.setText(Integer.toString(</b>
+<b class="nc">&nbsp;                Integer.parseInt(coveredNLabel.getText()) - 1)</b>
+&nbsp;        ));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds a rejected component to the rejected container in the GUI.
+&nbsp;     *
+&nbsp;     * @param component the component to add to the rejected list
+&nbsp;     */
+&nbsp;    public void notifyRejectComponent(Component component) {
+<b class="nc">&nbsp;        Platform.runLater(()-&gt; {</b>
+<b class="nc">&nbsp;            GuiComponent newComponent = new GuiComponent(component);</b>
+<b class="nc">&nbsp;            rejectedContainer.getChildren().add(newComponent);</b>
+<b class="nc">&nbsp;            newComponent.setOnMouseClicked(_ -&gt;</b>
+<b class="nc">&nbsp;                    controller.requestComponent(component.getId())</b>
+&nbsp;            );
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes a component from the rejected container when it is requested by the player.
+&nbsp;     *
+&nbsp;     * @param component the component to remove from the rejected list
+&nbsp;     */
+&nbsp;    public void notifyRequestComponent(Component component) {
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc">&nbsp;            rejectedContainer.getChildren().stream()</b>
+<b class="nc">&nbsp;                    .filter(node -&gt; node instanceof GuiComponent gui &amp;&amp; gui.hasId(component.getId()))</b>
+<b class="nc">&nbsp;                    .findFirst()</b>
+<b class="nc">&nbsp;                    .ifPresent(node -&gt; rejectedContainer.getChildren().remove(node));</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

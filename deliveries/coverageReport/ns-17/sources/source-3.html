@@ -1,0 +1,266 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SessionManager</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.network.server</a>
+</div>
+
+<h1>Coverage Summary for Class: SessionManager (it.polimi.ingsw.galaxytruckers.network.server)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SessionManager</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    72.7%
+  </span>
+  <span class="absValue">
+    (8/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    41.7%
+  </span>
+  <span class="absValue">
+    (5/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (24/40)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.network.server;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.ServerControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.lobby.Player;
+&nbsp;
+&nbsp;import java.time.Instant;
+&nbsp;import java.util.*;
+&nbsp;import java.util.concurrent.Executors;
+&nbsp;import java.util.concurrent.ScheduledExecutorService;
+&nbsp;import java.util.concurrent.TimeUnit;
+&nbsp;
+&nbsp;/**
+&nbsp; * Manages client sessions, allowing registration, unregistration, and cleanup of client handlers.
+&nbsp; * It also provides methods to check if a player is active and to ping a player to update their session.
+&nbsp; */
+&nbsp;public class SessionManager {
+&nbsp;    private static SessionManager instance;
+&nbsp;
+&nbsp;    private final Map&lt;Player, Session&gt; activeSessions;
+&nbsp;    private final ScheduledExecutorService scheduler;
+&nbsp;    private ServerControllerInterface serverController;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the singleton instance of SessionManager.
+&nbsp;     * If the instance is null, it creates a new one.
+&nbsp;     *
+&nbsp;     * @return the singleton instance of SessionManager
+&nbsp;     */
+&nbsp;    public static SessionManager getInstance() {
+<b class="fc">&nbsp;        if (instance == null) {</b>
+<b class="fc">&nbsp;            instance = new SessionManager();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return instance;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private SessionManager() {</b>
+<b class="fc">&nbsp;        this.activeSessions = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.scheduler = Executors.newScheduledThreadPool(1);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the server controller for this session manager.
+&nbsp;     * This controller is used to handle player disconnections.
+&nbsp;     *
+&nbsp;     * @param serverController the server controller to set
+&nbsp;     */
+&nbsp;    public void setServerController(ServerControllerInterface serverController) {
+<b class="nc">&nbsp;        this.serverController = serverController;</b>
+<b class="nc">&nbsp;        this.scheduler.scheduleAtFixedRate(this::cleanup, 5, 5, TimeUnit.SECONDS);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Registers a client with the session manager.
+&nbsp;     *
+&nbsp;     * @param player the player associated with the client
+&nbsp;     * @param client the player&#39;s client handler
+&nbsp;     */
+&nbsp;    public void registerClient(Player player, ClientHandler client) {
+<b class="fc">&nbsp;        synchronized (activeSessions) {</b>
+<b class="fc">&nbsp;            activeSessions.put(player, new Session(client, Instant.now()));</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Unregisters a client from the session manager.
+&nbsp;     * If the client is found, it stops the associated client handler.
+&nbsp;     *
+&nbsp;     * @param player the player whose client is to be unregistered
+&nbsp;     */
+&nbsp;    public void unregisterClient(Player player) {
+&nbsp;        Session session;
+<b class="fc">&nbsp;        synchronized (activeSessions) {</b>
+<b class="fc">&nbsp;            session = activeSessions.remove(player);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="pc">&nbsp;        if(session != null){</b>
+<b class="fc">&nbsp;            session.getClientHandler().stop();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Clears all active sessions.
+&nbsp;     */
+&nbsp;    public void clear() {
+<b class="fc">&nbsp;        synchronized (activeSessions) {</b>
+<b class="fc">&nbsp;            activeSessions.clear();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the client handler associated with a player.
+&nbsp;     *
+&nbsp;     * @param player the player whose client handler is requested
+&nbsp;     * @return the client handler for the player, or null if the player is not active
+&nbsp;     */
+&nbsp;    public ClientHandler getClient(Player player) {
+<b class="fc">&nbsp;        synchronized (activeSessions) {</b>
+<b class="fc">&nbsp;            if (activeSessions.containsKey(player)) {</b>
+<b class="fc">&nbsp;                return activeSessions.get(player).getClientHandler();</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return null;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if a player is currently active in the session manager.
+&nbsp;     *
+&nbsp;     * @param player the player to check
+&nbsp;     * @return true if the player is active, false otherwise
+&nbsp;     */
+&nbsp;    public boolean isPlayerActive(Player player) {
+<b class="fc">&nbsp;        synchronized (activeSessions) {</b>
+<b class="fc">&nbsp;            return activeSessions.containsKey(player);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the last ping time for a player, indicating that the player is still active.
+&nbsp;     *
+&nbsp;     * @param player the player to ping
+&nbsp;     */
+&nbsp;    public void ping(Player player) {
+<b class="nc">&nbsp;        synchronized (activeSessions) {</b>
+<b class="nc">&nbsp;            if (activeSessions.containsKey(player)) {</b>
+<b class="nc">&nbsp;                Session session = activeSessions.get(player);</b>
+<b class="nc">&nbsp;                session.setLastPing(Instant.now());</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Shuts down the session manager, stopping the cleanup scheduler, charged
+&nbsp;     * with checking for expired sessions.
+&nbsp;     */
+&nbsp;    public void shutDown() {
+<b class="fc">&nbsp;        scheduler.shutdown();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void cleanup() {
+<b class="nc">&nbsp;        synchronized (activeSessions) {</b>
+<b class="nc">&nbsp;            Instant now = Instant.now();</b>
+<b class="nc">&nbsp;            Set&lt;Player&gt; activePlayers = new HashSet&lt;&gt;(activeSessions.keySet());</b>
+<b class="nc">&nbsp;            for (Player player : activePlayers) {</b>
+<b class="nc">&nbsp;                if (activeSessions.get(player).isExpired(now)) {</b>
+<b class="nc">&nbsp;                    serverController.handlePlayerDisconnection(player);</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,400 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ModelObserver</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view</a>
+</div>
+
+<h1>Coverage Summary for Class: ModelObserver (it.polimi.ingsw.galaxytruckers.client.view)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">ModelObserver$MockitoMock$U9Xqh3ci</td>
+  </tr>
+  <tr>
+    <td class="name">ModelObserver$MockitoMock$U9Xqh3ci$auxiliary$d5H5AX9J</td>
+  </tr>
+  <tr>
+    <td class="name">ModelObserver$MockitoMock$U9Xqh3ci$auxiliary$RolHElOB</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Lobby;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.MetaState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Player;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.AdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.GameState;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;/**
+&nbsp; * Observer interface for model changes in the Galaxy Truckers game.
+&nbsp; * Implements the Observer pattern to notify view components about model state changes.
+&nbsp; * Contains methods for receiving notifications about various game events, state changes,
+&nbsp; * and player actions that affect the model.
+&nbsp; */
+&nbsp;public interface ModelObserver {
+&nbsp;    //region Event update methods
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a player has joined the game
+&nbsp;     *
+&nbsp;     * @param player the player who joined
+&nbsp;     */
+&nbsp;    void notifyPlayerJoin(Player player);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer of a change in the meta state of the game.
+&nbsp;     *
+&nbsp;     * @param metaState The new meta state of the game
+&nbsp;     */
+&nbsp;    void notifyMetaState(MetaState metaState);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer of a change in the current gameplay state.
+&nbsp;     *
+&nbsp;     * @param gameState The new game state
+&nbsp;     */
+&nbsp;    void notifyCurrentState(GameState gameState);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer about a newly created lobby.
+&nbsp;     *
+&nbsp;     * @param lobby The newly created lobby
+&nbsp;     */
+&nbsp;    void notifyNewLobby(Lobby lobby);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer about a removed lobby.
+&nbsp;     *
+&nbsp;     * @param uuid The UUID of the removed lobby
+&nbsp;     */
+&nbsp;    void notifyRemoveLobby(UUID uuid);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a random component has been requested.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board requesting the component
+&nbsp;     * @param component The randomly selected component
+&nbsp;     */
+&nbsp;    void notifyRequestRandComponent(ShipBoard shipBoard, Component component);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a specific component has been requested from the rejected pile of components.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board requesting the component
+&nbsp;     * @param component The requested component
+&nbsp;     */
+&nbsp;    void notifyRequestComponent(ShipBoard shipBoard, Component component);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a component has been rejected.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was rejected
+&nbsp;     * @param component The rejected component
+&nbsp;     */
+&nbsp;    void notifyRejectComponent(ShipBoard shipBoard, Component component);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a component has been rejected, including its old position.
+&nbsp;     *
+&nbsp;     * @param shipBoard   The ship board where the component was rejected
+&nbsp;     * @param component   The rejected component
+&nbsp;     * @param oldPosition The previous position of the component
+&nbsp;     */
+&nbsp;    void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a component has been stashed.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was stashed
+&nbsp;     * @param component The stashed component
+&nbsp;     */
+&nbsp;    void notifyStashComponent(ShipBoard shipBoard, Component component);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a component has been stashed, including its old position.
+&nbsp;     *
+&nbsp;     * @param shipBoard   The ship board where the component was stashed
+&nbsp;     * @param component   The stashed component
+&nbsp;     * @param oldPosition The previous position of the component
+&nbsp;     */
+&nbsp;    void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a placed component has been grabbed.
+&nbsp;     *
+&nbsp;     * @param shipBoard    The ship board where the component was grabbed from
+&nbsp;     * @param prevPosition The previous position of the grabbed component
+&nbsp;     */
+&nbsp;    void notifyGrabPlacedComponent(ShipBoard shipBoard, Point prevPosition);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a stashed component has been grabbed.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was grabbed from
+&nbsp;     * @param index     The index of the stashed component
+&nbsp;     * @param component The grabbed component
+&nbsp;     */
+&nbsp;    void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a component has been placed on the board.
+&nbsp;     *
+&nbsp;     * @param shipBoard   The ship board where the component was placed
+&nbsp;     * @param newPoint    The position where the component was placed
+&nbsp;     * @param orientation The orientation of the placed component
+&nbsp;     */
+&nbsp;    void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a component has been placed, including its old position.
+&nbsp;     *
+&nbsp;     * @param shipBoard   The ship board where the component was placed
+&nbsp;     * @param newPoint    The new position of the component
+&nbsp;     * @param orientation The orientation of the component
+&nbsp;     * @param oldPosition The previous position of the component
+&nbsp;     */
+&nbsp;    void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that the hourglass has been flipped.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board associated with the hourglass
+&nbsp;     */
+&nbsp;    void notifyFlipHourglass(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that the hourglass timer has ended.
+&nbsp;     */
+&nbsp;    void notifyHourglassEnd();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer of a ship&#39;s position update on the flight board.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board being updated
+&nbsp;     * @param position  The new position on the flight board
+&nbsp;     */
+&nbsp;    void notifyFlightBoardPosition(ShipBoard shipBoard, int position);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a forecast card has been peeked at.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board associated with the forecast
+&nbsp;     * @param deckIndex The index of the deck being peeked at
+&nbsp;     */
+&nbsp;    void notifyPeekForecast(ShipBoard shipBoard, int deckIndex);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the forecast deck of adventure cards.
+&nbsp;     *
+&nbsp;     * @param adventureCards The list of adventure cards for the forecast deck
+&nbsp;     */
+&nbsp;    void setForecastDeck(List&lt;AdventureCard&gt; adventureCards);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a forecast has been released.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board associated with the forecast
+&nbsp;     * @param index     The index of the released forecast
+&nbsp;     */
+&nbsp;    void notifyReleaseForecast(ShipBoard shipBoard, int index);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a component has been removed from the board.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was removed
+&nbsp;     * @param point     The position of the removed component
+&nbsp;     */
+&nbsp;    void notifyRemoveComponent(ShipBoard shipBoard, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a ship piece has been chosen.
+&nbsp;     *
+&nbsp;     * @param shipBoard  The ship board where the piece was chosen
+&nbsp;     * @param pieceIndex The index of the chosen piece
+&nbsp;     * @param removed    List of points where components were removed
+&nbsp;     */
+&nbsp;    void notifyChooseShipPiece(ShipBoard shipBoard, int pieceIndex, List&lt;Point&gt; removed);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that the ship is not properly connected.
+&nbsp;     *
+&nbsp;     * @param shipBoard  The ship board that is not connected
+&nbsp;     * @param shipPieces Sets of points representing disconnected ship pieces
+&nbsp;     */
+&nbsp;    void notifyShipNotConnected(ShipBoard shipBoard, List&lt;Set&lt;Point&gt;&gt; shipPieces);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that the ship has been validated.
+&nbsp;     *
+&nbsp;     * @param shipBoard The validated ship board
+&nbsp;     */
+&nbsp;    void notifyShipValidated(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a cabin has been initialized.
+&nbsp;     *
+&nbsp;     * @param shipBoard    The ship board where the cabin was initialized
+&nbsp;     * @param point        The position of the cabin
+&nbsp;     * @param crewType     The type of crew assigned to the cabin
+&nbsp;     * @param numResidents The number of residents in the cabin
+&nbsp;     */
+&nbsp;    void notifyInitializeCabin(ShipBoard shipBoard, Point point, CrewType crewType, int numResidents);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that an adventure card has been drawn.
+&nbsp;     *
+&nbsp;     * @param adventureCard The drawn adventure card
+&nbsp;     */
+&nbsp;    void notifyDrawCard(AdventureCard adventureCard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a component has been activated.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the component was activated
+&nbsp;     * @param point     The position of the activated component
+&nbsp;     */
+&nbsp;    void notifyActivateComponent(ShipBoard shipBoard, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a crew member has been lost.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the crew was lost
+&nbsp;     * @param point     The position where the crew was lost
+&nbsp;     */
+&nbsp;    void notifyLoseCrew(ShipBoard shipBoard, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a reward has been grabbed or not.
+&nbsp;     *
+&nbsp;     * @param shipBoard      The ship board associated with the reward
+&nbsp;     * @param rewardGrabbed  Whether the reward was grabbed (true) or not (false)
+&nbsp;     */
+&nbsp;    void notifyGrabReward(ShipBoard shipBoard, boolean rewardGrabbed);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that goods have been placed on the ship.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where goods were placed
+&nbsp;     * @param point     The position where goods were placed
+&nbsp;     * @param goodsType The type of goods placed
+&nbsp;     */
+&nbsp;    void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that goods have been removed from the ship.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where goods were removed
+&nbsp;     * @param point     The position where goods were removed
+&nbsp;     * @param goodsType The type of goods removed
+&nbsp;     */
+&nbsp;    void notifyRemoveGoods(ShipBoard shipBoard, Point point, GoodsType goodsType);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a battery has been used.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board where the battery was used
+&nbsp;     * @param point     The position of the used battery
+&nbsp;     */
+&nbsp;    void notifyUseBattery(ShipBoard shipBoard, Point point);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a planet has been chosen.
+&nbsp;     *
+&nbsp;     * @param shipBoard     The current ship board
+&nbsp;     * @param choice        The index of the chosen planet
+&nbsp;     * @param nextShipBoard The next ship board after the choice
+&nbsp;     */
+&nbsp;    void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer of the current player update.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board of the current player
+&nbsp;     */
+&nbsp;    void notifyCurrentPlayerUpdate(ShipBoard shipBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Notifies the observer that a player has given up.
+&nbsp;     *
+&nbsp;     * @param player The player who gave up
+&nbsp;     */
+&nbsp;    void notifyGiveUp(Player player);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the final scores for all players.
+&nbsp;     *
+&nbsp;     * @param finalScores A map of players to their final scores
+&nbsp;     */
+&nbsp;    void setFinalScores(Map&lt;Player, Integer&gt; finalScores);
+&nbsp;
+&nbsp;    //endregion
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

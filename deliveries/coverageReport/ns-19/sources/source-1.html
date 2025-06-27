@@ -1,0 +1,437 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SocketClientHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.network.server.socket</a>
+</div>
+
+<h1>Coverage Summary for Class: SocketClientHandler (it.polimi.ingsw.galaxytruckers.network.server.socket)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SocketClientHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/41)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/88)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.network.server.socket;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.SafeSocket;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.VirtualServer;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.messages.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.server.ClientEventQueue;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
+&nbsp;import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.ServerControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.types.Event;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.lobby.LobbyInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.lobby.Player;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.UUID;
+&nbsp;import java.util.concurrent.atomic.AtomicBoolean;
+&nbsp;
+&nbsp;/**
+&nbsp; * Handles communication with a client over a socket connection.
+&nbsp; * It processes requests from the client and sends events back to the client.
+&nbsp; */
+&nbsp;class SocketClientHandler implements VirtualServer, ClientHandler {
+&nbsp;    private Player player;
+&nbsp;    private final ServerControllerInterface controller;
+&nbsp;    private final SafeSocket socket;
+&nbsp;
+&nbsp;    private final Thread updateThread;
+&nbsp;    private final Thread requestThread;
+<b class="nc">&nbsp;    private final AtomicBoolean isRunning = new AtomicBoolean(false);</b>
+&nbsp;
+<b class="nc">&nbsp;    private final Object requestLock = new Object();</b>
+&nbsp;
+<b class="nc">&nbsp;    private final ClientEventQueue eventQueue = new ClientEventQueue();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new SocketClientHandler that handles communication with a client
+&nbsp;     *
+&nbsp;     * @param socket     the socket through which the client communicates
+&nbsp;     * @param controller the controller that manages server operations
+&nbsp;     */
+<b class="nc">&nbsp;    public SocketClientHandler(SafeSocket socket, ServerControllerInterface controller) {</b>
+<b class="nc">&nbsp;        this.socket = socket;</b>
+<b class="nc">&nbsp;        this.controller = controller;</b>
+<b class="nc">&nbsp;        this.requestThread = new Thread(this::requestTask, &quot;RequestThread&quot;);</b>
+<b class="nc">&nbsp;        this.updateThread = new Thread(this::updateTask, &quot;UpdateThread&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Starts the request and update threads to handle client communication.
+&nbsp;     * This method should be called after setting the player.
+&nbsp;     */
+&nbsp;    public void start() {
+<b class="nc">&nbsp;        isRunning.set(true);</b>
+<b class="nc">&nbsp;        requestThread.start();</b>
+<b class="nc">&nbsp;        updateThread.start();</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Started Socket Client Handler&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void setPlayer(Player player) {
+<b class="nc">&nbsp;        this.player = player;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void pauseEvents() {
+<b class="nc">&nbsp;        eventQueue.pause();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     *
+&nbsp;     * &lt;p&gt;The socket is closed and the threads are interrupted&lt;/p&gt;
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void stop() {
+<b class="nc">&nbsp;        if (isRunning.compareAndSet(true, false)) {</b>
+<b class="nc">&nbsp;            synchronized (requestLock) {</b>
+<b class="nc">&nbsp;                requestThread.interrupt();</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            updateThread.interrupt();</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                socket.close();</b>
+&nbsp;            } catch (IOException e) {
+<b class="nc">&nbsp;                System.err.println(&quot;Error closing socket&quot;);</b>
+<b class="nc">&nbsp;                e.printStackTrace(System.err);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void updateTask() {
+<b class="nc">&nbsp;        while (isRunning.get()) {</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                Event event = eventQueue.poll();</b>
+<b class="nc">&nbsp;                socket.write(new EventMessage(event));</b>
+&nbsp;            } catch (InterruptedException e) {
+<b class="nc">&nbsp;                Thread.currentThread().interrupt();</b>
+&nbsp;            } catch (IOException e) {
+<b class="nc">&nbsp;                eventQueue.clear();</b>
+<b class="nc">&nbsp;                handleIOException(e);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void requestTask() {
+&nbsp;        try {
+<b class="nc">&nbsp;            while (isRunning.get()) {</b>
+<b class="nc">&nbsp;                Message message = socket.read();</b>
+<b class="nc">&nbsp;                synchronized (requestLock) {</b>
+<b class="nc">&nbsp;                    switch (message) {</b>
+<b class="nc">&nbsp;                        case RegisterNickname request -&gt; {</b>
+<b class="nc">&nbsp;                            Response response = runRequest(request);</b>
+<b class="nc">&nbsp;                            socket.write(response);</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                        case RegisteredRequest request -&gt; {</b>
+&nbsp;                            Response response;
+<b class="nc">&nbsp;                            if (player == null) {</b>
+<b class="nc">&nbsp;                                response = new Response(request.getUuid(),</b>
+&nbsp;                                        new IllegalStateException(&quot;You have to register first&quot;));
+&nbsp;                            } else {
+<b class="nc">&nbsp;                                response = runRequest(request);</b>
+&nbsp;                            }
+<b class="nc">&nbsp;                            socket.write(response);</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                        case Ping ping -&gt; {</b>
+<b class="nc">&nbsp;                            if (player != null) {</b>
+<b class="nc">&nbsp;                                SessionManager.getInstance().ping(player);</b>
+<b class="nc">&nbsp;                                socket.write(new Response(ping.id()));</b>
+&nbsp;                            }
+&nbsp;                        }
+<b class="nc">&nbsp;                        case EventMessage _, Response _ -&gt;</b>
+<b class="nc">&nbsp;                                System.err.println(&quot;The SocketHandler received invalid request &quot; + message.getClass());</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                }</b>
+&nbsp;            }
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            handleIOException(e);</b>
+&nbsp;        } catch (ClassNotFoundException e) {
+<b class="nc">&nbsp;            System.err.println(&quot;Class not found, check that the socket classes are configured correctly&quot;);</b>
+<b class="nc">&nbsp;            stop();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private Response runRequest(Request request) {
+&nbsp;        try {
+<b class="nc">&nbsp;            request.execute(this);</b>
+<b class="nc">&nbsp;            return new Response(request.getUuid());</b>
+&nbsp;        } catch (RuntimeException e) {
+<b class="nc">&nbsp;            return new Response(request.getUuid(), e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private LobbyInterface getLobby() {
+<b class="nc">&nbsp;        return player.getLobby().orElseThrow(() -&gt; new IllegalStateException(&quot;You are not in a lobby&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void handleIOException(IOException e) {
+<b class="nc">&nbsp;        System.err.println(&quot;An IOException occurred while trying to communicate with the server.&quot;);</b>
+<b class="nc">&nbsp;        e.printStackTrace(System.err);</b>
+<b class="nc">&nbsp;        controller.handlePlayerDisconnection(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyEvent(Event event) {
+<b class="nc">&nbsp;        eventQueue.notifyEvent(event);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void registerNickname(String myNickname) {
+<b class="nc">&nbsp;        controller.registerNickname(myNickname, this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void requestNewGame(Level level, int playerN) {
+<b class="nc">&nbsp;        controller.newGame(player, level, playerN);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void drawCard() {
+<b class="nc">&nbsp;        getLobby().drawCard(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void joinLobby(UUID lobbyID) {
+<b class="nc">&nbsp;        controller.joinLobby(player, lobbyID);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void leaveLobby() {
+<b class="nc">&nbsp;        controller.leaveLobby(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void requestRandComponent() {
+<b class="nc">&nbsp;        getLobby().requestRandComponent(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void requestComponent(int componentID) {
+<b class="nc">&nbsp;        getLobby().requestComponent(player, componentID);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void rejectComponent() {
+<b class="nc">&nbsp;        getLobby().rejectComponent(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void stashComponent() {
+<b class="nc">&nbsp;        getLobby().stashComponent(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void grabPlacedComponent() {
+<b class="nc">&nbsp;        getLobby().grabPlacedComponent(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void grabStashedComponent(int index) {
+<b class="nc">&nbsp;        getLobby().grabStashedComponent(player, index);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void placeComponent(Point point, Direction orientation) {
+<b class="nc">&nbsp;        getLobby().placeComponent(player, point, orientation);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void flipHourglass() {
+<b class="nc">&nbsp;        getLobby().flipHourglass(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void placeShipOnFlightBoard(int startingPosition) {
+<b class="nc">&nbsp;        getLobby().placeShipOnFlightBoard(player, startingPosition);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void placeShipOnFlightBoard() {
+<b class="nc">&nbsp;        getLobby().placeShipOnFlightBoard(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void acquireForecast(int deckIndex) {
+<b class="nc">&nbsp;        getLobby().acquireForecast(player, deckIndex);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void releaseForecast() {
+<b class="nc">&nbsp;        getLobby().releaseForecast(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void removeComponent(Point point) {
+<b class="nc">&nbsp;        getLobby().removeComponent(player, point);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void chooseShipPiece(int pieceIndex) {
+<b class="nc">&nbsp;        getLobby().chooseShipPiece(player, pieceIndex);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void initializeCabin(Point point, CrewType crewType) {
+<b class="nc">&nbsp;        getLobby().initializeCabin(player, point, crewType);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void activateComponent(Point point) {
+<b class="nc">&nbsp;        getLobby().activateComponent(player, point);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void loseCrew(Point point) {
+<b class="nc">&nbsp;        getLobby().loseCrew(player, point);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void grabReward() {
+<b class="nc">&nbsp;        getLobby().grabReward(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void placeGoods(Point point, GoodsType goodsType) {
+<b class="nc">&nbsp;        getLobby().placeGoods(player, point, goodsType);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void removeGoods(Point point, GoodsType goodsType) {
+<b class="nc">&nbsp;        getLobby().removeGoods(player, point, goodsType);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void loseGoods(Point point) {
+<b class="nc">&nbsp;        getLobby().loseGoods(player, point);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void useBattery(Point point) {
+<b class="nc">&nbsp;        getLobby().useBattery(player, point);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void choosePlanet(int choice) {
+<b class="nc">&nbsp;        getLobby().choosePlanet(player, choice);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void goNext() {
+<b class="nc">&nbsp;        getLobby().goNext(player);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void giveUp() {
+<b class="nc">&nbsp;        getLobby().giveUp(player);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

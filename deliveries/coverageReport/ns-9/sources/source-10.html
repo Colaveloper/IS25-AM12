@@ -1,0 +1,267 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ShipBuildingState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.model.state</a>
+</div>
+
+<h1>Coverage Summary for Class: ShipBuildingState (it.polimi.ingsw.galaxytruckers.client.model.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ShipBuildingState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (10/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    15.4%
+  </span>
+  <span class="absValue">
+    (4/26)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    72.7%
+  </span>
+  <span class="absValue">
+    (32/44)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.model.state;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ComponentBank;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract base class for ship building states in the Galaxy Truckers game.
+&nbsp; * This class represents the phase where players build their ships by selecting,
+&nbsp; * placing, and arranging components. It manages the component bank and tracks
+&nbsp; * the status of ship construction.
+&nbsp; * &lt;p&gt;
+&nbsp; * The class is sealed to restrict subclassing to specific ship building states.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public sealed abstract class ShipBuildingState extends GameState permits
+&nbsp;        SecondShipBuildingState,
+&nbsp;        TestShipBuildingState
+&nbsp;{
+&nbsp;    /** The bank of components available for selection by players */
+&nbsp;    private final ComponentBank componentBank;
+&nbsp;
+&nbsp;    /** Set of ship boards that have completed the building phase */
+&nbsp;    protected final Set&lt;ShipBoard&gt; completedShipBoards;
+&nbsp;
+&nbsp;    /** Flag indicating whether the player has stashed a component in this turn */
+<b class="fc">&nbsp;    protected boolean hasStashed = false;</b>
+&nbsp;
+&nbsp;    /** Flag indicating whether the player has finished ship building */
+<b class="fc">&nbsp;    protected boolean hasFinished = false;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new ShipBuildingState.
+&nbsp;     * Initializes the component bank and an empty set of completed ship boards.
+&nbsp;     */
+<b class="fc">&nbsp;    public ShipBuildingState() {</b>
+<b class="fc">&nbsp;        this.completedShipBoards = new HashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.componentBank = new ComponentBank();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void leave() {
+<b class="fc">&nbsp;        game.getShipBoards().forEach(ShipBoard::finishBuilding);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;StateActions&gt; getAvailableActions() {
+<b class="nc">&nbsp;        List&lt;StateActions&gt; actions = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        if(!hasFinished) {</b>
+<b class="nc">&nbsp;            if(componentBank.getCoveredComponentsN() != 0) actions.add(StateActions.REQUEST_RAND_COMPONENT);</b>
+<b class="nc">&nbsp;            if(!componentBank.getUncoveredComponents().isEmpty()) actions.add(StateActions.REQUEST_COMPONENT);</b>
+<b class="nc">&nbsp;            if((myShip.getLastComponent() != null) &amp;&amp; !hasStashed) actions.add(StateActions.REJECT_COMPONENT);</b>
+<b class="nc">&nbsp;            if(myShip.getLastComponent() != null) actions.add(StateActions.PLACE_COMPONENT);</b>
+<b class="nc">&nbsp;            if(componentInHand()) actions.add(StateActions.ROTATE_COMPONENT);</b>
+<b class="nc">&nbsp;            if(myShip.getLastPosition() != null) actions.add(StateActions.GRAB_PLACED_COMPONENT);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return actions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position, boolean isMyShip) {
+<b class="fc">&nbsp;        if(isMyShip) hasFinished = true;</b>
+<b class="fc">&nbsp;        game.getFlightBoard().setShipPosition(shipBoard, position);</b>
+<b class="fc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyFlightBoardPosition(shipBoard, position));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
+<b class="fc">&nbsp;        hasStashed = false;</b>
+<b class="fc">&nbsp;        shipBoard.offerComponent(component);</b>
+<b class="fc">&nbsp;        componentBank.removeCoveredComponent();</b>
+<b class="fc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyRequestRandComponent(shipBoard, component));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
+<b class="fc">&nbsp;        hasStashed = false;</b>
+<b class="fc">&nbsp;        shipBoard.offerComponent(component);</b>
+<b class="fc">&nbsp;        componentBank.removeUncoveredComponent(component);</b>
+<b class="fc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyRequestComponent(shipBoard, component));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyGrabPlacedComponent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        Point prevPosition = shipBoard.getLastPosition();</b>
+<b class="fc">&nbsp;        shipBoard.grabPlacedComponent();</b>
+<b class="fc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyGrabPlacedComponent(shipBoard,prevPosition));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRejectComponent(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        Point prevPos = shipBoard.getLastPosition();</b>
+<b class="fc">&nbsp;        Component component = shipBoard.rejectComponent();</b>
+<b class="fc">&nbsp;        componentBank.addUncoveredComponent(component);</b>
+<b class="pc">&nbsp;        if (prevPos != null) {</b>
+<b class="nc">&nbsp;            game.getObservers().forEach(observer -&gt; observer.notifyRejectComponent(shipBoard, component, prevPos));</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            game.getObservers().forEach(observer -&gt; observer.notifyRejectComponent(shipBoard, component));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
+<b class="fc">&nbsp;        Point prevPos = shipBoard.getLastPosition();</b>
+<b class="fc">&nbsp;        shipBoard.placeComponent(point, orientation);</b>
+<b class="pc">&nbsp;        if (prevPos != null) {</b>
+<b class="nc">&nbsp;            game.getObservers().forEach(observer -&gt; observer.notifyPlaceComponent(shipBoard, point, orientation, prevPos));</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            game.getObservers().forEach(observer -&gt; observer.notifyPlaceComponent(shipBoard, point, orientation));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the set of ship boards that have completed the building phase.
+&nbsp;     * This method clears the existing set and replaces it with the provided set.
+&nbsp;     *
+&nbsp;     * @param completedShipBoards The set of ship boards that have completed building
+&nbsp;     */
+&nbsp;    public void setCompletedShipBoards(Set&lt;ShipBoard&gt; completedShipBoards) {
+<b class="fc">&nbsp;        this.completedShipBoards.clear();</b>
+<b class="fc">&nbsp;        this.completedShipBoards.addAll(completedShipBoards);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks whether the player currently has a component in hand (not placed).
+&nbsp;     * A component is considered &quot;in hand&quot; if it has been selected but not yet placed
+&nbsp;     * on the ship board or stashed.
+&nbsp;     *
+&nbsp;     * @return true if the player has a component in hand, false otherwise
+&nbsp;     */
+&nbsp;    public boolean componentInHand(){
+<b class="nc">&nbsp;        return myShip.getLastComponent() != null &amp;&amp; myShip.getLastPosition() == null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the component bank that contains available components for selection.
+&nbsp;     * The component bank manages both covered (random) and uncovered (visible) components.
+&nbsp;     *
+&nbsp;     * @return The component bank for this building phase
+&nbsp;     */
+&nbsp;    public ComponentBank getComponentBank(){
+<b class="fc">&nbsp;        return componentBank;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

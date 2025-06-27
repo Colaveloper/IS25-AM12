@@ -1,0 +1,207 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Cabin</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.model.shipBuilding</a>
+</div>
+
+<h1>Coverage Summary for Class: Cabin (it.polimi.ingsw.galaxytruckers.client.model.shipBuilding)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Cabin</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.model.shipBuilding;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.Connector;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a cabin component on the spaceship that can house crew members.
+&nbsp; */
+&nbsp;public final class Cabin extends Component {
+&nbsp;    /** The type of crew assigned to this cabin (HUMAN or a kind of ALIEN) */
+&nbsp;    private CrewType crewType;
+&nbsp;
+&nbsp;    /** The current number of crew members residing in this cabin */
+&nbsp;    private int numResidents;
+&nbsp;    /**
+&nbsp;     * Constructs a new empty cabin component.
+&nbsp;     * Initially sets the crew type to HUMAN with no residents.
+&nbsp;     *
+&nbsp;     * @param connectors Map of directional connectors for this component
+&nbsp;     * @param id Unique identifier for this component
+&nbsp;     */
+&nbsp;    public Cabin(Map&lt;Direction, Connector&gt; connectors, int id) {
+<b class="fc">&nbsp;        super(connectors,id);</b>
+<b class="fc">&nbsp;        this.crewType = CrewType.HUMAN;</b>
+<b class="fc">&nbsp;        this.numResidents = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the type of crew assigned to this cabin.
+&nbsp;     *
+&nbsp;     * @return The crew type (HUMAN or ALIEN)
+&nbsp;     */
+&nbsp;    public CrewType getCrewType() {
+<b class="fc">&nbsp;        return crewType;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the current number of crew members in the cabin.
+&nbsp;     *
+&nbsp;     * @return The number of residents
+&nbsp;     */
+&nbsp;    public int getNumResidents() {
+<b class="fc">&nbsp;        return numResidents;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes the cabin with a specific crew type.
+&nbsp;     * Sets the number of residents based on the crew type:
+&nbsp;     * - Humans: 2 residents
+&nbsp;     * - Aliens: 1 resident
+&nbsp;     *
+&nbsp;     * @param crewType The type of crew to assign to this cabin
+&nbsp;     */
+&nbsp;    public void initialize(CrewType crewType) {
+<b class="fc">&nbsp;        this.crewType = crewType;</b>
+<b class="pc">&nbsp;        this.numResidents = switch (crewType) {</b>
+<b class="fc">&nbsp;            case HUMAN -&gt; 2;</b>
+<b class="fc">&nbsp;            case PURPLE, BROWN -&gt; 1;</b>
+<b class="fc">&nbsp;            case null -&gt; throw new IllegalArgumentException(&quot;CrewType is null&quot;);</b>
+<b class="fc">&nbsp;        };</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Reduces the number of crew members in the cabin by one.
+&nbsp;     * Called when a crew member is lost due to damage or other game events.
+&nbsp;     */
+&nbsp;    public void loseCrew() {
+<b class="fc">&nbsp;        this.numResidents--;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the type of crew assigned to this cabin.
+&nbsp;     *
+&nbsp;     * @param crewType The new crew type to assign
+&nbsp;     */
+&nbsp;    public void setCrewType(CrewType crewType) {
+<b class="fc">&nbsp;        this.crewType = crewType;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the number of crew members in the cabin.
+&nbsp;     *
+&nbsp;     * @param numResidents The new number of residents
+&nbsp;     */
+&nbsp;    public void setNumResidents(int numResidents) {
+<b class="fc">&nbsp;        this.numResidents = numResidents;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

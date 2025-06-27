@@ -1,0 +1,210 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliShipHandAndStash</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements</a>
+</div>
+
+<h1>Coverage Summary for Class: CliShipHandAndStash (it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliShipHandAndStash</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    19%
+  </span>
+  <span class="absValue">
+    (4/21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.DescriptionUtils;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * CLI ship board including hand and stash, for level SECOND games
+&nbsp; */
+&nbsp;public class CliShipHandAndStash extends CliShipBoard {
+&nbsp;
+&nbsp;    private final CliHand cliHand;
+&nbsp;    private final CliStash cliStash;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new CLI representation of a ship&#39;s hand and stash.
+&nbsp;     * Initializes the hand with the last component of the ship board, or an empty hand if none exists.
+&nbsp;     * Initializes the stash with the components currently stashed in the ship board.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ship board containing the components
+&nbsp;     * @param nickname  The nickname of the player owning this ship
+&nbsp;     */
+&nbsp;    public CliShipHandAndStash(ShipBoard shipBoard, String nickname) {
+<b class="fc">&nbsp;        super(shipBoard, nickname);</b>
+&nbsp;
+<b class="pc">&nbsp;        if (shipBoard.getLastComponent() != null) {</b>
+<b class="nc">&nbsp;            cliHand = new CliHand(shipBoard.getLastComponent());</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            cliHand = new CliHand();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        cliStash = new CliStash(shipBoard.getStashedComponents());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the nickname of this CLI ship hand and stash.
+&nbsp;     * This is used for display purposes in the CLI.
+&nbsp;     *
+&nbsp;     * @return The nickname of the player owning this ship
+&nbsp;     */
+&nbsp;    public String getNickname() {
+<b class="nc">&nbsp;        return &quot;Cli Ship Hand and Stash&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handles the action of stashing a component.
+&nbsp;     * @param component the component to be stashed
+&nbsp;     */
+&nbsp;    public void onStash(Component component) {
+<b class="nc">&nbsp;        cliStash.onStash(component);</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handles the action of grabbing a stashed component by its index.
+&nbsp;     * @param index the index of the stashed component to grab
+&nbsp;     */
+&nbsp;    public void onGrabStashed(int index) {
+<b class="nc">&nbsp;        cliStash.onGrab(index);</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Clears the hand of the ship.
+&nbsp;     */
+&nbsp;    public void clearHand() {
+<b class="nc">&nbsp;        cliHand.clearHand();</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the hand of the ship to a specific component.
+&nbsp;     * @param component the component to set as the hand
+&nbsp;     */
+&nbsp;    public void setHand(Component component) {
+<b class="nc">&nbsp;        cliHand.setHand(component);</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;String&gt; getNewDescription(){
+<b class="nc">&nbsp;        List&lt;String&gt; description = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        description.addAll(super.getNewDescription());</b>
+<b class="nc">&nbsp;        description.addAll(</b>
+<b class="nc">&nbsp;                DescriptionUtils.sideBySide(</b>
+<b class="nc">&nbsp;                        cliHand.getDescription(),</b>
+<b class="nc">&nbsp;                        cliStash.getDescription()</b>
+&nbsp;                )
+&nbsp;        );
+<b class="nc">&nbsp;        return description;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

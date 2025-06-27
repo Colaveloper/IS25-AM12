@@ -1,0 +1,268 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiShipPieceChoiceScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiShipPieceChoiceScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiShipPieceChoiceScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GuiShipPieceChoiceScreen$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/38)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.AdventureState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.ChooseShipPieceState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.StateActions;
+&nbsp;import javafx.beans.property.IntegerProperty;
+&nbsp;import javafx.beans.property.SimpleIntegerProperty;
+&nbsp;import javafx.beans.binding.Bindings;
+&nbsp;import javafx.geometry.Insets;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.layout.VBox;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;import java.awt.Point;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI screen for handling the selection and removal of disconnected ship pieces.
+&nbsp; * &lt;p&gt;
+&nbsp; * This screen is shown when a player must choose a disconnected piece of their ship to keep.
+&nbsp; * It highlights all available ship pieces, allows the player to select one, and provides UI controls
+&nbsp; * for confirming. The screen updates the log and UI based on the player&#39;s turn.
+&nbsp; * &lt;/p&gt;
+&nbsp; *
+&nbsp; * @author (your name or team)
+&nbsp; */
+&nbsp;public class GuiShipPieceChoiceScreen extends GuiAdventureScreen {
+<b class="nc">&nbsp;    private final IntegerProperty selectedPieceIndex = new SimpleIntegerProperty(-1);</b>
+&nbsp;    private final List&lt;Set&lt;Point&gt;&gt; shipPieces;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new GuiShipPieceChoiceScreen.
+&nbsp;     *
+&nbsp;     * @param model the client model
+&nbsp;     * @param controller the controller to communicate with the server
+&nbsp;     * @param gameState the current adventure state (should be ChooseShipPieceState)
+&nbsp;     */
+&nbsp;    public GuiShipPieceChoiceScreen(ClientModel model, ClientControllerInterface controller, AdventureState gameState) {
+<b class="nc">&nbsp;        super(model, controller, gameState);</b>
+<b class="nc">&nbsp;        ChooseShipPieceState chooseState = (ChooseShipPieceState) gameState;</b>
+<b class="nc">&nbsp;        this.shipPieces = chooseState.getShipPieces();</b>
+<b class="nc">&nbsp;        highlightShipPieces();</b>
+<b class="nc">&nbsp;        if (isMyTurn()) {</b>
+<b class="nc">&nbsp;            guiLog.log(&quot;Your turn: select a disconnected ship piece to remove.&quot;);</b>
+<b class="nc">&nbsp;            setupButtonBox();</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            guiLog.log(&quot;Wait for your turn to remove a ship piece.&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void highlightShipPieces() {
+<b class="nc">&nbsp;        if(isMyTurn()) {</b>
+<b class="nc">&nbsp;            List&lt;Color&gt; colors = List.of(Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.PURPLE, Color.BROWN, Color.PINK, Color.YELLOW);</b>
+<b class="nc">&nbsp;            for (int i = 0; i &lt; shipPieces.size(); i++) {</b>
+<b class="nc">&nbsp;                Color color = colors.get(i % colors.size());</b>
+<b class="nc">&nbsp;                guiShipBoards.get(myShipBoard).highlightPoints(shipPieces.get(i), color);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void setupButtonBox() {
+<b class="nc">&nbsp;        guiButtonBox.getChildren().clear();</b>
+<b class="nc">&nbsp;        VBox actionButtons = new VBox(5);</b>
+<b class="nc">&nbsp;        actionButtons.setPadding(new Insets(5));</b>
+&nbsp;
+<b class="nc">&nbsp;        Button removeButton = new Button(&quot;Keep Selected Piece&quot;);</b>
+<b class="nc">&nbsp;        removeButton.disableProperty().bind(</b>
+<b class="nc">&nbsp;            Bindings.createBooleanBinding(</b>
+<b class="nc">&nbsp;                () -&gt; selectedPieceIndex.get() &lt; 0 || selectedPieceIndex.get() &gt;= shipPieces.size(),</b>
+&nbsp;                selectedPieceIndex
+&nbsp;            )
+&nbsp;        );
+<b class="nc">&nbsp;        removeButton.setOnAction(_ -&gt; {</b>
+<b class="nc">&nbsp;            controller.chooseShipPiece(selectedPieceIndex.get());</b>
+<b class="nc">&nbsp;            selectedPieceIndex.set(-1);</b>
+<b class="nc">&nbsp;            getGuiController().goNext();</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        actionButtons.getChildren().addAll(removeButton);</b>
+<b class="nc">&nbsp;        guiButtonBox.getChildren().add(actionButtons);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected GuiController getGuiController() {
+<b class="nc">&nbsp;        return new GuiController() {</b>
+&nbsp;            @Override
+&nbsp;            public void handlePointPress(Point point) {
+<b class="nc">&nbsp;                if (!isMyTurn()) return;</b>
+<b class="nc">&nbsp;                highlightShipPieces();</b>
+<b class="nc">&nbsp;                for (int i = 0; i &lt; shipPieces.size(); i++) {</b>
+<b class="nc">&nbsp;                    if (shipPieces.get(i).contains(point)) {</b>
+<b class="nc">&nbsp;                        selectedPieceIndex.set(i);</b>
+<b class="nc">&nbsp;                        guiLog.log(&quot;Selected piece #&quot; + (i+1));</b>
+<b class="nc">&nbsp;                        guiShipBoards.get(myShipBoard).highlightPoints(shipPieces.get(i), Color.YELLOW);</b>
+&nbsp;                        break;
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            @Override
+&nbsp;            public void goNext() {
+<b class="nc">&nbsp;                if (state.getAvailableActions().contains(StateActions.GO_NEXT)) {</b>
+<b class="nc">&nbsp;                    controller.goNext();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        };
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

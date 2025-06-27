@@ -1,0 +1,166 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AdventureState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.state</a>
+</div>
+
+<h1>Coverage Summary for Class: AdventureState (it.polimi.ingsw.galaxytruckers.server.model.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AdventureState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (11/11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.state;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.SurrenderPolicy;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.SurrenderCause;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract class representing a state in the adventure phase of the game.
+&nbsp; * It extends GameState and provides methods to handle state transitions and surrender actions.
+&nbsp; */
+<b class="fc">&nbsp;public abstract class AdventureState extends GameState {</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if the state has expired because a transition has already been submitted.
+&nbsp;     * @throws IllegalStateException if the state has expired
+&nbsp;     */
+&nbsp;    protected void checkIfExpired() {
+<b class="fc">&nbsp;        if (expired) throw new IllegalStateException(&quot;It&#39;s too late to take this action&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * &lt;p&gt;Calls {@link SurrenderPolicy#requestSurrender(ShipBoard, SurrenderCause)}&lt;/p&gt;
+&nbsp;     * on the game&#39;s surrender policy if surrender is enabled.
+&nbsp;     * @param shipBoard the ship board of the player giving up
+&nbsp;     * @throws UnsupportedOperationException if surrender is not enabled in the game
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void giveUp(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        SurrenderPolicy surrenderPolicy = game.getSurrenderPolicy();</b>
+<b class="fc">&nbsp;        if (surrenderPolicy.isSurrenderEnabled()) {</b>
+<b class="fc">&nbsp;            if (!surrenderPolicy.requestSurrender(shipBoard, SurrenderCause.REQUEST))</b>
+<b class="fc">&nbsp;                throw new IllegalStateException(&quot;You have already surrendered&quot;);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            throw new UnsupportedOperationException(&quot;You cannot give up in this game&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Submits a state transition to the game, setting the current state to the next state
+&nbsp;     * of the current card.
+&nbsp;     */
+&nbsp;    protected synchronized void getNextState() {
+<b class="fc">&nbsp;        if (!expired) {</b>
+<b class="fc">&nbsp;            game.submitStateTransition(() -&gt;</b>
+<b class="fc">&nbsp;                    game.setCurrentState(game.getDeck().getCurrentCard().getNextState()));</b>
+<b class="fc">&nbsp;            expired = true;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

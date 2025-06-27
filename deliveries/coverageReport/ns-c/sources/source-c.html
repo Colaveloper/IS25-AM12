@@ -1,0 +1,181 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliStash</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements</a>
+</div>
+
+<h1>Coverage Summary for Class: CliStash (it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliStash</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    17.6%
+  </span>
+  <span class="absValue">
+    (3/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.DescriptionUtils;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents.CliComponent;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;/**
+&nbsp; * CLI element representing a stash of components in the Galaxy Truckers game.
+&nbsp; */
+&nbsp;public class CliStash extends CliElement {
+&nbsp;    private static final int SIZE = 2;
+&nbsp;
+&nbsp;    protected final List&lt;CliComponent&gt; cliStashedComponents;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new CliStash from the given list of components.
+&nbsp;     * Each component is converted to a CliComponent for CLI representation.
+&nbsp;     *
+&nbsp;     * @param stashedComponents The list of components to be stashed
+&nbsp;     */
+<b class="fc">&nbsp;    public CliStash(List&lt;Component&gt; stashedComponents) {</b>
+<b class="fc">&nbsp;        this.cliStashedComponents = stashedComponents.stream()</b>
+<b class="fc">&nbsp;                .map(CliComponent::of).collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds a new component to the stash.
+&nbsp;     * @param component the component to stash
+&nbsp;     */
+&nbsp;    public void onStash(Component component) {
+<b class="nc">&nbsp;        cliStashedComponents.add(CliComponent.of(component));</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes a component from the stash at the specified index.
+&nbsp;     * @param index The index of the component to remove
+&nbsp;     */
+&nbsp;    public void onGrab(int index) {
+<b class="nc">&nbsp;        cliStashedComponents.remove(index);</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected List&lt;String&gt; getNewDescription() {
+<b class="nc">&nbsp;        List&lt;String&gt; description = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        List&lt;String&gt; unitDescription = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        for(int i=0 ; i&lt;SIZE ; i++) {</b>
+<b class="nc">&nbsp;            unitDescription.clear();</b>
+<b class="nc">&nbsp;            if(i &gt;= cliStashedComponents.size()) {</b>
+<b class="nc">&nbsp;                unitDescription.addAll(List.of(&quot;     &quot;, &quot;  X  &quot;, &quot;     &quot;));</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                unitDescription.addAll(cliStashedComponents.get(i).getDescription());</b>
+&nbsp;            }
+<b class="nc">&nbsp;            unitDescription.add(&quot; &quot;+i+&quot; &quot;);</b>
+<b class="nc">&nbsp;            description = DescriptionUtils.sideBySide(description, unitDescription);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return DescriptionUtils.borderAndTitle(description, &quot;stash&quot;);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

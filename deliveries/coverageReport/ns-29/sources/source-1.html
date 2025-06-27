@@ -1,0 +1,286 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ActivateState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.state</a>
+</div>
+
+<h1>Coverage Summary for Class: ActivateState (it.polimi.ingsw.galaxytruckers.server.model.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ActivateState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (34/34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (50/50)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.state;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract class representing a state in which the player can activate components
+&nbsp; * and spend batteries on their ship board.
+&nbsp; */
+&nbsp;public abstract class ActivateState extends AdventureState {
+&nbsp;    /**
+&nbsp;     * A set containing the positions on the ship board of components
+&nbsp;     * that can be activated.
+&nbsp;     */
+&nbsp;    protected final Set&lt;Point&gt; availablePositions;
+&nbsp;    /**
+&nbsp;     * The ship board of the player who is activating components.
+&nbsp;     */
+&nbsp;    protected final ShipBoard shipBoard;
+&nbsp;    /**
+&nbsp;     * The number of batteries the player has to spend. If it&#39;s negative
+&nbsp;     * it indicates the number of components that need to be activated.
+&nbsp;     */
+&nbsp;    protected int batteriesToSpend;
+&nbsp;    /**
+&nbsp;     * The number of components that have been activated by the player.
+&nbsp;     */
+&nbsp;    protected int activatedComponents;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for ActivateState.
+&nbsp;     *
+&nbsp;     * @param shipBoard          the ship board of the player who is activating components
+&nbsp;     * @param availablePositions the positions on the ship board where components can be activated
+&nbsp;     */
+<b class="fc">&nbsp;    protected ActivateState(ShipBoard shipBoard, Set&lt;Point&gt; availablePositions) {</b>
+<b class="fc">&nbsp;        this.shipBoard = shipBoard;</b>
+<b class="fc">&nbsp;        this.batteriesToSpend = 0;</b>
+<b class="fc">&nbsp;        this.activatedComponents = 0;</b>
+<b class="fc">&nbsp;        this.availablePositions = availablePositions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * &lt;p&gt;
+&nbsp;     * Skips this state if it&#39;s the given ship board&#39;s turn.
+&nbsp;     * If the player has batteries to spend or components to activate
+&nbsp;     * they will be used/activated.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board of the player who should skip
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public synchronized void skip(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        if (!expired &amp;&amp; this.shipBoard.equals(shipBoard)) {</b>
+<b class="fc">&nbsp;            if (batteriesToSpend &gt; 0) {</b>
+<b class="fc">&nbsp;                Iterator&lt;Point&gt; positions = shipBoard.getBatteries().keySet().iterator();</b>
+<b class="fc">&nbsp;                while (batteriesToSpend &gt; 0) {</b>
+<b class="fc">&nbsp;                    Point currentPosition = positions.next();</b>
+<b class="fc">&nbsp;                    int min = Integer.min(batteriesToSpend, shipBoard.getBatteries().get(currentPosition).getNumBatteries());</b>
+<b class="fc">&nbsp;                    for (int i = 0; i &lt; min; i++) {</b>
+<b class="fc">&nbsp;                        shipBoard.useBatteries(currentPosition);</b>
+<b class="fc">&nbsp;                        batteriesToSpend--;</b>
+&nbsp;                    }
+&nbsp;                }
+<b class="fc">&nbsp;            } else if (batteriesToSpend &lt; 0) {</b>
+<b class="fc">&nbsp;                Iterator&lt;Point&gt; positions = getAvailablePositions().stream()</b>
+<b class="fc">&nbsp;                        .filter(p -&gt; !shipBoard.getActivatables().get(p).isActive())</b>
+<b class="fc">&nbsp;                        .iterator();</b>
+<b class="fc">&nbsp;                while (batteriesToSpend &lt; 0) {</b>
+<b class="fc">&nbsp;                    Point currentPosition = positions.next();</b>
+<b class="fc">&nbsp;                    shipBoard.activateComponent(currentPosition);</b>
+<b class="fc">&nbsp;                    batteriesToSpend++;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            endStateAction();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Activates a component on the ship board at the specified position.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board on which the component is located
+&nbsp;     * @param position  the position of the component to activate
+&nbsp;     * @throws IllegalStateException if it&#39;s not the player&#39;s turn, or if
+&nbsp;     *                               the player has not enough batteries to activate the component.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public synchronized void activateComponent(ShipBoard shipBoard, Point position) {
+<b class="fc">&nbsp;        if (!this.shipBoard.equals(shipBoard)) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;It&#39;s not your turn&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        checkIfExpired();</b>
+<b class="fc">&nbsp;        if (batteriesToSpend &gt;= shipBoard.getNumBatteries()) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;You don&#39;t have enough batteries&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (availablePositions.contains(position)) {</b>
+<b class="fc">&nbsp;            if (shipBoard.activateComponent(position)) {</b>
+<b class="fc">&nbsp;                batteriesToSpend++;</b>
+<b class="fc">&nbsp;                activatedComponents++;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Spends a battery on the ship board at the specified point.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board where the battery is used
+&nbsp;     * @param point     the point on the ship board where the battery is located
+&nbsp;     * @throws IllegalStateException if it&#39;s not the player&#39;s turn, or if
+&nbsp;     *                               the player has not enough activatable components to spend the battery on.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public synchronized void spendBatteries(ShipBoard shipBoard, Point point) {
+<b class="fc">&nbsp;        if (!this.shipBoard.equals(shipBoard)) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;It&#39;s not your turn&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        checkIfExpired();</b>
+<b class="fc">&nbsp;        if (batteriesToSpend &lt;= 0 &amp;&amp; activatedComponents - batteriesToSpend &gt;= availablePositions.size()) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;You don&#39;t have components to spend that battery on&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        shipBoard.useBatteries(point);</b>
+<b class="fc">&nbsp;        batteriesToSpend--;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     *
+&nbsp;     * @param shipBoard the ship board of the player that requested the action
+&nbsp;     * @throws IllegalStateException if it&#39;s not the player&#39;s turn, or if the player
+&nbsp;     *                               has batteries to spend or components to activate.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public synchronized void goNext(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        if (!this.shipBoard.equals(shipBoard)) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;It&#39;s not your turn&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        checkIfExpired();</b>
+<b class="fc">&nbsp;        if (batteriesToSpend &gt; 0) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;You still have batteries to spend&quot;);</b>
+<b class="fc">&nbsp;        } else if (batteriesToSpend &lt; 0) {</b>
+<b class="fc">&nbsp;            throw new IllegalStateException(&quot;You still have to activate components&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        endStateAction();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Ends the state action by transitioning to the next state.
+&nbsp;     */
+&nbsp;    protected void endStateAction() {
+<b class="fc">&nbsp;        getNextState();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return a set containing the positions on the ship board of
+&nbsp;     * components that can be activated.
+&nbsp;     */
+&nbsp;    public synchronized Set&lt;Point&gt; getAvailablePositions() {
+<b class="fc">&nbsp;        return availablePositions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return the ship board of the player who is activating components.
+&nbsp;     */
+&nbsp;    public synchronized ShipBoard getShipBoard() {
+<b class="fc">&nbsp;        return shipBoard;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

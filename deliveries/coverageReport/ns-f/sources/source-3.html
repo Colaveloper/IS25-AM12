@@ -1,0 +1,143 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > JFXApp</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui</a>
+</div>
+
+<h1>Coverage Summary for Class: JFXApp (it.polimi.ingsw.galaxytruckers.client.view.gui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">JFXApp</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui;
+&nbsp;
+&nbsp;import javafx.application.Application;
+&nbsp;import javafx.stage.Stage;
+&nbsp;
+&nbsp;/**
+&nbsp; * JavaFX application entry point for the Galaxy Truckers game GUI.
+&nbsp; * This class serves as a bridge between the JavaFX application lifecycle
+&nbsp; * and the game&#39;s GUI view system.
+&nbsp; */
+<b class="nc">&nbsp;public class JFXApp extends Application {</b>
+&nbsp;    /** The GUI view instance that will be attached to this JavaFX application */
+&nbsp;    private static GuiView guiView;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the GUI view to be used by this JavaFX application.
+&nbsp;     * This method should be called before the JavaFX application is launched.
+&nbsp;     *
+&nbsp;     * @param guiView The GUI view instance to be used
+&nbsp;     */
+&nbsp;    public static void setGuiView(GuiView guiView) {
+<b class="nc">&nbsp;        JFXApp.guiView = guiView;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes the JavaFX application stage.
+&nbsp;     * This method is called automatically by the JavaFX runtime
+&nbsp;     * after the application is launched. It delegates to the
+&nbsp;     * GuiView to set up the stage with the game&#39;s user interface.
+&nbsp;     *
+&nbsp;     * @param stage The primary stage for this application
+&nbsp;     * @throws Exception If an error occurs during initialization
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void start(Stage stage) throws Exception {
+<b class="nc">&nbsp;        guiView.setStage(stage);</b>
+<b class="nc">&nbsp;        stage.show();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

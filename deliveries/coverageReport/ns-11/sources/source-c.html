@@ -1,0 +1,329 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiJoinOrCreateScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiJoinOrCreateScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiJoinOrCreateScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/82)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Lobby;
+&nbsp;import javafx.application.Platform;
+&nbsp;import javafx.geometry.Insets;
+&nbsp;import javafx.geometry.Pos;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.effect.DropShadow;
+&nbsp;import javafx.scene.layout.HBox;
+&nbsp;import javafx.scene.layout.Pane;
+&nbsp;import javafx.scene.layout.Region;
+&nbsp;import javafx.scene.layout.VBox;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;import javafx.scene.text.Font;
+&nbsp;import javafx.scene.text.TextAlignment;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI screen for joining existing game lobbies or creating a new game.
+&nbsp; * This screen displays a list of available game lobbies that the player can join,
+&nbsp; * along with a button to create a new game.
+&nbsp; */
+&nbsp;public class GuiJoinOrCreateScreen extends GuiScreen {
+&nbsp;
+&nbsp;    private final List&lt;UUID&gt; ids;
+&nbsp;    private final VBox lobbiesBox;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new join or create game screen.
+&nbsp;     *
+&nbsp;     * @param model      The client model containing game state
+&nbsp;     * @param ids        Set of UUIDs for available game lobbies
+&nbsp;     * @param controller The controller for communicating with the server
+&nbsp;     */
+&nbsp;    public GuiJoinOrCreateScreen(ClientModel model, Set&lt;UUID&gt; ids, ClientControllerInterface controller) {
+<b class="nc">&nbsp;        super(model, controller);</b>
+<b class="nc">&nbsp;        this.ids = new ArrayList&lt;&gt;(ids);</b>
+<b class="nc">&nbsp;        this.lobbiesBox = new VBox(10);</b>
+<b class="nc">&nbsp;        this.lobbiesBox.setAlignment(Pos.CENTER);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * Creates and returns the user interface for joining or creating a game,
+&nbsp;     * including a list of available lobbies and a button to create a new game.
+&nbsp;     *
+&nbsp;     * @return A styled Pane containing the join or create game interface
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public Pane getNode() {
+<b class="nc">&nbsp;        Label title = new Label(&quot;Are you ready for a new adventure?&quot;);</b>
+<b class="nc">&nbsp;        title.setFont(new Font(&quot;Arial&quot;, 24));</b>
+<b class="nc">&nbsp;        title.setWrapText(true);</b>
+<b class="nc">&nbsp;        title.setTextAlignment(TextAlignment.CENTER);</b>
+<b class="nc">&nbsp;        title.setTextFill(Color.LIGHTSKYBLUE);</b>
+<b class="nc">&nbsp;        title.setMaxWidth(400);</b>
+<b class="nc">&nbsp;        title.setEffect(new DropShadow(10, Color.DARKSLATEBLUE));</b>
+&nbsp;
+<b class="nc">&nbsp;        Button createButton = new Button(&quot;CREATE NEW GAME&quot;);</b>
+<b class="nc">&nbsp;        createButton.setFont(new Font(18));</b>
+<b class="nc">&nbsp;        createButton.setMaxWidth(Double.MAX_VALUE);</b>
+<b class="nc">&nbsp;        createButton.setStyle(</b>
+&nbsp;                &quot;-fx-background-color: rgba(80, 0, 200, 0.6); -fx-text-fill: white; -fx-background-radius: 8;&quot;
+&nbsp;        );
+<b class="nc">&nbsp;        createButton.setOnAction(e -&gt; controller.showGameCreation());</b>
+&nbsp;
+<b class="nc">&nbsp;        VBox layout = new VBox(20, title, createButton, lobbiesBox);</b>
+<b class="nc">&nbsp;        layout.setMinHeight(Region.USE_PREF_SIZE);</b>
+<b class="nc">&nbsp;        layout.setMaxHeight(Region.USE_PREF_SIZE);</b>
+<b class="nc">&nbsp;        layout.setAlignment(Pos.CENTER);</b>
+<b class="nc">&nbsp;        layout.setPadding(new Insets(40));</b>
+<b class="nc">&nbsp;        layout.setMaxWidth(400);</b>
+<b class="nc">&nbsp;        layout.setStyle(</b>
+&nbsp;                &quot;-fx-background-color: rgba(0, 0, 50, 0.4); -fx-background-radius: 20;&quot;
+&nbsp;        );
+&nbsp;
+<b class="nc">&nbsp;        updateLobbyButtons();</b>
+&nbsp;
+<b class="nc">&nbsp;        return layout;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the display of available game lobbies.
+&nbsp;     * This method creates a styled table showing the host and game level
+&nbsp;     * for each available lobby that is not yet full.
+&nbsp;     */
+&nbsp;    private void updateLobbyButtons() {
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc">&nbsp;            lobbiesBox.getChildren().clear();</b>
+&nbsp;
+&nbsp;            // lobby container
+<b class="nc">&nbsp;            VBox tableContainer = new VBox(0);  // No spacing between rows</b>
+<b class="nc">&nbsp;            tableContainer.setStyle(&quot;-fx-background-color: rgba(10, 20, 50, 0.7); -fx-background-radius: 8;&quot;);</b>
+<b class="nc">&nbsp;            tableContainer.setPadding(new Insets(10));</b>
+<b class="nc">&nbsp;            tableContainer.setMaxWidth(400);</b>
+&nbsp;
+&nbsp;            // header row
+<b class="nc">&nbsp;            HBox headerRow = new HBox();</b>
+<b class="nc">&nbsp;            headerRow.setAlignment(Pos.CENTER_LEFT);</b>
+<b class="nc">&nbsp;            headerRow.setSpacing(15);  // Increased spacing between columns</b>
+<b class="nc">&nbsp;            headerRow.setPadding(new Insets(10, 15, 10, 20));</b>
+<b class="nc">&nbsp;            headerRow.setStyle(&quot;-fx-border-color: transparent transparent rgba(200, 200, 200, 0.3) transparent;&quot;);</b>
+&nbsp;
+&nbsp;            // host column
+<b class="nc">&nbsp;            Label hostLabel = new Label(&quot;Host&quot;);</b>
+<b class="nc">&nbsp;            hostLabel.setFont(new Font(&quot;Arial&quot;, 14));</b>
+<b class="nc">&nbsp;            hostLabel.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;            hostLabel.setPrefWidth(110);</b>
+&nbsp;
+&nbsp;            // level column
+<b class="nc">&nbsp;            Label levelLabel = new Label(&quot;Game Level&quot;);</b>
+<b class="nc">&nbsp;            levelLabel.setFont(new Font(&quot;Arial&quot;, 14));</b>
+<b class="nc">&nbsp;            levelLabel.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;            levelLabel.setPrefWidth(130);  // Increased width</b>
+&nbsp;
+<b class="nc">&nbsp;            headerRow.getChildren().addAll(hostLabel, levelLabel);</b>
+<b class="nc">&nbsp;            tableContainer.getChildren().add(headerRow);</b>
+&nbsp;
+&nbsp;            // adding each lobby as a row
+<b class="nc">&nbsp;            for (UUID id : ids) {</b>
+<b class="nc">&nbsp;                Lobby lobby = model.getActiveLobbies().get(id);</b>
+&nbsp;                // Only show lobbies that are not full (still joinable)
+<b class="nc">&nbsp;                if (lobby != null &amp;&amp; lobby.getPlayers().size() &lt; lobby.getPlayersN()) {</b>
+<b class="nc">&nbsp;                    HBox lobbyRow = createLobbyRow(lobby, id);</b>
+<b class="nc">&nbsp;                    tableContainer.getChildren().add(lobbyRow);</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            lobbiesBox.getChildren().add(tableContainer);</b>
+&nbsp;
+&nbsp;            // message if no lobbies are available
+<b class="nc">&nbsp;            if (ids.isEmpty()) {</b>
+<b class="nc">&nbsp;                Label noLobbiesLabel = new Label(&quot;No active games available. Create a new one!&quot;);</b>
+<b class="nc">&nbsp;                noLobbiesLabel.setTextFill(Color.LIGHTGRAY);</b>
+<b class="nc">&nbsp;                noLobbiesLabel.setFont(new Font(&quot;Arial&quot;, 14));</b>
+<b class="nc">&nbsp;                noLobbiesLabel.setPadding(new Insets(20, 0, 0, 0));</b>
+<b class="nc">&nbsp;                tableContainer.getChildren().add(noLobbiesLabel);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a styled row for a single game lobby in the lobby list.
+&nbsp;     * The row includes information about the host and game level,
+&nbsp;     * and can be clicked to join the lobby.
+&nbsp;     *
+&nbsp;     * @param lobby The lobby to display
+&nbsp;     * @param id    The UUID of the lobby
+&nbsp;     * @return An HBox containing the lobby information with appropriate styling
+&nbsp;     */
+&nbsp;    private HBox createLobbyRow(Lobby lobby, UUID id) {
+<b class="nc">&nbsp;        HBox rowContent = new HBox();</b>
+<b class="nc">&nbsp;        rowContent.setAlignment(Pos.CENTER_LEFT);</b>
+<b class="nc">&nbsp;        rowContent.setSpacing(10);</b>
+<b class="nc">&nbsp;        rowContent.setPadding(new Insets(12, 10, 12, 20));</b>
+&nbsp;
+&nbsp;        // change background color on hover
+<b class="nc">&nbsp;        rowContent.setOnMouseEntered(e -&gt;</b>
+<b class="nc">&nbsp;            rowContent.setStyle(&quot;-fx-background-color: rgba(60, 100, 160, 0.6);&quot;)</b>
+&nbsp;        );
+<b class="nc">&nbsp;        rowContent.setOnMouseExited(e -&gt;</b>
+<b class="nc">&nbsp;            rowContent.setStyle(&quot;-fx-background-color: rgba(30, 40, 70, 0.6);&quot;)</b>
+&nbsp;        );
+&nbsp;
+&nbsp;        // host column
+<b class="nc">&nbsp;        Label hostValue = new Label(lobby.getHost());</b>
+<b class="nc">&nbsp;        hostValue.setFont(new Font(&quot;Arial&quot;, 14));</b>
+<b class="nc">&nbsp;        hostValue.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;        hostValue.setPrefWidth(140);</b>
+&nbsp;
+&nbsp;        // level column
+<b class="nc">&nbsp;        Label levelValue = new Label(lobby.getLevel().toString());</b>
+<b class="nc">&nbsp;        levelValue.setFont(new Font(&quot;Arial&quot;, 14));</b>
+<b class="nc">&nbsp;        levelValue.setTextFill(Color.WHITE);</b>
+<b class="nc">&nbsp;        levelValue.setPrefWidth(140);</b>
+&nbsp;
+<b class="nc">&nbsp;        rowContent.getChildren().addAll(hostValue, levelValue);</b>
+<b class="nc">&nbsp;        rowContent.setOnMouseClicked(e -&gt; controller.joinLobby(id));</b>
+<b class="nc">&nbsp;        rowContent.setCursor(javafx.scene.Cursor.HAND);</b>
+&nbsp;
+<b class="nc">&nbsp;        return rowContent;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * Updates the screen when a new lobby becomes available.
+&nbsp;     *
+&nbsp;     * @param lobby The newly created lobby
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void notifyNewLobby(Lobby lobby) {
+<b class="nc">&nbsp;        ids.add(lobby.getId());</b>
+<b class="nc">&nbsp;        updateLobbyButtons();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * Updates the screen when a lobby is no longer available.
+&nbsp;     *
+&nbsp;     * @param lobbyId The UUID of the removed lobby
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void notifyRemoveLobby(UUID lobbyId) {
+<b class="nc">&nbsp;        ids.remove(lobbyId);</b>
+<b class="nc">&nbsp;        updateLobbyButtons();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

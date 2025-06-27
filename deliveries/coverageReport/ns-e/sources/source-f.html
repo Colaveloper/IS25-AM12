@@ -1,0 +1,215 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliPlanetScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: CliPlanetScreen (it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliPlanetScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    12.5%
+  </span>
+  <span class="absValue">
+    (4/32)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.ChoosePlanetState;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * CLI screen for choosing a planet to land on during the game.
+&nbsp; */
+&nbsp;public class CliPlanetScreen extends CliAdventureScreen {
+&nbsp;    // this screen does all players without stateChange unlike the others
+&nbsp;    // so currentShip and isMyTurn are not final
+&nbsp;
+&nbsp;    private boolean isMyTurn;
+&nbsp;    private ShipBoard currentShip;
+&nbsp;    private final ShipBoard[] choiceToShip;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new planet choice screen with the given game state.
+&nbsp;     *
+&nbsp;     * @param model      The client model containing the current game state
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     * @param gameState  The current choose-planet state
+&nbsp;     */
+&nbsp;    public CliPlanetScreen(ClientModel model, ClientControllerInterface controller, ChoosePlanetState gameState) {
+<b class="fc">&nbsp;        super(model, controller, gameState);</b>
+<b class="fc">&nbsp;        this.currentShip = gameState.getShipBoard();</b>
+<b class="fc">&nbsp;        this.isMyTurn = gameState.isMyTurn();</b>
+<b class="fc">&nbsp;        this.choiceToShip = gameState.getOptions();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void render() {
+<b class="nc">&nbsp;        printShipFlightStats().forEach(System.out::println);</b>
+<b class="nc">&nbsp;        printCurrentCard().forEach(System.out::println);</b>
+<b class="nc">&nbsp;        if(imOut) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;you surrendered&quot;);</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;        if (isMyTurn) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Your turn to choose a planet to land on&quot;);</b>
+&nbsp;            //System.out.println(&quot;Available planets: &quot;);
+<b class="nc">&nbsp;            for(int i = 0; i &lt; choiceToShip.length; i++) {</b>
+<b class="nc">&nbsp;               if (choiceToShip[i] != null) System.out.println(&quot;planet &quot; + i + &quot; - &quot; + choiceToShip[i].getColor());</b>
+<b class="nc">&nbsp;               else System.out.println(&quot;planet &quot; + i + &quot; - available&quot;);</b>
+&nbsp;            }
+&nbsp;            //System.out.println(&quot;Enter a number between 0 and &quot; + (numPlanets - 1) + &quot; to choose a planet&quot;);
+&nbsp;        } else {
+<b class="nc">&nbsp;            System.out.println(&quot;Waiting for &quot; + currentShip.getColor() + &quot; ship to choose a planet&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        printActions();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void parseAndInvoke(String input) {
+<b class="nc">&nbsp;        if(input.equalsIgnoreCase(&quot;Y&quot;)) {</b>
+<b class="nc">&nbsp;            controller.giveUp();</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;        if (!isMyTurn) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;It&#39;s not your turn to choose a planet&quot;);</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;        String[] parts = input.split(&quot;\\s+&quot;);</b>
+<b class="nc">&nbsp;        switch (parts[0].toUpperCase()){</b>
+&nbsp;            case &quot;L&quot; -&gt; {
+<b class="nc">&nbsp;                int choice = Integer.parseInt(parts[1]);</b>
+<b class="nc">&nbsp;                if (choice &lt; 0 || choice &gt;= choiceToShip.length || choiceToShip[choice] != null) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;Invalid planet choice.&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                controller.choosePlanet(choice);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case &quot;&quot; -&gt; controller.goNext();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyChoosePlanet(ShipBoard shipBoardLanded, int choice, ShipBoard nextShipBoard) {
+<b class="nc">&nbsp;        currentShip = nextShipBoard;</b>
+<b class="nc">&nbsp;        isMyTurn = currentShip.equals(myShipBoard);</b>
+<b class="nc">&nbsp;        choiceToShip[choice] = shipBoardLanded;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyCurrentPlayerUpdate(ShipBoard shipBoard) {
+<b class="nc">&nbsp;        currentShip = shipBoard;</b>
+<b class="nc">&nbsp;        isMyTurn = currentShip.equals(myShipBoard);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPlaceGoods(ShipBoard shipBoard, Point point, GoodsType goodsType) {
+<b class="nc">&nbsp;        super.notifyPlaceGoods(shipBoard, point, goodsType);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

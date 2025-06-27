@@ -1,0 +1,141 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MeteorSwarmCard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.model.adventureCards</a>
+</div>
+
+<h1>Coverage Summary for Class: MeteorSwarmCard (it.polimi.ingsw.galaxytruckers.client.model.adventureCards)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MeteorSwarmCard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.model.adventureCards;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents an adventure card for a meteor swarm event in the game.
+&nbsp; * Stores the list of projectiles associated with the meteor swarm.
+&nbsp; * Extends {@link AdventureCard} and implements {@link AdventureCardInterface}.
+&nbsp; */
+&nbsp;public final class MeteorSwarmCard extends AdventureCard implements AdventureCardInterface {
+&nbsp;
+&nbsp;    private final List&lt;Projectile&gt; projectiles;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a MeteorSwarmCard with the specified level, projectiles, and unique identifier.
+&nbsp;     *
+&nbsp;     * @param level the level of the card
+&nbsp;     * @param projectiles the list of projectiles for the meteor swarm
+&nbsp;     * @param id the unique identifier for the card
+&nbsp;     */
+&nbsp;    public MeteorSwarmCard(Level level, List&lt;Projectile&gt; projectiles, int id) {
+<b class="fc">&nbsp;        super(level, id);</b>
+<b class="fc">&nbsp;        this.projectiles = new ArrayList&lt;&gt;(projectiles);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the list of projectiles associated with this meteor swarm card.
+&nbsp;     *
+&nbsp;     * @return the list of projectiles
+&nbsp;     */
+&nbsp;    public List&lt;Projectile&gt; getProjectiles() {
+<b class="fc">&nbsp;        return projectiles;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

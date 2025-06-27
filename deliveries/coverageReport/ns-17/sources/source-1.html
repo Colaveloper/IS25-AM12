@@ -1,0 +1,166 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ClientEventQueue</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.network.server</a>
+</div>
+
+<h1>Coverage Summary for Class: ClientEventQueue (it.polimi.ingsw.galaxytruckers.network.server)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClientEventQueue</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.network.server;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.EventQueue;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.types.ControllerEvent;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.types.Event;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.controller.events.types.LobbyEvent;
+&nbsp;
+&nbsp;/**
+&nbsp; * A thread-safe event queue for client events that can be paused, i.e.
+&nbsp; * when waiting for a game snapshot to be sent to the client.
+&nbsp; */
+<b class="nc">&nbsp;public class ClientEventQueue extends EventQueue&lt;Event&gt; {</b>
+<b class="nc">&nbsp;    private boolean pausedController = false;</b>
+<b class="nc">&nbsp;    private boolean pausedLobby = false;</b>
+&nbsp;
+<b class="nc">&nbsp;    private final Object controllerLock = new Object();</b>
+<b class="nc">&nbsp;    private final Object lobbyLock = new Object();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Pauses the event queue for controller events and lobby events.
+&nbsp;     */
+&nbsp;    public synchronized void pause() {
+<b class="nc">&nbsp;        pausedController = true;</b>
+<b class="nc">&nbsp;        pausedLobby = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Enqueues an event to the queue if it is not paused. If an event
+&nbsp;     * should resume the queue, the queue will be resumed.
+&nbsp;     *
+&nbsp;     * @param event the event to enqueue
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public synchronized void notifyEvent(Event event) {
+<b class="nc">&nbsp;        switch (event) {</b>
+<b class="nc">&nbsp;            case ControllerEvent controllerEvent -&gt; {</b>
+<b class="nc">&nbsp;                synchronized (controllerLock) {</b>
+<b class="nc">&nbsp;                    pausedController = pausedController &amp;&amp; !controllerEvent.shouldResume();</b>
+<b class="nc">&nbsp;                    if (!pausedController) super.notifyEvent(controllerEvent);</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            }
+<b class="nc">&nbsp;            case LobbyEvent lobbyEvent -&gt; {</b>
+<b class="nc">&nbsp;                synchronized (lobbyLock) {</b>
+<b class="nc">&nbsp;                    pausedLobby = pausedLobby &amp;&amp; !lobbyEvent.shouldResume();</b>
+<b class="nc">&nbsp;                    if (!pausedLobby) super.notifyEvent(lobbyEvent);</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

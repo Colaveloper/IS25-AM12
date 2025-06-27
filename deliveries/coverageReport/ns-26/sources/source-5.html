@@ -1,0 +1,94 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Penalty</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.adventureCards.penalty</a>
+</div>
+
+<h1>Coverage Summary for Class: Penalty (it.polimi.ingsw.galaxytruckers.server.model.adventureCards.penalty)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">Penalty</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.adventureCards.penalty;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.FlightBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.AdventureState;
+&nbsp;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;/**
+&nbsp; * Interface for applying penalties in the game.
+&nbsp; * It defines a method to inflict a penalty on a player, by changing his ship or the flight board.
+&nbsp; * It also specifies what state, if any, the player must be brought to after the penalty can be applied.
+&nbsp; */
+&nbsp;public interface Penalty {
+&nbsp;    /**
+&nbsp;     * Inflicts a penalty on the player, modifying their ship or the flight board.
+&nbsp;     * If the player must be brought to a specific state after the penalty can be applied, the returned
+&nbsp;     * optional will contain that AdventureState.
+&nbsp;     *
+&nbsp;     * @param shipBoard the ShipBoard of the player being penalized
+&nbsp;     * @param flightBoard the FlightBoard containing all players&#39; ship boards
+&nbsp;     * @return an Optional containing the AdventureState the player must be brought to after the
+&nbsp;     * penalty, or empty if not applicable
+&nbsp;     */
+&nbsp;    Optional&lt;AdventureState&gt; inflictPenalty(ShipBoard shipBoard, FlightBoard flightBoard);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

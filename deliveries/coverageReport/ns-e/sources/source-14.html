@@ -1,0 +1,466 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliSecondShipBuildingScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: CliSecondShipBuildingScreen (it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliSecondShipBuildingScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5.3%
+  </span>
+  <span class="absValue">
+    (1/19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    2.5%
+  </span>
+  <span class="absValue">
+    (2/81)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    9.3%
+  </span>
+  <span class="absValue">
+    (14/151)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.DescriptionUtils;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents.CliComponentBank;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Hourglass;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.Player;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.AdventureCard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.state.SecondShipBuildingState;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.*;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * CLI screen for the ship building phase of game of level SECOND.
+&nbsp; */
+&nbsp;public class CliSecondShipBuildingScreen extends CliScreen {
+&nbsp;
+&nbsp;    private final CliComponentBank cliComponentBank;
+&nbsp;    private final CliForecast cliForecast;
+&nbsp;    private final CliForecastCards cliForecastCards;
+&nbsp;    private final CliComponentLegend cliComponentLegend;
+&nbsp;
+&nbsp;    private final SecondShipBuildingState gameState;
+&nbsp;    private final Map&lt;ShipBoard, CliShipHandAndStash&gt; buildingShipToCliShip;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new second ship building screen with the given game state.
+&nbsp;     *
+&nbsp;     * @param model The client model containing the current game state
+&nbsp;     * @param controller The controller for sending commands to the server
+&nbsp;     * @param gameState The current second ship building state
+&nbsp;     */
+&nbsp;    public CliSecondShipBuildingScreen(ClientModel model, ClientControllerInterface controller, SecondShipBuildingState gameState) {
+<b class="fc">&nbsp;        super(model, controller, gameState);</b>
+<b class="fc">&nbsp;        this.gameState = gameState;</b>
+<b class="fc">&nbsp;        cliComponentBank = new CliComponentBank(gameState.getComponentBank());</b>
+<b class="fc">&nbsp;        cliForecast = new CliForecast(gameState.getBlockedForecasts());</b>
+<b class="fc">&nbsp;        cliForecastCards = new CliForecastCards();</b>
+<b class="fc">&nbsp;        cliComponentLegend = new CliComponentLegend();</b>
+<b class="fc">&nbsp;        this.buildingShipToCliShip = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (Player player : model.getPlayers()) {</b>
+<b class="fc">&nbsp;            buildingShipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        List&lt;CliShipHandAndStash&gt; list = new ArrayList&lt;&gt;(buildingShipToCliShip.values().stream().toList());</b>
+<b class="fc">&nbsp;        list.sort(Comparator.comparing(CliShipHandAndStash::getNickname));</b>
+<b class="fc">&nbsp;        list.remove(buildingShipToCliShip.get(myShipBoard));</b>
+<b class="fc">&nbsp;        list.addFirst(buildingShipToCliShip.get(myShipBoard));</b>
+<b class="fc">&nbsp;        cliAllShips = new CliAllShips(list);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void render() {
+<b class="nc">&nbsp;        if(gameState.getHasForecastDeck()) {</b>
+<b class="nc">&nbsp;            cliForecastCards.getDescription().forEach(System.out::println);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            cliComponentBank.getDescription().forEach(System.out::println);</b>
+&nbsp;
+&nbsp;            // First combine the forecast with the component legend
+<b class="nc">&nbsp;            List&lt;String&gt; forecastWithLegend = DescriptionUtils.sideBySide(</b>
+<b class="nc">&nbsp;                cliForecast.getDescription(),</b>
+<b class="nc">&nbsp;                cliComponentLegend.getDescription()</b>
+&nbsp;            );
+&nbsp;
+&nbsp;            // Then combine the flight board with the forecast+legend
+<b class="nc">&nbsp;            DescriptionUtils.sideBySide(</b>
+<b class="nc">&nbsp;                cliFlightBoard.getDescription(),</b>
+&nbsp;                forecastWithLegend
+<b class="nc">&nbsp;            ).forEach(System.out::println);</b>
+&nbsp;
+<b class="nc">&nbsp;            System.out.println(</b>
+<b class="nc">&nbsp;                    &quot;firepower: &quot;   + myShipBoard.getFirePower()/2 +</b>
+<b class="nc">&nbsp;                    &quot;\tengine power: &quot; + myShipBoard.getEnginePower() +</b>
+<b class="nc">&nbsp;                    &quot;\tbatteries: &quot;   + myShipBoard.getNumBatteries()</b>
+&nbsp;            );
+&nbsp;
+&nbsp;            // Display hourglass status if it&#39;s running
+<b class="nc">&nbsp;            Hourglass hourglass = gameState.getHourglass();</b>
+<b class="nc">&nbsp;            if (hourglass != null) {</b>
+<b class="nc">&nbsp;                if (hourglass.getIsRunning()) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;HOURGLASS RUNNING - Time left: &quot; + hourglass.getTimeLeft() + &quot; seconds&quot;);</b>
+<b class="nc">&nbsp;                    if (hourglass.getFlipsLeft() == 0) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;WARNING: This is the FINAL hourglass flip!&quot;);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                } else if (hourglass.getFlipsLeft() &lt; 3) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;Hourglass ended, ready for another flip. &quot; + (hourglass.getFlipsLeft() == 1 ? &quot;Final flip available once you place your ship on the flight board.&quot; : &quot;&quot;));</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            cliAllShips.getDescription().forEach(System.out::println);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        printActions();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void parseAndInvoke(String input) {
+<b class="nc">&nbsp;        String[] parts = input.split(&quot;\\s+&quot;);</b>
+<b class="nc">&nbsp;        if(parts[0].isEmpty()) {</b>
+<b class="nc">&nbsp;            if (gameState.getHasForecastDeck()) {</b>
+<b class="nc">&nbsp;                controller.releaseForecast();</b>
+&nbsp;                return;
+&nbsp;            }
+<b class="nc">&nbsp;            else System.out.println(&quot;Invalid input&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        switch (parts[0].toUpperCase()) {</b>
+&nbsp;            case &quot;C&quot;:
+<b class="nc">&nbsp;                if(componentInHand()) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;You already have a component in hand&quot;);</b>
+&nbsp;                    break;
+&nbsp;                }
+<b class="nc">&nbsp;                controller.requestRandComponent();</b>
+&nbsp;                break;
+&nbsp;
+&nbsp;            case &quot;U&quot;:
+<b class="nc">&nbsp;                if (parts.length == 2) {</b>
+<b class="nc">&nbsp;                    int index = Integer.parseInt(parts[1]);</b>
+<b class="nc">&nbsp;                    int uncovered = gameState.getComponentBank().getUncoveredComponents().size();</b>
+<b class="nc">&nbsp;                    if (index &lt; 0 || index &gt;= uncovered) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;Invalid component index, must be from 0 to &quot; + (uncovered - 1));</b>
+&nbsp;                        break;
+&nbsp;                    }
+<b class="nc">&nbsp;                    if(componentInHand()) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;You already have a component in hand&quot;);</b>
+&nbsp;                        break;
+&nbsp;                    }
+<b class="nc">&nbsp;                    controller.requestComponent(cliComponentBank.getUncoveredComponents().get(index).getId());</b>
+&nbsp;                }
+&nbsp;                break;
+&nbsp;
+&nbsp;            case &quot;S&quot;:
+<b class="nc">&nbsp;                if (parts.length == 1) {</b>
+<b class="nc">&nbsp;                    controller.stashComponent();</b>
+<b class="nc">&nbsp;                } else if (parts.length == 2) {</b>
+<b class="nc">&nbsp;                    int index = Integer.parseInt(parts[1]);</b>
+<b class="nc">&nbsp;                    if(myShipBoard.getStashedComponents().size() &lt;= index) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;No stashed component found&quot;);</b>
+&nbsp;                        break;
+&nbsp;                    }
+<b class="nc">&nbsp;                    controller.grabStashedComponent(index);</b>
+&nbsp;                }
+&nbsp;                break;
+&nbsp;
+&nbsp;            case &quot;G&quot;:
+<b class="nc">&nbsp;                controller.grabPlacedComponent();</b>
+&nbsp;                break;
+&nbsp;            case &quot;F&quot;:
+<b class="nc">&nbsp;                if (parts.length == 2) {</b>
+<b class="nc">&nbsp;                    int index = Integer.parseInt(parts[1]);</b>
+<b class="nc">&nbsp;                    controller.acquireForecast(index);</b>
+&nbsp;                }
+&nbsp;                break;
+&nbsp;
+&nbsp;            case &quot;R&quot;:
+<b class="nc">&nbsp;                if (parts.length == 1) controller.rejectComponent();</b>
+<b class="nc">&nbsp;                else if (parts.length == 2) {</b>
+<b class="nc">&nbsp;                    Component lastComponent = myShipBoard.getLastComponent();</b>
+<b class="nc">&nbsp;                    if(lastComponent == null) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;Nothing to rotate&quot;);</b>
+&nbsp;                        break;
+&nbsp;                    }
+<b class="nc">&nbsp;                    Direction lastDirection = lastComponent.getOrientation();</b>
+<b class="nc">&nbsp;                    if(parts[1].equalsIgnoreCase(&quot;LEFT&quot;)) lastComponent.setOrientation(lastDirection.getLeft());</b>
+<b class="nc">&nbsp;                    else if(parts[1].equalsIgnoreCase(&quot;RIGHT&quot;)) lastComponent.setOrientation(lastDirection.getRight());</b>
+&nbsp;
+<b class="nc">&nbsp;                    cliAllShips.setDirty();</b>
+<b class="nc">&nbsp;                    buildingShipToCliShip.get(myShipBoard).setDirty();</b>
+&nbsp;
+<b class="nc">&nbsp;                    buildingShipToCliShip.get(myShipBoard).clearHand();</b>
+<b class="nc">&nbsp;                    buildingShipToCliShip.get(myShipBoard).setHand(lastComponent);</b>
+&nbsp;
+<b class="nc">&nbsp;                    render();</b>
+&nbsp;                }
+&nbsp;                break;
+&nbsp;
+&nbsp;            case &quot;P&quot;:
+<b class="nc">&nbsp;                if (parts.length == 3) {</b>
+<b class="nc">&nbsp;                    Point point = getPoint(input);</b>
+<b class="nc">&nbsp;                    if(!myShipBoard.getShipArea().contains(point)){</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;Cannot place component outside of the ship&quot;);</b>
+&nbsp;                        break;
+&nbsp;                    }
+<b class="nc">&nbsp;                    if(myShipBoard.getComponentMap().containsKey(point)) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;This point is already occupied&quot;);</b>
+&nbsp;                        break;
+&nbsp;                    }
+<b class="nc">&nbsp;                    Direction orientation = Direction.UP;</b>
+<b class="nc">&nbsp;                    if (myShipBoard.getLastComponent() != null) {</b>
+<b class="nc">&nbsp;                        orientation = myShipBoard.getLastComponent().getOrientation();</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    controller.placeComponent(getPoint(input), orientation);</b>
+&nbsp;                }
+&nbsp;                break;
+&nbsp;
+&nbsp;            case &quot;H&quot;:
+<b class="nc">&nbsp;                controller.flipHourglass();</b>
+&nbsp;                break;
+&nbsp;
+&nbsp;            case &quot;E&quot;:
+<b class="nc">&nbsp;                if (parts.length == 2) {</b>
+<b class="nc">&nbsp;                    int index = Integer.parseInt(parts[1]);</b>
+<b class="nc">&nbsp;                    if(!model.getGame().getFlightBoard().getStartingPositions().contains(index)) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;invalid position&quot;);</b>
+&nbsp;                        break;
+&nbsp;                    }
+<b class="nc">&nbsp;                    if(model.getGame().getFlightBoard().getShipToPlace().containsValue(index)) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;position already occupied&quot;);</b>
+&nbsp;                        break;
+&nbsp;                    }
+<b class="nc">&nbsp;                    controller.placeShipOnFlightboard(index);</b>
+&nbsp;                }
+&nbsp;                break;
+&nbsp;            default:
+&nbsp;                // should be impossible
+<b class="nc">&nbsp;                System.out.println(&quot;Invalid command.&quot;);</b>
+&nbsp;                break;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
+<b class="nc">&nbsp;        cliComponentBank.removeCovered();</b>
+<b class="nc">&nbsp;        buildingShipToCliShip.get(shipBoard).setHand(component);</b>
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
+<b class="nc">&nbsp;        cliComponentBank.removeUncovered(component);</b>
+<b class="nc">&nbsp;        buildingShipToCliShip.get(shipBoard).setHand(component);</b>
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyStashComponent(ShipBoard shipBoard, Component component) {
+<b class="nc">&nbsp;        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);</b>
+<b class="nc">&nbsp;        ship.clearHand();</b>
+<b class="nc">&nbsp;        ship.onStash(component);</b>
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
+<b class="nc">&nbsp;        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);</b>
+<b class="nc">&nbsp;        ship.onRemoveComponent(oldPosition);</b>
+<b class="nc">&nbsp;        ship.onStash(component);</b>
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyGrabPlacedComponent(ShipBoard shipBoard, Point prevPosition) {
+<b class="nc">&nbsp;        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);</b>
+<b class="nc">&nbsp;        ship.onRemoveComponent(prevPosition);</b>
+<b class="nc">&nbsp;        ship.setHand(shipBoard.getLastComponent());</b>
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRejectComponent(ShipBoard shipBoard, Component component) {
+&nbsp;        //can t reject component picked from stashed
+<b class="nc">&nbsp;        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);</b>
+<b class="nc">&nbsp;        ship.clearHand();</b>
+<b class="nc">&nbsp;        cliComponentBank.addUncovered(component);</b>
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
+&nbsp;        //can t reject component picked from stashed
+<b class="nc">&nbsp;        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);</b>
+<b class="nc">&nbsp;        ship.onRemoveComponent(oldPosition);</b>
+<b class="nc">&nbsp;        cliComponentBank.addUncovered(component);</b>
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
+<b class="nc">&nbsp;        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);</b>
+<b class="nc">&nbsp;        ship.setHand(component);</b>
+<b class="nc">&nbsp;        ship.onGrabStashed(index);</b>
+<b class="nc">&nbsp;        cliAllShips.setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+<b class="nc">&nbsp;        cliFlightBoard.setPosition(shipBoard, position);</b>
+<b class="nc">&nbsp;        cliFlightBoard.setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
+<b class="nc">&nbsp;        Component placedComponent = shipBoard.getComponentMap().get(point);</b>
+<b class="nc">&nbsp;        if (placedComponent != null) {</b>
+<b class="nc">&nbsp;            CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);</b>
+<b class="nc">&nbsp;            ship.onPutComponent(point, placedComponent);</b>
+<b class="nc">&nbsp;            ship.clearHand();</b>
+<b class="nc">&nbsp;            cliAllShips.setDirty();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {
+<b class="nc">&nbsp;        Component placedComponent = shipBoard.getComponentMap().get(newPoint);</b>
+<b class="nc">&nbsp;        if (placedComponent != null) {</b>
+<b class="nc">&nbsp;            CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);</b>
+<b class="nc">&nbsp;            ship.onPutComponent(newPoint, placedComponent);</b>
+<b class="nc">&nbsp;            ship.onRemoveComponent(oldPosition);</b>
+<b class="nc">&nbsp;            cliAllShips.setDirty();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyFlipHourglass(ShipBoard shipBoard) {
+<b class="nc">&nbsp;        Hourglass hourglass = gameState.getHourglass();</b>
+<b class="nc">&nbsp;        if (hourglass != null) {</b>
+<b class="nc">&nbsp;            if (hourglass.getFlipsLeft() == 0) {</b>
+<b class="nc">&nbsp;                System.out.println(&quot;Hourglass flipped for the FINAL time!&quot;);</b>
+<b class="nc">&nbsp;                System.out.println(&quot;All players must complete their ships before the timer ends!&quot;);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                System.out.println(&quot;Hourglass flipped!&quot;);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
+<b class="nc">&nbsp;        cliForecast.setBlockedForecasts(deckIndex,shipBoard.getColor());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
+<b class="nc">&nbsp;        cliForecast.removeBlockedForecast(index);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void setForecastDeck(List&lt;AdventureCard&gt; adventureCards) {
+<b class="nc">&nbsp;        cliForecastCards.setCards(adventureCards);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private boolean componentInHand(){
+<b class="nc">&nbsp;        return myShipBoard.getLastComponent() != null &amp;&amp; myShipBoard.getLastPosition() == null;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

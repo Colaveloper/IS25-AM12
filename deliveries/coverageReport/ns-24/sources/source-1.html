@@ -1,0 +1,202 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AbandonedShipCard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.server.model.adventureCards</a>
+</div>
+
+<h1>Coverage Summary for Class: AbandonedShipCard (it.polimi.ingsw.galaxytruckers.server.model.adventureCards)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbandonedShipCard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (23/23)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.server.model.adventureCards;
+&nbsp;
+&nbsp;import com.google.common.annotations.VisibleForTesting;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.Game;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.AdventureState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.DrawCardState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.GrabRewardState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.server.model.state.RemoveCrewState;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents an Abandoned Ship adventure card in the Galaxy Truckers game.
+&nbsp; */
+&nbsp;public class AbandonedShipCard extends AdventureCard {
+&nbsp;    private final int flightDaysLoss;
+&nbsp;    private final int creditPrize;
+&nbsp;    private final int requiredCrew;
+&nbsp;    private boolean accepted;
+&nbsp;    private boolean acquired;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs an AbandonedShipCard.
+&nbsp;     *
+&nbsp;     * @param game the game instance
+&nbsp;     * @param level the adventure card level
+&nbsp;     * @param creditPrize the credits awarded for claiming the ship
+&nbsp;     * @param requiredCrew the number of crew required to claim the ship
+&nbsp;     * @param flightDaysLoss the number of flight days lost when claiming the ship
+&nbsp;     * @param id the unique card identifier
+&nbsp;     */
+&nbsp;    public AbandonedShipCard (Game game, Level level, int creditPrize, int requiredCrew, int flightDaysLoss, int id) {
+<b class="fc">&nbsp;        super(game, level, id);</b>
+<b class="fc">&nbsp;        this.flightDaysLoss = flightDaysLoss;</b>
+<b class="fc">&nbsp;        this.creditPrize = creditPrize;</b>
+<b class="fc">&nbsp;        this.requiredCrew = requiredCrew;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void initialize() {
+<b class="fc">&nbsp;        super.initialize();</b>
+<b class="fc">&nbsp;        this.accepted = false;</b>
+<b class="fc">&nbsp;        this.acquired = false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public AdventureState getNextState() {
+<b class="fc">&nbsp;        if(!accepted) {</b>
+<b class="fc">&nbsp;            if (currentPlayerIndex &lt; flightBoard.getShipToPlace().size()) { // There are other players to evaluate</b>
+<b class="fc">&nbsp;                currentShipBoard = flightBoard.getOrderedShips().get(currentPlayerIndex);</b>
+&nbsp;            }
+&nbsp;            else {
+<b class="fc">&nbsp;                return new DrawCardState();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            currentPlayerIndex++;</b>
+<b class="fc">&nbsp;            if (currentShipBoard.getCrewSize() &gt;= requiredCrew) {</b>
+<b class="fc">&nbsp;                return new GrabRewardState(currentShipBoard, this::getReward);</b>
+&nbsp;            }
+&nbsp;            else {
+<b class="fc">&nbsp;                return getNextState();</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        else if(!acquired){</b>
+<b class="fc">&nbsp;            acquired = true;</b>
+<b class="fc">&nbsp;            return new RemoveCrewState(requiredCrew, currentShipBoard); // Let the player choose whether to collect the prize</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return new DrawCardState();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Method to apply the reward of the card, which consists of gaining credits and displacing the ship.
+&nbsp;     */
+&nbsp;    public void getReward() {
+<b class="fc">&nbsp;        currentShipBoard.gainCredits(creditPrize);</b>
+<b class="fc">&nbsp;        flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);</b>
+<b class="fc">&nbsp;        accepted = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * For testing purposes only.
+&nbsp;     * @return true if the reward has been accepted, false otherwise.
+&nbsp;     */
+&nbsp;    @VisibleForTesting
+&nbsp;    public boolean getAccepted(){
+<b class="fc">&nbsp;        return this.accepted;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,265 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CliShipBoard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements</a>
+</div>
+
+<h1>Coverage Summary for Class: CliShipBoard (it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliShipBoard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    7.1%
+  </span>
+  <span class="absValue">
+    (1/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25.6%
+  </span>
+  <span class="absValue">
+    (11/43)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.GameColor;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.DescriptionUtils;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents.CliBattery;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents.CliCabin;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents.CliCargoHold;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents.CliComponent;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.view.cli.CliHighlights;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.*;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.*;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a CLI element that displays a ship board in the Galaxy Truckers game.
+&nbsp; */
+&nbsp;public class CliShipBoard extends CliElement {
+&nbsp;
+&nbsp;    protected final ShipBoard shipBoard;
+&nbsp;
+&nbsp;    // no key = empty-space,
+&nbsp;    // no value = empty-area
+&nbsp;    protected final Map&lt;Point, CliComponent&gt; cliComponentMap;
+&nbsp;    private final GameColor color;
+&nbsp;    private final String nickname;
+&nbsp;    private Map&lt;Point, CliCabin&gt; cabins;
+&nbsp;    private Map&lt;Point, CliCargoHold&gt; cargoHolds;
+&nbsp;    private Map&lt;Point, CliBattery&gt; batteries;
+&nbsp;
+&nbsp;    int minX;
+&nbsp;    int maxX;
+&nbsp;    int minY;
+&nbsp;    int maxY;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a CLI representation of a ShipBoard.
+&nbsp;     *
+&nbsp;     * @param shipBoard The ShipBoard to be represented in the CLI
+&nbsp;     * @param nickname  The nickname of the player owning this ship board
+&nbsp;     */
+<b class="fc">&nbsp;    public CliShipBoard(ShipBoard shipBoard, String nickname) {</b>
+<b class="fc">&nbsp;        this.shipBoard = shipBoard;</b>
+<b class="fc">&nbsp;        this.nickname = nickname;</b>
+<b class="fc">&nbsp;        this.color = shipBoard.getColor();</b>
+&nbsp;
+<b class="fc">&nbsp;        cliComponentMap = new HashMap&lt;&gt;();</b>
+&nbsp;
+&nbsp;        //shipBoard.getShipArea().forEach(p-&gt; cliComponentMap.put(p, null));
+<b class="fc">&nbsp;        Set&lt;Point&gt; shipArea = shipBoard.getShipArea();</b>
+&nbsp;
+<b class="fc">&nbsp;        minX = shipArea.stream().mapToInt(p -&gt; p.x).min().orElse(0);</b>
+<b class="fc">&nbsp;        maxX = shipArea.stream().mapToInt(p -&gt; p.x).max().orElse(0);</b>
+<b class="fc">&nbsp;        minY = shipArea.stream().mapToInt(p -&gt; p.y).min().orElse(0);</b>
+<b class="fc">&nbsp;        maxY = shipArea.stream().mapToInt(p -&gt; p.y).max().orElse(0);</b>
+&nbsp;
+<b class="pc">&nbsp;        for (Point p : shipBoard.getComponentMap().keySet()) {</b>
+<b class="nc">&nbsp;            cliComponentMap.put(p, CliComponent.of(shipBoard.getComponentMap().get(p)));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the component at the specified point on the ship board with a new value.
+&nbsp;     * @param p the point on the ship board where the component is to be updated
+&nbsp;     * @param newValue the new component to be placed at the specified point
+&nbsp;     */
+&nbsp;    public void onPutComponent(Point p, Component newValue) {
+<b class="nc">&nbsp;        CliComponent newCliComponent = CliComponent.of(newValue);</b>
+<b class="nc">&nbsp;        cliComponentMap.put(p, newCliComponent);</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes the component at the specified point on the ship board.
+&nbsp;     * @param p the point on the ship board where the component is to be removed
+&nbsp;     */
+&nbsp;    public void onRemoveComponent(Point p) {
+<b class="nc">&nbsp;        cliComponentMap.remove(p);</b>
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the CliComponent at the given point on the ship board, or null if there is no such component.
+&nbsp;     * @param p the point on the ship board
+&nbsp;     * @return the CliComponent at the specified point, or null if there is no component
+&nbsp;     */
+&nbsp;    public CliComponent getCliComponent(Point p) {
+<b class="nc">&nbsp;        return cliComponentMap.get(p);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Highlights the specified points on the ship board with the given color.
+&nbsp;     * @param points the set of points to highlight
+&nbsp;     * @param color the color to use for highlighting
+&nbsp;     */
+&nbsp;    public void highlightPoints(Set&lt;Point&gt; points, CliHighlights color){
+<b class="nc">&nbsp;        for (Point point : points){</b>
+<b class="nc">&nbsp;            cliComponentMap.get(point).highlight(color);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        setDirty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return the nickname of the player owning this ship board.
+&nbsp;     */
+&nbsp;    public String getNickname() {
+<b class="nc">&nbsp;        return nickname;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected List&lt;String&gt; getNewDescription(){
+&nbsp;
+<b class="nc">&nbsp;        List&lt;String&gt; result = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        List&lt;String&gt; rowDescription = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int y = minY; y &lt;= maxY; y++) {</b>
+<b class="nc">&nbsp;            rowDescription.clear();</b>
+<b class="nc">&nbsp;            rowDescription.addAll(List.of(&quot;&quot;,String.valueOf(y),&quot;&quot;));</b>
+<b class="nc">&nbsp;            for (int x = minX; x &lt;= maxX; x++) {</b>
+<b class="nc">&nbsp;                List&lt;String&gt; newCell = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;                if (!shipBoard.getShipArea().contains(new Point(x, y))) {</b>
+&nbsp;                    // empty-space
+<b class="nc">&nbsp;                    newCell = List.of(&quot;     &quot;, &quot;     &quot;, &quot;     &quot;);</b>
+<b class="nc">&nbsp;                } else if (cliComponentMap.containsKey(new Point(x, y))) {</b>
+<b class="nc">&nbsp;                    newCell = cliComponentMap.get(new Point(x, y)).getDescription();</b>
+&nbsp;                } else {
+&nbsp;                    // empty-area
+<b class="nc">&nbsp;                    newCell = List.of(&quot;     &quot;, &quot;  X  &quot;, &quot;     &quot;);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                rowDescription = DescriptionUtils.sideBySide(rowDescription, newCell, 0);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            result.addAll(rowDescription);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        StringBuilder xIndexes = new StringBuilder(&quot; &quot;);</b>
+<b class="nc">&nbsp;        for (int x = minX; x &lt;= maxX; x++) {</b>
+<b class="nc">&nbsp;            xIndexes.append(&quot;  &quot;).append(x).append(&quot;  &quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        result.add(xIndexes.toString());</b>
+&nbsp;
+<b class="nc">&nbsp;        result = DescriptionUtils.borderAndTitle(</b>
+&nbsp;                result,
+<b class="nc">&nbsp;                GameColorCliMapper.toAnsiBullet(color)+&quot; &quot;+nickname</b>
+&nbsp;        );
+<b class="nc">&nbsp;        return result;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

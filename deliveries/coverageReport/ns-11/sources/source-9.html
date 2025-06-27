@@ -1,0 +1,220 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GuiGameCreationScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiGameCreationScreen (it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiGameCreationScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/39)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.view.gui.guiScreens;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+&nbsp;import javafx.geometry.Insets;
+&nbsp;import javafx.geometry.Pos;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.ComboBox;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.effect.DropShadow;
+&nbsp;import javafx.scene.layout.Pane;
+&nbsp;import javafx.scene.layout.Region;
+&nbsp;import javafx.scene.layout.VBox;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;import javafx.scene.text.Font;
+&nbsp;
+&nbsp;import java.util.Arrays;
+&nbsp;
+&nbsp;/**
+&nbsp; * GUI screen for creating a new game.
+&nbsp; * This screen allows the user to select game settings such as flight level
+&nbsp; * and the number of players before starting a new game session.
+&nbsp; */
+&nbsp;public class GuiGameCreationScreen extends GuiScreen {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new game creation screen.
+&nbsp;     *
+&nbsp;     * @param model      The client model containing game state
+&nbsp;     * @param controller The controller for communicating with the server
+&nbsp;     */
+&nbsp;    public GuiGameCreationScreen(ClientModel model, ClientControllerInterface controller) {
+<b class="nc">&nbsp;        super(model, controller);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * {@inheritDoc}
+&nbsp;     * Creates and returns the game creation interface with level selection,
+&nbsp;     * player count selection, and a start button.
+&nbsp;     *
+&nbsp;     * @return A styled Pane containing the game creation user interface
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public Pane getNode() {
+<b class="nc">&nbsp;        VBox layout = new VBox(20);</b>
+<b class="nc">&nbsp;        layout.setMinHeight(Region.USE_PREF_SIZE);</b>
+<b class="nc">&nbsp;        layout.setMaxHeight(Region.USE_PREF_SIZE);</b>
+<b class="nc">&nbsp;        layout.setAlignment(Pos.CENTER);</b>
+<b class="nc">&nbsp;        layout.setPadding(new Insets(40));</b>
+<b class="nc">&nbsp;        layout.setMaxWidth(400);</b>
+<b class="nc">&nbsp;        layout.setStyle(</b>
+&nbsp;                &quot;-fx-background-color: rgba(0, 0, 50, 0.4); -fx-background-radius: 20;&quot;
+&nbsp;        );
+&nbsp;
+<b class="nc">&nbsp;        Label instructionLabel = new Label(&quot;New Game&quot;);</b>
+<b class="nc">&nbsp;        instructionLabel.setFont(new Font(&quot;Arial&quot;, 22));</b>
+<b class="nc">&nbsp;        instructionLabel.setTextFill(Color.LIGHTSKYBLUE);</b>
+<b class="nc">&nbsp;        instructionLabel.setEffect(new DropShadow(8, Color.DARKSLATEBLUE));</b>
+&nbsp;
+<b class="nc">&nbsp;        String comboBoxStyle = &quot;-fx-background-color: rgba(255,255,255,0.87); &quot; +</b>
+&nbsp;                &quot;-fx-border-color: rgba(90,155,212,0.73); &quot; +
+&nbsp;                &quot;-fx-border-radius: 6; &quot; +
+&nbsp;                &quot;-fx-font-size: 14px;&quot;;
+&nbsp;
+<b class="nc">&nbsp;        ComboBox&lt;Level&gt; levelComboBox = new ComboBox&lt;&gt;();</b>
+<b class="nc">&nbsp;        levelComboBox.getItems().addAll(</b>
+<b class="nc">&nbsp;            Arrays.stream(Level.values())</b>
+<b class="nc">&nbsp;                  .filter(level -&gt; level != Level.FIRST)</b>
+<b class="nc">&nbsp;                  .toArray(Level[]::new)</b>
+&nbsp;        );
+<b class="nc">&nbsp;        levelComboBox.setPromptText(&quot;Select Level&quot;);</b>
+<b class="nc">&nbsp;        levelComboBox.setMaxWidth(Double.MAX_VALUE);</b>
+<b class="nc">&nbsp;        levelComboBox.setStyle(comboBoxStyle);</b>
+&nbsp;
+<b class="nc">&nbsp;        ComboBox&lt;Integer&gt; playersComboBox = new ComboBox&lt;&gt;();</b>
+<b class="nc">&nbsp;        playersComboBox.getItems().addAll(2, 3, 4);</b>
+<b class="nc">&nbsp;        playersComboBox.setPromptText(&quot;Number of Players&quot;);</b>
+<b class="nc">&nbsp;        playersComboBox.setMaxWidth(Double.MAX_VALUE);</b>
+<b class="nc">&nbsp;        playersComboBox.setStyle(comboBoxStyle);</b>
+&nbsp;
+<b class="nc">&nbsp;        Button createButton = new Button(&quot;Start&quot;);</b>
+<b class="nc">&nbsp;        createButton.setFont(new Font(18));</b>
+<b class="nc">&nbsp;        createButton.setMaxWidth(Double.MAX_VALUE);</b>
+<b class="nc">&nbsp;        createButton.setStyle(</b>
+&nbsp;                &quot;-fx-background-color: rgba(80, 0, 200, 0.6); -fx-text-fill: white; -fx-background-radius: 8;&quot;
+&nbsp;        );
+<b class="nc">&nbsp;        createButton.setOnAction(e -&gt; {</b>
+<b class="nc">&nbsp;            Level selectedLevel = levelComboBox.getValue();</b>
+<b class="nc">&nbsp;            Integer selectedPlayers = playersComboBox.getValue();</b>
+<b class="nc">&nbsp;            if (selectedLevel != null &amp;&amp; selectedPlayers != null) {</b>
+&nbsp;                try {
+<b class="nc">&nbsp;                    controller.requestNewGame(selectedLevel, selectedPlayers);</b>
+<b class="nc">&nbsp;                    createButton.setDisable(true);</b>
+&nbsp;                } catch (Exception ex) {
+<b class="nc">&nbsp;                    throw new RuntimeException(ex);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        layout.getChildren().addAll(instructionLabel, levelComboBox, playersComboBox, createButton);</b>
+<b class="nc">&nbsp;        return layout;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>

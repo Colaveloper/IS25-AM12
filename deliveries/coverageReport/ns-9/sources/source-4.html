@@ -1,0 +1,206 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ChoosePlanetState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.galaxytruckers.client.model.state</a>
+</div>
+
+<h1>Coverage Summary for Class: ChoosePlanetState (it.polimi.ingsw.galaxytruckers.client.model.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChoosePlanetState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (21/21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package it.polimi.ingsw.galaxytruckers.client.model.state;
+&nbsp;
+&nbsp;import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents the state where players choose a planet in the Galaxy Truckers game.
+&nbsp; * This state allows players to select which planets to land on to receive goods
+&nbsp; * at the cost of losing flight days.
+&nbsp; */
+&nbsp;public final class ChoosePlanetState extends AdventureState implements GameStateInterface, AdventureStateInterface {
+&nbsp;    /** Array of planet options represented as ship boards */
+&nbsp;    private final ShipBoard[] options;
+&nbsp;
+&nbsp;    /** Flag indicating whether it&#39;s the current player&#39;s turn */
+&nbsp;    private boolean isMyTurn;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new ChoosePlanetState with the specified parameters.
+&nbsp;     * Initializes the state with the player&#39;s ship, the currently active ship,
+&nbsp;     * and the number of planets to choose from.
+&nbsp;     *
+&nbsp;     * @param myShip The ship board of the local player
+&nbsp;     * @param currentShip The ship board that is currently active
+&nbsp;     * @param numPlanets The number of planet options available
+&nbsp;     */
+<b class="fc">&nbsp;    public ChoosePlanetState(ShipBoard myShip, ShipBoard currentShip, int numPlanets) {</b>
+<b class="fc">&nbsp;        this.myShip = myShip;</b>
+<b class="fc">&nbsp;        options = new ShipBoard[numPlanets];</b>
+<b class="fc">&nbsp;        this.currentShip = currentShip;</b>
+<b class="fc">&nbsp;        this.isMyTurn = myShip.equals(currentShip);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;StateActions&gt; getAvailableActions() {
+<b class="fc">&nbsp;        List&lt;StateActions&gt; actions = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        if(isMyTurn) {</b>
+<b class="fc">&nbsp;            actions.add(StateActions.CHOOSE_PLANET);</b>
+<b class="fc">&nbsp;            actions.add(StateActions.GO_NEXT);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        actions.addAll(super.getAvailableActions());</b>
+<b class="fc">&nbsp;        return actions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyChoosePlanet(ShipBoard shipBoard, int choice, ShipBoard nextShipBoard) {
+<b class="fc">&nbsp;        isMyTurn = myShip.equals(nextShipBoard);</b>
+<b class="fc">&nbsp;        if(choice != -1) options[choice] = shipBoard;</b>
+<b class="fc">&nbsp;        currentShip = nextShipBoard;</b>
+<b class="fc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyChoosePlanet(shipBoard,choice,nextShipBoard));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyCurrentPlayerUpdate(ShipBoard shipBoard) {
+<b class="fc">&nbsp;        isMyTurn = myShip.equals(shipBoard);</b>
+<b class="fc">&nbsp;        currentShip = shipBoard;</b>
+<b class="fc">&nbsp;        game.getObservers().forEach(observer -&gt; observer.notifyCurrentPlayerUpdate(shipBoard));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if it&#39;s the local player&#39;s turn to choose a planet.
+&nbsp;     *
+&nbsp;     * @return true if it&#39;s the local player&#39;s turn, false otherwise
+&nbsp;     */
+&nbsp;    public boolean isMyTurn() {
+<b class="fc">&nbsp;        return isMyTurn;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the array of planet options available for selection.
+&nbsp;     * Each occupied planet is represented by a shipboard in the array.
+&nbsp;     *
+&nbsp;     * @return Array of ship boards representing planet options
+&nbsp;     */
+&nbsp;    public ShipBoard[] getOptions() {
+<b class="fc">&nbsp;        return options;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the planet options available for selection.
+&nbsp;     * Copies the provided options array into the internal options array.
+&nbsp;     *
+&nbsp;     * @param options Array of ship boards representing planet options
+&nbsp;     */
+&nbsp;    public void setOptions(ShipBoard[] options) {
+<b class="fc">&nbsp;        System.arraycopy(options, 0, this.options, 0, this.options.length);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:01</div>
+</div>
+</body>
+</html>
