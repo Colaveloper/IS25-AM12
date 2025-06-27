@@ -1,4 +1,4 @@
-![logo.webp](logo.webp)
+![logo.webp](src/main/resources/textures/other/logo.webp)
 ## About the Project
 
 This project is a digital implementation of the board game **Galaxy Trucker**, developed as part of the Final Software Engineering Project for the academic year 2024/2025 at Politecnico di Milano by:
@@ -8,7 +8,7 @@ This project is a digital implementation of the board game **Galaxy Trucker**, d
 * [Lorenzo Carafa](https://github.com/LorenzoCarafa)
 * [Francesco Canossi](https://github.com/froopy090)
 
-The implementation supports the **complete rule set** of the game, including both the **Second Flight** and the optional **Test Flight** mode.
+The implementation supports the [**complete rule set**](https://www.czechgames.com/games/galaxy-trucker#downloads) of the game, including both the **Second Flight** and the optional **Test Flight** mode.
 
 Each player can independently choose their preferred combination of interface (GUI or TUI) and communication protocol (Socket or RMI) and still take part in the same game.
 
@@ -33,7 +33,7 @@ The project is distributed as a single precompiled executable JAR file.
 To run it:
 
 ```bash
-java -jar GalaxyTruckers-1.0.jar
+java -jar GalaxyTruckers-1.0-SNAPSHOT-shaded.jar
 ```
 
 When launching the server, the host is first asked whether to start a **demo** session. If so, they can either:
@@ -46,17 +46,17 @@ Ensure that **Java 24** is installed.
 
 ## Documentation
 
-* The entire project is covered with **JavaDoc**.
-* A **high-level UML diagram** and **generated UML diagrams** (from the source code) are provided.
-* The communication protocol between client and server is documented in the deliverables folder.
+* The entire project is documented with [**Javadoc**](deliveries/javadoc/index.html).
+* A [**high-level UML diagram**](deliveries/UML_high_level.drawio.pdf) and [**generated UML diagrams**](deliveries/UML_generated_diagram.pdf) are provided.
+* The communication protocol between client and server is documented with [**sequence diagrams**](deliveries/SEQUENCE-DIAGRAM.drawio.pdf).
 
 ## Testing and Coverage
 
 *Work in progress.*
 
 ## Gameplay Screenshots
-![cli_screenshot.png](cli_screenshot.png) 
-![gui_screenshot.png](gui_screenshot.png)
+![cli_screenshot.png](src/main/resources/textures/other/cli_screenshot.png)
+![gui_screenshot.png](src/main/resources/textures/other/gui_screenshot.png)
 
 ## Tools and Libraries
 
