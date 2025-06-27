@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.view.controller;
 
 
+import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.*;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.states.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventHandler;
@@ -26,6 +27,7 @@ import java.util.List;
  * </p>
  */
 public class ClientEventHandler implements EventHandler<Event> {
+    private final ClientController controller;
     private final ClientModel clientModel;
     private final PlayerRegistry playerRegistry;
     private final ConversionUtils conversionUtils;
@@ -33,10 +35,12 @@ public class ClientEventHandler implements EventHandler<Event> {
     /**
      * Constructs a ClientEventHandler with the given client model and player registry.
      *
-     * @param clientModel the client-side model to update
-     * @param playerRegistry the registry for player information
+     * @param clientController
+     * @param clientModel      the client-side model to update
+     * @param playerRegistry   the registry for player information
      */
-    public ClientEventHandler(ClientModel clientModel, PlayerRegistry playerRegistry) {
+    public ClientEventHandler(ClientController clientController, ClientModel clientModel, PlayerRegistry playerRegistry) {
+        this.controller = clientController;
         this.clientModel = clientModel;
         this.playerRegistry = playerRegistry;
         this.conversionUtils = new ConversionUtils(playerRegistry);
@@ -124,7 +128,7 @@ public class ClientEventHandler implements EventHandler<Event> {
                     conversionUtils.convertName(planetChoiceEvent.nextPlayerName())
             );
             case PlayerDisconnectionEvent playerDisconnectionEvent -> {
-                //TODO: handle player disconnection
+                controller.reportError("Player " + playerDisconnectionEvent.playerName() + " has disconnected.");
             }
             case PlayerExitEvent playerExitEvent -> {
                 //TODO: handle player exit (maybe we can treat exit like disconnection)
@@ -252,6 +256,10 @@ public class ClientEventHandler implements EventHandler<Event> {
                 } else {
                     setupLobby(details,true);
                 }
+            }
+            case EndByDisconnectionEvent endByDisconnectionEvent -> {
+                controller.reportError("The game has ended because all other players disconnected.");
+                clientModel.clearGame();
             }
         }
     }

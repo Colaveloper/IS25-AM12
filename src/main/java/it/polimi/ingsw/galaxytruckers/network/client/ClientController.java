@@ -69,7 +69,7 @@ public class ClientController implements ClientControllerInterface, ControllerTo
      * Initializes the event handler for processing events received from the server.
      */
     public void initEventHandler() {
-        this.eventHandler = new ClientEventHandler(model, playerRegistry);
+        this.eventHandler = new ClientEventHandler(this, model, playerRegistry);
     }
 
     //---------------------------------------INTERNAL CALLS------------------------------------------
@@ -108,6 +108,15 @@ public class ClientController implements ClientControllerInterface, ControllerTo
                 .filter(p -> !p.equals(model.getClientPlayer()))
                 .forEach(playerRegistry::removePlayer);
         model.clearGame();
+    }
+
+    /**
+     * Reports an error message to the view.
+     *
+     * @param message the error message to be reported
+     */
+    public void reportError(String message) {
+        view.reportError(message);
     }
 
     /**

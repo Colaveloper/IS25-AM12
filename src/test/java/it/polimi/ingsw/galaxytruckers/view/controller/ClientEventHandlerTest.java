@@ -5,9 +5,9 @@ import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.SurrenderCause;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.network.client.ClientController;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.ActiveLobbyDTO;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.LobbyDetailsDTO;
-import it.polimi.ingsw.galaxytruckers.serverController.dto.states.StateDTO;
 import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
@@ -29,6 +29,7 @@ import java.util.UUID;
 import static org.mockito.Mockito.*;
 
 class ClientEventHandlerTest {
+    private ClientController clientController;
     private ClientModel clientModel;
     private PlayerRegistry playerRegistry;
     private ClientEventHandler handler;
@@ -38,10 +39,11 @@ class ClientEventHandlerTest {
 
     @BeforeEach
     void setUp() {
+        clientController = mock(ClientController.class);
         clientModel = mock(ClientModel.class);
         playerRegistry = new PlayerRegistry();
         ConversionUtils conversionUtils = new ConversionUtils(playerRegistry);
-        handler = new ClientEventHandler(clientModel, playerRegistry);
+        handler = new ClientEventHandler(clientController, clientModel, playerRegistry);
 
         // Set up a test player
         testPlayer = playerRegistry.addPlayer(testPlayerName);
