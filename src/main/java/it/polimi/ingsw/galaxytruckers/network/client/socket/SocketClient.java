@@ -1,23 +1,21 @@
 package it.polimi.ingsw.galaxytruckers.network.client.socket;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
+import it.polimi.ingsw.galaxytruckers.client.controller.ServerToClientInterface;
+import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ServerHandler;
-import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.messages.*;
 import it.polimi.ingsw.galaxytruckers.network.messages.requests.*;
-import it.polimi.ingsw.galaxytruckers.network.server.VirtualClient;
+import it.polimi.ingsw.galaxytruckers.network.VirtualClient;
 import it.polimi.ingsw.galaxytruckers.network.SafeSocket;
-import it.polimi.ingsw.galaxytruckers.view.Direction;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+import it.polimi.ingsw.galaxytruckers.server.controller.events.types.Event;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
@@ -28,7 +26,7 @@ import java.util.concurrent.*;
  */
 public class SocketClient implements ServerHandler, VirtualClient {
     private SafeSocket socket;
-    private ClientControllerInterface controller;
+    private ServerToClientInterface controller;
 
     private String ip;
     private int port;
@@ -49,7 +47,7 @@ public class SocketClient implements ServerHandler, VirtualClient {
      *
      * @param controller the controller to set
      */
-    public void setController(ClientControllerInterface controller) {
+    public void setController(ServerToClientInterface controller) {
         this.controller = controller;
     }
 

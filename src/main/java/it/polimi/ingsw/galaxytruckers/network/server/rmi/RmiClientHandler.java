@@ -1,18 +1,18 @@
 package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
 import com.google.common.annotations.VisibleForTesting;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
 import it.polimi.ingsw.galaxytruckers.network.server.ClientEventQueue;
 import it.polimi.ingsw.galaxytruckers.network.server.ClientHandler;
 import it.polimi.ingsw.galaxytruckers.network.server.SessionManager;
-import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.LobbyInterface;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
-import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.server.controller.ServerControllerInterface;
+import it.polimi.ingsw.galaxytruckers.server.controller.events.types.Event;
+import it.polimi.ingsw.galaxytruckers.server.controller.lobby.LobbyInterface;
+import it.polimi.ingsw.galaxytruckers.server.controller.lobby.Player;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
 
 import java.awt.*;
 import java.rmi.NoSuchObjectException;

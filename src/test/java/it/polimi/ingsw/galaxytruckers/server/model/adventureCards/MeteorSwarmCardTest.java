@@ -1,0 +1,103 @@
+package it.polimi.ingsw.galaxytruckers.server.model.adventureCards;
+
+import it.polimi.ingsw.galaxytruckers.server.model.*;
+import it.polimi.ingsw.galaxytruckers.server.model.adventureCards.projectiles.BigMeteor;
+import it.polimi.ingsw.galaxytruckers.server.model.adventureCards.projectiles.Projectile;
+import it.polimi.ingsw.galaxytruckers.server.model.adventureCards.projectiles.SmallMeteor;
+import it.polimi.ingsw.galaxytruckers.server.model.state.DrawCardState;
+import it.polimi.ingsw.galaxytruckers.server.model.state.GameState;
+import it.polimi.ingsw.galaxytruckers.server.model.state.HandleProjectileState;
+import it.polimi.ingsw.galaxytruckers.shared.enums.GameColor;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.SecondShipBoard;
+import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class MeteorSwarmCardTest {
+    Game game;
+    MeteorSwarmCard meteorSwarmCard;
+    FlightBoard flightBoard;
+    List<Projectile> safeProjectiles;
+    Projectile damagingProjectile;
+
+    SecondShipBoard ship1;
+    SecondShipBoard ship2;
+    List<ShipBoard> ships;
+    GameState testState;
+
+    @BeforeEach
+    void setUp() {
+        ship1 = new SecondShipBoardForTesting(GameColor.RED) {
+            @Override
+            public List<Set<Point>> getConnectedSets() {
+                return List.of(Set.of(), Set.of()); // breaking
+            }
+        };
+        ship2 = new SecondShipBoardForTesting(GameColor.BLUE) {
+            @Override
+            public List<Set<Point>> getConnectedSets() {
+                return List.of(Set.of()); // not breaking
+            }
+        };
+        ships = new ArrayList<>(List.of(ship1, ship2));
+        flightBoard = new FlightBoard(new GameEventListenerForTesting()) {
+
+            @Override
+            public List<ShipBoard> getOrderedShips() {
+                return new ArrayList<>(ships);
+            }
+
+            @Override
+            public void placeShipOnFlightBoard(ShipBoard shipBoard, int startingPosition) {
+            }
+
+            @Override
+            protected int getLoopLength() {
+                return 0;
+            }
+        };
+        safeProjectiles = new ArrayList<>(List.of(
+                new SmallMeteor(()->6, Direction.UP),
+                new SmallMeteor(()->9,Direction.UP),
+                new BigMeteor(()->8, Direction.RIGHT), // 1
+                new BigMeteor(()->5, Direction.DOWN)
+        ));
+        damagingProjectile = new SmallMeteor(()->1,Direction.UP) {
+            @Override
+            public boolean fireAt(ShipBoard shipBoard) {
+                return true;
+            }
+        };
+
+        game = new GameStub(Level.SECOND) {
+            @Override public FlightBoard getFlightBoard() {
+                return flightBoard;
+            }
+        };
+
+        meteorSwarmCard = new MeteorSwarmCard(game,  Level.SECOND, new ArrayList<>(safeProjectiles), 1);
+        meteorSwarmCard.initialize();
+    }
+
+    @Test
+    void getNextStateReturnsActivateThenDrawCardIfNoBreaking() {
+        for (Projectile projectile : safeProjectiles) {
+            for (ShipBoard shipBoard : ships) {
+                testState = meteorSwarmCard.getNextState();
+                assertEquals(meteorSwarmCard.getCurrentShipBoard(), shipBoard);
+                assertInstanceOf(HandleProjectileState.class, testState);
+                assertEquals(projectile, ((HandleProjectileState) testState).getProjectile());
+            }
+        }
+        testState = meteorSwarmCard.getNextState();
+        assertInstanceOf(DrawCardState.class, testState);
+    }
+}

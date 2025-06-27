@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.server.socket;
 
 import it.polimi.ingsw.galaxytruckers.network.SafeSocket;
-import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
+import it.polimi.ingsw.galaxytruckers.server.controller.ServerControllerInterface;
 
 import java.io.*;
 import java.net.*;

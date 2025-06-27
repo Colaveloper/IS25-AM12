@@ -1,14 +1,14 @@
 package it.polimi.ingsw.galaxytruckers.network.client.rmi;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.network.client.ClientControllerInterface;
+import it.polimi.ingsw.galaxytruckers.client.controller.ServerToClientInterface;
+import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.network.client.ServerHandler;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteServer;
 import it.polimi.ingsw.galaxytruckers.network.server.rmi.RemoteController;
-import it.polimi.ingsw.galaxytruckers.view.Direction;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+import it.polimi.ingsw.galaxytruckers.server.controller.events.types.Event;
 
 import java.awt.*;
 import java.rmi.NotBoundException;
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class RmiClient extends UnicastRemoteObject implements RemoteClient, ServerHandler {
     private RemoteServer server;
     private RemoteController remoteController;
-    private ClientControllerInterface clientController;
+    private ServerToClientInterface clientController;
     private final ScheduledExecutorService pingScheduler = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> pingTask;
 
@@ -95,7 +95,7 @@ public class RmiClient extends UnicastRemoteObject implements RemoteClient, Serv
      *
      * @param clientController the client controller interface to set
      */
-    public void setClientController(ClientControllerInterface clientController) {
+    public void setClientController(ServerToClientInterface clientController) {
         this.clientController = clientController;
     }
 

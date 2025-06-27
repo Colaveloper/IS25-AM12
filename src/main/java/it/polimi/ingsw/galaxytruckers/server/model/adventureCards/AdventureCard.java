@@ -1,0 +1,79 @@
+package it.polimi.ingsw.galaxytruckers.server.model.adventureCards;
+
+import it.polimi.ingsw.galaxytruckers.server.model.FlightBoard;
+import it.polimi.ingsw.galaxytruckers.server.model.Game;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.server.model.state.AdventureState;
+
+/**
+ * Abstract class representing an adventure card in the game.
+ * It provides methods to initialize the card and retrieve its level and ID.
+ */
+public abstract class AdventureCard {
+    /**
+     * The index of the player currently being evaluated for the adventure card.
+     */
+    protected int currentPlayerIndex;
+    /**
+     * The ship board of the player currently being evaluated.
+     */
+    protected ShipBoard currentShipBoard;
+    /**
+     * The flight board where the adventure takes place.
+     */
+    protected FlightBoard flightBoard;
+    private final Level cardLevel;
+    /**
+     * The game instance this card belongs to.
+     */
+    protected final Game game;
+    private final int id;
+
+    /**
+     * Constructor for the AdventureCard class.
+     *
+     * @param game      The game instance this card belongs to.
+     * @param cardLevel The level of the card.
+     * @param id        The unique identifier for the card.
+     */
+    protected AdventureCard(Game game, Level cardLevel, int id) {
+        this.game = game;
+        this.cardLevel = cardLevel;
+        this.id = id;
+    }
+
+    /**
+     * Initializes the adventure card by setting the flight board and resetting the current ship board and player index.
+     */
+    public void initialize() {
+        this.flightBoard = game.getFlightBoard();
+        this.currentShipBoard = null;
+        this.currentPlayerIndex = 0;
+    }
+
+    /**
+     * @return the level of the adventure card.
+     */
+    public Level getCardLevel() {
+        return cardLevel;
+    }
+
+    /**
+     * Abstract method to get the next state of the adventure card, based on the rules of the card,
+     * and the state of the ships.
+     * This method can call recursively and make use of local subclasses variables.
+     *
+     * @return The next AdventureState that the game should transition to.
+     */
+    public abstract AdventureState getNextState();
+
+    /**
+     * Returns the unique identifier of this adventure card.
+     *
+     * @return the card's unique ID
+     */
+    public int getId() {
+        return id;
+    }
+}

@@ -1,0 +1,350 @@
+package it.polimi.ingsw.galaxytruckers.client.view.cli.cliScreens;
+
+import it.polimi.ingsw.galaxytruckers.client.controller.ClientControllerInterface;
+import it.polimi.ingsw.galaxytruckers.client.view.cli.DescriptionUtils;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.*;
+import it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents.CliComponentBank;
+import it.polimi.ingsw.galaxytruckers.client.model.ClientModel;
+import it.polimi.ingsw.galaxytruckers.client.model.Hourglass;
+import it.polimi.ingsw.galaxytruckers.client.model.Player;
+import it.polimi.ingsw.galaxytruckers.client.model.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.Component;
+import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.client.model.state.SecondShipBuildingState;
+
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+
+/**
+ * CLI screen for the ship building phase of game of level SECOND.
+ */
+public class CliSecondShipBuildingScreen extends CliScreen {
+
+    private final CliComponentBank cliComponentBank;
+    private final CliForecast cliForecast;
+    private final CliForecastCards cliForecastCards;
+    private final CliComponentLegend cliComponentLegend;
+
+    private final SecondShipBuildingState gameState;
+    private final Map<ShipBoard, CliShipHandAndStash> buildingShipToCliShip;
+
+    /**
+     * Creates a new second ship building screen with the given game state.
+     *
+     * @param model The client model containing the current game state
+     * @param controller The controller for sending commands to the server
+     * @param gameState The current second ship building state
+     */
+    public CliSecondShipBuildingScreen(ClientModel model, ClientControllerInterface controller, SecondShipBuildingState gameState) {
+        super(model, controller, gameState);
+        this.gameState = gameState;
+        cliComponentBank = new CliComponentBank(gameState.getComponentBank());
+        cliForecast = new CliForecast(gameState.getBlockedForecasts());
+        cliForecastCards = new CliForecastCards();
+        cliComponentLegend = new CliComponentLegend();
+        this.buildingShipToCliShip = new HashMap<>();
+        for (Player player : model.getPlayers()) {
+            buildingShipToCliShip.put(player.getShipBoard(), new CliShipHandAndStash(player.getShipBoard(), player.getNickname()));
+        }
+        List<CliShipHandAndStash> list = new ArrayList<>(buildingShipToCliShip.values().stream().toList());
+        list.sort(Comparator.comparing(CliShipHandAndStash::getNickname));
+        list.remove(buildingShipToCliShip.get(myShipBoard));
+        list.addFirst(buildingShipToCliShip.get(myShipBoard));
+        cliAllShips = new CliAllShips(list);
+    }
+
+    @Override
+    public void render() {
+        if(gameState.getHasForecastDeck()) {
+            cliForecastCards.getDescription().forEach(System.out::println);
+        } else {
+            cliComponentBank.getDescription().forEach(System.out::println);
+
+            // First combine the forecast with the component legend
+            List<String> forecastWithLegend = DescriptionUtils.sideBySide(
+                cliForecast.getDescription(),
+                cliComponentLegend.getDescription()
+            );
+
+            // Then combine the flight board with the forecast+legend
+            DescriptionUtils.sideBySide(
+                cliFlightBoard.getDescription(),
+                forecastWithLegend
+            ).forEach(System.out::println);
+
+            System.out.println(
+                    "firepower: "   + myShipBoard.getFirePower()/2 +
+                    "\tengine power: " + myShipBoard.getEnginePower() +
+                    "\tbatteries: "   + myShipBoard.getNumBatteries()
+            );
+
+            // Display hourglass status if it's running
+            Hourglass hourglass = gameState.getHourglass();
+            if (hourglass != null) {
+                if (hourglass.getIsRunning()) {
+                    System.out.println("HOURGLASS RUNNING - Time left: " + hourglass.getTimeLeft() + " seconds");
+                    if (hourglass.getFlipsLeft() == 0) {
+                        System.out.println("WARNING: This is the FINAL hourglass flip!");
+                    }
+                } else if (hourglass.getFlipsLeft() < 3) {
+                    System.out.println("Hourglass ended, ready for another flip. " + (hourglass.getFlipsLeft() == 1 ? "Final flip available once you place your ship on the flight board." : ""));
+                }
+            }
+
+            cliAllShips.getDescription().forEach(System.out::println);
+        }
+        printActions();
+    }
+
+    @Override
+    public void parseAndInvoke(String input) {
+        String[] parts = input.split("\\s+");
+        if(parts[0].isEmpty()) {
+            if (gameState.getHasForecastDeck()) {
+                controller.releaseForecast();
+                return;
+            }
+            else System.out.println("Invalid input");
+        }
+
+        switch (parts[0].toUpperCase()) {
+            case "C":
+                if(componentInHand()) {
+                    System.out.println("You already have a component in hand");
+                    break;
+                }
+                controller.requestRandComponent();
+                break;
+
+            case "U":
+                if (parts.length == 2) {
+                    int index = Integer.parseInt(parts[1]);
+                    int uncovered = gameState.getComponentBank().getUncoveredComponents().size();
+                    if (index < 0 || index >= uncovered) {
+                        System.out.println("Invalid component index, must be from 0 to " + (uncovered - 1));
+                        break;
+                    }
+                    if(componentInHand()) {
+                        System.out.println("You already have a component in hand");
+                        break;
+                    }
+                    controller.requestComponent(cliComponentBank.getUncoveredComponents().get(index).getId());
+                }
+                break;
+
+            case "S":
+                if (parts.length == 1) {
+                    controller.stashComponent();
+                } else if (parts.length == 2) {
+                    int index = Integer.parseInt(parts[1]);
+                    if(myShipBoard.getStashedComponents().size() <= index) {
+                        System.out.println("No stashed component found");
+                        break;
+                    }
+                    controller.grabStashedComponent(index);
+                }
+                break;
+
+            case "G":
+                controller.grabPlacedComponent();
+                break;
+            case "F":
+                if (parts.length == 2) {
+                    int index = Integer.parseInt(parts[1]);
+                    controller.acquireForecast(index);
+                }
+                break;
+
+            case "R":
+                if (parts.length == 1) controller.rejectComponent();
+                else if (parts.length == 2) {
+                    Component lastComponent = myShipBoard.getLastComponent();
+                    if(lastComponent == null) {
+                        System.out.println("Nothing to rotate");
+                        break;
+                    }
+                    Direction lastDirection = lastComponent.getOrientation();
+                    if(parts[1].equalsIgnoreCase("LEFT")) lastComponent.setOrientation(lastDirection.getLeft());
+                    else if(parts[1].equalsIgnoreCase("RIGHT")) lastComponent.setOrientation(lastDirection.getRight());
+
+                    cliAllShips.setDirty();
+                    buildingShipToCliShip.get(myShipBoard).setDirty();
+
+                    buildingShipToCliShip.get(myShipBoard).clearHand();
+                    buildingShipToCliShip.get(myShipBoard).setHand(lastComponent);
+
+                    render();
+                }
+                break;
+
+            case "P":
+                if (parts.length == 3) {
+                    Point point = getPoint(input);
+                    if(!myShipBoard.getShipArea().contains(point)){
+                        System.out.println("Cannot place component outside of the ship");
+                        break;
+                    }
+                    if(myShipBoard.getComponentMap().containsKey(point)) {
+                        System.out.println("This point is already occupied");
+                        break;
+                    }
+                    Direction orientation = Direction.UP;
+                    if (myShipBoard.getLastComponent() != null) {
+                        orientation = myShipBoard.getLastComponent().getOrientation();
+                    }
+                    controller.placeComponent(getPoint(input), orientation);
+                }
+                break;
+
+            case "H":
+                controller.flipHourglass();
+                break;
+
+            case "E":
+                if (parts.length == 2) {
+                    int index = Integer.parseInt(parts[1]);
+                    if(!model.getGame().getFlightBoard().getStartingPositions().contains(index)) {
+                        System.out.println("invalid position");
+                        break;
+                    }
+                    if(model.getGame().getFlightBoard().getShipToPlace().containsValue(index)) {
+                        System.out.println("position already occupied");
+                        break;
+                    }
+                    controller.placeShipOnFlightboard(index);
+                }
+                break;
+            default:
+                // should be impossible
+                System.out.println("Invalid command.");
+                break;
+        }
+    }
+
+
+    @Override
+    public void notifyRequestRandComponent(ShipBoard shipBoard, Component component) {
+        cliComponentBank.removeCovered();
+        buildingShipToCliShip.get(shipBoard).setHand(component);
+        cliAllShips.setDirty();
+    }
+
+    @Override
+    public void notifyRequestComponent(ShipBoard shipBoard, Component component) {
+        cliComponentBank.removeUncovered(component);
+        buildingShipToCliShip.get(shipBoard).setHand(component);
+        cliAllShips.setDirty();
+    }
+
+    @Override
+    public void notifyStashComponent(ShipBoard shipBoard, Component component) {
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
+        ship.clearHand();
+        ship.onStash(component);
+        cliAllShips.setDirty();
+    }
+
+    @Override
+    public void notifyStashComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
+        ship.onRemoveComponent(oldPosition);
+        ship.onStash(component);
+        cliAllShips.setDirty();
+    }
+
+    @Override
+    public void notifyGrabPlacedComponent(ShipBoard shipBoard, Point prevPosition) {
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
+        ship.onRemoveComponent(prevPosition);
+        ship.setHand(shipBoard.getLastComponent());
+        cliAllShips.setDirty();
+    }
+
+    @Override
+    public void notifyRejectComponent(ShipBoard shipBoard, Component component) {
+        //can t reject component picked from stashed
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
+        ship.clearHand();
+        cliComponentBank.addUncovered(component);
+        cliAllShips.setDirty();
+    }
+
+    @Override
+    public void notifyRejectComponent(ShipBoard shipBoard, Component component, Point oldPosition) {
+        //can t reject component picked from stashed
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
+        ship.onRemoveComponent(oldPosition);
+        cliComponentBank.addUncovered(component);
+        cliAllShips.setDirty();
+    }
+
+    @Override
+    public void notifyGrabStashedComponent(ShipBoard shipBoard, int index, Component component) {
+        CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
+        ship.setHand(component);
+        ship.onGrabStashed(index);
+        cliAllShips.setDirty();
+    }
+
+    @Override
+    public void notifyFlightBoardPosition(ShipBoard shipBoard, int position) {
+        cliFlightBoard.setPosition(shipBoard, position);
+        cliFlightBoard.setDirty();
+    }
+
+    @Override
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point point, Direction orientation) {
+        Component placedComponent = shipBoard.getComponentMap().get(point);
+        if (placedComponent != null) {
+            CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
+            ship.onPutComponent(point, placedComponent);
+            ship.clearHand();
+            cliAllShips.setDirty();
+        }
+    }
+
+    @Override
+    public void notifyPlaceComponent(ShipBoard shipBoard, Point newPoint, Direction orientation, Point oldPosition) {
+        Component placedComponent = shipBoard.getComponentMap().get(newPoint);
+        if (placedComponent != null) {
+            CliShipHandAndStash ship = buildingShipToCliShip.get(shipBoard);
+            ship.onPutComponent(newPoint, placedComponent);
+            ship.onRemoveComponent(oldPosition);
+            cliAllShips.setDirty();
+        }
+    }
+
+    @Override
+    public void notifyFlipHourglass(ShipBoard shipBoard) {
+        Hourglass hourglass = gameState.getHourglass();
+        if (hourglass != null) {
+            if (hourglass.getFlipsLeft() == 0) {
+                System.out.println("Hourglass flipped for the FINAL time!");
+                System.out.println("All players must complete their ships before the timer ends!");
+            } else {
+                System.out.println("Hourglass flipped!");
+            }
+        }
+    }
+
+    @Override
+    public void notifyPeekForecast(ShipBoard shipBoard, int deckIndex) {
+        cliForecast.setBlockedForecasts(deckIndex,shipBoard.getColor());
+    }
+
+    @Override
+    public void notifyReleaseForecast(ShipBoard shipBoard, int index) {
+        cliForecast.removeBlockedForecast(index);
+    }
+
+    @Override
+    public void setForecastDeck(List<AdventureCard> adventureCards) {
+        cliForecastCards.setCards(adventureCards);
+    }
+
+    private boolean componentInHand(){
+        return myShipBoard.getLastComponent() != null && myShipBoard.getLastPosition() == null;
+    }
+}

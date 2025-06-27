@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
-import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
+import it.polimi.ingsw.galaxytruckers.server.controller.ServerControllerInterface;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;

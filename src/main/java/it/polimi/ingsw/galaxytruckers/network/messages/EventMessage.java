@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.messages;
 
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
+import it.polimi.ingsw.galaxytruckers.server.controller.events.types.Event;
 
 /**
  * Message that contains an event to be sent to the client.

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.galaxytruckers;
 
-import it.polimi.ingsw.galaxytruckers.network.client.Client;
-import it.polimi.ingsw.galaxytruckers.network.server.Server;
-import it.polimi.ingsw.galaxytruckers.utils.Logger;
+import it.polimi.ingsw.galaxytruckers.client.Client;
+import it.polimi.ingsw.galaxytruckers.server.Server;
+import it.polimi.ingsw.galaxytruckers.shared.utils.Logger;
 
 import java.util.Scanner;
 

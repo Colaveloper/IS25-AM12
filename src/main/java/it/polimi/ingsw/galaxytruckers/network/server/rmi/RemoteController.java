@@ -1,9 +1,10 @@
 package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
-import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
-import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
-import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.network.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.shared.enums.GoodsType;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.CrewType;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
 
 import java.awt.*;
 import java.rmi.Remote;
@@ -22,7 +23,7 @@ public interface RemoteController extends Remote {
     void ping() throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#requestNewGame(Level, int)}.
+     * Remote version of {@link VirtualServer#requestNewGame(Level, int)}.
      *
      * @param level the game level
      * @param numPlayers the number of players
@@ -31,7 +32,7 @@ public interface RemoteController extends Remote {
     void newGame(Level level, int numPlayers) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#joinLobby(UUID)}.
+     * Remote version of {@link VirtualServer#joinLobby(UUID)}.
      *
      * @param lobbyID the UUID of the lobby to join
      * @throws RemoteException if there is an error during the remote method call
@@ -39,7 +40,7 @@ public interface RemoteController extends Remote {
     void joinLobby(UUID lobbyID) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#leaveLobby()}.
+     * Remote version of {@link VirtualServer#leaveLobby()}.
      *
      * @throws RemoteException if there is an error during the remote method call
      */
@@ -50,14 +51,14 @@ public interface RemoteController extends Remote {
     // Ship building
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#requestRandComponent()}.
+     * Remote version of {@link VirtualServer#requestRandComponent()}.
      *
      * @throws RemoteException if there is an error during the remote method call
      */
     void requestRandComponent() throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#requestComponent(int)}.
+     * Remote version of {@link VirtualServer#requestComponent(int)}.
      *
      * @param componentID the id of the component to request
      * @throws RemoteException if there is an error during the remote method call
@@ -65,28 +66,28 @@ public interface RemoteController extends Remote {
     void requestComponent(int componentID) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#rejectComponent()}.
+     * Remote version of {@link VirtualServer#rejectComponent()}.
      *
      * @throws RemoteException if there is an error during the remote method call
      */
     void rejectComponent() throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#stashComponent()}.
+     * Remote version of {@link VirtualServer#stashComponent()}.
      *
      * @throws RemoteException if there is an error during the remote method call
      */
     void stashComponent() throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#grabPlacedComponent()}.
+     * Remote version of {@link VirtualServer#grabPlacedComponent()}.
      *
      * @throws RemoteException if there is an error during the remote method call
      */
     void grabPlacedComponent() throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#grabStashedComponent(int)}.
+     * Remote version of {@link VirtualServer#grabStashedComponent(int)}.
      *
      * @param index the index of the stashed component to grab
      * @throws RemoteException if there is an error during the remote method call
@@ -94,7 +95,7 @@ public interface RemoteController extends Remote {
     void grabStashedComponent(int index) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#placeComponent(Point, Direction)}.
+     * Remote version of {@link VirtualServer#placeComponent(Point, Direction)}.
      *
      * @param point the coordinates where the component should be placed
      * @param orientation the direction the component should face
@@ -103,14 +104,14 @@ public interface RemoteController extends Remote {
     void placeComponent(Point point, Direction orientation) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#flipHourglass()}.
+     * Remote version of {@link VirtualServer#flipHourglass()}.
      *
      * @throws RemoteException if there is an error during the remote method call
      */
     void flipHourglass() throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#placeShipOnFlightBoard(int)}.
+     * Remote version of {@link VirtualServer#placeShipOnFlightBoard(int)}.
      *
      * @param startingPosition the position on the flight board where the ship should be placed
      * @throws RemoteException if there is an error during the remote method call
@@ -118,14 +119,14 @@ public interface RemoteController extends Remote {
     void placeShipOnFlightBoard(int startingPosition) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#placeShipOnFlightBoard()}.
+     * Remote version of {@link VirtualServer#placeShipOnFlightBoard()}.
      *
      * @throws RemoteException if there is an error during the remote method call
      */
     void placeShipOnFlightBoard() throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#acquireForecast(int)}.
+     * Remote version of {@link VirtualServer#acquireForecast(int)}.
      *
      * @param deckIndex the index of the deck to view the forecast from
      * @throws RemoteException if there is an error during the remote method call
@@ -133,7 +134,7 @@ public interface RemoteController extends Remote {
     void acquireForecast(int deckIndex) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#releaseForecast()}.
+     * Remote version of {@link VirtualServer#releaseForecast()}.
      *
      * @throws RemoteException if there is an error during the remote method call
      */
@@ -142,7 +143,7 @@ public interface RemoteController extends Remote {
     // Ship validity check
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#removeComponent(Point)}.
+     * Remote version of {@link VirtualServer#removeComponent(Point)}.
      *
      * @param point the coordinates of the component to remove
      * @throws RemoteException if there is an error during the remote method call
@@ -150,7 +151,7 @@ public interface RemoteController extends Remote {
     void removeComponent(Point point) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#chooseShipPiece(int)}.
+     * Remote version of {@link VirtualServer#chooseShipPiece(int)}.
      *
      * @param pieceIndex the index of the piece to choose
      * @throws RemoteException if there is an error during the remote method call
@@ -160,7 +161,7 @@ public interface RemoteController extends Remote {
     // Ship init
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#initializeCabin(Point, CrewType)}.
+     * Remote version of {@link VirtualServer#initializeCabin(Point, CrewType)}.
      *
      * @param point the coordinates where the cabin should be placed
      * @param crewType the type of crew to place in the cabin
@@ -171,14 +172,14 @@ public interface RemoteController extends Remote {
     // Adventure
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#drawCard()}.
+     * Remote version of {@link VirtualServer#drawCard()}.
      *
      * @throws RemoteException if there is an error during the remote method call
      */
     void drawCard() throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#activateComponent(Point)}.
+     * Remote version of {@link VirtualServer#activateComponent(Point)}.
      *
      * @param point the coordinates of the component to activate
      * @throws RemoteException if there is an error during the remote method call
@@ -186,7 +187,7 @@ public interface RemoteController extends Remote {
     void activateComponent(Point point) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#loseCrew(Point)}.
+     * Remote version of {@link VirtualServer#loseCrew(Point)}.
      *
      * @param point the coordinates where the crew is lost
      * @throws RemoteException if there is an error during the remote method call
@@ -194,14 +195,14 @@ public interface RemoteController extends Remote {
     void loseCrew(Point point) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#grabReward()}.
+     * Remote version of {@link VirtualServer#grabReward()}.
      *
      * @throws RemoteException if there is an error during the remote method call
      */
     void grabReward() throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#placeGoods(Point, GoodsType)}.
+     * Remote version of {@link VirtualServer#placeGoods(Point, GoodsType)}.
      *
      * @param point the coordinates where the goods should be placed
      * @param goodsType the type of goods to place
@@ -210,7 +211,7 @@ public interface RemoteController extends Remote {
     void placeGoods(Point point, GoodsType goodsType) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#removeGoods(Point, GoodsType)}.
+     * Remote version of {@link VirtualServer#removeGoods(Point, GoodsType)}.
      *
      * @param point the coordinates from which to remove the goods
      * @param goodsType the type of goods to remove
@@ -219,7 +220,7 @@ public interface RemoteController extends Remote {
     void removeGoods(Point point, GoodsType goodsType) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#loseGoods(Point)}.
+     * Remote version of {@link VirtualServer#loseGoods(Point)}.
      *
      * @param point the coordinates where the goods are lost
      * @throws RemoteException if there is an error during the remote method call
@@ -227,7 +228,7 @@ public interface RemoteController extends Remote {
     void loseGoods(Point point) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#useBattery(Point)}.
+     * Remote version of {@link VirtualServer#useBattery(Point)}.
      *
      * @param point the coordinates of the battery to use
      * @throws RemoteException if there is an error during the remote method call
@@ -235,7 +236,7 @@ public interface RemoteController extends Remote {
     void useBattery(Point point) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#choosePlanet(int)}.
+     * Remote version of {@link VirtualServer#choosePlanet(int)}.
      *
      * @param choice the index of the chosen planet
      * @throws RemoteException if there is an error during the remote method call
@@ -243,14 +244,14 @@ public interface RemoteController extends Remote {
     void choosePlanet(int choice) throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#goNext()}.
+     * Remote version of {@link VirtualServer#goNext()}.
      *
      * @throws RemoteException if there is an error during the remote method call
      */
     void goNext() throws RemoteException;
 
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#giveUp()}.
+     * Remote version of {@link VirtualServer#giveUp()}.
      *
      * @throws RemoteException if there is an error during the remote method call
      */

@@ -1,0 +1,64 @@
+package it.polimi.ingsw.galaxytruckers.server.model.adventureCards.projectiles;
+
+import it.polimi.ingsw.galaxytruckers.server.model.SecondShipBoardForTesting;
+import it.polimi.ingsw.galaxytruckers.shared.enums.GameColor;
+import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+import it.polimi.ingsw.galaxytruckers.shared.enums.ProjectileType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.awt.*;
+import java.util.Optional;
+import java.util.function.IntSupplier;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class BigFireTest {
+    BigFire bigFire;
+    ShipBoard shipBoard;
+    Point position;
+
+    @BeforeEach
+    void setUp() {
+        shipBoard = new SecondShipBoardForTesting(GameColor.BLUE) {
+            @Override
+            protected boolean containsPoint(Point point) {
+                return true;
+            }
+
+        };
+        position = new Point();
+        bigFire = new BigFire(() -> 0, Direction.UP);
+    }
+
+    @Test
+    void getProjectileType() {
+        assertEquals(ProjectileType.BIGFIRE, bigFire.getProjectileType());
+    }
+
+    @Test
+    void getActivatablePointsReturnsEmptySet() {
+        bigFire = new BigFire(Direction.UP);
+
+        assertTrue(bigFire.getActivatablePoints(shipBoard).isEmpty());
+    }
+
+    @Test
+    void getComponentToRemoveReturnsFirstFoundComponentPosition() {
+        class RiggedProjectile extends BigFire {
+            public RiggedProjectile(IntSupplier dice, Direction direction) {
+                super(dice, direction);
+            }
+
+            @Override
+            public Optional<Point> getFirstFoundComponentPosition(ShipBoard shipBoard) {
+                return Optional.of(position);
+            }
+        };
+
+        Projectile projectile = new RiggedProjectile(()->0, Direction.UP);
+
+        assertEquals(Optional.of(position), projectile.getComponentPositionToRemove(shipBoard));
+    }
+}

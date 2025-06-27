@@ -1,7 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.server;
 
-import it.polimi.ingsw.galaxytruckers.serverController.ServerControllerInterface;
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
+import it.polimi.ingsw.galaxytruckers.server.controller.ServerControllerInterface;
+import it.polimi.ingsw.galaxytruckers.server.controller.lobby.Player;
 
 import java.time.Instant;
 import java.util.*;

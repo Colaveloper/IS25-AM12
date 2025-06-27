@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.server.rmi;
 
+import it.polimi.ingsw.galaxytruckers.network.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.client.rmi.RemoteClient;
 
 import java.rmi.Remote;
@@ -10,7 +11,7 @@ import java.rmi.RemoteException;
  */
 public interface RemoteServer extends Remote {
     /**
-     * Remote version of {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer#registerNickname(String)}
+     * Remote version of {@link VirtualServer#registerNickname(String)}
      * @param client the remote client that is registering the nickname
      * @param nickname the nickname to register
      * @return a RemoteController that allows the client to interact with the server

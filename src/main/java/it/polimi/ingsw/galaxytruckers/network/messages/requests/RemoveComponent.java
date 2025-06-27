@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.messages.requests;
 
-import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.network.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.messages.RegisteredRequest;
 
 import java.awt.*;

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.client;
 
+import it.polimi.ingsw.galaxytruckers.network.VirtualServer;
+
 /**
  * Interface for handling server connections in the Galaxy Truckers game.
  * It extends the VirtualServer interface to include methods for reconnecting

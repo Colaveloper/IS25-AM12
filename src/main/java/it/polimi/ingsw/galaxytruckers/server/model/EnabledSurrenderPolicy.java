@@ -1,0 +1,74 @@
+package it.polimi.ingsw.galaxytruckers.server.model;
+
+import com.google.common.annotations.VisibleForTesting;
+import it.polimi.ingsw.galaxytruckers.shared.enums.SurrenderCause;
+import it.polimi.ingsw.galaxytruckers.server.model.shipBuilding.ShipBoard;
+
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Surrender policy implementation that allows surrendering ships.
+ */
+public class EnabledSurrenderPolicy implements SurrenderPolicy {
+    private final Set<ShipBoard> requests = new HashSet<>();
+    private final Set<ShipBoard> surrenderedShips = new HashSet<>();
+    private final GameEventListener listener;
+
+    /**
+     * Constructor for EnabledSurrenderPolicy.
+     * @param listener the GameEventListener to notify about surrender events
+     */
+    public EnabledSurrenderPolicy(GameEventListener listener) {
+        this.listener = listener;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @return true
+     */
+    @Override
+    public boolean isSurrenderEnabled() {
+        return true;
+    }
+
+    @Override
+    public synchronized boolean requestSurrender(ShipBoard shipBoard, SurrenderCause cause) {
+        if (surrenderedShips.contains(shipBoard)) return false;
+        boolean res = requests.add(shipBoard);
+        if (res) listener.notifySurrenderRequestEvent(shipBoard, cause);
+        return res;
+    }
+
+    @Override
+    public synchronized Set<ShipBoard> confirmSurrender(FlightBoard flightBoard) {
+
+        Set<ShipBoard> allShips = flightBoard.getShipToPlace().keySet();
+        allShips.stream()
+                .filter(s -> s.getCrewSize() == 0)
+                .forEach(s -> requestSurrender(s, SurrenderCause.NOCREW));
+        flightBoard.getLappedShips().forEach(s -> requestSurrender(s,SurrenderCause.LAPPED));
+
+        this.surrenderedShips.addAll(requests);
+        Set<ShipBoard> newSurrenderedShips = new HashSet<>(this.requests);
+        this.requests.clear();
+        flightBoard.removeShips(newSurrenderedShips);
+        if (!newSurrenderedShips.isEmpty()) listener.notifySurrenderEvent(newSurrenderedShips.stream().toList());
+        return newSurrenderedShips;
+    }
+
+    @Override
+    public synchronized Set<ShipBoard> getSurrenderedShips() {
+        return new HashSet<>(surrenderedShips);
+    }
+
+    @VisibleForTesting
+    public synchronized Set<ShipBoard> getRequests() {
+        return new HashSet<>(requests);
+    }
+
+    @VisibleForTesting
+    protected synchronized GameEventListener getListener() {
+        return listener;
+    }
+}

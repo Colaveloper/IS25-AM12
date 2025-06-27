@@ -1,6 +1,7 @@
 package it.polimi.ingsw.galaxytruckers.network.server;
 
-import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
+import it.polimi.ingsw.galaxytruckers.network.VirtualClient;
+import it.polimi.ingsw.galaxytruckers.server.controller.lobby.Player;
 
 /**
  * Interface representing a client handler in the Galaxy Truckers game.

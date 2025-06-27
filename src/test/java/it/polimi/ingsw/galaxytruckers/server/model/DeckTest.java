@@ -1,0 +1,47 @@
+package it.polimi.ingsw.galaxytruckers.server.model;
+
+import it.polimi.ingsw.galaxytruckers.server.model.adventureCards.AdventureCard;
+import it.polimi.ingsw.galaxytruckers.server.model.adventureCards.CombatZoneCard;
+import it.polimi.ingsw.galaxytruckers.server.model.adventureCards.check.CrewSizeCheck;
+import it.polimi.ingsw.galaxytruckers.server.model.adventureCards.check.EnginePowerCheck;
+import it.polimi.ingsw.galaxytruckers.server.model.adventureCards.check.FirePowerCheck;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Level;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+class DeckTest {
+    Deck deck;
+    Game game;
+
+    @BeforeEach
+    void setup(){
+        game = new GameStub(Level.SECOND);
+    }
+
+    @Test
+    void loadComponents() throws IOException {
+        List<AdventureCard> allCards = Deck.loadRelevantCards(game);
+        List<CombatZoneCard> combatZoneCards = allCards.stream()
+                .filter(c -> c instanceof CombatZoneCard)
+                .map(c -> (CombatZoneCard) c)
+                .toList();
+        CombatZoneCard combatZoneCard1 = combatZoneCards.getFirst();
+        assertEquals(List.of(CrewSizeCheck.getInstance(),
+                EnginePowerCheck.getInstance(),
+                FirePowerCheck.getInstance()), combatZoneCard1.getChecks());
+
+    }
+
+    @Test
+    void drawCardUpdatesCurrentCard() throws IOException {
+        deck = new TestDeck(game);
+        deck.drawCard();
+        assertNotNull(deck.getCurrentCard());
+    }
+}

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.network.messages;
 
-import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.network.VirtualServer;
 
 /**
  * Represents a request to register a nickname for a player.

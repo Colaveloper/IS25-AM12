@@ -1,8 +1,8 @@
 package it.polimi.ingsw.galaxytruckers.network.messages.requests;
 
-import it.polimi.ingsw.galaxytruckers.network.client.VirtualServer;
+import it.polimi.ingsw.galaxytruckers.network.VirtualServer;
 import it.polimi.ingsw.galaxytruckers.network.messages.RegisteredRequest;
-import it.polimi.ingsw.galaxytruckers.view.Direction;
+import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
 
 import java.awt.*;
 

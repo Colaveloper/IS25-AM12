@@ -1,0 +1,39 @@
+package it.polimi.ingsw.galaxytruckers.client.view.cli.cliElements.CliComponents;
+
+import it.polimi.ingsw.galaxytruckers.shared.enums.Direction;
+import it.polimi.ingsw.galaxytruckers.client.model.shipBuilding.DoubleCannon;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Represents a Double Cannon component in the CLI view of the Galaxy Truckers game.
+ */
+public class CliDoubleCannon extends CliComponent {
+
+    private final DoubleCannon doubleCannon;
+
+    /**
+     * Constructs a CLI representation of a Double Cannon component.
+     *
+     * @param component the DoubleCannon component to be represented
+     */
+    public CliDoubleCannon(DoubleCannon component) {
+        super(component);
+        this.doubleCannon = component;
+    }
+
+    private static final Map<Direction, String> symbols = Map.of(
+            Direction.UP, "▲",
+            Direction.RIGHT, "▶",
+            Direction.DOWN, "▼",
+            Direction.LEFT, "◀"
+    );
+
+
+    @Override
+    protected List<String> getNewDescription() {
+        return addBorders(" " + symbols.get(doubleCannon.getOrientation()) + " ");
+    }
+
+}

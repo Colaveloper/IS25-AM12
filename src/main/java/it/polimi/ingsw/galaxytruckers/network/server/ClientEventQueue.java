@@ -1,9 +1,9 @@
 package it.polimi.ingsw.galaxytruckers.network.server;
 
-import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.ControllerEvent;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.Event;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.LobbyEvent;
+import it.polimi.ingsw.galaxytruckers.server.controller.events.EventQueue;
+import it.polimi.ingsw.galaxytruckers.server.controller.events.types.ControllerEvent;
+import it.polimi.ingsw.galaxytruckers.server.controller.events.types.Event;
+import it.polimi.ingsw.galaxytruckers.server.controller.events.types.LobbyEvent;
 
 /**
  * A thread-safe event queue for client events that can be paused, i.e.
