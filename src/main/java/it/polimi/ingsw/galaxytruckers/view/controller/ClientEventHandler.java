@@ -128,10 +128,11 @@ public class ClientEventHandler implements EventHandler<Event> {
                     conversionUtils.convertName(planetChoiceEvent.nextPlayerName())
             );
             case PlayerDisconnectionEvent playerDisconnectionEvent -> {
-                controller.reportError("Player " + playerDisconnectionEvent.playerName() + " has disconnected.");
+                    controller.reportError("Player " + playerDisconnectionEvent.playerName() + " has disconnected.");
             }
             case PlayerExitEvent playerExitEvent -> {
-                //TODO: handle player exit (maybe we can treat exit like disconnection)
+                    controller.reportError("Player " + playerExitEvent.playerName() + " has left the game.");
+                    controller.clearModel();
             }
             case RejectComponentEvent rejectComponentEvent -> clientModel.notifyRejectComponent(
                     conversionUtils.convertName(rejectComponentEvent.playerName())
