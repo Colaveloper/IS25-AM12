@@ -310,33 +310,6 @@
             "flight day loss": 4,
             "planets": [
                   {
-                        "blue": 4,
-                        "green": 0,
-                        "yellow": 0,
-                        "red": 1
-                  },
-                  {
-                        "blue": 0,
-                        "green": 2,
-                        "yellow": 0,
-                        "red": 2
-                  },
-                  {
-                        "blue": 0,
-                        "green": 0,
-                        "yellow": 1,
-                        "red": 3
-                  }
-            ],
-            "path": "src/main/resources/textures/cards/GT-cards_I_IT_0115.jpg",
-            "id": 20
-      },
-      {
-            "type": "planets",
-            "level": "SECOND",
-            "flight day loss": 4,
-            "planets": [
-                  {
                         "blue": 0,
                         "green": 0,
                         "yellow": 1,
@@ -356,7 +329,7 @@
                   }
             ],
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0112.jpg",
-            "id": 21
+            "id": 20
       },
       {
             "type": "planets",
@@ -377,7 +350,7 @@
                   }
             ],
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0113.jpg",
-            "id": 22
+            "id": 21
       },
       {
             "type": "planets",
@@ -386,11 +359,11 @@
             "planets": [
                   {"blue": 0, "green": 0, "yellow": 1, "red": 1},
                   {"blue": 1, "green": 1, "yellow": 1, "red": 0},
-                  {"blue": 0, "green": 0, "yellow": 1, "red": 1},
+                  {"blue": 0, "green": 2, "yellow": 0, "red": 0},
                   {"blue": 0, "green": 0, "yellow": 1, "red": 0}
             ],
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0114.jpg",
-            "id": 23
+            "id": 22
       },
       {
             "type": "planets",
@@ -417,49 +390,49 @@
                   }
             ],
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0115.jpg",
-            "id": 24
+            "id": 23
       },
       {
             "type": "open space",
             "level": "FIRST",
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_016.jpg",
-            "id": 25
+            "id": 24
       },
       {
             "type": "open space",
             "level": "FIRST",
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_017.jpg",
-            "id": 26
+            "id": 25
       },
       {
             "type": "open space",
             "level": "FIRST",
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_018.jpg",
-            "id": 27
+            "id": 26
       },
       {
             "type": "open space",
             "level": "SECOND",
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_016.jpg",
-            "id": 28
+            "id": 27
       },
       {
             "type": "open space",
             "level": "SECOND",
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_018.jpg",
-            "id": 29
+            "id": 28
       },
       {
             "type": "open space",
             "level": "SECOND",
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_017.jpg",
-            "id": 30
+            "id": 29
       },
       {
             "type": "epidemic",
             "level": "SECOND",
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_015.jpg",
-            "id": 31
+            "id": 30
       },
       {
             "type": "smugglers",
@@ -475,7 +448,7 @@
             "cannons": 4,
             "penalty": 2,
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_012.jpg",
-            "id": 32
+            "id": 31
       },
       {
             "type": "smugglers",
@@ -491,7 +464,7 @@
             "cannons": 8,
             "penalty": 3,
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_012.jpg",
-            "id": 33
+            "id": 32
       },
       {
             "type": "slavers",
@@ -501,7 +474,7 @@
             "penalty": 3,
             "credits": 5,
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_01.jpg",
-            "id": 34
+            "id": 33
       },
       {
             "type": "slavers",
@@ -511,13 +484,13 @@
             "penalty": 4,
             "credits": 8,
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_01.jpg",
-            "id": 35
+            "id": 34
       },
       {
             "type": "stardust",
             "level": "TEST",
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_014.jpg",
-            "id": 36
+            "id": 35
       },
       {
             "type": "warzone",
@@ -539,7 +512,7 @@
             "flight day loss": 3,
             "level": "TEST",
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_0116.jpg",
-            "id": 37
+            "id": 36
       },
       {
             "type": "warzone",
@@ -563,18 +536,18 @@
             ],
             "level": "SECOND",
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_0116.jpg",
-            "id": 38
+            "id": 37
       },
       {
             "type": "stardust",
             "level": "SECOND",
             "path": "src/main/resources/textures/cards/GT-cards_II_IT_014.jpg",
-            "id": 39
+            "id": 38
       },
       {
             "type": "open space",
             "level": "TEST",
             "path": "src/main/resources/textures/cards/GT-cards_I_IT_015.jpg",
-            "id": 40
+            "id": 39
       }
 ]
