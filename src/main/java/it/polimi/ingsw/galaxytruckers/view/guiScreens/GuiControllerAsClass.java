@@ -147,9 +147,9 @@
 //        }
 //    }
 //
-////                    case PLACE_COMPONENT ->         actions.add("P[x][y]  Place component in [x][y]");
-////                    case FINISH_BUILDING ->         actions.add("X  To finish building             ");
-////                    case DRAW_CARD ->               actions.add("  Press ENTER to draw a card      ");
-////                    case REMOVE_COMPONENT ->        actions.add("R[x][y]  Remove component in x, y ");
-////                    case INITIALIZE_CABIN ->        actions.add("P[x][y]  Initialize cabin in x, y ");
+//                    case PLACE_COMPONENT ->         actions.add("P[x][y]  Place component in [x][y]");
+//                    case FINISH_BUILDING ->         actions.add("X  To finish building             ");
+//                    case DRAW_CARD ->               actions.add("  Press ENTER to draw a card      ");
+//                    case REMOVE_COMPONENT ->        actions.add("R[x][y]  Remove component in x, y ");
+//                    case INITIALIZE_CABIN ->        actions.add("P[x][y]  Initialize cabin in x, y ");
 //}

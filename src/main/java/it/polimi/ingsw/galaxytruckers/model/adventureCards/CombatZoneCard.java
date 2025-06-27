@@ -6,11 +6,15 @@ import it.polimi.ingsw.galaxytruckers.model.adventureCards.check.CombatZoneCheck
 import it.polimi.ingsw.galaxytruckers.model.adventureCards.penalty.Penalty;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
-import it.polimi.ingsw.galaxytruckers.model.state.*;
+import it.polimi.ingsw.galaxytruckers.model.state.AdventureState;
+import it.polimi.ingsw.galaxytruckers.model.state.DrawCardState;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Represents a combat zone card in the game.
+ */
 public class CombatZoneCard extends AdventureCard {
     private final List<CombatZoneCheck> checks;
     private final List<Penalty> penalties;
@@ -20,11 +24,11 @@ public class CombatZoneCard extends AdventureCard {
     /**
      * Constructs a CombatZoneCard.
      *
-     * @param game the game instance
-     * @param level the adventure card level
-     * @param checks the list of combat zone checks to perform
+     * @param game      the game instance
+     * @param level     the adventure card level
+     * @param checks    the list of combat zone checks to perform
      * @param penalties the list of penalties to inflict
-     * @param id the unique card identifier
+     * @param id        the unique card identifier
      */
     public CombatZoneCard(Game game, Level level, List<CombatZoneCheck> checks, List<Penalty> penalties, int id) {
         super(game, level, id);
@@ -39,11 +43,21 @@ public class CombatZoneCard extends AdventureCard {
         penalizedShipBoard = null;
     }
 
+    /**
+     * For testing purposes only.
+     *
+     * @return a list of combat zone checks to be performed
+     */
     @VisibleForTesting
     public List<CombatZoneCheck> getChecks() {
         return checks;
     }
 
+    /**
+     * For testing purposes only.
+     *
+     * @return a list of penalties to be inflicted
+     */
     @VisibleForTesting
     public List<Penalty> getPenalties() {
         return penalties;

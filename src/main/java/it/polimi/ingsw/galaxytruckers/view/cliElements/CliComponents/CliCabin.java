@@ -6,10 +6,18 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Cabin;
 
 import java.util.List;
 
+/**
+ * Represents a CLI representation of a Cabin component.
+ */
 public class CliCabin extends CliComponent{
     
     private final Cabin cabin;
-    
+
+    /**
+     * Constructs a CLI representation of a Cabin component.
+     *
+     * @param component the Cabin component to be represented in the CLI
+     */
     public CliCabin(Cabin component) {
         super(component);
         this.cabin = component;

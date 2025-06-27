@@ -129,6 +129,12 @@ public class AdventureCardRegistry {
         return projectiles;
     }
 
+    /**
+     * Parses a JSON node representing an adventure card into an {@link AdventureCard} object.
+     * Visible for testing purposes.
+     * @param cardNode the JsonNode representing the card
+     * @return the parsed {@link AdventureCard}
+     */
     @VisibleForTesting
     protected AdventureCard parseAdventureCard(JsonNode cardNode) {
         String type = cardNode.get("type").asText();
@@ -238,6 +244,11 @@ public class AdventureCardRegistry {
         return goods;
     }
 
+    /**
+     * Parses a JSON node representing checks for a combat zone card into a list of {@link CombatZoneCheck}.
+     * @param checkNode the JsonNode representing the checks
+     * @return a list of {@link CombatZoneCheck} objects
+     */
     @VisibleForTesting
     protected List<CombatZoneCheck> parseChecks(JsonNode checkNode) {
         List<String> checkNames = new ObjectMapper().convertValue(checkNode, new TypeReference<>(){});
@@ -253,6 +264,12 @@ public class AdventureCardRegistry {
         return checks;
     }
 
+    /**
+     * Parses a JSON node representing penalties for a combat zone card into a list of {@link Penalty} objects.
+     * @param penaltiesNode the JsonNode representing the penalties
+     * @param cardNode the JsonNode representing the card, used to retrieve specific penalty values
+     * @return a list of {@link Penalty} objects
+     */
     @VisibleForTesting
     protected List<Penalty> parsePenalties(JsonNode penaltiesNode, JsonNode cardNode) {
         List<Penalty> penalties = new ArrayList<>();

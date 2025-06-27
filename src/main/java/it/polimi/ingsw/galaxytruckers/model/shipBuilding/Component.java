@@ -3,8 +3,9 @@ package it.polimi.ingsw.galaxytruckers.model.shipBuilding;
 import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
 
-import java.awt.*;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Base class for all ship components, providing connector and orientation management.
@@ -56,18 +57,32 @@ public non-sealed class Component implements ComponentInterface {
         this.id = 0;
     }
 
+    /**
+     * @return a map of connectors for this component, keyed by direction.
+     */
     public Map<Direction, Connector> getConnectors() {
         return connectors;
     }
 
+    /**
+     * @return the unique identifier of the component
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * @return the current orientation of the component
+     */
     public Direction getOrientation() {
         return orientation;
     }
 
+    /**
+     * Sets the orientation of the component.
+     *
+     * @param orientation the new orientation to set
+     */
     public void setOrientation(Direction orientation) {
         Map<Direction, Connector> rotatedConnectors = Direction.rotateDirectionMap(connectors, this.orientation, orientation);
         this.orientation = orientation;

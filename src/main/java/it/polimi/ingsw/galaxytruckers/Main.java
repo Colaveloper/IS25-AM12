@@ -2,6 +2,7 @@ package it.polimi.ingsw.galaxytruckers;
 
 import it.polimi.ingsw.galaxytruckers.network.client.Client;
 import it.polimi.ingsw.galaxytruckers.network.server.Server;
+import it.polimi.ingsw.galaxytruckers.utils.Logger;
 
 import java.util.Scanner;
 
@@ -12,6 +13,11 @@ public class Main {
     private final static String SERVER_NAME = "Galaxy-Truckers-Server"; // Default server name
 
     public static void main(String[] args) {
+        if (args.length > 0 && args[0].equals("debug")) {
+            // Enable debug mode if the first argument is "debug"
+            System.out.println("Debug mode enabled.");
+            Logger.setEnable(true);
+        }
         // This is the entry point of the Galaxy Truckers game application.
         // You can initialize your game logic here, set up the server, or start the client interface.
         System.out.println("Welcome to Galaxy Truckers!");

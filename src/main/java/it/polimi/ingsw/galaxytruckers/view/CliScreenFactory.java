@@ -7,6 +7,10 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 import it.polimi.ingsw.galaxytruckers.view.model.state.*;
 
+/**
+ * Factory class for creating CLI screens based on the current game state.
+ * Implements the ScreenFactory interface for CLI screens.
+ */
 public class CliScreenFactory implements ScreenFactory<CliScreen> {
 
     @Override

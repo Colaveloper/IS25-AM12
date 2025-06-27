@@ -146,8 +146,6 @@ class ServerControllerTest {
         assertFalse(SessionManager.getInstance().isPlayerActive(p2));
     }
 
-
-
     @Test
     void registerNicknameWithNewPlayerAddsPlayer() {
         controller.registerNickname("p1",clientHandler);

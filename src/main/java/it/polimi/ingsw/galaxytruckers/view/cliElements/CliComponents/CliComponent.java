@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a component on the ship board in the CLI.
+ */
 public class CliComponent extends CliElement {
 
     private final Component component;

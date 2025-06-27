@@ -11,6 +11,9 @@ import java.awt.*;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * CLI screen for validating and correcting ship configurations in the game.
+ */
 public class CliValidationScreen extends CliScreen {
 
     private boolean shipValid;

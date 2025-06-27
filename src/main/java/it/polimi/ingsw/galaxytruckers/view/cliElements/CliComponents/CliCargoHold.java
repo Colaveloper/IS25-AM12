@@ -7,11 +7,19 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.CargoHold;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a CargoHold in the CLI, displaying its contents and status.
+ */
 public class CliCargoHold extends CliComponent {
 
     private final CargoHold cargoHold;
     private final List<String> symbols;
 
+    /**
+     * Constructs a CLI representation of a CargoHold component.
+     *
+     * @param component the CargoHold component to be represented
+     */
     public CliCargoHold(CargoHold component) {
         super(component);
         this.cargoHold = component;

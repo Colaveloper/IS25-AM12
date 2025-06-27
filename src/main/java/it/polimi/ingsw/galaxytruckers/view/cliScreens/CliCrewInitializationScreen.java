@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * CLI screen for crew initialization in the Galaxy Truckers game.
+ */
 public class CliCrewInitializationScreen extends CliScreen {
 
     private final boolean shipNotValid;

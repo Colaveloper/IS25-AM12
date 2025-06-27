@@ -6,9 +6,18 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.LifeSupport;
 
 import java.util.List;
 
+/**
+ * Represents a CLI component for displaying the Life Support system in the Galaxy Truckers game.
+ */
 public class CliLifeSupport extends CliComponent {
 
     private final LifeSupport lifeSupport;
+
+    /**
+     * Creates a new CLI representation of a Life Support component.
+     *
+     * @param component the LifeSupport component to be represented
+     */
     public CliLifeSupport(LifeSupport component) {
         super(component);
         this.lifeSupport = component;

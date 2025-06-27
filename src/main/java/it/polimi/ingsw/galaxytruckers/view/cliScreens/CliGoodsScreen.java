@@ -9,6 +9,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.GoodsBuffer;
 
 import java.awt.*;
 
+/**
+ * CLI screen for the add goods phase in the Galaxy Truckers game.
+ */
 public class CliGoodsScreen extends CliAdventureScreen {
 
     private final GoodsBuffer goodsBuffer;

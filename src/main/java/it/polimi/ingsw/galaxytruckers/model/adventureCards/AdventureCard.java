@@ -12,12 +12,21 @@ import it.polimi.ingsw.galaxytruckers.model.state.GameState;
  * It provides methods to initialize the card and retrieve its level and ID.
  */
 public abstract class AdventureCard {
+    /**
+     * The index of the player currently being evaluated for the adventure card.
+     */
     protected int currentPlayerIndex;
+    /**
+     * The ship board of the player currently being evaluated.
+     */
     protected ShipBoard currentShipBoard;
+    /**
+     * The flight board where the adventure takes place.
+     */
     protected FlightBoard flightBoard;
-    protected final Level cardLevel;
-    protected final Game game;
-    protected final int id;
+    private final Level cardLevel;
+    private final Game game;
+    private final int id;
 
     /**
      * Constructor for the AdventureCard class.
@@ -41,6 +50,9 @@ public abstract class AdventureCard {
         this.currentPlayerIndex = 0;
     }
 
+    /**
+     * @return the level of the adventure card.
+     */
     public Level getCardLevel() {
         return cardLevel;
     }

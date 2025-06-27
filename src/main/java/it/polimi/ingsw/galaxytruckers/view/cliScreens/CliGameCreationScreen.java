@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * CLI screen for creating a new game in the Galaxy Truckers game.
+ */
 public class CliGameCreationScreen extends CliScreen {
 
     /**

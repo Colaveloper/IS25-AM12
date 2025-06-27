@@ -13,11 +13,25 @@ import java.util.Set;
 import java.util.function.IntSupplier;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a Big Meteor projectile in the Galaxy Truckers game.
+ */
 public class BigMeteor extends Projectile {
+    /**
+     * Constructs a Big Meteor projectile with a specified dice roll and direction.
+     *
+     * @param dice      the dice roll supplier to determine the position of the Big Meteor
+     * @param direction the direction of the Big Meteor
+     */
     public BigMeteor(IntSupplier dice, Direction direction) {
         super(dice, direction);
     }
 
+    /**
+     * Constructs a Big Meteor projectile with a specified direction.
+     *
+     * @param direction the direction of the Big Meteor
+     */
     public BigMeteor(Direction direction) {
         super(direction);
     }
@@ -53,11 +67,11 @@ public class BigMeteor extends Projectile {
     protected Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard) {
         return getFirstFoundComponentPosition(shipBoard).filter(
                 (_) -> shipBoard.getCannons().entrySet().stream()
-                .filter(e -> {
-                    Cannon c = e.getValue();
-                    return c.getFirePower()>0;
-                })
-                .noneMatch(this::cannonPositionIsEffective));
+                        .filter(e -> {
+                            Cannon c = e.getValue();
+                            return c.getFirePower() > 0;
+                        })
+                        .noneMatch(this::cannonPositionIsEffective));
     }
 
     /**
@@ -70,8 +84,8 @@ public class BigMeteor extends Projectile {
     protected boolean cannonPositionIsEffective(Map.Entry<Point, Cannon> e) {
         return e.getValue().getOrientation() == direction && switch (direction) {
             case Direction.UP -> e.getKey().x == diceRoll;
-            case Direction.LEFT, Direction.RIGHT ->  Math.abs(e.getKey().y - diceRoll) < 2;
-            case Direction.DOWN ->  Math.abs(e.getKey().x - diceRoll) < 2;
+            case Direction.LEFT, Direction.RIGHT -> Math.abs(e.getKey().y - diceRoll) < 2;
+            case Direction.DOWN -> Math.abs(e.getKey().x - diceRoll) < 2;
         };
     }
 

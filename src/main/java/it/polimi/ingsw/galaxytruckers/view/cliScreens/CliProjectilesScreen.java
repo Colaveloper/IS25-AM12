@@ -9,6 +9,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.HandleProjectileState;
 
 import java.awt.*;
 
+/**
+ * CLI screen for handling projectiles in the game.
+ */
 public class CliProjectilesScreen extends CliActivationScreen {
 
     private final HandleProjectileState gameState;

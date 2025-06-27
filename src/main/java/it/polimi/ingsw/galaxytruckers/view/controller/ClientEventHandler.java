@@ -35,7 +35,7 @@ public class ClientEventHandler implements EventHandler<Event> {
     /**
      * Constructs a ClientEventHandler with the given client model and player registry.
      *
-     * @param clientController
+     * @param clientController the controller for client-side operations
      * @param clientModel      the client-side model to update
      * @param playerRegistry   the registry for player information
      */

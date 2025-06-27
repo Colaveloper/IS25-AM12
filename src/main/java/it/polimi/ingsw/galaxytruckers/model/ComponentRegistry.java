@@ -15,6 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ComponentRegistry is a singleton class that manages the components used in the game.
+ * It loads components from a JSON file and provides methods to access them by ID or type.
+ * It also provides starting cabins for players based on their color.
+ */
 public class ComponentRegistry {
     private static ComponentRegistry instance;
 

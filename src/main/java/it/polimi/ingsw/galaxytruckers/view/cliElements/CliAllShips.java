@@ -5,6 +5,9 @@ import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Represents a CLI element that displays all ships in the game
+ */
 public class CliAllShips extends CliElement {
     private final List<CliShipBoard> cliShips;
 

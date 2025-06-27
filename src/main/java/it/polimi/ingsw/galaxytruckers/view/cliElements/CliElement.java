@@ -10,6 +10,9 @@ import java.util.List;
 public abstract class CliElement {
 
     private boolean dirty = true;
+    /**
+     * Cache for the textual description of this element.
+     */
     protected final List<String> descriptionCache = new ArrayList<>();
 
     /**

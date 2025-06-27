@@ -7,6 +7,9 @@ import it.polimi.ingsw.galaxytruckers.view.DescriptionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a CLI element that displays the forecast decks in the game.
+ */
 public class CliForecast extends CliElement {
     private final GameColor[] blockedForecasts;
 

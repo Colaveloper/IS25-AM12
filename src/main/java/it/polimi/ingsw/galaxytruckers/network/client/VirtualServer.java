@@ -13,7 +13,7 @@ import java.util.UUID;
  * <p>
  * Methods in this interface allow the client to interact with the game server for lobby management,
  * ship building, adventure actions, and other gameplay operations.
- * <p>
+ * </p>
  */
 public interface VirtualServer {
 

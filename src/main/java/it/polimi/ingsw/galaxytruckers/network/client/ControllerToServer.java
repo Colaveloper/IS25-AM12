@@ -14,6 +14,9 @@ import java.util.UUID;
  */
 public interface ControllerToServer {
 
+    /**
+     * Clears the model, deleting game data and resetting the state to JOIN_OR_CREATE
+     */
     void clearModel();
 
     /**

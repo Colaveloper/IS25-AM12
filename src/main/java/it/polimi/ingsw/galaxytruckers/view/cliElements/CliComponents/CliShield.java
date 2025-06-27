@@ -6,6 +6,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Shield;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a CLI element that displays a shield component.
+ */
 public class CliShield extends CliComponent {
 
     private final Shield shield;
@@ -13,9 +16,14 @@ public class CliShield extends CliComponent {
             Direction.UP, "╮",
             Direction.RIGHT, "╯",
             Direction.DOWN, "╰",
-            Direction.LEFT,"╭"
+            Direction.LEFT, "╭"
     );
 
+    /**
+     * Creates a new CLI shield from the given Shield model.
+     *
+     * @param shield the Shield model to create the CLI shield from
+     */
     public CliShield(Shield shield) {
         super(shield);
         this.shield = shield;

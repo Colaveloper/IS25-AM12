@@ -23,6 +23,13 @@ public class Client {
     private final ClientController controller = new ClientController();
     private final ClientModel model = new ClientModel();
 
+    /**
+     * Main method to start the client application.
+     * It expects four command line arguments: server name, server address, RMI port, and socket port.
+     *
+     * @param args command line arguments for server connection: serverName, serverAddress,
+     *             rmiPort, socketPort
+     */
     public static void main(String[] args) {
         Client client = new Client();
         if (args.length != 4) {

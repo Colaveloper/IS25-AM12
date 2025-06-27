@@ -73,7 +73,6 @@ public abstract class FlightBoard {
      * position unavailable for future calls.
      *
      * @param shipBoard the ship to be placed
-     * @return the position the ship was placed at
      */
     public void placeShipOnFlightBoard(ShipBoard shipBoard) {
         int position = placeInternal(shipBoard);

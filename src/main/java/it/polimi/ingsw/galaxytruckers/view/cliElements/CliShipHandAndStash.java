@@ -7,6 +7,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * CLI ship board including hand and stash, for level SECOND games
+ */
 public class CliShipHandAndStash extends CliShipBoard {
 
     private final CliHand cliHand;

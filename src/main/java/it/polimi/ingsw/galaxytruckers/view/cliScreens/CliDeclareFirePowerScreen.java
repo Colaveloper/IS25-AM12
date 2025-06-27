@@ -5,6 +5,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.DeclareFirePowerState;
 
+/**
+ * CLI screen for declaring fire power in the Galaxy Truckers game.
+ */
 public class CliDeclareFirePowerScreen extends CliActivationScreen {
 
     private final DeclareFirePowerState gameState;

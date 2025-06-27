@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * CLI screen for joining or creating a game lobby.
+ */
 public class CliJoinOrCreateScreen extends CliScreen {
     private final List<UUID> ids;
 

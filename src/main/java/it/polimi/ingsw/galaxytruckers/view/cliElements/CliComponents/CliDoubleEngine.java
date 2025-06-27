@@ -8,10 +8,18 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.DoubleEngine;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a CLI representation of a Double Engine component in the Galaxy Truckers game.
+ */
 public class CliDoubleEngine extends CliComponent {
 
     private final DoubleEngine doubleEngine;
 
+    /**
+     * Constructor for CliDoubleEngine.
+     *
+     * @param component the DoubleEngine component to be represented in the CLI
+     */
     protected CliDoubleEngine(DoubleEngine component) {
         super(component);
         this.doubleEngine = component;

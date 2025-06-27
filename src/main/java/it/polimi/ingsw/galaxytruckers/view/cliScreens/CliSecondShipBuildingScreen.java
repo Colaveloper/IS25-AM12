@@ -17,6 +17,9 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * CLI screen for the ship building phase of game of level SECOND.
+ */
 public class CliSecondShipBuildingScreen extends CliScreen {
 
     private final CliComponentBank cliComponentBank;

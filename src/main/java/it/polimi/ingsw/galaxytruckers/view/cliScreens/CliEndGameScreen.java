@@ -2,18 +2,26 @@ package it.polimi.ingsw.galaxytruckers.view.cliScreens;
 
 import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
-import it.polimi.ingsw.galaxytruckers.view.model.MetaState;
 
+/**
+ * CLI screen for displaying the end game state.
+ */
 public class CliEndGameScreen extends CliScreen {
 
+    /**
+     * Constructor for the end game screen.
+     *
+     * @param model      the client model containing the game state
+     * @param controller the client controller to handle server communication
+     */
     public CliEndGameScreen(ClientModel model, ControllerToServer controller) {
         super(model, controller);
     }
 
     /**
      * {@inheritDoc}
+     *
      * @param input The command string entered by the user
-     * @return
      */
     @Override
     public boolean isInputLegal(String input) {
@@ -38,10 +46,11 @@ public class CliEndGameScreen extends CliScreen {
      * {@inheritDoc}
      * This method is called to parse the input and update the model's state.
      * In this case, it sets the meta-state to JOINORCREATE if the input is empty.
+     *
      * @param input The command string entered by the user
      */
     @Override
     public void parseAndInvoke(String input) {
-        if(input.isEmpty()) controller.clearModel();
+        if (input.isEmpty()) controller.clearModel();
     }
 }

@@ -9,6 +9,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.ChoosePlanetState;
 import java.awt.*;
 import java.util.*;
 
+/**
+ * CLI screen for choosing a planet to land on during the game.
+ */
 public class CliPlanetScreen extends CliAdventureScreen {
     // this screen does all players without stateChange unlike the others
     // so currentShip and isMyTurn are not final

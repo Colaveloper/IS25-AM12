@@ -98,6 +98,9 @@ public abstract class Projectile {
      */
     protected abstract Optional<Point> getComponentPositionToRemove(ShipBoard shipBoard);
 
+    /**
+     * @return the type of the projectile
+     */
     public abstract ProjectileType getProjectileType();
 
     public int getDiceRoll() {

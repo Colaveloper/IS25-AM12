@@ -11,11 +11,11 @@ import java.lang.*;
  */
 public class Logger {
     /** Flag to control whether debug messages are displayed */
-    private static boolean debug = true;
-//
-//    public static void setSilent(boolean flag) {
-//        Logger.debug = flag;
-//    }
+    private static boolean debug = false;
+
+    public static void setEnable(boolean flag) {
+        Logger.debug = flag;
+    }
 
     /**
      * Prints a formatted message to the console with color highlighting.

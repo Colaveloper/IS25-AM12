@@ -7,6 +7,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Component;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Represents a CLI hand element that displays a component in the player's hand.
+ */
 public class CliHand extends CliElement {
 
     private CliComponent cliComponent;

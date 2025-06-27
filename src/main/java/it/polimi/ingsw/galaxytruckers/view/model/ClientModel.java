@@ -595,6 +595,9 @@ public class ClientModel {
         observers.forEach(observer -> observer.notifyMetaState(metaState));
     }
 
+    /**
+     * Clears the current game state, resets players, and sets the meta state to JOINORCREATE.
+     */
     public void clearGame() {
         synchronized (gameLock) {
             game = null;

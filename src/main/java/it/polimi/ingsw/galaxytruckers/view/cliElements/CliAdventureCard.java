@@ -11,6 +11,10 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.*;
 import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.penalty.*;
 
+/**
+ * Represents an adventure card in the CLI.
+ * It provides a detailed description of the card's effects and requirements.
+ */
 public class CliAdventureCard extends CliElement{
     AdventureCard card;
 

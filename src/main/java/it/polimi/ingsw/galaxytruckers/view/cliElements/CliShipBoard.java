@@ -14,6 +14,9 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Represents a CLI element that displays a ship board in the Galaxy Truckers game.
+ */
 public class CliShipBoard extends CliElement {
 
     protected final ShipBoard shipBoard;
@@ -100,8 +103,7 @@ public class CliShipBoard extends CliElement {
     }
 
     /**
-     * Returns the nickname of the player owning this ship board.
-     * @return
+     * @return the nickname of the player owning this ship board.
      */
     public String getNickname() {
         return nickname;

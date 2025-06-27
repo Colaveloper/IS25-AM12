@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ClIScreen for choosing a nickname in the CLI version of Galaxy Truckers.
+ */
 public class CliNicknameChoiceScreen extends CliScreen {
 
     /**

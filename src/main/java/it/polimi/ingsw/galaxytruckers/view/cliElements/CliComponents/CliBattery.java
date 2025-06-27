@@ -4,9 +4,17 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Battery;
 
 import java.util.List;
 
+/**
+ * Represents a CLI component for displaying a battery on the ship board.
+ */
 public class CliBattery extends CliComponent {
     private final Battery battery;
 
+    /**
+     * Creates a new CLI representation of a Battery component.
+     *
+     * @param component the Battery component to be represented
+     */
     public CliBattery(Battery component) {
         super(component);
         this.battery = component;

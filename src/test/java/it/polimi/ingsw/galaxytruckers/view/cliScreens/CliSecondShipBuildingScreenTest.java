@@ -24,9 +24,9 @@
 //    CliSecondShipBuildingScreen screen;
 //    ClientModel model = new ClientModel();
 //    Player player1 = new Player("player1");
-////    Player player2 = new Player("player2");
-////    Player player3 = new Player("player3");
-////    Player player4 = new Player("player4");
+//    Player player2 = new Player("player2");
+//    Player player3 = new Player("player3");
+//    Player player4 = new Player("player4");
 //
 //    @BeforeEach
 //    void setUp() {
@@ -34,9 +34,9 @@
 //        model.createGame(Level.SECOND, 4);
 //        model.setPlayer(player1);
 //        model.addPlayer(player1, GameColor.BLUE);
-////        model.addPlayer(player2, GameColor.RED);
-////        model.addPlayer(player3, GameColor.GREEN);
-////        model.addPlayer(player4, GameColor.YELLOW);
+//        model.addPlayer(player2, GameColor.RED);
+//        model.addPlayer(player3, GameColor.GREEN);
+//        model.addPlayer(player4, GameColor.YELLOW);
 //
 //        SecondShipBuildingState state = new SecondShipBuildingState();
 //        model.setMetaState(MetaState.INGAME);

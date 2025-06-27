@@ -10,6 +10,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.RemoveCrewState;
 
 import java.awt.*;
 
+/**
+ * CLI screen for removing crew members from a ship during the adventure phase.
+ */
 public class CliRemoveCrewScreen extends CliAdventureScreen {
 
 

@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the component bank in the CLI.
+ */
 public class CliComponentBank extends CliElement {
 
     private int coveredComponentsN;

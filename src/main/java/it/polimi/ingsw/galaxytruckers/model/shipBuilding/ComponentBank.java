@@ -5,10 +5,18 @@ import it.polimi.ingsw.galaxytruckers.model.ComponentRegistry;
 
 import java.util.*;
 
+/**
+ * Represents a bank of components used in the Galaxy Truckers game during
+ * ship building.
+ */
 public class ComponentBank {
     private final List<Component> coveredComponents;
     private final Map<Integer, Component> uncoveredComponents;
 
+    /**
+     * Constructor for ComponentBank. initializes the lists for covered and uncovered components
+     * as empty collections.
+     */
     public ComponentBank() {
         this.coveredComponents = new ArrayList<>();
         this.uncoveredComponents = new HashMap<>();
@@ -26,6 +34,7 @@ public class ComponentBank {
 
     /**
      * Removes a component from the uncovered components by its ID.
+     *
      * @param id the ID of the component to remove
      * @return the removed component
      */
@@ -48,6 +57,7 @@ public class ComponentBank {
 
     /**
      * Adds a component to the uncovered components.
+     *
      * @param component the component to add
      */
     public void addToUncoveredComponents(Component component) {
@@ -64,19 +74,35 @@ public class ComponentBank {
         coveredComponents.add(component);
     }
 
+    /**
+     * @return the number of covered components in the bank.
+     */
     public int getNumCovered() {
         return coveredComponents.size();
     }
 
+    /**
+     * @return a list of IDs of uncovered components.
+     */
     public List<Integer> getUncoveredIds() {
         return new ArrayList<>(uncoveredComponents.keySet());
     }
 
+    /**
+     * For testing only.
+     *
+     * @return a list of all covered components.
+     */
     @VisibleForTesting
     public List<Component> getCoveredComponents() {
         return new ArrayList<>(coveredComponents);
     }
 
+    /**
+     * For testing only.
+     *
+     * @return a map of uncovered components, where the key is the component ID and the value is the component itself.
+     */
     @VisibleForTesting
     public Map<Integer, Component> getUncoveredComponents() {
         return new HashMap<>(uncoveredComponents);

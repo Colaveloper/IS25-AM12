@@ -7,6 +7,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.state.RemoveGoodsState;
 
 import java.awt.*;
 
+/**
+ * CLI screen for losing goods in the Galaxy Truckers game.
+ */
 public class CliLoseGoodsScreen extends CliAdventureScreen {
 
     /**

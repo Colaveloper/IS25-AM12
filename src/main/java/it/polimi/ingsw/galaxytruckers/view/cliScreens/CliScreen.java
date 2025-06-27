@@ -20,14 +20,41 @@ import java.util.List;
  */
 public abstract class CliScreen extends Screen {
 
+    /**
+     * The client model containing the current game state and player information.
+     */
     protected final ClientModel model;
+    /**
+     * The controller used to send commands to the server.
+     */
     protected final ControllerToServer controller;
+    /**
+     * The current game state containing available actions and state information.
+     */
     protected final GameState state;
+    /**
+     * List of available actions that can be performed in the current game state.
+     */
     protected final List<StateActions> availableActions;
+    /**
+     * The CLI flight board displaying the current state of the flight board.
+     */
     protected CliFlightBoard cliFlightBoard;
+    /**
+     * The ship board of the client player,
+     */
     protected ShipBoard myShipBoard;
+    /**
+     * The CLI representation of all ships in the game, including the client's ship.
+     */
     protected CliAllShips cliAllShips;
+    /**
+     * Map linking each ship board to its corresponding CLI representation.
+     */
     protected Map<ShipBoard, CliShipBoard> shipToCliShip;
+    /**
+     * The CLI component legend that provides information about ship components and their representations.
+     */
     protected CliComponentLegend cliComponentLegend;
     private String surrenderMessage;
 

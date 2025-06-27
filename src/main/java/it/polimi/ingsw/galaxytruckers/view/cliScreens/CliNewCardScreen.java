@@ -9,6 +9,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 
 import java.util.List;
 
+/**
+ * CLI screen for displaying a newly drawn adventure card in the Galaxy Truckers game.
+ */
 public class CliNewCardScreen extends CliAdventureScreen {
     private CliAdventureCard adventureCard;
     private boolean hasDrawn;

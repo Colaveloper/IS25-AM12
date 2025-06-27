@@ -16,6 +16,9 @@ import javafx.geometry.Pos;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * CLI screen for displaying the lobby in the Galaxy Truckers game.
+ */
 public class CliLobbyScreen extends CliScreen {
 
     /**

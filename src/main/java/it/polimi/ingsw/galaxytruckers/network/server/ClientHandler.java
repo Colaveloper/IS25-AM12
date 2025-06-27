@@ -2,6 +2,9 @@ package it.polimi.ingsw.galaxytruckers.network.server;
 
 import it.polimi.ingsw.galaxytruckers.serverController.lobby.Player;
 
+/**
+ * Interface representing a client handler in the Galaxy Truckers game.
+ */
 public interface ClientHandler extends VirtualClient {
     /**
      * Sets the player associated with this client handler.

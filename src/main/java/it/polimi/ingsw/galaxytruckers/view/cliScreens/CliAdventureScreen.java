@@ -18,9 +18,21 @@ import java.util.List;
  */
 public abstract class CliAdventureScreen extends CliScreen{
 
+    /**
+     * Flag indicating whether it is the current player's turn.
+     */
     protected final boolean isMyTurn;
+    /**
+     * Flag indicating whether the player has surrendered and is out of the game.
+     */
     protected final boolean imOut;
+    /**
+     * The ship board of the current player.
+     */
     protected final ShipBoard currentShip;
+    /**
+     * The current adventure card being played.
+     */
     protected final CliAdventureCard currentAdventureCard;
 
     /**

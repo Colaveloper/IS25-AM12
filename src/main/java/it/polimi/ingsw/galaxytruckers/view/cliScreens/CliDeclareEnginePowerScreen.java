@@ -5,6 +5,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.view.model.state.DeclareEnginePowerState;
 
+/**
+ * CLI screen for declaring engine power in the Galaxy Truckers game.
+ */
 public class CliDeclareEnginePowerScreen extends CliActivationScreen {
 
     private final DeclareEnginePowerState gameState;

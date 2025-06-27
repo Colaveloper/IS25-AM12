@@ -6,6 +6,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.Engine;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a CLI component for displaying an engine on the ship board.
+ */
 public class CliEngine extends CliComponent {
 
     private final Engine engine;
@@ -16,6 +19,11 @@ public class CliEngine extends CliComponent {
             Direction.LEFT,"→"
     );
 
+    /**
+     * Creates a new CLI representation of an Engine component.
+     *
+     * @param engine the Engine component to be represented
+     */
     public CliEngine(Engine engine) {
         super(engine);
         this.engine = engine;

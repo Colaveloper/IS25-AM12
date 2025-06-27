@@ -7,6 +7,7 @@ import it.polimi.ingsw.galaxytruckers.serverController.ServerController;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.Scanner;
 
 /**
  * The Server class initializes and starts the RMI and socket servers for the Galaxy Trucker game.
@@ -57,7 +58,18 @@ public class Server {
             System.err.println("Failed to connect socket server: ");
             e.printStackTrace(System.err);
         }
-//        SessionManager.getInstance().shutDown();
+        do {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Type 'q' to stop the server.");
+            String input = scanner.nextLine().trim();
+            if (input.equalsIgnoreCase("q")) {
+                System.out.println("Stopping the server...");
+                System.exit(0);
+                break;
+            } else {
+                System.out.println("Unknown command. Type 'q' to stop the server.");
+            }
+        } while (true);
     }
 
     public static void main(String[] args) {

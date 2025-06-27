@@ -7,6 +7,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.shipBuilding.ShipBoard;
 
 import java.util.*;
 
+/**
+ * Represents a CLI flight board that displays the positions of ships
+ */
 public class CliFlightBoard extends CliElement {
     private final int loopLength;
     private final List<Integer> startingPositions;

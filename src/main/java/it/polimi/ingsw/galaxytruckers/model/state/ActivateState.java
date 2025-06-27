@@ -11,10 +11,18 @@ import java.util.List;
  * and spend batteries on their ship board.
  */
 public abstract class ActivateState extends AdventureState {
+    /**
+     * A set containing the positions on the ship board of components
+     * that can be activated.
+     */
     protected final Set<Point> availablePositions;
-    protected final ShipBoard shipBoard;
+    private final ShipBoard shipBoard;
+    /**
+     * The number of batteries the player has to spend. If it's negative
+     * it indicates the number of components that need to be activated.
+     */
     protected int batteriesToSpend;
-    protected int activatedComponents;
+    private int activatedComponents;
 
     /**
      * Constructor for ActivateState.

@@ -4,6 +4,9 @@ import it.polimi.ingsw.galaxytruckers.network.client.ControllerToServer;
 import it.polimi.ingsw.galaxytruckers.view.model.ClientModel;
 import it.polimi.ingsw.galaxytruckers.view.model.state.GrabRewardState;
 
+/**
+ * CLI screen for handling the reward phase in the Galaxy Truckers game.
+ */
 public class CliRewardScreen extends CliAdventureScreen {
 
     /**

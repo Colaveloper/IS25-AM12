@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * CLI element representing a stash of components in the Galaxy Truckers game.
+ */
 public class CliStash extends CliElement {
     private static final int SIZE = 2;
 
@@ -26,7 +29,7 @@ public class CliStash extends CliElement {
 
     /**
      * Adds a new component to the stash.
-     * @param component
+     * @param component the component to stash
      */
     public void onStash(Component component) {
         cliStashedComponents.add(CliComponent.of(component));

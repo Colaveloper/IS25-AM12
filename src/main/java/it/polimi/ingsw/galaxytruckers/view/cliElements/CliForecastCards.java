@@ -5,6 +5,9 @@ import it.polimi.ingsw.galaxytruckers.view.model.adventureCards.AdventureCard;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a CLI element that displays a deck of forecast cards.
+ */
 public class CliForecastCards extends CliElement {
     private List<AdventureCard> forecastDeck;
 

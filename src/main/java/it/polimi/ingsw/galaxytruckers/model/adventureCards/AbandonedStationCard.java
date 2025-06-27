@@ -1,5 +1,6 @@
 package it.polimi.ingsw.galaxytruckers.model.adventureCards;
 
+import com.google.common.annotations.VisibleForTesting;
 import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.GoodsType;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
@@ -7,6 +8,9 @@ import it.polimi.ingsw.galaxytruckers.model.state.*;
 
 import java.util.Map;
 
+/**
+ * Represents an Abandoned Station adventure card in the Galaxy Truckers game.
+ */
 public class AbandonedStationCard extends AdventureCard {
     private final int flightDaysLoss;
     private final Map<GoodsType, Integer> goodsPrize;
@@ -63,7 +67,12 @@ public class AbandonedStationCard extends AdventureCard {
     }
 
 
-    public void getReward() {
+    /**
+     * Grants the player the reward for claiming the abandoned station.
+     * Visible for testing purposes.
+     */
+    @VisibleForTesting
+    protected void getReward() {
         flightBoard.displaceShip(currentShipBoard, -flightDaysLoss);
         accepted = true;
     }

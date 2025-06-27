@@ -16,6 +16,9 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * CLI screen for ship building phase in games of level TEST.
+ */
 public class CliTestShipBuildingScreen extends CliScreen {
 
     private final CliComponentBank cliComponentBank;

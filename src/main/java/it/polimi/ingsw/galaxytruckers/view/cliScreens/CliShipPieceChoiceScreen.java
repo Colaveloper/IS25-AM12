@@ -11,6 +11,9 @@ import java.awt.*;
 import java.util.Set;
 import java.util.List;
 
+/**
+ * CLI screen for choosing a ship piece during the adventure phase.
+ */
 public class CliShipPieceChoiceScreen extends CliAdventureScreen {
 
     private boolean shipBroken;

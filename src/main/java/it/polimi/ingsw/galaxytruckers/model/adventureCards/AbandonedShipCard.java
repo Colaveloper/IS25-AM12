@@ -5,6 +5,9 @@ import it.polimi.ingsw.galaxytruckers.model.Game;
 import it.polimi.ingsw.galaxytruckers.model.enumTypes.Level;
 import it.polimi.ingsw.galaxytruckers.model.state.*;
 
+/**
+ * Represents an Abandoned Ship adventure card in the Galaxy Truckers game.
+ */
 public class AbandonedShipCard extends AdventureCard {
     private final int flightDaysLoss;
     private final int creditPrize;
@@ -69,6 +72,10 @@ public class AbandonedShipCard extends AdventureCard {
         accepted = true;
     }
 
+    /**
+     * For testing purposes only.
+     * @return true if the reward has been accepted, false otherwise.
+     */
     @VisibleForTesting
     public boolean getAccepted(){
         return this.accepted;
