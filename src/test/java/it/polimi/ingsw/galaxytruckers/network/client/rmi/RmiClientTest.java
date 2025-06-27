@@ -238,7 +238,6 @@
 //
 //        @Test
 //        void notifyEvent() {
-//            //TODO: test this method
 //        }
 //
 //    }

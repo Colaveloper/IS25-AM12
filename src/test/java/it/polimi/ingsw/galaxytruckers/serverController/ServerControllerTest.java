@@ -146,7 +146,7 @@ class ServerControllerTest {
         assertFalse(SessionManager.getInstance().isPlayerActive(p2));
     }
 
-    //TODO: fix old tests
+
 
     @Test
     void registerNicknameWithNewPlayerAddsPlayer() {

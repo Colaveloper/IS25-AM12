@@ -167,7 +167,7 @@ public class ClientEventHandler implements EventHandler<Event> {
             case StashComponentEvent stashComponentEvent -> clientModel.notifyStashComponent(
                     conversionUtils.convertName(stashComponentEvent.playerName())
             );
-            case SurrenderEvent surrenderEvent -> //TODO: handle player surrender
+            case SurrenderEvent surrenderEvent ->
                     clientModel.notifySurrenderShip(
                             conversionUtils.convertCollection(surrenderEvent.playerNames(), HashSet::new)
                     );

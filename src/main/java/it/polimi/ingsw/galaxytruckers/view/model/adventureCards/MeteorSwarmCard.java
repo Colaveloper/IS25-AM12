@@ -11,7 +11,7 @@ import java.util.List;
  * Extends {@link AdventureCard} and implements {@link AdventureCardInterface}.
  */
 public final class MeteorSwarmCard extends AdventureCard implements AdventureCardInterface {
-    //attributes
+
     private final List<Projectile> projectiles;
 
     /**
