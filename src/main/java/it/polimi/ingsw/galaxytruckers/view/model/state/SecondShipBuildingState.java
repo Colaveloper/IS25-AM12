@@ -84,7 +84,6 @@ public final class SecondShipBuildingState extends ShipBuildingState implements 
             actions.addAll(super.getAvailableActions());
             if(!hasFinished) actions.add(StateActions.PLACE_SHIP_ON_FLIGHTBOARD);
         }
-        //TODO: implement conditional available action if needed
         return actions;
     }
 

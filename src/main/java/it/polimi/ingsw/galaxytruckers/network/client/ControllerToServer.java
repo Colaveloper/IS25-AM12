@@ -165,4 +165,9 @@ public interface ControllerToServer {
      * Calls the corresponding method on {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer}.
      */
     void giveUp();
+
+    /**
+     * Calls the corresponding method on {@link it.polimi.ingsw.galaxytruckers.network.client.VirtualServer}.
+     */
+    void quit();
 }

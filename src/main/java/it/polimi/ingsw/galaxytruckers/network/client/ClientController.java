@@ -416,5 +416,16 @@ public class ClientController implements ClientControllerInterface, ControllerTo
             view.reportError(e.getMessage());
         }
     }
+
+    @Override
+    public void quit() {
+        try {
+            clearModel();
+            server.leaveLobby();
+        }
+        catch (RuntimeException e) {
+            view.reportError(e.getMessage());
+        }
+    }
 }
 
