@@ -41,7 +41,7 @@ When launching the server, the host is first asked whether to start a **demo** s
 
 > Tip: For the best experience in TUI mode, disable soft-wrap in the terminal.
 
-Ensure that **Java 21 or higher** is installed.
+Ensure that **Java 24** is installed.
 
 ## Documentation
 
