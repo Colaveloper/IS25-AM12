@@ -36,7 +36,7 @@ JAR file must be run from the root directory of the project.
 To run it:
 
 ```bash
-java -jar GalaxyTruckers-1.0-SNAPSHOT-shaded.jar
+java -jar GalaxyTruckers-1.0-SNAPSHOT.jar
 ```
 
 When launching the server, the host is first asked whether to start a **demo** session. If so, they can either:
