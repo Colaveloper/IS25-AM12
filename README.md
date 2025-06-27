@@ -1,17 +1,74 @@
-# Project Overview
+## About the Project
 
-A Java-based implementation of the board game Galaxy Truckers developed at Politecnico di Milano by Francesco Canossi, Lorenzo Carafa, Tommaso Capone and Francesco Cola.
-It will feature a Command-Line Interface and a JavaFX Graphical User Interface.
+This project is a digital implementation of the board game **Galaxy Trucker**, developed as part of the Final Software Engineering Project for the academic year 2024/2025 at Politecnico di Milano by:
 
-An high-level description of the project in UML can be found here: https://shorturl.at/ZGhA5 \
-TODO: remove editor privileges from the UML before making public
+* Tommaso Capone
+* Francesco Cola
+* Lorenzo Carafa
+* Francesco Canossi
 
-## Work status
-A more detailed description of the development status can be found in the UML. 
+The implementation supports the **complete rule set** of the game, including both the **Second Flight** and the optional **Test Flight** mode.
 
-| Functionality     | Implementation Status | Testing Status       |
-| ------------------| ----------------------| ---------------------|
-| ShipBuilding phase| Few TODOs left        | Few untested methods |
-| Flight phase      | Unknown               | No tests yet         |
+Each player can independently choose their preferred combination of interface (GUI or TUI) and communication protocol (Socket or RMI), and still take part in the same game.
 
-## Running and Playing
+The GUI is implemented in **JavaFX**, with responsive layouts for different screen sizes. The TUI supports **UTF-8 encoding** and, where possible, clears the console for a better experience.
+
+The server supports **multiple games simultaneously** and handles players using different technologies in the same match. If a player disconnects, the server continues by taking default actions. Players can reconnect using the same nickname and resume the game. If only one player remains, default actions are applied until the game ends.
+
+## Features
+
+| Feature          | Implemented | Feature                  | Implemented |
+| ---------------- | ----------- | ------------------------ | ----------- |
+| Simplified rules | ✔️          | Socket                   | ✔️          |
+| Complete rules   | ✔️          | RMI                      | ✔️          |
+| TUI              | ✔️          | Multiple games           | ✔️          |
+| GUI              | ✔️          | Disconnection resilience | ✔️          |
+| Test Flight mode | ✔️          | Persistence              | ❌           |
+| Chat             | ❌           |                          |             |
+
+## Running the Application
+
+The project is distributed as a single precompiled executable JAR file.
+
+To run it:
+
+```bash
+java -jar GalaxyTruckers-1.0.jar
+```
+
+You can also start the server in special modes:
+
+* `edit` → saves the ship layout as a JSON after ship construction
+* `demo` → loads a ship layout from a JSON file and skips ship construction
+
+> Tip: For the best experience in TUI mode, disable soft-wrap in the terminal.
+
+Ensure that **Java 21 or higher** is installed.
+
+## Documentation
+
+* The entire project is covered with **JavaDoc**.
+* A **high-level UML diagram** and **generated UML diagrams** (from the source code) are provided.
+* The communication protocol between client and server is documented in the deliverables folder.
+
+## Testing and Coverage
+
+*Work in progress.*
+
+## Screenshots
+
+*Work in progress.*
+
+## Tools and Libraries
+
+Libraries:
+
+* **JUnit 4 / 5** – Unit testing
+* **Mockito** – Mocking for tests
+* **Jackson** – JSON handling
+* **Guava** – Data structures and annotations
+* **JavaFX** – GUI
+
+Build:
+
+* **Maven** with Shade and Compiler plugins (Java 24 target, Java 21+ runtime)
