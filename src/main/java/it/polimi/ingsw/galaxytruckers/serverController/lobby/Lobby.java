@@ -14,21 +14,27 @@ import it.polimi.ingsw.galaxytruckers.model.shipBuilding.CrewType;
 import it.polimi.ingsw.galaxytruckers.model.shipBuilding.ShipBoard;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.DtoConverter;
 import it.polimi.ingsw.galaxytruckers.serverController.dto.ShipBoardDTO;
-import it.polimi.ingsw.galaxytruckers.serverController.events.*;
 import it.polimi.ingsw.galaxytruckers.serverController.events.EventQueue;
+import it.polimi.ingsw.galaxytruckers.serverController.events.LobbyEventHandler;
+import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 import it.polimi.ingsw.galaxytruckers.serverController.utils.SetupUtils;
 import it.polimi.ingsw.galaxytruckers.utils.JsonUtils;
+import it.polimi.ingsw.galaxytruckers.utils.LockUtils;
 import it.polimi.ingsw.galaxytruckers.view.Direction;
-import it.polimi.ingsw.galaxytruckers.serverController.events.types.*;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Paths;
-import java.util.*;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
 
 public class Lobby implements LobbyInterface {
@@ -36,6 +42,7 @@ public class Lobby implements LobbyInterface {
     private static final String demoPath = "src/main/resources/demoShips_%s.json";
 
     private final Object paramLock = new Object();
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     private final UUID id;
     private final Level level;
@@ -45,7 +52,8 @@ public class Lobby implements LobbyInterface {
     private final boolean demoMode;
     private final boolean editScenario;
 
-    private volatile LobbyState state;
+    private LobbyState state;
+    private boolean pending = false;
     private final GameInterface game;
     private final List<Player> players;
     private final Set<GameColor> chosenColors;
@@ -170,33 +178,31 @@ public class Lobby implements LobbyInterface {
      * @param player the player to add
      */
     public boolean addPlayer(Player player) {
-        boolean res;
-        synchronized (paramLock) {
+        boolean shouldStart = LockUtils.withLock(lock, () -> {
             checkLobbyState(LobbyState.PREPARATION);
-            GameColor chosenColor = Arrays.stream(GameColor.values())
-                    .filter(c -> !chosenColors.contains(c))
-                    .findAny().orElseThrow();
-            chosenColors.add(chosenColor);
-            players.add(player);
-            playerColors.put(player, chosenColor);
-            player.setLobby(this);
-            if (scheduledFuture != null) {
-                scheduledFuture.cancel(true);
-                scheduledFuture = null;
+            boolean res;
+            synchronized (paramLock) {
+                GameColor chosenColor = Arrays.stream(GameColor.values())
+                        .filter(c -> !chosenColors.contains(c))
+                        .findAny().orElseThrow();
+                chosenColors.add(chosenColor);
+                players.add(player);
+                playerColors.put(player, chosenColor);
+                player.setLobby(this);
+                eventQueue.notifyEvent(new LobbyDetailsEvent(
+                        player.getNickname(),
+                        DtoConverter.getLobbyDetails(this)
+                ));
+                eventQueue.notifyEvent(new JoinLobbyEvent(player.getNickname(), playerColors.get(player)));
+                res = players.size() == numPlayers;
             }
-            eventQueue.notifyEvent(new LobbyDetailsEvent(
-                    player.getNickname(),
-                    DtoConverter.getLobbyDetails(this)
-            ));
-            eventQueue.notifyEvent(new JoinLobbyEvent(player.getNickname(), playerColors.get(player)));
-            if (players.size() == numPlayers) {
-                startGame();
-                res = true;
-            } else {
-                res = false;
-            }
+            return res;
+        }, false);
+        updatePending();
+        if (shouldStart) {
+            startGame();
         }
-        return res;
+        return shouldStart;
     }
 
     /**
@@ -206,15 +212,53 @@ public class Lobby implements LobbyInterface {
      * @param player the player who has disconnected
      */
     public void notifyPlayerDisconnection(Player player) {
+        LockUtils.withLock(lock, () -> {
+            synchronized (paramLock) {
+                if (disconnectedPlayers.add(player)) {
+                    eventQueue.notifyEvent(new PlayerDisconnectionEvent(player.getNickname()));
+                }
+            }
+        }, false);
+        updatePending();
+
+    }
+
+    private boolean shouldSchedule() {
+        boolean res;
         synchronized (paramLock) {
-            if (disconnectedPlayers.add(player)) {
-                eventQueue.notifyEvent(new PlayerDisconnectionEvent(player.getNickname()));
-                if (disconnectedPlayers.size() == getPlayers().size()) {
-                    scheduledFuture = scheduler.schedule(this::remove, removalDelay, TimeUnit.MILLISECONDS);
+            res = !disconnectedPlayers.isEmpty() && disconnectedPlayers.size() >= players.size() - 1;
+        }
+        return res;
+    }
+
+    private void updatePending() {
+        LockUtils.withLock(lock, () -> {
+            synchronized (paramLock) {
+                if (pending && !shouldSchedule()) {
+                    pending = false;
+                    if (scheduledFuture != null) {
+                        scheduledFuture.cancel(true);
+                        scheduledFuture = null;
+                    }
+                }
+                if (!pending && shouldSchedule()) {
+                    pending = true;
+                    scheduledFuture = scheduler.schedule(() -> {
+                        synchronized (paramLock) {
+                            eventQueue.notifyEvent(new EndByDisconnectionEvent(
+                                    players.stream()
+                                            .filter(p -> !disconnectedPlayers.contains(p))
+                                            .findFirst()
+                                            .map(Player::getNickname)
+                                            .orElse(null)
+                            ));
+                        }
+                        remove();
+                    }, removalDelay, TimeUnit.MILLISECONDS);
                     System.out.println("Scheduled lobby " + getId() + " removal");
                 }
             }
-        }
+        }, true);
     }
 
     /**
@@ -226,10 +270,9 @@ public class Lobby implements LobbyInterface {
     public void notifyPlayerReconnection(Player player) {
         synchronized (paramLock) {
             disconnectedPlayers.remove(player);
-            if (scheduledFuture != null) {
-                scheduledFuture.cancel(true);
-                scheduledFuture = null;
-            }
+        }
+        updatePending();
+        LockUtils.withLock(lock, () -> {
             if (state == LobbyState.INGAME) {
                 game.requestSnapshot(player.getShipBoard().orElseThrow());
             } else {
@@ -239,7 +282,7 @@ public class Lobby implements LobbyInterface {
                         null
                 ));
             }
-        }
+        }, false);
     }
 
     /**
@@ -259,18 +302,32 @@ public class Lobby implements LobbyInterface {
         this.lobbyEventHandler.stop();
     }
 
+    private void checkInGame() {
+        LockUtils.withLock(lock, () -> {
+            checkLobbyState(LobbyState.INGAME);
+            if (pending) {
+                throw new IllegalStateException("All other players have disconnected, the lobby is paused");
+            }
+        },false);
+    }
+
     private void checkLobbyState(LobbyState lobbyState) {
-        if (state != lobbyState) {
-            throw new IllegalStateException("The lobby is not in " + lobbyState.toString());
-        }
+        LockUtils.withLock(lock, () -> {
+            if (state != lobbyState) {
+                throw new IllegalStateException("The lobby is not in " + lobbyState.toString());
+            }
+        }, false);
     }
 
     /**
      * Sets the state of the lobby to the specified state.
+     *
      * @param state the new state of the lobby
      */
     public void setState(LobbyState state) {
-        this.state = state;
+        LockUtils.withLock(lock, () -> {
+            this.state = state;
+        }, true);
     }
 
     /**
@@ -281,17 +338,19 @@ public class Lobby implements LobbyInterface {
     }
 
     private void startGame() {
-        for (Player player : getPlayers()) {
-            ShipBoard ship = game.addShipBoard(playerColors.get(player));
-            player.setShipBoard(ship);
-        }
-        if (demoMode) {
-            loadScenario();
-        } else {
-            if (editScenario) game.setStartAdventureCallback(this::saveShips);
-            game.start();
-        }
-        setState(LobbyState.INGAME);
+        LockUtils.withLock(lock, () -> {
+            for (Player player : getPlayers()) {
+                ShipBoard ship = game.addShipBoard(playerColors.get(player));
+                player.setShipBoard(ship);
+            }
+            if (demoMode) {
+                loadScenario();
+            } else {
+                if (editScenario) game.setStartAdventureCallback(this::saveShips);
+                game.start();
+            }
+            setState(LobbyState.INGAME);
+        }, true);
     }
 
     /**
@@ -329,12 +388,12 @@ public class Lobby implements LobbyInterface {
      * @param player the player who is skipping their turn
      */
     public void skip(Player player) {
-        synchronized (paramLock) {
-            if (disconnectedPlayers.size() == players.size()) return;
-        }
-        if (state == LobbyState.INGAME) {
-            game.skip(player.getShipBoard().orElseThrow());
-        }
+        LockUtils.withLock(lock, () -> {
+            if (!pending && state == LobbyState.INGAME) {
+                game.skip(player.getShipBoard().orElseThrow());
+            }
+        }, false);
+
     }
 
     /**
@@ -366,158 +425,210 @@ public class Lobby implements LobbyInterface {
 
     @Override
     public void requestRandComponent(Player player) {
-        checkLobbyState(LobbyState.INGAME);
-        game.requestRandComponent(player.getShipBoard().orElseThrow());
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.requestRandComponent(player.getShipBoard().orElseThrow());
+        }, false);
     }
 
     @Override
     public void requestComponent(Player player, int componentID) {
-        checkLobbyState(LobbyState.INGAME);
-        game.requestComponent(player.getShipBoard().orElseThrow(), componentID);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.requestComponent(player.getShipBoard().orElseThrow(), componentID);
+        }, false);
     }
 
     @Override
     public void rejectComponent(Player player) {
-        checkLobbyState(LobbyState.INGAME);
-        game.rejectComponent(player.getShipBoard().orElseThrow());
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.rejectComponent(player.getShipBoard().orElseThrow());
+        }, false);
     }
 
     @Override
     public void stashComponent(Player player) {
-        checkLobbyState(LobbyState.INGAME);
-        game.stashComponent(player.getShipBoard().orElseThrow());
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.stashComponent(player.getShipBoard().orElseThrow());
+        }, false);
     }
 
     @Override
     public void grabPlacedComponent(Player player) {
-        checkLobbyState(LobbyState.INGAME);
-        game.grabPlacedComponent(player.getShipBoard().orElseThrow());
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.grabPlacedComponent(player.getShipBoard().orElseThrow());
+        }, false);
     }
 
     @Override
     public void grabStashedComponent(Player player, int index) {
-        checkLobbyState(LobbyState.INGAME);
-        game.grabStashedComponent(player.getShipBoard().orElseThrow(), index);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.grabStashedComponent(player.getShipBoard().orElseThrow(), index);
+        }, false);
     }
 
     @Override
     public void placeComponent(Player player, Point point, Direction orientation) {
-        checkLobbyState(LobbyState.INGAME);
-        game.placeComponent(player.getShipBoard().orElseThrow(), point, orientation);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.placeComponent(player.getShipBoard().orElseThrow(), point, orientation);
+        }, false);
     }
 
     @Override
     public void flipHourglass(Player player) {
-        checkLobbyState(LobbyState.INGAME);
-        game.flipHourglass(player.getShipBoard().orElseThrow());
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.flipHourglass(player.getShipBoard().orElseThrow());
+        }, false);
     }
 
     @Override
     public void placeShipOnFlightBoard(Player player, int startingPosition) {
-        checkLobbyState(LobbyState.INGAME);
-        game.placeShipOnFlightBoard(player.getShipBoard().orElseThrow(), startingPosition);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.placeShipOnFlightBoard(player.getShipBoard().orElseThrow(), startingPosition);
+        }, false);
     }
 
     @Override
     public void placeShipOnFlightBoard(Player player) {
-        checkLobbyState(LobbyState.INGAME);
-        game.placeShipOnFlightBoard(player.getShipBoard().orElseThrow());
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.placeShipOnFlightBoard(player.getShipBoard().orElseThrow());
+        }, false);
     }
 
     @Override
     public void acquireForecast(Player player, int deckIndex) {
-        checkLobbyState(LobbyState.INGAME);
-        game.acquireForecast(player.getShipBoard().orElseThrow(), deckIndex);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.acquireForecast(player.getShipBoard().orElseThrow(), deckIndex);
+        }, false);
     }
 
     @Override
     public void releaseForecast(Player player) {
-        checkLobbyState(LobbyState.INGAME);
-        game.releaseForecast(player.getShipBoard().orElseThrow());
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.releaseForecast(player.getShipBoard().orElseThrow());
+        }, false);
     }
 
     @Override
     public void removeComponent(Player player, Point point) {
-        checkLobbyState(LobbyState.INGAME);
-        game.removeComponent(player.getShipBoard().orElseThrow(), point);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.removeComponent(player.getShipBoard().orElseThrow(), point);
+        }, false);
     }
 
     @Override
     public void chooseShipPiece(Player player, int pieceIndex) {
-        checkLobbyState(LobbyState.INGAME);
-        game.chooseShipPiece(player.getShipBoard().orElseThrow(), pieceIndex);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.chooseShipPiece(player.getShipBoard().orElseThrow(), pieceIndex);
+        }, false);
     }
 
     @Override
     public void initializeCabin(Player player, Point point, CrewType crewType) {
-        checkLobbyState(LobbyState.INGAME);
-        game.initializeCabin(player.getShipBoard().orElseThrow(), point, crewType);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.initializeCabin(player.getShipBoard().orElseThrow(), point, crewType);
+        }, false);
     }
 
     @Override
     public void drawCard(Player player) {
-        checkLobbyState(LobbyState.INGAME);
-        game.drawCard(player.getShipBoard().orElseThrow());
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.drawCard(player.getShipBoard().orElseThrow());
+        }, false);
     }
 
     @Override
     public void activateComponent(Player player, Point point) {
-        checkLobbyState(LobbyState.INGAME);
-        game.activateComponent(player.getShipBoard().orElseThrow(), point);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.activateComponent(player.getShipBoard().orElseThrow(), point);
+        }, false);
     }
 
     @Override
     public void loseCrew(Player player, Point point) {
-        checkLobbyState(LobbyState.INGAME);
-        game.loseCrew(player.getShipBoard().orElseThrow(), point);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.loseCrew(player.getShipBoard().orElseThrow(), point);
+        }, false);
     }
 
     @Override
     public void grabReward(Player player) {
-        checkLobbyState(LobbyState.INGAME);
-        game.grabReward(player.getShipBoard().orElseThrow());
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.grabReward(player.getShipBoard().orElseThrow());
+        }, false);
     }
 
     @Override
     public void placeGoods(Player player, Point point, GoodsType goodsType) {
-        checkLobbyState(LobbyState.INGAME);
-        game.placeGoods(player.getShipBoard().orElseThrow(), point, goodsType);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.placeGoods(player.getShipBoard().orElseThrow(), point, goodsType);
+        }, false);
     }
 
     @Override
     public void removeGoods(Player player, Point point, GoodsType goodsType) {
-        checkLobbyState(LobbyState.INGAME);
-        game.removeGoods(player.getShipBoard().orElseThrow(), point, goodsType);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.removeGoods(player.getShipBoard().orElseThrow(), point, goodsType);
+        }, false);
     }
 
     @Override
     public void loseGoods(Player player, Point point) {
-        checkLobbyState(LobbyState.INGAME);
-        game.loseGood(player.getShipBoard().orElseThrow(), point);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.loseGood(player.getShipBoard().orElseThrow(), point);
+        }, false);
     }
 
     @Override
     public void useBattery(Player player, Point point) {
-        checkLobbyState(LobbyState.INGAME);
-        game.useBattery(player.getShipBoard().orElseThrow(), point);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.useBattery(player.getShipBoard().orElseThrow(), point);
+        }, false);
     }
 
     @Override
     public void choosePlanet(Player player, int choice) {
-        checkLobbyState(LobbyState.INGAME);
-        game.choosePlanet(player.getShipBoard().orElseThrow(), choice);
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.choosePlanet(player.getShipBoard().orElseThrow(), choice);
+        }, false);
     }
 
     @Override
     public void goNext(Player player) {
-        checkLobbyState(LobbyState.INGAME);
-        game.goNext(player.getShipBoard().orElseThrow());
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.goNext(player.getShipBoard().orElseThrow());
+        }, false);
     }
 
     @Override
     public void giveUp(Player player) {
-        checkLobbyState(LobbyState.INGAME);
-        game.giveUp(player.getShipBoard().orElseThrow());
+        LockUtils.withLock(lock, () -> {
+            checkInGame();
+            game.giveUp(player.getShipBoard().orElseThrow());
+        }, false);
     }
 
     /**
