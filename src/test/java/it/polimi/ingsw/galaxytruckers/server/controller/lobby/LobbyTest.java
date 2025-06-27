@@ -71,6 +71,7 @@ class LobbyTest {
     @AfterEach
     void cleanup() {
         Player.clear();
+        lobby.remove();
     }
 
     @Test
