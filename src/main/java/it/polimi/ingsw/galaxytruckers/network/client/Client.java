@@ -44,17 +44,17 @@ public class Client {
     public void connect(String serverName, String serverAddress, int rmiPort, int socketPort) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Do you wish to use RMI (0) or Socket (1) for communication with the server?");
-        System.out.println("create and skip to building (2) or join and skip to building (3)");
+        //System.out.println("create and skip to building (2) or join and skip to building (3)");
         boolean chosen = false;
         controller.setModel(model);
         controller.initEventHandler();
         do {
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
-                if (choice > 1 && choice <= 3) {
-                    model.activateCheats(choice);
-                    choice = Integer.parseInt(CheatCodes.cheat());
-                }
+//                if (choice > 1 && choice <= 3) {
+//                    model.activateCheats(choice);
+//                    choice = Integer.parseInt(CheatCodes.cheat());
+//                }
                 ServerHandler server;
                 if (choice == 0) {
                     chosen = true;
@@ -76,7 +76,7 @@ public class Client {
                 }
             } catch (NumberFormatException e) {
                 System.out.println("The choice is badly formatted!");
-            } catch (RemoteException | InterruptedException e) {
+            } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
         } while (!chosen);
