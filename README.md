@@ -59,7 +59,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 
 ## Testing and Coverage
 The server was tested with full coverage by unit and systems tests
-![coverage.png](../IS25-AM12/deliveries/coverage.png)
+![coverage.png](./deliveries/coverage.png)
 
 ## Gameplay Screenshots
 ![cli_screenshot.png](src/main/resources/textures/other/cli_screenshot.png)
